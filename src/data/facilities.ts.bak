@@ -1,0 +1,214 @@
+// Define the type for facility data
+export interface FacilityStaff {
+  name: string;
+  position: string;
+}
+
+export interface FacilityTestimonial {
+  quote: string;
+  author: string;
+}
+
+export interface Facility {
+  id: string;
+  name: string;
+  location: string;
+  address?: string; // Full street address
+  coordinates?: {
+    lat: number;
+    lng: number;
+  };
+  images: string[];
+  careTypes: string[];
+  description?: string;
+  amenities?: string[];
+  staff?: {
+    administrators: FacilityStaff[];
+    caregivers: FacilityStaff[];
+  };
+  testimonials?: FacilityTestimonial[];
+}
+
+// Export facility data
+export const facilityData: Facility[] = [
+  // ... existing facilities from 1-27
+  // ... keep all existing facilities
+
+  // Add new facilities
+  {
+    id: "facility-28",
+    name: "Kemper House Strongsville",
+    location: "Strongsville, OH",
+    address: "10890 Prospect Rd, Strongsville, OH 44149",
+    coordinates: {
+      lat: 41.3138,
+      lng: -81.8055
+    },
+    images: [
+      "https://ext.same-assets.com/3140348022/554927045.jpeg",
+      "https://ext.same-assets.com/3140348022/3950841709.jpeg",
+    ],
+    careTypes: ["Assisted Living", "Memory Care"],
+    description: "Kemper House Strongsville offers specialized memory care in a supportive assisted living environment. Our purpose-built community is designed specifically for residents with Alzheimer's and other forms of dementia, with secure outdoor areas and innovative programming to enhance quality of life."
+  },
+  {
+    id: "facility-29",
+    name: "Paramount Senior Living",
+    location: "Middleburg Heights, OH",
+    address: "15435 Bagley Rd, Middleburg Heights, OH 44130",
+    coordinates: {
+      lat: 41.3683,
+      lng: -81.8230
+    },
+    images: [
+      "https://ext.same-assets.com/3140348022/3923490053.jpeg",
+      "https://ext.same-assets.com/3140348022/277918512.jpeg",
+    ],
+    careTypes: ["Independent Living", "Assisted Living"],
+    description: "Paramount Senior Living in Middleburg Heights provides a continuum of care from independent living to assisted living. Our community features spacious apartments, engaging activities, and personalized services that allow residents to maintain independence while receiving the support they need."
+  },
+  {
+    id: "facility-30",
+    name: "Sunrise of Westlake",
+    location: "Westlake, OH",
+    address: "27819 Center Ridge Rd, Westlake, OH 44145",
+    coordinates: {
+      lat: 41.4424,
+      lng: -81.9088
+    },
+    images: [
+      "https://ext.same-assets.com/3140348022/2616406230.jpeg",
+      "https://ext.same-assets.com/3140348022/808373612.jpeg",
+    ],
+    careTypes: ["Assisted Living", "Memory Care"],
+    description: "Sunrise of Westlake provides personalized assisted living and memory care services in a charming, homelike environment. Our dedicated team offers 24-hour support, medication management, and specialized memory care programming within our Reminiscence neighborhood designed for those with cognitive impairments."
+  },
+  {
+    id: "facility-31",
+    name: "The Grande at Middleburg Heights",
+    location: "Middleburg Heights, OH",
+    address: "7510 Pearl Rd, Middleburg Heights, OH 44130",
+    coordinates: {
+      lat: 41.3760,
+      lng: -81.8172
+    },
+    images: [
+      "https://ext.same-assets.com/3140348022/3811120941.jpeg",
+      "https://ext.same-assets.com/3140348022/1423073146.jpeg",
+    ],
+    careTypes: ["Assisted Living"],
+    description: "The Grande at Middleburg Heights offers luxury assisted living accommodations in a convenient location. Our elegant community provides personalized care plans, upscale amenities, and a full calendar of social activities designed to promote wellness and engagement for all residents."
+  },
+  {
+    id: "facility-32",
+    name: "The Grande at Westlake",
+    location: "Westlake, OH",
+    address: "28777 Detroit Rd, Westlake, OH 44145",
+    coordinates: {
+      lat: 41.4556,
+      lng: -81.9259
+    },
+    images: [
+      "https://ext.same-assets.com/3140348022/1483408660.jpeg",
+      "https://ext.same-assets.com/3140348022/3950841709.jpeg",
+    ],
+    careTypes: ["Assisted Living"],
+    description: "The Grande at Westlake delivers premium assisted living services in an upscale environment. Our beautiful community offers personalized care plans, restaurant-style dining, and a wide range of social and recreational activities to keep residents engaged and fulfilled."
+  },
+  {
+    id: "facility-33",
+    name: "Sunrise At Parma",
+    location: "Parma, OH",
+    address: "7766 Broadview Rd, Parma, OH 44134",
+    coordinates: {
+      lat: 41.3902,
+      lng: -81.6821
+    },
+    images: [
+      "https://ext.same-assets.com/3140348022/2975331289.jpeg",
+      "https://ext.same-assets.com/3140348022/1423073146.jpeg",
+    ],
+    careTypes: ["Assisted Living", "Memory Care"],
+    description: "Sunrise At Parma provides personalized assisted living and memory care services in a warm, inviting setting. Our compassionate staff delivers individualized care plans, medication management, and specialized memory support in our secure Reminiscence neighborhood."
+  },
+  {
+    id: "facility-34",
+    name: "Legacy Place Parma",
+    location: "Parma, OH",
+    address: "7377 Ridge Rd, Parma, OH 44129",
+    coordinates: {
+      lat: 41.3837,
+      lng: -81.7299
+    },
+    images: [
+      "https://ext.same-assets.com/3140348022/554927045.jpeg",
+      "https://ext.same-assets.com/3140348022/3923490053.jpeg",
+    ],
+    careTypes: ["Assisted Living"],
+    description: "Legacy Place Parma offers comfortable assisted living accommodations in a convenient location. Our dedicated care team provides personalized assistance with daily activities, medication management, and health monitoring while respecting each resident's independence and dignity."
+  },
+  {
+    id: "facility-35",
+    name: "SHEVCHENKO MANOR",
+    location: "Parma, OH",
+    address: "2222 Westbrook Dr, Parma, OH 44134",
+    coordinates: {
+      lat: 41.3925,
+      lng: -81.7228
+    },
+    images: [
+      "https://ext.same-assets.com/3140348022/3950841709.jpeg",
+      "https://ext.same-assets.com/3140348022/808373612.jpeg",
+    ],
+    careTypes: ["Assisted Living"],
+    description: "SHEVCHENKO MANOR provides a culturally sensitive assisted living environment with a focus on Eastern European traditions. Our community offers personalized care plans, home-cooked meals reflecting cultural preferences, and activities designed to maintain residents' cultural connections while providing the daily assistance they need."
+  },
+  {
+    id: "facility-36",
+    name: "StoryPoint Strongsville",
+    location: "Strongsville, OH",
+    address: "19205 Pearl Rd, Strongsville, OH 44136",
+    coordinates: {
+      lat: 41.3213,
+      lng: -81.8204
+    },
+    images: [
+      "https://ext.same-assets.com/3140348022/277918512.jpeg",
+      "https://ext.same-assets.com/3140348022/2616406230.jpeg",
+    ],
+    careTypes: ["Independent Living", "Assisted Living", "Memory Care"],
+    description: "StoryPoint Strongsville offers a continuum of care with independent living, assisted living, and memory care options. Our beautiful campus features spacious apartments, chef-prepared dining, engaging activities, and personalized care services tailored to each resident's unique needs and preferences."
+  },
+  {
+    id: "facility-37",
+    name: "Brookdale Westlake Village",
+    location: "Westlake, OH",
+    address: "28460 Westlake Village Dr, Westlake, OH 44145",
+    coordinates: {
+      lat: 41.4535,
+      lng: -81.9152
+    },
+    images: [
+      "https://ext.same-assets.com/3140348022/3811120941.jpeg",
+      "https://ext.same-assets.com/3140348022/1483408660.jpeg",
+    ],
+    careTypes: ["Assisted Living", "Memory Care"],
+    description: "Brookdale Westlake Village provides personalized assisted living and memory care in a resort-style setting. Our dedicated staff delivers 24-hour assistance, medication management, and specialized memory care programming within our secure Clare Bridge neighborhood designed for residents with Alzheimer's and other forms of dementia."
+  },
+  {
+    id: "facility-38",
+    name: "Brookdale Gardens at Westlake",
+    location: "Westlake, OH",
+    address: "27569 Detroit Rd, Westlake, OH 44145",
+    coordinates: {
+      lat: 41.4545,
+      lng: -81.9198
+    },
+    images: [
+      "https://ext.same-assets.com/3140348022/2975331289.jpeg",
+      "https://ext.same-assets.com/3140348022/3923490053.jpeg",
+    ],
+    careTypes: ["Independent Living"],
+    description: "Brookdale Gardens at Westlake offers premium independent living for active seniors in a beautiful campus setting. Our community features spacious apartments, restaurant-style dining, a full calendar of social activities, and a wide range of amenities designed to support an engaging, maintenance-free lifestyle."
+  }
+];
