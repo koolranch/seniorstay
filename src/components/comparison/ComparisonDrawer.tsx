@@ -4,7 +4,7 @@ import React from 'react';
 import { Community } from '@/data/facilities';
 import { useComparison } from '@/context/ComparisonContext';
 import { Button } from '@/components/ui/button';
-import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger } from '@/components/ui/drawer';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { X } from 'lucide-react';
 
 interface ComparisonDrawerProps {
@@ -34,14 +34,14 @@ export default function ComparisonDrawer({ trigger }: ComparisonDrawerProps) {
   };
 
   return (
-    <Drawer open={open} onOpenChange={setOpen}>
-      <DrawerTrigger asChild>
+    <Sheet open={open} onOpenChange={setOpen}>
+      <SheetTrigger asChild>
         {trigger}
-      </DrawerTrigger>
-      <DrawerContent className="max-h-[90vh]">
-        <DrawerHeader>
-          <DrawerTitle>Compare Communities ({comparisonList.length}/4)</DrawerTitle>
-        </DrawerHeader>
+      </SheetTrigger>
+      <SheetContent className="w-full sm:max-w-xl">
+        <SheetHeader>
+          <SheetTitle>Compare Communities ({comparisonList.length}/4)</SheetTitle>
+        </SheetHeader>
         <div className="p-4 space-y-4">
           {comparisonList.length === 0 ? (
             <p className="text-center text-gray-500">No communities selected for comparison</p>
@@ -75,7 +75,7 @@ export default function ComparisonDrawer({ trigger }: ComparisonDrawerProps) {
             </>
           )}
         </div>
-      </DrawerContent>
-    </Drawer>
+      </SheetContent>
+    </Sheet>
   );
 }
