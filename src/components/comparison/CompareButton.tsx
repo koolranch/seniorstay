@@ -5,10 +5,10 @@ import { ScaleIcon, CheckIcon, PlusIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { useComparison } from '@/context/ComparisonContext';
-import { Facility } from '@/data/facilities';
+import { Community } from '@/data/facilities';
 
 interface CompareButtonProps {
-  facility: Facility;
+  facility: Community;
   variant?: 'icon' | 'button';
   className?: string;
 }
