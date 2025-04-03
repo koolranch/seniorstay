@@ -3,8 +3,13 @@ import { notFound } from 'next/navigation';
 import { facilityData } from '@/data/facilities';
 import CityLocationClient from './CityLocationClient';
 
-export async function generateMetadata({ params }: { params: { city: string } }) {
-  const decodedCity = decodeURIComponent(params.city);
+type PageProps = {
+  params: Promise<{ city: string }>;
+};
+
+export async function generateMetadata({ params }: PageProps) {
+  const { city } = await params;
+  const decodedCity = decodeURIComponent(city);
   const cityParts = decodedCity.split('-');
 
   // Extract city name and state
@@ -36,8 +41,9 @@ export async function generateMetadata({ params }: { params: { city: string } })
   };
 }
 
-export default async function CityLocationPage({ params }: { params: { city: string } }) {
-  const decodedCity = decodeURIComponent(params.city);
+export default async function CityLocationPage({ params }: PageProps) {
+  const { city } = await params;
+  const decodedCity = decodeURIComponent(city);
   const cityParts = decodedCity.split('-');
 
   // Extract city name and state
@@ -50,16 +56,18 @@ export default async function CityLocationPage({ params }: { params: { city: str
     return communityCity.toLowerCase() === cityName.toLowerCase();
   });
 
-  // If no communities found for this city, show 404
+  // If no communities found, show 404
   if (cityCommunities.length === 0) {
     notFound();
   }
 
   return (
-    <CityLocationClient
-      cityName={cityName}
-      stateAbbr={stateAbbr}
-      communities={cityCommunities}
-    />
+    <main>
+      <CityLocationClient
+        cityName={cityName}
+        stateAbbr={stateAbbr}
+        communities={cityCommunities}
+      />
+    </main>
   );
 }
