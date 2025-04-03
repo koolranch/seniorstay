@@ -18,8 +18,14 @@ interface LocationCardProps {
 }
 
 export default function LocationCard({ community }: LocationCardProps) {
-  // Generate stable IDs for form elements
+  // All Hooks must be called at the top level
   const formId = useId();
+  const [isPricingSubmitting, setIsPricingSubmitting] = useState(false);
+  const [isTourSubmitting, setIsTourSubmitting] = useState(false);
+  const [pricingSubmitted, setPricingSubmitted] = useState(false);
+  const [tourSubmitted, setTourSubmitted] = useState(false);
+  const router = useRouter();
+  const { addToComparison, isInComparison, removeFromComparison } = useComparison();
 
   // Early return with an error indicator if community is null/undefined
   if (!community) {
@@ -29,15 +35,6 @@ export default function LocationCard({ community }: LocationCardProps) {
       </div>
     );
   }
-
-  const [isPricingSubmitting, setIsPricingSubmitting] = useState(false);
-  const [isTourSubmitting, setIsTourSubmitting] = useState(false);
-  const [pricingSubmitted, setPricingSubmitted] = useState(false);
-  const [tourSubmitted, setTourSubmitted] = useState(false);
-  const router = useRouter();
-
-  // Get comparison context
-  const { addToComparison, isInComparison, removeFromComparison } = useComparison();
 
   // Safely access community id with fallback only if actually undefined
   const communityId = community.id || 'unknown';

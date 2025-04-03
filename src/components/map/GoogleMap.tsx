@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useMemo } from 'react';
 import { Community } from '@/data/facilities';
 import { useRouter } from 'next/navigation';
 import { Loader2 } from 'lucide-react';
@@ -40,17 +40,22 @@ export default function MapComponent({
   // Use facilities as fallback for communities
   const communitiesData = communities || facilities || [];
 
-  // Ensure communitiesData is an array and filter out any null or undefined entries
-  const validCommunities = Array.isArray(communitiesData) ? communitiesData.filter(Boolean) : [];
+  // Memoize validCommunities to prevent unnecessary recalculations
+  const validCommunities = useMemo(() => 
+    Array.isArray(communitiesData) ? communitiesData.filter(Boolean) : [],
+    [communitiesData]
+  );
 
-  // Safely get coordinates from first community or use default
-  const communityCenter = center ||
-    (validCommunities.length > 0 && validCommunities[0]?.coordinates
+  // Memoize communityCenter to prevent unnecessary recalculations
+  const communityCenter = useMemo(() => 
+    center || (validCommunities.length > 0 && validCommunities[0]?.coordinates
       ? {
           lat: validCommunities[0].coordinates.lat,
           lng: validCommunities[0].coordinates.lng
         }
-      : { lat: 41.4822, lng: -81.6697 }); // Default to Cleveland area
+      : { lat: 41.4993, lng: -81.6944 }), // Default to Cleveland coordinates
+    [center, validCommunities]
+  );
 
   // Set mounted state after component mounts to prevent hydration issues
   useEffect(() => {
