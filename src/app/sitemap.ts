@@ -1,6 +1,13 @@
 import { MetadataRoute } from 'next';
 import { facilityData } from '@/data/facilities';
 
+type SitemapEntry = {
+  url: string;
+  lastModified?: Date | string;
+  changeFrequency?: "always" | "hourly" | "daily" | "weekly" | "monthly" | "yearly" | "never";
+  priority?: number;
+};
+
 // Extract unique cities from facilities data
 const getUniqueCities = (): string[] => {
   const cities = facilityData.map(facility => {
@@ -16,16 +23,16 @@ const createCitySlugs = (): string[] => {
   return cities.map(city => city.toLowerCase().replace(/\s+/g, '-'));
 };
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default function sitemap(): SitemapEntry[] {
   const baseUrl = 'https://rayseniorplacement.com';
   const citySlugs = createCitySlugs();
 
   // Basic pages
-  const routes = [
+  const routes: SitemapEntry[] = [
     {
       url: baseUrl,
       lastModified: new Date(),
-      changeFrequency: 'daily',
+      changeFrequency: "daily",
       priority: 1.0,
     },
   ];
@@ -35,7 +42,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     routes.push({
       url: `${baseUrl}/location/${citySlug}`,
       lastModified: new Date(),
-      changeFrequency: 'weekly',
+      changeFrequency: "weekly",
       priority: 0.8,
     });
   }
@@ -46,7 +53,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     routes.push({
       url: `${baseUrl}/facility/${facility.id}/${facilitySlug}`,
       lastModified: new Date(),
-      changeFrequency: 'weekly',
+      changeFrequency: "weekly",
       priority: 0.7,
     });
   }
