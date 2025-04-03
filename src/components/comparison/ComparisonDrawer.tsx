@@ -5,6 +5,7 @@ import { X, Check, AlertCircle } from 'lucide-react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import { useComparison } from '@/context/ComparisonContext';
+import { Community } from '@/data/facilities';
 import Link from 'next/link';
 
 interface ComparisonDrawerProps {
@@ -16,14 +17,14 @@ export default function ComparisonDrawer({ trigger }: ComparisonDrawerProps) {
   const [open, setOpen] = React.useState(false);
 
   const getCareTypeAvailability = (careType: string) => {
-    return comparisonList.map(community => {
+    return comparisonList.map((community: Community) => {
       return community.careTypes.includes(careType);
     });
   };
 
   // Get all unique care types across all compared communities
   const allCareTypes = Array.from(
-    new Set(comparisonList.flatMap(community => community.careTypes))
+    new Set(comparisonList.flatMap((community: Community) => community.careTypes))
   ).sort();
 
   // Get all common amenities
@@ -34,8 +35,8 @@ export default function ComparisonDrawer({ trigger }: ComparisonDrawerProps) {
     const firstCommunityAmenities = comparisonList[0].amenities || [];
 
     // Find common amenities across all communities
-    return firstCommunityAmenities.filter(amenity =>
-      comparisonList.every(community =>
+    return firstCommunityAmenities.filter((amenity: string) =>
+      comparisonList.every((community: Community) =>
         community.amenities ? community.amenities.includes(amenity) : false
       )
     );
@@ -83,7 +84,7 @@ export default function ComparisonDrawer({ trigger }: ComparisonDrawerProps) {
             {/* Community Names Row */}
             <div className="grid grid-cols-[120px_repeat(auto-fill,minmax(120px,1fr))] gap-2 border-b pb-3 mb-3">
               <div className="font-semibold">Community</div>
-              {comparisonList.map(community => (
+              {comparisonList.map((community: Community) => (
                 <div key={community.id} className="relative">
                   <Button
                     variant="ghost"
@@ -107,7 +108,7 @@ export default function ComparisonDrawer({ trigger }: ComparisonDrawerProps) {
             {/* Location Row */}
             <div className="grid grid-cols-[120px_repeat(auto-fill,minmax(120px,1fr))] gap-2 border-b pb-3 mb-3">
               <div className="font-semibold">Location</div>
-              {comparisonList.map(community => (
+              {comparisonList.map((community: Community) => (
                 <div key={`${community.id}-location`} className="text-sm">
                   {community.location}
                 </div>
@@ -160,7 +161,7 @@ export default function ComparisonDrawer({ trigger }: ComparisonDrawerProps) {
             <div className="mt-6">
               <h3 className="font-semibold mb-2">Request Information</h3>
               <div className="grid grid-cols-[repeat(auto-fill,minmax(120px,1fr))] gap-2">
-                {comparisonList.map(community => (
+                {comparisonList.map((community: Community) => (
                   <div key={`${community.id}-buttons`} className="space-y-2">
                     <Button
                       variant="outline"

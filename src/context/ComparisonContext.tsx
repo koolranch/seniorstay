@@ -4,10 +4,11 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Community } from '@/data/facilities';
 
 type ComparisonContextType = {
-  addToComparison: (facility: Community) => void;
+  addToComparison: (community: Community) => void;
   removeFromComparison: (id: string) => void;
   isInComparison: (id: string) => boolean;
   comparisonList: Community[];
+  clearComparison: () => void;
 };
 
 const ComparisonContext = createContext<ComparisonContextType | undefined>(undefined);
@@ -33,10 +34,10 @@ export const ComparisonProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     localStorage.setItem('comparisonList', JSON.stringify(comparison));
   }, [comparison]);
 
-  const addToComparison = (facility: Community) => {
+  const addToComparison = (community: Community) => {
     // Don't add if already in comparison or reached limit
-    if (isInComparison(facility.id) || comparison.length >= 4) return;
-    setComparison((prev) => [...prev, facility]);
+    if (isInComparison(community.id) || comparison.length >= 4) return;
+    setComparison((prev) => [...prev, community]);
   };
 
   const removeFromComparison = (id: string) => {
@@ -45,9 +46,13 @@ export const ComparisonProvider: React.FC<{ children: React.ReactNode }> = ({ ch
 
   const isInComparison = (id: string) => comparison.some((item) => item.id === id);
 
+  const clearComparison = () => {
+    setComparison([]);
+  };
+
   return (
     <ComparisonContext.Provider
-      value={{ addToComparison, removeFromComparison, isInComparison, comparisonList: comparison }}
+      value={{ addToComparison, removeFromComparison, isInComparison, comparisonList: comparison, clearComparison }}
     >
       {children}
     </ComparisonContext.Provider>
