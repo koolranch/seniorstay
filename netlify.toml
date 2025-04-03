@@ -2,7 +2,7 @@
   remote_images = ["https://ext.same-assets.com/*"]
 
 [build]
-  command = "bun run build --cwd ."
+  command = "bun run build"
   publish = ".next"
 
 [build.environment]
