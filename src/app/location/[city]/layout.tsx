@@ -1,8 +1,8 @@
 import { Metadata } from 'next';
 
 type Props = {
-  params: { city: string }
-  children: React.ReactNode
+  params: Promise<{ city: string }>;
+  children: React.ReactNode;
 };
 
 // Format city slug into readable name
@@ -18,8 +18,8 @@ const formatCityName = (slug: string): string => {
 // Generate metadata for each city page dynamically
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   // Make sure to get params asynchronously
-  const citySlug = params?.city || '';
-  const cityName = formatCityName(citySlug);
+  const { city } = await params;
+  const cityName = formatCityName(city);
 
   return {
     title: `Senior Living in ${cityName}, OH | Cleveland Senior Guide`,
@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       title: `Senior Living Options in ${cityName}, Ohio | Cleveland Senior Guide`,
       description: `Find the perfect senior living community in ${cityName} with Cleveland Senior Guide. Browse assisted living, memory care, and independent living options.`,
-      url: `https://rayseniorplacement.com/location/${citySlug}`,
+      url: `https://rayseniorplacement.com/location/${city}`,
       siteName: 'Cleveland Senior Guide',
       locale: 'en_US',
       type: 'website',
@@ -36,6 +36,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default function CityLayout({ children }: { children: React.ReactNode }) {
+export default async function CityLayout({ params, children }: Props) {
+  const { city } = await params;
   return children;
 }
