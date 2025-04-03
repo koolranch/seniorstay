@@ -2,12 +2,13 @@
 
 import * as React from 'react';
 import { communityData } from '@/data/facilities';
+import PropertyCard from '@/components/property/PropertyCard';
 
-interface LocationMapProps {
+interface LocationCommunitiesProps {
   city: string;
 }
 
-export const LocationMap: React.FC<LocationMapProps> = ({ city }: LocationMapProps) => {
+export const LocationCommunities: React.FC<LocationCommunitiesProps> = ({ city }: LocationCommunitiesProps) => {
   const decodedCity = decodeURIComponent(city);
   const cityCommunities = communityData.filter(
     community => community.location.toLowerCase().includes(decodedCity.toLowerCase())
@@ -19,13 +20,10 @@ export const LocationMap: React.FC<LocationMapProps> = ({ city }: LocationMapPro
         <h2 className="text-2xl font-bold text-gray-900 mb-6">
           Senior Living Communities in {decodedCity}
         </h2>
-        <div className="h-[400px] rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center">
-          <div className="text-center">
-            <p className="text-gray-500 text-lg mb-2">Map View Coming Soon</p>
-            <p className="text-gray-400">
-              {cityCommunities.length} communities found in {decodedCity}
-            </p>
-          </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {cityCommunities.map((community) => (
+            <PropertyCard key={community.id} community={community} />
+          ))}
         </div>
       </div>
     </div>

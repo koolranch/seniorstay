@@ -11,7 +11,6 @@ import CommunityStaff from '@/components/community/CommunityStaff';
 import CommunityTestimonials from '@/components/community/CommunityTestimonials';
 import CommunityContact from '@/components/community/CommunityContact';
 import SchemaOrg from './SchemaOrg';
-import { Metadata } from 'next';
 
 interface CommunityPageProps {
   params: {
@@ -52,30 +51,4 @@ export default function CommunityPage({ params }: CommunityPageProps) {
       <SchemaOrg community={community} />
     </div>
   );
-}
-
-// Generate metadata for all communities
-export async function generateMetadata({ params }: CommunityPageProps): Promise<Metadata> {
-  const { id, slug } = params;
-  
-  const community = communityData.find(
-    (community) => community.id === id
-  );
-
-  if (!community) {
-    return {
-      title: 'Community Not Found',
-      description: 'The requested community could not be found.',
-    };
-  }
-
-  return {
-    title: `${community.name} | Senior Living Community`,
-    description: community.description,
-    openGraph: {
-      title: `${community.name} | Senior Living Community`,
-      description: community.description,
-      images: community.images,
-    },
-  };
 }
