@@ -41,46 +41,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const title = `${community.name} | Senior Living in ${community.location} | Cleveland Senior Guide`;
   const description = `View detailed information about ${community.name}, a senior living community in ${community.location}. Compare amenities, care levels, and pricing for assisted living, memory care, and independent living options.`;
 
-  return {
-    title,
-    description,
-    openGraph: {
-      title,
-      description,
-      type: 'article',
-      siteName: 'Cleveland Senior Guide',
-      images: community.images?.length ? [
-        {
-          url: community.images[0],
-          width: 1200,
-          height: 630,
-          alt: `${community.name} - Senior Living Community`,
-        }
-      ] : undefined,
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title,
-      description,
-      images: community.images?.length ? [community.images[0]] : undefined,
-    },
-    alternates: {
-      canonical: `/facility/${community.id}/${community.name.toLowerCase().replace(/\s+/g, '-')}`,
-    },
-  };
-}
-
-// Generate structured data for the facility
-export async function generateStructuredData({ params }: PageProps) {
-  const community = facilityData.find(
-    (community) => community.id === params.id
-  );
-
-  if (!community) {
-    return null;
-  }
-
-  const facilitySchema = {
+  const structuredData = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
     "name": community.name,
@@ -117,20 +78,37 @@ export async function generateStructuredData({ params }: PageProps) {
           "description": `Professional ${type} services provided at ${community.name}`
         }
       }))
-    },
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4.8",
-      "ratingCount": "124",
-      "bestRating": "5",
-      "worstRating": "1"
     }
   };
 
-  return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(facilitySchema) }}
-    />
-  );
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      type: 'article',
+      siteName: 'Cleveland Senior Guide',
+      images: community.images?.length ? [
+        {
+          url: community.images[0],
+          width: 1200,
+          height: 630,
+          alt: `${community.name} - Senior Living Community`,
+        }
+      ] : undefined,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: community.images?.length ? [community.images[0]] : undefined,
+    },
+    alternates: {
+      canonical: `/facility/${community.id}/${community.name.toLowerCase().replace(/\s+/g, '-')}`,
+    },
+    other: {
+      'application/ld+json': JSON.stringify(structuredData)
+    }
+  };
 }
