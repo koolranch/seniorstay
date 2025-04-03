@@ -12,30 +12,30 @@ interface ComparisonDrawerProps {
 }
 
 export default function ComparisonDrawer({ trigger }: ComparisonDrawerProps) {
-  const { communities, removeFromComparison, clearComparison } = useComparison();
+  const { comparisonList, removeFromComparison, clearComparison } = useComparison();
   const [open, setOpen] = React.useState(false);
 
   const getCareTypeAvailability = (careType: string) => {
-    return communities.map(community => {
+    return comparisonList.map(community => {
       return community.careTypes.includes(careType);
     });
   };
 
   // Get all unique care types across all compared communities
   const allCareTypes = Array.from(
-    new Set(communities.flatMap(community => community.careTypes))
+    new Set(comparisonList.flatMap(community => community.careTypes))
   ).sort();
 
   // Get all common amenities
   const getCommonAmenities = () => {
-    if (communities.length === 0) return [];
+    if (comparisonList.length === 0) return [];
 
     // Start with the amenities of the first community
-    const firstCommunityAmenities = communities[0].amenities || [];
+    const firstCommunityAmenities = comparisonList[0].amenities || [];
 
     // Find common amenities across all communities
     return firstCommunityAmenities.filter(amenity =>
-      communities.every(community =>
+      comparisonList.every(community =>
         community.amenities ? community.amenities.includes(amenity) : false
       )
     );
@@ -51,7 +51,7 @@ export default function ComparisonDrawer({ trigger }: ComparisonDrawerProps) {
           <SheetTitle className="text-xl">Compare Communities</SheetTitle>
         </SheetHeader>
 
-        {communities.length === 0 ? (
+        {comparisonList.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full py-12 text-center">
             <AlertCircle className="h-12 w-12 text-gray-400 mb-4" />
             <h3 className="text-lg font-medium mb-2">No Communities Selected</h3>
@@ -68,7 +68,7 @@ export default function ComparisonDrawer({ trigger }: ComparisonDrawerProps) {
           <>
             <div className="flex justify-between items-center mb-4">
               <p className="text-sm text-gray-600">
-                {communities.length} of 4 communities selected
+                {comparisonList.length} of 4 communities selected
               </p>
               <Button
                 variant="ghost"
@@ -83,7 +83,7 @@ export default function ComparisonDrawer({ trigger }: ComparisonDrawerProps) {
             {/* Community Names Row */}
             <div className="grid grid-cols-[120px_repeat(auto-fill,minmax(120px,1fr))] gap-2 border-b pb-3 mb-3">
               <div className="font-semibold">Community</div>
-              {communities.map(community => (
+              {comparisonList.map(community => (
                 <div key={community.id} className="relative">
                   <Button
                     variant="ghost"
@@ -107,7 +107,7 @@ export default function ComparisonDrawer({ trigger }: ComparisonDrawerProps) {
             {/* Location Row */}
             <div className="grid grid-cols-[120px_repeat(auto-fill,minmax(120px,1fr))] gap-2 border-b pb-3 mb-3">
               <div className="font-semibold">Location</div>
-              {communities.map(community => (
+              {comparisonList.map(community => (
                 <div key={`${community.id}-location`} className="text-sm">
                   {community.location}
                 </div>
@@ -160,7 +160,7 @@ export default function ComparisonDrawer({ trigger }: ComparisonDrawerProps) {
             <div className="mt-6">
               <h3 className="font-semibold mb-2">Request Information</h3>
               <div className="grid grid-cols-[repeat(auto-fill,minmax(120px,1fr))] gap-2">
-                {communities.map(community => (
+                {comparisonList.map(community => (
                   <div key={`${community.id}-buttons`} className="space-y-2">
                     <Button
                       variant="outline"
