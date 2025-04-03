@@ -14,7 +14,7 @@ import SearchResults from '@/components/search/SearchResults';
 import ComparisonFloatingButton from '@/components/comparison/ComparisonFloatingButton';
 import Footer from '@/components/footer/Footer';
 import LocationCard from '@/components/property/LocationCard';
-import { facilityData } from '@/data/facilities';
+import { communityData } from '@/data/facilities';
 
 export default function Home() {
   // Get search parameters
@@ -24,25 +24,25 @@ export default function Home() {
   // Filters
   const [selectedCareFilter, setSelectedCareFilter] = useState('all');
   const [selectedLocation, setSelectedLocation] = useState('all');
-  const [filteredCommunities, setFilteredCommunities] = useState(facilityData);
+  const [filteredCommunities, setFilteredCommunities] = useState(communityData);
 
   // Store active filter labels for display
   const [activeCareLabel, setActiveCareLabel] = useState('');
   const [activeLocationLabel, setActiveLocationLabel] = useState('');
 
   // Extract all unique cities from communities
-  const allCities = Array.from(new Set(facilityData.map(community =>
+  const allCities = Array.from(new Set(communityData.map(community =>
     community.location.split(',')[0].trim()
   ))).sort();
 
   // Get all unique care types across all communities
   const allCareTypes = Array.from(new Set(
-    facilityData.flatMap(community => community.careTypes)
+    communityData.flatMap(community => community.careTypes)
   )).sort();
 
   // Apply filters
   useEffect(() => {
-    let results = [...facilityData];
+    let results = [...communityData];
 
     // Apply care type filter
     if (selectedCareFilter !== 'all') {
@@ -145,13 +145,13 @@ export default function Home() {
 
   // Count communities by type
   const communityCounts = allCareTypes.reduce((acc, type) => {
-    acc[type] = facilityData.filter(c => c.careTypes.includes(type)).length;
+    acc[type] = communityData.filter(c => c.careTypes.includes(type)).length;
     return acc;
   }, {} as Record<string, number>);
 
   // Count communities by city for display
   const cityCounts = allCities.reduce((acc, city) => {
-    acc[city] = facilityData.filter(c => c.location.split(',')[0].trim() === city).length;
+    acc[city] = communityData.filter(c => c.location.split(',')[0].trim() === city).length;
     return acc;
   }, {} as Record<string, number>);
 
@@ -177,7 +177,7 @@ export default function Home() {
               Find Senior Living Options in Northeast Ohio
             </h1>
             <p className="text-lg text-gray-700 mb-8 text-center">
-              Discover the best assisted living, memory care, and independent living communities for yourself or your loved one. We help you make informed decisions with comprehensive information on {facilityData.length} senior care communities.
+              Discover the best assisted living, memory care, and independent living communities for yourself or your loved one. We help you make informed decisions with comprehensive information on {communityData.length} senior care communities.
             </p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
@@ -235,7 +235,7 @@ export default function Home() {
                 href="#communities"
                 className="inline-flex items-center text-primary hover:underline"
               >
-                <span>View all {facilityData.length} communities</span>
+                <span>View all {communityData.length} communities</span>
                 <ArrowRight className="ml-1 h-4 w-4" />
               </Link>
             </div>

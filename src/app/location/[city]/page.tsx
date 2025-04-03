@@ -1,73 +1,52 @@
+"use client";
+
 import React from 'react';
+import { communityData } from '@/data/facilities';
 import { notFound } from 'next/navigation';
-import { facilityData } from '@/data/facilities';
-import CityLocationClient from './CityLocationClient';
+import LocationHeader from '@/components/location/LocationHeader';
+import LocationTabs from '@/components/location/LocationTabs';
+import LocationStats from '@/components/location/LocationStats';
+import LocationMap from '@/components/location/LocationMap';
+import LocationCommunities from '@/components/location/LocationCommunities';
+import LocationFAQ from '@/components/location/LocationFAQ';
+import SchemaOrg from './SchemaOrg';
 
-type PageProps = {
-  params: Promise<{ city: string }>;
-};
-
-export async function generateMetadata({ params }: PageProps) {
-  const { city } = await params;
-  const decodedCity = decodeURIComponent(city);
-  const cityParts = decodedCity.split('-');
-
-  // Extract city name and state
-  const cityName = cityParts.slice(0, -1).join(' ');
-  const stateAbbr = cityParts[cityParts.length - 1];
-
-  // Get communities for this city
-  const cityCommunities = facilityData.filter(community => {
-    const communityCity = community.location?.split(',')[0]?.trim() || '';
-    return communityCity.toLowerCase() === cityName.toLowerCase();
-  });
-
-  // If no communities found, use default metadata
-  if (cityCommunities.length === 0) {
-    return {
-      title: 'Location Not Found | Ray Senior Placement',
-      description: 'Explore senior living options across Northeast Ohio.',
-    };
-  }
-
-  return {
-    title: `Senior Living in ${cityName}, ${stateAbbr} | Ray Senior Placement`,
-    description: `Discover ${cityCommunities.length} senior living communities in ${cityName}, ${stateAbbr}. Find assisted living, memory care, and independent living options.`,
-    openGraph: {
-      title: `Senior Living in ${cityName}, ${stateAbbr}`,
-      description: `Explore ${cityCommunities.length} senior care communities in ${cityName}, ${stateAbbr} including assisted living, memory care, and independent living.`,
-      images: ['/images/og-image.jpg'],
-    }
+interface LocationPageProps {
+  params: {
+    city: string;
   };
 }
 
-export default async function CityLocationPage({ params }: PageProps) {
-  const { city } = await params;
+export default function LocationPage({ params }: LocationPageProps) {
+  const { city } = params;
   const decodedCity = decodeURIComponent(city);
-  const cityParts = decodedCity.split('-');
 
-  // Extract city name and state
-  const cityName = cityParts.slice(0, -1).join(' ');
-  const stateAbbr = cityParts[cityParts.length - 1];
+  // Filter communities by city
+  const communities = communityData.filter(
+    community => community.location.split(',')[0].trim() === decodedCity
+  );
 
-  // Get communities for this city
-  const cityCommunities = facilityData.filter(community => {
-    const communityCity = community.location?.split(',')[0]?.trim() || '';
-    return communityCity.toLowerCase() === cityName.toLowerCase();
-  });
-
-  // If no communities found, show 404
-  if (cityCommunities.length === 0) {
+  if (communities.length === 0) {
     notFound();
   }
 
+  // Get state abbreviation from the first community
+  const stateAbbr = communities[0].location.split(',')[1]?.trim() || 'OH';
+
   return (
-    <main>
-      <CityLocationClient
-        cityName={cityName}
+    <div className="min-h-screen bg-gray-50">
+      <LocationHeader city={decodedCity} state={stateAbbr} />
+      <div className="container mx-auto px-4 py-8">
+        <LocationStats communities={communities} />
+        <LocationMap communities={communities} />
+        <LocationCommunities communities={communities} />
+        <LocationFAQ />
+      </div>
+      <SchemaOrg
+        cityName={decodedCity}
         stateAbbr={stateAbbr}
-        communities={cityCommunities}
+        communities={communities}
       />
-    </main>
+    </div>
   );
 }

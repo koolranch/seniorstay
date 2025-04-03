@@ -1,6 +1,7 @@
 "use client";
 
 import React from 'react';
+import { Community } from '@/data/facilities';
 import PropertyCard from './PropertyCard';
 
 // Parse senior living facility data from CSV
@@ -91,19 +92,18 @@ const processedFacilities = seniorLivingFacilities.map((facility, index) => {
   };
 });
 
-const PropertyGrid = () => {
+interface PropertyGridProps {
+  communities: Community[];
+}
+
+export default function PropertyGrid({ communities }: PropertyGridProps) {
   return (
     <div className="container px-6 py-8 mx-auto">
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {processedFacilities.map((facility) => (
-          <PropertyCard
-            key={facility.id}
-            {...facility}
-          />
+        {communities.map((community) => (
+          <PropertyCard key={community.id} community={community} />
         ))}
       </div>
     </div>
   );
-};
-
-export default PropertyGrid;
+}

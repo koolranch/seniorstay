@@ -29,8 +29,23 @@ export interface Community {
   testimonials?: CommunityTestimonial[];
 }
 
-// Export the renamed community data (keep facilityData as the variable name for now to avoid breaking imports)
-export const facilityData: Community[] = [
+// Export the community data
+export const communityData: Community[] = [
+  {
+    id: "community-1",
+    name: "The Woodlands by Heritage Retirement Communities",
+    location: "Shaker Heights, OH",
+    address: "16333 Chagrin Blvd, Shaker Heights, OH 44120",
+    description: "The Woodlands by Heritage Retirement Communities offers a full continuum of care with independent living, assisted living, and memory care options. Our beautiful community features spacious apartments, chef-prepared dining, engaging activities, and a supportive environment.",
+    careTypes: ["Independent Living", "Assisted Living", "Memory Care"],
+    amenities: ["Fitness Center", "Swimming Pool", "Library", "Beauty Salon", "Restaurant-Style Dining"],
+    coordinates: { lat: 41.4822, lng: -81.5697 },
+    images: [
+      "/images/communities/woodlands-1.jpg",
+      "/images/communities/woodlands-2.jpg",
+      "/images/communities/woodlands-3.jpg"
+    ]
+  },
   {
     id: "facility-1",
     name: "Westwood Place",
@@ -817,7 +832,7 @@ export const facilityData: Community[] = [
   },
   {
     id: "facility-50",
-    name: "Rely’s Adult Family Home",
+    name: "Rely's Adult Family Home",
     location: "Parma, OH",
     address: "7500 Big Creek Pkwy, Parma, OH 44130",
     coordinates: {
@@ -829,7 +844,7 @@ export const facilityData: Community[] = [
       "https://ext.same-assets.com/3140348022/3811120941.jpeg",
     ],
     careTypes: ["Assisted Living"],
-    description: "Rely’s Adult Family Home provides personalized assisted living services in a comfortable environment. Our dedicated staff delivers 24-hour assistance with daily activities, medication management, and health monitoring while promoting dignity and independence."
+    description: "Rely's Adult Family Home provides personalized assisted living services in a comfortable environment. Our dedicated staff delivers 24-hour assistance with daily activities, medication management, and health monitoring while promoting dignity and independence."
   },
   {
     id: "facility-51",

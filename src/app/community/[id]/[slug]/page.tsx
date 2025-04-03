@@ -1,49 +1,81 @@
-import { facilityData } from '@/data/facilities';
+"use client";
+
+import React from 'react';
+import { communityData } from '@/data/facilities';
 import { notFound } from 'next/navigation';
-import CommunityClient from './CommunityClient';
+import CommunityHeader from '@/components/community/CommunityHeader';
+import CommunityOverview from '@/components/community/CommunityOverview';
+import CommunityAmenities from '@/components/community/CommunityAmenities';
+import CommunityCareTypes from '@/components/community/CommunityCareTypes';
+import CommunityStaff from '@/components/community/CommunityStaff';
+import CommunityTestimonials from '@/components/community/CommunityTestimonials';
+import CommunityContact from '@/components/community/CommunityContact';
+import SchemaOrg from './SchemaOrg';
 import { Metadata } from 'next';
 
-interface PageProps {
-  params: Promise<{
+interface CommunityPageProps {
+  params: {
     id: string;
     slug: string;
-  }>;
+  };
 }
 
-export default async function CommunityPage({ params }: PageProps) {
-  const { id, slug } = await params;
-  
-  const community = facilityData.find(
-    (community) => community.id === id
+export default function CommunityPage({ params }: CommunityPageProps) {
+  const { id, slug } = params;
+
+  // Find the community by ID
+  const community = communityData.find(
+    community => community.id === id
   );
 
   if (!community) {
     notFound();
   }
 
+  // Verify the slug matches the community name
+  const expectedSlug = community.name.toLowerCase().replace(/\s+/g, '-');
+  if (slug !== expectedSlug) {
+    notFound();
+  }
+
   return (
-    <main>
-      <CommunityClient community={community} />
-    </main>
+    <div className="min-h-screen bg-gray-50">
+      <CommunityHeader community={community} />
+      <div className="container mx-auto px-4 py-8">
+        <CommunityOverview community={community} />
+        <CommunityAmenities community={community} />
+        <CommunityCareTypes community={community} />
+        <CommunityStaff community={community} />
+        <CommunityTestimonials community={community} />
+        <CommunityContact community={community} />
+      </div>
+      <SchemaOrg community={community} />
+    </div>
   );
 }
 
 // Generate metadata for all communities
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { id, slug } = await params;
+export async function generateMetadata({ params }: CommunityPageProps): Promise<Metadata> {
+  const { id, slug } = params;
   
-  const community = facilityData.find(
+  const community = communityData.find(
     (community) => community.id === id
   );
 
   if (!community) {
     return {
       title: 'Community Not Found',
+      description: 'The requested community could not be found.',
     };
   }
 
   return {
-    title: `${community.name} | Cleveland Senior Guide`,
-    description: `View details about ${community.name}, a senior living community located in ${community.location}.`,
+    title: `${community.name} | Senior Living Community`,
+    description: community.description,
+    openGraph: {
+      title: `${community.name} | Senior Living Community`,
+      description: community.description,
+      images: community.images,
+    },
   };
 }

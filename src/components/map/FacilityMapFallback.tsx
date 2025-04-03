@@ -1,41 +1,27 @@
+"use client";
+
 import React from 'react';
-import MapFallback from './MapFallback';
 import { Community } from '@/data/facilities';
 
-interface FacilityMapFallbackProps {
-  facility: Community;
-  height?: string;
-  width?: string;
+interface CommunityMapFallbackProps {
+  community: Community;
 }
 
-export default function FacilityMapFallback({
-  facility,
-  height = '450px',
-  width = '100%',
-}: FacilityMapFallbackProps) {
-  const getDirectionsUrl = () => {
-    if (!facility?.coordinates) return '';
-
-    return `https://www.google.com/maps/dir/?api=1&destination=${facility.coordinates.lat},${facility.coordinates.lng}`;
-  };
+export default function CommunityMapFallback({ community }: CommunityMapFallbackProps) {
+  const { coordinates } = community;
+  const mapUrl = `https://www.google.com/maps/embed/v1/place?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&q=${coordinates.lat},${coordinates.lng}`;
 
   return (
-    <div className="relative" style={{ height, width }}>
-      <MapFallback
-        height={height}
-        width={width}
+    <div className="w-full h-full">
+      <iframe
+        src={mapUrl}
+        width="100%"
+        height="100%"
+        style={{ border: 0 }}
+        allowFullScreen
+        loading="lazy"
+        referrerPolicy="no-referrer-when-downgrade"
       />
-
-      <div className="absolute bottom-4 left-0 right-0 flex justify-center">
-        <a
-          href={getDirectionsUrl()}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="bg-primary text-white px-4 py-2 rounded-md text-sm shadow-md hover:bg-primary/90 transition-colors"
-        >
-          Get Directions
-        </a>
-      </div>
     </div>
   );
 }

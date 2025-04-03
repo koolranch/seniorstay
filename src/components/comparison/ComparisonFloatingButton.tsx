@@ -1,28 +1,33 @@
 "use client";
 
 import React from 'react';
-import { Scale } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { useComparison } from '@/context/ComparisonContext';
+import { Button } from '@/components/ui/button';
+import { Scale } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import ComparisonDrawer from './ComparisonDrawer';
 
 export default function ComparisonFloatingButton() {
-  const { communities } = useComparison();
+  const { comparisonList } = useComparison();
+  const [isVisible, setIsVisible] = React.useState(false);
 
-  // Don't show button if no communities are in comparison
-  if (communities.length === 0) {
-    return null;
-  }
+  // Don't show button if no items are in comparison
+  if (comparisonList.length === 0) return null;
 
   return (
-    <div className="fixed bottom-6 right-6 z-40">
+    <div className="fixed bottom-4 right-4 z-50">
       <ComparisonDrawer
         trigger={
           <Button
-            className="rounded-full px-5 py-6 shadow-lg flex items-center gap-2"
+            className={cn(
+              'rounded-full shadow-lg transition-all duration-300',
+              isVisible ? 'opacity-100' : 'opacity-0'
+            )}
+            size="lg"
+            onClick={() => setIsVisible(!isVisible)}
           >
-            <Scale className="h-5 w-5" />
-            <span>Compare ({communities.length})</span>
+            <Scale className="mr-2 h-5 w-5" />
+            Compare ({comparisonList.length})
           </Button>
         }
       />
