@@ -1,17 +1,20 @@
 import { facilityData } from '@/data/facilities';
 import { notFound } from 'next/navigation';
 import CommunityClient from './CommunityClient';
+import { Metadata } from 'next';
 
 interface PageProps {
-  params: {
+  params: Promise<{
     id: string;
     slug: string;
-  };
+  }>;
 }
 
-export default function CommunityPage({ params }: PageProps) {
+export default async function CommunityPage({ params }: PageProps) {
+  const { id, slug } = await params;
+  
   const community = facilityData.find(
-    (community) => community.id === params.id
+    (community) => community.id === id
   );
 
   if (!community) {
@@ -26,9 +29,11 @@ export default function CommunityPage({ params }: PageProps) {
 }
 
 // Generate metadata for all communities
-export async function generateMetadata({ params }: PageProps) {
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { id, slug } = await params;
+  
   const community = facilityData.find(
-    (community) => community.id === params.id
+    (community) => community.id === id
   );
 
   if (!community) {

@@ -37,8 +37,11 @@ export default function MapComponent({
   // This prevents hydration mismatches
   const [isMounted, setIsMounted] = useState(false);
 
-  // Use facilities as fallback for communities
-  const communitiesData = communities || facilities || [];
+  // Memoize communitiesData to prevent unnecessary recalculations
+  const communitiesData = useMemo(() => 
+    communities || facilities || [],
+    [communities, facilities]
+  );
 
   // Memoize validCommunities to prevent unnecessary recalculations
   const validCommunities = useMemo(() => 
