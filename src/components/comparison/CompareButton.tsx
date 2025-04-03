@@ -52,13 +52,8 @@ const CompareButton: React.FC<CompareButtonProps> = ({
               )}
             </button>
           </TooltipTrigger>
-          <TooltipContent side="bottom">
-            {isSelected
-              ? "Remove from comparison"
-              : isFull
-                ? "Maximum of 4 facilities can be compared"
-                : "Add to comparison"
-            }
+          <TooltipContent>
+            {isSelected ? "Remove from comparison" : "Add to comparison"}
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
@@ -67,25 +62,24 @@ const CompareButton: React.FC<CompareButtonProps> = ({
 
   return (
     <Button
-      variant={isSelected ? "default" : "outline"}
-      size="sm"
       onClick={(e) => {
         e.stopPropagation();
         e.preventDefault();
         handleToggle();
       }}
+      variant={isSelected ? "default" : "outline"}
+      className={`w-full ${isFull ? 'opacity-50 cursor-not-allowed' : ''} ${className}`}
       disabled={isFull}
-      className={`${isSelected ? 'bg-primary text-white' : 'border-primary text-primary'} ${isFull ? 'opacity-50' : ''} ${className}`}
     >
       {isSelected ? (
         <>
-          <CheckIcon className="h-4 w-4 mr-2" />
-          Added to Compare
+          <CheckIcon className="mr-2 h-4 w-4" />
+          Added to Comparison
         </>
       ) : (
         <>
-          <PlusIcon className="h-4 w-4 mr-2" />
-          Add to Compare
+          <PlusIcon className="mr-2 h-4 w-4" />
+          Add to Comparison
         </>
       )}
     </Button>

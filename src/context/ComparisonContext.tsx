@@ -3,74 +3,61 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Community } from '@/data/facilities';
 
-interface ComparisonContextType {
-  communities: Community[];
-  addToComparison: (community: Community) => void;
+type ComparisonContextType = {
+  addToComparison: (facility: Community) => void;
   removeFromComparison: (id: string) => void;
-  clearComparison: () => void;
   isInComparison: (id: string) => boolean;
-}
+  comparisonList: Community[];
+};
 
-const ComparisonContext = createContext<ComparisonContextType>({
-  communities: [],
-  addToComparison: () => {},
-  removeFromComparison: () => {},
-  clearComparison: () => {},
-  isInComparison: () => false,
-});
-
-export const useComparison = () => useContext(ComparisonContext);
+const ComparisonContext = createContext<ComparisonContextType | undefined>(undefined);
 
 export const ComparisonProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [communities, setCommunities] = useState<Community[]>([]);
+  const [comparison, setComparison] = useState<Community[]>([]);
 
-  // Load saved communities from localStorage on initial render
+  // Load saved comparison from localStorage on initial render
   useEffect(() => {
-    const savedCommunities = localStorage.getItem('comparisonCommunities');
-    if (savedCommunities) {
+    const savedComparison = localStorage.getItem('comparisonList');
+    if (savedComparison) {
       try {
-        setCommunities(JSON.parse(savedCommunities));
+        setComparison(JSON.parse(savedComparison));
       } catch (error) {
-        console.error('Error loading saved comparison communities:', error);
-        localStorage.removeItem('comparisonCommunities');
+        console.error('Error loading saved comparison:', error);
+        localStorage.removeItem('comparisonList');
       }
     }
   }, []);
 
-  // Save communities to localStorage whenever they change
+  // Save comparison to localStorage whenever it changes
   useEffect(() => {
-    localStorage.setItem('comparisonCommunities', JSON.stringify(communities));
-  }, [communities]);
+    localStorage.setItem('comparisonList', JSON.stringify(comparison));
+  }, [comparison]);
 
-  const addToComparison = (community: Community) => {
+  const addToComparison = (facility: Community) => {
     // Don't add if already in comparison or reached limit
-    if (isInComparison(community.id) || communities.length >= 4) return;
-    setCommunities([...communities, community]);
+    if (isInComparison(facility.id) || comparison.length >= 4) return;
+    setComparison((prev) => [...prev, facility]);
   };
 
   const removeFromComparison = (id: string) => {
-    setCommunities(communities.filter(item => item.id !== id));
+    setComparison((prev) => prev.filter((item) => item.id !== id));
   };
 
-  const clearComparison = () => {
-    setCommunities([]);
-  };
-
-  const isInComparison = (id: string) => {
-    return communities.some(item => item.id === id);
-  };
+  const isInComparison = (id: string) => comparison.some((item) => item.id === id);
 
   return (
     <ComparisonContext.Provider
-      value={{
-        communities,
-        addToComparison,
-        removeFromComparison,
-        clearComparison,
-        isInComparison,
-      }}
+      value={{ addToComparison, removeFromComparison, isInComparison, comparisonList: comparison }}
     >
       {children}
     </ComparisonContext.Provider>
   );
+};
+
+export const useComparison = () => {
+  const context = useContext(ComparisonContext);
+  if (!context) {
+    throw new Error('useComparison must be used within a ComparisonProvider');
+  }
+  return context;
 };
