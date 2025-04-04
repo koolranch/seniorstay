@@ -12,15 +12,16 @@ import CommunityTestimonials from '@/components/community/CommunityTestimonials'
 import CommunityContact from '@/components/community/CommunityContact';
 import SchemaOrg from './SchemaOrg';
 
-interface CommunityPageProps {
+type Props = {
   params: {
     id: string;
     slug: string;
   };
-}
+  searchParams: Record<string, string | string[] | undefined>;
+};
 
-export default function CommunityPage({ params }: CommunityPageProps) {
-  const { id, slug } = params as { id: string; slug: string };
+export default function CommunityPage({ params }: Props) {
+  const { id, slug } = params;
 
   // Find the community by ID
   const community = communityData.find(
