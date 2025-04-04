@@ -36,24 +36,26 @@ const categories = [
 
 interface CategoryTabsProps {
   communities: Community[];
+  selectedFilter?: string;
+  onFilterChange?: (value: string) => void;
 }
 
-export default function CategoryTabs({ communities }: CategoryTabsProps) {
-  const careTypes = Array.from(new Set(communities.flatMap(community => community.careTypes)));
+export default function CategoryTabs({ communities, selectedFilter = 'all', onFilterChange }: CategoryTabsProps) {
+  const careTypes = ['all', ...Array.from(new Set(communities.flatMap(community => community.careTypes)))];
 
   return (
-    <Tabs defaultValue={careTypes[0]} className="w-full">
+    <Tabs value={selectedFilter} onValueChange={onFilterChange} className="w-full">
       <TabsList className="grid w-full grid-cols-2 md:grid-cols-4">
         {careTypes.map((type) => (
           <TabsTrigger key={type} value={type}>
-            {type}
+            {type === 'all' ? 'All Options' : type}
           </TabsTrigger>
         ))}
       </TabsList>
       {careTypes.map((type) => (
         <TabsContent key={type} value={type}>
           <PropertyGrid
-            communities={communities.filter(community => community.careTypes.includes(type))}
+            communities={type === 'all' ? communities : communities.filter(community => community.careTypes.includes(type))}
           />
         </TabsContent>
       ))}
