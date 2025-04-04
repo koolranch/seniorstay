@@ -21,7 +21,7 @@ export default function CommunityTestimonials({ community }: CommunityTestimonia
               className="bg-white p-6 rounded-lg shadow-sm"
             >
               <p className="text-gray-600 italic mb-4">
-                "{testimonial.text}"
+                "{testimonial.quote}"
               </p>
               <div className="flex items-center">
                 <div>
@@ -29,7 +29,7 @@ export default function CommunityTestimonials({ community }: CommunityTestimonia
                     {testimonial.author}
                   </p>
                   <p className="text-sm text-gray-500">
-                    {testimonial.role}
+                    Resident
                   </p>
                 </div>
               </div>
