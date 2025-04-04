@@ -27,6 +27,7 @@ export interface Community {
     caregivers: CommunityStaff[];
   };
   testimonials?: CommunityTestimonial[];
+  rating?: number; // Optional rating property
 }
 
 // Export the community data
