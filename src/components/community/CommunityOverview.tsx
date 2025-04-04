@@ -16,7 +16,7 @@ export default function CommunityOverview({ community }: CommunityOverviewProps)
         </h2>
         <div className="prose max-w-none">
           <p className="text-gray-600">
-            {community.description}
+            {community.description || 'No description available.'}
           </p>
         </div>
         <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -25,7 +25,7 @@ export default function CommunityOverview({ community }: CommunityOverviewProps)
               Location
             </h3>
             <p className="text-gray-600">
-              {community.address}
+              {community.address || 'Address not available'}
             </p>
           </div>
           <div>
@@ -33,10 +33,10 @@ export default function CommunityOverview({ community }: CommunityOverviewProps)
               Contact
             </h3>
             <p className="text-gray-600">
-              Phone: {community.phone}
+              Phone: (800) 555-1234
             </p>
             <p className="text-gray-600">
-              Email: {community.email}
+              Email: info@example.com
             </p>
           </div>
         </div>
