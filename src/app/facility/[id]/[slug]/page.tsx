@@ -10,7 +10,7 @@ import CommunityCareTypes from '@/components/community/CommunityCareTypes';
 import CommunityStaff from '@/components/community/CommunityStaff';
 import CommunityTestimonials from '@/components/community/CommunityTestimonials';
 import CommunityContact from '@/components/community/CommunityContact';
-import SchemaOrg from './SchemaOrg';
+import { SchemaOrg } from './SchemaOrg';
 import type { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
 
 interface FacilityPageProps {
