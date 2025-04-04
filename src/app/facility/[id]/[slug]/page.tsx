@@ -11,14 +11,8 @@ import CommunityStaff from '@/components/community/CommunityStaff';
 import CommunityTestimonials from '@/components/community/CommunityTestimonials';
 import CommunityContact from '@/components/community/CommunityContact';
 import { SchemaOrg } from './SchemaOrg';
-import type { NextPage } from 'next';
 
-interface FacilityPageProps {
-  params: { id: string; slug: string };
-  searchParams?: { [key: string]: string | string[] | undefined };
-}
-
-const FacilityPage: NextPage<FacilityPageProps> = ({ params }) => {
+export default function FacilityPage({ params }: { params: { id: string; slug: string } }) {
   const { id, slug } = params;
 
   // Find the community by ID
@@ -50,6 +44,4 @@ const FacilityPage: NextPage<FacilityPageProps> = ({ params }) => {
       <SchemaOrg community={community} />
     </div>
   );
-};
-
-export default FacilityPage;
+}

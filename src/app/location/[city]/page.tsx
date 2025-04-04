@@ -10,14 +10,8 @@ import LocationMap from '@/components/location/LocationMap';
 import LocationCommunities from '@/components/location/LocationCommunities';
 import LocationFAQ from '@/components/location/LocationFAQ';
 import SchemaOrg from './SchemaOrg';
-import type { NextPage } from 'next';
 
-interface LocationPageProps {
-  params: { city: string };
-  searchParams?: { [key: string]: string | string[] | undefined };
-}
-
-const LocationPage: NextPage<LocationPageProps> = ({ params }) => {
+export default function LocationPage({ params }: { params: { city: string } }) {
   const { city } = params;
   const decodedCity = decodeURIComponent(city);
 
@@ -49,6 +43,4 @@ const LocationPage: NextPage<LocationPageProps> = ({ params }) => {
       />
     </div>
   );
-};
-
-export default LocationPage;
+}

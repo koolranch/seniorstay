@@ -11,16 +11,8 @@ import CommunityStaff from '@/components/community/CommunityStaff';
 import CommunityTestimonials from '@/components/community/CommunityTestimonials';
 import CommunityContact from '@/components/community/CommunityContact';
 import { SchemaOrg } from './SchemaOrg';
-import type { NextPage } from 'next';
 
-// Define the expected params structure
-interface CommunityPageProps {
-  params: { id: string; slug: string };
-  searchParams?: { [key: string]: string | string[] | undefined };
-}
-
-// Use NextPage type for the component
-const CommunityPage: NextPage<CommunityPageProps> = ({ params }) => {
+export default function CommunityPage({ params }: { params: { id: string; slug: string } }) {
   const { id, slug } = params;
 
   // Find the community by ID
@@ -52,6 +44,4 @@ const CommunityPage: NextPage<CommunityPageProps> = ({ params }) => {
       <SchemaOrg community={community} />
     </div>
   );
-};
-
-export default CommunityPage;
+}
