@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -16,8 +16,8 @@ import Footer from '@/components/footer/Footer';
 import LocationCard from '@/components/property/LocationCard';
 import { communityData } from '@/data/facilities';
 
-export default function Home() {
-  // Get search parameters
+// Create a separate component for the search functionality
+function SearchContainer() {
   const searchParams = useSearchParams();
   const searchQuery = searchParams.get('query') || '';
 
@@ -91,58 +91,6 @@ export default function Home() {
     setActiveLocationLabel(selectedLocation === 'all' ? '' : selectedLocation);
   }, [selectedCareFilter, selectedLocation, allCareTypes]);
 
-  // Generate structured data for SEO
-  const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    "name": "Cleveland Senior Guide",
-    "url": "https://guideforseniors.com",
-    "logo": "https://guideforseniors.com/logo.png",
-    "description": "Cleveland Senior Guide helps seniors and families find the right senior living options in Northeast Ohio including assisted living, memory care, and independent living communities.",
-    "address": {
-      "@type": "PostalAddress",
-      "addressRegion": "OH",
-      "addressCountry": "US"
-    },
-    "telephone": "(800) 555-1234",
-    "sameAs": [
-      "https://www.facebook.com/guideforseniors",
-      "https://twitter.com/guideforseniors"
-    ]
-  };
-
-  // FAQ Schema
-  const faqSchema = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "How much does senior living cost in Northeast Ohio?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "The cost of senior living in Northeast Ohio varies based on the level of care, location, and amenities. Independent living typically ranges from $1,500 to $3,500 per month, assisted living from $3,000 to $6,000 per month, and memory care from $4,000 to $8,000 per month. Use our 'Get Pricing' button on any community to receive specific cost information."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "How do I know which type of senior living is right for my loved one?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Consider your loved one's current and potential future care needs. If they need minimal assistance, independent living might be appropriate. If they need help with daily activities but not 24-hour nursing care, assisted living is a good option. For those with Alzheimer's or dementia, memory care provides specialized support. Our community profiles detail the care types offered at each location."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "What amenities should I look for in a senior living community?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Look for amenities that match your or your loved one's lifestyle and needs, such as dining options, social activities, fitness centers, transportation services, outdoor spaces, and housekeeping. Consider security features, on-site medical support, and accessibility accommodations. Most importantly, visit communities to experience the atmosphere firsthand."
-        }
-      }
-    ]
-  };
-
   // Count communities by type
   const communityCounts = allCareTypes.reduce((acc, type) => {
     acc[type] = communityData.filter(c => c.careTypes.includes(type)).length;
@@ -156,15 +104,9 @@ export default function Home() {
   }, {} as Record<string, number>);
 
   return (
-    <main className="flex min-h-screen flex-col">
-      {/* Structured Data for SEO */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify([structuredData, faqSchema]) }}
-      />
-
-      <Header />
+    <>
       <CategoryTabs
+        communities={filteredCommunities}
         selectedFilter={selectedCareFilter}
         onFilterChange={setSelectedCareFilter}
       />
@@ -245,6 +187,7 @@ export default function Home() {
 
       {/* Location Filter */}
       <LocationTabs
+        communities={filteredCommunities}
         selectedLocation={selectedLocation}
         onLocationChange={setSelectedLocation}
       />
@@ -299,6 +242,75 @@ export default function Home() {
           </div>
         )}
       </div>
+    </>
+  );
+}
+
+export default function Home() {
+  // Generate structured data for SEO
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Cleveland Senior Guide",
+    "url": "https://guideforseniors.com",
+    "logo": "https://guideforseniors.com/logo.png",
+    "description": "Cleveland Senior Guide helps seniors and families find the right senior living options in Northeast Ohio including assisted living, memory care, and independent living communities.",
+    "address": {
+      "@type": "PostalAddress",
+      "addressRegion": "OH",
+      "addressCountry": "US"
+    },
+    "telephone": "(800) 555-1234",
+    "sameAs": [
+      "https://www.facebook.com/guideforseniors",
+      "https://twitter.com/guideforseniors"
+    ]
+  };
+
+  // FAQ Schema
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How much does senior living cost in Northeast Ohio?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The cost of senior living in Northeast Ohio varies based on the level of care, location, and amenities. Independent living typically ranges from $1,500 to $3,500 per month, assisted living from $3,000 to $6,000 per month, and memory care from $4,000 to $8,000 per month. Use our 'Get Pricing' button on any community to receive specific cost information."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I know which type of senior living is right for my loved one?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Consider your loved one's current and potential future care needs. If they need minimal assistance, independent living might be appropriate. If they need help with daily activities but not 24-hour nursing care, assisted living is a good option. For those with Alzheimer's or dementia, memory care provides specialized support. Our community profiles detail the care types offered at each location."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What amenities should I look for in a senior living community?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Look for amenities that match your or your loved one's lifestyle and needs, such as dining options, social activities, fitness centers, transportation services, outdoor spaces, and housekeeping. Consider security features, on-site medical support, and accessibility accommodations. Most importantly, visit communities to experience the atmosphere firsthand."
+        }
+      }
+    ]
+  };
+
+  return (
+    <main className="flex min-h-screen flex-col">
+      {/* Structured Data for SEO */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify([structuredData, faqSchema]) }}
+      />
+
+      <Header />
+      <Suspense fallback={<div>Loading...</div>}>
+        <SearchContainer />
+      </Suspense>
 
       {/* SEO Content Section */}
       <div className="bg-gray-50 py-12 border-t border-gray-200">
