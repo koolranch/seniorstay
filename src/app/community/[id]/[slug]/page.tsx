@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { communityData } from '@/data/facilities';
+import { communityData, Community } from '@/data/facilities';
 import { notFound } from 'next/navigation';
 import CommunityHeader from '@/components/community/CommunityHeader';
 import CommunityOverview from '@/components/community/CommunityOverview';
@@ -12,13 +12,24 @@ import CommunityTestimonials from '@/components/community/CommunityTestimonials'
 import CommunityContact from '@/components/community/CommunityContact';
 import { SchemaOrg } from './SchemaOrg';
 
-// Use the standard Next.js page component pattern
-export default function CommunityPage(props: any) {
-  const { id, slug } = props.params;
+// Define the expected params structure
+interface PageParams {
+  id: string;
+  slug: string;
+}
+
+// Use a more specific type for the page props
+export default function CommunityPage({ 
+  params 
+}: { 
+  params: PageParams;
+  searchParams?: Record<string, string | string[] | undefined>;
+}) {
+  const { id, slug } = params;
 
   // Find the community by ID
   const community = communityData.find(
-    community => community.id === id
+    (community: Community) => community.id === id
   );
 
   if (!community) {
