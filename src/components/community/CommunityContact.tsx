@@ -22,17 +22,17 @@ export default function CommunityContact({ community }: CommunityContactProps) {
             <div className="space-y-4">
               <div>
                 <p className="text-gray-600">
-                  <span className="font-semibold">Phone:</span> {community.phone}
+                  <span className="font-semibold">Phone:</span> (800) 555-1234
                 </p>
               </div>
               <div>
                 <p className="text-gray-600">
-                  <span className="font-semibold">Email:</span> {community.email}
+                  <span className="font-semibold">Email:</span> info@example.com
                 </p>
               </div>
               <div>
                 <p className="text-gray-600">
-                  <span className="font-semibold">Address:</span> {community.address}
+                  <span className="font-semibold">Address:</span> {community.address || 'Address not available'}
                 </p>
               </div>
             </div>
