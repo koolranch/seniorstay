@@ -12,19 +12,9 @@ import CommunityTestimonials from '@/components/community/CommunityTestimonials'
 import CommunityContact from '@/components/community/CommunityContact';
 import { SchemaOrg } from './SchemaOrg';
 
-// Define the expected params structure
-interface PageParams {
-  id: string;
-  slug: string;
-}
-
-export default function CommunityPage({ 
-  params 
-}: { 
-  params: PageParams;
-  searchParams?: Record<string, string | string[] | undefined>;
-}) {
-  const { id, slug } = params;
+// Use the standard Next.js page component pattern
+export default function CommunityPage(props: any) {
+  const { id, slug } = props.params;
 
   // Find the community by ID
   const community = communityData.find(
