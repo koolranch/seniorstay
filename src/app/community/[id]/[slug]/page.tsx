@@ -11,10 +11,12 @@ import CommunityStaff from '@/components/community/CommunityStaff';
 import CommunityTestimonials from '@/components/community/CommunityTestimonials';
 import CommunityContact from '@/components/community/CommunityContact';
 import SchemaOrg from './SchemaOrg';
-import type { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
 
 interface CommunityPageProps {
-  params: Params;
+  params: {
+    id: string;
+    slug: string;
+  };
 }
 
 export default function CommunityPage({ params }: CommunityPageProps) {
