@@ -20,7 +20,7 @@ interface PropertyCardProps {
 }
 
 const PropertyCard: React.FC<PropertyCardProps> = ({ community }) => {
-  const { id, name, location, images, careTypes, rating } = community;
+  const { id, name, location, images, careTypes } = community;
 
   // Default image if no images provided
   const defaultImage = "https://ext.same-assets.com/3140348022/3950841709.jpeg";
@@ -129,10 +129,13 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ community }) => {
               <span>{location}</span>
             </div>
           </div>
-          <div className="flex items-center gap-1">
-            <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-            <span className="text-sm font-medium">{rating}</span>
-          </div>
+          {/* Only show rating if it exists */}
+          {community.rating && (
+            <div className="flex items-center gap-1">
+              <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+              <span className="text-sm font-medium">{community.rating}</span>
+            </div>
+          )}
         </div>
         <div className="mt-2 flex flex-wrap gap-1">
           {careTypes.map((type) => (
@@ -141,7 +144,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ community }) => {
             </Badge>
           ))}
         </div>
-        <p className="mt-2 text-sm text-gray-600">{community.description}</p>
+        <p className="mt-2 text-sm text-gray-600">{community.description || 'No description available.'}</p>
       </CardContent>
       <CardFooter className="border-t p-4">
         <Link href={`/community/${id}/${facilitySlug}`}>
