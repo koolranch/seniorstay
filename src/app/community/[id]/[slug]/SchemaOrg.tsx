@@ -6,7 +6,7 @@ interface SchemaOrgProps {
   community: Community;
 }
 
-export default function SchemaOrg({ community }: SchemaOrgProps) {
+export function SchemaOrg({ community }: SchemaOrgProps) {
   // Extract zip code from address if available
   const extractZipCode = (address?: string): string => {
     if (!address) return '';
