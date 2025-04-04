@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { communityData } from '@/data/facilities';
+import { communityData, Community } from '@/data/facilities';
 import { notFound } from 'next/navigation';
 import CommunityHeader from '@/components/community/CommunityHeader';
 import CommunityOverview from '@/components/community/CommunityOverview';
@@ -11,21 +11,19 @@ import CommunityStaff from '@/components/community/CommunityStaff';
 import CommunityTestimonials from '@/components/community/CommunityTestimonials';
 import CommunityContact from '@/components/community/CommunityContact';
 import { SchemaOrg } from './SchemaOrg';
+import type { NextPage } from 'next';
 
-type Props = {
-  params: {
-    id: string;
-    slug: string;
-  };
-  searchParams: Record<string, string | string[] | undefined>;
-};
+interface FacilityPageProps {
+  params: { id: string; slug: string };
+  searchParams?: { [key: string]: string | string[] | undefined };
+}
 
-export default function FacilityPage({ params }: Props) {
+const FacilityPage: NextPage<FacilityPageProps> = ({ params }) => {
   const { id, slug } = params;
 
   // Find the community by ID
   const community = communityData.find(
-    community => community.id === id
+    (community: Community) => community.id === id
   );
 
   if (!community) {
@@ -52,4 +50,6 @@ export default function FacilityPage({ params }: Props) {
       <SchemaOrg community={community} />
     </div>
   );
-}
+};
+
+export default FacilityPage;
