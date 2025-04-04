@@ -7,40 +7,40 @@ interface CommunityOverviewProps {
   community: Community;
 }
 
-export const CommunityOverview: React.FC<CommunityOverviewProps> = ({ community }: CommunityOverviewProps) => {
+export default function CommunityOverview({ community }: CommunityOverviewProps) {
   return (
     <div className="bg-white py-8">
       <div className="container mx-auto px-4">
-        <h2 className="text-2xl font-bold text-gray-900 mb-6">
+        <h2 className="text-2xl font-bold text-gray-900 mb-4">
           Overview
         </h2>
         <div className="prose max-w-none">
-          <p className="text-gray-600 mb-4">
+          <p className="text-gray-600">
             {community.description}
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                Location
-              </h3>
-              <p className="text-gray-600">
-                {community.address}
-              </p>
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                Contact
-              </h3>
-              <p className="text-gray-600">
-                Phone: {community.phone || 'Not available'}
-              </p>
-              <p className="text-gray-600">
-                Email: {community.email || 'Not available'}
-              </p>
-            </div>
+        </div>
+        <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              Location
+            </h3>
+            <p className="text-gray-600">
+              {community.address}
+            </p>
+          </div>
+          <div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              Contact
+            </h3>
+            <p className="text-gray-600">
+              Phone: {community.phone}
+            </p>
+            <p className="text-gray-600">
+              Email: {community.email}
+            </p>
           </div>
         </div>
       </div>
     </div>
   );
-}; 
+} 

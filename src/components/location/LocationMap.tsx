@@ -7,7 +7,7 @@ interface LocationMapProps {
   city: string;
 }
 
-export const LocationMap: React.FC<LocationMapProps> = ({ city }: LocationMapProps) => {
+export default function LocationMap({ city }: LocationMapProps) {
   const decodedCity = decodeURIComponent(city);
   const cityCommunities = communityData.filter(
     community => community.location.toLowerCase().includes(decodedCity.toLowerCase())
@@ -30,4 +30,4 @@ export const LocationMap: React.FC<LocationMapProps> = ({ city }: LocationMapPro
       </div>
     </div>
   );
-}; 
+} 

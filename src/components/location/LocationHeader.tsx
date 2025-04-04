@@ -6,12 +6,12 @@ interface LocationHeaderProps {
   city: string;
 }
 
-export const LocationHeader: React.FC<LocationHeaderProps> = ({ city }: LocationHeaderProps) => {
+export default function LocationHeader({ city }: LocationHeaderProps) {
   const decodedCity = decodeURIComponent(city);
   
   return (
-    <div className="bg-white shadow-sm">
-      <div className="container mx-auto px-4 py-8">
+    <div className="bg-white py-8">
+      <div className="container mx-auto px-4">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">
           Senior Living Communities in {decodedCity}
         </h1>
@@ -21,4 +21,4 @@ export const LocationHeader: React.FC<LocationHeaderProps> = ({ city }: Location
       </div>
     </div>
   );
-}; 
+} 

@@ -7,7 +7,7 @@ interface CommunityTestimonialsProps {
   community: Community;
 }
 
-export const CommunityTestimonials: React.FC<CommunityTestimonialsProps> = ({ community }: CommunityTestimonialsProps) => {
+export default function CommunityTestimonials({ community }: CommunityTestimonialsProps) {
   return (
     <div className="bg-gray-50 py-8">
       <div className="container mx-auto px-4">
@@ -39,4 +39,4 @@ export const CommunityTestimonials: React.FC<CommunityTestimonialsProps> = ({ co
       </div>
     </div>
   );
-}; 
+} 

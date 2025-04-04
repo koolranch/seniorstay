@@ -11,16 +11,14 @@ import CommunityStaff from '@/components/community/CommunityStaff';
 import CommunityTestimonials from '@/components/community/CommunityTestimonials';
 import CommunityContact from '@/components/community/CommunityContact';
 import SchemaOrg from './SchemaOrg';
+import type { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
 
 interface CommunityPageProps {
-  params: {
-    id: string;
-    slug: string;
-  };
+  params: Params;
 }
 
 export default function CommunityPage({ params }: CommunityPageProps) {
-  const { id, slug } = params;
+  const { id, slug } = params as { id: string; slug: string };
 
   // Find the community by ID
   const community = communityData.find(

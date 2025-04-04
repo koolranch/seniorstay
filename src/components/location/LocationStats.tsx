@@ -13,7 +13,7 @@ interface Community {
   careTypes: string[];
 }
 
-export const LocationStats: React.FC<LocationStatsProps> = ({ city }: LocationStatsProps) => {
+export default function LocationStats({ city }: LocationStatsProps) {
   const decodedCity = decodeURIComponent(city);
   const cityCommunities = communityData.filter(
     (community: Community) => community.location.toLowerCase().includes(decodedCity.toLowerCase())
@@ -46,4 +46,4 @@ export const LocationStats: React.FC<LocationStatsProps> = ({ city }: LocationSt
       </div>
     </div>
   );
-}; 
+} 

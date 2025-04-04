@@ -1,5 +1,5 @@
 import { MetadataRoute } from 'next';
-import { facilityData } from '@/data/facilities';
+import { communityData } from '@/data/facilities';
 
 type SitemapEntry = {
   url: string;
@@ -8,10 +8,10 @@ type SitemapEntry = {
   priority?: number;
 };
 
-// Extract unique cities from facilities data
+// Extract unique cities from communities data
 const getUniqueCities = (): string[] => {
-  const cities = facilityData.map(facility => {
-    return facility.location.split(',')[0].trim();
+  const cities = communityData.map(community => {
+    return community.location.split(',')[0].trim();
   });
 
   return Array.from(new Set(cities));
@@ -47,11 +47,11 @@ export default function sitemap(): SitemapEntry[] {
     });
   }
 
-  // Add individual facility pages
-  for (const facility of facilityData) {
-    const facilitySlug = facility.name.toLowerCase().replace(/\s+/g, '-');
+  // Add individual community pages
+  for (const community of communityData) {
+    const communitySlug = community.name.toLowerCase().replace(/\s+/g, '-');
     routes.push({
-      url: `${baseUrl}/facility/${facility.id}/${facilitySlug}`,
+      url: `${baseUrl}/community/${community.id}/${communitySlug}`,
       lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 0.7,

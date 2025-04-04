@@ -7,7 +7,7 @@ interface CommunityContactProps {
   community: Community;
 }
 
-export const CommunityContact: React.FC<CommunityContactProps> = ({ community }: CommunityContactProps) => {
+export default function CommunityContact({ community }: CommunityContactProps) {
   return (
     <div className="bg-white py-8">
       <div className="container mx-auto px-4">
@@ -87,4 +87,4 @@ export const CommunityContact: React.FC<CommunityContactProps> = ({ community }:
       </div>
     </div>
   );
-}; 
+} 

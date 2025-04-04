@@ -10,15 +10,14 @@ import LocationMap from '@/components/location/LocationMap';
 import LocationCommunities from '@/components/location/LocationCommunities';
 import LocationFAQ from '@/components/location/LocationFAQ';
 import SchemaOrg from './SchemaOrg';
+import type { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
 
 interface LocationPageProps {
-  params: {
-    city: string;
-  };
+  params: Params;
 }
 
 export default function LocationPage({ params }: LocationPageProps) {
-  const { city } = params;
+  const { city } = params as { city: string };
   const decodedCity = decodeURIComponent(city);
 
   // Filter communities by city
