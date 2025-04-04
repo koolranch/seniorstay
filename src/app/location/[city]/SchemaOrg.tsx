@@ -36,37 +36,36 @@ const SchemaOrg: React.FC<SchemaOrgProps> = ({ cityName, stateAbbr, communities 
   const communityListSchema = {
     "@context": "https://schema.org",
     "@type": "ItemList",
-    "itemListElement": communities.map((community, index) => ({
-      "@type": "ListItem",
-      "position": index + 1,
-      "item": {
-        "@type": "LocalBusiness",
-        "name": community.name,
-        "description": community.description,
-        "address": {
-          "@type": "PostalAddress",
-          "streetAddress": community.address,
-          "addressLocality": cityName,
-          "addressRegion": stateAbbr,
-          "postalCode": community.zipCode,
-          "addressCountry": "US",
-        },
-        "geo": {
-          "@type": "GeoCoordinates",
-          "latitude": community.coordinates.lat,
-          "longitude": community.coordinates.lng,
-        },
-        "telephone": community.phone,
-        "url": `https://clevelandsr.com/community/${community.id}/${community.name.toLowerCase().replace(/\s+/g, '-')}`,
-        "image": community.images[0],
-        "priceRange": community.priceRange,
-        "aggregateRating": {
-          "@type": "AggregateRating",
-          "ratingValue": community.rating,
-          "reviewCount": community.reviewCount,
-        },
-      }
-    })),
+    "itemListElement": communities.map((community, index) => {
+      // Extract zip code from address if available
+      const zipCode = community.address?.match(/\b\d{5}\b/)?.[0] || '';
+      
+      return {
+        "@type": "ListItem",
+        "position": index + 1,
+        "item": {
+          "@type": "LocalBusiness",
+          "name": community.name,
+          "description": community.description || `Senior living community in ${cityName}, ${stateAbbr}`,
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": community.address || '',
+            "addressLocality": cityName,
+            "addressRegion": stateAbbr,
+            "postalCode": zipCode,
+            "addressCountry": "US",
+          },
+          "geo": community.coordinates ? {
+            "@type": "GeoCoordinates",
+            "latitude": community.coordinates.lat,
+            "longitude": community.coordinates.lng,
+          } : undefined,
+          "telephone": "(800) 555-1234",
+          "url": `https://clevelandsr.com/community/${community.id}/${community.name.toLowerCase().replace(/\s+/g, '-')}`,
+          "image": community.images[0],
+        }
+      };
+    }),
   };
 
   // Add LocalBusiness schema with aggregate rating
