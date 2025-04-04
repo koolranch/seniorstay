@@ -10,23 +10,6 @@ interface CommunityCareTypesProps {
 
 // Component to display care types
 export default function CommunityCareTypes({ community }: CommunityCareTypesProps) {
-  const getCareTypeDescription = (type: string): string => {
-    switch (type) {
-      case 'Independent Living':
-        return 'Perfect for active seniors who want maintenance-free living with amenities and social opportunities.';
-      case 'Assisted Living':
-        return 'Ideal for seniors who need help with daily activities while maintaining independence.';
-      case 'Memory Care':
-        return 'Specialized care for seniors with Alzheimer\'s or other forms of dementia.';
-      case 'Skilled Nursing':
-        return '24/7 medical care and supervision for seniors with complex health needs.';
-      case 'Rehabilitation':
-        return 'Short-term therapy and recovery services to help seniors regain strength and mobility.';
-      default:
-        return 'Customized care services tailored to meet specific needs and preferences.';
-    }
-  };
-
   return (
     <div className="bg-white py-8">
       <div className="container mx-auto px-4">
@@ -43,7 +26,12 @@ export default function CommunityCareTypes({ community }: CommunityCareTypesProp
                 {type}
               </h3>
               <p className="text-gray-600">
-                {getCareTypeDescription(type)}
+                {type === 'Independent Living' && 'Perfect for active seniors who want maintenance-free living with amenities and social opportunities.'}
+                {type === 'Assisted Living' && 'Ideal for seniors who need help with daily activities while maintaining independence.'}
+                {type === 'Memory Care' && 'Specialized care for seniors with Alzheimer\'s or other forms of dementia.'}
+                {type === 'Skilled Nursing' && '24/7 medical care and supervision for seniors with complex health needs.'}
+                {type === 'Rehabilitation' && 'Short-term therapy and recovery services to help seniors regain strength and mobility.'}
+                {!['Independent Living', 'Assisted Living', 'Memory Care', 'Skilled Nursing', 'Rehabilitation'].includes(type) && 'Customized care services tailored to meet specific needs and preferences.'}
               </p>
             </div>
           ))}
