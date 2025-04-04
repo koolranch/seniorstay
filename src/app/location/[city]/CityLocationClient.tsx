@@ -62,7 +62,7 @@ export default function CityLocationClient({ cityName, stateAbbr, communities }:
       />
 
       <Header />
-      <CategoryTabs />
+      <CategoryTabs communities={communities} />
 
       {/* City Header and SEO Content */}
       <div className="bg-gray-50 py-8 border-b border-gray-200">
