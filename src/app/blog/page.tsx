@@ -4,6 +4,18 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { FiArrowLeft, FiSearch, FiCalendar, FiClock, FiArrowRight } from 'react-icons/fi';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Senior Blog | SeniorStay',
+  description: 'Explore our collection of articles about senior living, health, travel, technology, and more. Stay informed and inspired with our trusted content.',
+  openGraph: {
+    title: 'Senior Blog',
+    description: 'Explore our collection of articles about senior living, health, travel, technology, and more. Stay informed and inspired with our trusted content.',
+    type: 'website',
+    url: 'https://guideforseniors.com/blog',
+  },
+};
 
 // Mock blog post data
 const blogPosts = [
@@ -80,6 +92,18 @@ const categories = [
   "Lifestyle"
 ];
 
+// Group posts by category
+const postsByCategory = blogPosts.reduce((acc, post) => {
+  if (!acc[post.category]) {
+    acc[post.category] = [];
+  }
+  acc[post.category].push(post);
+  return acc;
+}, {} as Record<string, typeof blogPosts>);
+
+// Sort categories alphabetically
+const sortedCategories = Object.keys(postsByCategory).sort();
+
 const BlogPage = () => {
   const [activeCategory, setActiveCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
@@ -96,7 +120,7 @@ const BlogPage = () => {
   const featuredPost = blogPosts.find(post => post.featured);
 
   return (
-    <div className="min-h-screen bg-[#FAFAF5]">
+    <main className="min-h-screen bg-[#FAFAF5]">
       {/* Header */}
       <div className="bg-[#1b4d70] text-white">
         <div className="container mx-auto px-6 md:px-10 lg:px-20 py-12 md:py-20">
@@ -107,9 +131,9 @@ const BlogPage = () => {
             <FiArrowLeft className="mr-2" />
             <span>Back to Home</span>
           </Link>
-          <h1 className="text-3xl md:text-4xl font-bold mb-4">Senior Living Resources</h1>
+          <h1 className="text-3xl md:text-4xl font-bold mb-4">Senior Blog</h1>
           <p className="text-xl text-white/80 max-w-2xl">
-            Helpful guides, tips, and information to support you and your loved ones in the senior living journey.
+            Explore our collection of articles about senior living, health, travel, technology, and more.
           </p>
         </div>
       </div>
@@ -289,7 +313,7 @@ const BlogPage = () => {
           scrollbar-width: none;
         }
       `}</style>
-    </div>
+    </main>
   );
 };
 
