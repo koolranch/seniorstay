@@ -38,9 +38,75 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
   }
 
+  const title = `${community.name} - Senior Living Community in ${community.city}, ${community.state}`;
+  const description = community.description;
+  const imageUrl = community.image;
+  const canonicalUrl = `https://seniorstay.com/community/${resolvedParams.state}/${resolvedParams.city}/${resolvedParams.slug}`;
+
+  // Generate structured data for rich search results
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "SeniorLivingCommunity",
+    "name": community.name,
+    "description": description,
+    "image": imageUrl,
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": community.address.split(',')[0],
+      "addressLocality": community.city,
+      "addressRegion": community.state,
+      "addressCountry": "US"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": "", // Would need to be added to community data
+      "longitude": "" // Would need to be added to community data
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": community.rating,
+      "reviewCount": "10" // Would need to be added to community data
+    },
+    "amenityFeature": community.amenities.map(amenity => ({
+      "@type": "LocationFeatureSpecification",
+      "name": amenity
+    })),
+    "offers": {
+      "@type": "Offer",
+      "category": community.services.join(", ")
+    }
+  };
+
   return {
-    title: `${community.name} - Senior Living Community`,
-    description: community.description,
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      images: [
+        {
+          url: imageUrl,
+          width: 1200,
+          height: 630,
+          alt: community.name
+        }
+      ],
+      type: 'website',
+      url: canonicalUrl,
+      siteName: 'SeniorStay'
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [imageUrl]
+    },
+    alternates: {
+      canonical: canonicalUrl
+    },
+    other: {
+      'structured-data': JSON.stringify(structuredData)
+    }
   };
 }
 

@@ -15,6 +15,8 @@ interface CommunityClientProps {
   communities: Community[];
 }
 
+const FALLBACK_IMAGE = "https://images.unsplash.com/photo-1519974719765-e6559eac2575?q=80&w=2070&auto=format&fit=crop";
+
 export default function CommunityClient({ params, communities }: CommunityClientProps) {
   const [activeTab, setActiveTab] = useState("overview");
 
@@ -54,8 +56,13 @@ export default function CommunityClient({ params, communities }: CommunityClient
           src={community.image}
           alt={community.name}
           fill
+          sizes="100vw"
           className="object-cover"
           priority
+          onError={(e) => {
+            const target = e.target as HTMLImageElement;
+            target.src = FALLBACK_IMAGE;
+          }}
         />
         <div className="absolute inset-0 bg-black bg-opacity-50" />
         <div className="absolute inset-0 flex items-center justify-center">

@@ -8,6 +8,9 @@ import { communities } from '@/lib/data/communities';
 import type { Community } from '@/lib/data/communities';
 import { getCommunityPath } from "@/lib/utils/formatSlug";
 
+// Add this constant at the top of the file
+const FALLBACK_IMAGE = "https://images.unsplash.com/photo-1519974719765-e6559eac2575?q=80&w=2070&auto=format&fit=crop";
+
 // Get unique services from all communities
 const allServices = Array.from(
   new Set(communities.flatMap((community) => community.services))
@@ -139,7 +142,14 @@ export default function CommunityDirectory() {
                   src={community.image}
                   alt={community.name}
                   fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   className="object-cover transition-transform duration-300 group-hover:scale-105"
+                  loading="lazy"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.src = FALLBACK_IMAGE;
+                  }}
+                  priority={false}
                 />
                 <div className="absolute bottom-3 left-3 bg-black bg-opacity-50 text-white px-2 py-1 rounded-md text-xs">
                   {community.type}
@@ -187,7 +197,14 @@ export default function CommunityDirectory() {
                     src={community.image}
                     alt={community.name}
                     fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     className="object-cover transition-transform duration-300 group-hover:scale-105"
+                    loading="lazy"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.src = FALLBACK_IMAGE;
+                    }}
+                    priority={false}
                   />
                   <div className="absolute bottom-3 left-3 bg-black bg-opacity-50 text-white px-2 py-1 rounded-md text-xs">
                     {community.type}
