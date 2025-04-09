@@ -26,5 +26,5 @@ export default function CommunityWrapper({ params, communities }: CommunityWrapp
     notFound();
   }
 
-  return <CommunityClient community={community} />;
+  return <CommunityClient params={params} communities={communities} />;
 } 

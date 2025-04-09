@@ -1,5 +1,5 @@
 import NextAuth from "next-auth";
-import { PrismaAdapter } from "@auth/prisma-adapter";
+import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { prisma } from "@/lib/prisma";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
@@ -40,7 +40,7 @@ const handler = NextAuth({
         return {
           id: user.id,
           email: user.email,
-          name: user.name,
+          name: user.name || "User",
         };
       },
     }),
@@ -49,11 +49,11 @@ const handler = NextAuth({
     strategy: "jwt",
   },
   pages: {
-    signIn: "/login",
+    signIn: "/auth/signin",
   },
   callbacks: {
     async session({ session, token }) {
-      if (token && session.user) {
+      if (session.user) {
         session.user.id = token.sub as string;
       }
       return session;

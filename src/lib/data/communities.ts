@@ -33,16 +33,16 @@ export interface Community {
   id: number;
   name: string;
   slug: string;
-  address: string;
   city: string;
   state: string;
+  address: string;
   type: string;
   services: string[];
   image: string;
   description: string;
   rating: number;
-  amenities: string[];
   price: string;
+  amenities: string[];
   phone: string;
 }
 
@@ -59,8 +59,15 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/featured/?senior-living",
     description: "Sunrise at Parma offers personalized care in a peaceful setting.",
     rating: 4.5,
-    amenities: ["Assisted Living", "Memory Care"],
-    price: "$3,500/month",
-    phone: "555-0123"
+    price: "$3,500 - $5,500/month",
+    amenities: [
+      "24/7 Staff",
+      "Restaurant-Style Dining",
+      "Fitness Center",
+      "Library",
+      "Garden",
+      "Transportation Services"
+    ],
+    phone: "(440) 555-0123"
   }
 ]; 
