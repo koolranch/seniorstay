@@ -1,11 +1,8 @@
-import type { Metadata } from 'next';
+import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: {
-    template: '%s | SeniorStay Blog',
-    default: 'Senior Living Resources & Articles | SeniorStay Blog',
-  },
-  description: 'Explore articles and resources about senior living, retirement communities, and tips for older adults and their families.',
+  title: 'Senior Blog | Guide for Seniors',
+  description: 'Explore our collection of articles about senior living, health, travel, technology, and more. Stay informed with expert advice and resources for seniors.',
 };
 
 export default function BlogLayout({
@@ -14,7 +11,7 @@ export default function BlogLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen bg-[#FAFAF5]">
+    <div className="min-h-screen bg-gray-50">
       {children}
     </div>
   );

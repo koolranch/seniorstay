@@ -3,10 +3,10 @@ import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: 'Blue Light and Seniors: What You Should Know | SeniorStay',
-  description: 'Learn how blue light affects seniors' sleep and eye health. Get simple tips to reduce exposure while still enjoying technology.',
+  description: "Learn how blue light affects seniors' sleep and eye health. Get simple tips to reduce exposure while still enjoying technology.",
   openGraph: {
     title: 'Blue Light and Seniors: What You Should Know',
-    description: 'Learn how blue light affects seniors' sleep and eye health. Get simple tips to reduce exposure while still enjoying technology.',
+    description: "Learn how blue light affects seniors' sleep and eye health. Get simple tips to reduce exposure while still enjoying technology.",
     type: 'article',
     url: 'https://guideforseniors.com/blog/blue-light',
   },
