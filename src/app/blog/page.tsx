@@ -1,7 +1,6 @@
+"use client";
+
 import React from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
-import { FiArrowLeft, FiSearch, FiCalendar, FiClock, FiArrowRight } from 'react-icons/fi';
 import BlogClient from './BlogClient';
 
 // Sample blog posts data - replace with your actual data source

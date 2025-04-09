@@ -1,7 +1,7 @@
 'use client';
 
 import { notFound } from "next/navigation";
-import { Community } from "@/lib/data/communities";
+import { Community } from '../../../../../lib/data/communities';
 import { formatSlug, formatLocation } from "@/lib/utils/formatSlug";
 import CommunityClient from "./CommunityClient";
 

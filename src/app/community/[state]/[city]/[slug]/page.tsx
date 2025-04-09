@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { communities } from "@/lib/data/communities";
+import { communities } from '../../../../../lib/data/communities';
 import CommunityClient from "./CommunityClient";
 
 interface PageParams {
