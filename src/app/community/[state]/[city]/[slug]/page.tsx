@@ -1,6 +1,7 @@
-import { Metadata } from "next";
-import { communities } from '../../../../../lib/data/communities';
-import CommunityClient from "./CommunityClient";
+import type { Metadata } from "next";
+import { communities } from '@/lib/data/communities';
+import { formatSlug, formatLocation } from '@/lib/utils/formatSlug';
+import CommunityClient from './CommunityClient';
 
 interface PageParams {
   state: string;
