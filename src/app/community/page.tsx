@@ -6,7 +6,7 @@ import Link from "next/link";
 import { FiSearch, FiGrid, FiList, FiMapPin, FiStar } from "react-icons/fi";
 import { communities } from '../../lib/data/communities';
 import type { Community } from '../../lib/data/communities';
-import { getCommunityPath } from "@/lib/utils/formatSlug";
+import { getCommunityPath } from "../../lib/utils/formatSlug";
 
 // Get unique services from all communities
 const allServices = Array.from(
