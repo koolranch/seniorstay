@@ -6,6 +6,7 @@ import Link from "next/link";
 import { FiSearch, FiGrid, FiList, FiMapPin, FiStar } from "react-icons/fi";
 import { communities } from "@/lib/data/communities";
 import type { Community } from "@/lib/data/communities";
+import { getCommunityPath } from "@/lib/utils/formatSlug";
 
 // Get unique services from all communities
 const allServices = Array.from(
@@ -130,7 +131,7 @@ export default function CommunityDirectory() {
           {filteredCommunities.map((community) => (
             <Link
               key={community.id}
-              href={`/community/${community.id}/${community.slug}`}
+              href={getCommunityPath(community)}
               className="group bg-white rounded-xl shadow-sm border border-[#A7C4A0] overflow-hidden hover:shadow-md transition"
             >
               <div className="relative aspect-[16/10]">
@@ -180,7 +181,7 @@ export default function CommunityDirectory() {
           {filteredCommunities.map((community) => (
             <Link
               key={community.id}
-              href={`/community/${community.id}/${community.slug}`}
+              href={getCommunityPath(community)}
               className="block group bg-white rounded-xl shadow-sm border border-[#A7C4A0] overflow-hidden hover:shadow-md transition"
             >
               <div className="flex flex-col md:flex-row">
