@@ -55,8 +55,7 @@ const SearchFilterBar = ({ onFilterChange, className = '' }: SearchFilterBarProp
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [selectedCareTypes, setSelectedCareTypes] = useState<string[]>([]);
   const [selectedAmenities, setSelectedAmenities] = useState<string[]>([]);
-  const [priceRange, setPriceRange] = useState<[number, number]>([2000, 6000]);
-  const [rating, setRating] = useState<number>(0);
+  const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
 
   // Mobile drawer state
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
@@ -73,46 +72,20 @@ const SearchFilterBar = ({ onFilterChange, className = '' }: SearchFilterBarProp
 
   // Handle care type selection
   const handleCareTypeToggle = (typeId: string) => {
-    setSelectedCareTypes(prev => {
-      const newSelection = prev.includes(typeId)
+    setSelectedCareTypes(prev =>
+      prev.includes(typeId)
         ? prev.filter(id => id !== typeId)
-        : [...prev, typeId];
-
-      // Notify parent component if callback exists
-      if (onFilterChange) {
-        onFilterChange({
-          location,
-          careTypes: newSelection,
-          amenities: selectedAmenities,
-          priceRange,
-          rating
-        });
-      }
-
-      return newSelection;
-    });
+        : [...prev, typeId]
+    );
   };
 
   // Handle amenity selection
   const handleAmenityToggle = (amenityId: string) => {
-    setSelectedAmenities(prev => {
-      const newSelection = prev.includes(amenityId)
+    setSelectedAmenities(prev =>
+      prev.includes(amenityId)
         ? prev.filter(id => id !== amenityId)
-        : [...prev, amenityId];
-
-      // Notify parent component if callback exists
-      if (onFilterChange) {
-        onFilterChange({
-          location,
-          careTypes: selectedCareTypes,
-          amenities: newSelection,
-          priceRange,
-          rating
-        });
-      }
-
-      return newSelection;
-    });
+        : [...prev, amenityId]
+    );
   };
 
   // Handle location change
@@ -125,57 +98,21 @@ const SearchFilterBar = ({ onFilterChange, className = '' }: SearchFilterBarProp
         location: newLocation,
         careTypes: selectedCareTypes,
         amenities: selectedAmenities,
-        priceRange,
-        rating
-      });
-    }
-  };
-
-  // Handle price range change
-  const handlePriceRangeChange = (newRange: [number, number]) => {
-    setPriceRange(newRange);
-
-    if (onFilterChange) {
-      onFilterChange({
-        location,
-        careTypes: selectedCareTypes,
-        amenities: selectedAmenities,
-        priceRange: newRange,
-        rating
-      });
-    }
-  };
-
-  // Handle clear all filters
-  const clearAllFilters = () => {
-    setLocation('');
-    setSelectedCareTypes([]);
-    setSelectedAmenities([]);
-    setPriceRange([2000, 6000]);
-    setRating(0);
-
-    if (onFilterChange) {
-      onFilterChange({
-        location: '',
-        careTypes: [],
-        amenities: [],
         priceRange: [2000, 6000],
         rating: 0
       });
     }
   };
 
-  // Apply filters (for mobile drawer)
-  const applyFilters = () => {
-    if (onFilterChange) {
-      onFilterChange({
-        location,
-        careTypes: selectedCareTypes,
-        amenities: selectedAmenities,
-        priceRange,
-        rating
-      });
-    }
+  // Handle apply filters
+  const handleApplyFilters = () => {
+    setIsFilterDrawerOpen(false);
+  };
+
+  // Handle clear filters
+  const handleClearFilters = () => {
+    setSelectedCareTypes([]);
+    setSelectedAmenities([]);
   };
 
   // Calculate active filter count
@@ -183,7 +120,7 @@ const SearchFilterBar = ({ onFilterChange, className = '' }: SearchFilterBarProp
     location ? 1 : 0,
     selectedCareTypes.length,
     selectedAmenities.length,
-    rating > 0 ? 1 : 0
+    0
   ].reduce((sum, count) => sum + count, 0);
 
   return (
@@ -312,7 +249,7 @@ const SearchFilterBar = ({ onFilterChange, className = '' }: SearchFilterBarProp
               {/* Clear Filters (only show if filters are active) */}
               {activeFilterCount > 0 && (
                 <button
-                  onClick={clearAllFilters}
+                  onClick={handleClearFilters}
                   className="flex items-center text-[#1b4d70] hover:text-[#F5A623] px-2"
                 >
                   <FiX className="mr-1" />
@@ -400,12 +337,10 @@ const SearchFilterBar = ({ onFilterChange, className = '' }: SearchFilterBarProp
         onClose={() => setMobileFilterOpen(false)}
         selectedCareTypes={selectedCareTypes}
         selectedAmenities={selectedAmenities}
-        priceRange={priceRange}
         onCareTypeToggle={handleCareTypeToggle}
         onAmenityToggle={handleAmenityToggle}
-        onPriceRangeChange={handlePriceRangeChange}
-        onApplyFilters={applyFilters}
-        onClearFilters={clearAllFilters}
+        onApplyFilters={handleApplyFilters}
+        onClearFilters={handleClearFilters}
       />
     </>
   );

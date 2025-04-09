@@ -3,6 +3,14 @@ import { communities } from '@/lib/data/communities';
 import { formatSlug, formatLocation } from '@/lib/utils/formatSlug';
 import CommunityClient from './CommunityClient';
 
+export async function generateStaticParams() {
+  return communities.map((community) => ({
+    state: community.state.toLowerCase(),
+    city: community.city.toLowerCase(),
+    slug: community.slug
+  }));
+}
+
 interface PageParams {
   state: string;
   city: string;

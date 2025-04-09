@@ -169,9 +169,6 @@ export default function CommunityDirectory() {
                     </span>
                   ))}
                 </div>
-                <div className="text-[#1b4d70] font-semibold">
-                  {community.price || "Contact for pricing"}
-                </div>
               </div>
             </Link>
           ))}
@@ -223,9 +220,6 @@ export default function CommunityDirectory() {
                         {service}
                       </span>
                     ))}
-                  </div>
-                  <div className="text-[#1b4d70] font-semibold">
-                    {community.price || "Contact for pricing"}
                   </div>
                 </div>
               </div>

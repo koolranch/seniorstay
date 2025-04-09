@@ -286,12 +286,6 @@ function SearchPageContent() {
                           </div>
                           <p className="text-gray-500 text-sm">{community.name}</p>
                           <p className="text-gray-500 text-sm">{community.type}</p>
-                          <p className="mt-1 text-gray-900">
-                            <span className="font-semibold">
-                              {community.price ? community.price : "$2,000 - $4,500"}
-                            </span>
-                            <span className="text-sm text-gray-500"> / month</span>
-                          </p>
                         </div>
                       </Link>
                     </div>
@@ -358,18 +352,13 @@ function SearchPageContent() {
 
                         <div className="mt-auto flex justify-between items-center">
                           <div>
-                            <p className="text-xl font-semibold">
-                              {community.price ? community.price : "$2,000 - $4,500"}
-                              <span className="text-sm font-normal text-gray-500"> / month</span>
-                            </p>
+                            <Link
+                              href={`/community/${community.id}/${community.slug}`}
+                              className="bg-rose-600 text-white px-4 py-2 rounded-lg hover:bg-rose-700 transition"
+                            >
+                              View Details
+                            </Link>
                           </div>
-
-                          <Link
-                            href={`/community/${community.id}/${community.slug}`}
-                            className="bg-rose-600 text-white px-4 py-2 rounded-lg hover:bg-rose-700 transition"
-                          >
-                            View Details
-                          </Link>
                         </div>
                       </div>
                     </div>

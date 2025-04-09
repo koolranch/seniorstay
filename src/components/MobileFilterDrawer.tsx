@@ -33,10 +33,8 @@ interface MobileFilterDrawerProps {
   onClose: () => void;
   selectedCareTypes: string[];
   selectedAmenities: string[];
-  priceRange: [number, number];
   onCareTypeToggle: (typeId: string) => void;
   onAmenityToggle: (amenityId: string) => void;
-  onPriceRangeChange: (range: [number, number]) => void;
   onApplyFilters: () => void;
   onClearFilters: () => void;
 }
@@ -46,10 +44,8 @@ const MobileFilterDrawer: React.FC<MobileFilterDrawerProps> = ({
   onClose,
   selectedCareTypes,
   selectedAmenities,
-  priceRange,
   onCareTypeToggle,
   onAmenityToggle,
-  onPriceRangeChange,
   onApplyFilters,
   onClearFilters
 }) => {

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { FiMapPin, FiPhone, FiMail, FiStar, FiDollarSign } from "react-icons/fi";
+import { FiMapPin, FiMail, FiStar } from "react-icons/fi";
 import { Community } from '../../../../../lib/data/communities';
 
 interface CommunityClientProps {
@@ -100,10 +100,6 @@ export default function CommunityClient({ params, communities }: CommunityClient
                 <FiStar className="h-6 w-6 text-yellow-400 mr-2" />
                 <span className="text-gray-700">Rating: {community.rating}/5</span>
               </div>
-              <div className="flex items-center">
-                <FiDollarSign className="h-6 w-6 text-green-500 mr-2" />
-                <span className="text-gray-700">Price Range: {community.price}</span>
-              </div>
             </div>
           </div>
         )}
@@ -131,12 +127,6 @@ export default function CommunityClient({ params, communities }: CommunityClient
               <div className="flex items-center">
                 <FiMapPin className="h-6 w-6 text-gray-400 mr-2" />
                 <span className="text-gray-700">{community.address}</span>
-              </div>
-              <div className="flex items-center">
-                <FiPhone className="h-6 w-6 text-gray-400 mr-2" />
-                <a href={`tel:${community.phone}`} className="text-blue-600 hover:text-blue-800">
-                  {community.phone}
-                </a>
               </div>
             </div>
           </div>
