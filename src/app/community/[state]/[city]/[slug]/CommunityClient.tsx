@@ -4,23 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { FiMapPin, FiPhone, FiMail, FiStar, FiDollarSign } from "react-icons/fi";
-
-interface Community {
-  id: string;
-  name: string;
-  slug: string;
-  address: string;
-  city: string;
-  state: string;
-  type: string;
-  services: string[];
-  image: string;
-  description: string;
-  rating: number;
-  amenities: string[];
-  price: string;
-  phone: string;
-}
+import { Community } from "@/lib/data/communities";
 
 interface CommunityClientProps {
   params: {

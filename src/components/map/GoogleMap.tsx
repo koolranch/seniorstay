@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { GoogleMap as GoogleMapComponent, LoadScript, Marker } from '@react-google-maps/api';
+import { GoogleMap as GoogleMapComponent, LoadScript, Marker as GoogleMarker } from '@react-google-maps/api';
 
 interface Location {
   lat: number;
@@ -53,7 +53,7 @@ export default function GoogleMap({ markers, location, zoom = 12 }: GoogleMapPro
         }}
       >
         {markers.map((marker) => (
-          <Marker
+          <GoogleMarker
             key={marker.id}
             position={marker.position}
             title={marker.title}

@@ -39,31 +39,44 @@ const ContactPage = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // In a real application, you would send this data to a server
-    console.log('Form data submitted:', formData);
+    try {
+      // In a real application, you would send this data to a server
+      // const response = await fetch('/api/contact', {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify(formData),
+      // });
+      // if (!response.ok) throw new Error('Failed to submit form');
 
-    // Simulate a successful submission
-    setFormStatus({
-      submitted: true,
-      success: true,
-      message: 'Thank you for your inquiry. One of our care advisors will contact you shortly.',
-    });
+      // Simulate a successful submission
+      setFormStatus({
+        submitted: true,
+        success: true,
+        message: 'Thank you for your inquiry. One of our care advisors will contact you shortly.',
+      });
 
-    // Reset form
-    setFormData({
-      firstName: '',
-      lastName: '',
-      email: '',
-      phone: '',
-      preferredContact: 'phone',
-      inquiryFor: 'self',
-      careType: 'independent',
-      message: '',
-      agreeTerms: false,
-    });
+      // Reset form
+      setFormData({
+        firstName: '',
+        lastName: '',
+        email: '',
+        phone: '',
+        preferredContact: 'phone',
+        inquiryFor: 'self',
+        careType: 'independent',
+        message: '',
+        agreeTerms: false,
+      });
+    } catch (error) {
+      setFormStatus({
+        submitted: true,
+        success: false,
+        message: 'There was an error submitting your form. Please try again later.',
+      });
+    }
   };
 
   return (

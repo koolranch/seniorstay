@@ -1,33 +1,25 @@
-import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import { communities } from "@/lib/data/communities";
-import { formatSlug, formatLocation } from "@/lib/utils/formatSlug";
 import CommunityClient from "./CommunityClient";
 
-interface CommunityPageProps {
-  params: {
-    state: string;
-    city: string;
-    slug: string;
-  };
+interface PageParams {
+  state: string;
+  city: string;
+  slug: string;
 }
 
-export async function generateStaticParams() {
-  return communities.map((community) => ({
-    state: formatLocation(community.state),
-    city: formatLocation(community.city),
-    slug: formatSlug(community.name),
-  }));
+interface Props {
+  params: Promise<PageParams>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
-export async function generateMetadata({
-  params,
-}: CommunityPageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const resolvedParams = await params;
   const community = communities.find(
     (c) =>
-      formatLocation(c.state) === params.state &&
-      formatLocation(c.city) === params.city &&
-      formatSlug(c.name) === params.slug
+      c.state.toLowerCase() === resolvedParams.state &&
+      c.city.toLowerCase() === resolvedParams.city &&
+      c.slug === resolvedParams.slug
   );
 
   if (!community) {
@@ -38,27 +30,12 @@ export async function generateMetadata({
   }
 
   return {
-    title: `${community.name} | Senior Living in ${community.city}, ${community.state}`,
+    title: `${community.name} - Senior Living Community`,
     description: community.description,
-    openGraph: {
-      title: `${community.name} | Senior Living in ${community.city}, ${community.state}`,
-      description: community.description,
-      images: [community.image],
-    },
   };
 }
 
-export default function CommunityPage({ params }: CommunityPageProps) {
-  const community = communities.find(
-    (c) =>
-      formatLocation(c.state) === params.state &&
-      formatLocation(c.city) === params.city &&
-      formatSlug(c.name) === params.slug
-  );
-
-  if (!community) {
-    notFound();
-  }
-
-  return <CommunityClient community={community} />;
+export default async function Page(props: Props) {
+  const params = await props.params;
+  return <CommunityClient params={params} communities={communities} />;
 } 
