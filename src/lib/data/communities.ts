@@ -102,7 +102,6 @@ export interface Community {
   rating: number;
   description: string;
   image: string;
-  phone: string;
 }
 
 export const communities: Community[] = [
@@ -118,8 +117,7 @@ export const communities: Community[] = [
     amenities: generateAmenities(["Assisted Living"]),
     rating: 4.2,
     description: generateDescription("Westwood Place", ["Assisted Living"]),
-    image: "https://source.unsplash.com/random/800x600/?senior,living",
-    phone: "(800) 555-1001"
+    image: "https://images.unsplash.com/photo-1591088398332-8a7791972843?q=80&w=2074&auto=format&fit=crop"
   },
   {
     id: 2,
@@ -133,8 +131,7 @@ export const communities: Community[] = [
     amenities: generateAmenities(["Independent Living", "Assisted Living", "Memory Care"]),
     rating: 4.5,
     description: generateDescription("Summit Point", ["Independent Living", "Assisted Living", "Memory Care"]),
-    image: "https://source.unsplash.com/random/800x600/?senior,community",
-    phone: "(800) 555-1002"
+    image: "https://images.unsplash.com/photo-1556155092-490a1ba16284?q=80&w=2070&auto=format&fit=crop"
   },
   {
     id: 3,
@@ -149,7 +146,6 @@ export const communities: Community[] = [
     rating: 4.7,
     description: generateDescription("Mount Alverna Village", ["Independent Living", "Assisted Living", "Memory Care", "Skilled Nursing", "Rehabilitation"]),
     image: "https://source.unsplash.com/random/800x600/?retirement,home",
-    phone: "(800) 555-1003"
   },
   {
     id: 4,
@@ -164,7 +160,6 @@ export const communities: Community[] = [
     rating: 4.6,
     description: generateDescription("Rose Senior Living at Beachwood", ["Independent Living", "Assisted Living", "Memory Care"]),
     image: "https://source.unsplash.com/random/800x600/?senior,residence",
-    phone: "(800) 555-1004"
   },
   {
     id: 5,
@@ -179,7 +174,6 @@ export const communities: Community[] = [
     rating: 4.4,
     description: generateDescription("Vitalia Rockside", ["Independent Living", "Assisted Living", "Memory Care"]),
     image: "https://source.unsplash.com/random/800x600/?senior,apartment",
-    phone: "(800) 555-1005"
   },
   {
     id: 6,
@@ -194,7 +188,6 @@ export const communities: Community[] = [
     rating: 4.8,
     description: generateDescription("StoryPoint Shaker Heights", ["Independent Living", "Assisted Living", "Memory Care"]),
     image: "https://source.unsplash.com/random/800x600/?senior,community",
-    phone: "(800) 555-1006"
   },
   {
     id: 7,
@@ -209,7 +202,6 @@ export const communities: Community[] = [
     rating: 4.5,
     description: generateDescription("The Woodlands by Heritage Retirement Communities", ["Independent Living", "Assisted Living", "Memory Care"]),
     image: "https://source.unsplash.com/random/800x600/?retirement,community",
-    phone: "(800) 555-1007"
   },
   {
     id: 8,
@@ -224,7 +216,6 @@ export const communities: Community[] = [
     rating: 4.3,
     description: generateDescription("Forest Hills Place", ["Assisted Living"]),
     image: "https://source.unsplash.com/random/800x600/?senior,living",
-    phone: "(800) 555-1008"
   },
   {
     id: 9,
@@ -239,7 +230,6 @@ export const communities: Community[] = [
     rating: 4.4,
     description: generateDescription("Woodside Senior Living", ["Assisted Living"]),
     image: "https://source.unsplash.com/random/800x600/?senior,residence",
-    phone: "(800) 555-1009"
   },
   {
     id: 10,
@@ -254,7 +244,6 @@ export const communities: Community[] = [
     rating: 4.7,
     description: generateDescription("Eliza Jennings", ["Independent Living", "Assisted Living", "Skilled Nursing", "Rehabilitation"]),
     image: "https://source.unsplash.com/random/800x600/?senior,community",
-    phone: "(800) 555-1010"
   },
   {
     id: 11,
@@ -269,7 +258,6 @@ export const communities: Community[] = [
     rating: 4.5,
     description: generateDescription("Brooklyn Pointe Assisted Living and Memory Care", ["Assisted Living", "Memory Care"]),
     image: "https://source.unsplash.com/random/800x600/?senior,living",
-    phone: "(800) 555-1011"
   },
   {
     id: 12,
@@ -284,7 +272,6 @@ export const communities: Community[] = [
     rating: 4.6,
     description: generateDescription("HarborChase of Shaker Heights", ["Assisted Living", "Memory Care"]),
     image: "https://source.unsplash.com/random/800x600/?senior,residence",
-    phone: "(800) 555-1012"
   },
   {
     id: 13,
@@ -299,7 +286,6 @@ export const communities: Community[] = [
     rating: 4.4,
     description: generateDescription("Marymount Place", ["Assisted Living"]),
     image: "https://source.unsplash.com/random/800x600/?senior,community",
-    phone: "(800) 555-1013"
   },
   {
     id: 14,
@@ -314,7 +300,6 @@ export const communities: Community[] = [
     rating: 4.7,
     description: generateDescription("Vista Springs Ravinia", ["Assisted Living", "Memory Care"]),
     image: "https://source.unsplash.com/random/800x600/?senior,living",
-    phone: "(800) 555-1014"
   },
   {
     id: 15,
@@ -329,7 +314,6 @@ export const communities: Community[] = [
     rating: 4.3,
     description: generateDescription("Haven at Lakewood", ["Assisted Living"]),
     image: "https://source.unsplash.com/random/800x600/?senior,residence",
-    phone: "(800) 555-1015"
   },
   {
     id: 16,
@@ -344,7 +328,6 @@ export const communities: Community[] = [
     rating: 4.5,
     description: generateDescription("American House Macedonia", ["Independent Living", "Assisted Living"]),
     image: "https://source.unsplash.com/random/800x600/?senior,community",
-    phone: "(800) 555-1016"
   },
   {
     id: 17,
@@ -359,7 +342,6 @@ export const communities: Community[] = [
     rating: 4.6,
     description: generateDescription("Arden Courts of Parma", ["Assisted Living", "Memory Care"]),
     image: "https://source.unsplash.com/random/800x600/?senior,living",
-    phone: "(800) 555-1017"
   },
   {
     id: 18,
@@ -374,7 +356,6 @@ export const communities: Community[] = [
     rating: 4.4,
     description: generateDescription("Berea Alzheimer's Care Center", ["Assisted Living", "Memory Care"]),
     image: "https://source.unsplash.com/random/800x600/?senior,care",
-    phone: "(800) 555-1018"
   },
   {
     id: 19,
@@ -389,7 +370,6 @@ export const communities: Community[] = [
     rating: 4.7,
     description: generateDescription("Bickford of Rocky River", ["Assisted Living", "Memory Care"]),
     image: "https://source.unsplash.com/random/800x600/?senior,residence",
-    phone: "(800) 555-1019"
   },
   {
     id: 20,
@@ -404,7 +384,6 @@ export const communities: Community[] = [
     rating: 4.5,
     description: generateDescription("Cardinal Court Alzheimer's Special Care Center", ["Assisted Living", "Memory Care"]),
     image: "https://source.unsplash.com/random/800x600/?senior,care",
-    phone: "(800) 555-1020"
   },
   {
     id: 21,
@@ -419,7 +398,6 @@ export const communities: Community[] = [
     rating: 4.8,
     description: generateDescription("Danbury Senior Living Brunswick", ["Independent Living", "Assisted Living", "Memory Care"]),
     image: "https://source.unsplash.com/random/800x600/?senior,community",
-    phone: "(800) 555-1021"
   },
   {
     id: 22,
@@ -434,7 +412,6 @@ export const communities: Community[] = [
     rating: 4.4,
     description: generateDescription("Elmcroft of Sagamore Hills", ["Assisted Living", "Memory Care"]),
     image: "https://source.unsplash.com/random/800x600/?senior,living",
-    phone: "(800) 555-1022"
   },
   {
     id: 23,
@@ -449,7 +426,6 @@ export const communities: Community[] = [
     rating: 4.6,
     description: generateDescription("Kemper House Strongsville", ["Assisted Living", "Memory Care"]),
     image: "https://source.unsplash.com/random/800x600/?senior,residence",
-    phone: "(800) 555-1023"
   },
   {
     id: 24,
@@ -464,7 +440,6 @@ export const communities: Community[] = [
     rating: 4.5,
     description: generateDescription("Paramount Senior Living", ["Independent Living", "Assisted Living"]),
     image: "https://source.unsplash.com/random/800x600/?senior,community",
-    phone: "(800) 555-1024"
   },
   {
     id: 25,
@@ -479,7 +454,6 @@ export const communities: Community[] = [
     rating: 4.7,
     description: generateDescription("Sunrise of Westlake", ["Assisted Living", "Memory Care"]),
     image: "https://source.unsplash.com/random/800x600/?senior,living",
-    phone: "(800) 555-1025"
   },
   {
     id: 26,
@@ -494,7 +468,6 @@ export const communities: Community[] = [
     rating: 4.4,
     description: generateDescription("The Grande at Middleburg Heights", ["Assisted Living"]),
     image: "https://source.unsplash.com/random/800x600/?senior,residence",
-    phone: "(800) 555-1026"
   },
   {
     id: 27,
@@ -509,7 +482,6 @@ export const communities: Community[] = [
     rating: 4.4,
     description: generateDescription("The Grande at Westlake", ["Assisted Living"]),
     image: "https://source.unsplash.com/random/800x600/?senior,residence",
-    phone: "(800) 555-1027"
   },
   {
     id: 28,
@@ -524,7 +496,6 @@ export const communities: Community[] = [
     rating: 4.7,
     description: generateDescription("Sunrise At Parma", ["Assisted Living", "Memory Care"]),
     image: "https://source.unsplash.com/random/800x600/?senior,living",
-    phone: "(800) 555-1028"
   },
   {
     id: 29,
@@ -539,7 +510,6 @@ export const communities: Community[] = [
     rating: 4.3,
     description: generateDescription("Legacy Place Parma", ["Assisted Living"]),
     image: "https://source.unsplash.com/random/800x600/?senior,residence",
-    phone: "(800) 555-1029"
   },
   {
     id: 30,
@@ -554,7 +524,6 @@ export const communities: Community[] = [
     rating: 4.2,
     description: generateDescription("SHEVCHENKO MANOR", ["Assisted Living"]),
     image: "https://source.unsplash.com/random/800x600/?senior,living",
-    phone: "(800) 555-1030"
   },
   {
     id: 31,
@@ -569,7 +538,6 @@ export const communities: Community[] = [
     rating: 4.8,
     description: generateDescription("StoryPoint Strongsville", ["Independent Living", "Assisted Living", "Memory Care"]),
     image: "https://source.unsplash.com/random/800x600/?senior,community",
-    phone: "(800) 555-1031"
   },
   {
     id: 32,
@@ -584,7 +552,6 @@ export const communities: Community[] = [
     rating: 4.6,
     description: generateDescription("Brookdale Westlake Village", ["Assisted Living", "Memory Care"]),
     image: "https://source.unsplash.com/random/800x600/?senior,residence",
-    phone: "(800) 555-1032"
   },
   {
     id: 33,
@@ -599,7 +566,6 @@ export const communities: Community[] = [
     rating: 4.5,
     description: generateDescription("Brookdale Gardens at Westlake", ["Independent Living"]),
     image: "https://source.unsplash.com/random/800x600/?senior,community",
-    phone: "(800) 555-1033"
   },
   {
     id: 34,
@@ -614,7 +580,6 @@ export const communities: Community[] = [
     rating: 4.4,
     description: generateDescription("Fairmont of Westlake", ["Assisted Living", "Memory Care"]),
     image: "https://source.unsplash.com/random/800x600/?senior,living",
-    phone: "(800) 555-1034"
   },
   {
     id: 35,
@@ -629,7 +594,6 @@ export const communities: Community[] = [
     rating: 4.7,
     description: generateDescription("Light of Hearts Villa", ["Assisted Living", "Memory Care"]),
     image: "https://source.unsplash.com/random/800x600/?senior,residence",
-    phone: "(800) 555-1035"
   },
   {
     id: 36,
@@ -644,7 +608,6 @@ export const communities: Community[] = [
     rating: 4.6,
     description: generateDescription("Arden Courts of Westlake", ["Assisted Living", "Memory Care"]),
     image: "https://source.unsplash.com/random/800x600/?senior,living",
-    phone: "(800) 555-1036"
   },
   {
     id: 37,
@@ -659,7 +622,6 @@ export const communities: Community[] = [
     rating: 4.5,
     description: generateDescription("Vitalia North Royalton", ["Independent Living", "Assisted Living", "Memory Care"]),
     image: "https://source.unsplash.com/random/800x600/?senior,community",
-    phone: "(800) 555-1037"
   },
   {
     id: 38,
@@ -674,7 +636,6 @@ export const communities: Community[] = [
     rating: 4.4,
     description: generateDescription("Vitalia Active Adult Community North Olmsted", ["Independent Living"]),
     image: "https://source.unsplash.com/random/800x600/?senior,residence",
-    phone: "(800) 555-1038"
   },
   {
     id: 39,
@@ -689,7 +650,6 @@ export const communities: Community[] = [
     rating: 4.7,
     description: generateDescription("The Ganzhorn Suites of Avon", ["Assisted Living", "Memory Care"]),
     image: "https://source.unsplash.com/random/800x600/?senior,living",
-    phone: "(800) 555-1039"
   },
   {
     id: 40,
@@ -704,7 +664,6 @@ export const communities: Community[] = [
     rating: 4.6,
     description: generateDescription("Maplewood at Cuyahoga Falls", ["Assisted Living", "Memory Care"]),
     image: "https://source.unsplash.com/random/800x600/?senior,residence",
-    phone: "(800) 555-1040"
   },
   {
     id: 41,
@@ -719,7 +678,6 @@ export const communities: Community[] = [
     rating: 4.8,
     description: generateDescription("Danbury Woods in Cuyahoga Falls", ["Assisted Living", "Memory Care"]),
     image: "https://source.unsplash.com/random/800x600/?senior,community",
-    phone: "(800) 555-1041"
   },
   {
     id: 42,
@@ -734,7 +692,6 @@ export const communities: Community[] = [
     rating: 4.7,
     description: generateDescription("StoryPoint Medina", ["Independent Living", "Assisted Living", "Memory Care"]),
     image: "https://source.unsplash.com/random/800x600/?senior,residence",
-    phone: "(800) 555-1042"
   },
   {
     id: 43,
@@ -749,7 +706,6 @@ export const communities: Community[] = [
     rating: 4.5,
     description: generateDescription("Brookdale Richmond Heights", ["Assisted Living", "Memory Care"]),
     image: "https://source.unsplash.com/random/800x600/?senior,living",
-    phone: "(800) 555-1043"
   },
   {
     id: 44,
@@ -764,7 +720,6 @@ export const communities: Community[] = [
     rating: 4.4,
     description: generateDescription("Waterford At Richmond Heights", ["Independent Living", "Assisted Living"]),
     image: "https://source.unsplash.com/random/800x600/?senior,residence",
-    phone: "(800) 555-1044"
   },
   {
     id: 45,
@@ -779,7 +734,6 @@ export const communities: Community[] = [
     rating: 4.8,
     description: generateDescription("South Franklin Circle", ["Independent Living", "Assisted Living", "Memory Care", "Skilled Nursing"]),
     image: "https://source.unsplash.com/random/800x600/?senior,community",
-    phone: "(800) 555-1045"
   },
   {
     id: 46,
@@ -794,7 +748,6 @@ export const communities: Community[] = [
     rating: 4.6,
     description: generateDescription("Maplewood at Chardon", ["Assisted Living", "Memory Care"]),
     image: "https://source.unsplash.com/random/800x600/?senior,residence",
-    phone: "(800) 555-1046"
   },
   {
     id: 47,
@@ -809,7 +762,6 @@ export const communities: Community[] = [
     rating: 4.5,
     description: generateDescription("The Winfield at Richmond Heights", ["Assisted Living", "Memory Care"]),
     image: "https://source.unsplash.com/random/800x600/?senior,living",
-    phone: "(800) 555-1047"
   },
   {
     id: 48,
@@ -824,7 +776,6 @@ export const communities: Community[] = [
     rating: 4.3,
     description: generateDescription("Saint Augustine Towers Assisted Living Residences", ["Assisted Living"]),
     image: "https://source.unsplash.com/random/800x600/?senior,residence",
-    phone: "(800) 555-1048"
   },
   {
     id: 49,
@@ -839,7 +790,6 @@ export const communities: Community[] = [
     rating: 4.2,
     description: generateDescription("Rely's Adult Family Home", ["Assisted Living"]),
     image: "https://source.unsplash.com/random/800x600/?senior,living",
-    phone: "(800) 555-1049"
   },
   {
     id: 50,
@@ -854,7 +804,6 @@ export const communities: Community[] = [
     rating: 4.4,
     description: generateDescription("Your Second Family", ["Assisted Living"]),
     image: "https://source.unsplash.com/random/800x600/?senior,residence",
-    phone: "(800) 555-1050"
   },
   {
     id: 51,
@@ -869,7 +818,6 @@ export const communities: Community[] = [
     rating: 4.5,
     description: generateDescription("O'Neill Healthcare Lakewood", ["Assisted Living", "Memory Care"]),
     image: "https://source.unsplash.com/random/800x600/?senior,living",
-    phone: "(800) 555-1051"
   },
   {
     id: 52,
@@ -884,7 +832,6 @@ export const communities: Community[] = [
     rating: 4.7,
     description: generateDescription("Danbury Senior Living Cuyahoga Falls", ["Assisted Living", "Memory Care"]),
     image: "https://source.unsplash.com/random/800x600/?senior,residence",
-    phone: "(800) 555-1052"
   },
   {
     id: 53,
@@ -899,7 +846,6 @@ export const communities: Community[] = [
     rating: 4.7,
     description: generateDescription("Danbury Senior Living Mentor", ["Assisted Living", "Memory Care"]),
     image: "https://source.unsplash.com/random/800x600/?senior,residence",
-    phone: "(800) 555-1053"
   },
   {
     id: 54,
@@ -914,7 +860,6 @@ export const communities: Community[] = [
     rating: 4.6,
     description: generateDescription("Danbury Senior Living North Ridgeville", ["Assisted Living", "Memory Care"]),
     image: "https://source.unsplash.com/random/800x600/?senior,living",
-    phone: "(800) 555-1054"
   },
   {
     id: 55,
@@ -929,7 +874,6 @@ export const communities: Community[] = [
     rating: 4.8,
     description: generateDescription("Danbury Senior Living Wooster", ["Assisted Living", "Memory Care"]),
     image: "https://source.unsplash.com/random/800x600/?senior,community",
-    phone: "(800) 555-1055"
   },
   {
     id: 56,
@@ -944,7 +888,6 @@ export const communities: Community[] = [
     rating: 4.5,
     description: generateDescription("Brookdale Bath", ["Assisted Living", "Memory Care"]),
     image: "https://source.unsplash.com/random/800x600/?senior,residence",
-    phone: "(800) 555-1056"
   },
   {
     id: 57,
@@ -959,7 +902,6 @@ export const communities: Community[] = [
     rating: 4.4,
     description: generateDescription("Brookdale Montrose", ["Assisted Living", "Memory Care"]),
     image: "https://source.unsplash.com/random/800x600/?senior,living",
-    phone: "(800) 555-1057"
   },
   {
     id: 58,
@@ -974,7 +916,6 @@ export const communities: Community[] = [
     rating: 4.6,
     description: generateDescription("Brookdale Medina South", ["Assisted Living", "Memory Care"]),
     image: "https://source.unsplash.com/random/800x600/?senior,residence",
-    phone: "(800) 555-1058"
   },
   {
     id: 59,
@@ -989,7 +930,6 @@ export const communities: Community[] = [
     rating: 4.5,
     description: generateDescription("Brookdale Wickliffe", ["Assisted Living", "Memory Care"]),
     image: "https://source.unsplash.com/random/800x600/?senior,community",
-    phone: "(800) 555-1059"
   },
   {
     id: 60,
@@ -1004,7 +944,6 @@ export const communities: Community[] = [
     rating: 4.7,
     description: generateDescription("Vitalia Mentor", ["Independent Living", "Assisted Living", "Memory Care"]),
     image: "https://source.unsplash.com/random/800x600/?senior,residence",
-    phone: "(800) 555-1060"
   },
   {
     id: 61,
@@ -1019,7 +958,6 @@ export const communities: Community[] = [
     rating: 4.6,
     description: generateDescription("Vitalia Montrose", ["Independent Living", "Assisted Living", "Memory Care"]),
     image: "https://source.unsplash.com/random/800x600/?senior,living",
-    phone: "(800) 555-1061"
   },
   {
     id: 62,
@@ -1034,7 +972,6 @@ export const communities: Community[] = [
     rating: 4.8,
     description: generateDescription("Vitalia Solon", ["Independent Living", "Assisted Living", "Memory Care"]),
     image: "https://source.unsplash.com/random/800x600/?senior,community",
-    phone: "(800) 555-1062"
   },
   {
     id: 63,
@@ -1049,7 +986,6 @@ export const communities: Community[] = [
     rating: 4.5,
     description: generateDescription("Vitalia Stow", ["Independent Living", "Assisted Living", "Memory Care"]),
     image: "https://source.unsplash.com/random/800x600/?senior,residence",
-    phone: "(800) 555-1063"
   },
   {
     id: 64,
@@ -1064,7 +1000,6 @@ export const communities: Community[] = [
     rating: 4.7,
     description: generateDescription("StoryPoint Rockside", ["Independent Living", "Assisted Living", "Memory Care"]),
     image: "https://source.unsplash.com/random/800x600/?senior,living",
-    phone: "(800) 555-1064"
   },
   {
     id: 65,
@@ -1079,7 +1014,6 @@ export const communities: Community[] = [
     rating: 4.6,
     description: generateDescription("StoryPoint Troy", ["Assisted Living", "Memory Care"]),
     image: "https://source.unsplash.com/random/800x600/?senior,residence",
-    phone: "(800) 555-1065"
   },
   {
     id: 66,
@@ -1094,7 +1028,6 @@ export const communities: Community[] = [
     rating: 4.5,
     description: generateDescription("Sunrise of Cuyahoga Falls", ["Assisted Living", "Memory Care"]),
     image: "https://source.unsplash.com/random/800x600/?senior,community",
-    phone: "(800) 555-1066"
   },
   {
     id: 67,
@@ -1109,36 +1042,117 @@ export const communities: Community[] = [
     rating: 4.8,
     description: generateDescription("Sunrise of Rocky River", ["Assisted Living", "Memory Care"]),
     image: "https://source.unsplash.com/random/800x600/?senior,residence",
-    phone: "(800) 555-1067"
   },
   {
     id: 68,
-    name: "Sunrise of Shaker Heights",
-    slug: "sunrise-shaker-heights-shaker-heights-oh",
-    address: "16333 Chagrin Blvd, Shaker Heights, OH 44120",
-    city: "Shaker Heights",
+    name: "Sunrise of Hudson",
+    slug: "sunrise-of-hudson-hudson-oh",
+    address: "5900 Hudson Drive, Hudson, OH 44236",
+    city: "Hudson",
     state: "OH",
-    type: "Continuing Care",
+    type: "Assisted Living",
     services: ["Assisted Living", "Memory Care"],
     amenities: generateAmenities(["Assisted Living", "Memory Care"]),
-    rating: 4.7,
-    description: generateDescription("Sunrise of Shaker Heights", ["Assisted Living", "Memory Care"]),
-    image: "https://source.unsplash.com/random/800x600/?senior,living",
-    phone: "(800) 555-1068"
+    rating: 4.3,
+    description: generateDescription("Sunrise of Hudson", ["Assisted Living", "Memory Care"]),
+    image: "https://images.unsplash.com/photo-1582719471384-894fbb07a271?q=80&w=2187&auto=format&fit=crop"
   },
   {
     id: 69,
-    name: "Sunrise of Poland",
-    slug: "sunrise-poland-poland-oh",
-    address: "335 W McKinley Way, Poland, OH 44514",
-    city: "Poland",
+    name: "Sunrise of Solon",
+    slug: "sunrise-of-solon-solon-oh",
+    address: "33333 Aurora Road, Solon, OH 44139",
+    city: "Solon",
     state: "OH",
-    type: "Continuing Care",
+    type: "Assisted Living",
+    services: ["Assisted Living", "Memory Care"],
+    amenities: generateAmenities(["Assisted Living", "Memory Care"]),
+    rating: 4.4,
+    description: generateDescription("Sunrise of Solon", ["Assisted Living", "Memory Care"]),
+    image: "https://images.unsplash.com/photo-1568939571043-88fceafce24f?q=80&w=2070&auto=format&fit=crop"
+  },
+  {
+    id: 70,
+    name: "The Landing of Stow",
+    slug: "the-landing-of-stow-stow-oh",
+    address: "5511 Fishcreek Road, Stow, OH 44224",
+    city: "Stow",
+    state: "OH",
+    type: "Assisted Living",
     services: ["Assisted Living", "Memory Care"],
     amenities: generateAmenities(["Assisted Living", "Memory Care"]),
     rating: 4.6,
-    description: generateDescription("Sunrise of Poland", ["Assisted Living", "Memory Care"]),
-    image: "https://source.unsplash.com/random/800x600/?senior,residence",
-    phone: "(800) 555-1069"
+    description: generateDescription("The Landing of Stow", ["Assisted Living", "Memory Care"]),
+    image: "https://images.unsplash.com/photo-1600607687126-8a3414349a51?q=80&w=2070&auto=format&fit=crop"
+  },
+  {
+    id: 71,
+    name: "The Landing of Canton",
+    slug: "the-landing-of-canton-canton-oh",
+    address: "4550 Hills and Dales Road NW, Canton, OH 44708",
+    city: "Canton",
+    state: "OH",
+    type: "Assisted Living",
+    services: ["Assisted Living", "Memory Care"],
+    amenities: generateAmenities(["Assisted Living", "Memory Care"]),
+    rating: 4.5,
+    description: generateDescription("The Landing of Canton", ["Assisted Living", "Memory Care"]),
+    image: "https://images.unsplash.com/photo-1519974719765-e6559eac2575?q=80&w=2070&auto=format&fit=crop"
+  },
+  {
+    id: 72,
+    name: "The Landing of Worthington",
+    slug: "the-landing-of-worthington-worthington-oh",
+    address: "1650 N. High Street, Worthington, OH 43085",
+    city: "Worthington",
+    state: "OH",
+    type: "Assisted Living",
+    services: ["Assisted Living", "Memory Care"],
+    amenities: generateAmenities(["Assisted Living", "Memory Care"]),
+    rating: 4.7,
+    description: generateDescription("The Landing of Worthington", ["Assisted Living", "Memory Care"]),
+    image: "https://images.unsplash.com/photo-1556228578-8c89e6adf883?q=80&w=2070&auto=format&fit=crop"
+  },
+  {
+    id: 73,
+    name: "The Landing of Hamilton",
+    slug: "the-landing-of-hamilton-hamilton-oh",
+    address: "1800 Riverchase Drive, Hamilton, OH 45011",
+    city: "Hamilton",
+    state: "OH",
+    type: "Assisted Living",
+    services: ["Assisted Living", "Memory Care"],
+    amenities: generateAmenities(["Assisted Living", "Memory Care"]),
+    rating: 4.4,
+    description: generateDescription("The Landing of Hamilton", ["Assisted Living", "Memory Care"]),
+    image: "https://images.unsplash.com/photo-1571171637578-41bc2dd41cd2?q=80&w=2070&auto=format&fit=crop"
+  },
+  {
+    id: 74,
+    name: "The Landing of Middleburg Heights",
+    slug: "the-landing-of-middleburg-heights-middleburg-heights-oh",
+    address: "15435 Bagley Road, Middleburg Heights, OH 44130",
+    city: "Middleburg Heights",
+    state: "OH",
+    type: "Assisted Living",
+    services: ["Assisted Living", "Memory Care"],
+    amenities: generateAmenities(["Assisted Living", "Memory Care"]),
+    rating: 4.5,
+    description: generateDescription("The Landing of Middleburg Heights", ["Assisted Living", "Memory Care"]),
+    image: "https://images.unsplash.com/photo-1579377677747-44a9b1ce2f17?q=80&w=2070&auto=format&fit=crop"
+  },
+  {
+    id: 75,
+    name: "The Landing of Westerville",
+    slug: "the-landing-of-westerville-westerville-oh",
+    address: "690 Cooper Road, Westerville, OH 43081",
+    city: "Westerville",
+    state: "OH",
+    type: "Assisted Living",
+    services: ["Assisted Living", "Memory Care"],
+    amenities: generateAmenities(["Assisted Living", "Memory Care"]),
+    rating: 4.6,
+    description: generateDescription("The Landing of Westerville", ["Assisted Living", "Memory Care"]),
+    image: "https://images.unsplash.com/photo-1505577058444-a3dab90d4253?q=80&w=2070&auto=format&fit=crop"
   }
 ]; 
