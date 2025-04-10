@@ -115,9 +115,10 @@ export async function generateStaticParams() {
 export default async function Page({ 
   params 
 }: { 
-  params: Params 
+  params: Promise<Params> 
 }) {
-  const { city, slug } = params;
+  const resolvedParams = await params;
+  const { city, slug } = resolvedParams;
   const community = communities.find(
     community => 
       community.state === "OH" && 
