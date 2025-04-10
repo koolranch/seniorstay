@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { communities } from "@/lib/data/communities";
 import Link from "next/link";
 
-type Props = {
+type CityLayoutProps = {
   children: React.ReactNode;
   params: {
     state: string;
@@ -12,7 +12,7 @@ type Props = {
 
 export async function generateMetadata({ 
   params 
-}: Props): Promise<Metadata> {
+}: CityLayoutProps): Promise<Metadata> {
   const { state, city } = params;
   const cityCommunities = communities.filter(
     c => c.state.toLowerCase() === state.toLowerCase() && 
@@ -38,7 +38,7 @@ export async function generateMetadata({
 export default function CityLayout({
   children,
   params,
-}: Props) {
+}: CityLayoutProps) {
   const { state, city } = params;
   const cityCommunities = communities.filter(
     c => c.state.toLowerCase() === state.toLowerCase() && 
