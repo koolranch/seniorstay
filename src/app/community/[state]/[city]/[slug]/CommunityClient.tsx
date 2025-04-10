@@ -20,14 +20,17 @@ const FALLBACK_IMAGE = "https://images.unsplash.com/photo-1519974719765-e6559eac
 export default function CommunityClient({ params, communities }: CommunityClientProps) {
   const [activeTab, setActiveTab] = useState("overview");
 
+  console.log('CommunityClient looking for community with params:', params);
+  
   const community = communities.find(
     (c) =>
-      c.state.toLowerCase() === params.state &&
-      c.city.toLowerCase() === params.city &&
+      c.state.toLowerCase() === params.state.toLowerCase() &&
+      c.city.toLowerCase() === params.city.toLowerCase() &&
       c.slug === params.slug
   );
 
   if (!community) {
+    console.log('Community not found in CommunityClient for params:', params);
     return (
       <div className="min-h-screen bg-gray-50 py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

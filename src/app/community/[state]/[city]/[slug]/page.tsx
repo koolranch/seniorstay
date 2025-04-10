@@ -25,14 +25,17 @@ interface Props {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const resolvedParams = await params;
+  console.log('Looking for community with params:', resolvedParams);
+  
   const community = communities.find(
     (c) =>
-      c.state.toLowerCase() === resolvedParams.state &&
-      c.city.toLowerCase() === resolvedParams.city &&
+      c.state.toLowerCase() === resolvedParams.state.toLowerCase() &&
+      c.city.toLowerCase() === resolvedParams.city.toLowerCase() &&
       c.slug === resolvedParams.slug
   );
 
   if (!community) {
+    console.log('Community not found for params:', resolvedParams);
     return {
       title: "Community Not Found",
       description: "The requested senior living community could not be found.",
@@ -128,14 +131,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function Page(props: Props) {
   const params = await props.params;
+  console.log('Page component looking for community with params:', params);
+  
   const community = communities.find(
     (c) =>
-      c.state.toLowerCase() === params.state &&
-      c.city.toLowerCase() === params.city &&
+      c.state.toLowerCase() === params.state.toLowerCase() &&
+      c.city.toLowerCase() === params.city.toLowerCase() &&
       c.slug === params.slug
   );
 
   if (!community) {
+    console.log('Community not found in Page component for params:', params);
     return <CommunityClient params={params} communities={communities} />;
   }
 

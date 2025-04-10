@@ -1,6 +1,6 @@
 // Helper function to generate slug from name
 function generateSlug(name: string, city: string, state: string): string {
-  return `${name} ${city} ${state}`
+  return `${name}-${city}-${state}`
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/(^-|-$)/g, '');
@@ -109,7 +109,7 @@ export const communities: Community[] = [
   {
     id: 1,
     name: "Westwood Place",
-    slug: "westwood-place-cleveland-oh",
+    slug: generateSlug("Westwood Place", "Cleveland", "OH"),
     address: "Cleveland, OH",
     city: "Cleveland",
     state: "OH",
@@ -123,7 +123,7 @@ export const communities: Community[] = [
   {
     id: 2,
     name: "Summit Point",
-    slug: "summit-point-macedonia-oh",
+    slug: generateSlug("Summit Point", "Macedonia", "OH"),
     address: "9633 Valley View Rd, Macedonia, OH 44056",
     city: "Macedonia",
     state: "OH",
