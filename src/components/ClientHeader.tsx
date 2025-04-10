@@ -10,7 +10,8 @@ import {
   FiHeart,
   FiMessageSquare,
   FiLogOut,
-  FiSettings
+  FiSettings,
+  FiBarChart2
 } from "react-icons/fi";
 import MobileNav from "./MobileNav";
 import { useAuth } from "@/context/AuthContext";
@@ -104,6 +105,7 @@ const ClientHeader = () => {
               className="hidden md:flex items-center text-[#1b4d70] hover:text-[#2F5061] transition"
               aria-label="Compare communities"
             >
+              <FiBarChart2 className="mr-1" />
               <span>Compare</span>
             </Link>
             <Link
