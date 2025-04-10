@@ -13,13 +13,6 @@ export type CommunityPageProps = {
   searchParams?: { [key: string]: string | string[] | undefined };
 };
 
-// Extend Next.js types to include our custom types
-declare module "next" {
-  interface PageProps {
-    params: CommunityParams;
-  }
-}
-
 // Helper type for generateMetadata function
 export type GenerateMetadataProps = {
   params: CommunityParams;
