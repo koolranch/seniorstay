@@ -49,7 +49,7 @@ const ClientHeader = () => {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center">
-            <span className="text-[#1b4d70] text-xl md:text-2xl font-bold">SeniorStay</span>
+            <span className="text-[#1b4d70] text-xl md:text-2xl font-bold">GuideForSeniors</span>
           </Link>
 
           {/* Center Search Bar - Desktop */}

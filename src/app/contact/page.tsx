@@ -313,7 +313,7 @@ const ContactPage = () => {
                   <FiMail className="text-[#1b4d70] mr-3 mt-1" size={18} />
                   <div>
                     <p className="font-medium">Email</p>
-                    <p className="text-[#333333]">info@seniorstay.com</p>
+                    <p className="text-[#333333]">info@guideforseniors.com</p>
                     <p className="text-sm text-[#666666]">We respond within 24 hours</p>
                   </div>
                 </div>
@@ -331,7 +331,7 @@ const ContactPage = () => {
                   <FiMapPin className="text-[#1b4d70] mr-3 mt-1" size={18} />
                   <div>
                     <p className="font-medium">Headquarters</p>
-                    <p className="text-[#333333]">123 SeniorCare Avenue</p>
+                    <p className="text-[#333333]">123 Guide Avenue</p>
                     <p className="text-[#333333]">Columbus, OH 43215</p>
                   </div>
                 </div>

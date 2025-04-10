@@ -10,7 +10,7 @@ import ClientBody from "./ClientBody";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "SeniorStay | Find Senior Living Communities",
+  title: "GuideForSeniors | Find Senior Living Communities",
   description: "Browse and compare senior living communities in Ohio. Find independent living, assisted living, memory care and more.",
 };
 

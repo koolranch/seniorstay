@@ -37,7 +37,7 @@ const ClientFooter = () => {
           <div>
             <h3 className="text-base font-semibold mb-4 text-[#1b4d70]">About</h3>
             <ul className="space-y-3 text-sm text-[#333333]">
-              <li><Link href="#" className="hover:text-[#F5A623] block py-1">How SeniorStay works</Link></li>
+              <li><Link href="#" className="hover:text-[#F5A623] block py-1">How GuideForSeniors works</Link></li>
               <li><Link href="#" className="hover:text-[#F5A623] block py-1">Our Mission</Link></li>
               <li><Link href="#" className="hover:text-[#F5A623] block py-1">Privacy Policy</Link></li>
               <li><Link href="#" className="hover:text-[#F5A623] block py-1">Terms of Service</Link></li>
@@ -46,7 +46,7 @@ const ClientFooter = () => {
         </div>
         <div className="border-t border-[#A7C4A0] mt-8 pt-8 flex flex-col md:flex-row md:items-center justify-between text-sm">
           <div className="text-[#333333]">
-            © {new Date().getFullYear()} SeniorStay, Inc.
+            © {new Date().getFullYear()} GuideForSeniors, Inc.
           </div>
           <div className="flex space-x-4 mt-4 md:mt-0">
             <Link href="#" className="text-[#333333] hover:text-[#F5A623]">Privacy</Link>
