@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
+import { ReactNode } from "react";
 import { communities } from "@/lib/data/communities";
 import Link from "next/link";
 
 type CityLayoutProps = {
-  children: React.ReactNode;
+  children: ReactNode;
   params: {
     state: string;
     city: string;
@@ -35,7 +36,7 @@ export async function generateMetadata({
   };
 }
 
-export default function CityLayout({
+export default function Layout({
   children,
   params,
 }: CityLayoutProps) {
