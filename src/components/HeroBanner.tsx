@@ -56,7 +56,7 @@ const HeroBanner = ({
         {/* Additional CTAs */}
         <div className="flex flex-col sm:flex-row gap-4 mt-6">
           <Link
-            href="/provider?featured=true"
+            href="/featured"
             className="bg-white text-[#1b4d70] rounded-full py-2 px-6 font-medium hover:bg-[#FAFAF5] transition flex items-center justify-center"
           >
             View Featured Communities
