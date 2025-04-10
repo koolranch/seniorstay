@@ -1,14 +1,19 @@
-import { Metadata } from "next";
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { communities } from "@/lib/data/communities";
 import { slugify, getCityPath, getCommunityPath } from "@/lib/utils/formatSlug";
 import CommunityContent from "./CommunityContent";
 
+type Params = {
+  city: string;
+  slug: string;
+};
+
 // Generate metadata for each community page
 export async function generateMetadata({ 
   params 
 }: { 
-  params: { city: string; slug: string } 
+  params: Params 
 }): Promise<Metadata> {
   const cityName = params.city.split("-").map((word: string) => 
     word.charAt(0).toUpperCase() + word.slice(1)
@@ -107,10 +112,10 @@ export async function generateStaticParams() {
     }));
 }
 
-export default function Page({ 
+export default async function Page({ 
   params 
 }: { 
-  params: { city: string; slug: string } 
+  params: Params 
 }) {
   const { city, slug } = params;
   const community = communities.find(
