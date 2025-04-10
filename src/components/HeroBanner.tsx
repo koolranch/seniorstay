@@ -6,30 +6,23 @@ import { FiMapPin, FiSearch, FiHeart } from 'react-icons/fi';
 interface HeroBannerProps {
   title?: string;
   subtitle?: string;
-  backgroundImage?: string;
 }
 
 const HeroBanner = ({
   title = "Find the Perfect Senior Living Community",
-  subtitle = "Discover and compare communities that meet your unique needs and preferences",
-  backgroundImage = "https://images.unsplash.com/photo-1579208030886-b937da9dc6cc?q=80&w=1974&auto=format&fit=crop"
+  subtitle = "Discover and compare communities that meet your unique needs and preferences"
 }: HeroBannerProps) => {
   return (
-    <div className="relative w-full h-[60vh] min-h-[400px] max-h-[600px] bg-[#1b4d70]">
-      {/* Background image with overlay */}
-      <div className="absolute inset-0 z-0">
-        <Image
-          src={backgroundImage}
-          alt="Senior living community"
-          fill
-          className="object-cover opacity-40"
-          priority
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#1b4d70]/60 to-[#1b4d70]/80" />
-      </div>
-
+    <div 
+      className="relative w-full min-h-[600px] flex items-center justify-center"
+      style={{ 
+        backgroundImage: "url('/images/gradient-header.png')", 
+        backgroundSize: 'cover', 
+        backgroundPosition: 'center' 
+      }}
+    >
       {/* Content */}
-      <div className="relative z-10 container mx-auto px-6 md:px-10 lg:px-20 h-full flex flex-col justify-center items-center text-center">
+      <div className="relative z-10 container mx-auto px-4 py-20 md:py-32 flex flex-col justify-center items-center text-center">
         <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 max-w-3xl">
           {title}
         </h1>
