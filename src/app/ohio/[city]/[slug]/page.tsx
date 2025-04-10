@@ -4,13 +4,12 @@ import { communities } from "@/lib/data/communities";
 import { slugify, getCityPath, getCommunityPath } from "@/lib/utils/formatSlug";
 import CommunityContent from "./CommunityContent";
 
-interface PageProps {
+type PageProps = {
   params: {
     city: string;
     slug: string;
   };
-  searchParams?: { [key: string]: string | string[] | undefined };
-}
+};
 
 // Generate metadata for each community page
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -111,19 +110,20 @@ export async function generateStaticParams() {
     }));
 }
 
-export default function CommunityPage({ params }: PageProps) {
+export default function Page({ params }: PageProps) {
+  const { city, slug } = params;
   const community = communities.find(
     community => 
       community.state === "OH" && 
-      slugify(community.city) === params.city &&
-      slugify(community.name) === params.slug
+      slugify(community.city) === city &&
+      slugify(community.name) === slug
   );
 
   if (!community) {
     notFound();
   }
 
-  const cityName = params.city.split("-").map((word: string) => 
+  const cityName = city.split("-").map((word: string) => 
     word.charAt(0).toUpperCase() + word.slice(1)
   ).join(" ");
 
