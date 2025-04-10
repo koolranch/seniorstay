@@ -1,0 +1,16 @@
+# Guide for Seniors - robots.txt
+# Last updated: April 9, 2024
+# This file allows all search engines to crawl the entire site
+
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://www.guideforseniors.com/sitemap.xml
+
+# Future restrictions (commented out)
+# Disallow: /admin/
+# Disallow: /api/
+# Disallow: /draft/
+# Disallow: /private/
+# Disallow: /temp/ 

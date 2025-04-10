@@ -3,10 +3,11 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { FiStar, FiCheck, FiMapPin, FiHome, FiUsers, FiCalendar, FiDollarSign } from 'react-icons/fi';
+import { FiStar, FiCheck, FiMapPin, FiHome, FiUsers, FiCalendar, FiDollarSign, FiArrowRight } from 'react-icons/fi';
 import { useComparison } from '@/context/ComparisonContext';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import FavoriteButton from './FavoriteButton';
+import { getCommunityPath, getCityPath } from '@/lib/utils/formatSlug';
 
 interface ProviderCardProps {
   id: number;
@@ -52,6 +53,10 @@ const ProviderCard = ({
   // Get 3 amenities to display
   const displayAmenities = amenities.slice(0, 3);
 
+  // Generate paths using utility functions
+  const communityPath = getCommunityPath(state, city, slug);
+  const cityPath = getCityPath(state, city);
+
   // Handle tour schedule button click
   const handleScheduleTour = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -73,7 +78,7 @@ const ProviderCard = ({
   return (
     <article className={`rounded-2xl shadow-md hover:ring-2 hover:ring-primary transition-all p-4 bg-white ${className}`}>
       <Link
-        href={`/community/${state.toLowerCase()}/${city.toLowerCase()}/${slug}`}
+        href={communityPath}
         className="block"
         aria-label={`View details for ${name} in ${city}, ${state}`}
       >
@@ -98,63 +103,78 @@ const ProviderCard = ({
           </div>
 
           {/* Type badge */}
-          <div className="absolute bottom-3 left-3 bg-black bg-opacity-50 text-white px-2 py-1 rounded-md text-xs">
+          <div className="absolute bottom-3 left-3 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-md text-xs font-medium text-[#1b4d70]">
             {type}
           </div>
         </div>
 
         {/* Content */}
         <div className="space-y-3">
-          {/* Name and Rating */}
-          <div>
-            <h2 className="text-xl font-semibold text-[#1b4d70] line-clamp-1">{name}</h2>
-            <p className="text-sm text-gray-600 mt-1">{city}, {state}</p>
-            <div className="flex items-center mt-2">
-              <FiStar className="text-[#F5A623] fill-[#F5A623]" />
-              <span className="ml-1 font-medium text-sm">{rating}</span>
-              <span className="text-gray-400 text-xs ml-1">({reviewCount} reviews)</span>
-            </div>
+          {/* Name and rating */}
+          <div className="flex justify-between items-start">
+            <h3 className="font-semibold text-lg text-[#1b4d70] line-clamp-2">{name}</h3>
+            {rating > 0 && (
+              <div className="flex items-center bg-[#f1f6f0] px-2 py-1 rounded-md text-sm">
+                <FiStar className="text-yellow-400 mr-1" />
+                <span className="font-medium">{rating.toFixed(1)}</span>
+                {reviewCount > 0 && (
+                  <span className="text-gray-500 ml-1">({reviewCount})</span>
+                )}
+              </div>
+            )}
           </div>
 
-          {/* Service Tags */}
-          {!compact && displayAmenities.length > 0 && (
-            <ul className="flex flex-wrap gap-2 list-none p-0 m-0">
-              {displayAmenities.map((amenity) => (
-                <li
-                  key={`${id}-${amenity}`}
-                  className="inline-block bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded"
+          {/* Location */}
+          <div className="flex items-center text-gray-600 text-sm">
+            <FiMapPin className="mr-1 text-[#1b4d70]" />
+            <span>{city}, {state}</span>
+          </div>
+
+          {/* Amenities */}
+          {displayAmenities.length > 0 && (
+            <div className="flex flex-wrap gap-2">
+              {displayAmenities.map((amenity, index) => (
+                <div 
+                  key={index} 
+                  className="flex items-center bg-gray-100 px-2 py-1 rounded-md text-xs text-gray-700"
                 >
-                  {amenity}
-                </li>
+                  <FiCheck className="mr-1 text-green-600" />
+                  <span className="line-clamp-1">{amenity}</span>
+                </div>
               ))}
-            </ul>
+            </div>
           )}
+
+          {/* City link */}
+          <div className="pt-2">
+            <Link 
+              href={cityPath}
+              className="inline-flex items-center text-sm text-[#1b4d70] hover:underline"
+              onClick={(e) => e.stopPropagation()}
+            >
+              See all communities in {city}
+              <FiArrowRight className="ml-1" />
+            </Link>
+          </div>
         </div>
       </Link>
 
-      {/* Action Buttons */}
-      <div className="mt-4 space-y-2">
-        {onScheduleTour && (
-          <button
-            onClick={handleScheduleTour}
-            className="w-full bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded font-semibold text-sm flex items-center justify-center"
-            aria-label={`Request a tour at ${name}`}
-          >
-            <FiCalendar className="mr-2" />
-            Request a Tour
-          </button>
-        )}
-        
-        {onRequestPricing && (
-          <button
-            onClick={handleRequestPricing}
-            className="w-full bg-white border border-green-600 text-green-600 hover:bg-green-50 px-4 py-2 rounded font-semibold text-sm flex items-center justify-center"
-            aria-label={`Get pricing for ${name}`}
-          >
-            <FiDollarSign className="mr-2" />
-            Get Pricing
-          </button>
-        )}
+      {/* Action buttons */}
+      <div className="flex gap-2 mt-4">
+        <button
+          onClick={handleScheduleTour}
+          className="flex-1 bg-[#1b4d70] text-white py-2 px-4 rounded-md text-sm font-medium hover:bg-[#2F5061] transition-colors flex items-center justify-center"
+        >
+          <FiCalendar className="mr-2" />
+          Schedule Tour
+        </button>
+        <button
+          onClick={handleRequestPricing}
+          className="flex-1 bg-white border border-[#1b4d70] text-[#1b4d70] py-2 px-4 rounded-md text-sm font-medium hover:bg-gray-50 transition-colors flex items-center justify-center"
+        >
+          <FiDollarSign className="mr-2" />
+          Request Pricing
+        </button>
       </div>
     </article>
   );

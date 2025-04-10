@@ -103,6 +103,7 @@ export interface Community {
   reviewCount?: number;
   description: string;
   image: string;
+  phone?: string;
 }
 
 export const communities: Community[] = [
