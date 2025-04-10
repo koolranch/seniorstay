@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { FiMapPin, FiSearch, FiHeart } from 'react-icons/fi';
 
 interface HeroBannerProps {
@@ -12,6 +13,15 @@ const HeroBanner = ({
   title = "Find the Perfect Senior Living Community",
   subtitle = "Discover and compare communities that meet your unique needs and preferences"
 }: HeroBannerProps) => {
+  const router = useRouter();
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleSearch = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    if (!searchQuery.trim()) return;
+    router.push(`/community?location=${encodeURIComponent(searchQuery.trim())}`);
+  };
+  
   return (
     <div 
       className="relative w-full min-h-[600px] flex items-center justify-center"
@@ -31,20 +41,25 @@ const HeroBanner = ({
         </p>
 
         {/* Search bar */}
-        <div className="w-full max-w-2xl bg-white rounded-full shadow-lg p-2 flex items-center">
+        <form onSubmit={handleSearch} className="w-full max-w-2xl bg-white rounded-full shadow-lg p-2 flex items-center">
           <div className="flex-1 flex items-center pl-4">
             <FiMapPin className="text-[#1b4d70] mr-2" />
             <input
               type="text"
               placeholder="Enter city, state, or zip code"
               className="w-full p-2 focus:outline-none text-[#333333]"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
-          <button className="bg-[#F5A623] text-[#1b4d70] font-medium rounded-full py-3 px-6 md:px-8 flex items-center hover:bg-[#FFC65C] transition">
+          <button 
+            type="submit"
+            className="bg-[#F5A623] text-[#1b4d70] font-medium rounded-full py-3 px-6 md:px-8 flex items-center hover:bg-[#FFC65C] transition"
+          >
             <FiSearch className="mr-2" />
             Search
           </button>
-        </div>
+        </form>
 
         {/* Additional CTAs */}
         <div className="flex flex-col sm:flex-row gap-4 mt-6">

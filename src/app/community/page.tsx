@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { FiSearch, FiGrid, FiList, FiMapPin, FiStar, FiX } from "react-icons/fi";
@@ -20,7 +21,10 @@ const allServices = Array.from(
 ).sort();
 
 export default function CommunityDirectory() {
-  const [searchQuery, setSearchQuery] = useState("");
+  const searchParams = useSearchParams();
+  const locationParam = searchParams.get('location');
+  
+  const [searchQuery, setSearchQuery] = useState(locationParam || "");
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [showTourScheduler, setShowTourScheduler] = useState(false);
@@ -164,6 +168,7 @@ export default function CommunityDirectory() {
           <div className="mb-6">
             <p className="text-gray-600">
               Showing {filteredCommunities.length} of {communities.length} communities
+              {searchQuery && ` matching "${searchQuery}"`}
             </p>
           </div>
 
