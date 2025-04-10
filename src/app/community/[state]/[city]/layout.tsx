@@ -3,7 +3,7 @@ import { ReactNode } from "react";
 import { communities } from "@/lib/data/communities";
 import Link from "next/link";
 
-type CityLayoutProps = {
+type LayoutProps = {
   children: ReactNode;
   params: {
     state: string;
@@ -13,7 +13,7 @@ type CityLayoutProps = {
 
 export async function generateMetadata({ 
   params 
-}: CityLayoutProps): Promise<Metadata> {
+}: LayoutProps): Promise<Metadata> {
   const { state, city } = params;
   const cityCommunities = communities.filter(
     c => c.state.toLowerCase() === state.toLowerCase() && 
@@ -36,7 +36,7 @@ export async function generateMetadata({
   };
 }
 
-export default function Layout({ children, params }: CityLayoutProps) {
+export default function Layout({ children, params }: LayoutProps) {
   const { state, city } = params;
   const cityCommunities = communities.filter(
     c => c.state.toLowerCase() === state.toLowerCase() && 
