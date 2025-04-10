@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
   FiSearch,
@@ -15,12 +16,14 @@ import MobileNav from "./MobileNav";
 import { useAuth } from "@/context/AuthContext";
 
 const ClientHeader = () => {
+  const router = useRouter();
   const { user, logout } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [authMode, setAuthMode] = useState<'login' | 'signup'>('login');
+  const [searchQuery, setSearchQuery] = useState("");
 
   const userMenuRef = useRef<HTMLDivElement>(null);
 
@@ -43,6 +46,20 @@ const ClientHeader = () => {
     setShowUserMenu(false);
   };
 
+  const handleSearch = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    if (!searchQuery.trim()) return;
+    router.push(`/community?location=${encodeURIComponent(searchQuery.trim())}`);
+    setSearchQuery("");  // Clear the search after submission
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleSearch();
+    }
+  };
+
   return (
     <header className="border-b sticky top-0 bg-[#FAFAF5] z-50 py-4">
       <div className="container mx-auto px-4 sm:px-6 md:px-10 lg:px-20">
@@ -55,12 +72,20 @@ const ClientHeader = () => {
           {/* Center Search Bar - Desktop */}
           <div className="hidden md:flex items-center justify-center flex-1 mx-4 lg:mx-24">
             <div className="flex items-center border border-[#A7C4A0] rounded-full shadow-sm hover:shadow transition px-2 py-2 w-full max-w-lg">
-              <button className="px-4 font-medium text-sm text-[#333333]">
-                Where to?
-              </button>
-              <div className="ml-auto bg-[#1b4d70] text-white p-2 rounded-full">
+              <input
+                type="text"
+                placeholder="Where to?"
+                className="flex-1 px-4 font-medium text-sm text-[#333333] focus:outline-none"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyDown={handleKeyDown}
+              />
+              <button 
+                onClick={() => handleSearch()}
+                className="ml-auto bg-[#1b4d70] text-white p-2 rounded-full hover:bg-[#2F5061] transition"
+              >
                 <FiSearch />
-              </div>
+              </button>
             </div>
           </div>
 
@@ -173,14 +198,19 @@ const ClientHeader = () => {
 
         {/* Mobile Search Button */}
         <div className="md:hidden mt-4">
-          <button
-            className="flex items-center w-full border border-[#A7C4A0] rounded-full shadow-sm p-3"
-            onClick={() => setIsSearchFocused(true)}
-            aria-label="Search for communities"
-          >
-            <FiSearch className="text-[#1b4d70] mr-2" />
-            <span className="text-[#333333] text-sm">Where to?</span>
-          </button>
+          <div className="flex items-center w-full border border-[#A7C4A0] rounded-full shadow-sm p-3">
+            <input
+              type="text"
+              placeholder="Where to?"
+              className="flex-1 text-[#333333] text-sm focus:outline-none"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={handleKeyDown}
+            />
+            <button onClick={() => handleSearch()} aria-label="Search for communities">
+              <FiSearch className="text-[#1b4d70]" />
+            </button>
+          </div>
         </div>
       </div>
 
