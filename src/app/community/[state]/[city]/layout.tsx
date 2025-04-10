@@ -1,14 +1,10 @@
 import { ReactNode } from 'react';
 
-type LayoutProps = {
+export default function Layout({
+  children,
+}: {
   children: ReactNode;
-  params: {
-    state: string;
-    city: string;
-  };
-};
-
-export default function Layout({ children }: LayoutProps) {
+}) {
   return (
     <div className="container mx-auto px-4 py-6">
       {children}
