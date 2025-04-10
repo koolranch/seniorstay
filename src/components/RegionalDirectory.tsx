@@ -49,17 +49,17 @@ export default function RegionalDirectory({ className = "" }: RegionalDirectoryP
           </p>
         </div>
 
-        {/* Desktop Grid */}
-        <div className="hidden md:grid grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Responsive Grid */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
           {citiesWithCommunities.map((cityData) => (
             <Link
               key={cityData.city}
               href={`/ohio/${cityData.city.toLowerCase()}`}
-              className="block bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-6 border border-gray-100"
+              className="block bg-white rounded-lg shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-200 py-3 px-4 border border-gray-100 text-center"
             >
-              <div className="flex items-center mb-2">
-                <FiMapPin className="text-[#1b4d70] mr-2" />
-                <h3 className="text-lg font-medium text-[#1b4d70]">
+              <div className="flex items-center justify-center mb-2">
+                <FiMapPin className="text-[#1b4d70] mr-2 flex-shrink-0" />
+                <h3 className="text-lg font-medium text-[#1b4d70] truncate">
                   {cityData.city}, OH
                 </h3>
               </div>
@@ -68,49 +68,16 @@ export default function RegionalDirectory({ className = "" }: RegionalDirectoryP
               </div>
               {cityData.topRatedCommunity && (
                 <div className="text-sm text-gray-700 mt-2">
-                  <div className="font-medium">
-                    Top Rated: {cityData.topRatedCommunity.name}
+                  <div className="font-medium truncate">
+                    Top: {cityData.topRatedCommunity.name}
                   </div>
                   <div className="text-gray-500">
-                    Rated {cityData.topRatedCommunity.rating.toFixed(1)} out of 5
+                    Rated {cityData.topRatedCommunity.rating.toFixed(1)}/5
                   </div>
                 </div>
               )}
             </Link>
           ))}
-        </div>
-
-        {/* Mobile Horizontal Scroll */}
-        <div className="md:hidden -mx-6 px-6">
-          <div className="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4">
-            {citiesWithCommunities.map((cityData) => (
-              <Link
-                key={cityData.city}
-                href={`/ohio/${cityData.city.toLowerCase()}`}
-                className="flex-none w-[280px] snap-center bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-6 border border-gray-100"
-              >
-                <div className="flex items-center mb-2">
-                  <FiMapPin className="text-[#1b4d70] mr-2" />
-                  <h3 className="text-lg font-medium text-[#1b4d70]">
-                    {cityData.city}, OH
-                  </h3>
-                </div>
-                <div className="text-sm text-gray-600">
-                  {cityData.count} {cityData.count === 1 ? "community" : "communities"}
-                </div>
-                {cityData.topRatedCommunity && (
-                  <div className="text-sm text-gray-700 mt-2">
-                    <div className="font-medium">
-                      Top Rated: {cityData.topRatedCommunity.name}
-                    </div>
-                    <div className="text-gray-500">
-                      Rated {cityData.topRatedCommunity.rating.toFixed(1)} out of 5
-                    </div>
-                  </div>
-                )}
-              </Link>
-            ))}
-          </div>
         </div>
 
         {/* View All Link */}
