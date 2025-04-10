@@ -38,7 +38,7 @@ export default function RegionalDirectory({ className = "" }: RegionalDirectoryP
     .slice(0, 6); // Show top 6 cities by community count
 
   return (
-    <section className={`bg-white py-12 ${className}`}>
+    <section className={`bg-[#f9fafb] py-12 ${className}`}>
       <div className="container mx-auto px-6 md:px-10 lg:px-20">
         <div className="text-center mb-8">
           <h2 className="text-2xl md:text-3xl font-bold text-[#1b4d70] mb-2">
@@ -55,7 +55,7 @@ export default function RegionalDirectory({ className = "" }: RegionalDirectoryP
             <Link
               key={cityData.city}
               href={`/ohio/${cityData.city.toLowerCase()}`}
-              className="block bg-[#FAFAF5] rounded-lg shadow-sm hover:shadow-md transition-shadow p-6 border border-gray-100"
+              className="block bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-6 border border-gray-100"
             >
               <div className="flex items-center mb-2">
                 <FiMapPin className="text-[#1b4d70] mr-2" />
@@ -87,7 +87,7 @@ export default function RegionalDirectory({ className = "" }: RegionalDirectoryP
               <Link
                 key={cityData.city}
                 href={`/ohio/${cityData.city.toLowerCase()}`}
-                className="flex-none w-[280px] snap-center bg-[#FAFAF5] rounded-lg shadow-sm hover:shadow-md transition-shadow p-6 border border-gray-100"
+                className="flex-none w-[280px] snap-center bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-6 border border-gray-100"
               >
                 <div className="flex items-center mb-2">
                   <FiMapPin className="text-[#1b4d70] mr-2" />

@@ -80,125 +80,136 @@ export default function CommunityDirectory() {
   };
 
   return (
-    <main className="container mx-auto px-4 py-8">
+    <main className="bg-gray-50 min-h-screen">
       {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-[#1b4d70] mb-4">
-          Senior Living Communities
-        </h1>
-        <p className="text-gray-600">
-          Find the perfect senior living community for you or your loved ones.
-        </p>
+      <div className="bg-white border-b border-neutral-200 py-10">
+        <div className="container mx-auto px-6 md:px-10 lg:px-20">
+          <h1 className="text-3xl font-bold text-[#1b4d70] mb-4">
+            Senior Living Communities
+          </h1>
+          <p className="text-gray-600">
+            Find the perfect senior living community for you or your loved ones.
+          </p>
+        </div>
       </div>
 
       {/* Filters */}
-      <div className="bg-white rounded-lg shadow-md p-4 mb-8">
-        <div className="flex flex-col md:flex-row gap-4">
-          {/* Search Input */}
-          <div className="flex-1">
-            <div className="relative">
-              <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search by name or location..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1b4d70] focus:border-transparent"
-              />
+      <div className="border-b border-neutral-200 bg-white">
+        <div className="container mx-auto px-6 md:px-10 lg:px-20 py-8">
+          <div className="bg-white rounded-lg shadow-sm p-4">
+            <div className="flex flex-col md:flex-row gap-4">
+              {/* Search Input */}
+              <div className="flex-1">
+                <div className="relative">
+                  <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                  <input
+                    type="text"
+                    placeholder="Search by name or location..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1b4d70] focus:border-transparent"
+                  />
+                </div>
+              </div>
+
+              {/* View Toggle */}
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setViewMode("grid")}
+                  className={`p-2 rounded-lg ${
+                    viewMode === "grid"
+                      ? "bg-[#1b4d70] text-white"
+                      : "bg-gray-100 text-gray-600"
+                  }`}
+                >
+                  <FiGrid />
+                </button>
+                <button
+                  onClick={() => setViewMode("list")}
+                  className={`p-2 rounded-lg ${
+                    viewMode === "list"
+                      ? "bg-[#1b4d70] text-white"
+                      : "bg-gray-100 text-gray-600"
+                  }`}
+                >
+                  <FiList />
+                </button>
+              </div>
+            </div>
+
+            {/* Service Filters */}
+            <div className="mt-4 flex flex-wrap gap-2">
+              {allServices.map((service) => (
+                <button
+                  key={service}
+                  onClick={() => toggleService(service)}
+                  className={`px-3 py-1 rounded-full text-sm ${
+                    selectedServices.includes(service)
+                      ? "bg-[#1b4d70] text-white"
+                      : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                  }`}
+                >
+                  {service}
+                </button>
+              ))}
             </div>
           </div>
+        </div>
+      </div>
 
-          {/* View Toggle */}
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => setViewMode("grid")}
-              className={`p-2 rounded-lg ${
-                viewMode === "grid"
-                  ? "bg-[#1b4d70] text-white"
-                  : "bg-gray-100 text-gray-600"
-              }`}
-            >
-              <FiGrid />
-            </button>
-            <button
-              onClick={() => setViewMode("list")}
-              className={`p-2 rounded-lg ${
-                viewMode === "list"
-                  ? "bg-[#1b4d70] text-white"
-                  : "bg-gray-100 text-gray-600"
-              }`}
-            >
-              <FiList />
-            </button>
+      {/* Results */}
+      <div className="bg-gray-50 py-10">
+        <div className="container mx-auto px-6 md:px-10 lg:px-20">
+          {/* Results Count */}
+          <div className="mb-6">
+            <p className="text-gray-600">
+              Showing {filteredCommunities.length} of {communities.length} communities
+            </p>
           </div>
-        </div>
 
-        {/* Service Filters */}
-        <div className="mt-4 flex flex-wrap gap-2">
-          {allServices.map((service) => (
-            <button
-              key={service}
-              onClick={() => toggleService(service)}
-              className={`px-3 py-1 rounded-full text-sm ${
-                selectedServices.includes(service)
-                  ? "bg-[#1b4d70] text-white"
-                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-              }`}
-            >
-              {service}
-            </button>
-          ))}
+          {/* Community Grid/List */}
+          {viewMode === "grid" ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredCommunities.map((community) => (
+                <ProviderCard
+                  key={community.id}
+                  id={community.id}
+                  slug={community.slug}
+                  name={community.name}
+                  city={community.city}
+                  state={community.state}
+                  type={community.type}
+                  image={community.image}
+                  rating={community.rating}
+                  amenities={community.services}
+                  onScheduleTour={() => handleScheduleTour({ id: community.id, name: community.name })}
+                  onRequestPricing={() => handleRequestPricing({ id: community.id, name: community.name })}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {filteredCommunities.map((community) => (
+                <ProviderCard
+                  key={community.id}
+                  id={community.id}
+                  slug={community.slug}
+                  name={community.name}
+                  city={community.city}
+                  state={community.state}
+                  type={community.type}
+                  image={community.image}
+                  rating={community.rating}
+                  amenities={community.services}
+                  onScheduleTour={() => handleScheduleTour({ id: community.id, name: community.name })}
+                  onRequestPricing={() => handleRequestPricing({ id: community.id, name: community.name })}
+                  className="flex flex-col md:flex-row"
+                />
+              ))}
+            </div>
+          )}
         </div>
       </div>
-
-      {/* Results Count */}
-      <div className="mb-6">
-        <p className="text-gray-600">
-          Showing {filteredCommunities.length} of {communities.length} communities
-        </p>
-      </div>
-
-      {/* Community Grid/List */}
-      {viewMode === "grid" ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredCommunities.map((community) => (
-            <ProviderCard
-              key={community.id}
-              id={community.id}
-              slug={community.slug}
-              name={community.name}
-              city={community.city}
-              state={community.state}
-              type={community.type}
-              image={community.image}
-              rating={community.rating}
-              amenities={community.services}
-              onScheduleTour={() => handleScheduleTour({ id: community.id, name: community.name })}
-              onRequestPricing={() => handleRequestPricing({ id: community.id, name: community.name })}
-            />
-          ))}
-        </div>
-      ) : (
-        <div className="space-y-4">
-          {filteredCommunities.map((community) => (
-            <ProviderCard
-              key={community.id}
-              id={community.id}
-              slug={community.slug}
-              name={community.name}
-              city={community.city}
-              state={community.state}
-              type={community.type}
-              image={community.image}
-              rating={community.rating}
-              amenities={community.services}
-              onScheduleTour={() => handleScheduleTour({ id: community.id, name: community.name })}
-              onRequestPricing={() => handleRequestPricing({ id: community.id, name: community.name })}
-              className="flex flex-col md:flex-row"
-            />
-          ))}
-        </div>
-      )}
 
       {/* Tour Scheduler Modal */}
       {showTourScheduler && selectedCommunity && (

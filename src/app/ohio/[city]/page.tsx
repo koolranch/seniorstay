@@ -121,19 +121,19 @@ export default function CityPage({ params }: { params: { city: string } }) {
     .slice(0, 5); // Show top 5 nearby cities
 
   return (
-    <div className="bg-[#FAFAF5] min-h-screen">
-      <div className="container mx-auto px-6 md:px-10 lg:px-20 py-8">
-        {/* Back Link */}
-        <Link 
-          href="/ohio" 
-          className="inline-flex items-center text-[#1b4d70] mb-6 hover:underline"
-        >
-          <FiArrowLeft className="mr-2" />
-          Back to Ohio Communities
-        </Link>
+    <div className="bg-gray-50 min-h-screen">
+      {/* Header */}
+      <div className="bg-white border-b border-neutral-200 py-8">
+        <div className="container mx-auto px-6 md:px-10 lg:px-20">
+          {/* Back Link */}
+          <Link 
+            href="/ohio" 
+            className="inline-flex items-center text-[#1b4d70] mb-6 hover:underline"
+          >
+            <FiArrowLeft className="mr-2" />
+            Back to Ohio Communities
+          </Link>
 
-        {/* Header */}
-        <div className="mb-8">
           <h1 className="text-3xl md:text-4xl font-bold text-[#1b4d70] mb-4">
             Senior Living in {cityName}, Ohio
           </h1>
@@ -142,9 +142,11 @@ export default function CityPage({ params }: { params: { city: string } }) {
             Compare amenities, care types, and request a tour today.
           </p>
         </div>
+      </div>
 
-        {/* Communities Grid */}
-        <div className="mb-12">
+      {/* Communities Grid */}
+      <div className="py-12 bg-gray-50">
+        <div className="container mx-auto px-6 md:px-10 lg:px-20">
           <h2 className="text-2xl font-semibold text-[#1b4d70] mb-6">
             Communities in {cityName}
           </h2>
@@ -165,45 +167,53 @@ export default function CityPage({ params }: { params: { city: string } }) {
             ))}
           </div>
         </div>
+      </div>
 
-        {/* Nearby Cities */}
-        {nearbyCitiesList.length > 0 && (
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h2 className="text-xl font-semibold text-[#1b4d70] mb-4">
-              Explore Nearby Cities
-            </h2>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-              {nearbyCitiesList.map((city) => (
-                <Link
-                  key={city.slug}
-                  href={`/ohio/${city.slug}`}
-                  className="text-[#1b4d70] hover:underline"
-                >
-                  {city.name}
-                </Link>
-              ))}
+      {/* Nearby Cities */}
+      {nearbyCitiesList.length > 0 && (
+        <div className="py-12 bg-white border-t border-neutral-200">
+          <div className="container mx-auto px-6 md:px-10 lg:px-20">
+            <div className="bg-white rounded-lg shadow-sm p-6">
+              <h2 className="text-xl font-semibold text-[#1b4d70] mb-4">
+                Explore Nearby Cities
+              </h2>
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                {nearbyCitiesList.map((city) => (
+                  <Link
+                    key={city.slug}
+                    href={`/ohio/${city.slug}`}
+                    className="text-[#1b4d70] hover:underline"
+                  >
+                    {city.name}
+                  </Link>
+                ))}
+              </div>
             </div>
           </div>
-        )}
+        </div>
+      )}
 
-        {/* Local SEO Content */}
-        <div className="mt-12 prose max-w-none">
-          <h2 className="text-2xl font-semibold text-[#1b4d70] mb-4">
-            Senior Living Options in {cityName}
-          </h2>
-          <p>
-            {cityName} offers a variety of senior living communities to meet different needs and preferences. 
-            From independent living for active seniors to assisted living and memory care for those requiring more support, 
-            you'll find options that match your specific requirements.
-          </p>
-          <p>
-            Each community in {cityName} provides unique amenities, care services, and living arrangements. 
-            Use our directory to compare features, read reviews, and connect with communities that align with your needs.
-          </p>
-          <p>
-            Whether you're looking for a vibrant social environment, specialized memory care, or a peaceful retirement setting, 
-            {cityName}'s senior living communities offer diverse options to support your lifestyle and care needs.
-          </p>
+      {/* Local SEO Content */}
+      <div className="py-12 bg-gray-50 border-t border-neutral-200">
+        <div className="container mx-auto px-6 md:px-10 lg:px-20">
+          <div className="prose max-w-none">
+            <h2 className="text-2xl font-semibold text-[#1b4d70] mb-4">
+              Senior Living Options in {cityName}
+            </h2>
+            <p>
+              {cityName} offers a variety of senior living communities to meet different needs and preferences. 
+              From independent living for active seniors to assisted living and memory care for those requiring more support, 
+              you'll find options that match your specific requirements.
+            </p>
+            <p>
+              Each community in {cityName} provides unique amenities, care services, and living arrangements. 
+              Use our directory to compare features, read reviews, and connect with communities that align with your needs.
+            </p>
+            <p>
+              Whether you're looking for a vibrant social environment, specialized memory care, or a peaceful retirement setting, 
+              {cityName}'s senior living communities offer diverse options to support your lifestyle and care needs.
+            </p>
+          </div>
         </div>
       </div>
     </div>
