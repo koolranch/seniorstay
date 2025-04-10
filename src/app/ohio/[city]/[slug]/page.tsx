@@ -1,16 +1,22 @@
 import { notFound } from "next/navigation";
 import { communities } from "@/lib/data/communities";
 import CommunityContent from "./CommunityContent";
-import { slugify, getCityPath, getCommunityPath } from "@/lib/utils/formatSlug";
+import { getCommunityPathFromObject, slugify } from "@/lib/utils/formatSlug";
 
-export default function Page({ params }: { params: { city: string; slug: string } }) {
+export default function Page({
+  params,
+}: {
+  params: {
+    city: string;
+    slug: string;
+  };
+}) {
   const { city, slug } = params;
 
-  const community = communities.find((c) => 
-    c.state === "OH" && 
-    slugify(c.city) === city && 
-    slugify(c.name) === slug
-  );
+  const community = communities.find((c) => {
+    const path = getCommunityPathFromObject(c).toLowerCase();
+    return path.includes(city.toLowerCase()) && path.includes(slug.toLowerCase());
+  });
 
   if (!community) {
     notFound();
