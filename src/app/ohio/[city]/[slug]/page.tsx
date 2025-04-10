@@ -108,11 +108,7 @@ export async function generateStaticParams() {
 }
 
 // Define the page component
-export default function Page({ 
-  params 
-}: { 
-  params: { city: string; slug: string } 
-}) {
+export default function Page({ params }: { params: { city: string; slug: string } }) {
   const { city, slug } = params;
   const community = communities.find(
     community => 
