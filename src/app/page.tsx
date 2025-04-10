@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import HeroBanner from "@/components/HeroBanner";
 import SearchFilterBar from "@/components/SearchFilterBar";
 import ProviderCard from "@/components/ProviderCard";
@@ -10,6 +10,7 @@ import TestimonialSlider from "@/components/TestimonialSlider";
 import ReferralCTA from "@/components/ReferralCTA";
 import TourScheduler from "@/components/TourScheduler";
 import { FiX } from "react-icons/fi";
+import { communities } from "@/lib/data/communities";
 
 export default function Home() {
   // State for filtering
@@ -33,100 +34,6 @@ export default function Home() {
     { id: "rural", name: "Rural Retreats", icon: "🌳" },
     { id: "beachfront", name: "Beachfront", icon: "🏖️" },
     { id: "amenities", name: "Amenities-Rich", icon: "🏊" },
-  ];
-
-  // Featured communities (using the same data structure as Airbnb listings)
-  const featuredCommunities = [
-    {
-      id: 1,
-      slug: "sunshine-meadows",
-      name: "Sunshine Meadows",
-      city: "Cleveland",
-      state: "OH",
-      type: "Independent Living",
-      image: "https://images.unsplash.com/photo-1591088398332-8a7791972843?q=80&w=2074&auto=format&fit=crop",
-      rating: 4.8,
-      distance: "61 miles away",
-      amenities: ["Restaurant-style dining", "Fitness center", "Swimming pool", "Garden", "Pet friendly"],
-      isFeatured: true,
-      lat: 41.4993,
-      lng: -81.6944
-    },
-    {
-      id: 2,
-      slug: "cedar-ridge",
-      name: "Cedar Ridge Retirement",
-      city: "Columbus",
-      state: "OH",
-      type: "Assisted Living",
-      image: "https://images.unsplash.com/photo-1556155092-490a1ba16284?q=80&w=2070&auto=format&fit=crop",
-      rating: 4.98,
-      distance: "63 miles away",
-      amenities: ["24/7 care staff", "Medication management", "Housekeeping", "Transportation services", "Social activities"],
-      isFeatured: true,
-      lat: 39.9612,
-      lng: -82.9988
-    },
-    {
-      id: 3,
-      slug: "lakeside-gardens",
-      name: "Lakeside Gardens",
-      city: "Cincinnati",
-      state: "OH",
-      type: "Memory Care",
-      image: "https://images.unsplash.com/photo-1582719471384-894fbb07a271?q=80&w=2187&auto=format&fit=crop",
-      rating: 4.97,
-      distance: "62 miles away",
-      amenities: ["Specialized memory programs", "Secured environment", "Therapeutic activities", "Individualized care plans"],
-      isFeatured: false,
-      lat: 39.1031,
-      lng: -84.5120
-    },
-    {
-      id: 4,
-      slug: "maple-grove",
-      name: "Maple Grove Living",
-      city: "Toledo",
-      state: "OH",
-      type: "Continuing Care",
-      image: "https://images.unsplash.com/photo-1568939571043-88fceafce24f?q=80&w=2070&auto=format&fit=crop",
-      rating: 4.99,
-      distance: "64 miles away",
-      amenities: ["Independent living", "Assisted living", "Memory care", "Nursing care", "Rehabilitation services"],
-      isFeatured: true,
-      lat: 41.6528,
-      lng: -83.5379
-    },
-    {
-      id: 5,
-      slug: "evergreen-commons",
-      name: "Evergreen Commons",
-      city: "Akron",
-      state: "OH",
-      type: "Independent Living",
-      image: "https://images.unsplash.com/photo-1600607687126-8a3414349a51?q=80&w=2070&auto=format&fit=crop",
-      rating: 4.94,
-      distance: "56 miles away",
-      amenities: ["Restaurant-style dining", "Fitness center", "Arts and crafts studio", "Library", "Game room"],
-      isFeatured: false,
-      lat: 41.0814,
-      lng: -81.5190
-    },
-    {
-      id: 6,
-      slug: "riverside-retreat",
-      name: "Riverside Retreat",
-      city: "Dayton",
-      state: "OH",
-      type: "Assisted Living",
-      image: "https://images.unsplash.com/photo-1519974719765-e6559eac2575?q=80&w=2070&auto=format&fit=crop",
-      rating: 4.91,
-      distance: "68 miles away",
-      amenities: ["24/7 care staff", "Restaurant-style dining", "Medication management", "Housekeeping", "Transportation services"],
-      isFeatured: false,
-      lat: 39.7589,
-      lng: -84.1916
-    }
   ];
 
   // Sample testimonials
@@ -154,15 +61,31 @@ export default function Home() {
     }
   ];
 
-  // Filter communities based on active category
-  const filteredCommunities = activeCategory === "all"
-    ? featuredCommunities
-    : featuredCommunities.filter(community =>
-        community.type.toLowerCase().includes(activeCategory) ||
-        community.amenities?.some(amenity =>
-          amenity.toLowerCase().includes(activeCategory)
-        )
+  // Filter communities based on active category using useMemo for performance
+  const filteredCommunities = useMemo(() => {
+    console.log(`Filtering ${communities.length} communities for category: ${activeCategory}`);
+    
+    if (activeCategory === "all") {
+      return communities;
+    }
+
+    const filtered = communities.filter(community => {
+      // Check if the community's services include the selected category
+      const serviceMatch = community.services.some(service => 
+        service.toLowerCase().includes(activeCategory)
       );
+
+      // Check if the community's amenities include the selected category
+      const amenityMatch = community.amenities.some(amenity => 
+        amenity.toLowerCase().includes(activeCategory)
+      );
+
+      return serviceMatch || amenityMatch;
+    });
+
+    console.log(`Found ${filtered.length} matching communities`);
+    return filtered;
+  }, [activeCategory]);
 
   // Add handler for scheduling a tour
   const handleScheduleTour = (community: { id: number; name: string }) => {
@@ -218,8 +141,11 @@ export default function Home() {
       <div className="container mx-auto px-6 md:px-10 lg:px-20 py-4">
         <h2 className="text-2xl font-semibold text-[#1b4d70] mb-6">
           {activeCategory === 'all'
-            ? 'Featured Senior Living Communities'
+            ? 'Senior Living Communities'
             : `${categories.find(c => c.id === activeCategory)?.name} Communities`}
+          <span className="text-gray-500 text-lg ml-2">
+            ({filteredCommunities.length} communities)
+          </span>
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {filteredCommunities.map((community) => (
@@ -233,9 +159,7 @@ export default function Home() {
               type={community.type}
               image={community.image}
               rating={community.rating}
-              distance={community.distance}
-              isFeatured={community.isFeatured}
-              amenities={community.amenities}
+              amenities={community.services}
               onScheduleTour={() => handleScheduleTour({ id: community.id, name: community.name })}
             />
           ))}
@@ -245,36 +169,22 @@ export default function Home() {
         {filteredCommunities.length > 0 && (
           <div className="flex justify-center mt-10">
             <Link
-              href="/search"
+              href="/community"
               className="px-6 py-3 bg-white border border-[#1b4d70] text-[#1b4d70] rounded-md hover:bg-[#1b4d70] hover:text-white transition-colors"
             >
               View All Communities
             </Link>
           </div>
         )}
-
-        {/* Empty state */}
-        {filteredCommunities.length === 0 && (
-          <div className="text-center py-10">
-            <h3 className="text-xl font-medium text-[#1b4d70] mb-2">No communities found</h3>
-            <p className="text-[#333333] mb-4">We couldn't find any senior living communities matching your criteria.</p>
-            <button
-              onClick={() => setActiveCategory('all')}
-              className="px-6 py-2 bg-[#1b4d70] text-white rounded-md hover:bg-[#2F5061] transition-colors"
-            >
-              Show all communities
-            </button>
-          </div>
-        )}
       </div>
 
-      {/* Testimonials Section */}
-      <div className="container mx-auto px-6 md:px-10 lg:px-20 py-12">
+      {/* Testimonials */}
+      <div className="container mx-auto px-6 md:px-10 lg:px-20 py-16">
         <TestimonialSlider testimonials={testimonials} />
       </div>
 
       {/* Referral CTA */}
-      <div className="container mx-auto px-6 md:px-10 lg:px-20 py-12">
+      <div className="container mx-auto px-6 md:px-10 lg:px-20 py-16">
         <ReferralCTA />
       </div>
 
