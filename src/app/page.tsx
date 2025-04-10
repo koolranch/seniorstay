@@ -11,15 +11,9 @@ import ReferralCTA from "@/components/ReferralCTA";
 import TourScheduler from "@/components/TourScheduler";
 import { FiX } from "react-icons/fi";
 import { communities } from "@/lib/data/communities";
-import { Metadata } from "next";
 import CategoryPillBar from "@/components/CategoryPillBar";
 import CommunityGrid from "@/components/CommunityGrid";
 import TourModal from "@/components/TourModal";
-
-export const metadata: Metadata = {
-  title: "Senior Living Communities | SeniorStay",
-  description: "Find the perfect senior living community for you or your loved one. Compare amenities, care types, and request a tour today.",
-};
 
 export default function HomePage() {
   return (
