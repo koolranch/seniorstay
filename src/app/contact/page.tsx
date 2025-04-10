@@ -304,7 +304,7 @@ const ContactPage = () => {
                   <FiPhoneCall className="text-[#1b4d70] mr-3 mt-1" size={18} />
                   <div>
                     <p className="font-medium">Call Us</p>
-                    <p className="text-[#333333]">1-800-555-CARE</p>
+                    <a href="tel:2162323354" className="text-[#333333] hover:text-[#1b4d70]">(216) 232-3354</a>
                     <p className="text-sm text-[#666666]">Available 24/7</p>
                   </div>
                 </div>

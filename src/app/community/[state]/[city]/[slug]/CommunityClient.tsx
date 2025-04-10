@@ -139,9 +139,9 @@ export default function CommunityClient({ params, communities }: CommunityClient
               <FiMapPin className="h-6 w-6 text-gray-400 mr-2" />
               <span className="text-gray-700">{community.address}</span>
             </div>
-            <div className="flex items-center">
+            <div className="flex items-center mb-4">
               <FiPhone className="h-6 w-6 text-gray-400 mr-2" />
-              <span className="text-gray-700">+1-800-555-1234</span>
+              <a href="tel:2162323354" className="text-gray-700 hover:text-[#1b4d70]">(216) 232-3354</a>
             </div>
             <div className="flex items-center">
               <FiMail className="h-6 w-6 text-gray-400 mr-2" />

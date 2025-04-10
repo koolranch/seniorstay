@@ -56,7 +56,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     "description": description,
     "image": imageUrl,
     "url": canonicalUrl,
-    "telephone": "+1-800-555-1234", // This would be replaced with actual phone number
+    "telephone": "(216) 232-3354", // This would be replaced with actual phone number
     "address": {
       "@type": "PostalAddress",
       "streetAddress": community.address.split(',')[0],
@@ -153,7 +153,7 @@ export default async function Page(props: Props) {
     "description": `Learn more about ${community.name}, offering ${community.services.join(', ')} in ${community.city}, ${community.state}.`,
     "image": community.image,
     "url": `https://seniorstay.com/community/${params.state}/${params.city}/${params.slug}`,
-    "telephone": "+1-800-555-1234", // This would be replaced with actual phone number
+    "telephone": "(216) 232-3354", // This would be replaced with actual phone number
     "address": {
       "@type": "PostalAddress",
       "streetAddress": community.address.split(',')[0],

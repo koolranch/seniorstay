@@ -15,7 +15,7 @@ interface ReferralCTAProps {
 const ReferralCTA = ({
   title = "Need Help Finding the Right Community?",
   description = "Our care advisors are here to answer your questions and provide personalized recommendations for you or your loved one.",
-  phoneNumber = "1-800-555-CARE",
+  phoneNumber = "(216) 232-3354",
   className = '',
   variant = 'default',
   imageUrl = "https://images.unsplash.com/photo-1581579438747-104c53d7fbc4?q=80&w=2070&auto=format&fit=crop",

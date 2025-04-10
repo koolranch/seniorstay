@@ -291,7 +291,7 @@ const TourScheduler = ({
                   onChange={handleChange}
                   required
                   className="w-full pl-10 p-3 border border-[#A7C4A0] rounded-md focus:outline-none focus:ring-2 focus:ring-[#1b4d70] focus:border-transparent"
-                  placeholder="(555) 555-5555"
+                  placeholder="(216) 232-3354"
                 />
               </div>
             </div>

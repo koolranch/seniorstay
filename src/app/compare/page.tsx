@@ -170,13 +170,13 @@ export default function ComparePage() {
                   <td className="p-4 text-[#1b4d70] font-medium bg-[#f1f6f0]">Contact</td>
                   {comparedCommunities.map((community) => (
                     <td key={community.id} className="p-4 text-center border-l border-[#A7C4A0]">
-                      <Link
-                        href={`tel:${community.phone || '555-123-4567'}`}
-                        className="flex items-center justify-center gap-2 bg-[#1b4d70] text-white px-4 py-2 rounded-md hover:bg-[#2F5061] transition mx-auto w-36"
+                      <a
+                        className="flex items-center text-[#1b4d70] text-sm font-medium hover:text-blue-700 mb-2"
+                        href={`tel:${community.phone || '2162323354'}`}
                       >
                         <FiPhone size={16} />
-                        <span>Call</span>
-                      </Link>
+                        <span className="ml-2">{community.phone || "(216) 232-3354"}</span>
+                      </a>
                     </td>
                   ))}
                 </tr>

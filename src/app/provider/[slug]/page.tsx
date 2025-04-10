@@ -85,7 +85,7 @@ const sampleCommunity = {
   ],
   lat: 41.4993,
   lng: -81.6944,
-  phoneNumber: "1-800-555-CARE",
+  phoneNumber: "(216) 232-3354",
 };
 
 export default function ProviderPage() {
@@ -233,7 +233,7 @@ export default function ProviderPage() {
                 <div className="flex flex-col items-end">
                   <div className="flex items-center text-[#1b4d70] font-semibold">
                     <FiPhoneCall className="mr-2" />
-                    <span>{community.phoneNumber}</span>
+                    <a href="tel:2162323354" className="hover:underline">{community.phoneNumber}</a>
                   </div>
                   <span className="text-sm text-[#666666] mt-1">Available 24/7</span>
                 </div>
@@ -358,7 +358,7 @@ export default function ProviderPage() {
               <div className="mb-6">
                 <div className="flex items-center mb-3">
                   <FiPhoneCall className="text-[#1b4d70] mr-2" />
-                  <span className="font-medium">Call directly: {community.phoneNumber}</span>
+                  <span className="font-medium">Call directly: <a href="tel:2162323354" className="hover:underline">{community.phoneNumber}</a></span>
                 </div>
                 <span className="text-sm text-[#666666] block ml-6">Available 24/7</span>
               </div>
@@ -390,7 +390,7 @@ export default function ProviderPage() {
                     type="tel"
                     id="phone"
                     className="w-full p-3 border border-[#A7C4A0] rounded-md focus:outline-none focus:ring-2 focus:ring-[#1b4d70] focus:border-transparent"
-                    placeholder="(555) 555-5555"
+                    placeholder="(216) 232-3354"
                   />
                 </div>
 
