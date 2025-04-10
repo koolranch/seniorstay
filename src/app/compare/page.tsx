@@ -66,8 +66,9 @@ export default function ComparePage() {
             You haven't added any communities to compare yet. Browse communities and click "Add to Compare" to get started.
           </p>
           <Link
-            href="/search"
+            href="/community"
             className="inline-block bg-[#1b4d70] text-white px-6 py-3 rounded-md hover:bg-[#2F5061] transition"
+            aria-label="Browse Communities"
           >
             Browse Communities
           </Link>
