@@ -36,10 +36,7 @@ export async function generateMetadata({
   };
 }
 
-export default function Layout({
-  children,
-  params,
-}: CityLayoutProps) {
+export default function Layout({ children, params }: CityLayoutProps) {
   const { state, city } = params;
   const cityCommunities = communities.filter(
     c => c.state.toLowerCase() === state.toLowerCase() && 
