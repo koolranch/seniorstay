@@ -100,6 +100,7 @@ export interface Community {
   services: string[];
   amenities: string[];
   rating: number;
+  reviewCount?: number;
   description: string;
   image: string;
 }

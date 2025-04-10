@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { communities } from '@/lib/data/communities';
 import { formatSlug, formatLocation } from '@/lib/utils/formatSlug';
 import CommunityClient from './CommunityClient';
+import Script from 'next/script';
 
 export async function generateStaticParams() {
   return communities.map((community) => ({
@@ -38,23 +39,27 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
   }
 
-  const title = `${community.name} - Senior Living Community in ${community.city}, ${community.state}`;
-  const description = community.description;
+  // Create a more SEO-friendly title and description
+  const title = `${community.name} | ${community.type} in ${community.city}, ${community.state} | SeniorStay`;
+  const description = `Learn more about ${community.name}, offering ${community.services.join(', ')} in ${community.city}, ${community.state}. Schedule a tour or request pricing today.`;
   const imageUrl = community.image;
   const canonicalUrl = `https://seniorstay.com/community/${resolvedParams.state}/${resolvedParams.city}/${resolvedParams.slug}`;
 
   // Generate structured data for rich search results
   const structuredData = {
     "@context": "https://schema.org",
-    "@type": "SeniorLivingCommunity",
+    "@type": "LocalBusiness",
     "name": community.name,
     "description": description,
     "image": imageUrl,
+    "url": canonicalUrl,
+    "telephone": "+1-800-555-1234", // This would be replaced with actual phone number
     "address": {
       "@type": "PostalAddress",
       "streetAddress": community.address.split(',')[0],
       "addressLocality": community.city,
       "addressRegion": community.state,
+      "postalCode": community.address.match(/\d{5}/)?.[0] || "",
       "addressCountry": "US"
     },
     "geo": {
@@ -65,7 +70,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     "aggregateRating": {
       "@type": "AggregateRating",
       "ratingValue": community.rating,
-      "reviewCount": "10" // Would need to be added to community data
+      "reviewCount": community.reviewCount || "10" // Would need to be added to community data
     },
     "amenityFeature": community.amenities.map(amenity => ({
       "@type": "LocationFeatureSpecification",
@@ -74,6 +79,20 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     "offers": {
       "@type": "Offer",
       "category": community.services.join(", ")
+    },
+    "openingHoursSpecification": {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday"
+      ],
+      "opens": "00:00",
+      "closes": "23:59"
     }
   };
 
@@ -88,7 +107,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
           url: imageUrl,
           width: 1200,
           height: 630,
-          alt: community.name
+          alt: `${community.name} senior living community in ${community.city}, ${community.state}`
         }
       ],
       type: 'website',
@@ -103,14 +122,63 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     },
     alternates: {
       canonical: canonicalUrl
-    },
-    other: {
-      'structured-data': JSON.stringify(structuredData)
     }
   };
 }
 
 export default async function Page(props: Props) {
   const params = await props.params;
-  return <CommunityClient params={params} communities={communities} />;
+  const community = communities.find(
+    (c) =>
+      c.state.toLowerCase() === params.state &&
+      c.city.toLowerCase() === params.city &&
+      c.slug === params.slug
+  );
+
+  if (!community) {
+    return <CommunityClient params={params} communities={communities} />;
+  }
+
+  // Generate structured data for rich search results
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": community.name,
+    "description": `Learn more about ${community.name}, offering ${community.services.join(', ')} in ${community.city}, ${community.state}.`,
+    "image": community.image,
+    "url": `https://seniorstay.com/community/${params.state}/${params.city}/${params.slug}`,
+    "telephone": "+1-800-555-1234", // This would be replaced with actual phone number
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": community.address.split(',')[0],
+      "addressLocality": community.city,
+      "addressRegion": community.state,
+      "postalCode": community.address.match(/\d{5}/)?.[0] || "",
+      "addressCountry": "US"
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": community.rating,
+      "reviewCount": community.reviewCount || "10"
+    },
+    "amenityFeature": community.amenities.map(amenity => ({
+      "@type": "LocationFeatureSpecification",
+      "name": amenity
+    })),
+    "offers": {
+      "@type": "Offer",
+      "category": community.services.join(", ")
+    }
+  };
+
+  return (
+    <>
+      <Script
+        id="structured-data"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
+      <CommunityClient params={params} communities={communities} />
+    </>
+  );
 } 

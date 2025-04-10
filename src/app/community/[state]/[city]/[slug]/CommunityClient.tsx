@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { FiMapPin, FiMail, FiStar } from "react-icons/fi";
+import { FiMapPin, FiMail, FiStar, FiCheck, FiPhone, FiCalendar } from "react-icons/fi";
 import { Community } from '../../../../../lib/data/communities';
 
 interface CommunityClientProps {
@@ -54,7 +54,7 @@ export default function CommunityClient({ params, communities }: CommunityClient
       <div className="relative h-96">
         <Image
           src={community.image}
-          alt={community.name}
+          alt={`Front exterior of ${community.name} senior living community in ${community.city}, ${community.state}`}
           fill
           sizes="100vw"
           className="object-cover"
@@ -76,7 +76,7 @@ export default function CommunityClient({ params, communities }: CommunityClient
       </div>
 
       {/* Navigation Tabs */}
-      <div className="bg-white shadow">
+      <nav className="bg-white shadow" aria-label="Community information tabs">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex space-x-8">
             {["overview", "amenities", "contact"].map((tab) => (
@@ -88,17 +88,20 @@ export default function CommunityClient({ params, communities }: CommunityClient
                     ? "border-blue-500 text-blue-600"
                     : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
                 }`}
+                aria-selected={activeTab === tab}
+                aria-controls={`${tab}-panel`}
+                role="tab"
               >
                 {tab.charAt(0).toUpperCase() + tab.slice(1)}
               </button>
             ))}
           </div>
         </div>
-      </div>
+      </nav>
 
       {/* Content Sections */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {activeTab === "overview" && (
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <section id="overview-panel" role="tabpanel" aria-labelledby="overview-tab" hidden={activeTab !== "overview"}>
           <div className="prose max-w-none">
             <h2 className="text-2xl font-bold text-gray-900 mb-4">Overview</h2>
             <p className="text-gray-600">{community.description}</p>
@@ -109,36 +112,55 @@ export default function CommunityClient({ params, communities }: CommunityClient
               </div>
             </div>
           </div>
-        )}
+        </section>
 
-        {activeTab === "amenities" && (
-          <div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Amenities</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {community.amenities.map((amenity, index) => (
-                <div
-                  key={index}
-                  className="bg-white p-4 rounded-lg shadow-sm border border-gray-200"
-                >
-                  <p className="text-gray-700">{amenity}</p>
-                </div>
-              ))}
+        <section id="amenities-panel" role="tabpanel" aria-labelledby="amenities-tab" hidden={activeTab !== "amenities"}>
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Amenities</h2>
+          <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {community.amenities.map((amenity, index) => (
+              <li
+                key={index}
+                className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 flex items-center"
+              >
+                <FiCheck className="text-green-500 mr-2" />
+                <span className="text-gray-700">{amenity}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section id="contact-panel" role="tabpanel" aria-labelledby="contact-tab" hidden={activeTab !== "contact"}>
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Contact Information</h2>
+          <div className="space-y-4">
+            <div className="flex items-center">
+              <FiMapPin className="h-6 w-6 text-gray-400 mr-2" />
+              <span className="text-gray-700">{community.address}</span>
+            </div>
+            <div className="flex items-center">
+              <FiPhone className="h-6 w-6 text-gray-400 mr-2" />
+              <span className="text-gray-700">+1-800-555-1234</span>
+            </div>
+            <div className="flex items-center">
+              <FiMail className="h-6 w-6 text-gray-400 mr-2" />
+              <span className="text-gray-700">info@{community.name.toLowerCase().replace(/\s+/g, '')}.com</span>
             </div>
           </div>
-        )}
-
-        {activeTab === "contact" && (
-          <div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Contact Information</h2>
-            <div className="space-y-4">
-              <div className="flex items-center">
-                <FiMapPin className="h-6 w-6 text-gray-400 mr-2" />
-                <span className="text-gray-700">{community.address}</span>
-              </div>
-            </div>
+          
+          <div className="mt-8">
+            <h3 className="text-xl font-semibold text-gray-900 mb-4">Schedule a Tour</h3>
+            <p className="text-gray-600 mb-4">
+              We'd love to show you around our community. Schedule a tour today to see all that {community.name} has to offer.
+            </p>
+            <button
+              className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold flex items-center"
+              aria-label={`Schedule a tour at ${community.name}`}
+            >
+              <FiCalendar className="mr-2" />
+              Schedule a Tour
+            </button>
           </div>
-        )}
-      </div>
+        </section>
+      </main>
     </div>
   );
 } 

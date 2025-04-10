@@ -35,13 +35,13 @@ const ProviderCard = ({
   type,
   image,
   rating,
-  reviewCount = 0, // Default value for reviewCount
+  reviewCount = 0,
   city,
   state,
-  price = 0, // Default value for price
+  price = 0,
   amenities = [],
   onScheduleTour,
-  onRequestPricing, // Added for pricing requests
+  onRequestPricing,
   compact = false,
   className = '',
 }: ProviderCardProps) => {
@@ -71,107 +71,92 @@ const ProviderCard = ({
   };
 
   return (
-    <Link
-      href={`/provider/${slug}`}
-      className={`group relative flex flex-col bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow overflow-hidden ${className}`}
-    >
-      {/* Image */}
-      <div className="relative aspect-[16/10] w-full">
-        <Image
-          src={image}
-          alt={name}
-          fill
-          sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
-          className="object-cover"
-          priority
-        />
-
-        {/* Replace save button with FavoriteButton */}
-        <div className="absolute top-3 right-3 z-10">
-          <FavoriteButton
-            providerId={id}
-            providerName={name}
-            size={isMobile ? 20 : 18}
+    <article className={`rounded-2xl shadow-md hover:ring-2 hover:ring-primary transition-all p-4 bg-white ${className}`}>
+      <Link
+        href={`/community/${state.toLowerCase()}/${city.toLowerCase()}/${slug}`}
+        className="block"
+        aria-label={`View details for ${name} in ${city}, ${state}`}
+      >
+        {/* Image */}
+        <div className="relative aspect-[16/10] w-full rounded-xl overflow-hidden mb-4">
+          <Image
+            src={image}
+            alt={`Front exterior of ${name} senior living community in ${city}, ${state}`}
+            fill
+            sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
+            className="object-cover"
+            priority
           />
-        </div>
 
-        {/* Type badge */}
-        <div className="absolute bottom-3 left-3 bg-black bg-opacity-50 text-white px-2 py-1 rounded-md text-xs">
-          {type}
-        </div>
-      </div>
+          {/* Favorite button */}
+          <div className="absolute top-3 right-3 z-10">
+            <FavoriteButton
+              providerId={id}
+              providerName={name}
+              size={isMobile ? 20 : 18}
+            />
+          </div>
 
-      {/* Content */}
-      <div className="flex flex-col flex-grow p-4">
-        <div className="flex justify-between items-start mb-1">
-          <h3 className="font-semibold text-lg text-[#1b4d70] line-clamp-1">{name}</h3>
-
-          {/* Rating */}
-          <div className="flex items-center">
-            <FiStar className="text-[#F5A623] fill-[#F5A623]" />
-            <span className="ml-1 font-medium text-sm">{rating}</span>
-            <span className="text-gray-400 text-xs ml-1">({reviewCount})</span>
+          {/* Type badge */}
+          <div className="absolute bottom-3 left-3 bg-black bg-opacity-50 text-white px-2 py-1 rounded-md text-xs">
+            {type}
           </div>
         </div>
 
-        {/* Location */}
-        <div className="flex items-center text-gray-500 text-sm mb-3">
-          <FiMapPin size={14} className="mr-1 flex-shrink-0" />
-          <span className="truncate">{city}, {state}</span>
-        </div>
+        {/* Content */}
+        <div className="space-y-3">
+          {/* Name and Rating */}
+          <div>
+            <h2 className="text-xl font-semibold text-[#1b4d70] line-clamp-1">{name}</h2>
+            <p className="text-sm text-gray-600 mt-1">{city}, {state}</p>
+            <div className="flex items-center mt-2">
+              <FiStar className="text-[#F5A623] fill-[#F5A623]" />
+              <span className="ml-1 font-medium text-sm">{rating}</span>
+              <span className="text-gray-400 text-xs ml-1">({reviewCount} reviews)</span>
+            </div>
+          </div>
 
-        {!compact && (
-          <>
-            {/* Amenities */}
-            {displayAmenities.length > 0 && (
-              <div className="mt-2 space-y-1">
-                {displayAmenities.map((amenity, index) => (
-                  <div key={`${id}-${amenity}`} className="flex items-center text-xs text-[#333333]">
-                    <FiCheck size={12} className="text-[#A7C4A0] mr-1" />
-                    <span>{amenity}</span>
-                  </div>
-                ))}
-              </div>
-            )}
-          </>
+          {/* Service Tags */}
+          {!compact && displayAmenities.length > 0 && (
+            <ul className="flex flex-wrap gap-2 list-none p-0 m-0">
+              {displayAmenities.map((amenity) => (
+                <li
+                  key={`${id}-${amenity}`}
+                  className="inline-block bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded"
+                >
+                  {amenity}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </Link>
+
+      {/* Action Buttons */}
+      <div className="mt-4 space-y-2">
+        {onScheduleTour && (
+          <button
+            onClick={handleScheduleTour}
+            className="w-full bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded font-semibold text-sm flex items-center justify-center"
+            aria-label={`Request a tour at ${name}`}
+          >
+            <FiCalendar className="mr-2" />
+            Request a Tour
+          </button>
         )}
-
-        {/* Bottom actions */}
-        <div className="mt-auto pt-3 space-y-2">
-          {onScheduleTour && (
-            <button
-              onClick={handleScheduleTour}
-              className="w-full bg-[#1b4d70] text-white py-2.5 px-4 rounded-lg hover:bg-[#2F5061] transition flex items-center justify-center font-medium"
-            >
-              <FiCalendar className="mr-2" />
-              {isMobile ? 'Schedule Tour' : 'Schedule a Tour'}
-            </button>
-          )}
-          
-          {onRequestPricing && (
-            <button
-              onClick={handleRequestPricing}
-              className="w-full bg-[#F5A623] text-[#1b4d70] py-2.5 px-4 rounded-lg hover:bg-[#FFC65C] transition flex items-center justify-center font-medium"
-            >
-              <FiDollarSign className="mr-2" />
-              {isMobile ? 'Request Pricing' : 'Request Pricing'}
-            </button>
-          )}
-        </div>
+        
+        {onRequestPricing && (
+          <button
+            onClick={handleRequestPricing}
+            className="w-full bg-white border border-green-600 text-green-600 hover:bg-green-50 px-4 py-2 rounded font-semibold text-sm flex items-center justify-center"
+            aria-label={`Get pricing for ${name}`}
+          >
+            <FiDollarSign className="mr-2" />
+            Get Pricing
+          </button>
+        )}
       </div>
-
-      {/* Mobile quick actions - Bottom bar */}
-      {isMobile && !compact && (
-        <div className="flex items-center justify-center bg-[#f1f6f0] border-t border-[#A7C4A0] p-2">
-          <div className="flex items-center text-[#1b4d70] text-sm">
-            <FiHome className="mr-1" />
-            <span className="font-semibold">
-              {type.split(' ')[0]}
-            </span>
-          </div>
-        </div>
-      )}
-    </Link>
+    </article>
   );
 };
 
