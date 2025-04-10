@@ -4,11 +4,15 @@ import { communities } from "@/lib/data/communities";
 import { slugify, getCityPath, getCommunityPath } from "@/lib/utils/formatSlug";
 import CommunityContent from "./CommunityContent";
 
+// Define the params type separately
+type PageParams = {
+  city: string;
+  slug: string;
+};
+
+// Define the page props type
 type PageProps = {
-  params: {
-    city: string;
-    slug: string;
-  };
+  params: PageParams;
 };
 
 // Generate metadata for each community page
