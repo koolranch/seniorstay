@@ -12,11 +12,11 @@ type PageParams = {
 
 // Define the page props type
 type PageProps = {
-  params: PageParams;
+  params: Promise<PageParams>;
 };
 
 // Generate metadata for each community page
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: PageParams }): Promise<Metadata> {
   const cityName = params.city.split("-").map((word: string) => 
     word.charAt(0).toUpperCase() + word.slice(1)
   ).join(" ");
@@ -114,7 +114,7 @@ export async function generateStaticParams() {
     }));
 }
 
-export default function Page({ params }: PageProps) {
+export default async function Page({ params }: { params: PageParams }) {
   const { city, slug } = params;
   const community = communities.find(
     community => 
