@@ -3,10 +3,13 @@
 import { useState, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { FiSearch, FiGrid, FiList, FiMapPin, FiStar } from "react-icons/fi";
+import { FiSearch, FiGrid, FiList, FiMapPin, FiStar, FiX } from "react-icons/fi";
 import { communities } from '@/lib/data/communities';
 import type { Community } from '@/lib/data/communities';
 import { getCommunityPath } from "@/lib/utils/formatSlug";
+import ProviderCard from "@/components/ProviderCard";
+import TourScheduler from "@/components/TourScheduler";
+import PricingRequest from "@/components/PricingRequest";
 
 // Add this constant at the top of the file
 const FALLBACK_IMAGE = "https://images.unsplash.com/photo-1519974719765-e6559eac2575?q=80&w=2070&auto=format&fit=crop";
@@ -20,6 +23,12 @@ export default function CommunityDirectory() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [showTourScheduler, setShowTourScheduler] = useState(false);
+  const [showPricingRequest, setShowPricingRequest] = useState(false);
+  const [selectedCommunity, setSelectedCommunity] = useState<{
+    id: number;
+    name: string;
+  } | null>(null);
 
   // Filter communities based on search query and selected services
   const filteredCommunities = useMemo(() => {
@@ -47,6 +56,27 @@ export default function CommunityDirectory() {
         ? prev.filter((s) => s !== service)
         : [...prev, service]
     );
+  };
+
+  // Handle tour schedule button click
+  const handleScheduleTour = (community: { id: number; name: string }) => {
+    setSelectedCommunity(community);
+    setShowTourScheduler(true);
+  };
+
+  // Handle pricing request button click
+  const handleRequestPricing = (community: { id: number; name: string }) => {
+    setSelectedCommunity(community);
+    setShowPricingRequest(true);
+  };
+
+  // Close modals
+  const closeTourScheduler = () => {
+    setShowTourScheduler(false);
+  };
+
+  const closePricingRequest = () => {
+    setShowPricingRequest(false);
   };
 
   return (
@@ -132,116 +162,91 @@ export default function CommunityDirectory() {
       {viewMode === "grid" ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredCommunities.map((community) => (
-            <Link
+            <ProviderCard
               key={community.id}
-              href={getCommunityPath(community)}
-              className="group bg-white rounded-xl shadow-sm border border-[#A7C4A0] overflow-hidden hover:shadow-md transition"
-            >
-              <div className="relative aspect-[16/10]">
-                <Image
-                  src={community.image}
-                  alt={community.name}
-                  fill
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  className="object-cover transition-transform duration-300 group-hover:scale-105"
-                  loading="lazy"
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.src = FALLBACK_IMAGE;
-                  }}
-                  priority={false}
-                />
-                <div className="absolute bottom-3 left-3 bg-black bg-opacity-50 text-white px-2 py-1 rounded-md text-xs">
-                  {community.type}
-                </div>
-              </div>
-              <div className="p-4">
-                <h3 className="font-semibold text-lg text-[#1b4d70] line-clamp-1">
-                  {community.name}
-                </h3>
-                <div className="flex items-center text-gray-500 text-sm mt-1 mb-2">
-                  <FiMapPin size={14} className="mr-1 flex-shrink-0" />
-                  <span className="truncate">
-                    {community.city}, {community.state}
-                  </span>
-                </div>
-                <div className="flex items-center text-sm mb-3">
-                  <FiStar className="text-[#F5A623] fill-[#F5A623]" />
-                  <span className="ml-1 font-medium">{community.rating}</span>
-                </div>
-                <div className="flex flex-wrap gap-2 mb-3">
-                  {community.services.map((service) => (
-                    <span
-                      key={service}
-                      className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full"
-                    >
-                      {service}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </Link>
+              id={community.id}
+              slug={community.slug}
+              name={community.name}
+              city={community.city}
+              state={community.state}
+              type={community.type}
+              image={community.image}
+              rating={community.rating}
+              amenities={community.services}
+              onScheduleTour={() => handleScheduleTour({ id: community.id, name: community.name })}
+              onRequestPricing={() => handleRequestPricing({ id: community.id, name: community.name })}
+            />
           ))}
         </div>
       ) : (
         <div className="space-y-4">
           {filteredCommunities.map((community) => (
-            <Link
+            <ProviderCard
               key={community.id}
-              href={getCommunityPath(community)}
-              className="block group bg-white rounded-xl shadow-sm border border-[#A7C4A0] overflow-hidden hover:shadow-md transition"
-            >
-              <div className="flex flex-col md:flex-row">
-                <div className="relative md:w-1/3 aspect-[16/10] md:aspect-auto">
-                  <Image
-                    src={community.image}
-                    alt={community.name}
-                    fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    className="object-cover transition-transform duration-300 group-hover:scale-105"
-                    loading="lazy"
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.src = FALLBACK_IMAGE;
-                    }}
-                    priority={false}
-                  />
-                  <div className="absolute bottom-3 left-3 bg-black bg-opacity-50 text-white px-2 py-1 rounded-md text-xs">
-                    {community.type}
-                  </div>
-                </div>
-                <div className="p-4 md:w-2/3">
-                  <div className="flex flex-col md:flex-row md:items-start justify-between">
-                    <div>
-                      <h3 className="font-semibold text-lg text-[#1b4d70]">
-                        {community.name}
-                      </h3>
-                      <div className="flex items-center text-gray-500 text-sm mt-1">
-                        <FiMapPin size={14} className="mr-1 flex-shrink-0" />
-                        <span>
-                          {community.city}, {community.state}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="mt-2 md:mt-0 flex items-center">
-                      <FiStar className="text-[#F5A623] fill-[#F5A623]" />
-                      <span className="ml-1 font-medium">{community.rating}</span>
-                    </div>
-                  </div>
-                  <div className="flex flex-wrap gap-2 my-3">
-                    {community.services.map((service) => (
-                      <span
-                        key={service}
-                        className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full"
-                      >
-                        {service}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </Link>
+              id={community.id}
+              slug={community.slug}
+              name={community.name}
+              city={community.city}
+              state={community.state}
+              type={community.type}
+              image={community.image}
+              rating={community.rating}
+              amenities={community.services}
+              onScheduleTour={() => handleScheduleTour({ id: community.id, name: community.name })}
+              onRequestPricing={() => handleRequestPricing({ id: community.id, name: community.name })}
+              className="flex flex-col md:flex-row"
+            />
           ))}
+        </div>
+      )}
+
+      {/* Tour Scheduler Modal */}
+      {showTourScheduler && selectedCommunity && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="sticky top-0 bg-white p-4 border-b border-[#A7C4A0] flex justify-between items-center">
+              <h3 className="font-semibold text-[#1b4d70]">Schedule a Tour</h3>
+              <button
+                onClick={closeTourScheduler}
+                className="text-[#666666] hover:text-[#1b4d70] p-2"
+                aria-label="Close modal"
+              >
+                <FiX size={24} />
+              </button>
+            </div>
+            <div className="p-4">
+              <TourScheduler
+                communityName={selectedCommunity.name}
+                communityId={selectedCommunity.id}
+                onClose={closeTourScheduler}
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Pricing Request Modal */}
+      {showPricingRequest && selectedCommunity && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="sticky top-0 bg-white p-4 border-b border-[#A7C4A0] flex justify-between items-center">
+              <h3 className="font-semibold text-[#1b4d70]">Request Pricing</h3>
+              <button
+                onClick={closePricingRequest}
+                className="text-[#666666] hover:text-[#1b4d70] p-2"
+                aria-label="Close modal"
+              >
+                <FiX size={24} />
+              </button>
+            </div>
+            <div className="p-4">
+              <PricingRequest
+                communityName={selectedCommunity.name}
+                communityId={selectedCommunity.id}
+                onClose={closePricingRequest}
+              />
+            </div>
+          </div>
         </div>
       )}
     </main>

@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { FiStar, FiCheck, FiMapPin, FiHome, FiUsers, FiCalendar } from 'react-icons/fi';
+import { FiStar, FiCheck, FiMapPin, FiHome, FiUsers, FiCalendar, FiDollarSign } from 'react-icons/fi';
 import { useComparison } from '@/context/ComparisonContext';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import FavoriteButton from './FavoriteButton';
@@ -23,6 +23,7 @@ interface ProviderCardProps {
   isFeatured?: boolean; // Added
   amenities?: string[];
   onScheduleTour?: () => void;
+  onRequestPricing?: () => void; // Added for pricing requests
   compact?: boolean;
   className?: string;
 }
@@ -40,6 +41,7 @@ const ProviderCard = ({
   price = 0, // Default value for price
   amenities = [],
   onScheduleTour,
+  onRequestPricing, // Added for pricing requests
   compact = false,
   className = '',
 }: ProviderCardProps) => {
@@ -56,6 +58,15 @@ const ProviderCard = ({
     e.stopPropagation();
     if (onScheduleTour) {
       onScheduleTour();
+    }
+  };
+
+  // Handle pricing request button click
+  const handleRequestPricing = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (onRequestPricing) {
+      onRequestPricing();
     }
   };
 
@@ -126,14 +137,24 @@ const ProviderCard = ({
         )}
 
         {/* Bottom actions */}
-        <div className="mt-auto pt-3">
+        <div className="mt-auto pt-3 space-y-2">
           {onScheduleTour && (
             <button
               onClick={handleScheduleTour}
-              className="w-full mt-2 bg-[#1b4d70] text-white py-2.5 px-4 rounded-lg hover:bg-[#2F5061] transition flex items-center justify-center font-medium"
+              className="w-full bg-[#1b4d70] text-white py-2.5 px-4 rounded-lg hover:bg-[#2F5061] transition flex items-center justify-center font-medium"
             >
               <FiCalendar className="mr-2" />
               {isMobile ? 'Schedule Tour' : 'Schedule a Tour'}
+            </button>
+          )}
+          
+          {onRequestPricing && (
+            <button
+              onClick={handleRequestPricing}
+              className="w-full bg-[#F5A623] text-[#1b4d70] py-2.5 px-4 rounded-lg hover:bg-[#FFC65C] transition flex items-center justify-center font-medium"
+            >
+              <FiDollarSign className="mr-2" />
+              {isMobile ? 'Request Pricing' : 'Request Pricing'}
             </button>
           )}
         </div>
