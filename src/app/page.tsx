@@ -16,12 +16,14 @@ import CommunityGrid from "@/components/CommunityGrid";
 import TourModal from "@/components/TourModal";
 
 export default function HomePage() {
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+
   return (
     <main>
       <HeroBanner />
-      <CategoryPillBar />
+      <CategoryPillBar onSelectCategory={setSelectedCategory} selected={selectedCategory} />
       <RegionalDirectory />
-      <CommunityGrid communities={communities} />
+      <CommunityGrid communities={communities} filterByCategory={selectedCategory} />
       <TourModal />
     </main>
   );
