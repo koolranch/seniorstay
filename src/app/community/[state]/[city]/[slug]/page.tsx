@@ -156,19 +156,7 @@ export default async function Page(props: Props) {
     // Validate params
     if (!params || !params.state || !params.city || !params.slug) {
       console.error("Missing required route params:", params);
-      return <div className="min-h-screen bg-gray-50 py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h1 className="text-3xl font-bold text-gray-900">Invalid Community URL</h1>
-            <p className="mt-4 text-lg text-gray-600">
-              The URL for this community appears to be invalid or incomplete.
-            </p>
-            <Link href="/community" className="mt-8 inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700">
-              Back to Communities
-            </Link>
-          </div>
-        </div>
-      </div>;
+      return notFound();
     }
     
     const community = communities.find(
@@ -179,39 +167,39 @@ export default async function Page(props: Props) {
     );
 
     if (!community) {
-      console.log('Community not found in Page component for params:', params);
-      return <CommunityClient params={params} communities={communities} />;
+      console.error('Community not found in Page component for params:', params);
+      return notFound();
     }
 
     // Generate structured data for rich search results
     const structuredData = {
       "@context": "https://schema.org",
       "@type": "LocalBusiness",
-      "name": community.name,
-      "description": `Learn more about ${community.name}, offering ${community.services.join(', ')} in ${community.city}, ${community.state}.`,
-      "image": community.image,
+      "name": community.name || "",
+      "description": `Learn more about ${community.name || "this community"}, offering ${(community.services || []).join(', ')} in ${community.city || ""}, ${community.state || ""}.`,
+      "image": community.image || "",
       "url": `https://seniorstay.com/community/${params.state}/${params.city}/${params.slug}`,
       "telephone": "(216) 232-3354", // This would be replaced with actual phone number
       "address": {
         "@type": "PostalAddress",
-        "streetAddress": community.address.split(',')[0],
-        "addressLocality": community.city,
-        "addressRegion": community.state,
-        "postalCode": community.address.match(/\d{5}/)?.[0] || "",
+        "streetAddress": community.address ? community.address.split(',')[0] : "",
+        "addressLocality": community.city || "",
+        "addressRegion": community.state || "",
+        "postalCode": community.address ? (community.address.match(/\d{5}/)?.[0] || "") : "",
         "addressCountry": "US"
       },
       "aggregateRating": {
         "@type": "AggregateRating",
-        "ratingValue": community.rating,
+        "ratingValue": community.rating || 0,
         "reviewCount": community.reviewCount || "10"
       },
-      "amenityFeature": community.amenities.map(amenity => ({
+      "amenityFeature": (community.amenities || []).map(amenity => ({
         "@type": "LocationFeatureSpecification",
         "name": amenity
       })),
       "offers": {
         "@type": "Offer",
-        "category": community.services.join(", ")
+        "category": (community.services || []).join(", ")
       }
     };
 
@@ -226,19 +214,7 @@ export default async function Page(props: Props) {
       </>
     );
   } catch (error) {
-    console.error("Error rendering community page:", error);
-    return <div className="min-h-screen bg-gray-50 py-12">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center">
-          <h1 className="text-3xl font-bold text-gray-900">Something Went Wrong</h1>
-          <p className="mt-4 text-lg text-gray-600">
-            We encountered an error while loading this community.
-          </p>
-          <Link href="/community" className="mt-8 inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700">
-            Back to Communities
-          </Link>
-        </div>
-      </div>
-    </div>;
+    console.error("Community Page Error:", error);
+    return notFound();
   }
 } 
