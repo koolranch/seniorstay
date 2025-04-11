@@ -1,9 +1,8 @@
 import { notFound } from "next/navigation";
 import { communities } from "@/lib/data/communities";
 import { getCommunityPathFromObject } from "@/lib/utils/formatSlug";
-import Link from "next/link";
-import { FiArrowLeft } from "react-icons/fi";
 import CommunityContent from "./CommunityContent";
+import { prisma } from "@/lib/prisma"; // Fix import to use named export
 
 // Generate static params to pre-render valid paths
 export async function generateStaticParams() {
@@ -38,7 +37,7 @@ interface PageParams {
 }
 
 // Use a plain function component without type constraints
-export default function Page({ params }: { params: PageParams | undefined }) {
+export default async function Page({ params }: { params: PageParams | undefined }) {
   try {
     console.log("Ohio community page: Rendering with params:", JSON.stringify(params, null, 2));
     
@@ -58,7 +57,56 @@ export default function Page({ params }: { params: PageParams | undefined }) {
       return notFound();
     }
     
-    // Try to find the community with proper error handling
+    // ✅ Step 1: Try to find the community from Prisma with proper error handling
+    try {
+      // First try to find the community in the database (if we're using Prisma)
+      const communityFromDb = await prisma.community?.findFirst({
+        where: {
+          slug: params.slug,
+          city: {
+            equals: params.city,
+            mode: 'insensitive', // optional: helps avoid case mismatches
+          },
+        },
+      });
+      
+      // ✅ Step 2: If found in DB, use it, otherwise fall back to in-memory data
+      if (communityFromDb) {
+        console.log(`Ohio community page: Found community in database '${communityFromDb.name}' for city=${city}, slug=${slug}`);
+        
+        // ✅ Step 3: Add helpful debugging during build time
+        console.log("Rendering community page:", {
+          city: params.city,
+          slug: params.slug,
+          communityName: communityFromDb.name,
+        });
+        
+        // Safely format city name for display
+        const formattedCityName = city
+          .split('-')
+          .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+          .join(' ');
+
+        // ✅ Step 4: Return the page with the community from database
+        return (
+          <div className="bg-gray-50 min-h-screen">
+            <div className="bg-white border-b border-neutral-200 py-8">
+              <div className="container mx-auto px-6 md:px-10 lg:px-20">
+                <CommunityContent 
+                  community={communityFromDb} 
+                  cityName={formattedCityName} 
+                />
+              </div>
+            </div>
+          </div>
+        );
+      }
+    } catch (error) {
+      // Log the error but continue to try the in-memory data as fallback
+      console.error("Error querying community from database:", error);
+    }
+    
+    // Fall back to in-memory data if database query failed or returned no results
     const community = communities.find((c) => {
       try {
         const path = getCommunityPathFromObject(c).toLowerCase();
@@ -72,7 +120,7 @@ export default function Page({ params }: { params: PageParams | undefined }) {
       }
     });
 
-    // If no community is found, show the not-found page
+    // If no community is found in either source, show the not-found page
     if (!community) {
       console.error(`Ohio community page: Community not found for city=${city}, slug=${slug}`);
       return notFound();
@@ -89,7 +137,6 @@ export default function Page({ params }: { params: PageParams | undefined }) {
     // Return the community page with the content
     return (
       <div className="bg-gray-50 min-h-screen">
-        {/* Header */}
         <div className="bg-white border-b border-neutral-200 py-8">
           <div className="container mx-auto px-6 md:px-10 lg:px-20">
             <CommunityContent 
