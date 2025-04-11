@@ -69,12 +69,8 @@ export default async function Page({ params }: { params: PageParams | undefined 
     });
 
     if (!community) {
-      console.error("Community not found during prerender:", {
-        city: params.city,
-        slug: params.slug,
-      });
-
-      return notFound(); // This will render a 404 page instead of crashing build
+      console.error("❌ Community not found:", params);
+      return notFound();
     }
 
     // Helpful debug logs
