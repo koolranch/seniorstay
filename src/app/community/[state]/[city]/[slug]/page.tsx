@@ -150,14 +150,21 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function Page(props: Props) {
   try {
+    // Add more detailed logging for debugging
+    console.log('Community Page: Starting render with props:', JSON.stringify(props, null, 2));
+    
     const params = await props.params;
-    console.log('Page component looking for community with params:', params);
+    console.log('Community Page: Resolved params:', JSON.stringify(params, null, 2));
     
     // Validate params
     if (!params || !params.state || !params.city || !params.slug) {
-      console.error("Missing required route params:", params);
+      console.error("Community Page Error: Missing required route params:", JSON.stringify(params, null, 2));
       return notFound();
     }
+    
+    // Try to find the community
+    console.log('Community Page: Looking for community with params:', 
+      `state=${params.state}, city=${params.city}, slug=${params.slug}`);
     
     const community = communities.find(
       (c) =>
@@ -166,12 +173,30 @@ export default async function Page(props: Props) {
         c.slug === params.slug
     );
 
-    if (!community) {
-      console.error('Community not found in Page component for params:', params);
+    // Log whether community was found or not
+    if (community) {
+      console.log('Community Page: Found community:', community.name);
+    } else {
+      console.error('Community Page Error: Community not found for params:', 
+        `state=${params.state}, city=${params.city}, slug=${params.slug}`);
       return notFound();
     }
 
-    // Generate structured data for rich search results
+    // Ensure community has all required properties
+    if (!community.name || !community.city || !community.state || !community.services || !community.amenities) {
+      console.error('Community Page Error: Community is missing required properties:', 
+        JSON.stringify({
+          hasName: !!community.name,
+          hasCity: !!community.city, 
+          hasState: !!community.state,
+          hasServices: !!community.services,
+          hasAmenities: !!community.amenities
+        }, null, 2));
+      
+      // Continue with fallbacks instead of returning notFound()
+    }
+
+    // Generate structured data with safe fallbacks for all properties
     const structuredData = {
       "@context": "https://schema.org",
       "@type": "LocalBusiness",
@@ -179,7 +204,7 @@ export default async function Page(props: Props) {
       "description": `Learn more about ${community.name || "this community"}, offering ${(community.services || []).join(', ')} in ${community.city || ""}, ${community.state || ""}.`,
       "image": community.image || "",
       "url": `https://seniorstay.com/community/${params.state}/${params.city}/${params.slug}`,
-      "telephone": "(216) 232-3354", // This would be replaced with actual phone number
+      "telephone": "(216) 232-3354", 
       "address": {
         "@type": "PostalAddress",
         "streetAddress": community.address ? community.address.split(',')[0] : "",
@@ -203,6 +228,8 @@ export default async function Page(props: Props) {
       }
     };
 
+    console.log('Community Page: Rendering community client with valid data');
+    
     return (
       <>
         <Script
@@ -214,7 +241,11 @@ export default async function Page(props: Props) {
       </>
     );
   } catch (error) {
-    console.error("Community Page Error:", error);
+    // Log the full error details for debugging
+    console.error("Community Page Fatal Error:", error);
+    console.error("Error stack:", error instanceof Error ? error.stack : "No stack trace available");
+    
+    // For unexpected errors, still use notFound() to avoid leaking error details to the client
     return notFound();
   }
 } 
