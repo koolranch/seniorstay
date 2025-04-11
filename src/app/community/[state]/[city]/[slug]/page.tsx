@@ -4,6 +4,7 @@ import { formatSlug, formatLocation } from '@/lib/utils/formatSlug';
 import CommunityClient from './CommunityClient';
 import Script from 'next/script';
 import { notFound } from "next/navigation";
+import Link from 'next/link';
 
 export async function generateStaticParams() {
   return communities.map((community) => ({
@@ -162,9 +163,9 @@ export default async function Page(props: Props) {
             <p className="mt-4 text-lg text-gray-600">
               The URL for this community appears to be invalid or incomplete.
             </p>
-            <a href="/community" className="mt-8 inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700">
+            <Link href="/community" className="mt-8 inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700">
               Back to Communities
-            </a>
+            </Link>
           </div>
         </div>
       </div>;
@@ -233,9 +234,9 @@ export default async function Page(props: Props) {
           <p className="mt-4 text-lg text-gray-600">
             We encountered an error while loading this community.
           </p>
-          <a href="/community" className="mt-8 inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700">
+          <Link href="/community" className="mt-8 inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700">
             Back to Communities
-          </a>
+          </Link>
         </div>
       </div>
     </div>;
