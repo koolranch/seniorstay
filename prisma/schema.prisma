@@ -68,4 +68,21 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model Community {
+  id          String   @id @default(uuid())
+  name        String
+  slug        String
+  city        String
+  state       String
+  description String?
+  imageUrl    String?
+  zip         String?
+  address     String?
+  phone       String?
+  website     String?
+  email       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 } 
