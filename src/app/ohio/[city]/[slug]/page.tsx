@@ -47,6 +47,30 @@ interface PageParams {
   slug: string;
 }
 
+// Fallback data for when database is unreachable
+const getFallbackCommunity = (city: string, slug: string) => {
+  // Try to find a match in local data
+  const fallbackCommunity = communities.find(c => 
+    c.slug?.toLowerCase() === slug.toLowerCase() && 
+    c.city?.toLowerCase() === city.toLowerCase()
+  );
+  
+  if (fallbackCommunity) {
+    console.log("Using fallback community data from local source:", fallbackCommunity.name);
+    return fallbackCommunity;
+  }
+  
+  // If no match found, create a minimal placeholder
+  return {
+    id: "local-fallback",
+    name: slug.split('-').map((w: string) => w.charAt(0).toUpperCase() + w.slice(1)).join(' '),
+    city: city.split('-').map((w: string) => w.charAt(0).toUpperCase() + w.slice(1)).join(' '),
+    state: "Ohio",
+    slug: slug,
+    description: "Community information is temporarily unavailable."
+  };
+};
+
 // Use a plain function component without type constraints
 export default async function Page({ params }: { params: PageParams | undefined }) {
   try {
@@ -68,38 +92,48 @@ export default async function Page({ params }: { params: PageParams | undefined 
       return notFound();
     }
     
-    // Check if Prisma client is properly initialized
-    if (!prisma?.community) {
-      console.error("Ohio community page: Prisma client not initialized or database unreachable");
-      throw new Error("Database connection error: Prisma client not initialized");
-    }
+    let community;
     
-    // Ensure you're handling community lookup safely
-    const community = await prisma.community.findFirst({
-      where: {
-        slug: params.slug,
-        city: {
-          equals: params.city,
-          mode: 'insensitive',
-        },
-      },
-    });
+    try {
+      // Check if Prisma client is properly initialized
+      if (!prisma?.community) {
+        console.error("Ohio community page: Prisma client not initialized or database unreachable");
+        // Instead of throwing, we'll use fallback data
+        community = getFallbackCommunity(city, slug);
+      } else {
+        // Ensure you're handling community lookup safely
+        community = await prisma.community.findFirst({
+          where: {
+            slug: params.slug,
+            city: {
+              equals: params.city,
+              mode: 'insensitive',
+            },
+          },
+        });
+      }
+    } catch (dbError) {
+      console.error("Database query error:", dbError);
+      // Use fallback data if database query fails
+      community = getFallbackCommunity(city, slug);
+    }
 
+    // If no community found and no fallback used, return 404
     if (!community) {
       console.error("❌ Community not found:", params);
       return notFound();
     }
 
-    // Helpful debug logs
+    // Helpful debug logs - ensure we're safely accessing properties
     console.log("Rendering community page:", {
-      name: community.name,
-      city: community.city,
+      name: community?.name || "Unknown",
+      city: community?.city || "Unknown",
     });
 
-    // Safely format city name for display
-    const formattedCityName = city
+    // Safely format city name for display - use the community object or fallback to params
+    const formattedCityName = (community?.city || city)
       .split('-')
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(' ');
 
     // Now render safely
