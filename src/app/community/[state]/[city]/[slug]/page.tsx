@@ -28,13 +28,13 @@ interface Props {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   try {
     const resolvedParams = await params;
-    console.log('Looking for community with params:', resolvedParams);
+    console.log('Metadata: Looking for community with params:', JSON.stringify(resolvedParams, null, 2));
     
     // Validate params
     if (!resolvedParams || !resolvedParams.state || !resolvedParams.city || !resolvedParams.slug) {
-      console.error("Missing required route params:", resolvedParams);
+      console.error("Metadata Error: Missing required route params:", JSON.stringify(resolvedParams, null, 2));
       return {
-        title: "Community Not Found",
+        title: "Community Not Found | SeniorStay",
         description: "The requested senior living community could not be found.",
       };
     }
@@ -47,53 +47,70 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     );
 
     if (!community) {
-      console.log('Community not found for params:', resolvedParams);
+      console.error('Metadata Error: Community not found for params:', 
+        `state=${resolvedParams.state}, city=${resolvedParams.city}, slug=${resolvedParams.slug}`);
       return {
-        title: "Community Not Found",
+        title: "Community Not Found | SeniorStay",
         description: "The requested senior living community could not be found.",
       };
     }
 
-    // Create a more SEO-friendly title and description
-    const title = `${community.name} | ${community.type} in ${community.city}, ${community.state} | SeniorStay`;
-    const description = `Learn more about ${community.name}, offering ${community.services.join(', ')} in ${community.city}, ${community.state}. Schedule a tour or request pricing today.`;
-    const imageUrl = community.image;
+    // Add safety checks for community properties
+    if (!community.name || !community.city || !community.state) {
+      console.error('Metadata Error: Community is missing required properties:', 
+        JSON.stringify({
+          hasName: !!community.name,
+          hasCity: !!community.city, 
+          hasState: !!community.state
+        }, null, 2));
+    }
+
+    // Create a more SEO-friendly title and description with fallbacks
+    const name = community.name || "Senior Living Community";
+    const type = community.type || "Senior Living";
+    const city = community.city || "";
+    const state = community.state || "";
+    const services = (community.services || []).join(', ');
+    
+    const title = `${name} | ${type} in ${city}${city && state ? ', ' : ''}${state} | SeniorStay`;
+    const description = `Learn more about ${name}, offering ${services} in ${city}${city && state ? ', ' : ''}${state}. Schedule a tour or request pricing today.`;
+    const imageUrl = community.image || "";
     const canonicalUrl = `https://seniorstay.com/community/${resolvedParams.state}/${resolvedParams.city}/${resolvedParams.slug}`;
 
-    // Generate structured data for rich search results
+    // Generate structured data for rich search results with safe property access
     const structuredData = {
       "@context": "https://schema.org",
       "@type": "LocalBusiness",
-      "name": community.name,
+      "name": name,
       "description": description,
       "image": imageUrl,
       "url": canonicalUrl,
-      "telephone": "(216) 232-3354", // This would be replaced with actual phone number
+      "telephone": "(216) 232-3354", 
       "address": {
         "@type": "PostalAddress",
-        "streetAddress": community.address.split(',')[0],
-        "addressLocality": community.city,
-        "addressRegion": community.state,
-        "postalCode": community.address.match(/\d{5}/)?.[0] || "",
+        "streetAddress": community.address ? community.address.split(',')[0] : "",
+        "addressLocality": city,
+        "addressRegion": state,
+        "postalCode": community.address ? (community.address.match(/\d{5}/)?.[0] || "") : "",
         "addressCountry": "US"
       },
       "geo": {
         "@type": "GeoCoordinates",
-        "latitude": "", // Would need to be added to community data
-        "longitude": "" // Would need to be added to community data
+        "latitude": "", 
+        "longitude": "" 
       },
       "aggregateRating": {
         "@type": "AggregateRating",
-        "ratingValue": community.rating,
-        "reviewCount": community.reviewCount || "10" // Would need to be added to community data
+        "ratingValue": community.rating || 0,
+        "reviewCount": community.reviewCount || "10"
       },
-      "amenityFeature": community.amenities.map(amenity => ({
+      "amenityFeature": (community.amenities || []).map(amenity => ({
         "@type": "LocationFeatureSpecification",
         "name": amenity
       })),
       "offers": {
         "@type": "Offer",
-        "category": community.services.join(", ")
+        "category": (community.services || []).join(", ")
       },
       "openingHoursSpecification": {
         "@type": "OpeningHoursSpecification",
@@ -111,6 +128,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       }
     };
 
+    console.log('Metadata: Successfully generated for community:', name);
+
     return {
       title,
       description,
@@ -122,7 +141,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
             url: imageUrl,
             width: 1200,
             height: 630,
-            alt: `${community.name} senior living community in ${community.city}, ${community.state}`
+            alt: `${name} senior living community in ${city}${city && state ? ', ' : ''}${state}`
           }
         ],
         type: 'website',
@@ -140,9 +159,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       }
     };
   } catch (error) {
-    console.error("Error generating metadata:", error);
+    console.error("Metadata Fatal Error:", error);
+    console.error("Error stack:", error instanceof Error ? error.stack : "No stack trace available");
     return {
-      title: "Error Loading Community",
+      title: "Error Loading Community | SeniorStay",
       description: "There was an error loading this community.",
     };
   }
