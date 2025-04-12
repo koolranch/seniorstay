@@ -227,73 +227,64 @@ export default async function Page({ params }: { params: PageParams | undefined 
       return <CommunityErrorFallback cityName={city || "Unknown"} />;
     }
     
-    // Format city name for display - needed for both error and success cases
+    // Format city name just in case needed for error fallback
     const formattedCityName = city
       .split('-')
       .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(' ');
-    
-    // Initialize community with explicit safe default values to ensure no undefined properties
-    let community: SafeCommunity = {
-      id: `safe-default-${slug}`,
-      name: slug.split('-').map((w: string) => w.charAt(0).toUpperCase() + w.slice(1)).join(' '),
-      city: formattedCityName,
-      state: "Ohio",
-      slug: slug,
-      description: "Community information is temporarily unavailable.",
-      address: "Address unavailable",
-      zipCode: null,
-      type: "Senior Living Community",
-      amenities: [],
-      rating: null,
-      reviewCount: null,
-      images: [],
-      phone: null,
-      latitude: null,
-      longitude: null,
-    };
+
+    // Initialize community directly with a guaranteed safe fallback object
+    let community: SafeCommunity = getFallbackCommunity(city, slug); 
     
     try {
-      // Safely check Prisma availability with double protection
+      // Safely check Prisma availability 
       if (!prisma || !prisma.community) {
         console.warn("⚠️ Ohio community page: Prisma client not initialized or database unreachable");
         throw new Error("Database connection unavailable");
       }
       
-      // Attempt database query with proper error handling
+      // Attempt database query
       const dbCommunity = await prisma.community.findFirst({
         where: {
-          slug: {
-            equals: slug,
-            mode: 'insensitive',
-          },
-          city: {
-            equals: city,
-            mode: 'insensitive',
-          },
+          slug: { equals: slug, mode: 'insensitive' },
+          city: { equals: city, mode: 'insensitive' },
         },
       });
       
-      // If community found in DB, use it (overwriting our safe default)
-      if (dbCommunity) {
-        community = dbCommunity;
-      } else {
-        console.warn(`Community not found in database: ${city}/${slug}, using fallback data`);
-        const fallbackCommunity = getFallbackCommunity(city, slug);
-        // Only overwrite our safe default if fallback returns valid data
-        if (fallbackCommunity && fallbackCommunity.name) {
-          community = fallbackCommunity;
-        }
+      // If community found in DB and seems valid, use it by merging onto a safe base
+      if (dbCommunity && dbCommunity.name && dbCommunity.city) {
+        community = {
+          ...getFallbackCommunity(city, slug), // Base defaults
+          ...dbCommunity, // Spread DB data (overwrites defaults)
+          id: String(dbCommunity.id), // Ensure ID is string
+          // Ensure potentially null/undefined fields match SafeCommunity
+          zipCode: dbCommunity.zipCode ?? null,
+          rating: dbCommunity.rating ?? null,
+          reviewCount: dbCommunity.reviewCount ?? null,
+          phone: dbCommunity.phone ?? null,
+          latitude: dbCommunity.latitude ?? null,
+          longitude: dbCommunity.longitude ?? null,
+          description: dbCommunity.description ?? community.description, // Keep fallback if null
+          address: dbCommunity.address ?? community.address, // Keep fallback if null
+          type: dbCommunity.type ?? community.type, // Keep fallback if null
+          amenities: dbCommunity.amenities ?? community.amenities, // Keep fallback if null
+          images: dbCommunity.images ?? community.images, // Keep fallback if null
+        };
+      } else if (!dbCommunity) {
+        console.warn(`Community not found in database: ${city}/${slug}, using initial fallback data.`);
+        // Stick with the initial 'community' object from getFallbackCommunity
       }
     } catch (dbError) {
-      // Detailed error logging for all database-related issues
+      // Detailed error logging for database issues
       console.error("Database connection or query error:", dbError);
-      console.warn("Using fallback community data due to database error");
-      const fallbackCommunity = getFallbackCommunity(city, slug);
-      // Only overwrite our safe default if fallback returns valid data
-      if (fallbackCommunity && fallbackCommunity.name) {
-        community = fallbackCommunity;
-      }
+      console.warn("Using initial fallback community data due to database error.");
+      // Stick with the initial 'community' object from getFallbackCommunity
+    }
+
+    // Final sanity check before rendering
+    if (!community || !community.name || !community.city) {
+        console.error("❌ Fatal Error: Community object is invalid before rendering. Params:", params);
+        return <CommunityErrorFallback cityName={formattedCityName || "Unknown"} />;
     }
 
     // Helpful debug logs - using safe access pattern
