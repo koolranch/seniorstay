@@ -12,6 +12,26 @@ interface PageParams {
   slug: string;
 }
 
+// Define a type for the community object matching both the Prisma schema and CommunityContent props
+interface SafeCommunity {
+  id: string;
+  name: string;
+  city: string;
+  state: string;
+  slug: string;
+  description?: string;
+  address?: string;
+  zipCode?: string | null;
+  type?: string;
+  amenities?: string[];
+  rating?: number | null;
+  reviewCount?: number | null;
+  images?: string[];
+  phone?: string | null;
+  latitude?: number | null;
+  longitude?: number | null;
+}
+
 // Safe metadata generation that avoids DB errors
 export async function generateMetadata(
   { params }: { params: PageParams | undefined },
@@ -106,7 +126,7 @@ export async function generateStaticParams() {
 }
 
 // Fallback data for when database is unreachable
-const getFallbackCommunity = (city: string, slug: string) => {
+const getFallbackCommunity = (city: string, slug: string): SafeCommunity => {
   console.warn(`⚠️ Using fallback community data for ${city}/${slug}`); // Add warning
   try {
     // Try to find a match in local data first (less likely now, but keep as secondary fallback)
@@ -119,7 +139,7 @@ const getFallbackCommunity = (city: string, slug: string) => {
       console.log("Using fallback community data from local source:", localFallback.name);
       // Ensure local fallback also has necessary fields
       return {
-        id: localFallback.id || `local-${slug}`,
+        id: (localFallback.id ? String(localFallback.id) : `local-${slug}`),
         name: localFallback.name || "Community Name Unavailable",
         city: localFallback.city || city.split('-').map((w: string) => w.charAt(0).toUpperCase() + w.slice(1)).join(' '),
         state: localFallback.state || "Ohio",
@@ -231,8 +251,25 @@ export default async function Page({ params }: { params: PageParams | undefined 
       .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(' ');
     
-    // Initialize community as null to ensure proper type checking
-    let community = null;
+    // Initialize community with explicit safe default values to ensure no undefined properties
+    let community: SafeCommunity = {
+      id: `safe-default-${slug}`,
+      name: slug.split('-').map((w: string) => w.charAt(0).toUpperCase() + w.slice(1)).join(' '),
+      city: formattedCityName,
+      state: "Ohio",
+      slug: slug,
+      description: "Community information is temporarily unavailable.",
+      address: "Address unavailable",
+      zipCode: null,
+      type: "Senior Living Community",
+      amenities: [],
+      rating: null,
+      reviewCount: null,
+      images: [],
+      phone: null,
+      latitude: null,
+      longitude: null,
+    };
     
     try {
       // Safely check Prisma availability with double protection
@@ -242,7 +279,7 @@ export default async function Page({ params }: { params: PageParams | undefined 
       }
       
       // Attempt database query with proper error handling
-      community = await prisma.community.findFirst({
+      const dbCommunity = await prisma.community.findFirst({
         where: {
           slug: {
             equals: slug,
@@ -255,75 +292,51 @@ export default async function Page({ params }: { params: PageParams | undefined 
         },
       });
       
-      // If no community found in DB, use fallback
-      if (!community) {
+      // If community found in DB, use it (overwriting our safe default)
+      if (dbCommunity) {
+        community = dbCommunity;
+      } else {
         console.warn(`Community not found in database: ${city}/${slug}, using fallback data`);
-        community = getFallbackCommunity(city, slug);
+        const fallbackCommunity = getFallbackCommunity(city, slug);
+        // Only overwrite our safe default if fallback returns valid data
+        if (fallbackCommunity && fallbackCommunity.name) {
+          community = fallbackCommunity;
+        }
       }
     } catch (dbError) {
       // Detailed error logging for all database-related issues
       console.error("Database connection or query error:", dbError);
       console.warn("Using fallback community data due to database error");
-      community = getFallbackCommunity(city, slug);
+      const fallbackCommunity = getFallbackCommunity(city, slug);
+      // Only overwrite our safe default if fallback returns valid data
+      if (fallbackCommunity && fallbackCommunity.name) {
+        community = fallbackCommunity;
+      }
     }
 
-    // Extra safety: if community is still null after fallbacks, create a minimal known-good object 
-    // This ensures we never pass undefined to any component
-    if (!community) {
-      console.error("❌ Ultimate fallback: Creating emergency fallback object");
-      community = {
-        id: "emergency-fallback",
-        name: "Community Information",
-        city: formattedCityName, // Important: Use formattedCityName directly to avoid undefined
-        state: "Ohio",
-        slug: slug,
-        description: "Community information is temporarily unavailable.",
-        address: "Address unavailable",
-        type: "Senior Living Community",
-        amenities: [],
-        // Add any other required fields
-      };
-    }
-
-    // Final safety check - if still missing critical fields, use error UI
-    if (!community.name || !community.city || !community.slug) {
-      console.error("❌ Critical data fields missing even after fallback:", community);
-      return <CommunityErrorFallback cityName={formattedCityName} />;
-    }
-
-    // Helpful debug logs - ensure we're safely accessing properties with null coalescing
-    // Important: This ensures we never try to access properties of undefined
+    // Helpful debug logs - using safe access pattern
     console.log("Rendering community page:", {
-      name: community?.name || "Unknown",
-      city: community?.city || "Unknown",
+      name: community.name,
+      city: community.city
     });
 
-    // Safely format city name from community data or from params
-    // Double-safeguard with optional chaining and nullish coalescing
-    const displayCityName = community?.city || formattedCityName || "Unknown City";
-
-    // Now render safely with complete community object and proper null checks
+    // Now render with our guaranteed safe community object
     return (
       <div className="bg-gray-50 min-h-screen">
         <div className="bg-white border-b border-neutral-200 py-8">
           <div className="container mx-auto px-6 md:px-10 lg:px-20">
-            {community && community.name && community.city && community.slug ? (
-              <CommunityContent 
-                community={{
-                  // Explicitly spread and provide defaults for all properties
-                  ...community,
-                  name: community.name || "Unknown Community",
-                  city: community.city || formattedCityName,
-                  type: community.type || "Senior Living Community",
-                  description: community.description || "No description available",
-                  address: community.address || "Address unavailable",
-                  amenities: community.amenities || [],
-                }} 
-                cityName={displayCityName} 
-              />
-            ) : (
-              <CommunityErrorFallback cityName={displayCityName} />
-            )}
+            <CommunityContent 
+              community={{
+                name: community.name,
+                type: community.type,
+                description: community.description,
+                address: community.address,
+                amenities: community.amenities,
+                rating: community.rating === null ? undefined : community.rating,
+                reviewCount: community.reviewCount === null ? undefined : community.reviewCount
+              }} 
+              cityName={community.city} 
+            />
           </div>
         </div>
       </div>
