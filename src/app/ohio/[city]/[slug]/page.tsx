@@ -37,37 +37,31 @@ export async function generateMetadata(
   { params }: { params: PageParams | undefined },
   parent: ResolvingMetadata
 ): Promise<Metadata> {
-  try {
-    // Safety check for params
-    if (!params || !params.city || !params.slug) {
-      return {
-        title: 'Community Not Found | Senior Living in Ohio',
-        description: 'Information about this senior living community is not available.',
-      };
-    }
-
-    // Get city and slug with explicit defaults for maximum safety
-    const city = params.city || "";
-    const slug = params.slug || "";
-
-    // Create a guaranteed safe community object using our fallback function
-    // This avoids any database access which can fail during build
-    const safeCommunity = getFallbackCommunity(city, slug);
-
-    // Now we can safely use the community's data for metadata
+  // Safety check for params
+  if (!params || !params.city || !params.slug) {
     return {
-      title: `${safeCommunity.name} | Senior Living in ${safeCommunity.city}, Ohio`,
-      description: safeCommunity.description || 
-        `Information about ${safeCommunity.name}, a senior living community in ${safeCommunity.city}, Ohio.`,
-    };
-  } catch (error) {
-    // Ultimate fallback for metadata in case of any errors
-    console.error('Error generating metadata:', error);
-    return {
-      title: 'Senior Living Community | Ohio',
-      description: 'Information about senior living communities in Ohio.',
+      title: 'Community Not Found | Senior Living in Ohio',
+      description: 'Information about this senior living community is not available.',
     };
   }
+
+  // Format city and community name from params for the hardcoded fallback
+  const cityFormatted = params.city
+    .split('-')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+  const communityFormatted = params.slug
+    .split('-')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+
+  // Return completely hardcoded metadata based only on params
+  // This avoids calling getFallbackCommunity entirely in metadata generation
+  return {
+    title: `${communityFormatted} | Senior Living in ${cityFormatted}, Ohio (Info Unavailable)`,
+    description: `Information about ${communityFormatted}, a senior living community located in ${cityFormatted}, Ohio. Please visit the page for details.`,
+  };
+  // Note: We removed the try/catch as this path is now synchronous and error-free
 }
 
 // Generate static params to pre-render valid paths
