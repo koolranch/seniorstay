@@ -220,25 +220,30 @@ export default async function Page({ params }: { params: PageParams | undefined 
     let communityData: SafeCommunity | null = null; // Use null initially
     let databaseQueryFailed = false; // Flag for DB query errors
     
+    console.log(`[${city}/${slug}] Page rendering started.`); // Log start
+
     try {
+      console.log(`[${city}/${slug}] Checking Prisma client...`);
       // Safely check Prisma availability 
       if (!prisma || !prisma.community) {
-        console.warn("⚠️ Ohio community page: Prisma client not initialized or database unreachable");
+        console.warn(`[${city}/${slug}] Prisma client not initialized or database unreachable`);
         throw new Error("Database connection unavailable"); // This will be caught below
       }
+      console.log(`[${city}/${slug}] Prisma client OK.`);
       
       // Attempt database query
-      console.log(`Attempting DB query for ${city}/${slug}...`);
+      console.log(`[${city}/${slug}] Attempting DB query...`);
       const dbCommunity = await prisma.community.findFirst({
         where: {
           slug: { equals: slug, mode: 'insensitive' },
           city: { equals: city, mode: 'insensitive' },
         },
       });
-      console.log(`DB query result for ${city}/${slug}:`, dbCommunity ? `Found ID ${dbCommunity.id}` : "Not Found");
+      console.log(`[${city}/${slug}] DB query completed. Found: ${!!dbCommunity}`);
       
       // Process valid data if found
       if (dbCommunity && dbCommunity.name && dbCommunity.city) { 
+          console.log(`[${city}/${slug}] Processing valid DB data...`);
           communityData = {
             // Structure data...
             id: String(dbCommunity.id),
@@ -258,23 +263,26 @@ export default async function Page({ params }: { params: PageParams | undefined 
             latitude: dbCommunity.latitude ?? null,
             longitude: dbCommunity.longitude ?? null,
           };
+          console.log(`[${city}/${slug}] communityData successfully populated.`);
       } else if (!dbCommunity) {
-           console.warn(`Community not found in database: ${city}/${slug}. Will trigger notFound() later.`);
+           console.warn(`[${city}/${slug}] Community not found in DB.`);
            // Leave communityData as null
       } else {
-           console.error(`❌ DB record for ${city}/${slug} missing critical fields (name/city). Will trigger notFound() later.`);
+           console.error(`[${city}/${slug}] DB record missing critical fields (name/city).`);
            // Leave communityData as null
       }
 
     } catch (dbError) {
       // Catch ANY error during the DB access attempt
-      console.error("Database connection or query error during attempt:", dbError);
+      console.error(`[${city}/${slug}] Database connection or query error during attempt:`, dbError);
       databaseQueryFailed = true; // Set the flag
     }
 
+    console.log(`[${city}/${slug}] After DB attempt. Failed flag: ${databaseQueryFailed}, communityData is null: ${communityData === null}`);
+
     // AFTER the try/catch, check if we should call notFound()
     if (databaseQueryFailed || communityData === null) {
-      console.warn(`Triggering notFound() for ${city}/${slug} due to DB error or missing/invalid data.`);
+      console.warn(`[${city}/${slug}] Triggering notFound() due to DB error or missing/invalid data.`);
       notFound();
     }
 
@@ -283,11 +291,7 @@ export default async function Page({ params }: { params: PageParams | undefined 
     // AND the page is being dynamically rendered, so DB access *should* succeed unless down
 
     // Helpful debug logs - using safe access pattern
-    console.log("Rendering community page with DB data:", {
-      name: communityData.name,
-      city: communityData.city
-    });
-
+    console.log(`[${city}/${slug}] Rendering CommunityContent with valid data.`);
     // Render CommunityContent ONLY with successful DB data
     return (
       <div className="bg-gray-50 min-h-screen">
@@ -308,8 +312,10 @@ export default async function Page({ params }: { params: PageParams | undefined 
       </div>
     );
   } catch (error) {
-    // Catch any unexpected errors during the page logic itself (less likely now)
-    console.error("Ohio community page: Fatal error caught in outer try/catch:", error);
+    // Catch any unexpected errors during the page logic itself
+    const errorCity = params?.city || "unknown";
+    const errorSlug = params?.slug || "unknown";
+    console.error(`[${errorCity}/${errorSlug}] Fatal error caught in outer try/catch:`, error);
     // Since it's dynamic, we might want a different error display than just notFound()
     // For now, keep notFound(), but could render a generic error page component
     notFound(); // Trigger not found for any other unexpected error
