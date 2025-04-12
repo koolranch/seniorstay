@@ -197,18 +197,28 @@ function convertToSafeCommunity(community: {
   image?: string;
   phone?: string;
 }): SafeCommunity {
+  // Ensure all required fields have values with fallbacks
+  const cityValue = community.city || "Unknown City";
+  const stateValue = community.state || "OH";
+  
   return {
     id: String(community.id),
-    name: community.name,
-    city: community.city,
-    state: community.state,
-    slug: community.slug,
-    description: community.description,
-    address: community.address,
-    type: community.type,
-    amenities: Array.isArray(community.amenities) ? community.amenities : community.services || [],
+    name: community.name || "Unknown Community",
+    city: cityValue,
+    state: stateValue,
+    slug: community.slug || `unknown-${community.id}`,
+    description: community.description || `Information about this community in ${cityValue}, ${stateValue} is currently being updated.`,
+    address: community.address || `${cityValue}, ${stateValue}`,
+    type: community.type || "Senior Living",
+    // Ensure amenities is always an array
+    amenities: Array.isArray(community.amenities) 
+      ? community.amenities 
+      : Array.isArray(community.services) 
+        ? community.services 
+        : [],
     rating: community.rating,
     reviewCount: community.reviewCount,
+    // Ensure images is always an array
     images: community.image ? [community.image] : [],
     phone: community.phone || null,
   };

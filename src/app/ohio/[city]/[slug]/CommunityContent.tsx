@@ -5,33 +5,26 @@ import { FiArrowLeft } from "react-icons/fi";
 import { getCityPath } from "@/lib/utils/formatSlug";
 
 interface CommunityContentProps {
-  community: {
-    name?: string;
-    type?: string;
-    description?: string;
-    address?: string;
-    amenities?: string[];
-    rating?: number;
-    reviewCount?: number;
-  };
-  cityName: string;
+  name?: string;
+  type?: string;
+  description?: string;
+  address?: string;
+  amenities?: string[];
+  rating?: number;
+  reviewCount?: number;
+  cityName?: string;
 }
 
 export default function CommunityContent({ 
-  community = {}, 
+  name = "Community Information",
+  type = "Senior Living Community",
+  description = "Detailed information about this community is currently unavailable. Please check back later for updates.",
+  address = "Address information unavailable",
+  amenities = [],
+  rating,
+  reviewCount,
   cityName = "Unknown City"
 }: CommunityContentProps) {
-  // Extract values with fallbacks for safety
-  const {
-    name = "Community Information",
-    type = "Senior Living Community",
-    description = "Detailed information about this community is currently unavailable. Please check back later for updates.",
-    address = "Address information unavailable",
-    amenities = [],
-    rating,
-    reviewCount
-  } = community;
-
   // Ensure we have a valid city name
   const displayCityName = cityName || "Unknown City";
 
