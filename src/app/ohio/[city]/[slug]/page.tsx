@@ -234,7 +234,7 @@ export default async function Page({ params }: { params: PageParams | undefined 
       .join(' ');
 
     // Initialize community directly with a guaranteed safe fallback object
-    let community: SafeCommunity = getFallbackCommunity(city, slug); 
+    const community: SafeCommunity = getFallbackCommunity(city, slug); 
     
     try {
       // Safely check Prisma availability 
