@@ -50,41 +50,79 @@ interface PageParams {
 
 // Fallback data for when database is unreachable
 const getFallbackCommunity = (city: string, slug: string) => {
+  console.warn(`⚠️ Using fallback community data for ${city}/${slug}`); // Add warning
   try {
-    // Try to find a match in local data
-    const fallbackCommunity = communities.find(c => 
+    // Try to find a match in local data first (less likely now, but keep as secondary fallback)
+    const localFallback = communities.find(c => 
       c.slug?.toLowerCase() === slug.toLowerCase() && 
       c.city?.toLowerCase() === city.toLowerCase()
     );
     
-    if (fallbackCommunity) {
-      console.log("Using fallback community data from local source:", fallbackCommunity.name);
-      return fallbackCommunity;
+    if (localFallback) {
+      console.log("Using fallback community data from local source:", localFallback.name);
+      // Ensure local fallback also has necessary fields
+      return {
+        id: localFallback.id || `local-${slug}`,
+        name: localFallback.name || "Community Name Unavailable",
+        city: localFallback.city || city.split('-').map((w: string) => w.charAt(0).toUpperCase() + w.slice(1)).join(' '),
+        state: localFallback.state || "Ohio",
+        slug: localFallback.slug || slug,
+        description: localFallback.description || "Community information is temporarily unavailable.",
+        address: localFallback.address || "Address unavailable",
+        zipCode: null, // zipCode not available in local data
+        type: localFallback.type || "Senior Living Community",
+        amenities: localFallback.amenities || [],
+        rating: localFallback.rating || null,
+        reviewCount: localFallback.reviewCount || null,
+        // Use 'image' if available, otherwise default to empty array for 'images'
+        images: localFallback.image ? [localFallback.image] : [], 
+        phone: localFallback.phone || null,
+        latitude: null, // latitude not available in local data
+        longitude: null, // longitude not available in local data
+        // Add any other fields from your Prisma schema with defaults
+      };
     }
     
-    // If no match found, create a minimal placeholder
+    // If no local match, create a comprehensive placeholder
     return {
-      id: "local-fallback",
-      name: slug.split('-').map((w: string) => w.charAt(0).toUpperCase() + w.slice(1)).join(' '),
-      city: city.split('-').map((w: string) => w.charAt(0).toUpperCase() + w.slice(1)).join(' '),
+      id: `fallback-${slug}`,
+      name: slug.split('-').map((w: string) => w.charAt(0).toUpperCase() + w.slice(1)).join(' '), // Generate name from slug
+      city: city.split('-').map((w: string) => w.charAt(0).toUpperCase() + w.slice(1)).join(' '), // Generate city from param
       state: "Ohio",
       slug: slug,
-      description: "Community information is temporarily unavailable.",
+      description: "Community information is temporarily unavailable due to a connection issue. Please try again later.",
       address: "Address unavailable",
-      type: "Senior Living Community"
+      zipCode: null,
+      type: "Senior Living Community",
+      amenities: [],
+      rating: null,
+      reviewCount: null,
+      images: [],
+      phone: null,
+      latitude: null,
+      longitude: null,
+      // Add any other fields from your Prisma schema with defaults
     };
   } catch (error) {
     console.error("Error creating fallback community:", error);
-    // Return absolute minimum data to prevent crashes
+    // Return absolute minimum safe data in case of error during fallback creation
     return {
       id: "error-fallback",
-      name: "Community Information",
+      name: "Community Information Error",
       city: city || "Unknown City",
       state: "Ohio",
       slug: slug || "unknown",
-      description: "Community information is temporarily unavailable.",
+      description: "Could not load community information due to an error.",
       address: "Address unavailable",
-      type: "Senior Living Community"
+      zipCode: null,
+      type: "Senior Living Community",
+      amenities: [],
+      rating: null,
+      reviewCount: null,
+      images: [],
+      phone: null,
+      latitude: null,
+      longitude: null,
     };
   }
 };
