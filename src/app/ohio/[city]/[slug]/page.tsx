@@ -4,6 +4,69 @@ import { getCommunityPathFromObject } from "@/lib/utils/formatSlug";
 import CommunityContent from "./CommunityContent";
 import { prisma } from "@/lib/prisma";
 import Link from 'next/link';
+import { Metadata, ResolvingMetadata } from 'next';
+
+// Define the page params interface
+interface PageParams {
+  city: string;
+  slug: string;
+}
+
+// Safe metadata generation that avoids DB errors
+export async function generateMetadata(
+  { params }: { params: PageParams | undefined },
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  try {
+    // Safety check for params
+    if (!params || !params.city || !params.slug) {
+      return {
+        title: 'Community Not Found | Senior Living in Ohio',
+        description: 'Information about this senior living community is not available.',
+      };
+    }
+
+    // Format city for display (without database access)
+    const cityFormatted = params.city
+      .split('-')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+
+    // Format community name for display (without database access)
+    const communityFormatted = params.slug
+      .split('-')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+
+    // Try to find the community in local data first - this is safe during build
+    const localCommunity = communities.find(c => 
+      c.slug?.toLowerCase() === params.slug.toLowerCase() && 
+      c.city?.toLowerCase() === params.city.toLowerCase()
+    );
+
+    // If found in local data, use it
+    if (localCommunity) {
+      return {
+        title: `${localCommunity.name} | Senior Living in ${localCommunity.city}, Ohio`,
+        description: localCommunity.description || 
+          `Information about ${localCommunity.name}, a senior living community in ${localCommunity.city}, Ohio.`,
+      };
+    }
+
+    // Use safe fallback metadata that doesn't need database access
+    return {
+      title: `${communityFormatted} | Senior Living in ${cityFormatted}, Ohio`,
+      description: `Information about ${communityFormatted}, a senior living community in ${cityFormatted}, Ohio.`,
+    };
+  } catch (error) {
+    // Ultimate fallback for metadata in case of any errors
+    console.error('Error generating metadata:', error);
+    return {
+      title: 'Senior Living Community | Ohio',
+      description: 'Information about senior living communities in Ohio.',
+    };
+  }
+}
 
 // Generate static params to pre-render valid paths
 export async function generateStaticParams() {
@@ -40,12 +103,6 @@ export async function generateStaticParams() {
     console.error("Error generating static params for Ohio communities:", error);
     return [];
   }
-}
-
-// Define the page params interface
-interface PageParams {
-  city: string;
-  slug: string;
 }
 
 // Fallback data for when database is unreachable
