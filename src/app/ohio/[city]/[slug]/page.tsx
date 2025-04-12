@@ -317,22 +317,34 @@ export default async function Page({ params }: { params: PageParams | undefined 
     notFound(); 
   }
 
+  // Add safety checks to ensure required fields exist before rendering
+  const safeData = {
+    name: communityData.name || "Community Information",
+    type: communityData.type || "Senior Living Community",
+    description: communityData.description || "Information about this community is currently unavailable.",
+    address: communityData.address || "Address information unavailable",
+    amenities: Array.isArray(communityData.amenities) ? communityData.amenities : [],
+    rating: communityData.rating,
+    reviewCount: communityData.reviewCount,
+    cityName: communityData.city || city.split("-").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ")
+  };
+
   // Render the content if data is valid
-  console.log(`[${city}/${slug}] Rendering CommunityContent with data for: ${communityData.name}`);
+  console.log(`[${city}/${slug}] Rendering CommunityContent with data for: ${safeData.name}`);
   return (
     <div className="bg-gray-50 min-h-screen">
       <div className="bg-white border-b border-neutral-200 py-8">
         <div className="container mx-auto px-6 md:px-10 lg:px-20">
-          {/* Pass validated data to the content component */}
+          {/* Pass sanitized data to the content component */}
           <CommunityContent 
-            name={communityData.name}
-            type={communityData.type}
-            description={communityData.description}
-            address={communityData.address}
-            amenities={communityData.amenities}
-            rating={communityData.rating}
-            reviewCount={communityData.reviewCount}
-            cityName={communityData.city} 
+            name={safeData.name}
+            type={safeData.type}
+            description={safeData.description}
+            address={safeData.address}
+            amenities={safeData.amenities}
+            rating={safeData.rating}
+            reviewCount={safeData.reviewCount}
+            cityName={safeData.cityName} 
           />
         </div>
       </div>
