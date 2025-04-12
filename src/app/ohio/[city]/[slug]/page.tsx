@@ -180,25 +180,6 @@ const getFallbackCommunity = (city: string, slug: string): SafeCommunity => {
   }
 };
 
-// Error fallback component when community data can't be loaded
-const CommunityErrorFallback = ({ cityName }: { cityName: string }) => {
-  return (
-    <div className="bg-white border-b border-neutral-200 py-8">
-      <div className="container mx-auto px-6 md:px-10 lg:px-20">
-        <h1 className="text-3xl md:text-4xl font-bold text-[#1b4d70] mb-4">
-          Community Not Found
-        </h1>
-        <p className="text-lg text-gray-600 mb-6">
-          We couldn't load this community information for {cityName}, Ohio. Please try again later.
-        </p>
-        <Link href="/ohio" className="text-[#1b4d70] hover:underline">
-          View all Ohio communities
-        </Link>
-      </div>
-    </div>
-  );
-};
-
 // Use a plain function component without type constraints
 export default async function Page({ params }: { params: PageParams | undefined }) {
   // Wrap the entire function in try/catch for maximum safety
@@ -208,7 +189,7 @@ export default async function Page({ params }: { params: PageParams | undefined 
     // Check if params exist
     if (!params) {
       console.error("Ohio community page: Missing params object");
-      return <CommunityErrorFallback cityName="Unknown" />;
+      notFound();
     }
     
     // Destructure with default values for safety
@@ -218,7 +199,7 @@ export default async function Page({ params }: { params: PageParams | undefined 
     // Validate that we have the required params
     if (!city || !slug) {
       console.error(`Ohio community page: Invalid params: city=${city}, slug=${slug}`);
-      return <CommunityErrorFallback cityName={city || "Unknown"} />;
+      notFound();
     }
     
     // Format city name just in case needed for error fallback
@@ -249,16 +230,10 @@ export default async function Page({ params }: { params: PageParams | undefined 
       });
       console.log(`DB query result for ${city}/${slug}:`, dbCommunity ? `Found ID ${dbCommunity.id}` : "Not Found");
       
-      // If community NOT found in DB, render the error fallback immediately
+      // If community NOT found in DB, signal not found to Next.js
       if (!dbCommunity) {
-        console.warn(`Community not found in database: ${city}/${slug}. Rendering simple error div.`);
-        // Return simple div instead of custom component
-        return (
-          <div>
-            <h1>Community Not Found</h1>
-            <p>Information for {formattedCityName}, Ohio could not be loaded.</p>
-          </div>
-        );
+        console.warn(`Community not found in database: ${city}/${slug}. Triggering notFound().`);
+        notFound(); // Use Next.js notFound function
       }
 
       // If community found, process it into the SafeCommunity format
@@ -284,40 +259,22 @@ export default async function Page({ params }: { params: PageParams | undefined 
             longitude: dbCommunity.longitude ?? null,
           };
       } else {
-           console.error(`❌ DB record for ${city}/${slug} missing critical fields (name/city). Rendering simple error div.`);
-           // Return simple div instead of custom component
-           return (
-             <div>
-               <h1>Community Data Error</h1>
-               <p>Information for {formattedCityName}, Ohio could not be processed.</p>
-             </div>
-           );
+           console.error(`❌ DB record for ${city}/${slug} missing critical fields (name/city). Triggering notFound().`);
+            notFound(); // Use Next.js notFound function
       }
 
     } catch (dbError) {
-      // If ANY database error occurs, render the error fallback immediately
+      // If ANY database error occurs, signal not found to Next.js
       console.error("Database connection or query error:", dbError);
-      console.warn(`Rendering simple error div for ${city}/${slug} due to DB error.`);
-      // Return simple div instead of custom component
-      return (
-        <div>
-          <h1>Database Error</h1>
-          <p>Could not connect to database to load information for {formattedCityName}, Ohio.</p>
-        </div>
-      );
+      console.warn(`Triggering notFound() for ${city}/${slug} due to DB error.`);
+      notFound(); // Use Next.js notFound function
     }
 
     // If we reach here, communityData MUST be valid (not null)
     if (!communityData) {
         // This should be theoretically unreachable due to the checks above, but acts as a final safeguard
         console.error("❌ Fatal Error: communityData is null despite checks. Params:", params);
-        // Return simple div instead of custom component
-        return (
-          <div>
-            <h1>Internal Server Error</h1>
-            <p>An unexpected error occurred for {formattedCityName || "Unknown"}.</p>
-          </div>
-       );
+        notFound(); // Use Next.js notFound function
     }
 
     // Helpful debug logs - using safe access pattern
@@ -346,14 +303,8 @@ export default async function Page({ params }: { params: PageParams | undefined 
       </div>
     );
   } catch (error) {
-    // Catch any unexpected errors
-    console.error("Ohio community page: Fatal error:", error);
-    // Return simple div instead of custom component
-    return (
-      <div>
-        <h1>Page Error</h1>
-        <p>An unexpected error occurred loading this page.</p>
-      </div>
-   );
+    // Catch any unexpected errors during the page logic itself (less likely now)
+    console.error("Ohio community page: Fatal error caught in outer try/catch:", error);
+    notFound(); // Trigger not found for any other unexpected error
   }
 } 
