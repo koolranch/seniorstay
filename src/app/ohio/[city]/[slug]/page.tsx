@@ -171,7 +171,7 @@ export default async function Page({ params }: { params: PageParams | undefined 
     }
 
     // Final safety check - if we still don't have community data, show error UI
-    if (!community) {
+    if (!community || !community.name || !community.city || !community.slug) {
       console.error("❌ Failed to load or create community data:", params);
       return <CommunityErrorFallback cityName={formattedCityName} />;
     }
@@ -190,10 +190,14 @@ export default async function Page({ params }: { params: PageParams | undefined 
       <div className="bg-gray-50 min-h-screen">
         <div className="bg-white border-b border-neutral-200 py-8">
           <div className="container mx-auto px-6 md:px-10 lg:px-20">
-            <CommunityContent 
-              community={community} 
-              cityName={displayCityName} 
-            />
+            {community.name && community.city && community.slug ? (
+              <CommunityContent 
+                community={community} 
+                cityName={displayCityName} 
+              />
+            ) : (
+              <CommunityErrorFallback cityName={displayCityName} />
+            )}
           </div>
         </div>
       </div>
