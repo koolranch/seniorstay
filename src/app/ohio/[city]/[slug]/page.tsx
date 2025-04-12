@@ -3,6 +3,7 @@ import { communities } from "@/lib/data/communities";
 import { getCommunityPathFromObject } from "@/lib/utils/formatSlug";
 import CommunityContent from "./CommunityContent";
 import { prisma } from "@/lib/prisma";
+import Link from 'next/link';
 
 // Generate static params to pre-render valid paths
 export async function generateStaticParams() {
@@ -99,9 +100,9 @@ const CommunityErrorFallback = ({ cityName }: { cityName: string }) => {
         <p className="text-lg text-gray-600 mb-6">
           We couldn't load this community information for {cityName}, Ohio. Please try again later.
         </p>
-        <a href="/ohio" className="text-[#1b4d70] hover:underline">
+        <Link href="/ohio" className="text-[#1b4d70] hover:underline">
           View all Ohio communities
-        </a>
+        </Link>
       </div>
     </div>
   );
