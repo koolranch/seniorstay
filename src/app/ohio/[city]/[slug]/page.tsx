@@ -24,8 +24,8 @@ interface SafeCommunity {
   zipCode?: string | null;
   type?: string;
   amenities?: string[];
-  rating?: number | null;
-  reviewCount?: number | null;
+  rating?: number | undefined;
+  reviewCount?: number | undefined;
   images?: string[];
   phone?: string | null;
   latitude?: number | null;
@@ -128,16 +128,16 @@ const getFallbackCommunity = (city: string, slug: string): SafeCommunity => {
         slug: localFallback.slug || slug,
         description: localFallback.description || "Community information is temporarily unavailable.",
         address: localFallback.address || "Address unavailable",
-        zipCode: null, // zipCode not available in local data
+        zipCode: null, 
         type: localFallback.type || "Senior Living Community",
         amenities: localFallback.amenities || [],
-        rating: localFallback.rating || null,
-        reviewCount: localFallback.reviewCount || null,
+        rating: localFallback.rating ?? undefined,
+        reviewCount: localFallback.reviewCount ?? undefined,
         // Use 'image' if available, otherwise default to empty array for 'images'
         images: localFallback.image ? [localFallback.image] : [], 
         phone: localFallback.phone || null,
-        latitude: null, // latitude not available in local data
-        longitude: null, // longitude not available in local data
+        latitude: null, 
+        longitude: null, 
         // Add any other fields from your Prisma schema with defaults
       };
     }
@@ -154,8 +154,8 @@ const getFallbackCommunity = (city: string, slug: string): SafeCommunity => {
       zipCode: null,
       type: "Senior Living Community",
       amenities: [],
-      rating: null,
-      reviewCount: null,
+      rating: undefined,
+      reviewCount: undefined,
       images: [],
       phone: null,
       latitude: null,
@@ -176,8 +176,8 @@ const getFallbackCommunity = (city: string, slug: string): SafeCommunity => {
       zipCode: null,
       type: "Senior Living Community",
       amenities: [],
-      rating: null,
-      reviewCount: null,
+      rating: undefined,
+      reviewCount: undefined,
       images: [],
       phone: null,
       latitude: null,
@@ -251,25 +251,25 @@ export default async function Page({ params }: { params: PageParams | undefined 
         },
       });
       
-      // If community found in DB and seems valid, use it by merging onto a safe base
+      // If community found in DB and seems valid, update our initial community object
       if (dbCommunity && dbCommunity.name && dbCommunity.city) {
-        community = {
-          ...getFallbackCommunity(city, slug), // Base defaults
-          ...dbCommunity, // Spread DB data (overwrites defaults)
-          id: String(dbCommunity.id), // Ensure ID is string
-          // Ensure potentially null/undefined fields match SafeCommunity
-          zipCode: dbCommunity.zipCode ?? null,
-          rating: dbCommunity.rating ?? null,
-          reviewCount: dbCommunity.reviewCount ?? null,
-          phone: dbCommunity.phone ?? null,
-          latitude: dbCommunity.latitude ?? null,
-          longitude: dbCommunity.longitude ?? null,
-          description: dbCommunity.description ?? community.description, // Keep fallback if null
-          address: dbCommunity.address ?? community.address, // Keep fallback if null
-          type: dbCommunity.type ?? community.type, // Keep fallback if null
-          amenities: dbCommunity.amenities ?? community.amenities, // Keep fallback if null
-          images: dbCommunity.images ?? community.images, // Keep fallback if null
-        };
+        community.id = String(dbCommunity.id); // Ensure ID is string
+        community.name = dbCommunity.name;
+        community.city = dbCommunity.city;
+        community.state = dbCommunity.state; // Assuming state is always present in DB
+        community.slug = dbCommunity.slug; // Assuming slug is always present
+        // Update optional fields only if they exist in dbCommunity, otherwise keep fallback
+        community.description = dbCommunity.description ?? community.description;
+        community.address = dbCommunity.address ?? community.address;
+        community.zipCode = dbCommunity.zipCode ?? community.zipCode;
+        community.type = dbCommunity.type ?? community.type;
+        community.amenities = dbCommunity.amenities ?? community.amenities;
+        community.rating = dbCommunity.rating ?? undefined;
+        community.reviewCount = dbCommunity.reviewCount ?? undefined;
+        community.images = dbCommunity.images ?? community.images;
+        community.phone = dbCommunity.phone ?? community.phone;
+        community.latitude = dbCommunity.latitude ?? community.latitude;
+        community.longitude = dbCommunity.longitude ?? community.longitude;
       } else if (!dbCommunity) {
         console.warn(`Community not found in database: ${city}/${slug}, using initial fallback data.`);
         // Stick with the initial 'community' object from getFallbackCommunity
@@ -305,8 +305,8 @@ export default async function Page({ params }: { params: PageParams | undefined 
                 description: community.description,
                 address: community.address,
                 amenities: community.amenities,
-                rating: community.rating === null ? undefined : community.rating,
-                reviewCount: community.reviewCount === null ? undefined : community.reviewCount
+                rating: community.rating,
+                reviewCount: community.reviewCount
               }} 
               cityName={community.city} 
             />
