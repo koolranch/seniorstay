@@ -148,6 +148,7 @@ const CommunityErrorFallback = ({ cityName }: { cityName: string }) => {
 
 // Use a plain function component without type constraints
 export default async function Page({ params }: { params: PageParams | undefined }) {
+  // Wrap the entire function in try/catch for maximum safety
   try {
     console.log("Ohio community page: Rendering with params:", JSON.stringify(params, null, 2));
     
@@ -173,6 +174,7 @@ export default async function Page({ params }: { params: PageParams | undefined 
       .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(' ');
     
+    // Initialize community as null to ensure proper type checking
     let community = null;
     
     try {
@@ -208,29 +210,58 @@ export default async function Page({ params }: { params: PageParams | undefined 
       community = getFallbackCommunity(city, slug);
     }
 
-    // Final safety check - if we still don't have community data, show error UI
-    if (!community || !community.name || !community.city || !community.slug) {
-      console.error("❌ Failed to load or create community data:", params);
+    // Extra safety: if community is still null after fallbacks, create a minimal known-good object 
+    // This ensures we never pass undefined to any component
+    if (!community) {
+      console.error("❌ Ultimate fallback: Creating emergency fallback object");
+      community = {
+        id: "emergency-fallback",
+        name: "Community Information",
+        city: formattedCityName, // Important: Use formattedCityName directly to avoid undefined
+        state: "Ohio",
+        slug: slug,
+        description: "Community information is temporarily unavailable.",
+        address: "Address unavailable",
+        type: "Senior Living Community",
+        amenities: [],
+        // Add any other required fields
+      };
+    }
+
+    // Final safety check - if still missing critical fields, use error UI
+    if (!community.name || !community.city || !community.slug) {
+      console.error("❌ Critical data fields missing even after fallback:", community);
       return <CommunityErrorFallback cityName={formattedCityName} />;
     }
 
-    // Helpful debug logs - ensure we're safely accessing properties
+    // Helpful debug logs - ensure we're safely accessing properties with null coalescing
+    // Important: This ensures we never try to access properties of undefined
     console.log("Rendering community page:", {
       name: community?.name || "Unknown",
       city: community?.city || "Unknown",
     });
 
     // Safely format city name from community data or from params
-    const displayCityName = (community?.city || formattedCityName);
+    // Double-safeguard with optional chaining and nullish coalescing
+    const displayCityName = community?.city || formattedCityName || "Unknown City";
 
-    // Now render safely with complete community object
+    // Now render safely with complete community object and proper null checks
     return (
       <div className="bg-gray-50 min-h-screen">
         <div className="bg-white border-b border-neutral-200 py-8">
           <div className="container mx-auto px-6 md:px-10 lg:px-20">
-            {community.name && community.city && community.slug ? (
+            {community && community.name && community.city && community.slug ? (
               <CommunityContent 
-                community={community} 
+                community={{
+                  // Explicitly spread and provide defaults for all properties
+                  ...community,
+                  name: community.name || "Unknown Community",
+                  city: community.city || formattedCityName,
+                  type: community.type || "Senior Living Community",
+                  description: community.description || "No description available",
+                  address: community.address || "Address unavailable",
+                  amenities: community.amenities || [],
+                }} 
                 cityName={displayCityName} 
               />
             ) : (
@@ -243,6 +274,6 @@ export default async function Page({ params }: { params: PageParams | undefined 
   } catch (error) {
     // Catch any unexpected errors
     console.error("Ohio community page: Fatal error:", error);
-    return <CommunityErrorFallback cityName={params?.city?.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ') || "Unknown"} />;
+    return <CommunityErrorFallback cityName={params?.city ? params.city.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ') : "Unknown"} />;
   }
 } 
