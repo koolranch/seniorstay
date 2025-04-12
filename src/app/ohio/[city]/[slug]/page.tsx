@@ -6,6 +6,9 @@ import { prisma } from "@/lib/prisma";
 import Link from 'next/link';
 import { Metadata, ResolvingMetadata } from 'next';
 
+// Force dynamic rendering to avoid static generation issues with DB errors
+export const dynamic = 'force-dynamic';
+
 // Define the page params interface
 interface PageParams {
   city: string;
@@ -64,7 +67,8 @@ export async function generateMetadata(
   // Note: We removed the try/catch as this path is now synchronous and error-free
 }
 
-// Generate static params to pre-render valid paths
+// Remove generateStaticParams as we are forcing dynamic rendering
+/*
 export async function generateStaticParams() {
   try {
     // Check if we can access the database during build
@@ -100,8 +104,10 @@ export async function generateStaticParams() {
     return [];
   }
 }
+*/
 
 // Fallback data for when database is unreachable
+// This function is still useful for generateMetadata, but won't be used by the Page component anymore
 const getFallbackCommunity = (city: string, slug: string): SafeCommunity => {
   console.warn(`⚠️ Using fallback community data for ${city}/${slug}`); // Add warning
   try {
@@ -183,6 +189,7 @@ const getFallbackCommunity = (city: string, slug: string): SafeCommunity => {
 // Use a plain function component without type constraints
 export default async function Page({ params }: { params: PageParams | undefined }) {
   // Wrap the entire function in try/catch for maximum safety
+  // Outer catch for non-DB related errors during dynamic rendering
   try {
     console.log("Ohio community page: Rendering with params:", JSON.stringify(params, null, 2));
     
@@ -273,6 +280,7 @@ export default async function Page({ params }: { params: PageParams | undefined 
 
     // If we reach here, communityData MUST be valid 
     // (The notFound() call above would have stopped execution otherwise)
+    // AND the page is being dynamically rendered, so DB access *should* succeed unless down
 
     // Helpful debug logs - using safe access pattern
     console.log("Rendering community page with DB data:", {
@@ -302,6 +310,8 @@ export default async function Page({ params }: { params: PageParams | undefined 
   } catch (error) {
     // Catch any unexpected errors during the page logic itself (less likely now)
     console.error("Ohio community page: Fatal error caught in outer try/catch:", error);
+    // Since it's dynamic, we might want a different error display than just notFound()
+    // For now, keep notFound(), but could render a generic error page component
     notFound(); // Trigger not found for any other unexpected error
   }
 } 
