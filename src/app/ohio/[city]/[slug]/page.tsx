@@ -234,7 +234,9 @@ export default async function Page({ params }: { params: PageParams | undefined 
       .join(' ');
 
     // Initialize community directly with a guaranteed safe fallback object
-    const community: SafeCommunity = getFallbackCommunity(city, slug); 
+    // We might not need this if we always return ErrorFallback on fail/missing
+    // const community: SafeCommunity = getFallbackCommunity(city, slug);
+    let communityData: SafeCommunity | null = null; // Use null initially
     
     try {
       // Safely check Prisma availability 
@@ -244,71 +246,82 @@ export default async function Page({ params }: { params: PageParams | undefined 
       }
       
       // Attempt database query
+      console.log(`Attempting DB query for ${city}/${slug}...`);
       const dbCommunity = await prisma.community.findFirst({
         where: {
           slug: { equals: slug, mode: 'insensitive' },
           city: { equals: city, mode: 'insensitive' },
         },
       });
+      console.log(`DB query result for ${city}/${slug}:`, dbCommunity ? `Found ID ${dbCommunity.id}` : "Not Found");
       
-      // If community found in DB and seems valid, update our initial community object
-      if (dbCommunity && dbCommunity.name && dbCommunity.city) {
-        community.id = String(dbCommunity.id); // Ensure ID is string
-        community.name = dbCommunity.name;
-        community.city = dbCommunity.city;
-        community.state = dbCommunity.state; // Assuming state is always present in DB
-        community.slug = dbCommunity.slug; // Assuming slug is always present
-        // Update optional fields only if they exist in dbCommunity, otherwise keep fallback
-        community.description = dbCommunity.description ?? community.description;
-        community.address = dbCommunity.address ?? community.address;
-        community.zipCode = dbCommunity.zipCode ?? community.zipCode;
-        community.type = dbCommunity.type ?? community.type;
-        community.amenities = dbCommunity.amenities ?? community.amenities;
-        community.rating = dbCommunity.rating ?? undefined;
-        community.reviewCount = dbCommunity.reviewCount ?? undefined;
-        community.images = dbCommunity.images ?? community.images;
-        community.phone = dbCommunity.phone ?? community.phone;
-        community.latitude = dbCommunity.latitude ?? community.latitude;
-        community.longitude = dbCommunity.longitude ?? community.longitude;
-      } else if (!dbCommunity) {
-        console.warn(`Community not found in database: ${city}/${slug}, using initial fallback data.`);
-        // Stick with the initial 'community' object from getFallbackCommunity
+      // If community NOT found in DB, render the error fallback immediately
+      if (!dbCommunity) {
+        console.warn(`Community not found in database: ${city}/${slug}. Rendering error fallback.`);
+        return <CommunityErrorFallback cityName={formattedCityName} />;
       }
+
+      // If community found, process it into the SafeCommunity format
+      if (dbCommunity.name && dbCommunity.city) { // Basic validation
+          communityData = {
+            // Start with a minimal safe structure
+            id: String(dbCommunity.id),
+            name: dbCommunity.name,
+            city: dbCommunity.city,
+            state: dbCommunity.state,
+            slug: dbCommunity.slug,
+            // Fill in optional fields safely
+            description: dbCommunity.description ?? undefined,
+            address: dbCommunity.address ?? undefined,
+            zipCode: dbCommunity.zipCode ?? null,
+            type: dbCommunity.type ?? undefined,
+            amenities: dbCommunity.amenities ?? [],
+            rating: dbCommunity.rating ?? undefined,
+            reviewCount: dbCommunity.reviewCount ?? undefined,
+            images: dbCommunity.images ?? [],
+            phone: dbCommunity.phone ?? null,
+            latitude: dbCommunity.latitude ?? null,
+            longitude: dbCommunity.longitude ?? null,
+          };
+      } else {
+           console.error(`❌ DB record for ${city}/${slug} missing critical fields (name/city). Rendering error fallback.`);
+           return <CommunityErrorFallback cityName={formattedCityName} />;
+      }
+
     } catch (dbError) {
-      // Detailed error logging for database issues
+      // If ANY database error occurs, render the error fallback immediately
       console.error("Database connection or query error:", dbError);
-      console.warn("Using initial fallback community data due to database error.");
-      // Stick with the initial 'community' object from getFallbackCommunity
+      console.warn(`Rendering error fallback for ${city}/${slug} due to DB error.`);
+      return <CommunityErrorFallback cityName={formattedCityName} />;
     }
 
-    // Final sanity check before rendering
-    if (!community || !community.name || !community.city) {
-        console.error("❌ Fatal Error: Community object is invalid before rendering. Params:", params);
+    // If we reach here, communityData MUST be valid (not null)
+    if (!communityData) {
+        // This should be theoretically unreachable due to the checks above, but acts as a final safeguard
+        console.error("❌ Fatal Error: communityData is null despite checks. Params:", params);
         return <CommunityErrorFallback cityName={formattedCityName || "Unknown"} />;
     }
 
     // Helpful debug logs - using safe access pattern
-    console.log("Rendering community page:", {
-      name: community.name,
-      city: community.city
+    console.log("Rendering community page with DB data:", {
+      name: communityData.name,
+      city: communityData.city
     });
 
-    // Now render with our guaranteed safe community object
+    // Render CommunityContent ONLY with successful DB data
     return (
       <div className="bg-gray-50 min-h-screen">
         <div className="bg-white border-b border-neutral-200 py-8">
           <div className="container mx-auto px-6 md:px-10 lg:px-20">
             <CommunityContent 
-              community={{
-                name: community.name,
-                type: community.type,
-                description: community.description,
-                address: community.address,
-                amenities: community.amenities,
-                rating: community.rating,
-                reviewCount: community.reviewCount
-              }} 
-              cityName={community.city} 
+              name={communityData.name}
+              type={communityData.type}
+              description={communityData.description}
+              address={communityData.address}
+              amenities={communityData.amenities}
+              rating={communityData.rating}
+              reviewCount={communityData.reviewCount}
+              cityName={communityData.city} 
             />
           </div>
         </div>
