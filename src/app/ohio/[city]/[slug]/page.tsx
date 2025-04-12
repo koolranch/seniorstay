@@ -251,8 +251,14 @@ export default async function Page({ params }: { params: PageParams | undefined 
       
       // If community NOT found in DB, render the error fallback immediately
       if (!dbCommunity) {
-        console.warn(`Community not found in database: ${city}/${slug}. Rendering error fallback.`);
-        return <CommunityErrorFallback cityName={formattedCityName} />;
+        console.warn(`Community not found in database: ${city}/${slug}. Rendering simple error div.`);
+        // Return simple div instead of custom component
+        return (
+          <div>
+            <h1>Community Not Found</h1>
+            <p>Information for {formattedCityName}, Ohio could not be loaded.</p>
+          </div>
+        );
       }
 
       // If community found, process it into the SafeCommunity format
@@ -278,22 +284,40 @@ export default async function Page({ params }: { params: PageParams | undefined 
             longitude: dbCommunity.longitude ?? null,
           };
       } else {
-           console.error(`❌ DB record for ${city}/${slug} missing critical fields (name/city). Rendering error fallback.`);
-           return <CommunityErrorFallback cityName={formattedCityName} />;
+           console.error(`❌ DB record for ${city}/${slug} missing critical fields (name/city). Rendering simple error div.`);
+           // Return simple div instead of custom component
+           return (
+             <div>
+               <h1>Community Data Error</h1>
+               <p>Information for {formattedCityName}, Ohio could not be processed.</p>
+             </div>
+           );
       }
 
     } catch (dbError) {
       // If ANY database error occurs, render the error fallback immediately
       console.error("Database connection or query error:", dbError);
-      console.warn(`Rendering error fallback for ${city}/${slug} due to DB error.`);
-      return <CommunityErrorFallback cityName={formattedCityName} />;
+      console.warn(`Rendering simple error div for ${city}/${slug} due to DB error.`);
+      // Return simple div instead of custom component
+      return (
+        <div>
+          <h1>Database Error</h1>
+          <p>Could not connect to database to load information for {formattedCityName}, Ohio.</p>
+        </div>
+      );
     }
 
     // If we reach here, communityData MUST be valid (not null)
     if (!communityData) {
         // This should be theoretically unreachable due to the checks above, but acts as a final safeguard
         console.error("❌ Fatal Error: communityData is null despite checks. Params:", params);
-        return <CommunityErrorFallback cityName={formattedCityName || "Unknown"} />;
+        // Return simple div instead of custom component
+        return (
+          <div>
+            <h1>Internal Server Error</h1>
+            <p>An unexpected error occurred for {formattedCityName || "Unknown"}.</p>
+          </div>
+       );
     }
 
     // Helpful debug logs - using safe access pattern
@@ -324,6 +348,12 @@ export default async function Page({ params }: { params: PageParams | undefined 
   } catch (error) {
     // Catch any unexpected errors
     console.error("Ohio community page: Fatal error:", error);
-    return <CommunityErrorFallback cityName={params?.city ? params.city.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ') : "Unknown"} />;
+    // Return simple div instead of custom component
+    return (
+      <div>
+        <h1>Page Error</h1>
+        <p>An unexpected error occurred loading this page.</p>
+      </div>
+   );
   }
 } 
