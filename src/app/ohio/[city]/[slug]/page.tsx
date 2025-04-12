@@ -208,16 +208,16 @@ export default async function Page({ params }: { params: PageParams | undefined 
       .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(' ');
 
-    // Initialize community directly with a guaranteed safe fallback object
     // We might not need this if we always return ErrorFallback on fail/missing
     // const community: SafeCommunity = getFallbackCommunity(city, slug);
     let communityData: SafeCommunity | null = null; // Use null initially
+    let databaseQueryFailed = false; // Flag for DB query errors
     
     try {
       // Safely check Prisma availability 
       if (!prisma || !prisma.community) {
         console.warn("⚠️ Ohio community page: Prisma client not initialized or database unreachable");
-        throw new Error("Database connection unavailable");
+        throw new Error("Database connection unavailable"); // This will be caught below
       }
       
       // Attempt database query
@@ -230,22 +230,15 @@ export default async function Page({ params }: { params: PageParams | undefined 
       });
       console.log(`DB query result for ${city}/${slug}:`, dbCommunity ? `Found ID ${dbCommunity.id}` : "Not Found");
       
-      // If community NOT found in DB, signal not found to Next.js
-      if (!dbCommunity) {
-        console.warn(`Community not found in database: ${city}/${slug}. Triggering notFound().`);
-        notFound(); // Use Next.js notFound function
-      }
-
-      // If community found, process it into the SafeCommunity format
-      if (dbCommunity.name && dbCommunity.city) { // Basic validation
+      // Process valid data if found
+      if (dbCommunity && dbCommunity.name && dbCommunity.city) { 
           communityData = {
-            // Start with a minimal safe structure
+            // Structure data...
             id: String(dbCommunity.id),
             name: dbCommunity.name,
             city: dbCommunity.city,
             state: dbCommunity.state,
             slug: dbCommunity.slug,
-            // Fill in optional fields safely
             description: dbCommunity.description ?? undefined,
             address: dbCommunity.address ?? undefined,
             zipCode: dbCommunity.zipCode ?? null,
@@ -258,24 +251,28 @@ export default async function Page({ params }: { params: PageParams | undefined 
             latitude: dbCommunity.latitude ?? null,
             longitude: dbCommunity.longitude ?? null,
           };
+      } else if (!dbCommunity) {
+           console.warn(`Community not found in database: ${city}/${slug}. Will trigger notFound() later.`);
+           // Leave communityData as null
       } else {
-           console.error(`❌ DB record for ${city}/${slug} missing critical fields (name/city). Triggering notFound().`);
-            notFound(); // Use Next.js notFound function
+           console.error(`❌ DB record for ${city}/${slug} missing critical fields (name/city). Will trigger notFound() later.`);
+           // Leave communityData as null
       }
 
     } catch (dbError) {
-      // If ANY database error occurs, signal not found to Next.js
-      console.error("Database connection or query error:", dbError);
-      console.warn(`Triggering notFound() for ${city}/${slug} due to DB error.`);
-      notFound(); // Use Next.js notFound function
+      // Catch ANY error during the DB access attempt
+      console.error("Database connection or query error during attempt:", dbError);
+      databaseQueryFailed = true; // Set the flag
     }
 
-    // If we reach here, communityData MUST be valid (not null)
-    if (!communityData) {
-        // This should be theoretically unreachable due to the checks above, but acts as a final safeguard
-        console.error("❌ Fatal Error: communityData is null despite checks. Params:", params);
-        notFound(); // Use Next.js notFound function
+    // AFTER the try/catch, check if we should call notFound()
+    if (databaseQueryFailed || communityData === null) {
+      console.warn(`Triggering notFound() for ${city}/${slug} due to DB error or missing/invalid data.`);
+      notFound();
     }
+
+    // If we reach here, communityData MUST be valid 
+    // (The notFound() call above would have stopped execution otherwise)
 
     // Helpful debug logs - using safe access pattern
     console.log("Rendering community page with DB data:", {
