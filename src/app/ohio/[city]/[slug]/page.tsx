@@ -46,37 +46,19 @@ export async function generateMetadata(
       };
     }
 
-    // Format city for display (without database access)
-    const cityFormatted = params.city
-      .split('-')
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' ');
+    // Get city and slug with explicit defaults for maximum safety
+    const city = params.city || "";
+    const slug = params.slug || "";
 
-    // Format community name for display (without database access)
-    const communityFormatted = params.slug
-      .split('-')
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' ');
+    // Create a guaranteed safe community object using our fallback function
+    // This avoids any database access which can fail during build
+    const safeCommunity = getFallbackCommunity(city, slug);
 
-    // Try to find the community in local data first - this is safe during build
-    const localCommunity = communities.find(c => 
-      c.slug?.toLowerCase() === params.slug.toLowerCase() && 
-      c.city?.toLowerCase() === params.city.toLowerCase()
-    );
-
-    // If found in local data, use it
-    if (localCommunity) {
-      return {
-        title: `${localCommunity.name} | Senior Living in ${localCommunity.city}, Ohio`,
-        description: localCommunity.description || 
-          `Information about ${localCommunity.name}, a senior living community in ${localCommunity.city}, Ohio.`,
-      };
-    }
-
-    // Use safe fallback metadata that doesn't need database access
+    // Now we can safely use the community's data for metadata
     return {
-      title: `${communityFormatted} | Senior Living in ${cityFormatted}, Ohio`,
-      description: `Information about ${communityFormatted}, a senior living community in ${cityFormatted}, Ohio.`,
+      title: `${safeCommunity.name} | Senior Living in ${safeCommunity.city}, Ohio`,
+      description: safeCommunity.description || 
+        `Information about ${safeCommunity.name}, a senior living community in ${safeCommunity.city}, Ohio.`,
     };
   } catch (error) {
     // Ultimate fallback for metadata in case of any errors
