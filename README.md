@@ -92,3 +92,6 @@ src/
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Force redeploy with updated DATABASE_URL
+Updated configuration on: $(date)
