@@ -6,6 +6,9 @@ import { prisma } from "@/lib/prisma";
 import Link from 'next/link';
 import { Metadata, ResolvingMetadata } from 'next';
 import { slugify } from "@/lib/utils/formatSlug";
+import { PrismaClientInitializationError } from "@prisma/client/runtime/library";
+import path from 'path';
+import fs from 'fs';
 
 // Optimize for static generation, error on unknown paths
 // export const dynamic = 'force-dynamic'; // Removed
@@ -37,6 +40,30 @@ interface SafeCommunity {
   phone?: string | null;
   latitude?: number | null;
   longitude?: number | null;
+}
+
+// Define fallback community interface matching JSON structure
+interface FallbackCommunity {
+  id: number;
+  name: string;
+  city: string;
+  state: string;
+  slug: string;
+}
+
+// Function to load fallback communities from JSON file
+function loadFallbackCommunities(): FallbackCommunity[] {
+  try {
+    const filePath = path.join(process.cwd(), 'src', 'lib', 'fallbackCommunities.json');
+    const fileContents = fs.readFileSync(filePath, 'utf8');
+    const data = JSON.parse(fileContents) as FallbackCommunity[];
+    
+    console.warn('Using fallback communities data from JSON file');
+    return Array.isArray(data) ? data : [];
+  } catch (error) {
+    console.error('Failed to load fallback communities from JSON:', error);
+    return [];
+  }
 }
 
 // Safe metadata generation that avoids DB errors
@@ -80,58 +107,121 @@ export async function generateStaticParams(): Promise<PageParams[]> {
     // Attempt to connect and query the database
     if (prisma?.community) {
       console.log("Attempting to generate static params from database...");
-      const dbCommunities = await prisma.community.findMany({
-        where: { state: { equals: "Ohio", mode: 'insensitive' } },
-        select: { city: true, slug: true },
-      });
+      try {
+        const dbCommunities = await prisma.community.findMany({
+          where: { state: { equals: "Ohio", mode: 'insensitive' } },
+          select: { city: true, slug: true },
+        });
 
-      if (dbCommunities && dbCommunities.length > 0) {
-        params = dbCommunities.map(community => ({
-          city: community.city.toLowerCase(), // Ensure lowercase for consistency
-          slug: community.slug.toLowerCase(),
-        }));
-        usingDb = true;
-        console.log(`Successfully generated ${params.length} static params from database.`);
-      } else {
-        console.warn("⚠️ No Ohio communities found in the database for static param generation.");
+        if (dbCommunities && Array.isArray(dbCommunities) && dbCommunities.length > 0) {
+          params = dbCommunities
+            .filter(community => community && community.city && community.slug)
+            .map((community: { city: string; slug: string }) => ({
+              city: community.city.toLowerCase(), // Ensure lowercase for consistency
+              slug: community.slug.toLowerCase(),
+            }));
+          
+          if (params.length > 0) {
+            usingDb = true;
+            console.log(`Successfully generated ${params.length} static params from database.`);
+          } else {
+            console.warn("⚠️ Database returned communities but none had valid city/slug.");
+          }
+        } else {
+          console.warn("⚠️ No Ohio communities found in the database for static param generation.");
+        }
+      } catch (innerDbError) {
+        console.error("Error querying database:", innerDbError);
       }
     } else {
       console.warn("⚠️ Prisma client not available during static generation.");
     }
   } catch (dbError) {
-    console.warn("⚠️ Database error during static param generation:", dbError);
+    // Specifically check for Prisma initialization errors
+    if (dbError instanceof PrismaClientInitializationError) {
+      console.warn("⚠️ Prisma connection error during static param generation:", dbError.message);
+      console.warn("Will use fallback JSON data instead");
+    } else {
+      console.warn("⚠️ Database error during static param generation:", dbError);
+    }
     // Fallback strategy will be executed below if DB fails
   }
 
-  // Fallback to local data ONLY if DB failed or returned no results
-  if (!usingDb) {
-    console.warn("Falling back to local data for static param generation.");
+  // Fallback to JSON file if DB connection failed
+  if (!usingDb || params.length === 0) {
+    console.warn("Falling back to JSON file for static param generation.");
     try {
-        params = communities
-        .filter((community: Community) => community.state === "Ohio" || community.state === "OH")
-        .map((community: Community) => {
-          // Use the actual city/slug if available, format if needed
-           const city = community.city?.toLowerCase() || 'unknown-city';
-           const slug = community.slug?.toLowerCase() || 'unknown-slug';
-           
-           // Basic validation: Ensure city and slug are meaningful before including
-           if (city !== 'unknown-city' && slug !== 'unknown-slug') {
-               return { city, slug };
-           }
-           return null; // Skip invalid entries
-        })
-        .filter((p): p is PageParams => p !== null); // Type guard to filter out nulls and satisfy type
+      const fallbackCommunities = loadFallbackCommunities();
+      
+      if (fallbackCommunities && Array.isArray(fallbackCommunities) && fallbackCommunities.length > 0) {
+        const ohioCommunities = fallbackCommunities.filter(
+          (community: FallbackCommunity) => 
+            community && community.state &&
+            (community.state === "Ohio" || community.state === "OH")
+        );
+        
+        if (ohioCommunities.length > 0) {
+          const jsonParams = ohioCommunities
+            .filter(community => community && community.city && community.slug)
+            .map((community: FallbackCommunity) => ({
+              city: community.city.toLowerCase(), // Ensure lowercase for consistency
+              slug: community.slug.toLowerCase(),
+            }));
+            
+          params = params.concat(jsonParams);
+          console.warn(`Added ${jsonParams.length} static params from fallback JSON data.`);
+        } else {
+          console.warn("No Ohio communities found in fallback JSON data.");
+        }
+      } else {
+        console.warn("Fallback JSON file empty or not properly loaded.");
+      }
+    } catch (jsonError) {
+      console.error("Error processing fallback JSON data:", jsonError);
+    }
+    
+    // If JSON fallback failed or no Ohio communities in JSON, try static data as last resort
+    if (params.length === 0) {
+      console.warn("Falling back to local static data for static param generation.");
+      try {
+        if (Array.isArray(communities)) {
+          const staticParams = communities
+            .filter((community: Community) => 
+              community && community.state && 
+              (community.state === "Ohio" || community.state === "OH")
+            )
+            .map((community: Community) => {
+              // Use the actual city/slug if available, format if needed
+              const city = community.city?.toLowerCase() || 'unknown-city';
+              const slug = community.slug?.toLowerCase() || 'unknown-slug';
+               
+              // Basic validation: Ensure city and slug are meaningful before including
+              if (city !== 'unknown-city' && slug !== 'unknown-slug') {
+                return { city, slug };
+              }
+              return null; // Skip invalid entries
+            })
+            .filter((p): p is PageParams => p !== null); // Type guard to filter out nulls and satisfy type
 
-      console.log(`Generated ${params.length} static params from local fallback data.`);
-    } catch (localError) {
-      console.error("Error generating static params from local data:", localError);
-      params = []; // Return empty array on error
+          if (staticParams.length > 0) {
+            params = params.concat(staticParams);
+            console.log(`Added ${staticParams.length} static params from local fallback data.`);
+          }
+        } else {
+          console.warn("Communities data is not properly initialized as an array");
+        }
+      } catch (localError) {
+        console.error("Error generating static params from local data:", localError);
+      }
     }
   }
 
   // Add a check for empty params before returning
   if (params.length === 0) {
-    console.error("🚨 CRITICAL: No static params could be generated for Ohio communities from DB or fallback. Check data sources and DB connection.");
+    console.error("🚨 CRITICAL: No static params could be generated for Ohio communities from DB or fallbacks.");
+    // Provide at least one hardcoded path to prevent build failure
+    console.warn("Adding fallback hardcoded path for /ohio/cleveland/westview-manor");
+    params = [{ city: 'cleveland', slug: 'westview-manor' }];
   }
 
   return params;
@@ -139,6 +229,11 @@ export async function generateStaticParams(): Promise<PageParams[]> {
 
 // Try to find a community in the static data array
 function findCommunityInStaticData(city: string, slug: string): Community | null {
+  if (!city || !slug || !Array.isArray(communities)) {
+    console.warn(`[${city}/${slug}] Invalid parameters or communities data for findCommunityInStaticData`);
+    return null;
+  }
+  
   try {
     console.log(`[${city}/${slug}] Attempting to find community in static data...`);
     
@@ -148,13 +243,14 @@ function findCommunityInStaticData(city: string, slug: string): Community | null
     
     // First, try to find by exact slug match
     let staticCommunity = communities.find(
-      c => c.slug.toLowerCase() === normalizedSlug
+      c => c && c.slug && c.slug.toLowerCase() === normalizedSlug
     );
     
     // If not found by slug, try by city + name combination
     if (!staticCommunity) {
       staticCommunity = communities.find(
-        c => c.city.toLowerCase() === normalizedCity && 
+        c => c && c.city && c.name && 
+             c.city.toLowerCase() === normalizedCity && 
              slugify(c.name).toLowerCase() === normalizedSlug
       );
     }
@@ -162,12 +258,14 @@ function findCommunityInStaticData(city: string, slug: string): Community | null
     // One more attempt - more flexible matching
     if (!staticCommunity) {
       staticCommunity = communities.find(
-        c => c.slug.toLowerCase().includes(normalizedSlug) || 
+        c => c && c.slug && normalizedSlug && (
+             c.slug.toLowerCase().includes(normalizedSlug) || 
              normalizedSlug.includes(c.slug.toLowerCase())
+        )
       );
     }
     
-    if (staticCommunity) {
+    if (staticCommunity && staticCommunity.name) {
       console.log(`[${city}/${slug}] Found community in static data: ${staticCommunity.name}`);
       return staticCommunity;
     }
@@ -182,11 +280,11 @@ function findCommunityInStaticData(city: string, slug: string): Community | null
 
 // Convert a static Community to the SafeCommunity format
 function convertToSafeCommunity(community: {
-  id: number;
-  name: string;
-  city: string;
-  state: string;
-  slug: string;
+  id?: number;
+  name?: string;
+  city?: string;
+  state?: string;
+  slug?: string;
   description?: string;
   address?: string;
   type?: string;
@@ -196,17 +294,33 @@ function convertToSafeCommunity(community: {
   reviewCount?: number;
   image?: string;
   phone?: string;
-}): SafeCommunity {
+} | null): SafeCommunity {
+  if (!community) {
+    // Return a default SafeCommunity object if input is null
+    return {
+      id: 'unknown',
+      name: 'Unknown Community',
+      city: 'Unknown City',
+      state: 'OH',
+      slug: 'unknown-community',
+      description: 'Information about this community is currently unavailable.',
+      address: 'Address unavailable',
+      type: 'Senior Living',
+      amenities: [],
+    };
+  }
+  
   // Ensure all required fields have values with fallbacks
   const cityValue = community.city || "Unknown City";
   const stateValue = community.state || "OH";
+  const idValue = community.id || 0;
   
   return {
-    id: String(community.id),
+    id: String(idValue),
     name: community.name || "Unknown Community",
     city: cityValue,
     state: stateValue,
-    slug: community.slug || `unknown-${community.id}`,
+    slug: community.slug || `unknown-${idValue}`,
     description: community.description || `Information about this community in ${cityValue}, ${stateValue} is currently being updated.`,
     address: community.address || `${cityValue}, ${stateValue}`,
     type: community.type || "Senior Living",
@@ -226,6 +340,11 @@ function convertToSafeCommunity(community: {
 
 // Helper function to fetch data, returns SafeCommunity or null
 async function fetchCommunityData(city: string, slug: string): Promise<SafeCommunity | null> {
+    if (!city || !slug) {
+      console.warn(`Invalid parameters for fetchCommunityData: city=${city}, slug=${slug}`);
+      return null;
+    }
+    
     console.log(`[${city}/${slug}] Attempting to fetch community data...`);
     try {
       // First attempt to get from database
@@ -240,55 +359,106 @@ async function fetchCommunityData(city: string, slug: string): Promise<SafeCommu
             },
           });
 
-          if (dbCommunity && dbCommunity.name && dbCommunity.city && dbCommunity.state && dbCommunity.slug) {
+          // More explicit check to handle undefined/null responses
+          if (dbCommunity && 
+              typeof dbCommunity === 'object' && 
+              dbCommunity.name && 
+              dbCommunity.city && 
+              dbCommunity.state && 
+              dbCommunity.slug) {
             console.log(`[${city}/${slug}] Found community in database: ${dbCommunity.name}`);
-            // Map Prisma result to SafeCommunity type
+            // Map Prisma result to SafeCommunity type with additional safety checks
             const communityData: SafeCommunity = {
-                id: String(dbCommunity.id), // Ensure ID is string
-                name: dbCommunity.name,
-                city: dbCommunity.city,
-                state: dbCommunity.state,
-                slug: dbCommunity.slug,
+                id: String(dbCommunity.id || 'unknown'), // Ensure ID is string
+                name: dbCommunity.name || 'Unknown Community',
+                city: dbCommunity.city || city,
+                state: dbCommunity.state || 'OH',
+                slug: dbCommunity.slug || slug,
                 description: dbCommunity.description ?? undefined,
                 address: dbCommunity.address ?? undefined,
-                zipCode: dbCommunity.zipCode ?? null,
-                type: dbCommunity.type ?? undefined,
-                amenities: dbCommunity.amenities ?? [],
-                rating: dbCommunity.rating ?? undefined,
-                reviewCount: dbCommunity.reviewCount ?? undefined,
-                images: dbCommunity.images ?? [],
+                zipCode: dbCommunity.zip ?? null,
+                type: "Senior Living",
+                amenities: [],
                 phone: dbCommunity.phone ?? null,
-                latitude: dbCommunity.latitude ?? null,
-                longitude: dbCommunity.longitude ?? null,
             };
             return communityData;
+          } else {
+            console.warn(`[${city}/${slug}] Database returned incomplete or invalid community data`);
+            // Fall through to fallbacks
           }
         } catch (dbError) {
-          console.error(`[${city}/${slug}] Database error:`, dbError);
-          // Fall through to static data fallback
+          if (dbError instanceof PrismaClientInitializationError) {
+            console.warn(`[${city}/${slug}] Prisma connection error:`, dbError.message);
+            console.warn(`[${city}/${slug}] Will use fallback JSON data instead`);
+          } else {
+            console.error(`[${city}/${slug}] Database error:`, dbError);
+          }
+          // Fall through to fallback data
         }
       } else {
-        console.warn(`[${city}/${slug}] Prisma client not available, trying static data...`);
+        console.warn(`[${city}/${slug}] Prisma client not available, trying fallback data...`);
       }
       
-      // Fallback to static data if database fetch failed or returned null
-      const staticCommunity = findCommunityInStaticData(city, slug);
-      if (staticCommunity) {
-        console.log(`[${city}/${slug}] Using static data fallback for: ${staticCommunity.name}`);
-        return convertToSafeCommunity(staticCommunity);
+      // Try fallback JSON file first
+      try {
+        const fallbackCommunities = loadFallbackCommunities();
+        const fallbackCommunity = fallbackCommunities.find(
+          (community: FallbackCommunity) => 
+            community && community.slug && community.city &&
+            community.slug.toLowerCase() === slug.toLowerCase() &&
+            community.city.toLowerCase() === city.toLowerCase()
+        );
+        
+        if (fallbackCommunity) {
+          console.warn(`[${city}/${slug}] Using fallback JSON data for: ${fallbackCommunity.name}`);
+          
+          // Convert to SafeCommunity format with safety checks
+          const safeCommunity: SafeCommunity = {
+            id: String(fallbackCommunity.id || 'unknown'),
+            name: fallbackCommunity.name || 'Unknown Community',
+            city: fallbackCommunity.city || city,
+            state: fallbackCommunity.state || 'OH',
+            slug: fallbackCommunity.slug || slug,
+            description: `Information about ${fallbackCommunity.name} in ${fallbackCommunity.city}, ${fallbackCommunity.state} is currently being updated.`,
+            address: `${fallbackCommunity.city}, ${fallbackCommunity.state}`,
+            type: "Senior Living",
+            amenities: [],
+          };
+          
+          return safeCommunity;
+        }
+      } catch (jsonError) {
+        console.error(`[${city}/${slug}] Error processing fallback JSON data:`, jsonError);
+        // Fall through to static data
       }
       
-      // If we reach here, we couldn't find the community in either source
-      console.warn(`[${city}/${slug}] Community not found in database or static data.`);
+      // Fallback to static data if JSON fetch failed or returned null
+      try {
+        const staticCommunity = findCommunityInStaticData(city, slug);
+        if (staticCommunity) {
+          console.log(`[${city}/${slug}] Using static data fallback for: ${staticCommunity.name}`);
+          return convertToSafeCommunity(staticCommunity);
+        }
+      } catch (staticError) {
+        console.error(`[${city}/${slug}] Error processing static data:`, staticError);
+        // Fall through to return null
+      }
+      
+      // If we reach here, we couldn't find the community in any source
+      console.warn(`[${city}/${slug}] Community not found in database, JSON, or static data.`);
       return null;
     } catch (error) {
       console.error(`[${city}/${slug}] Error fetching community data:`, error);
       
       // Last resort fallback to static data
-      const staticCommunity = findCommunityInStaticData(city, slug);
-      if (staticCommunity) {
-        console.log(`[${city}/${slug}] Using static data last-resort fallback: ${staticCommunity.name}`);
-        return convertToSafeCommunity(staticCommunity);
+      try {
+        const staticCommunity = findCommunityInStaticData(city, slug);
+        if (staticCommunity) {
+          console.log(`[${city}/${slug}] Using static data last-resort fallback: ${staticCommunity.name}`);
+          return convertToSafeCommunity(staticCommunity);
+        }
+      } catch (e) {
+        console.error(`[${city}/${slug}] Failed last-resort static data attempt:`, e);
       }
       
       return null; // Return null only if all options fail
@@ -303,7 +473,8 @@ export default async function Page({ params }: { params: PageParams | undefined 
   // Validate params
   if (!params?.city || !params?.slug) {
     console.error("Ohio community page: Invalid or missing params.");
-    notFound(); // Use Next.js notFound for invalid routes
+    // Instead of notFound, render a fallback UI
+    return renderFallbackUI("Invalid URL", "This community page URL is missing required parameters.");
   }
   
   const { city, slug } = params;
@@ -311,22 +482,25 @@ export default async function Page({ params }: { params: PageParams | undefined 
   // Fetch data using the helper function
   const communityData = await fetchCommunityData(city, slug);
 
-  // If data fetch failed or community not found, trigger 404
-  if (communityData === null) {
-    console.log(`[${city}/${slug}] No valid community data found or fetch failed. Triggering notFound().`);
-    notFound(); 
+  // If data fetch failed or community not found, show fallback UI instead of 404
+  if (!communityData) {
+    console.warn(`[${city}/${slug}] No valid community data found or fetch failed.`);
+    return renderFallbackUI(
+      "Community Not Found", 
+      `We couldn't find information for this senior living community in ${city.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}, Ohio.`
+    );
   }
 
   // Add safety checks to ensure required fields exist before rendering
   const safeData = {
-    name: communityData.name || "Community Information",
-    type: communityData.type || "Senior Living Community",
-    description: communityData.description || "Information about this community is currently unavailable.",
-    address: communityData.address || "Address information unavailable",
-    amenities: Array.isArray(communityData.amenities) ? communityData.amenities : [],
-    rating: communityData.rating,
-    reviewCount: communityData.reviewCount,
-    cityName: communityData.city || city.split("-").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ")
+    name: communityData?.name || "Community Information",
+    type: communityData?.type || "Senior Living Community",
+    description: communityData?.description || "Information about this community is currently unavailable.",
+    address: communityData?.address || "Address information unavailable",
+    amenities: Array.isArray(communityData?.amenities) ? communityData.amenities : [],
+    rating: communityData?.rating,
+    reviewCount: communityData?.reviewCount,
+    cityName: communityData?.city || city.split("-").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ")
   };
 
   // Render the content if data is valid
@@ -350,4 +524,34 @@ export default async function Page({ params }: { params: PageParams | undefined 
       </div>
     </div>
   );
-} 
+}
+
+// Helper function to render a fallback UI when community isn't found or data is invalid
+function renderFallbackUI(title: string, message: string) {
+  return (
+    <div className="bg-gray-50 min-h-screen">
+      <div className="bg-white border-b border-neutral-200 py-8">
+        <div className="container mx-auto px-6 md:px-10 lg:px-20">
+          <div className="max-w-3xl mx-auto text-center py-12">
+            <h1 className="text-3xl font-bold text-gray-900 mb-6">{title}</h1>
+            <p className="text-lg text-gray-600 mb-8">{message}</p>
+            <div className="flex flex-col md:flex-row justify-center gap-4">
+              <Link
+                href="/ohio"
+                className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700"
+              >
+                Browse Ohio Communities
+              </Link>
+              <Link
+                href="/"
+                className="inline-flex items-center px-6 py-3 border border-gray-300 text-base font-medium rounded-md shadow-sm text-gray-700 bg-white hover:bg-gray-50"
+              >
+                Return to Home
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

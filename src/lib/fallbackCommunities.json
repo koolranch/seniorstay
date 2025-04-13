@@ -1,0 +1,16 @@
+[
+  {
+    "id": 1,
+    "name": "Westwood Place",
+    "city": "Cleveland",
+    "slug": "westwood-place-cleveland-oh",
+    "state": "OH"
+  },
+  {
+    "id": 2,
+    "name": "Summit Point",
+    "city": "Macedonia",
+    "slug": "summit-point-macedonia-oh",
+    "state": "OH"
+  }
+] 
