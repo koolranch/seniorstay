@@ -1,5 +1,3 @@
-'use client';
-
 export const dynamic = 'force-dynamic';
 
 import { notFound } from "next/navigation";
@@ -14,7 +12,7 @@ import { PrismaClientInitializationError } from "@prisma/client/runtime/library"
 import path from 'path';
 import fs from 'fs';
 import React, { useState, useEffect } from 'react';
-import ModalForm from '@/components/ModalForm';
+import CommunityActions from '@/components/CommunityActions';
 
 // Optimize for static generation, error on unknown paths
 export const dynamicParams = false; // Tell Next.js not to generate pages for paths not in generateStaticParams
@@ -512,72 +510,44 @@ function renderFallbackUI(title: string, message: string, cityParam?: string) {
   );
 }
 
-// Refactored Page component - Now a Client Component
-export default function Page({ params }: { params: PageParams | undefined }) {
-  const [communityData, setCommunityData] = useState<SafeCommunity | null | 'loading' | 'error'>('loading');
-  const [isPricingModalOpen, setIsPricingModalOpen] = useState(false);
-  const [isTourModalOpen, setIsTourModalOpen] = useState(false);
-  const formspreeEndpoint = "https://formspree.io/f/xnnpaply"; // Add your endpoint here
+// Refactored Page component - Now a Server Component
+export default async function Page({ params }: { params: PageParams | undefined }) {
+  if (!params?.city || !params?.slug) {
+    console.error("Ohio community page: Invalid or missing params.");
+    // Render fallback UI directly for invalid params
+    return renderFallbackUI("Invalid Page Request", "The requested community page URL is invalid.", undefined);
+  }
 
-  useEffect(() => {
-    if (!params?.city || !params?.slug) {
-      console.error("Ohio community page: Invalid or missing params.");
-      setCommunityData('error');
-      return;
+  const { city, slug } = params;
+  let communityData: SafeCommunity | null = null;
+  let errorOccurred = false;
+
+  console.log(`[${city}/${slug}] Starting server-side data fetch...`);
+  try {
+    communityData = await fetchCommunityData(city, slug);
+    if (communityData) {
+        console.log(`[${city}/${slug}] Server-side data fetch successful:`, JSON.stringify(communityData, null, 2));
+    } else {
+        console.warn(`[${city}/${slug}] No valid community data found or fetch failed on server.`);
+        // Keep communityData as null to trigger not found state below
     }
-
-    const { city, slug } = params;
-    let isMounted = true; // Prevent state update on unmounted component
-
-    const loadData = async () => {
-      console.log(`[${city}/${slug}] Starting data fetch...`);
-      try {
-        const fetchedData = await fetchCommunityData(city, slug);
-        if (isMounted) {
-          if (fetchedData) {
-            console.log(`[${city}/${slug}] Data fetch successful:`, JSON.stringify(fetchedData, null, 2));
-            setCommunityData(fetchedData);
-          } else {
-            console.warn(`[${city}/${slug}] No valid community data found or fetch failed.`);
-            setCommunityData(null); // Explicitly set to null for 'not found' state
-          }
-        }
-      } catch (error) {
-        console.error(`[${city}/${slug}] Error in loadData:`, error);
-        if (isMounted) {
-          setCommunityData('error');
-        }
-      }
-    };
-
-    loadData();
-
-    return () => {
-      isMounted = false; // Cleanup function
-    };
-  }, [params]); // Rerun effect if params change
-
-  // Loading state
-  if (communityData === 'loading') {
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        <p className="text-xl text-gray-600">Loading community details...</p>
-        {/* You could add a spinner here */}
-      </div>
-    );
+  } catch (error) {
+    console.error(`[${city}/${slug}] Error in server-side fetch:`, error);
+    errorOccurred = true; // Set error flag
+    // Keep communityData as null
   }
 
   // Error state
-  if (communityData === 'error') {
-     return renderFallbackUI("Error Loading Community", "We encountered an error trying to load the community details. Please try again later.", params?.city);
+  if (errorOccurred) {
+     return renderFallbackUI("Error Loading Community", "We encountered an error trying to load the community details. Please try again later.", city);
   }
 
   // Not found state
   if (!communityData) {
     return renderFallbackUI(
-      "Community Not Found", 
+      "Community Not Found",
       "", // Default message is overridden by cityParam
-      params?.city // Pass the validated city param
+      city // Pass the validated city param
     );
   }
 
@@ -589,7 +559,7 @@ export default function Page({ params }: { params: PageParams | undefined }) {
       <div className="bg-white border-b border-neutral-200 py-8">
         <div className="container mx-auto px-6 md:px-10 lg:px-20">
           {/* Pass sanitized data directly to the content component */}
-          <CommunityContent 
+          <CommunityContent
             name={communityData.name || "Community Information"}
             type={communityData.type || "Senior Living Community"}
             description={communityData.description || "Information about this community is currently unavailable."}
@@ -597,47 +567,15 @@ export default function Page({ params }: { params: PageParams | undefined }) {
             amenities={Array.isArray(communityData.amenities) ? communityData.amenities : []}
             rating={communityData.rating}
             reviewCount={communityData.reviewCount}
-            cityName={communityData.city || "Fallback City Name"} 
+            cityName={communityData.city || "Fallback City Name"}
           />
 
-          {/* --- Add CTA Buttons Below Community Details --- */}
-          <div className="mt-8 pt-8 border-t border-gray-200 flex flex-col sm:flex-row gap-4 justify-center">
-            <button
-              onClick={() => setIsPricingModalOpen(true)}
-              className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out"
-            >
-              Get Pricing
-            </button>
-            <button
-              onClick={() => setIsTourModalOpen(true)}
-              className="inline-flex items-center justify-center px-6 py-3 border border-gray-300 text-base font-medium rounded-md shadow-sm text-indigo-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out"
-            >
-              Schedule a Tour
-            </button>
+          {/* --- Replace CTA Buttons with CommunityActions component --- */}
+          <div className="mt-8 pt-8 border-t border-gray-200">
+            <CommunityActions communityName={currentCommunityName} />
           </div>
         </div>
       </div>
-
-      {/* --- Render Modals Conditionally --- */}
-      <ModalForm
-        isOpen={isPricingModalOpen}
-        onClose={() => setIsPricingModalOpen(false)}
-        title={`Get Pricing for ${currentCommunityName}`}
-        buttonText="Request Pricing Info"
-        defaultSubject={`Pricing Request for ${currentCommunityName}`}
-        communityName={currentCommunityName}
-        formspreeUrl={formspreeEndpoint}
-      />
-
-      <ModalForm
-        isOpen={isTourModalOpen}
-        onClose={() => setIsTourModalOpen(false)}
-        title={`Schedule a Tour at ${currentCommunityName}`}
-        buttonText="Request Tour Appointment"
-        defaultSubject={`Tour Request for ${currentCommunityName}`}
-        communityName={currentCommunityName}
-        formspreeUrl={formspreeEndpoint}
-      />
     </div>
   );
 }
