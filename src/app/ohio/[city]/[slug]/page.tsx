@@ -411,21 +411,29 @@ async function fetchCommunityData(city: string, slug: string): Promise<SafeCommu
         
         if (fallbackCommunity) {
           console.warn(`[${city}/${slug}] Using fallback JSON data for: ${fallbackCommunity.name}`);
-          
-          // Convert to SafeCommunity format with safety checks
-          const safeCommunity: SafeCommunity = {
-            id: String(fallbackCommunity.id || 'unknown'),
-            name: fallbackCommunity.name || 'Unknown Community',
-            city: fallbackCommunity.city || city,
-            state: fallbackCommunity.state || 'OH',
-            slug: fallbackCommunity.slug || slug,
-            description: `Information about ${fallbackCommunity.name} in ${fallbackCommunity.city}, ${fallbackCommunity.state} is currently being updated.`,
-            address: `${fallbackCommunity.city}, ${fallbackCommunity.state}`,
-            type: "Senior Living",
-            amenities: [],
-          };
-          
-          return safeCommunity;
+
+          // *** ADD EXPLICIT CHECKS ***
+          if (typeof fallbackCommunity.city !== 'string' || 
+              typeof fallbackCommunity.state !== 'string' || 
+              typeof fallbackCommunity.slug !== 'string' || 
+              typeof fallbackCommunity.name !== 'string') {
+             console.error(`[${city}/${slug}] Fallback JSON data for ${fallbackCommunity.id || 'unknown ID'} is malformed (missing/invalid city, state, slug, or name). Skipping JSON fallback.`);
+             // Let execution continue to the next fallback (static data)
+          } else {
+             // Existing code to construct safeCommunity - now safe to access properties
+             const safeCommunity: SafeCommunity = {
+               id: String(fallbackCommunity.id || 'unknown'),
+               name: fallbackCommunity.name, 
+               city: fallbackCommunity.city, 
+               state: fallbackCommunity.state, 
+               slug: fallbackCommunity.slug, 
+               description: `Information about ${fallbackCommunity.name} in ${fallbackCommunity.city}, ${fallbackCommunity.state} is currently being updated.`,
+               address: `${fallbackCommunity.city}, ${fallbackCommunity.state}`,
+               type: "Senior Living",
+               amenities: [],
+             };
+             return safeCommunity; // Return the valid object
+          }
         }
       } catch (jsonError) {
         console.error(`[${city}/${slug}] Error processing fallback JSON data:`, jsonError);
