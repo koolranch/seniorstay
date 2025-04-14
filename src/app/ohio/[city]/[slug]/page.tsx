@@ -550,7 +550,7 @@ export default async function Page({ params }: { params: PageParams | undefined 
     amenities: Array.isArray(communityData?.amenities) ? communityData.amenities : [],
     rating: communityData?.rating,
     reviewCount: communityData?.reviewCount,
-    cityName: communityData?.city || city.split("-").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ")
+    cityName: communityData?.city || "Fallback City Name"
   };
 
   // Render the content if data is valid
