@@ -524,6 +524,9 @@ export default async function Page({ params }: { params: PageParams | undefined 
   // Fetch data using the helper function
   const communityData = await fetchCommunityData(city, slug);
 
+  // *** ADD LOGGING: Inspect the raw data received ***
+  console.log(`[${city}/${slug}] Received communityData from fetch:`, JSON.stringify(communityData, null, 2));
+
   // If data fetch failed or community not found, show fallback UI instead of 404
   if (!communityData) {
     console.warn(`[${city}/${slug}] No valid community data found or fetch failed.`);
@@ -534,6 +537,9 @@ export default async function Page({ params }: { params: PageParams | undefined 
       city // Pass the validated city param
     );
   }
+
+  // *** ADD LOGGING: Inspect the city property before use ***
+  console.log(`[${city}/${slug}] Checking communityData.city before creating safeData:`, communityData?.city);
 
   // Add safety checks to ensure required fields exist before rendering
   const safeData = {
