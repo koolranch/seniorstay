@@ -465,6 +465,40 @@ async function fetchCommunityData(city: string, slug: string): Promise<SafeCommu
     }
 }
 
+// Helper function to render a fallback UI when community isn't found or data is invalid
+function renderFallbackUI(title: string, message: string, cityParam?: string) {
+  const fallbackMessage = cityParam 
+    ? `We couldn't find information for this senior living community in ${cityParam.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}, Ohio.` 
+    : message;
+
+  return (
+    <div className="bg-gray-50 min-h-screen">
+      <div className="bg-white border-b border-neutral-200 py-8">
+        <div className="container mx-auto px-6 md:px-10 lg:px-20">
+          <div className="max-w-3xl mx-auto text-center py-12">
+            <h1 className="text-3xl font-bold text-gray-900 mb-6">{title}</h1>
+            <p className="text-lg text-gray-600 mb-8">{fallbackMessage}</p>
+            <div className="flex flex-col md:flex-row justify-center gap-4">
+              <Link
+                href="/ohio"
+                className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700"
+              >
+                Browse Ohio Communities
+              </Link>
+              <Link
+                href="/"
+                className="inline-flex items-center px-6 py-3 border border-gray-300 text-base font-medium rounded-md shadow-sm text-gray-700 bg-white hover:bg-gray-50"
+              >
+                Return to Home
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // Refactored Page component
 export default async function Page({ params }: { params: PageParams | undefined }) {
   
@@ -473,7 +507,7 @@ export default async function Page({ params }: { params: PageParams | undefined 
   // Validate params
   if (!params?.city || !params?.slug) {
     console.error("Ohio community page: Invalid or missing params.");
-    // Instead of notFound, render a fallback UI
+    // Pass specific message, don't rely on cityParam here
     return renderFallbackUI("Invalid URL", "This community page URL is missing required parameters.");
   }
   
@@ -485,9 +519,11 @@ export default async function Page({ params }: { params: PageParams | undefined 
   // If data fetch failed or community not found, show fallback UI instead of 404
   if (!communityData) {
     console.warn(`[${city}/${slug}] No valid community data found or fetch failed.`);
+    // Pass the city param explicitly for the fallback message
     return renderFallbackUI(
       "Community Not Found", 
-      `We couldn't find information for this senior living community in ${city.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}, Ohio.`
+      "", // Default message is overridden by cityParam
+      city // Pass the validated city param
     );
   }
 
@@ -520,36 +556,6 @@ export default async function Page({ params }: { params: PageParams | undefined 
             reviewCount={safeData.reviewCount}
             cityName={safeData.cityName} 
           />
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// Helper function to render a fallback UI when community isn't found or data is invalid
-function renderFallbackUI(title: string, message: string) {
-  return (
-    <div className="bg-gray-50 min-h-screen">
-      <div className="bg-white border-b border-neutral-200 py-8">
-        <div className="container mx-auto px-6 md:px-10 lg:px-20">
-          <div className="max-w-3xl mx-auto text-center py-12">
-            <h1 className="text-3xl font-bold text-gray-900 mb-6">{title}</h1>
-            <p className="text-lg text-gray-600 mb-8">{message}</p>
-            <div className="flex flex-col md:flex-row justify-center gap-4">
-              <Link
-                href="/ohio"
-                className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700"
-              >
-                Browse Ohio Communities
-              </Link>
-              <Link
-                href="/"
-                className="inline-flex items-center px-6 py-3 border border-gray-300 text-base font-medium rounded-md shadow-sm text-gray-700 bg-white hover:bg-gray-50"
-              >
-                Return to Home
-              </Link>
-            </div>
-          </div>
         </div>
       </div>
     </div>

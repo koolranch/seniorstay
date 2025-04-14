@@ -170,27 +170,28 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function Page(props: Props) {
   try {
-    // Add more detailed logging for debugging
-    console.log('Community Page: Starting render with props:', JSON.stringify(props, null, 2));
+    // Add more detailed logging for debugging - AVOID stringifying the whole props object which includes searchParams
+    const resolvedParams = await props.params;
+    console.log('Community Page: Starting render with params:', JSON.stringify(resolvedParams, null, 2));
     
-    const params = await props.params;
-    console.log('Community Page: Resolved params:', JSON.stringify(params, null, 2));
+    // const params = await props.params; // Already resolved above
+    // console.log('Community Page: Resolved params:', JSON.stringify(params, null, 2)); // Duplicate log
     
     // Validate params
-    if (!params || !params.state || !params.city || !params.slug) {
-      console.error("Community Page Error: Missing required route params:", JSON.stringify(params, null, 2));
+    if (!resolvedParams || !resolvedParams.state || !resolvedParams.city || !resolvedParams.slug) {
+      console.error("Community Page Error: Missing required route params:", JSON.stringify(resolvedParams, null, 2));
       return notFound();
     }
     
     // Try to find the community
     console.log('Community Page: Looking for community with params:', 
-      `state=${params.state}, city=${params.city}, slug=${params.slug}`);
+      `state=${resolvedParams.state}, city=${resolvedParams.city}, slug=${resolvedParams.slug}`);
     
     const community = communities.find(
       (c) =>
-        c.state.toLowerCase() === params.state.toLowerCase() &&
-        c.city.toLowerCase() === params.city.toLowerCase() &&
-        c.slug === params.slug
+        c.state.toLowerCase() === resolvedParams.state.toLowerCase() &&
+        c.city.toLowerCase() === resolvedParams.city.toLowerCase() &&
+        c.slug === resolvedParams.slug
     );
 
     // Log whether community was found or not
@@ -198,7 +199,7 @@ export default async function Page(props: Props) {
       console.log('Community Page: Found community:', community.name);
     } else {
       console.error('Community Page Error: Community not found for params:', 
-        `state=${params.state}, city=${params.city}, slug=${params.slug}`);
+        `state=${resolvedParams.state}, city=${resolvedParams.city}, slug=${resolvedParams.slug}`);
       return notFound();
     }
 
@@ -223,7 +224,7 @@ export default async function Page(props: Props) {
       "name": community.name || "",
       "description": `Learn more about ${community.name || "this community"}, offering ${(community.services || []).join(', ')} in ${community.city || ""}, ${community.state || ""}.`,
       "image": community.image || "",
-      "url": `https://seniorstay.com/community/${params.state}/${params.city}/${params.slug}`,
+      "url": `https://seniorstay.com/community/${resolvedParams.state}/${resolvedParams.city}/${resolvedParams.slug}`,
       "telephone": "(216) 232-3354", 
       "address": {
         "@type": "PostalAddress",
@@ -257,7 +258,7 @@ export default async function Page(props: Props) {
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
         />
-        <CommunityClient params={params} communities={communities} />
+        <CommunityClient params={resolvedParams} communities={communities} />
       </>
     );
   } catch (error) {
