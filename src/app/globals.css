@@ -80,6 +80,12 @@
     -moz-osx-font-smoothing: grayscale;
     @apply bg-background text-foreground;
   }
+
+  /* Improve contrast for Tailwind Typography plugin */
+  .prose p,
+  .prose li {
+    @apply text-gray-700;
+  }
 }
 
 /* Airbnb-style card hover effects */

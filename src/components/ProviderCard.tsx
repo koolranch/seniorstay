@@ -154,36 +154,34 @@ const ProviderCard = ({
   );
 
   return (
-    <article className={`rounded-2xl shadow-md p-4 bg-white ${className} ${!hasRequiredData ? 'opacity-60 cursor-not-allowed' : 'hover:ring-2 hover:ring-primary transition-all'}`}>
-      {hasRequiredData ? (
-        <Link
-          href={communityPath}
-          className="block"
-          aria-label={`View details for ${name} in ${city}, ${state}`}
-        >
-          {cardContent}
-        </Link>
-      ) : (
-        <div aria-label={`Details unavailable for ${name}`}>
-          {cardContent}
-        </div>
-      )}
+    <article className={`flex flex-col justify-between h-full p-4 bg-white shadow rounded-md min-h-[380px] ${className} ${!hasRequiredData ? 'opacity-60 cursor-not-allowed' : 'hover:ring-2 hover:ring-primary transition-all'}`}>
+      <div>
+        {hasRequiredData ? (
+          <Link
+            href={communityPath}
+            className="block"
+            aria-label={`View details for ${name} in ${city}, ${state}`}
+          >
+            {cardContent}
+          </Link>
+        ) : (
+          <div aria-label={`Details unavailable for ${name}`}>
+            {cardContent}
+          </div>
+        )}
+      </div>
 
-      <div className="flex flex-col sm:flex-row gap-2 mt-4">
+      <div className="mt-auto flex gap-2">
         <button
-          onClick={handleScheduleTour}
-          disabled={!onScheduleTour}
-          className={`w-full bg-[#1b4d70] text-white py-2 px-4 rounded-md text-sm font-medium transition-colors flex items-center justify-center ${!onScheduleTour ? 'opacity-50 cursor-not-allowed' : 'hover:bg-[#2F5061]'}`}
+          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition w-full"
+          onClick={() => window.open('https://formspree.io/f/xnnpaply', '_blank')}
         >
-          <FiCalendar className="mr-2" />
           Schedule Tour
         </button>
         <button
-          onClick={handleRequestPricing}
-          disabled={!onRequestPricing}
-          className={`w-full bg-white border border-[#1b4d70] text-[#1b4d70] py-2 px-4 rounded-md text-sm font-medium transition-colors flex items-center justify-center ${!onRequestPricing ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-50'}`}
+          className="border border-blue-600 text-blue-600 px-4 py-2 rounded hover:bg-blue-50 transition w-full"
+          onClick={() => window.open('https://formspree.io/f/xnnpaply', '_blank')}
         >
-          <FiDollarSign className="mr-2" />
           Request Pricing
         </button>
       </div>

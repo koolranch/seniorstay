@@ -343,23 +343,23 @@ const ContactPage = () => {
               <ul className="space-y-3">
                 <li className="flex items-start">
                   <FiCheck className="text-[#1b4d70] mr-3 mt-1" />
-                  <span>Get personalized recommendations based on your specific needs</span>
+                  <span className="text-gray-700">Get personalized recommendations based on your specific needs</span>
                 </li>
                 <li className="flex items-start">
                   <FiCheck className="text-[#1b4d70] mr-3 mt-1" />
-                  <span>Receive guidance on care types and available options</span>
+                  <span className="text-gray-700">Receive guidance on care types and available options</span>
                 </li>
                 <li className="flex items-start">
                   <FiCheck className="text-[#1b4d70] mr-3 mt-1" />
-                  <span>Learn about financial assistance and payment options</span>
+                  <span className="text-gray-700">Learn about financial assistance and payment options</span>
                 </li>
                 <li className="flex items-start">
                   <FiCheck className="text-[#1b4d70] mr-3 mt-1" />
-                  <span>Get help scheduling tours with communities</span>
+                  <span className="text-gray-700">Get help scheduling tours with communities</span>
                 </li>
                 <li className="flex items-start">
                   <FiCheck className="text-[#1b4d70] mr-3 mt-1" />
-                  <span>Access our network of trusted senior living communities</span>
+                  <span className="text-gray-700">Access our network of trusted senior living communities</span>
                 </li>
               </ul>
             </div>
