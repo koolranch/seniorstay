@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { notFound } from "next/navigation";
 import { communities, Community } from "@/lib/data/communities";
 import { getCommunityPathFromObject } from "@/lib/utils/formatSlug";
@@ -11,8 +13,7 @@ import path from 'path';
 import fs from 'fs';
 
 // Optimize for static generation, error on unknown paths
-// export const dynamic = 'force-dynamic'; // Removed
-export const dynamic = 'error'; 
+export const dynamicParams = false; // Tell Next.js not to generate pages for paths not in generateStaticParams
 // Consider adding revalidate if ISR is desired later:
 // export const revalidate = 3600; // Revalidate every hour
 
@@ -522,7 +523,10 @@ export default async function Page({ params }: { params: PageParams | undefined 
   const { city, slug } = params;
 
   // Fetch data using the helper function
-  const communityData = await fetchCommunityData(city, slug);
+  const fetchedData = await fetchCommunityData(city, slug);
+
+  // *** Re-assign to a component-scoped const to prevent potential mutation issues ***
+  const communityData = fetchedData;
 
   // *** ADD LOGGING: Inspect the raw data received ***
   console.log(`[${city}/${slug}] Received communityData from fetch:`, JSON.stringify(communityData, null, 2));
@@ -538,37 +542,26 @@ export default async function Page({ params }: { params: PageParams | undefined 
     );
   }
 
-  // *** ADD LOGGING: Inspect the city property before use ***
-  console.log(`[${city}/${slug}] Checking communityData.city before creating safeData:`, communityData?.city);
-
-  // Add safety checks to ensure required fields exist before rendering
-  const safeData = {
-    name: communityData?.name || "Community Information",
-    type: communityData?.type || "Senior Living Community",
-    description: communityData?.description || "Information about this community is currently unavailable.",
-    address: communityData?.address || "Address information unavailable",
-    amenities: Array.isArray(communityData?.amenities) ? communityData.amenities : [],
-    rating: communityData?.rating,
-    reviewCount: communityData?.reviewCount,
-    cityName: communityData?.city || "Fallback City Name"
-  };
+  // *** ADD LOGGING: Check type and value of communityData itself ***
+  console.log(`[${city}/${slug}] typeof communityData before safeData creation:`, typeof communityData);
+  console.log(`[${city}/${slug}] Value of communityData before safeData creation:`, JSON.stringify(communityData, null, 2));
 
   // Render the content if data is valid
-  console.log(`[${city}/${slug}] Rendering CommunityContent with data for: ${safeData.name}`);
+  console.log(`[${city}/${slug}] Rendering CommunityContent with data for: ${communityData.name}`);
   return (
     <div className="bg-gray-50 min-h-screen">
       <div className="bg-white border-b border-neutral-200 py-8">
         <div className="container mx-auto px-6 md:px-10 lg:px-20">
-          {/* Pass sanitized data to the content component */}
+          {/* Pass sanitized data directly to the content component */}
           <CommunityContent 
-            name={safeData.name}
-            type={safeData.type}
-            description={safeData.description}
-            address={safeData.address}
-            amenities={safeData.amenities}
-            rating={safeData.rating}
-            reviewCount={safeData.reviewCount}
-            cityName={safeData.cityName} 
+            name={communityData.name || "Community Information"}
+            type={communityData.type || "Senior Living Community"}
+            description={communityData.description || "Information about this community is currently unavailable."}
+            address={communityData.address || "Address information unavailable"}
+            amenities={Array.isArray(communityData.amenities) ? communityData.amenities : []}
+            rating={communityData.rating}
+            reviewCount={communityData.reviewCount}
+            cityName={communityData.city || "Fallback City Name"} 
           />
         </div>
       </div>

@@ -1,17 +1,45 @@
 import type { Metadata } from "next";
-import { communities } from '@/lib/data/communities';
+// import { communities } from '@/lib/data/communities';
 import { formatSlug, formatLocation } from '@/lib/utils/formatSlug';
 import CommunityClient from './CommunityClient';
 import Script from 'next/script';
 import { notFound } from "next/navigation";
 import Link from 'next/link';
+import { PrismaClient } from '@prisma/client';
+// Import the generated Community type
+import type { Community } from '@prisma/client'; 
+
+const prisma = new PrismaClient();
 
 export async function generateStaticParams() {
-  return communities.map((community) => ({
-    state: community.state.toLowerCase(),
-    city: community.city.toLowerCase(),
-    slug: community.slug
-  }));
+  console.log('generateStaticParams: Fetching Ohio communities...');
+  try {
+    const communities = await prisma.community.findMany({
+      where: {
+        state: 'OH',
+      },
+      select: {
+        slug: true,
+        city: true,
+        state: true,
+      },
+    });
+
+    console.log(`generateStaticParams: Found ${communities.length} Ohio communities.`);
+
+    const params = communities.map((community) => ({
+      state: community.state.toLowerCase(),
+      city: community.city.toLowerCase(),
+      slug: community.slug,
+    }));
+
+    return params;
+  } catch (error) {
+    console.error('generateStaticParams: Failed to fetch communities from database:', error);
+    throw new Error('Failed to fetch community data for static paths. Build failed.');
+  } finally {
+    await prisma.$disconnect();
+  }
 }
 
 interface PageParams {
@@ -26,11 +54,12 @@ interface Props {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  let resolvedParams: PageParams;
+  let community: Community | null = null; // Initialize community as potentially null
   try {
-    const resolvedParams = await params;
+    resolvedParams = await params; // Resolve the promise
     console.log('Metadata: Looking for community with params:', JSON.stringify(resolvedParams, null, 2));
-    
-    // Validate params
+
     if (!resolvedParams || !resolvedParams.state || !resolvedParams.city || !resolvedParams.slug) {
       console.error("Metadata Error: Missing required route params:", JSON.stringify(resolvedParams, null, 2));
       return {
@@ -38,97 +67,64 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         description: "The requested senior living community could not be found.",
       };
     }
-    
-    const community = communities.find(
-      (c) =>
-        c.state.toLowerCase() === resolvedParams.state.toLowerCase() &&
-        c.city.toLowerCase() === resolvedParams.city.toLowerCase() &&
-        c.slug === resolvedParams.slug
-    );
+
+    // Fetch the specific community using Prisma with the unique slug
+    community = await prisma.community.findUnique({
+      where: {
+        slug: resolvedParams.slug, // Use the unique slug field for lookup
+      },
+    });
 
     if (!community) {
-      console.error('Metadata Error: Community not found for params:', 
+      console.error('Metadata Error: Community not found for params:',
         `state=${resolvedParams.state}, city=${resolvedParams.city}, slug=${resolvedParams.slug}`);
-      return {
-        title: "Community Not Found | SeniorStay",
-        description: "The requested senior living community could not be found.",
-      };
+      // Use notFound() for App Router instead of returning metadata for a non-existent page
+      return notFound();
     }
 
     // Add safety checks for community properties
     if (!community.name || !community.city || !community.state) {
-      console.error('Metadata Error: Community is missing required properties:', 
-        JSON.stringify({
-          hasName: !!community.name,
-          hasCity: !!community.city, 
-          hasState: !!community.state
-        }, null, 2));
-    }
+       console.error('Metadata Error: Community is missing required properties:',
+         JSON.stringify({
+           hasName: !!community.name,
+           hasCity: !!community.city,
+           hasState: !!community.state
+         }, null, 2));
+     }
 
-    // Create a more SEO-friendly title and description with fallbacks
-    const name = community.name || "Senior Living Community";
-    const type = community.type || "Senior Living";
-    const city = community.city || "";
-    const state = community.state || "";
-    const services = (community.services || []).join(', ');
-    
-    const title = `${name} | ${type} in ${city}${city && state ? ', ' : ''}${state} | SeniorStay`;
-    const description = `Learn more about ${name}, offering ${services} in ${city}${city && state ? ', ' : ''}${state}. Schedule a tour or request pricing today.`;
-    const imageUrl = community.image || "";
+    // Access community.services (should exist now)
+    const services = community.services || "various services"; 
+
+    const title = `${community.name} | Senior Living in ${community.city}, ${community.state} | SeniorStay`;
+    const description = `Learn more about ${community.name}, offering ${services} in ${community.city}, ${community.state}. Schedule a tour or request pricing today.`;
+    const imageUrl = community.imageUrl || "";
     const canonicalUrl = `https://seniorstay.com/community/${resolvedParams.state}/${resolvedParams.city}/${resolvedParams.slug}`;
 
     // Generate structured data for rich search results with safe property access
     const structuredData = {
       "@context": "https://schema.org",
       "@type": "LocalBusiness",
-      "name": name,
-      "description": description,
+      "name": community.name || "",
+      "description": description, // Use generated description
       "image": imageUrl,
-      "url": canonicalUrl,
-      "telephone": "(216) 232-3354", 
+      "url": `https://seniorstay.com/community/${resolvedParams.state}/${resolvedParams.city}/${resolvedParams.slug}`,
+      "telephone": community.phone || "",
       "address": {
         "@type": "PostalAddress",
-        "streetAddress": community.address ? community.address.split(',')[0] : "",
-        "addressLocality": city,
-        "addressRegion": state,
-        "postalCode": community.address ? (community.address.match(/\d{5}/)?.[0] || "") : "",
+        "streetAddress": community.address || "",
+        "addressLocality": community.city || "",
+        "addressRegion": community.state || "",
+        "postalCode": community.zip || "",
         "addressCountry": "US"
       },
-      "geo": {
-        "@type": "GeoCoordinates",
-        "latitude": "", 
-        "longitude": "" 
-      },
-      "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": community.rating || 0,
-        "reviewCount": community.reviewCount || "10"
-      },
-      "amenityFeature": (community.amenities || []).map(amenity => ({
-        "@type": "LocationFeatureSpecification",
-        "name": amenity
-      })),
       "offers": {
         "@type": "Offer",
-        "category": (community.services || []).join(", ")
-      },
-      "openingHoursSpecification": {
-        "@type": "OpeningHoursSpecification",
-        "dayOfWeek": [
-          "Monday",
-          "Tuesday",
-          "Wednesday",
-          "Thursday",
-          "Friday",
-          "Saturday",
-          "Sunday"
-        ],
-        "opens": "00:00",
-        "closes": "23:59"
+        "category": services
       }
+      // Add other fields back if they exist in your schema (rating, amenities, etc.)
     };
 
-    console.log('Metadata: Successfully generated for community:', name);
+    console.log('Metadata: Successfully generated for community:', community.name);
 
     return {
       title,
@@ -141,11 +137,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
             url: imageUrl,
             width: 1200,
             height: 630,
-            alt: `${name} senior living community in ${city}${city && state ? ', ' : ''}${state}`
+            alt: `${community.name} senior living community in ${community.city}, ${community.state}`
           }
         ],
         type: 'website',
-        url: canonicalUrl,
+        url: `https://seniorstay.com/community/${resolvedParams.state}/${resolvedParams.city}/${resolvedParams.slug}`,
         siteName: 'SeniorStay'
       },
       twitter: {
@@ -155,102 +151,75 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         images: [imageUrl]
       },
       alternates: {
-        canonical: canonicalUrl
+        canonical: `https://seniorstay.com/community/${resolvedParams.state}/${resolvedParams.city}/${resolvedParams.slug}`
       }
     };
   } catch (error) {
     console.error("Metadata Fatal Error:", error);
     console.error("Error stack:", error instanceof Error ? error.stack : "No stack trace available");
-    return {
-      title: "Error Loading Community | SeniorStay",
-      description: "There was an error loading this community.",
-    };
+    // Propagate the error or return generic error metadata
+     return {
+       title: "Error Loading Community | SeniorStay",
+       description: "There was an error loading the metadata for this community.",
+     };
+  } finally {
+      if (prisma) { await prisma.$disconnect(); } // Disconnect Prisma
   }
 }
 
 export default async function Page(props: Props) {
+  let resolvedParams: PageParams;
+  let community: Community | null = null; // Initialize community
   try {
-    // Add more detailed logging for debugging - AVOID stringifying the whole props object which includes searchParams
-    const resolvedParams = await props.params;
+    resolvedParams = await props.params;
     console.log('Community Page: Starting render with params:', JSON.stringify(resolvedParams, null, 2));
-    
-    // const params = await props.params; // Already resolved above
-    // console.log('Community Page: Resolved params:', JSON.stringify(params, null, 2)); // Duplicate log
-    
-    // Validate params
+
     if (!resolvedParams || !resolvedParams.state || !resolvedParams.city || !resolvedParams.slug) {
       console.error("Community Page Error: Missing required route params:", JSON.stringify(resolvedParams, null, 2));
       return notFound();
     }
-    
-    // Try to find the community
-    console.log('Community Page: Looking for community with params:', 
-      `state=${resolvedParams.state}, city=${resolvedParams.city}, slug=${resolvedParams.slug}`);
-    
-    const community = communities.find(
-      (c) =>
-        c.state.toLowerCase() === resolvedParams.state.toLowerCase() &&
-        c.city.toLowerCase() === resolvedParams.city.toLowerCase() &&
-        c.slug === resolvedParams.slug
-    );
 
-    // Log whether community was found or not
-    if (community) {
-      console.log('Community Page: Found community:', community.name);
-    } else {
-      console.error('Community Page Error: Community not found for params:', 
+    console.log('Community Page: Looking for community with params:',
+      `state=${resolvedParams.state}, city=${resolvedParams.city}, slug=${resolvedParams.slug}`);
+
+    // Fetch the specific community using Prisma
+    community = await prisma.community.findUnique({
+       where: {
+         slug: resolvedParams.slug, // Use unique slug
+       },
+    });
+
+    if (!community) {
+      console.error('Community Page Error: Community not found for params:',
         `state=${resolvedParams.state}, city=${resolvedParams.city}, slug=${resolvedParams.slug}`);
       return notFound();
     }
 
-    // Ensure community has all required properties
-    if (!community.name || !community.city || !community.state || !community.services || !community.amenities) {
-      console.error('Community Page Error: Community is missing required properties:', 
-        JSON.stringify({
-          hasName: !!community.name,
-          hasCity: !!community.city, 
-          hasState: !!community.state,
-          hasServices: !!community.services,
-          hasAmenities: !!community.amenities
-        }, null, 2));
-      
-      // Continue with fallbacks instead of returning notFound()
-    }
-
     // Generate structured data with safe fallbacks for all properties
     const structuredData = {
-      "@context": "https://schema.org",
-      "@type": "LocalBusiness",
-      "name": community.name || "",
-      "description": `Learn more about ${community.name || "this community"}, offering ${(community.services || []).join(', ')} in ${community.city || ""}, ${community.state || ""}.`,
-      "image": community.image || "",
-      "url": `https://seniorstay.com/community/${resolvedParams.state}/${resolvedParams.city}/${resolvedParams.slug}`,
-      "telephone": "(216) 232-3354", 
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": community.address ? community.address.split(',')[0] : "",
-        "addressLocality": community.city || "",
-        "addressRegion": community.state || "",
-        "postalCode": community.address ? (community.address.match(/\d{5}/)?.[0] || "") : "",
-        "addressCountry": "US"
-      },
-      "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": community.rating || 0,
-        "reviewCount": community.reviewCount || "10"
-      },
-      "amenityFeature": (community.amenities || []).map(amenity => ({
-        "@type": "LocationFeatureSpecification",
-        "name": amenity
-      })),
-      "offers": {
-        "@type": "Offer",
-        "category": (community.services || []).join(", ")
-      }
+       "@context": "https://schema.org",
+       "@type": "LocalBusiness", 
+       "name": community.name || "",
+       "description": `Learn more about ${community.name || "this community"}, offering ${community.services || "various services"} in ${community.city || ""}, ${community.state || ""}.`,
+       "image": community.imageUrl || "",
+       "url": `https://seniorstay.com/community/${resolvedParams.state}/${resolvedParams.city}/${resolvedParams.slug}`,
+       "telephone": community.phone || "",
+       "address": {
+         "@type": "PostalAddress",
+         "streetAddress": community.address || "",
+         "addressLocality": community.city || "",
+         "addressRegion": community.state || "",
+         "postalCode": community.zip || "",
+         "addressCountry": "US"
+       },
+       "offers": {
+         "@type": "Offer",
+         "category": community.services || ""
+       }
     };
 
     console.log('Community Page: Rendering community client with valid data');
-    
+
     return (
       <>
         <Script
@@ -258,15 +227,15 @@ export default async function Page(props: Props) {
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
         />
-        <CommunityClient params={resolvedParams} communities={communities} />
+        {/* Pass the fetched community data correctly */}
+        <CommunityClient community={community} /> 
       </>
     );
   } catch (error) {
-    // Log the full error details for debugging
     console.error("Community Page Fatal Error:", error);
     console.error("Error stack:", error instanceof Error ? error.stack : "No stack trace available");
-    
-    // For unexpected errors, still use notFound() to avoid leaking error details to the client
-    return notFound();
+    return notFound(); // Use notFound for errors during page generation
+  } finally {
+      if (prisma) { await prisma.$disconnect(); } // Disconnect Prisma
   }
 } 
