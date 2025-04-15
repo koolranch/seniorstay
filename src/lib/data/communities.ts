@@ -1,3 +1,7 @@
+import { PrismaClient } from '@prisma/client';
+import fs from 'fs';
+import path from 'path';
+
 // Helper function to generate slug from name
 function generateSlug(name: string, city: string, state: string): string {
   return `${name}-${city}-${state}`
@@ -104,6 +108,172 @@ export interface Community {
   description: string;
   image: string;
   phone?: string;
+}
+
+// Define the shape of the community data we'll work with internally
+// Use string for ID as it comes from Prisma
+interface InternalCommunity {
+  id: string; // Changed to string to match Prisma
+  name: string;
+  city: string;
+  slug: string;
+  state: string;
+  type: string; // Type will be derived or defaulted
+  services?: string[]; // Keep services if needed later
+}
+
+// Function to load fallback communities from JSON file
+// This still uses the old structure, so we need to adapt its output
+function loadFallbackCommunities(): InternalCommunity[] {
+  try {
+    const filePath = path.join(process.cwd(), 'src', 'lib', 'fallbackCommunities.json');
+    if (!fs.existsSync(filePath)) {
+      console.error('Fallback communities file not found:', filePath);
+      return [];
+    }
+    const fileContents = fs.readFileSync(filePath, 'utf8');
+    const data = JSON.parse(fileContents);
+
+    if (!Array.isArray(data)) {
+      console.error('Fallback communities data is not an array.');
+      return [];
+    }
+
+    // Adapt the JSON data (assuming id is number) to InternalCommunity
+    return data.map((item: any) => {
+      const fallbackId = item.id ? String(item.id) : `fallback-${Math.random().toString(36).substring(7)}`; // Convert or generate ID
+      const fallbackType = item.type || "Senior Living"; // Default type if missing
+      return {
+        id: fallbackId,
+        name: item.name || "Unknown Community",
+        city: item.city || "Unknown City",
+        slug: item.slug || generateSlug(item.name || "Unknown", item.city || "Unknown", item.state || "XX"),
+        state: item.state || "Unknown State",
+        type: fallbackType, // Use provided type or default
+      };
+    });
+  } catch (error) {
+    console.error('Failed to load or parse fallback communities from JSON:', error);
+    return [];
+  }
+}
+
+// Initialize Prisma Client
+const prisma = new PrismaClient();
+
+// Fetches all communities, trying the database first, then fallback JSON
+export async function getAllCommunities(): Promise<InternalCommunity[]> {
+  try {
+    const dbCommunities = await prisma.community.findMany({
+      select: {
+        id: true, // id is string in schema
+        name: true,
+        city: true,
+        state: true,
+        slug: true,
+        services: true, // Fetch services string instead of type
+      },
+    });
+
+    if (dbCommunities && dbCommunities.length > 0) {
+      console.log(`Fetched ${dbCommunities.length} communities from database.`);
+      // Map Prisma result to InternalCommunity structure
+      return dbCommunities.map(dbCommunity => {
+          // Parse services string into an array
+          const servicesArray = dbCommunity.services ? parseServices(dbCommunity.services) : [];
+          // Determine type based on services
+          const derivedType = determineType(servicesArray); // Use existing helper
+
+          return {
+              id: dbCommunity.id, // Already a string
+              name: dbCommunity.name,
+              city: dbCommunity.city,
+              state: dbCommunity.state, // Assuming state is stored correctly (e.g., "OH")
+              slug: dbCommunity.slug,
+              type: derivedType, // Use derived type
+              services: servicesArray, // Optionally keep the parsed services
+          };
+      });
+    } else {
+      console.log("No communities found in database, attempting to load from fallback JSON.");
+      return loadFallbackCommunities();
+    }
+  } catch (error) {
+    console.error("Error fetching communities from database:", error);
+    console.log("Attempting to load communities from fallback JSON due to database error.");
+    return loadFallbackCommunities();
+  } finally {
+    await prisma.$disconnect().catch(e => console.error("Failed to disconnect Prisma client:", e));
+  }
+}
+
+// Generates SEO content for all communities
+export async function generateSEOContentForCommunities() {
+  const communities = await getAllCommunities(); // Now returns Promise<InternalCommunity[]>
+
+  if (!communities || communities.length === 0) {
+      console.warn("No communities found to generate SEO content.");
+      return [];
+  }
+
+  const seoData = communities.map((community) => {
+    // Use fields from InternalCommunity
+    const name = community.name; // Already defaulted if necessary in getAllCommunities/loadFallback
+    const city = community.city;
+    const state = community.state;
+    const type = community.type; // Now correctly derived or defaulted
+    const slug = community.slug;
+
+    const cityState = `${city}, ${state}`;
+
+    // 1. SEO Title Tag (under 60 characters ideally)
+    let titleTag = `${name} - ${type} in ${cityState}`;
+    if (titleTag.length > 60) {
+        // Attempt to shorten if too long
+        titleTag = `${name}, ${cityState} | ${type}`;
+        if (titleTag.length > 60) {
+             // Further shorten if still needed
+             titleTag = `${name}, ${cityState}`;
+        }
+        // Log warning if still too long after shortening
+        if (titleTag.length > 60) {
+            console.warn(`Generated title tag for ${slug} exceeds 60 characters: "${titleTag}"`);
+        }
+    }
+
+    // 2. Meta Description (around 150–160 characters)
+    let metaDescription = `${name} offers compassionate ${type.toLowerCase()} services in ${city}. Schedule a tour or request pricing for quality care.`;
+    // Ensure meta description isn't excessively long or short
+    if (metaDescription.length > 160) {
+        metaDescription = metaDescription.substring(0, 157) + '...'; // Truncate cleanly
+        console.warn(`Generated meta description for ${slug} truncated to 160 characters.`);
+    } else if (metaDescription.length < 100) {
+        // Add a bit more detail if too short
+        metaDescription = `${name} in ${cityState} offers quality ${type.toLowerCase()} care options. Discover our services and amenities. Schedule a tour today!`;
+        // Re-check length after modification
+        if (metaDescription.length > 160) {
+            metaDescription = metaDescription.substring(0, 157) + '...';
+        }
+    }
+
+    // 3. H1 (main page heading)
+    const h1 = `${name}`;
+
+    // 4. H2 (supporting heading, local SEO benefit)
+    const h2 = `${type} Community in ${cityState}`;
+
+    return {
+      slug: slug,
+      seo: {
+        titleTag,
+        metaDescription,
+        h1,
+        h2,
+      },
+    };
+  });
+
+  return seoData;
 }
 
 export const communities: Community[] = [
