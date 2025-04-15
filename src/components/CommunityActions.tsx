@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import ModalForm from '@/components/ModalForm'; // Assuming ModalForm is correctly located
+import { Calendar, DollarSign } from 'lucide-react';
 
 interface CommunityActionsProps {
   communityName: string;
@@ -18,17 +19,16 @@ export default function CommunityActions({ communityName }: CommunityActionsProp
       <div className="flex flex-col sm:flex-row gap-4 justify-center">
         <button
           onClick={() => setIsPricingModalOpen(true)}
-          className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out"
-          // Use button-primary if defined and preferred
-          // className="button-primary"
+          className="bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold text-sm md:text-base py-2 px-4 rounded-lg shadow-sm transition-all duration-200 w-full sm:w-auto inline-flex items-center justify-center"
         >
+          <DollarSign className="w-4 h-4 inline-block mr-1 -mt-0.5" />
           Get Pricing
         </button>
         <button
           onClick={() => setIsTourModalOpen(true)}
-          className="inline-flex items-center justify-center px-6 py-3 border border-gray-300 text-base font-medium rounded-md shadow-sm text-indigo-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out"
-          // Use button-secondary or similar if defined
+          className="bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold text-sm md:text-base py-2 px-4 rounded-lg shadow-sm transition-all duration-200 w-full sm:w-auto inline-flex items-center justify-center"
         >
+          <Calendar className="w-4 h-4 inline-block mr-1 -mt-0.5" />
           Schedule a Tour
         </button>
       </div>

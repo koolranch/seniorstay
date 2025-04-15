@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { FiMapPin, FiMail, FiStar, FiCheck, FiPhone, FiCalendar } from "react-icons/fi";
+import { Calendar } from 'lucide-react';
 // Import Community type from Prisma Client
 import type { Community } from '@prisma/client';
 // Remove old import
@@ -47,7 +48,7 @@ export default function CommunityClient({ community }: CommunityClientProps) {
               </p>
               <Link
                 href="/community" // Link to a general community listing page
-                className="mt-8 inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700"
+                className="bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold text-sm md:text-base py-2 px-4 rounded-lg shadow-sm transition-all duration-200 w-full sm:w-auto inline-flex items-center justify-center mt-8"
               >
                 Back to Communities
               </Link>
@@ -202,10 +203,10 @@ export default function CommunityClient({ community }: CommunityClientProps) {
                 We'd love to show you around our community. Schedule a tour today to see all that {name} has to offer.
               </p>
               <button
-                className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold flex items-center"
+                className="bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold text-sm md:text-base py-2 px-4 rounded-lg shadow-sm transition-all duration-200 w-full sm:w-auto inline-flex items-center justify-center"
                 aria-label={`Schedule a tour at ${name}`}
               >
-                <FiCalendar className="mr-2" />
+                <Calendar className="w-4 h-4 inline-block mr-1 -mt-0.5" />
                 Schedule a Tour
               </button>
             </div>
@@ -227,7 +228,7 @@ export default function CommunityClient({ community }: CommunityClientProps) {
             </p>
             <Link
               href="/community" // Link to a general community listing page
-              className="mt-8 inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700"
+              className="bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold text-sm md:text-base py-2 px-4 rounded-lg shadow-sm transition-all duration-200 w-full sm:w-auto inline-flex items-center justify-center mt-8"
             >
               Back to Communities
             </Link>

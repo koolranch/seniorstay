@@ -2,7 +2,8 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { FiArrowLeft, FiStar, FiCheck, FiCalendar, FiDollarSign } from 'react-icons/fi';
+import { FiArrowLeft, FiStar, FiCheck } from 'react-icons/fi';
+import { Calendar, DollarSign } from 'lucide-react';
 import { getCityPath } from '@/lib/utils/formatSlug';
 
 interface CommunityCardProps {
@@ -133,16 +134,16 @@ export default function CommunityCard({
           <div className="flex gap-3 mt-6">
             <button
               onClick={handleScheduleTour}
-              className="flex-1 bg-[#1b4d70] text-white py-2 px-4 rounded-md font-medium hover:bg-[#2F5061] transition-colors flex items-center justify-center"
+              className="bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold text-sm md:text-base py-2 px-4 rounded-lg shadow-sm transition-all duration-200 w-full sm:w-auto inline-flex items-center justify-center"
             >
-              <FiCalendar className="mr-2" />
+              <Calendar className="w-4 h-4 inline-block mr-1 -mt-0.5" />
               Schedule Tour
             </button>
             <button
               onClick={handleRequestPricing}
-              className="flex-1 bg-white border border-[#1b4d70] text-[#1b4d70] py-2 px-4 rounded-md font-medium hover:bg-gray-50 transition-colors flex items-center justify-center"
+              className="bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold text-sm md:text-base py-2 px-4 rounded-lg shadow-sm transition-all duration-200 w-full sm:w-auto inline-flex items-center justify-center"
             >
-              <FiDollarSign className="mr-2" />
+              <DollarSign className="w-4 h-4 inline-block mr-1 -mt-0.5" />
               Get Pricing
             </button>
           </div>

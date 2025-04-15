@@ -8,6 +8,7 @@ import { useComparison } from '@/context/ComparisonContext';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import FavoriteButton from './FavoriteButton';
 import { getCommunityPath, getCityPath } from '@/lib/utils/formatSlug';
+import { Calendar, DollarSign } from 'lucide-react';
 
 interface ProviderCardProps {
   id: number;
@@ -190,15 +191,17 @@ const ProviderCard = ({
 
       <div className="mt-auto flex gap-2">
         <button
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition w-full"
-          onClick={() => window.open('https://formspree.io/f/xnnpaply', '_blank')}
+          className="bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold text-sm md:text-base py-2 px-4 rounded-lg shadow-sm transition-all duration-200 w-full sm:w-auto inline-flex items-center justify-center"
+          onClick={handleScheduleTour}
         >
+          <Calendar className="w-4 h-4 inline-block mr-1 -mt-0.5" />
           Schedule Tour
         </button>
         <button
-          className="border border-blue-600 text-blue-600 px-4 py-2 rounded hover:bg-blue-50 transition w-full"
+          className="bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold text-sm md:text-base py-2 px-4 rounded-lg shadow-sm transition-all duration-200 w-full sm:w-auto inline-flex items-center justify-center"
           onClick={() => window.open('https://formspree.io/f/xnnpaply', '_blank')}
         >
+          <DollarSign className="w-4 h-4 inline-block mr-1 -mt-0.5" />
           Get Pricing
         </button>
       </div>
