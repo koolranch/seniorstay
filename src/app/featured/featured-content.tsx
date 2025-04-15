@@ -3,7 +3,7 @@
 import { useState, useMemo } from "react";
 import Link from "next/link";
 import { FiArrowLeft } from "react-icons/fi";
-import { communities } from "@/lib/data/communities";
+import { communities } from "@/lib/data/staticCommunities";
 import ProviderCard from "@/components/ProviderCard";
 
 export function FeaturedPageContent() {

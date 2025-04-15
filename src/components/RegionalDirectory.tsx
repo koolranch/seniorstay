@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { FiMapPin } from 'react-icons/fi';
-import { communities } from '@/lib/data/communities';
+import { communities } from '@/lib/data/staticCommunities';
 
 type RegionalDirectoryProps = {
   className?: string;

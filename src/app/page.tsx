@@ -10,7 +10,7 @@ import TestimonialSlider from "@/components/TestimonialSlider";
 import ReferralCTA from "@/components/ReferralCTA";
 import TourScheduler from "@/components/TourScheduler";
 import { FiX } from "react-icons/fi";
-import { communities } from "@/lib/data/communities";
+import { communities } from "@/lib/data/staticCommunities";
 import CategoryPillBar from "@/components/CategoryPillBar";
 import CommunityGrid from "@/components/CommunityGrid";
 import TourModal from "@/components/TourModal";

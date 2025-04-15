@@ -1,6 +1,6 @@
 'use client';
 
-import { communities } from "@/lib/data/communities";
+import { communities } from "@/lib/data/staticCommunities";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 

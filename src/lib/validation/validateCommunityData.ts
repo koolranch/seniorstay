@@ -1,4 +1,4 @@
-import { communities, Community } from "@/lib/data/communities";
+import { communities, Community } from "@/lib/data/staticCommunities";
 import { prisma } from "@/lib/prisma";
 
 /**

@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { communities } from '@/lib/data/communities';
+import { communities } from '@/lib/data/staticCommunities';
 import { getCityPath, getCommunityPath } from '@/lib/utils/formatSlug';
 
 // Base URL for the site

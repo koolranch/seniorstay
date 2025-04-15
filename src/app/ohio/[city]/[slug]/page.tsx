@@ -1,7 +1,8 @@
 export const dynamic = 'force-dynamic';
 
 import { notFound } from "next/navigation";
-import { communities, Community, generateSEOContentForCommunities, getAllCommunities as getAllCommunitiesData } from "@/lib/data/communities";
+import { generateSEOContentForCommunities, getAllCommunities as getAllCommunitiesData } from "@/lib/data/communities";
+import { communities, Community } from "@/lib/data/staticCommunities";
 import { getCommunityPathFromObject } from "@/lib/utils/formatSlug";
 import CommunityContent from "./CommunityContent";
 import { prisma } from "@/lib/prisma";

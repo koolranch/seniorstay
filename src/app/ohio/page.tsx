@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import Link from "next/link";
-import { communities } from "@/lib/data/communities";
+import { communities } from "@/lib/data/staticCommunities";
 import { FiMapPin, FiArrowRight } from "react-icons/fi";
 import { slugify, getCityPath } from "@/lib/utils/formatSlug";
 

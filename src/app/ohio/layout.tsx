@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import Link from "next/link";
-import { communities } from "@/lib/data/communities";
+import { communities } from "@/lib/data/staticCommunities";
 
 export const metadata: Metadata = {
   title: "Senior Living in Ohio | SeniorStay",

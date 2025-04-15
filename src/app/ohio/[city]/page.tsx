@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { communities } from "@/lib/data/communities";
+import { communities } from "@/lib/data/staticCommunities";
 import ProviderCard from "@/components/ProviderCard";
 import Link from "next/link";
 import { FiArrowLeft } from "react-icons/fi";

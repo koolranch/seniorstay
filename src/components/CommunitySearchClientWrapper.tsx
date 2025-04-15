@@ -3,8 +3,7 @@
 import { useState, useMemo } from "react";
 import { useSearchParams } from "next/navigation";
 import { FiSearch, FiGrid, FiList, FiX } from "react-icons/fi";
-import { communities } from '@/lib/data/communities';
-import type { Community } from '@/lib/data/communities';
+import { communities, Community } from '@/lib/data/staticCommunities';
 import ProviderCard from "@/components/ProviderCard";
 import TourScheduler from "@/components/TourScheduler";
 import PricingRequest from "@/components/PricingRequest";
