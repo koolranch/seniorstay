@@ -165,10 +165,10 @@ const ProviderCard = ({
   );
 
   return (
-    <article className={`flex flex-col justify-between h-full p-4 shadow rounded-md min-h-[380px] ${className} ${
+    <article className={`flex flex-col justify-between h-full p-4 shadow rounded-md min-h-[380px] ${className} transition-all duration-200 hover:shadow-lg hover:-translate-y-1 hover:border-blue-300 ${
       !hasRequiredData ? 'cursor-not-allowed bg-white' : 
-      rating >= 4.8 ? 'border border-yellow-300 bg-yellow-50 hover:ring-2 hover:ring-yellow-300 transition-all' : 
-      'bg-white hover:ring-2 hover:ring-primary transition-all'
+      rating >= 4.8 ? 'border border-yellow-300 bg-yellow-50 hover:ring-2 hover:ring-yellow-300' : 
+      'bg-white border border-gray-200 hover:ring-2 hover:ring-primary'
     }`}>
       <div>
         {hasRequiredData ? (
