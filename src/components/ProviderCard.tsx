@@ -15,7 +15,7 @@ interface ProviderCardProps {
   slug?: string;
   name: string;
   type: string;
-  image: string;
+  imageUrl: string;
   rating: number;
   reviewCount?: number;
   city?: string;
@@ -35,7 +35,7 @@ const ProviderCard = ({
   slug,
   name,
   type,
-  image,
+  imageUrl,
   rating,
   reviewCount = 0,
   city,
@@ -82,7 +82,7 @@ const ProviderCard = ({
     <>
       <div className="relative aspect-[16/10] w-full rounded-xl overflow-hidden mb-4">
         <Image
-          src={image}
+          src={imageUrl}
           alt={`Front exterior of ${name} senior living community in ${city || 'Unknown City'}, ${state || 'Unknown State'}`}
           fill
           sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"

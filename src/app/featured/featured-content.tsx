@@ -63,7 +63,7 @@ export function FeaturedPageContent() {
                   city={community.city}
                   state={community.state}
                   type={community.type}
-                  image={community.image}
+                  imageUrl={community.image}
                   rating={community.rating}
                   reviewCount={community.reviewCount}
                   amenities={community.services}
