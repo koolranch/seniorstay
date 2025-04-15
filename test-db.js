@@ -1,0 +1,1 @@
+const { PrismaClient } = require("@prisma/client"); const prisma = new PrismaClient(); async function test() { try { const count = await prisma.community.count(); console.log(`Successfully connected to database! Found ${count} communities.`); } catch (e) { console.error("Error connecting to database:", e); } finally { await prisma.$disconnect(); } } test();
