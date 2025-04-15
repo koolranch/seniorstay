@@ -6,6 +6,7 @@ import { AuthProvider } from "@/context/AuthContext";
 import ClientHeader from "@/components/ClientHeader";
 import ClientFooter from "@/components/ClientFooter";
 import ClientBody from "./ClientBody";
+import { Analytics } from "@vercel/analytics/react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -33,6 +34,7 @@ export default function RootLayout({
             <ClientFooter />
           </ComparisonProvider>
         </AuthProvider>
+        <Analytics />
       </body>
     </html>
   );
