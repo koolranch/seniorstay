@@ -103,7 +103,7 @@ const ProviderCard = ({
         
         {rating >= 4.8 && (
           <div className="absolute top-3 left-3 bg-yellow-200 px-2 py-1 rounded-md text-xs font-semibold text-yellow-800 shadow-sm flex items-center">
-            <FiStar className="text-yellow-600 mr-1" size={12} />
+            <FiStar className="text-yellow-500 mr-1 drop-shadow-sm" size={12} />
             Featured
           </div>
         )}
@@ -113,9 +113,9 @@ const ProviderCard = ({
         <div className="flex justify-between items-start">
           <h3 className="font-semibold text-lg text-[#1b4d70] line-clamp-2">{name}</h3>
           {rating > 0 && (
-            <div className="flex items-center bg-[#f1f6f0] px-2 py-1 rounded-md text-sm">
-              <FiStar className="text-yellow-400 mr-1 drop-shadow-sm" />
-              <span className="font-semibold">{rating.toFixed(1)}</span>
+            <div className="flex items-center bg-[#f1f6f0] px-2 py-1 rounded-md text-sm shadow-sm">
+              <FiStar className="text-yellow-500 mr-1 drop-shadow-sm" />
+              <span className="font-semibold" aria-label={`Rated ${rating.toFixed(1)} out of 5`}>{rating.toFixed(1)}</span>
               {reviewCount > 0 && (
                 <span className="text-gray-500 ml-1">({reviewCount})</span>
               )}
