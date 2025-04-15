@@ -18,6 +18,9 @@ import TourModal from "@/components/TourModal";
 export default function HomePage() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
+  // Step 2: Log community data for debugging
+  console.log("Homepage Communities:", communities.map(c => ({ id: c.id, name: c.name, city: c.city, slug: c.slug })));
+
   return (
     <main>
       <HeroBanner />

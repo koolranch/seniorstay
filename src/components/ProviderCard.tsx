@@ -116,6 +116,10 @@ const ProviderCard = ({
           )}
         </div>
 
+        {!hasRequiredData && (
+          <p className="text-red-500 text-xs mt-1">⚠ Missing required data (city/slug)</p>
+        )}
+
         <div className="flex items-center text-gray-600 text-sm">
           <FiMapPin className="mr-1 text-[#1b4d70]" />
           <span>{city || 'N/A'}, {state || 'N/A'}</span>
@@ -154,7 +158,7 @@ const ProviderCard = ({
   );
 
   return (
-    <article className={`flex flex-col justify-between h-full p-4 bg-white shadow rounded-md min-h-[380px] ${className} ${!hasRequiredData ? 'opacity-60 cursor-not-allowed' : 'hover:ring-2 hover:ring-primary transition-all'}`}>
+    <article className={`flex flex-col justify-between h-full p-4 bg-white shadow rounded-md min-h-[380px] ${className} ${!hasRequiredData ? 'cursor-not-allowed' : 'hover:ring-2 hover:ring-primary transition-all'}`}>
       <div>
         {hasRequiredData ? (
           <Link
