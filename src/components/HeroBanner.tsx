@@ -23,43 +23,46 @@ const HeroBanner = ({
   };
   
   return (
-    <div 
-      className="relative w-full min-h-[600px] flex items-center justify-center"
-      style={{ 
-        backgroundImage: "url('/images/gradient-header.png')", 
-        backgroundSize: 'cover', 
-        backgroundPosition: 'center' 
-      }}
-    >
-      {/* Content */}
-      <div className="relative z-10 container mx-auto px-4 py-20 md:py-32 flex flex-col justify-center items-center text-center">
-        <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 max-w-3xl">
+    <section className="relative w-full h-[400px] md:h-[500px] lg:h-[600px] overflow-hidden">
+      <Image
+        src="/images/hero-banner.png"
+        alt="Senior Living Search Banner"
+        fill
+        priority
+        className="object-cover"
+      />
+
+      {/* Content overlay */}
+      <div className="absolute inset-0 flex flex-col justify-center items-center text-center px-4">
+        <h1 className="text-3xl md:text-4xl font-bold text-gray-800 drop-shadow-md">
           {title}
         </h1>
-        <p className="text-lg md:text-xl text-white/90 mb-8 max-w-2xl">
+        <p className="mt-2 text-gray-600 max-w-xl drop-shadow-sm">
           {subtitle}
         </p>
-
+        
         {/* Search bar */}
-        <form onSubmit={handleSearch} className="w-full max-w-2xl bg-white rounded-full shadow-lg p-2 flex items-center">
-          <div className="flex-1 flex items-center pl-4">
-            <FiMapPin className="text-[#1b4d70] mr-2" />
-            <input
-              type="text"
-              placeholder="Enter city, state, or zip code"
-              className="w-full p-2 focus:outline-none text-[#333333]"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </div>
-          <button 
-            type="submit"
-            className="bg-[#F5A623] text-[#1b4d70] font-medium rounded-full py-3 px-6 md:px-8 flex items-center hover:bg-[#FFC65C] transition"
-          >
-            <FiSearch className="mr-2" />
-            Search
-          </button>
-        </form>
+        <div className="mt-6 w-full max-w-xl">
+          <form onSubmit={handleSearch} className="w-full max-w-2xl bg-white rounded-full shadow-lg p-2 flex items-center">
+            <div className="flex-1 flex items-center pl-4">
+              <FiMapPin className="text-[#1b4d70] mr-2" />
+              <input
+                type="text"
+                placeholder="Enter city, state, or zip code"
+                className="w-full p-2 focus:outline-none text-[#333333]"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
+            <button 
+              type="submit"
+              className="bg-[#F5A623] text-[#1b4d70] font-medium rounded-full py-3 px-6 md:px-8 flex items-center hover:bg-[#FFC65C] transition"
+            >
+              <FiSearch className="mr-2" />
+              Search
+            </button>
+          </form>
+        </div>
 
         {/* Additional CTAs */}
         <div className="flex flex-col sm:flex-row gap-4 mt-6">
@@ -77,7 +80,7 @@ const HeroBanner = ({
           </Link>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 
