@@ -7,6 +7,7 @@ import ClientHeader from "@/components/ClientHeader";
 import ClientFooter from "@/components/ClientFooter";
 import ClientBody from "./ClientBody";
 import { Analytics } from "@vercel/analytics/react";
+import Script from 'next/script';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,6 +23,25 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        <Script 
+          async 
+          src="https://www.googletagmanager.com/gtag/js?id=G-Q2CS0GMD3C" 
+          strategy="afterInteractive"
+        />
+        <Script 
+          id="google-analytics" 
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-Q2CS0GMD3C');
+            `,
+          }}
+        />
+      </head>
       <body className={inter.className}>
         <AuthProvider>
           <ComparisonProvider>
