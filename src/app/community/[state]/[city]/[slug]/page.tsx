@@ -8,8 +8,37 @@ import Link from 'next/link';
 import { PrismaClient } from '@prisma/client';
 // Import the generated Community type
 import type { Community } from '@prisma/client'; 
+import fs from 'fs';
+import path from 'path';
 
 const prisma = new PrismaClient();
+
+// Function to load fallback communities from JSON
+async function loadFallbackCommunitiesForStaticParams() {
+  try {
+    console.log('Falling back to static community data for generateStaticParams...');
+    const filePath = path.join(process.cwd(), 'src/lib/data/fallback-communities.json');
+    
+    if (!fs.existsSync(filePath)) {
+      console.error('Fallback communities file not found:', filePath);
+      return [];
+    }
+    
+    const fileContents = fs.readFileSync(filePath, 'utf8');
+    const communities = JSON.parse(fileContents);
+    
+    if (!Array.isArray(communities)) {
+      console.error('Fallback communities data is not an array.');
+      return [];
+    }
+    
+    console.log(`Loaded ${communities.length} communities from fallback JSON for static params.`);
+    return communities;
+  } catch (error) {
+    console.error('Failed to load fallback communities from JSON:', error);
+    return [];
+  }
+}
 
 export async function generateStaticParams() {
   console.log('generateStaticParams: Fetching Ohio communities...');
@@ -36,7 +65,24 @@ export async function generateStaticParams() {
     return params;
   } catch (error) {
     console.error('generateStaticParams: Failed to fetch communities from database:', error);
-    throw new Error('Failed to fetch community data for static paths. Build failed.');
+    
+    // Instead of throwing an error, use fallback data
+    const fallbackCommunities = await loadFallbackCommunitiesForStaticParams();
+    
+    // Filter for Ohio communities
+    const ohioCommunities = fallbackCommunities.filter(
+      (community) => community.state && community.state.toUpperCase() === 'OH'
+    );
+    
+    console.log(`Using ${ohioCommunities.length} fallback Ohio communities for static paths.`);
+    
+    const params = ohioCommunities.map((community) => ({
+      state: community.state.toLowerCase(),
+      city: community.city.toLowerCase(),
+      slug: community.slug,
+    }));
+    
+    return params;
   } finally {
     await prisma.$disconnect();
   }
