@@ -31,6 +31,7 @@ const nextConfig = {
       },
     ],
   },
+  staticPageGenerationTimeout: 180, // Increase timeout to 3 minutes for database connections
   typescript: {
     // !! WARN !!
     // Dangerously allow production builds to successfully complete even if
