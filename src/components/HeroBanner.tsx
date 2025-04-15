@@ -10,8 +10,8 @@ interface HeroBannerProps {
 }
 
 const HeroBanner = ({
-  title = "Find the Perfect Senior Living Community",
-  subtitle = "Discover and compare communities that meet your unique needs and preferences"
+  title,
+  subtitle
 }: HeroBannerProps) => {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
@@ -33,12 +33,17 @@ const HeroBanner = ({
       />
 
       {/* Content overlay */}
-      <div className="absolute inset-0 flex flex-col justify-center items-center text-center px-4 bg-black/10">
-        <h1 className="text-3xl md:text-4xl font-bold text-blue-800 drop-shadow-md">
-          {title}
+      <div className="absolute inset-0 flex flex-col justify-center items-center text-center px-4">
+        <h1 className="text-3xl md:text-5xl font-bold text-gray-900 text-center leading-tight">
+          <span className="inline-block border-b-4 border-blue-300 pb-1">
+            Discover Senior Living Options in Your Area
+          </span>
+          <br />
+          Backed by Local Experts
         </h1>
-        <p className="mt-2 text-blue-700 max-w-xl drop-shadow-sm font-medium">
-          {subtitle}
+
+        <p className="mt-4 text-lg text-gray-700 text-center max-w-2xl mx-auto">
+          We're not a national call center. We're a real, local team helping you explore and connect with nearby communities.
         </p>
         
         {/* Search bar */}
