@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { FiArrowLeft, FiStar, FiCheck } from 'react-icons/fi';
 import { Calendar, DollarSign } from 'lucide-react';
 import { getCityPath } from '@/lib/utils/formatSlug';
+import { sendGAEvent } from '@/lib/utils/gtag';
 
 interface CommunityCardProps {
   community: {
@@ -38,6 +39,7 @@ export default function CommunityCard({
   const handleScheduleTour = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+    sendGAEvent('schedule_tour_click', community.name);
     // Implementation would go here
     console.log('Schedule tour for:', community.name);
   };
@@ -46,6 +48,7 @@ export default function CommunityCard({
   const handleRequestPricing = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+    sendGAEvent('get_pricing_click', community.name);
     // Implementation would go here
     console.log('Request pricing for:', community.name);
   };

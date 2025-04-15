@@ -9,6 +9,7 @@ import { useMediaQuery } from '@/hooks/useMediaQuery';
 import FavoriteButton from './FavoriteButton';
 import { getCommunityPath, getCityPath } from '@/lib/utils/formatSlug';
 import { Calendar, DollarSign } from 'lucide-react';
+import { sendGAEvent } from '@/lib/utils/gtag';
 
 interface ProviderCardProps {
   id: number;
@@ -69,6 +70,7 @@ const ProviderCard = ({
   const handleScheduleTour = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+    sendGAEvent('schedule_tour_click', name);
     if (onScheduleTour) {
       onScheduleTour();
     }
@@ -77,8 +79,11 @@ const ProviderCard = ({
   const handleRequestPricing = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+    sendGAEvent('get_pricing_click', name);
     if (onRequestPricing) {
       onRequestPricing();
+    } else {
+      window.open('https://formspree.io/f/xnnpaply', '_blank');
     }
   };
 
@@ -203,7 +208,7 @@ const ProviderCard = ({
         </button>
         <button
           className="border border-blue-600 text-blue-600 hover:bg-blue-50 text-sm font-medium py-2 px-4 rounded-full transition inline-flex items-center justify-center"
-          onClick={() => window.open('https://formspree.io/f/xnnpaply', '_blank')}
+          onClick={handleRequestPricing}
         >
           <DollarSign className="w-4 h-4 inline-block mr-1 -mt-0.5" />
           Get Pricing
