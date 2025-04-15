@@ -107,8 +107,8 @@ const ProviderCard = ({
           <h3 className="font-semibold text-lg text-[#1b4d70] line-clamp-2">{name}</h3>
           {rating > 0 && (
             <div className="flex items-center bg-[#f1f6f0] px-2 py-1 rounded-md text-sm">
-              <FiStar className="text-yellow-400 mr-1" />
-              <span className="font-medium">{rating.toFixed(1)}</span>
+              <FiStar className="text-yellow-400 mr-1 drop-shadow-sm" />
+              <span className="font-semibold">{rating.toFixed(1)}</span>
               {reviewCount > 0 && (
                 <span className="text-gray-500 ml-1">({reviewCount})</span>
               )}

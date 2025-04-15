@@ -280,8 +280,8 @@ function SearchPageContent() {
                           <div className="flex justify-between">
                             <h3 className="font-medium text-gray-900">{`${community.city}, ${community.state}`}</h3>
                             <div className="flex items-center">
-                              <FiStar className="fill-current" size={14} />
-                              <span className="ml-1 text-sm">{community.rating}</span>
+                              <FiStar className="fill-yellow-400 text-yellow-400 drop-shadow-sm" size={16} />
+                              <span className="ml-1 font-semibold" aria-label={`Rated ${community.rating} out of 5`}>{community.rating}</span>
                             </div>
                           </div>
                           <p className="text-gray-500 text-sm">{community.name}</p>
@@ -338,8 +338,8 @@ function SearchPageContent() {
                           </div>
 
                           <div className="flex items-center">
-                            <FiStar className="fill-yellow-400 text-yellow-400" size={16} />
-                            <span className="ml-1 font-medium">{community.rating}</span>
+                            <FiStar className="fill-yellow-400 text-yellow-400 drop-shadow-sm" size={16} />
+                            <span className="ml-1 font-semibold" aria-label={`Rated ${community.rating} out of 5`}>{community.rating}</span>
                           </div>
                         </div>
 

@@ -75,8 +75,8 @@ export default function CommunityCard({
         {community.rating && community.rating > 0 && (
           <div className="flex items-center mb-4">
             <div className="flex items-center bg-[#f1f6f0] px-2 py-1 rounded-md text-sm">
-              <FiStar className="text-yellow-400 mr-1" />
-              <span className="font-medium">{community.rating.toFixed(1)}</span>
+              <FiStar className="text-yellow-400 mr-1 drop-shadow-sm" />
+              <span className="font-semibold" aria-label={`Rated ${community.rating.toFixed(1)} out of 5`}>{community.rating.toFixed(1)}</span>
               {community.reviewCount && community.reviewCount > 0 && (
                 <span className="text-gray-500 ml-1">({community.reviewCount} reviews)</span>
               )}

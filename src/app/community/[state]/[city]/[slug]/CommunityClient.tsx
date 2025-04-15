@@ -146,8 +146,8 @@ export default function CommunityClient({ community }: CommunityClientProps) {
               {/* Remove rating section if not applicable */}
               {/* <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="flex items-center">
-                  <FiStar className="h-6 w-6 text-yellow-400 mr-2" />
-                  <span className="text-gray-700">Rating: {rating}/5</span>
+                  <FiStar className="h-6 w-6 text-yellow-400 mr-2 drop-shadow-sm" />
+                  <span className="text-gray-700 font-semibold" aria-label={`Rated ${rating} out of 5`}>Rating: {rating}/5</span>
                 </div>
               </div> */}
             </div>
