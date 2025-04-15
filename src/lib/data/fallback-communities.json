@@ -2,15 +2,676 @@
   {
     "id": 1,
     "name": "Westwood Place",
-    "city": "Cleveland",
     "slug": "westwood-place-cleveland-oh",
-    "state": "OH"
+    "city": "Cleveland",
+    "state": "OH",
+    "services": "Assisted Living",
+    "type": "Assisted Living" 
   },
   {
     "id": 2,
     "name": "Summit Point",
-    "city": "Macedonia",
     "slug": "summit-point-macedonia-oh",
-    "state": "OH"
+    "city": "Macedonia",
+    "state": "OH",
+    "services": "Independent Living,Assisted Living,Memory Care",
+    "type": "Continuing Care"
+  },
+  {
+    "id": 3,
+    "name": "Mount Alverna Village",
+    "slug": "mount-alverna-village-parma-oh",
+    "city": "Parma",
+    "state": "OH",
+    "services": "Independent Living,Assisted Living,Memory Care,Skilled Nursing,Rehabilitation",
+    "type": "Continuing Care"
+  },
+  {
+    "id": 4,
+    "name": "Rose Senior Living at Beachwood",
+    "slug": "rose-senior-living-beachwood-oh",
+    "city": "Beachwood",
+    "state": "OH",
+    "services": "Independent Living,Assisted Living,Memory Care",
+    "type": "Continuing Care"
+  },
+  {
+    "id": 5,
+    "name": "Vitalia Rockside",
+    "slug": "vitalia-rockside-seven-hills-oh",
+    "city": "Seven Hills",
+    "state": "OH",
+    "services": "Independent Living,Assisted Living,Memory Care",
+    "type": "Continuing Care"
+  },
+  {
+    "id": 6,
+    "name": "StoryPoint Shaker Heights",
+    "slug": "storypoint-shaker-heights-shaker-heights-oh",
+    "city": "Shaker Heights",
+    "state": "OH",
+    "services": "Independent Living,Assisted Living,Memory Care",
+    "type": "Continuing Care"
+  },
+  {
+    "id": 7,
+    "name": "Kemper House Highland Heights",
+    "slug": "kemper-house-highland-heights-oh",
+    "city": "Highland Heights",
+    "state": "OH",
+    "services": "Memory Care",
+    "type": "Memory Care"
+  },
+  {
+    "id": 8,
+    "name": "The Heights Care & Rehab Center",
+    "slug": "heights-care-rehab-center-broadview-heights-oh",
+    "city": "Broadview Heights",
+    "state": "OH",
+    "services": "Skilled Nursing,Rehabilitation",
+    "type": "Skilled Nursing"
+  },
+  {
+    "id": 9,
+    "name": "The Woodlands of Shaker Heights",
+    "slug": "woodlands-shaker-heights-shaker-heights-oh",
+    "city": "Shaker Heights",
+    "state": "OH",
+    "services": "Assisted Living,Memory Care",
+    "type": "Continuing Care"
+  },
+  {
+    "id": 10,
+    "name": "Eliza Jennings",
+    "slug": "eliza-jennings-cleveland-oh",
+    "city": "Cleveland",
+    "state": "OH",
+    "services": "Independent Living,Assisted Living,Skilled Nursing,Rehabilitation",
+    "type": "Continuing Care"
+  },
+  {
+    "id": 11,
+    "name": "Brooklyn Pointe Assisted Living and Memory Care",
+    "slug": "brooklyn-pointe-assisted-living-brooklyn-oh",
+    "city": "Brooklyn",
+    "state": "OH",
+    "services": "Assisted Living,Memory Care",
+    "type": "Continuing Care"
+  },
+  {
+    "id": 12,
+    "name": "HarborChase of Shaker Heights",
+    "slug": "harborchase-shaker-heights-shaker-heights-oh",
+    "city": "Shaker Heights",
+    "state": "OH",
+    "services": "Assisted Living,Memory Care",
+    "type": "Continuing Care"
+  },
+  {
+    "id": 13,
+    "name": "Marymount Place",
+    "slug": "marymount-place-garfield-heights-oh",
+    "city": "Garfield Heights",
+    "state": "OH",
+    "services": "Assisted Living",
+    "type": "Assisted Living"
+  },
+  {
+    "id": 14,
+    "name": "Vista Springs Ravinia",
+    "slug": "vista-springs-ravinia-independence-oh",
+    "city": "Independence",
+    "state": "OH",
+    "services": "Assisted Living,Memory Care",
+    "type": "Continuing Care"
+  },
+  {
+    "id": 15,
+    "name": "Haven at Lakewood",
+    "slug": "haven-at-lakewood-lakewood-oh",
+    "city": "Lakewood",
+    "state": "OH",
+    "services": "Assisted Living",
+    "type": "Assisted Living"
+  },
+  {
+    "id": 16,
+    "name": "American House Macedonia",
+    "slug": "american-house-macedonia-macedonia-oh",
+    "city": "Macedonia",
+    "state": "OH",
+    "services": "Independent Living,Assisted Living",
+    "type": "Continuing Care"
+  },
+  {
+    "id": 17,
+    "name": "Arden Courts of Parma",
+    "slug": "arden-courts-parma-parma-oh",
+    "city": "Parma",
+    "state": "OH",
+    "services": "Assisted Living,Memory Care",
+    "type": "Memory Care"
+  },
+  {
+    "id": 18,
+    "name": "Berea Alzheimer's Care Center",
+    "slug": "berea-alzheimers-care-center-berea-oh",
+    "city": "Berea",
+    "state": "OH",
+    "services": "Assisted Living,Memory Care",
+    "type": "Memory Care"
+  },
+  {
+    "id": 19,
+    "name": "Broadway Creek",
+    "slug": "broadway-creek-maple-heights-oh",
+    "city": "Maple Heights",
+    "state": "OH",
+    "services": "Assisted Living",
+    "type": "Assisted Living"
+  },
+  {
+    "id": 20,
+    "name": "Brickmont Senior Living",
+    "slug": "brickmont-senior-living-cleveland-oh",
+    "city": "Cleveland",
+    "state": "OH", 
+    "services": "Assisted Living,Memory Care",
+    "type": "Continuing Care"
+  },
+  {
+    "id": 21,
+    "name": "Danbury Senior Living Brunswick",
+    "slug": "danbury-senior-living-brunswick-oh",
+    "city": "Brunswick",
+    "state": "OH",
+    "services": "Independent Living,Assisted Living,Memory Care",
+    "type": "Continuing Care"
+  },
+  {
+    "id": 22,
+    "name": "Danbury Senior Living Broadview Heights",
+    "slug": "danbury-senior-living-broadview-heights-oh",
+    "city": "Broadview Heights",
+    "state": "OH",
+    "services": "Independent Living,Assisted Living,Memory Care",
+    "type": "Continuing Care"
+  },
+  {
+    "id": 23,
+    "name": "Danbury Senior Living Mentor",
+    "slug": "danbury-senior-living-mentor-oh",
+    "city": "Mentor",
+    "state": "OH",
+    "services": "Independent Living,Assisted Living,Memory Care",
+    "type": "Continuing Care"
+  },
+  {
+    "id": 24,
+    "name": "Danbury Senior Living North Canton",
+    "slug": "danbury-senior-living-north-canton-oh",
+    "city": "North Canton",
+    "state": "OH",
+    "services": "Independent Living,Assisted Living,Memory Care",
+    "type": "Continuing Care"
+  },
+  {
+    "id": 25,
+    "name": "Danbury Senior Living Hudson",
+    "slug": "danbury-senior-living-hudson-oh",
+    "city": "Hudson",
+    "state": "OH",
+    "services": "Independent Living,Assisted Living,Memory Care",
+    "type": "Continuing Care"
+  },
+  {
+    "id": 26,
+    "name": "Elmcroft of Sagamore Hills",
+    "slug": "elmcroft-sagamore-hills-sagamore-hills-oh",
+    "city": "Sagamore Hills",
+    "state": "OH",
+    "services": "Assisted Living,Memory Care",
+    "type": "Continuing Care"
+  },
+  {
+    "id": 27,
+    "name": "Forest Hills Place",
+    "slug": "forest-hills-place-cleveland-heights-oh",
+    "city": "Cleveland Heights",
+    "state": "OH",
+    "services": "Independent Living",
+    "type": "Independent Living"
+  },
+  {
+    "id": 28,
+    "name": "Sunrise At Parma",
+    "slug": "sunrise-parma-parma-oh",
+    "city": "Parma",
+    "state": "OH",
+    "services": "Assisted Living,Memory Care",
+    "type": "Continuing Care"
+  },
+  {
+    "id": 29,
+    "name": "Legacy Place Parma",
+    "slug": "legacy-place-parma-parma-oh",
+    "city": "Parma",
+    "state": "OH",
+    "services": "Assisted Living",
+    "type": "Assisted Living"
+  },
+  {
+    "id": 30,
+    "name": "SHEVCHENKO MANOR",
+    "slug": "shevchenko-manor-parma-oh",
+    "city": "Parma",
+    "state": "OH",
+    "services": "Assisted Living",
+    "type": "Assisted Living"
+  },
+  {
+    "id": 31,
+    "name": "Governors Village",
+    "slug": "governors-village-mayfield-village-oh",
+    "city": "Mayfield Village",
+    "state": "OH",
+    "services": "Memory Care",
+    "type": "Memory Care"
+  },
+  {
+    "id": 32,
+    "name": "Jennings at Brecksville",
+    "slug": "jennings-brecksville-brecksville-oh",
+    "city": "Brecksville",
+    "state": "OH",
+    "services": "Assisted Living,Memory Care",
+    "type": "Continuing Care"
+  },
+  {
+    "id": 33,
+    "name": "Light of Hearts Villa",
+    "slug": "light-of-hearts-villa-bedford-oh",
+    "city": "Bedford",
+    "state": "OH",
+    "services": "Independent Living,Assisted Living,Memory Care",
+    "type": "Continuing Care"
+  },
+  {
+    "id": 34,
+    "name": "Maple Woods Care Center",
+    "slug": "maple-woods-care-center-chardon-oh",
+    "city": "Chardon",
+    "state": "OH",
+    "services": "Skilled Nursing",
+    "type": "Skilled Nursing"
+  },
+  {
+    "id": 35,
+    "name": "McGregor",
+    "slug": "mcgregor-cleveland-oh",
+    "city": "Cleveland",
+    "state": "OH",
+    "services": "Independent Living,Assisted Living,Memory Care,Skilled Nursing",
+    "type": "Continuing Care"
+  },
+  {
+    "id": 36,
+    "name": "Northbrook Healthcare Center",
+    "slug": "northbrook-healthcare-center-northfield-oh",
+    "city": "Northfield",
+    "state": "OH",
+    "services": "Skilled Nursing,Rehabilitation",
+    "type": "Skilled Nursing"
+  },
+  {
+    "id": 37,
+    "name": "Atria North Olmsted",
+    "slug": "atria-north-olmsted-north-olmsted-oh",
+    "city": "North Olmsted",
+    "state": "OH",
+    "services": "Assisted Living,Memory Care",
+    "type": "Continuing Care"
+  },
+  {
+    "id": 38,
+    "name": "Brookdale North Olmsted",
+    "slug": "brookdale-north-olmsted-north-olmsted-oh",
+    "city": "North Olmsted",
+    "state": "OH",
+    "services": "Assisted Living",
+    "type": "Assisted Living"
+  },
+  {
+    "id": 39,
+    "name": "Emerald Village",
+    "slug": "emerald-village-north-olmsted-oh",
+    "city": "North Olmsted",
+    "state": "OH",
+    "services": "Independent Living,Assisted Living",
+    "type": "Continuing Care"
+  },
+  {
+    "id": 40,
+    "name": "Ohio Living Breckenridge Village",
+    "slug": "ohio-living-breckenridge-village-willoughby-oh",
+    "city": "Willoughby",
+    "state": "OH",
+    "services": "Independent Living,Assisted Living,Memory Care,Skilled Nursing",
+    "type": "Continuing Care"
+  },
+  {
+    "id": 41,
+    "name": "Ohman Family Living at Holly",
+    "slug": "ohman-family-living-holly-newbury-oh",
+    "city": "Newbury",
+    "state": "OH",
+    "services": "Skilled Nursing,Rehabilitation",
+    "type": "Skilled Nursing"
+  },
+  {
+    "id": 42,
+    "name": "Paramount Senior Living at Middleburg Heights",
+    "slug": "paramount-senior-living-middleburg-heights-oh",
+    "city": "Middleburg Heights",
+    "state": "OH",
+    "services": "Assisted Living,Memory Care",
+    "type": "Continuing Care"
+  },
+  {
+    "id": 43,
+    "name": "Parkside Villa",
+    "slug": "parkside-villa-middleburg-heights-oh",
+    "city": "Middleburg Heights",
+    "state": "OH",
+    "services": "Skilled Nursing,Rehabilitation",
+    "type": "Skilled Nursing"
+  },
+  {
+    "id": 44,
+    "name": "Rocky River Gardens",
+    "slug": "rocky-river-gardens-rocky-river-oh",
+    "city": "Rocky River",
+    "state": "OH",
+    "services": "Skilled Nursing,Rehabilitation",
+    "type": "Skilled Nursing"
+  },
+  {
+    "id": 45,
+    "name": "Royalton Woods",
+    "slug": "royalton-woods-north-royalton-oh",
+    "city": "North Royalton",
+    "state": "OH",
+    "services": "Independent Living,Assisted Living",
+    "type": "Continuing Care"
+  },
+  {
+    "id": 46,
+    "name": "Singleton Health Care Center",
+    "slug": "singleton-health-care-center-chardon-oh",
+    "city": "Chardon",
+    "state": "OH",
+    "services": "Skilled Nursing,Rehabilitation",
+    "type": "Skilled Nursing"
+  },
+  {
+    "id": 47,
+    "name": "Vitalia Active Adult Community at Strongsville",
+    "slug": "vitalia-strongsville-strongsville-oh",
+    "city": "Strongsville",
+    "state": "OH",
+    "services": "Independent Living,Assisted Living,Memory Care",
+    "type": "Continuing Care"
+  },
+  {
+    "id": 48,
+    "name": "Vitalia Active Adult Community at Westlake",
+    "slug": "vitalia-westlake-westlake-oh",
+    "city": "Westlake",
+    "state": "OH",
+    "services": "Independent Living,Assisted Living,Memory Care",
+    "type": "Continuing Care"
+  },
+  {
+    "id": 49,
+    "name": "The Woodlands of Shaker Heights",
+    "slug": "woodlands-shaker-heights-oh",
+    "city": "Shaker Heights",
+    "state": "OH",
+    "services": "Assisted Living,Memory Care",
+    "type": "Continuing Care"
+  },
+  {
+    "id": 50,
+    "name": "Symphony at Mentor",
+    "slug": "symphony-mentor-mentor-oh",
+    "city": "Mentor",
+    "state": "OH",
+    "services": "Memory Care",
+    "type": "Memory Care"
+  },
+  {
+    "id": 51,
+    "name": "Brookdale Mentor",
+    "slug": "brookdale-mentor-mentor-oh",
+    "city": "Mentor",
+    "state": "OH",
+    "services": "Assisted Living,Memory Care",
+    "type": "Continuing Care"
+  },
+  {
+    "id": 52,
+    "name": "The Residence at Chardon",
+    "slug": "residence-chardon-chardon-oh",
+    "city": "Chardon",
+    "state": "OH",
+    "services": "Assisted Living,Memory Care",
+    "type": "Continuing Care"
+  },
+  {
+    "id": 53,
+    "name": "Continuing Healthcare Solutions",
+    "slug": "continuing-healthcare-solutions-mentor-oh",
+    "city": "Mentor",
+    "state": "OH",
+    "services": "Skilled Nursing,Rehabilitation",
+    "type": "Skilled Nursing"
+  },
+  {
+    "id": 54,
+    "name": "The Grand at North Pointe",
+    "slug": "grand-north-pointe-northfield-oh",
+    "city": "Northfield",
+    "state": "OH",
+    "services": "Skilled Nursing,Rehabilitation",
+    "type": "Skilled Nursing"
+  },
+  {
+    "id": 55,
+    "name": "Lorantffy Care Center",
+    "slug": "lorantffy-care-center-westlake-oh",
+    "city": "Westlake",
+    "state": "OH",
+    "services": "Skilled Nursing,Rehabilitation",
+    "type": "Skilled Nursing"
+  },
+  {
+    "id": 56,
+    "name": "Village Center Retirement Community",
+    "slug": "village-center-retirement-community-parma-oh",
+    "city": "Parma",
+    "state": "OH",
+    "services": "Independent Living",
+    "type": "Independent Living"
+  },
+  {
+    "id": 57,
+    "name": "Altenheim Senior Living",
+    "slug": "altenheim-senior-living-strongsville-oh",
+    "city": "Strongsville",
+    "state": "OH",
+    "services": "Independent Living,Assisted Living,Skilled Nursing,Rehabilitation",
+    "type": "Continuing Care"
+  },
+  {
+    "id": 58,
+    "name": "Willowood Care Center",
+    "slug": "willowood-care-center-brunswick-oh",
+    "city": "Brunswick",
+    "state": "OH",
+    "services": "Skilled Nursing,Rehabilitation",
+    "type": "Skilled Nursing"
+  },
+  {
+    "id": 59,
+    "name": "Laurel Lake Retirement Community",
+    "slug": "laurel-lake-retirement-community-hudson-oh",
+    "city": "Hudson",
+    "state": "OH", 
+    "services": "Independent Living,Assisted Living,Skilled Nursing",
+    "type": "Continuing Care"
+  },
+  {
+    "id": 60,
+    "name": "The Campus of Anna Maria",
+    "slug": "campus-anna-maria-aurora-oh",
+    "city": "Aurora",
+    "state": "OH",
+    "services": "Independent Living,Assisted Living,Skilled Nursing,Rehabilitation",
+    "type": "Continuing Care"
+  },
+  {
+    "id": 61,
+    "name": "Wexford Healthcare Center",
+    "slug": "wexford-healthcare-center-tallmadge-oh",
+    "city": "Tallmadge",
+    "state": "OH",
+    "services": "Skilled Nursing,Rehabilitation",
+    "type": "Skilled Nursing"
+  },
+  {
+    "id": 62,
+    "name": "The Colony Healthcare Center",
+    "slug": "colony-healthcare-center-tallmadge-oh",
+    "city": "Tallmadge",
+    "state": "OH",
+    "services": "Skilled Nursing,Rehabilitation",
+    "type": "Skilled Nursing"
+  },
+  {
+    "id": 63,
+    "name": "Regina Health Center",
+    "slug": "regina-health-center-richfield-oh",
+    "city": "Richfield",
+    "state": "OH",
+    "services": "Assisted Living,Skilled Nursing,Rehabilitation",
+    "type": "Continuing Care"
+  },
+  {
+    "id": 64,
+    "name": "The Avenue at Macedonia",
+    "slug": "avenue-macedonia-macedonia-oh",
+    "city": "Macedonia",
+    "state": "OH",
+    "services": "Skilled Nursing,Rehabilitation",
+    "type": "Skilled Nursing"
+  },
+  {
+    "id": 65,
+    "name": "The Landing of Stow",
+    "slug": "landing-stow-stow-oh",
+    "city": "Stow",
+    "state": "OH",
+    "services": "Assisted Living,Memory Care",
+    "type": "Continuing Care"
+  },
+  {
+    "id": 66,
+    "name": "The Renaissance of Richfield/Bath",
+    "slug": "renaissance-richfield-bath-richfield-oh",
+    "city": "Richfield",
+    "state": "OH",
+    "services": "Skilled Nursing,Rehabilitation",
+    "type": "Skilled Nursing"
+  },
+  {
+    "id": 67,
+    "name": "Burbank Parke Care Center",
+    "slug": "burbank-parke-care-center-parma-heights-oh",
+    "city": "Parma Heights",
+    "state": "OH",
+    "services": "Skilled Nursing,Rehabilitation",
+    "type": "Skilled Nursing"
+  },
+  {
+    "id": 68,
+    "name": "Hudson Meadows",
+    "slug": "hudson-meadows-hudson-oh",
+    "city": "Hudson",
+    "state": "OH",
+    "services": "Independent Living",
+    "type": "Independent Living"
+  },
+  {
+    "id": 69,
+    "name": "Maplewood at Twinsburg",
+    "slug": "maplewood-at-twinsburg-twinsburg-oh",
+    "city": "Twinsburg",
+    "state": "OH",
+    "services": "Assisted Living,Memory Care",
+    "type": "Continuing Care"
+  },
+  {
+    "id": 70,
+    "name": "Vitalia Stow",
+    "slug": "vitalia-stow-stow-oh",
+    "city": "Stow",
+    "state": "OH", 
+    "services": "Independent Living,Assisted Living,Memory Care",
+    "type": "Continuing Care"
+  },
+  {
+    "id": 71,
+    "name": "Cedar Wood Senior Living",
+    "slug": "cedar-wood-senior-living-akron-oh",
+    "city": "Akron",
+    "state": "OH",
+    "services": "Independent Living,Assisted Living",
+    "type": "Continuing Care"
+  },
+  {
+    "id": 72,
+    "name": "The Gables of KentRidge",
+    "slug": "gables-kentridge-kent-oh",
+    "city": "Kent",
+    "state": "OH",
+    "services": "Independent Living,Assisted Living,Memory Care",
+    "type": "Continuing Care"
+  },
+  {
+    "id": 73,
+    "name": "The Sanctuary at Kent",
+    "slug": "sanctuary-kent-kent-oh",
+    "city": "Kent",
+    "state": "OH",
+    "services": "Assisted Living,Memory Care",
+    "type": "Continuing Care"
+  },
+  {
+    "id": 74,
+    "name": "Anna Maria of Aurora",
+    "slug": "anna-maria-aurora-aurora-oh",
+    "city": "Aurora",
+    "state": "OH",
+    "services": "Independent Living,Assisted Living,Skilled Nursing",
+    "type": "Continuing Care"
+  },
+  {
+    "id": 75,
+    "name": "The Residence at Kensington Place",
+    "slug": "residence-kensington-place-columbus-oh",
+    "city": "Columbus",
+    "state": "OH",
+    "services": "Assisted Living,Memory Care",
+    "type": "Continuing Care"
   }
 ] 
