@@ -227,7 +227,7 @@ export default function CommunitySearchClientWrapper() {
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
             <div className="sticky top-0 bg-white p-4 border-b border-[#A7C4A0] flex justify-between items-center">
-              <h3 className="font-semibold text-[#1b4d70]">Request Pricing</h3>
+              <h3 className="font-semibold text-[#1b4d70]">Get Pricing</h3>
               <button
                 onClick={closePricingRequest}
                 className="text-[#666666] hover:text-[#1b4d70] p-2"

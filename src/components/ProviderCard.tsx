@@ -186,7 +186,7 @@ const ProviderCard = ({
           className="border border-blue-600 text-blue-600 px-4 py-2 rounded hover:bg-blue-50 transition w-full"
           onClick={() => window.open('https://formspree.io/f/xnnpaply', '_blank')}
         >
-          Request Pricing
+          Get Pricing
         </button>
       </div>
     </article>

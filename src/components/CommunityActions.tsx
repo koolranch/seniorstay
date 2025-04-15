@@ -38,7 +38,7 @@ export default function CommunityActions({ communityName }: CommunityActionsProp
         isOpen={isPricingModalOpen}
         onClose={() => setIsPricingModalOpen(false)}
         title={`Get Pricing for ${communityName}`}
-        buttonText="Request Pricing Info"
+        buttonText="Get Pricing Info"
         defaultSubject={`Pricing Request for ${communityName}`}
         communityName={communityName}
         formspreeUrl={formspreeEndpoint}

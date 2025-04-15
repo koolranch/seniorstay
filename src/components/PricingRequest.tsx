@@ -74,7 +74,7 @@ const PricingRequest = ({
 
     try {
       // Submit to Formspree
-      const response = await fetch('https://formspree.io/f/xpzgwvzj', {
+      const response = await fetch('https://formspree.io/f/xnnpaply', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -121,7 +121,7 @@ const PricingRequest = ({
       {/* Header with Close Button */}
       <div className="mb-6 flex items-center justify-between">
         <h2 className="text-xl font-semibold text-[#1b4d70]">
-          Request Pricing for {communityName}
+          Get Pricing for {communityName}
         </h2>
         {isModal && onClose && (
           <button
@@ -266,7 +266,7 @@ const PricingRequest = ({
               disabled={isSubmitting}
               className="w-full bg-[#1b4d70] text-white py-3 px-4 rounded-lg font-medium hover:bg-[#2F5061] disabled:bg-gray-400 disabled:cursor-not-allowed transition"
             >
-              {isSubmitting ? 'Submitting...' : 'Request Pricing'}
+              {isSubmitting ? 'Submitting...' : 'Get Pricing'}
             </button>
             <p className="text-xs text-center text-gray-500 mt-2">
               We'll respond within 24 hours with pricing information.
