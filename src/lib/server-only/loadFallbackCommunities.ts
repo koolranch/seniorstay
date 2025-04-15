@@ -54,7 +54,8 @@ export function loadFallbackCommunities(): InternalCommunity[] {
         city: city,
         state: state,
         services: services, // Ensure services is always an array
-        type: type, 
+        type: type,
+        imageUrl: item.imageUrl || undefined, // Pass through the imageUrl if it exists
       };
     }).filter((c): c is InternalCommunity => c !== null); // Filter out null values and assert type
 

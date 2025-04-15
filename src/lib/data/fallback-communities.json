@@ -6,7 +6,8 @@
     "city": "Cleveland",
     "state": "OH",
     "services": "Assisted Living",
-    "type": "Assisted Living" 
+    "type": "Assisted Living",
+    "imageUrl": "https://hncgnxbooghjhpncujzx.supabase.co/storage/v1/object/public/community-images/westwood-place-cleveland-oh.webp"
   },
   {
     "id": 2,
@@ -15,7 +16,8 @@
     "city": "Macedonia",
     "state": "OH",
     "services": "Independent Living,Assisted Living,Memory Care",
-    "type": "Continuing Care"
+    "type": "Continuing Care",
+    "imageUrl": "https://hncgnxbooghjhpncujzx.supabase.co/storage/v1/object/public/community-images/summit-point-macedonia-oh.webp"
   },
   {
     "id": 3,
@@ -24,7 +26,8 @@
     "city": "Parma",
     "state": "OH",
     "services": "Independent Living,Assisted Living,Memory Care,Skilled Nursing,Rehabilitation",
-    "type": "Continuing Care"
+    "type": "Continuing Care",
+    "imageUrl": "https://hncgnxbooghjhpncujzx.supabase.co/storage/v1/object/public/community-images/mount-alverna-village-parma-oh.webp"
   },
   {
     "id": 4,
@@ -33,7 +36,8 @@
     "city": "Beachwood",
     "state": "OH",
     "services": "Independent Living,Assisted Living,Memory Care",
-    "type": "Continuing Care"
+    "type": "Continuing Care",
+    "imageUrl": "https://hncgnxbooghjhpncujzx.supabase.co/storage/v1/object/public/community-images/rose-senior-living-beachwood-oh.webp"
   },
   {
     "id": 5,
@@ -42,7 +46,8 @@
     "city": "Seven Hills",
     "state": "OH",
     "services": "Independent Living,Assisted Living,Memory Care",
-    "type": "Continuing Care"
+    "type": "Continuing Care",
+    "imageUrl": "https://hncgnxbooghjhpncujzx.supabase.co/storage/v1/object/public/community-images/vitalia-rockside-seven-hills-oh.webp"
   },
   {
     "id": 6,
@@ -51,7 +56,8 @@
     "city": "Shaker Heights",
     "state": "OH",
     "services": "Independent Living,Assisted Living,Memory Care",
-    "type": "Continuing Care"
+    "type": "Continuing Care",
+    "imageUrl": "https://hncgnxbooghjhpncujzx.supabase.co/storage/v1/object/public/community-images/storypoint-shaker-heights-shaker-heights-oh.webp"
   },
   {
     "id": 7,
@@ -60,7 +66,8 @@
     "city": "Highland Heights",
     "state": "OH",
     "services": "Memory Care",
-    "type": "Memory Care"
+    "type": "Memory Care",
+    "imageUrl": "https://hncgnxbooghjhpncujzx.supabase.co/storage/v1/object/public/community-images/kemper-house-highland-heights-oh.webp"
   },
   {
     "id": 8,
@@ -69,7 +76,8 @@
     "city": "Broadview Heights",
     "state": "OH",
     "services": "Skilled Nursing,Rehabilitation",
-    "type": "Skilled Nursing"
+    "type": "Skilled Nursing",
+    "imageUrl": "https://hncgnxbooghjhpncujzx.supabase.co/storage/v1/object/public/community-images/heights-care-rehab-center-broadview-heights-oh.webp"
   },
   {
     "id": 9,
@@ -78,7 +86,8 @@
     "city": "Shaker Heights",
     "state": "OH",
     "services": "Assisted Living,Memory Care",
-    "type": "Continuing Care"
+    "type": "Continuing Care",
+    "imageUrl": "https://hncgnxbooghjhpncujzx.supabase.co/storage/v1/object/public/community-images/woodlands-shaker-heights-shaker-heights-oh.webp"
   },
   {
     "id": 10,
@@ -87,7 +96,8 @@
     "city": "Cleveland",
     "state": "OH",
     "services": "Independent Living,Assisted Living,Skilled Nursing,Rehabilitation",
-    "type": "Continuing Care"
+    "type": "Continuing Care",
+    "imageUrl": "https://hncgnxbooghjhpncujzx.supabase.co/storage/v1/object/public/community-images/eliza-jennings-cleveland-oh.webp"
   },
   {
     "id": 11,
@@ -96,7 +106,8 @@
     "city": "Brooklyn",
     "state": "OH",
     "services": "Assisted Living,Memory Care",
-    "type": "Continuing Care"
+    "type": "Continuing Care",
+    "imageUrl": "https://hncgnxbooghjhpncujzx.supabase.co/storage/v1/object/public/community-images/brooklyn-pointe-assisted-living-brooklyn-oh.webp"
   },
   {
     "id": 12,
@@ -105,7 +116,8 @@
     "city": "Shaker Heights",
     "state": "OH",
     "services": "Assisted Living,Memory Care",
-    "type": "Continuing Care"
+    "type": "Continuing Care",
+    "imageUrl": "https://hncgnxbooghjhpncujzx.supabase.co/storage/v1/object/public/community-images/harborchase-shaker-heights-shaker-heights-oh.webp"
   },
   {
     "id": 13,
@@ -114,7 +126,8 @@
     "city": "Garfield Heights",
     "state": "OH",
     "services": "Assisted Living",
-    "type": "Assisted Living"
+    "type": "Assisted Living",
+    "imageUrl": "https://hncgnxbooghjhpncujzx.supabase.co/storage/v1/object/public/community-images/marymount-place-garfield-heights-oh.webp"
   },
   {
     "id": 14,
@@ -123,7 +136,8 @@
     "city": "Independence",
     "state": "OH",
     "services": "Assisted Living,Memory Care",
-    "type": "Continuing Care"
+    "type": "Continuing Care",
+    "imageUrl": "https://hncgnxbooghjhpncujzx.supabase.co/storage/v1/object/public/community-images/vista-springs-ravinia-independence-oh.webp"
   },
   {
     "id": 15,
@@ -132,7 +146,8 @@
     "city": "Lakewood",
     "state": "OH",
     "services": "Assisted Living",
-    "type": "Assisted Living"
+    "type": "Assisted Living",
+    "imageUrl": "https://hncgnxbooghjhpncujzx.supabase.co/storage/v1/object/public/community-images/haven-at-lakewood-lakewood-oh.webp"
   },
   {
     "id": 16,

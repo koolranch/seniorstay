@@ -8,4 +8,5 @@ export interface InternalCommunity {
   state: string;
   type: string; // Type will be derived or defaulted
   services?: string[]; // Keep services if needed later
+  imageUrl?: string; // URL to the community image
 } 
