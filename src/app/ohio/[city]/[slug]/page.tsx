@@ -149,70 +149,90 @@ function generateAmenities(services: string[]): string[] {
   return [...new Set(base)];
 }
 
-// Updated fetchCommunityData to select necessary fields and map to SafeCommunity
+// UPDATED fetchCommunityData with fallback logic
 async function fetchCommunityData(city: string, slug: string): Promise<SafeCommunity | null> {
-    if (!city || !slug) return null;
-    console.log(`[${city}/${slug}] fetchCommunityData: Fetching...`);
-    try {
-        const dbCommunity = await prisma.community.findFirst({
-            where: { 
-                slug: { equals: slug, mode: 'insensitive' },
-                // Optional: Add city/state check back if slugs aren't guaranteed unique across states/cities
-                // city: { equals: city, mode: 'insensitive' }, 
-                // state: { equals: "Ohio", mode: 'insensitive' },
-            },
-            select: { 
-                id: true,
-                name: true,
-                city: true,
-                state: true,
-                slug: true,
-                description: true,
-                address: true, // Fetch full address string
-                zip: true,     // Fetch zip code
-                phone: true,   // Fetch phone
-                services: true, // Fetch services string
-                // Select other fields if they exist in your Prisma schema
-            }
-        });
+  if (!city || !slug) return null;
+  console.log(`[${city}/${slug}] fetchCommunityData: Fetching...`);
+  let communityData: SafeCommunity | null = null;
 
-        if (dbCommunity) {
-            console.log(`[${city}/${slug}] fetchCommunityData: Found in DB: ${dbCommunity.name}`);
-            const servicesArray = parseServices(dbCommunity.services);
-            const derivedType = determineType(servicesArray);
-            const derivedAmenities = generateAmenities(servicesArray); 
+  try {
+    // Try fetching from database first
+    const dbCommunity = await prisma.community.findFirst({
+      where: { 
+        slug: { equals: slug, mode: 'insensitive' },
+      },
+      select: { 
+        id: true,
+        name: true,
+        city: true,
+        state: true,
+        slug: true,
+        description: true,
+        address: true,
+        zip: true,
+        phone: true,
+        services: true,
+      }
+    });
 
-            const communityData: SafeCommunity = {
-                id: dbCommunity.id, // Already string
-                name: dbCommunity.name,
-                city: dbCommunity.city,
-                state: dbCommunity.state, // Should be "OH" or "Ohio"
-                slug: dbCommunity.slug,
-                description: dbCommunity.description, // Already nullable
-                address: dbCommunity.address, // Full address string
-                zipCode: dbCommunity.zip, // Map zip to zipCode
-                type: derivedType,
-                amenities: derivedAmenities,
-                services: servicesArray, // Store parsed services
-                phone: dbCommunity.phone, // Already nullable
-            };
-            return communityData;
-        } else {
-             console.warn(`[${city}/${slug}] fetchCommunityData: Not found in DB.`);
-             // Fallback logic might be needed here if DB is primary source
-             // For now, assume fallbacks handled elsewhere or return null
-             return null;
-        }
-    } catch (error) {
-        if (error instanceof PrismaClientInitializationError) {
-            console.warn(`[${city}/${slug}] fetchCommunityData: Prisma connection error.`, error.message);
-        } else {
-            console.error(`[${city}/${slug}] fetchCommunityData: DB error:`, error);
-        }
-        // Attempt fallbacks only if DB fails? Or rely on page-level fallbacks?
-        // For simplicity here, return null on DB error.
-        return null;
+    if (dbCommunity) {
+      console.log(`[${city}/${slug}] fetchCommunityData: Found in DB: ${dbCommunity.name}`);
+      const servicesArray = parseServices(dbCommunity.services);
+      const derivedType = determineType(servicesArray);
+      const derivedAmenities = generateAmenities(servicesArray); 
+
+      communityData = {
+        id: dbCommunity.id,
+        name: dbCommunity.name,
+        city: dbCommunity.city,
+        state: dbCommunity.state,
+        slug: dbCommunity.slug,
+        description: dbCommunity.description,
+        address: dbCommunity.address,
+        zipCode: dbCommunity.zip,
+        type: derivedType,
+        amenities: derivedAmenities,
+        services: servicesArray,
+        phone: dbCommunity.phone,
+      };
+      return communityData;
+    } else {
+      console.warn(`[${city}/${slug}] fetchCommunityData: Not found in DB. Attempting fallback to static data...`);
+      // Fallback to static data if not found in DB
+      const staticCommunity = findCommunityInStaticData(city, slug);
+      if (staticCommunity) {
+        console.log(`[${city}/${slug}] fetchCommunityData: Found in static data: ${staticCommunity.name}`);
+        communityData = convertToSafeCommunity(staticCommunity);
+        return communityData;
+      } else {
+        console.warn(`[${city}/${slug}] fetchCommunityData: Not found in static data either.`);
+        return null; // Not found in DB or static data
+      }
     }
+  } catch (error) {
+    // If database connection fails, attempt fallback
+    if (error instanceof PrismaClientInitializationError) {
+      console.warn(`[${city}/${slug}] fetchCommunityData: Prisma connection error. Attempting fallback to static data...`, error.message);
+    } else {
+      console.error(`[${city}/${slug}] fetchCommunityData: DB error occurred. Attempting fallback to static data...`, error);
+    }
+    
+    // Attempt fallback to static data on any DB error
+    try {
+      const staticCommunity = findCommunityInStaticData(city, slug);
+      if (staticCommunity) {
+        console.log(`[${city}/${slug}] fetchCommunityData: Found in static data after DB error: ${staticCommunity.name}`);
+        communityData = convertToSafeCommunity(staticCommunity);
+        return communityData;
+      } else {
+        console.warn(`[${city}/${slug}] fetchCommunityData: Not found in static data after DB error.`);
+        return null; // Not found in static data after error
+      }
+    } catch (fallbackError) {
+      console.error(`[${city}/${slug}] fetchCommunityData: Error during static data fallback:`, fallbackError);
+      return null; // Error during fallback attempt
+    }
+  }
 }
 
 // Updated generateMetadata to ONLY handle title and description
