@@ -81,6 +81,13 @@ export default function CommunityCard({
                 <span className="text-gray-500 ml-1">({community.reviewCount} reviews)</span>
               )}
             </div>
+            
+            {community.rating >= 4.8 && (
+              <div className="ml-3 flex items-center bg-yellow-200 px-2 py-1 rounded-md text-xs font-semibold text-yellow-800 shadow-sm">
+                <FiStar className="text-yellow-600 mr-1" size={12} />
+                Featured
+              </div>
+            )}
           </div>
         )}
       </div>

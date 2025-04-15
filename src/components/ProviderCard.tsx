@@ -100,6 +100,13 @@ const ProviderCard = ({
         <div className="absolute bottom-3 left-3 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-md text-xs font-medium text-[#1b4d70]">
           {type}
         </div>
+        
+        {rating >= 4.8 && (
+          <div className="absolute top-3 left-3 bg-yellow-200 px-2 py-1 rounded-md text-xs font-semibold text-yellow-800 shadow-sm flex items-center">
+            <FiStar className="text-yellow-600 mr-1" size={12} />
+            Featured
+          </div>
+        )}
       </div>
 
       <div className="space-y-3">
@@ -158,7 +165,11 @@ const ProviderCard = ({
   );
 
   return (
-    <article className={`flex flex-col justify-between h-full p-4 bg-white shadow rounded-md min-h-[380px] ${className} ${!hasRequiredData ? 'cursor-not-allowed' : 'hover:ring-2 hover:ring-primary transition-all'}`}>
+    <article className={`flex flex-col justify-between h-full p-4 shadow rounded-md min-h-[380px] ${className} ${
+      !hasRequiredData ? 'cursor-not-allowed bg-white' : 
+      rating >= 4.8 ? 'border border-yellow-300 bg-yellow-50 hover:ring-2 hover:ring-yellow-300 transition-all' : 
+      'bg-white hover:ring-2 hover:ring-primary transition-all'
+    }`}>
       <div>
         {hasRequiredData ? (
           <Link
