@@ -33,11 +33,11 @@ const HeroBanner = ({
       />
 
       {/* Content overlay */}
-      <div className="absolute inset-0 flex flex-col justify-center items-center text-center px-4">
-        <h1 className="text-3xl md:text-4xl font-bold text-gray-800 drop-shadow-md">
+      <div className="absolute inset-0 flex flex-col justify-center items-center text-center px-4 bg-black/10">
+        <h1 className="text-3xl md:text-4xl font-bold text-blue-800 drop-shadow-md">
           {title}
         </h1>
-        <p className="mt-2 text-gray-600 max-w-xl drop-shadow-sm">
+        <p className="mt-2 text-blue-700 max-w-xl drop-shadow-sm font-medium">
           {subtitle}
         </p>
         
