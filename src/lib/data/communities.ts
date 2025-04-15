@@ -113,10 +113,69 @@ export interface Community {
   phone?: string;
 }
 
-// Initialize Prisma Client
+// Initialize Prisma Client globally again
 const prisma = new PrismaClient();
 
+// NEW function to fetch data with fallback
+export async function getAllCommunitiesData(): Promise<InternalCommunity[]> {
+  try {
+    console.log("Attempting to fetch communities from database for getAllCommunitiesData...");
+    const rawDbCommunities = await prisma.community.findMany({
+      select: {
+        id: true,
+        name: true,
+        city: true,
+        state: true, // Ensure state is selected
+        slug: true,
+        services: true,
+      },
+    });
+
+    if (rawDbCommunities && rawDbCommunities.length > 0) {
+       console.log(`Fetched ${rawDbCommunities.length} communities from database.`);
+       return rawDbCommunities.map((c) => {
+            const servicesArray = parseServices(c.services);
+            const derivedType = determineType(servicesArray);
+            return {
+                id: String(c.id), // Ensure ID is string
+                name: c.name,
+                city: c.city,
+                state: c.state, // Include state
+                slug: c.slug,
+                services: servicesArray, // Use parsed services
+                type: derivedType, // Use derived type
+            };
+       });
+    } else {
+        console.warn("⚠️ No communities found in database via getAllCommunitiesData. Falling back...");
+        // Fall through to catch block logic is not ideal, let's call fallback directly
+        const { loadFallbackCommunities } = await import('@/lib/server/loadFallbackCommunities');
+        return loadFallbackCommunities();
+    }
+  } catch (err) {
+    console.error("❌ Error fetching communities from database:", err);
+    console.warn("⚠️ Falling back to JSON community data");
+    // Dynamically import and load fallback data only on server
+    if (typeof window === 'undefined') {
+        try {
+            const { loadFallbackCommunities } = await import('@/lib/server/loadFallbackCommunities');
+            return loadFallbackCommunities(); // returns InternalCommunity[]
+        } catch (importError) {
+            console.error("🚨 Failed to dynamically import or load fallback communities:", importError);
+            return []; // Return empty array on critical fallback failure
+        }
+    } else {
+        console.error("🚨 Cannot load fallback communities in browser context during DB error.");
+        return []; // Cannot fallback on client
+    }
+  } finally {
+      // Ensure prisma disconnect is called
+      await prisma.$disconnect().catch((e: Error) => console.error("Failed to disconnect Prisma client:", e));
+  }
+}
+
 // Fetches all communities, trying the database first, then dynamically loading fallback JSON
+// Consider refactoring this to use getAllCommunitiesData? For now, keeping separate as per analysis.
 export async function getAllCommunities(): Promise<InternalCommunity[]> {
   let dbCommunities: InternalCommunity[] = [];
   let fallbackCommunities: InternalCommunity[] = [];
@@ -137,7 +196,7 @@ export async function getAllCommunities(): Promise<InternalCommunity[]> {
 
     if (rawDbCommunities && rawDbCommunities.length > 0) {
       console.log(`Fetched ${rawDbCommunities.length} communities from database.`);
-      dbCommunities = rawDbCommunities.map(dbCommunity => {
+      dbCommunities = rawDbCommunities.map((dbCommunity: { id: string; name: string; city: string; state: string; slug: string; services: string | null }) => {
           const servicesArray = parseServices(dbCommunity.services);
           const derivedType = determineType(servicesArray);
           return {
@@ -180,7 +239,7 @@ export async function getAllCommunities(): Promise<InternalCommunity[]> {
 
   // Disconnect Prisma client if it was potentially used
   if (prisma) {
-      await prisma.$disconnect().catch(e => console.error("Failed to disconnect Prisma client:", e));
+      await prisma.$disconnect().catch((e: Error) => console.error("Failed to disconnect Prisma client:", e));
   }
   
   // Return empty array if DB failed and fallback couldn't be loaded

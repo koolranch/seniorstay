@@ -249,47 +249,50 @@ export async function generateMetadata(
   }
 }
 
-// Re-enable generateStaticParams with Prisma priority and fallback
+// Re-enable generateStaticParams using the new safe getAllCommunitiesData
 export async function generateStaticParams(): Promise<PageParams[]> {
-  let params: PageParams[] = [];
-
   try {
-     console.log("Generating static params using getAllCommunitiesData...");
-     const allCommunities = await getAllCommunitiesData(); // Returns InternalCommunity[]
+    console.log("Generating static params using getAllCommunitiesData...");
+    const allCommunities = await getAllCommunitiesData(); // Fetches from DB or Fallback
 
-     if (allCommunities && Array.isArray(allCommunities) && allCommunities.length > 0) {
-       params = allCommunities
-         .filter(community => community && community.city && community.slug && community.state && (community.state === 'OH' || community.state === 'Ohio'))
-         .map(community => ({
-           // Ensure city parameter is correctly slugified for URL matching
-           city: slugify(community.city).toLowerCase(), 
-           slug: community.slug.toLowerCase(),
-         }));
-       
-       if (params.length > 0) {
-         console.log(`Successfully generated ${params.length} static params from getAllCommunitiesData.`);
-       } else {
-         console.warn("⚠️ getAllCommunitiesData returned communities but none were valid Ohio communities with city/slug.");
-       }
-     } else {
-       console.warn("⚠️ getAllCommunitiesData returned no communities.");
-     }
-  } catch (error) {
-     console.error("🚨 CRITICAL: Error generating static params:", error);
-     if (params.length === 0) {
-       console.warn("Adding fallback hardcoded path for /ohio/cleveland/westwood-place");
-       params = [{ city: 'cleveland', slug: 'westwood-place' }];
-     }
-  }
-  
-  const uniqueParams = Array.from(new Map(params.map(p => [`${p.city}-${p.slug}`, p])).values());
+    if (!allCommunities || allCommunities.length === 0) {
+      console.error("🚨 CRITICAL: No communities found from getAllCommunitiesData for generateStaticParams.");
+      // Return a minimal fallback or throw error to fail build
+      return [{ city: 'cleveland', slug: 'westwood-place' }]; 
+    }
 
-  if (uniqueParams.length === 0) {
-      console.error("🚨 CRITICAL: No unique static params could be generated.");
+    const params = allCommunities
+      // Filter for valid Ohio communities with necessary data
+      .filter(community => 
+         community && 
+         community.city && 
+         community.slug && 
+         community.state && 
+         (community.state.toUpperCase() === 'OH')
+      )
+      .map(community => ({
+        // Ensure city parameter is correctly slugified for URL matching
+        city: slugify(community.city).toLowerCase(), 
+        slug: community.slug.toLowerCase(),
+      }));
+
+    if (params.length === 0) {
+      console.warn("⚠️ No valid Ohio communities found to generate static params after filtering.");
+      // Consider fallback if needed
       return [{ city: 'cleveland', slug: 'westwood-place' }];
-  }
+    }
 
-  return uniqueParams;
+    // Deduplicate params
+    const uniqueParams = Array.from(new Map(params.map(p => [`${p.city}-${p.slug}`, p])).values());
+    console.log(`Successfully generated ${uniqueParams.length} unique static params.`);
+    return uniqueParams;
+
+  } catch (error) {
+    console.error("🚨 CRITICAL: Error occurred during generateStaticParams:", error);
+    // Provide a minimal fallback to prevent build failure if possible
+    console.warn("Providing minimal fallback static params due to error.");
+    return [{ city: 'cleveland', slug: 'westwood-place' }];
+  }
 }
 
 // Try to find a community in the static data array
