@@ -131,17 +131,17 @@ export default function CommunityCard({
 
         {/* Action buttons */}
         {showRequestButton && (
-          <div className="flex gap-3 mt-6">
+          <div className="mt-4 flex flex-col sm:flex-row gap-2">
             <button
               onClick={handleScheduleTour}
-              className="bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold text-sm md:text-base py-2 px-4 rounded-lg shadow-sm transition-all duration-200 w-full sm:w-auto inline-flex items-center justify-center"
+              className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-2 px-4 rounded-full shadow-sm transition inline-flex items-center justify-center"
             >
               <Calendar className="w-4 h-4 inline-block mr-1 -mt-0.5" />
               Schedule Tour
             </button>
             <button
               onClick={handleRequestPricing}
-              className="bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold text-sm md:text-base py-2 px-4 rounded-lg shadow-sm transition-all duration-200 w-full sm:w-auto inline-flex items-center justify-center"
+              className="border border-blue-600 text-blue-600 hover:bg-blue-50 text-sm font-medium py-2 px-4 rounded-full transition inline-flex items-center justify-center"
             >
               <DollarSign className="w-4 h-4 inline-block mr-1 -mt-0.5" />
               Get Pricing

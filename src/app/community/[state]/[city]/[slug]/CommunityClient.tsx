@@ -203,7 +203,7 @@ export default function CommunityClient({ community }: CommunityClientProps) {
                 We'd love to show you around our community. Schedule a tour today to see all that {name} has to offer.
               </p>
               <button
-                className="bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold text-sm md:text-base py-2 px-4 rounded-lg shadow-sm transition-all duration-200 w-full sm:w-auto inline-flex items-center justify-center"
+                className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-2 px-4 rounded-full shadow-sm transition inline-flex items-center justify-center"
                 aria-label={`Schedule a tour at ${name}`}
               >
                 <Calendar className="w-4 h-4 inline-block mr-1 -mt-0.5" />
@@ -228,7 +228,7 @@ export default function CommunityClient({ community }: CommunityClientProps) {
             </p>
             <Link
               href="/community" // Link to a general community listing page
-              className="bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold text-sm md:text-base py-2 px-4 rounded-lg shadow-sm transition-all duration-200 w-full sm:w-auto inline-flex items-center justify-center mt-8"
+              className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-2 px-4 rounded-full shadow-sm transition inline-flex items-center justify-center mt-8"
             >
               Back to Communities
             </Link>
