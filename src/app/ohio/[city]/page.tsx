@@ -160,7 +160,7 @@ export default function CityPage({ params }: { params: { city: string } }) {
                 city={community.city}
                 state={community.state}
                 type={community.type}
-                imageUrl={community.image}
+                image={community.image}
                 rating={community.rating}
                 amenities={community.services}
               />

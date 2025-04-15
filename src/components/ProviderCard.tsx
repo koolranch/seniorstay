@@ -15,7 +15,8 @@ interface ProviderCardProps {
   slug?: string;
   name: string;
   type: string;
-  imageUrl: string;
+  image: string;
+  imageUrl?: string;
   rating: number;
   reviewCount?: number;
   city?: string;
@@ -35,6 +36,7 @@ const ProviderCard = ({
   slug,
   name,
   type,
+  image,
   imageUrl,
   rating,
   reviewCount = 0,
@@ -62,6 +64,8 @@ const ProviderCard = ({
   const communityPath = hasRequiredData ? getCommunityPath(state, city, slug) : '#';
   const cityPath = hasRequiredData ? getCityPath(state, city) : '#';
 
+  const imageSource = imageUrl || image;
+
   const handleScheduleTour = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -82,7 +86,7 @@ const ProviderCard = ({
     <>
       <div className="relative aspect-[16/10] w-full rounded-xl overflow-hidden mb-4">
         <Image
-          src={imageUrl}
+          src={imageSource}
           alt={`Front exterior of ${name} senior living community in ${city || 'Unknown City'}, ${state || 'Unknown State'}`}
           fill
           sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
