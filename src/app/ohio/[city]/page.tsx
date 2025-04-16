@@ -232,7 +232,7 @@ export default async function CityPage({ params }: { params: { city: string } })
                       city={community.city ?? undefined}
                       state={community.state ?? 'N/A'}
                       type={derivedType}
-                      image={community.imageUrl ?? "/placeholder-image.png"}
+                      image={community.imageUrl ?? "/images/hero-banner.png"}
                       rating={0}
                       amenities={amenitiesList}
                     />
