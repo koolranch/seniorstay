@@ -220,6 +220,9 @@ export default async function CityPage({ params }: { params: { city: string } })
                                     community.description?.includes("Independent Living") ? "Independent Living" :
                                     "Senior Living"; // Default fallback
 
+                  // Log image URLs for debugging
+                  console.log(`Community: ${community.name}, imageUrl: ${community.imageUrl || 'NULL/UNDEFINED'}`);
+                  
                   return (
                     <ProviderCard
                       key={community.id}
