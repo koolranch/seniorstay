@@ -5,7 +5,7 @@ import { createContext, useState, useContext, useEffect } from "react";
 
 // Define the type for a community
 export type Community = {
-  id: number;
+  id: string;
   slug: string;
   name: string;
   city: string;
@@ -24,8 +24,8 @@ export type Community = {
 type ComparisonContextType = {
   comparedCommunities: Community[];
   addToComparison: (community: Community) => void;
-  removeFromComparison: (communityId: number) => void;
-  isInComparison: (communityId: number) => boolean;
+  removeFromComparison: (communityId: string) => void;
+  isInComparison: (communityId: string) => boolean;
   clearComparison: () => void;
 };
 
@@ -50,7 +50,13 @@ export const ComparisonProvider = ({ children }: { children: React.ReactNode }) 
     const savedComparison = localStorage.getItem("comparedCommunities");
     if (savedComparison) {
       try {
-        setComparedCommunities(JSON.parse(savedComparison));
+        const parsedData = JSON.parse(savedComparison);
+        if (Array.isArray(parsedData) && parsedData.every(item => typeof item.id === 'string')) {
+           setComparedCommunities(parsedData);
+        } else {
+            console.warn("Saved comparison data structure mismatch (expected id: string).");
+            localStorage.removeItem("comparedCommunities");
+        }
       } catch (error) {
         console.error("Failed to parse saved comparison", error);
         localStorage.removeItem("comparedCommunities");
@@ -71,6 +77,7 @@ export const ComparisonProvider = ({ children }: { children: React.ReactNode }) 
 
       // Limit to 3 communities max
       if (prev.length >= 3) {
+        console.log("Comparison limit reached (3).");
         return [...prev.slice(1), community];
       }
 
@@ -79,12 +86,12 @@ export const ComparisonProvider = ({ children }: { children: React.ReactNode }) 
   };
 
   // Remove a community from comparison
-  const removeFromComparison = (communityId: number) => {
+  const removeFromComparison = (communityId: string) => {
     setComparedCommunities((prev) => prev.filter((c) => c.id !== communityId));
   };
 
   // Check if a community is in comparison
-  const isInComparison = (communityId: number) => {
+  const isInComparison = (communityId: string) => {
     return comparedCommunities.some((c) => c.id === communityId);
   };
 

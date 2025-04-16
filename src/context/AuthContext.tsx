@@ -7,10 +7,10 @@ export type User = {
   id: string;
   email: string;
   name?: string;
-  favorites: number[]; // Array of provider IDs
+  favorites: string[]; // Changed from number[] to string[]
   referralHistory: {
-    id: number;
-    providerId: number;
+    id: number; // Assuming referral IDs might still be numbers? Check source.
+    providerId: number; // Check if this should also be string
     providerName: string;
     date: string;
     status: "pending" | "contacted" | "completed";
@@ -24,9 +24,9 @@ type AuthContextType = {
   login: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string, name?: string) => Promise<void>;
   logout: () => void;
-  addToFavorites: (providerId: number) => void;
-  removeFromFavorites: (providerId: number) => void;
-  isFavorite: (providerId: number) => boolean;
+  addToFavorites: (providerId: string) => void; // Changed from number to string
+  removeFromFavorites: (providerId: string) => void; // Changed from number to string
+  isFavorite: (providerId: string) => boolean; // Changed from number to string
   updateUser: (updates: Partial<User>) => void;
 };
 
@@ -57,7 +57,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const storedUser = localStorage.getItem("user");
       if (storedUser) {
         try {
-          setUser(JSON.parse(storedUser));
+          const parsedUser = JSON.parse(storedUser);
+          // Add validation for favorites being string[]
+          if (parsedUser && Array.isArray(parsedUser.favorites) && parsedUser.favorites.every((fav: any) => typeof fav === 'string')) {
+             setUser(parsedUser);
+          } else {
+             console.warn("Stored user data mismatch (expected favorites: string[]).");
+             // Optionally try to migrate or clear invalid data
+             localStorage.removeItem("user");
+          }
         } catch (error) {
           console.error("Failed to parse stored user", error);
           localStorage.removeItem("user");
@@ -73,43 +81,42 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     if (user) {
       localStorage.setItem("user", JSON.stringify(user));
+    } else {
+       // If user logs out, ensure the user item is removed
+       localStorage.removeItem("user");
     }
   }, [user]);
 
-  // Sign up function - in a real app, this would call an API
+  // Sign up function
   const signUp = async (email: string, password: string, name?: string) => {
-    // Simulate API call
     setIsLoading(true);
     try {
-      // In a real app, this would be an API call to create a user
-      // For demo, we'll create a mock user
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate network delay
+      await new Promise((resolve) => setTimeout(resolve, 1000)); 
 
       const newUser: User = {
-        id: Date.now().toString(),
+        id: Date.now().toString(), // Simple mock ID generation
         email,
         name,
-        favorites: [],
-        referralHistory: [],
+        favorites: [], // Initialize with empty string array
+        referralHistory: [], // Assuming referralHistory structure is correct
       };
 
-      setUser(newUser);
-      localStorage.setItem("user", JSON.stringify(newUser));
-
-      // Import favorites from localStorage if any exist
+      // Import favorites from localStorage if any exist (expecting string[])
       const localFavorites = localStorage.getItem("favorites");
       if (localFavorites) {
         try {
-          const favIds = JSON.parse(localFavorites) as number[];
-          if (favIds.length > 0) {
+          const favIds = JSON.parse(localFavorites) as string[];
+           if (Array.isArray(favIds) && favIds.every(id => typeof id === 'string') && favIds.length > 0) {
             newUser.favorites = favIds;
-            setUser({ ...newUser });
-            localStorage.setItem("user", JSON.stringify(newUser));
           }
         } catch (error) {
-          console.error("Failed to parse local favorites", error);
+          console.error("Failed to parse local favorites during signup", error);
         }
       }
+      
+      setUser(newUser);
+      // localStorage update happens in useEffect
+
     } catch (error) {
       console.error("Sign up failed", error);
       throw new Error("Sign up failed. Please try again.");
@@ -118,47 +125,36 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  // Login function - in a real app, this would verify credentials
+  // Login function
   const login = async (email: string, password: string) => {
     setIsLoading(true);
     try {
-      // In a real app, this would be an API call to verify credentials
-      // For demo, we'll create a mock user
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate network delay
+      await new Promise((resolve) => setTimeout(resolve, 1000)); 
 
       const loggedInUser: User = {
-        id: Date.now().toString(),
+        id: Date.now().toString(), 
         email,
         name: email.split('@')[0],
-        favorites: [],
-        referralHistory: [
-          {
-            id: 1,
-            providerId: 1,
-            providerName: "Sunshine Meadows",
-            date: new Date().toISOString(),
-            status: "contacted",
-          },
-        ],
+        favorites: [], // Initialize with empty string array
+        referralHistory: [], // Clear mock referral history or fetch real data
       };
 
-      setUser(loggedInUser);
-      localStorage.setItem("user", JSON.stringify(loggedInUser));
-
-      // Import favorites from localStorage if any exist
+      // Import favorites from localStorage if any exist (expecting string[])
       const localFavorites = localStorage.getItem("favorites");
       if (localFavorites) {
         try {
-          const favIds = JSON.parse(localFavorites) as number[];
-          if (favIds.length > 0) {
+          const favIds = JSON.parse(localFavorites) as string[];
+           if (Array.isArray(favIds) && favIds.every(id => typeof id === 'string') && favIds.length > 0) {
             loggedInUser.favorites = favIds;
-            setUser({ ...loggedInUser });
-            localStorage.setItem("user", JSON.stringify(loggedInUser));
           }
         } catch (error) {
-          console.error("Failed to parse local favorites", error);
+          console.error("Failed to parse local favorites during login", error);
         }
       }
+
+      setUser(loggedInUser);
+      // localStorage update happens in useEffect
+
     } catch (error) {
       console.error("Login failed", error);
       throw new Error("Login failed. Please check your credentials and try again.");
@@ -170,12 +166,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   // Logout function
   const logout = () => {
     setUser(null);
-    localStorage.removeItem("user");
-    // Don't remove favorites from localStorage to persist them for next login
+    // User removal from localStorage handled by useEffect
+    // Keep non-user-specific favorites in localStorage? Or clear them?
+    // Let's keep them for now, assuming they might be used when logged out.
   };
 
   // Add to favorites
-  const addToFavorites = (providerId: number) => {
+  const addToFavorites = (providerId: string) => { // Changed from number to string
     if (user) {
       // Add to user's favorites if logged in
       if (!user.favorites.includes(providerId)) {
@@ -184,18 +181,24 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           favorites: [...user.favorites, providerId],
         };
         setUser(updatedUser);
-        localStorage.setItem("user", JSON.stringify(updatedUser));
+        // localStorage update happens in useEffect
       }
     } else {
       // Store in localStorage if not logged in
       const localFavorites = localStorage.getItem("favorites");
-      let favIds: number[] = [];
+      let favIds: string[] = []; // Expect string array
 
       if (localFavorites) {
         try {
-          favIds = JSON.parse(localFavorites);
+          const parsedFavs = JSON.parse(localFavorites);
+          // Validate that it's an array of strings
+           if (Array.isArray(parsedFavs) && parsedFavs.every(id => typeof id === 'string')) {
+             favIds = parsedFavs;
+          }
         } catch (error) {
-          console.error("Failed to parse local favorites", error);
+          console.error("Failed to parse local favorites for adding", error);
+          // Reset favIds if parsing fails
+          favIds = [];
         }
       }
 
@@ -207,7 +210,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   // Remove from favorites
-  const removeFromFavorites = (providerId: number) => {
+  const removeFromFavorites = (providerId: string) => { // Changed from number to string
     if (user) {
       // Remove from user's favorites if logged in
       const updatedUser = {
@@ -215,25 +218,33 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         favorites: user.favorites.filter(id => id !== providerId),
       };
       setUser(updatedUser);
-      localStorage.setItem("user", JSON.stringify(updatedUser));
+      // localStorage update happens in useEffect
     } else {
       // Remove from localStorage if not logged in
       const localFavorites = localStorage.getItem("favorites");
 
       if (localFavorites) {
         try {
-          const favIds = JSON.parse(localFavorites) as number[];
-          const updatedFavs = favIds.filter(id => id !== providerId);
-          localStorage.setItem("favorites", JSON.stringify(updatedFavs));
+          const parsedFavs = JSON.parse(localFavorites) as string[];
+          // Validate it's an array of strings
+           if (Array.isArray(parsedFavs) && parsedFavs.every(id => typeof id === 'string')) {
+             const updatedFavs = parsedFavs.filter(id => id !== providerId);
+             localStorage.setItem("favorites", JSON.stringify(updatedFavs));
+          } else {
+             // If data is invalid, maybe just clear it?
+             localStorage.removeItem("favorites");
+          }
         } catch (error) {
-          console.error("Failed to parse local favorites", error);
+          console.error("Failed to parse local favorites for removing", error);
+          // Clear potentially corrupted data
+          localStorage.removeItem("favorites");
         }
       }
     }
   };
 
   // Check if a provider is favorited
-  const isFavorite = (providerId: number) => {
+  const isFavorite = (providerId: string) => { // Changed from number to string
     if (user) {
       // Check user's favorites if logged in
       return user.favorites.includes(providerId);
@@ -244,10 +255,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     if (localFavorites) {
       try {
-        const favIds = JSON.parse(localFavorites) as number[];
-        return favIds.includes(providerId);
+        const parsedFavs = JSON.parse(localFavorites) as string[];
+        // Validate it's an array of strings
+         if (Array.isArray(parsedFavs) && parsedFavs.every(id => typeof id === 'string')) {
+           return parsedFavs.includes(providerId);
+        }
       } catch (error) {
-        console.error("Failed to parse local favorites", error);
+        console.error("Failed to parse local favorites for checking", error);
+        // Clear potentially corrupted data
+        localStorage.removeItem("favorites");
       }
     }
 
@@ -257,9 +273,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   // Update user information
   const updateUser = (updates: Partial<User>) => {
     if (user) {
+      // Ensure favorites update is handled correctly if provided in updates
+       if (updates.favorites && !Array.isArray(updates.favorites)) {
+          console.error("Invalid favorites format in updateUser");
+          return; // Prevent update with invalid favorites
+       }
       const updatedUser = { ...user, ...updates };
       setUser(updatedUser);
-      localStorage.setItem("user", JSON.stringify(updatedUser));
+      // localStorage update happens in useEffect
     }
   };
 

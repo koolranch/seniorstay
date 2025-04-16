@@ -6,7 +6,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 type FavoriteButtonProps = {
-  providerId: number;
+  providerId: string;
   providerName: string;
   className?: string;
   size?: number;

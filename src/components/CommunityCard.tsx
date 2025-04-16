@@ -54,7 +54,7 @@ export default function CommunityCard({
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden">
+    <div className="bg-white rounded-lg shadow-md overflow-hidden h-full flex flex-col justify-between">
       {/* Back Link */}
       <div className="p-6 pb-0">
         <Link 
@@ -134,7 +134,7 @@ export default function CommunityCard({
 
         {/* Action buttons */}
         {showRequestButton && (
-          <div className="mt-4 flex flex-col sm:flex-row gap-2">
+          <div className="mt-auto flex flex-col sm:flex-row gap-2 pt-4">
             <button
               onClick={handleScheduleTour}
               className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-2 px-4 rounded-full shadow-sm transition inline-flex items-center justify-center"

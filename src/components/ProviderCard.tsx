@@ -12,7 +12,7 @@ import { Calendar, DollarSign } from 'lucide-react';
 import { sendGAEvent } from '@/lib/utils/gtag';
 
 interface ProviderCardProps {
-  id: number;
+  id: string;
   slug?: string;
   name: string;
   type: string;
