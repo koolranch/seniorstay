@@ -29,6 +29,11 @@ const nextConfig = {
         hostname: "ugc.same-assets.com",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "hncgnxbooghjhpncujzx.supabase.co",
+        pathname: "/**",
+      },
     ],
   },
   staticPageGenerationTimeout: 180, // Increase timeout to 3 minutes for database connections
