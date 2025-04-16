@@ -144,9 +144,9 @@ export default async function CityPage({ params }: { params: { city: string } })
     }
   });
 
-  if (cityCommunities.length === 0) {
-    notFound();
-  }
+  // if (cityCommunities.length === 0) {
+  //   notFound();
+  // }
 
   // Get nearby cities (Optional: Fetch from DB as well or keep static logic)
   // Keeping static logic for nearby cities for now, might need adjustment
@@ -203,40 +203,58 @@ export default async function CityPage({ params }: { params: { city: string } })
         </div>
       </div>
 
-      {/* Communities Grid */}
+      {/* Communities Grid / No Communities Message */}
       <div className="py-12 bg-gray-50">
         <div className="container mx-auto px-6 md:px-10 lg:px-20">
-          <h2 className="text-2xl font-semibold text-[#1b4d70] mb-6">
-            Communities in {cityName}
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-fr">
-            {cityCommunities.map((community) => {
-              const amenitiesList = parseServices(community.services); 
-              
-              // Determine a fallback type based on services or description if needed
-              // Example: Simple fallback, could be more sophisticated
-              const derivedType = community.description?.includes("Memory Care") ? "Memory Care" : 
-                                community.description?.includes("Assisted Living") ? "Assisted Living" :
-                                community.description?.includes("Independent Living") ? "Independent Living" :
-                                "Senior Living"; // Default fallback
+          {cityCommunities.length > 0 ? (
+            <>
+              <h2 className="text-2xl font-semibold text-[#1b4d70] mb-6">
+                Communities in {cityName}
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-fr">
+                {cityCommunities.map((community) => {
+                  const amenitiesList = parseServices(community.services);
+                  // ... rest of ProviderCard mapping
+                  const derivedType = community.description?.includes("Memory Care") ? "Memory Care" : 
+                                    community.description?.includes("Assisted Living") ? "Assisted Living" :
+                                    community.description?.includes("Independent Living") ? "Independent Living" :
+                                    "Senior Living"; // Default fallback
 
-              return (
-                <ProviderCard
-                  key={community.id}
-                  id={community.id}
-                  slug={community.slug ?? undefined} 
-                  name={community.name ?? 'Unnamed Community'}
-                  city={community.city ?? undefined}
-                  state={community.state ?? 'N/A'}
-                  type={derivedType} 
-                  imageUrl={community.imageUrl ?? undefined} 
-                  image="/placeholder-image.png" // Default fallback image
-                  rating={0}
-                  amenities={amenitiesList} 
-                />
-              );
-            })}
-          </div>
+                  return (
+                    <ProviderCard
+                      key={community.id}
+                      id={community.id}
+                      slug={community.slug ?? undefined}
+                      name={community.name ?? 'Unnamed Community'}
+                      city={community.city ?? undefined}
+                      state={community.state ?? 'N/A'}
+                      type={derivedType}
+                      image={community.imageUrl ?? "/placeholder-image.png"}
+                      rating={0}
+                      amenities={amenitiesList}
+                    />
+                  );
+                })}
+              </div>
+            </>
+          ) : (
+            <div className="text-center py-10 px-6 bg-white rounded-lg shadow-md">
+              <h2 className="text-2xl font-semibold text-[#1b4d70] mb-4">
+                No Communities Listed Yet
+              </h2>
+              <p className="text-gray-600 mb-6">
+                We couldn't find any senior living communities listed for {cityName}, Ohio at this time. 
+                Please check back later or explore other cities.
+              </p>
+              {/* Optional: Link back to the main Ohio page or search */}
+              <Link 
+                href="/ohio" 
+                className="text-blue-600 hover:underline"
+              >
+                Explore other Ohio cities
+              </Link>
+            </div>
+          )}
         </div>
       </div>
 
