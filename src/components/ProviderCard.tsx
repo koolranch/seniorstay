@@ -65,7 +65,7 @@ const ProviderCard = ({
   const communityPath = hasRequiredData ? getCommunityPath(state, city, slug) : '#';
   const cityPath = hasRequiredData ? getCityPath(state, city) : '#';
 
-  const imageSource = (imageUrl && imageUrl.trim() !== '') ? imageUrl : image;
+  const imageSource = image;
 
   const handleScheduleTour = (e: React.MouseEvent) => {
     e.preventDefault();
