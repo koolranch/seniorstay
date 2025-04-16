@@ -5,13 +5,11 @@ import CommunityClient from './CommunityClient';
 import Script from 'next/script';
 import { notFound } from "next/navigation";
 import Link from 'next/link';
-import { PrismaClient } from '@prisma/client';
+import prisma from '@/lib/db'; // Import the shared Prisma instance
 // Import the generated Community type
 import type { Community } from '@prisma/client'; 
 import fs from 'fs';
 import path from 'path';
-
-const prisma = new PrismaClient();
 
 // Function to load fallback communities from JSON
 async function loadFallbackCommunitiesForStaticParams() {
@@ -83,8 +81,6 @@ export async function generateStaticParams() {
     }));
     
     return params;
-  } finally {
-    await prisma.$disconnect();
   }
 }
 
@@ -208,8 +204,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
        title: "Error Loading Community | SeniorStay",
        description: "There was an error loading the metadata for this community.",
      };
-  } finally {
-      if (prisma) { await prisma.$disconnect(); } // Disconnect Prisma
   }
 }
 
@@ -281,7 +275,5 @@ export default async function Page(props: Props) {
     console.error("Community Page Fatal Error:", error);
     console.error("Error stack:", error instanceof Error ? error.stack : "No stack trace available");
     return notFound(); // Use notFound for errors during page generation
-  } finally {
-      if (prisma) { await prisma.$disconnect(); } // Disconnect Prisma
   }
 } 
