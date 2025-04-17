@@ -4,106 +4,87 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import Image from 'next/image';
 import Link from 'next/link';
-import { FiHeart, FiStar, FiMapPin, FiFilter, FiArrowLeft, FiTrash2 } from 'react-icons/fi';
+import { FiHeart, FiStar, FiMapPin, FiFilter, FiArrowLeft, FiTrash2, FiLoader } from 'react-icons/fi';
 import { useRouter } from 'next/navigation';
 import FavoriteButton from '@/components/FavoriteButton';
 import type { Community } from '@/types/community';
 
-// Mock data for favorites page - **IDs changed to strings**
-const mockCommunities: Community[] = [
-  {
-    id: "1", // Changed to string
-    slug: "sunshine-meadows",
-    name: "Sunshine Meadows",
-    city: "Cleveland",
-    state: "OH",
-    type: "Independent Living",
-    image: "https://images.unsplash.com/photo-1591088398332-8a7791972843?q=80&w=2074&auto=format&fit=crop",
-    rating: 4.8,
-    reviewCount: 126,
-    distance: "61 miles away",
-    amenities: ["Restaurant-style dining", "Fitness center", "Swimming pool", "Garden", "Pet friendly"],
-  },
-  {
-    id: "2", // Changed to string
-    slug: "cedar-ridge",
-    name: "Cedar Ridge Retirement",
-    city: "Columbus",
-    state: "OH",
-    type: "Assisted Living",
-    image: "https://images.unsplash.com/photo-1556155092-490a1ba16284?q=80&w=2070&auto=format&fit=crop",
-    rating: 4.98,
-    reviewCount: 87,
-    distance: "63 miles away",
-    amenities: ["24/7 care staff", "Medication management", "Housekeeping", "Transportation services", "Social activities"],
-  },
-  {
-    id: "3", // Changed to string
-    slug: "lakeside-gardens",
-    name: "Lakeside Gardens",
-    city: "Cincinnati",
-    state: "OH",
-    type: "Memory Care",
-    image: "https://images.unsplash.com/photo-1582719471384-894fbb07a271?q=80&w=2187&auto=format&fit=crop",
-    rating: 4.97,
-    reviewCount: 102,
-    distance: "62 miles away",
-    amenities: ["Specialized memory programs", "Secured environment", "Therapeutic activities", "Individualized care plans"],
-  },
-];
-
 export default function FavoritesPage() {
   const { user, isFavorite } = useAuth();
   const router = useRouter();
-  const [selectedCommunities, setSelectedCommunities] = useState<string[]>([]); // Changed to string[]
+  const [selectedCommunities, setSelectedCommunities] = useState<string[]>([]);
   const [favoritedCommunities, setFavoritedCommunities] = useState<Community[]>([]);
   const [view, setView] = useState<'grid' | 'list'>('grid');
+  const [isLoading, setIsLoading] = useState(true);
 
   // Load favorited communities
   useEffect(() => {
-    let favIds: string[] = []; // Ensure favIds is string[]
-    console.log("FavoritesPage: useEffect triggered"); // Added log
+    const fetchFavoritedCommunities = async () => {
+      setIsLoading(true);
+      setFavoritedCommunities([]);
+      let favIds: string[] = [];
 
-    if (user) {
-      // User is logged in, use their favorites directly (already string[])
-      favIds = user.favorites;
-      console.log("FavoritesPage: Using user context favorites:", favIds); // Added log
-    } else {
-      // For non-logged-in users, check localStorage
-      console.log("FavoritesPage: User not logged in, checking localStorage"); // Added log
-      const localFavorites = localStorage.getItem("favorites");
-      if (localFavorites) {
-        console.log("FavoritesPage: Found localFavorites string:", localFavorites); // Added log
+      console.log("FavoritesPage: useEffect triggered");
+
+      if (user) {
+        favIds = user.favorites;
+        console.log("FavoritesPage: Using user context favorites:", favIds);
+      } else {
+        console.log("FavoritesPage: User not logged in, checking localStorage");
+        const localFavorites = localStorage.getItem("favorites");
+        if (localFavorites) {
+          console.log("FavoritesPage: Found localFavorites string:", localFavorites);
+          try {
+            const parsedFavs = JSON.parse(localFavorites) as string[];
+            if (Array.isArray(parsedFavs) && parsedFavs.every(id => typeof id === 'string')) {
+              favIds = parsedFavs;
+              console.log("FavoritesPage: Parsed localFavorites successfully:", favIds);
+            } else {
+               console.warn("Invalid format in localStorage favorites. Expected string[].");
+               localStorage.removeItem("favorites");
+            }
+          } catch (error) {
+            console.error("Failed to parse local favorites", error);
+            localStorage.removeItem("favorites");
+          }
+        } else {
+           console.log("FavoritesPage: No favorites found in localStorage");
+        }
+      }
+
+      // Fetch communities from API if favIds exist
+      if (favIds.length > 0) {
         try {
-          // Parse as string[]
-          const parsedFavs = JSON.parse(localFavorites) as string[];
-          // Basic validation
-          if (Array.isArray(parsedFavs) && parsedFavs.every(id => typeof id === 'string')) {
-            favIds = parsedFavs;
-            console.log("FavoritesPage: Parsed localFavorites successfully:", favIds); // Added log
+          const response = await fetch(`/api/providers?ids=${favIds.join(',')}`);
+          if (!response.ok) {
+            throw new Error(`API error: ${response.statusText}`);
+          }
+          const data = await response.json();
+          console.log("FavoritesPage: Fetched favoritedCommunities data:", data.communities);
+          // Ensure the fetched data matches the Community type structure
+          // Basic validation (can be more robust)
+          if (data && Array.isArray(data.communities)) {
+            setFavoritedCommunities(data.communities);
           } else {
-             console.warn("Invalid format in localStorage favorites. Expected string[].");
-             localStorage.removeItem("favorites"); // Clear invalid data
+            console.error("Fetched data format mismatch:", data);
+            setFavoritedCommunities([]); // Set to empty if format is wrong
           }
         } catch (error) {
-          console.error("Failed to parse local favorites", error);
-          localStorage.removeItem("favorites"); // Clear potentially corrupted data
+          console.error("Error fetching favorited communities:", error);
+          setFavoritedCommunities([]); // Set to empty on error
         }
       } else {
-         console.log("FavoritesPage: No favorites found in localStorage"); // Added log
+        setFavoritedCommunities([]); // Set to empty if no favIds
       }
-    }
+      
+      setIsLoading(false);
+    };
 
-    // Filter mock communities based on the string IDs
-    const userFavorites = mockCommunities.filter(community =>
-       favIds.includes(community.id) // community.id is now string
-    );
-    console.log("FavoritesPage: Filtered favoritedCommunities:", userFavorites); // Added log
-    setFavoritedCommunities(userFavorites);
+    fetchFavoritedCommunities();
 
-  }, [user]); // Dependency array is correct
+  }, [user]);
 
-  const handleToggleSelection = (communityId: string) => { // Changed to string
+  const handleToggleSelection = (communityId: string) => {
     setSelectedCommunities(prev => {
       if (prev.includes(communityId)) {
         return prev.filter(id => id !== communityId);
@@ -121,7 +102,7 @@ export default function FavoritesPage() {
   };
 
   const selectAll = () => {
-    const allIds = favoritedCommunities.map(community => community.id); // Already string
+    const allIds = favoritedCommunities.map(community => community.id);
     setSelectedCommunities(allIds);
   };
 
@@ -146,7 +127,9 @@ export default function FavoritesPage() {
             </div>
             <h1 className="text-2xl md:text-3xl font-bold text-[#1b4d70]">My Favorites</h1>
             <p className="text-[#333333] mt-1">
-              {favoritedCommunities.length} saved senior living {favoritedCommunities.length === 1 ? 'community' : 'communities'}
+              {isLoading 
+                ? 'Loading...' 
+                : `${favoritedCommunities.length} saved senior living ${favoritedCommunities.length === 1 ? 'community' : 'communities'}`}
             </p>
           </div>
 
@@ -206,7 +189,11 @@ export default function FavoritesPage() {
         )}
 
         {/* Favorites content */}
-        {favoritedCommunities.length === 0 ? (
+        {isLoading ? (
+          <div className="flex justify-center items-center py-20">
+            <FiLoader className="animate-spin text-[#1b4d70]" size={48} />
+          </div>
+        ) : favoritedCommunities.length === 0 ? (
           <div className="bg-white rounded-lg shadow-sm border border-[#A7C4A0] p-8 text-center">
             <FiHeart size={48} className="mx-auto text-[#A7C4A0] mb-4" />
             <h2 className="text-xl font-semibold text-[#1b4d70] mb-2">No saved communities yet</h2>
@@ -229,15 +216,15 @@ export default function FavoritesPage() {
                   <input
                     type="checkbox"
                     id={`select-${community.id}`}
-                    checked={selectedCommunities.includes(community.id)} // Now compares strings
-                    onChange={() => handleToggleSelection(community.id)} // Pass string ID
+                    checked={selectedCommunities.includes(community.id)}
+                    onChange={() => handleToggleSelection(community.id)}
                     className="w-5 h-5 rounded border-[#A7C4A0] text-[#1b4d70] focus:ring-[#1b4d70]"
                   />
                 </div>
 
                 <div className="absolute top-3 right-3 z-10">
                   <FavoriteButton
-                    providerId={community.id} // Pass string ID
+                    providerId={community.id}
                     providerName={community.name}
                   />
                 </div>
@@ -293,14 +280,14 @@ export default function FavoritesPage() {
                       <input
                         type="checkbox"
                         id={`select-list-${community.id}`}
-                        checked={selectedCommunities.includes(community.id)} // Now compares strings
-                        onChange={() => handleToggleSelection(community.id)} // Pass string ID
+                        checked={selectedCommunities.includes(community.id)}
+                        onChange={() => handleToggleSelection(community.id)}
                         className="w-5 h-5 rounded border-[#A7C4A0] text-[#1b4d70] focus:ring-[#1b4d70]"
                       />
                     </div>
                     <div className="absolute top-3 right-3 z-10">
                       <FavoriteButton
-                        providerId={community.id} // Pass string ID
+                        providerId={community.id}
                         providerName={community.name}
                       />
                     </div>
