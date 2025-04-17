@@ -9,10 +9,10 @@ import { useRouter } from 'next/navigation';
 import FavoriteButton from '@/components/FavoriteButton';
 import type { Community } from '@/types/community';
 
-// Mock data for favorites page - in a real app, this would come from an API
+// Mock data for favorites page - **IDs changed to strings**
 const mockCommunities: Community[] = [
   {
-    id: 1,
+    id: "1", // Changed to string
     slug: "sunshine-meadows",
     name: "Sunshine Meadows",
     city: "Cleveland",
@@ -25,7 +25,7 @@ const mockCommunities: Community[] = [
     amenities: ["Restaurant-style dining", "Fitness center", "Swimming pool", "Garden", "Pet friendly"],
   },
   {
-    id: 2,
+    id: "2", // Changed to string
     slug: "cedar-ridge",
     name: "Cedar Ridge Retirement",
     city: "Columbus",
@@ -38,7 +38,7 @@ const mockCommunities: Community[] = [
     amenities: ["24/7 care staff", "Medication management", "Housekeeping", "Transportation services", "Social activities"],
   },
   {
-    id: 3,
+    id: "3", // Changed to string
     slug: "lakeside-gardens",
     name: "Lakeside Gardens",
     city: "Cincinnati",
@@ -55,36 +55,49 @@ const mockCommunities: Community[] = [
 export default function FavoritesPage() {
   const { user, isFavorite } = useAuth();
   const router = useRouter();
-  const [selectedCommunities, setSelectedCommunities] = useState<number[]>([]);
+  const [selectedCommunities, setSelectedCommunities] = useState<string[]>([]); // Changed to string[]
   const [favoritedCommunities, setFavoritedCommunities] = useState<Community[]>([]);
   const [view, setView] = useState<'grid' | 'list'>('grid');
 
   // Load favorited communities
   useEffect(() => {
+    let favIds: string[] = []; // Ensure favIds is string[]
+
     if (user) {
-      // In a real app, this would be a server request with user's favorites
-      const userFavorites = mockCommunities.filter(community =>
-        user.favorites.includes(community.id)
-      );
-      setFavoritedCommunities(userFavorites);
+      // User is logged in, use their favorites directly (already string[])
+      favIds = user.favorites;
     } else {
       // For non-logged-in users, check localStorage
       const localFavorites = localStorage.getItem("favorites");
       if (localFavorites) {
         try {
-          const favIds = JSON.parse(localFavorites) as number[];
-          const userFavorites = mockCommunities.filter(community =>
-            favIds.includes(community.id)
-          );
-          setFavoritedCommunities(userFavorites);
+          // Parse as string[]
+          const parsedFavs = JSON.parse(localFavorites) as string[];
+          // Basic validation
+          if (Array.isArray(parsedFavs) && parsedFavs.every(id => typeof id === 'string')) {
+            favIds = parsedFavs;
+          } else {
+             console.warn("Invalid format in localStorage favorites. Expected string[].");
+             localStorage.removeItem("favorites"); // Clear invalid data
+          }
         } catch (error) {
           console.error("Failed to parse local favorites", error);
+          localStorage.removeItem("favorites"); // Clear potentially corrupted data
         }
       }
     }
-  }, [user]);
 
-  const handleToggleSelection = (communityId: number) => {
+    // Filter mock communities based on the string IDs
+    // Ensure community.id is treated as a string for comparison if its type isn't already string
+    // Since we changed mockCommunities, direct includes should work.
+    const userFavorites = mockCommunities.filter(community =>
+       favIds.includes(community.id) // community.id is now string
+    );
+    setFavoritedCommunities(userFavorites);
+
+  }, [user]); // Dependency array is correct
+
+  const handleToggleSelection = (communityId: string) => { // Changed to string
     setSelectedCommunities(prev => {
       if (prev.includes(communityId)) {
         return prev.filter(id => id !== communityId);
@@ -95,12 +108,14 @@ export default function FavoritesPage() {
 
   const handleCompare = () => {
     if (selectedCommunities.length >= 2) {
-      router.push('/compare');
+       // Pass selected IDs (which are strings) to compare page if needed
+      // router.push(`/compare?ids=${selectedCommunities.join(',')}`); // Example
+      router.push('/compare'); // Assuming compare page handles selection separately
     }
   };
 
   const selectAll = () => {
-    const allIds = favoritedCommunities.map(community => community.id);
+    const allIds = favoritedCommunities.map(community => community.id); // Already string
     setSelectedCommunities(allIds);
   };
 
@@ -208,15 +223,15 @@ export default function FavoritesPage() {
                   <input
                     type="checkbox"
                     id={`select-${community.id}`}
-                    checked={selectedCommunities.includes(community.id)}
-                    onChange={() => handleToggleSelection(community.id)}
+                    checked={selectedCommunities.includes(community.id)} // Now compares strings
+                    onChange={() => handleToggleSelection(community.id)} // Pass string ID
                     className="w-5 h-5 rounded border-[#A7C4A0] text-[#1b4d70] focus:ring-[#1b4d70]"
                   />
                 </div>
 
                 <div className="absolute top-3 right-3 z-10">
                   <FavoriteButton
-                    providerId={community.id}
+                    providerId={community.id} // Pass string ID
                     providerName={community.name}
                   />
                 </div>
@@ -272,14 +287,14 @@ export default function FavoritesPage() {
                       <input
                         type="checkbox"
                         id={`select-list-${community.id}`}
-                        checked={selectedCommunities.includes(community.id)}
-                        onChange={() => handleToggleSelection(community.id)}
+                        checked={selectedCommunities.includes(community.id)} // Now compares strings
+                        onChange={() => handleToggleSelection(community.id)} // Pass string ID
                         className="w-5 h-5 rounded border-[#A7C4A0] text-[#1b4d70] focus:ring-[#1b4d70]"
                       />
                     </div>
                     <div className="absolute top-3 right-3 z-10">
                       <FavoriteButton
-                        providerId={community.id}
+                        providerId={community.id} // Pass string ID
                         providerName={community.name}
                       />
                     </div>

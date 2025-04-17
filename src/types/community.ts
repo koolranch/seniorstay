@@ -1,5 +1,5 @@
 export interface Community {
-  id: number;
+  id: string;
   slug: string;
   name: string;
   city: string;
