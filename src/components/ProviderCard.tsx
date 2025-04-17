@@ -10,6 +10,7 @@ import FavoriteButton from './FavoriteButton';
 import { getCommunityPath, getCityPath } from '@/lib/utils/formatSlug';
 import { Calendar, DollarSign } from 'lucide-react';
 import { sendGAEvent } from '@/lib/utils/gtag';
+import RequestInfoModal from './RequestInfoModal';
 
 interface ProviderCardProps {
   id: string;
@@ -58,6 +59,9 @@ const ProviderCard = ({
   const inComparison = isInComparison(id);
   const isMobile = useMediaQuery('(max-width: 640px)');
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalRequestType, setModalRequestType] = useState<'Pricing' | 'Tour'>('Pricing');
+
   const displayAmenities = amenities.slice(0, 3);
 
   const hasRequiredData = city && slug && state;
@@ -71,20 +75,20 @@ const ProviderCard = ({
     e.preventDefault();
     e.stopPropagation();
     sendGAEvent('schedule_tour_click', name);
-    if (onScheduleTour) {
-      onScheduleTour();
-    }
+    setModalRequestType('Tour');
+    setIsModalOpen(true);
   };
 
   const handleRequestPricing = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     sendGAEvent('get_pricing_click', name);
-    if (onRequestPricing) {
-      onRequestPricing();
-    } else {
-      window.open('https://formspree.io/f/xnnpaply', '_blank');
-    }
+    setModalRequestType('Pricing');
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
   };
 
   const cardContent = (
@@ -177,44 +181,55 @@ const ProviderCard = ({
   );
 
   return (
-    <article className={`flex flex-col justify-between h-full p-4 shadow rounded-md min-h-[380px] ${className} transition-all duration-200 hover:shadow-lg hover:-translate-y-1 hover:border-blue-300 ${
-      !hasRequiredData ? 'cursor-not-allowed bg-white' :
-      rating >= 4.8 ? 'border border-yellow-300 bg-yellow-50 hover:ring-2 hover:ring-yellow-300' :
-      'bg-white border border-gray-200 hover:ring-2 hover:ring-primary'
-    }`}>
-      <div>
-        {hasRequiredData ? (
-          <Link
-            href={communityPath}
-            className="block"
-            aria-label={`View details for ${name} in ${city}, ${state}`}
-          >
-            {cardContent}
-          </Link>
-        ) : (
-          <div aria-label={`Details unavailable for ${name}`}>
-            {cardContent}
-          </div>
-        )}
-      </div>
+    <>
+      <article className={`flex flex-col justify-between h-full p-4 shadow rounded-md min-h-[380px] ${className} transition-all duration-200 hover:shadow-lg hover:-translate-y-1 hover:border-blue-300 ${
+        !hasRequiredData ? 'cursor-not-allowed bg-white' :
+        rating >= 4.8 ? 'border border-yellow-300 bg-yellow-50 hover:ring-2 hover:ring-yellow-300' :
+        'bg-white border border-gray-200 hover:ring-2 hover:ring-primary'
+      }`}>
+        <div>
+          {hasRequiredData ? (
+            <Link
+              href={communityPath}
+              className="block"
+              aria-label={`View details for ${name} in ${city}, ${state}`}
+            >
+              {cardContent}
+            </Link>
+          ) : (
+            <div aria-label={`Details unavailable for ${name}`}>
+              {cardContent}
+            </div>
+          )}
+        </div>
 
-      <div className="mt-auto w-full flex flex-col sm:flex-row sm:justify-between gap-2 pt-4">
-        <button
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-2 px-4 rounded-full shadow-sm transition inline-flex items-center justify-center"
-          onClick={handleScheduleTour}
-        >
-          <Calendar className="w-4 h-4 inline-block mr-1 -mt-0.5" />
-          Schedule Tour
-        </button>
-        <button
-          className="w-full border border-blue-600 text-blue-600 hover:bg-blue-50 text-sm font-medium py-2 px-4 rounded-full transition inline-flex items-center justify-center"
-          onClick={handleRequestPricing}
-        >
-          <DollarSign className="w-4 h-4 inline-block mr-1 -mt-0.5" />
-          Get Pricing
-        </button>
-      </div>
-    </article>
+        <div className="mt-auto w-full flex flex-col sm:flex-row sm:justify-between gap-2 pt-4">
+          <button
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-2 px-4 rounded-full shadow-sm transition inline-flex items-center justify-center"
+            onClick={handleScheduleTour}
+            disabled={!hasRequiredData}
+          >
+            <Calendar className="w-4 h-4 inline-block mr-1 -mt-0.5" />
+            Schedule Tour
+          </button>
+          <button
+            className="w-full border border-blue-600 text-blue-600 hover:bg-blue-50 text-sm font-medium py-2 px-4 rounded-full transition inline-flex items-center justify-center"
+            onClick={handleRequestPricing}
+            disabled={!hasRequiredData}
+          >
+            <DollarSign className="w-4 h-4 inline-block mr-1 -mt-0.5" />
+            Get Pricing
+          </button>
+        </div>
+      </article>
+
+      <RequestInfoModal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        communityName={name}
+        requestType={modalRequestType}
+      />
+    </>
   );
 };
 
