@@ -62,20 +62,25 @@ export default function FavoritesPage() {
   // Load favorited communities
   useEffect(() => {
     let favIds: string[] = []; // Ensure favIds is string[]
+    console.log("FavoritesPage: useEffect triggered"); // Added log
 
     if (user) {
       // User is logged in, use their favorites directly (already string[])
       favIds = user.favorites;
+      console.log("FavoritesPage: Using user context favorites:", favIds); // Added log
     } else {
       // For non-logged-in users, check localStorage
+      console.log("FavoritesPage: User not logged in, checking localStorage"); // Added log
       const localFavorites = localStorage.getItem("favorites");
       if (localFavorites) {
+        console.log("FavoritesPage: Found localFavorites string:", localFavorites); // Added log
         try {
           // Parse as string[]
           const parsedFavs = JSON.parse(localFavorites) as string[];
           // Basic validation
           if (Array.isArray(parsedFavs) && parsedFavs.every(id => typeof id === 'string')) {
             favIds = parsedFavs;
+            console.log("FavoritesPage: Parsed localFavorites successfully:", favIds); // Added log
           } else {
              console.warn("Invalid format in localStorage favorites. Expected string[].");
              localStorage.removeItem("favorites"); // Clear invalid data
@@ -84,15 +89,16 @@ export default function FavoritesPage() {
           console.error("Failed to parse local favorites", error);
           localStorage.removeItem("favorites"); // Clear potentially corrupted data
         }
+      } else {
+         console.log("FavoritesPage: No favorites found in localStorage"); // Added log
       }
     }
 
     // Filter mock communities based on the string IDs
-    // Ensure community.id is treated as a string for comparison if its type isn't already string
-    // Since we changed mockCommunities, direct includes should work.
     const userFavorites = mockCommunities.filter(community =>
        favIds.includes(community.id) // community.id is now string
     );
+    console.log("FavoritesPage: Filtered favoritedCommunities:", userFavorites); // Added log
     setFavoritedCommunities(userFavorites);
 
   }, [user]); // Dependency array is correct

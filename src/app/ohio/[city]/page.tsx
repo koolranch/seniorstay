@@ -8,6 +8,23 @@ import { FiArrowLeft } from "react-icons/fi";
 import { slugify, getCityPath } from "@/lib/utils/formatSlug";
 import type { Community } from "@prisma/client"; // Import Prisma Community type
 
+// Helper function to decode and format city name from slug
+const getDecodedCityName = (slug: string): string => {
+  try {
+    const decoded = decodeURIComponent(slug);
+    // Capitalize each word (handles spaces correctly after decoding)
+    return decoded.split(" ").map(word => 
+      word.charAt(0).toUpperCase() + word.slice(1)
+    ).join(" ");
+  } catch (e) {
+    console.error(`Failed to decode city slug: ${slug}`, e);
+    // Fallback: Use the original capitalization logic on the raw slug
+    return slug.split("-").map(word => 
+      word.charAt(0).toUpperCase() + word.slice(1)
+    ).join(" ");
+  }
+};
+
 // Helper function to parse services (assuming it might be a string)
 const parseServices = (services: string | string[] | null | undefined): string[] => {
   if (Array.isArray(services)) {
@@ -31,9 +48,7 @@ const parseServices = (services: string | string[] | null | undefined): string[]
 
 // Generate metadata for each city page
 export async function generateMetadata({ params }: { params: { city: string } }): Promise<Metadata> {
-  const cityName = params.city.split("-").map(word => 
-    word.charAt(0).toUpperCase() + word.slice(1)
-  ).join(" ");
+  const cityName = getDecodedCityName(params.city); // Use helper function
 
   // Fetch communities for metadata generation
   const cityCommunities = await prisma.community.findMany({
@@ -121,9 +136,7 @@ export async function generateStaticParams() {
 
 // Make the component async to use await for prisma query
 export default async function CityPage({ params }: { params: { city: string } }) {
-  const cityName = params.city.split("-").map(word => 
-    word.charAt(0).toUpperCase() + word.slice(1)
-  ).join(" ");
+  const cityName = getDecodedCityName(params.city); // Use helper function
 
   // Fetch communities for this city from the database
   const cityCommunities = await prisma.community.findMany({

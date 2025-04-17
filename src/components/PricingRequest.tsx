@@ -121,7 +121,7 @@ const PricingRequest = ({
       {/* Header with Close Button */}
       <div className="mb-6 flex items-center justify-between">
         <h2 className="text-xl font-semibold text-[#1b4d70]">
-          Get Pricing for {communityName}
+          Get Hassle-Free Pricing for {communityName}
         </h2>
         {isModal && onClose && (
           <button
@@ -134,8 +134,8 @@ const PricingRequest = ({
         )}
       </div>
 
-      <p className="text-[#666666] mb-6">
-        Fill out the form below to receive pricing information for {communityName}.
+      <p className="text-[#666666] text-sm -mt-4 mb-6">
+        Skip the sales pitch. Just clear, upfront pricing—sent straight to your inbox.
       </p>
 
       {formStatus.submitted && (
@@ -266,7 +266,7 @@ const PricingRequest = ({
               disabled={isSubmitting}
               className="w-full bg-[#1b4d70] text-white py-3 px-4 rounded-lg font-medium hover:bg-[#2F5061] disabled:bg-gray-400 disabled:cursor-not-allowed transition"
             >
-              {isSubmitting ? 'Submitting...' : 'Get Pricing'}
+              {isSubmitting ? 'Submitting...' : 'Get My Pricing Info'}
             </button>
             <p className="text-xs text-center text-gray-500 mt-2">
               We'll respond within 24 hours with pricing information.
