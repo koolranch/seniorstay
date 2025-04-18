@@ -6,7 +6,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 type FavoriteButtonProps = {
-  providerId: string;
+  providerId: string | number;
   providerName: string;
   className?: string;
   size?: number;
@@ -22,6 +22,8 @@ const FavoriteButton = ({
   showToast = true,
   compact = false,
 }: FavoriteButtonProps) => {
+  const stringProviderId = String(providerId);
+
   const { addToFavorites, removeFromFavorites, isFavorite } = useAuth();
   const router = useRouter();
   const [isFavorited, setIsFavorited] = useState(false);
@@ -30,8 +32,8 @@ const FavoriteButton = ({
 
   // Check if provider is already in favorites
   useEffect(() => {
-    setIsFavorited(isFavorite(providerId));
-  }, [providerId, isFavorite]);
+    setIsFavorited(isFavorite(stringProviderId));
+  }, [stringProviderId, isFavorite]);
 
   // Handle favorite toggle
   const toggleFavorite = (e: React.MouseEvent) => {
@@ -39,13 +41,13 @@ const FavoriteButton = ({
     e.stopPropagation();
 
     if (isFavorited) {
-      removeFromFavorites(providerId);
+      removeFromFavorites(stringProviderId);
       if (showToast) {
         setFeedbackMessage(`${providerName} removed from favorites`);
         setShowFeedback(true);
       }
     } else {
-      addToFavorites(providerId);
+      addToFavorites(stringProviderId);
       if (showToast) {
         setFeedbackMessage(`${providerName} added to favorites`);
         setShowFeedback(true);

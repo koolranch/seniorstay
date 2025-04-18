@@ -172,53 +172,61 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   // Add to favorites
-  const addToFavorites = (providerId: string) => { // Changed from number to string
+  const addToFavorites = (providerId: string) => { 
     if (user) {
       // Add to user's favorites if logged in
-      if (!user.favorites.includes(providerId)) {
+      // Ensure providerId is treated as string even if passed differently
+      const stringProviderId = String(providerId); 
+      if (!user.favorites.includes(stringProviderId)) {
         const updatedUser = {
           ...user,
-          favorites: [...user.favorites, providerId],
+          favorites: [...user.favorites, stringProviderId],
         };
         setUser(updatedUser);
-        // localStorage update happens in useEffect
+        console.log("AuthContext: Added to user favorites. New value:", updatedUser.favorites); // Added log
       }
     } else {
       // Store in localStorage if not logged in
       const localFavorites = localStorage.getItem("favorites");
-      let favIds: string[] = []; // Expect string array
+      let favIds: string[] = []; 
 
       if (localFavorites) {
         try {
           const parsedFavs = JSON.parse(localFavorites);
-          // Validate that it's an array of strings
-           if (Array.isArray(parsedFavs) && parsedFavs.every(id => typeof id === 'string')) {
+          if (Array.isArray(parsedFavs) && parsedFavs.every(id => typeof id === 'string')) {
              favIds = parsedFavs;
           }
         } catch (error) {
           console.error("Failed to parse local favorites for adding", error);
-          // Reset favIds if parsing fails
-          favIds = [];
+          favIds = []; // Reset on error
         }
       }
 
-      if (!favIds.includes(providerId)) {
-        favIds.push(providerId);
-        localStorage.setItem("favorites", JSON.stringify(favIds));
+      // Ensure providerId is treated as string
+      const stringProviderId = String(providerId); 
+
+      if (!favIds.includes(stringProviderId)) {
+        favIds.push(stringProviderId);
+        const newValue = JSON.stringify(favIds); // Stringify the array
+        localStorage.setItem("favorites", newValue);
+        console.log("AuthContext: Added to local favorites. New value:", newValue); // Added log
+      } else {
+         console.log("AuthContext: ID already in local favorites."); // Added log
       }
     }
   };
 
   // Remove from favorites
-  const removeFromFavorites = (providerId: string) => { // Changed from number to string
+  const removeFromFavorites = (providerId: string) => { 
     if (user) {
       // Remove from user's favorites if logged in
+      const stringProviderId = String(providerId); // Ensure string
       const updatedUser = {
         ...user,
-        favorites: user.favorites.filter(id => id !== providerId),
+        favorites: user.favorites.filter(id => id !== stringProviderId),
       };
       setUser(updatedUser);
-      // localStorage update happens in useEffect
+      console.log("AuthContext: Removed from user favorites. New value:", updatedUser.favorites); // Added log
     } else {
       // Remove from localStorage if not logged in
       const localFavorites = localStorage.getItem("favorites");
@@ -226,17 +234,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       if (localFavorites) {
         try {
           const parsedFavs = JSON.parse(localFavorites) as string[];
-          // Validate it's an array of strings
-           if (Array.isArray(parsedFavs) && parsedFavs.every(id => typeof id === 'string')) {
-             const updatedFavs = parsedFavs.filter(id => id !== providerId);
-             localStorage.setItem("favorites", JSON.stringify(updatedFavs));
+          const stringProviderId = String(providerId); // Ensure string
+
+          if (Array.isArray(parsedFavs) && parsedFavs.every(id => typeof id === 'string')) {
+             const updatedFavs = parsedFavs.filter(id => id !== stringProviderId);
+             const newValue = JSON.stringify(updatedFavs); // Stringify the array
+             localStorage.setItem("favorites", newValue);
+             console.log("AuthContext: Removed from local favorites. New value:", newValue); // Added log
           } else {
-             // If data is invalid, maybe just clear it?
+             console.warn("AuthContext: Removing from invalid local storage format. Clearing."); // Added log
              localStorage.removeItem("favorites");
           }
         } catch (error) {
           console.error("Failed to parse local favorites for removing", error);
-          // Clear potentially corrupted data
           localStorage.removeItem("favorites");
         }
       }
