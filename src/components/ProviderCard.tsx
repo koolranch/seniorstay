@@ -109,6 +109,12 @@ const ProviderCard = ({
             providerName={name}
             size={isMobile ? 20 : 18}
           />
+          {/* Debugging info - only visible in development */}
+          {process.env.NODE_ENV === 'development' && (
+            <div className="bg-black bg-opacity-75 text-white text-xs p-1 mt-1 rounded">
+              ID: {id}
+            </div>
+          )}
         </div>
 
         <div className="absolute bottom-3 left-3 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-md text-xs font-medium text-[#1b4d70]">
