@@ -21,8 +21,8 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    // Fetch providers from the database based on the provided IDs
-    const communities: Community[] = await prisma.provider.findMany({
+    // Fetch communities from the database based on the provided IDs
+    const communities: Community[] = await prisma.community.findMany({
       where: {
         id: {
           in: providerIds,

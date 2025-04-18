@@ -4,14 +4,15 @@ export interface Community {
   name: string;
   city: string;
   state: string;
-  type: string;
-  image: string;
-  rating: number;
+  imageUrl?: string | null;
   reviewCount?: number;
-  distance?: string;
-  amenities?: string[];
-  price?: number;
-  lat?: number;
-  lng?: number;
-  isFeatured?: boolean;
+  description?: string | null;
+  zip?: string | null;
+  address?: string | null;
+  phone?: string | null;
+  website?: string | null;
+  email?: string | null;
+  services?: string | null;
+  createdAt?: Date | string;
+  updatedAt?: Date | string;
 }
