@@ -205,7 +205,7 @@ export default async function CityPage({ params }: { params: { city: string } })
               <h2 className="text-2xl font-semibold text-[#1b4d70] mb-6">
                 Communities in {cityName}
               </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-fr">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {cityCommunities.map((community) => {
                   const amenitiesList = parseServices(community.services);
                   const derivedType = deriveCommunityType(community.description, community.services);
@@ -222,7 +222,7 @@ export default async function CityPage({ params }: { params: { city: string } })
                       city={community.city ?? undefined}
                       state={community.state ?? 'N/A'}
                       type={derivedType}
-                      image={community.imageUrl ?? "/images/hero-banner.png"}
+                      image={community.imageUrl || "https://source.unsplash.com/random/800x600/?senior,living"}
                       rating={0}
                       amenities={amenitiesList}
                     />
