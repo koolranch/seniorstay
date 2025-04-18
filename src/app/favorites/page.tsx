@@ -10,6 +10,18 @@ import FavoriteButton from '@/components/FavoriteButton';
 import type { Community } from '@/types/community';
 import { parseServices, deriveCommunityType } from '@/lib/utils/communityUtils';
 
+// Add a debugging function to inspect the favorited communities
+const logCommunityData = (community: any) => {
+  console.log("Community data structure:", {
+    id: community.id,
+    name: community.name,
+    slug: community.slug,
+    imageUrl: community.imageUrl,
+    description: community.description,
+    services: community.services
+  });
+};
+
 export default function FavoritesPage() {
   const { user, isFavorite } = useAuth();
   const router = useRouter();
@@ -56,15 +68,27 @@ export default function FavoritesPage() {
       // Fetch communities from API if favIds exist
       if (favIds.length > 0) {
         try {
+          console.log("FavoritesPage: Requesting communities with IDs:", favIds);
           const response = await fetch(`/api/providers?ids=${favIds.join(',')}`);
+          
           if (!response.ok) {
+            const errorText = await response.text();
+            console.error(`API error (${response.status}): ${errorText || response.statusText}`);
             throw new Error(`API error: ${response.statusText}`);
           }
+          
           const data = await response.json();
-          console.log("FavoritesPage: Fetched favoritedCommunities data:", data.communities);
+          console.log("FavoritesPage: FULL API response:", data);
+          
           // Ensure the fetched data matches the Community type structure
-          // Basic validation (can be more robust)
           if (data && Array.isArray(data.communities)) {
+            console.log(`FavoritesPage: Received ${data.communities.length} communities from API`);
+            
+            // Log the first community to help debug structure issues
+            if (data.communities.length > 0) {
+              logCommunityData(data.communities[0]);
+            }
+            
             setFavoritedCommunities(data.communities);
           } else {
             console.error("Fetched data format mismatch:", data);
