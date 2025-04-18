@@ -7,6 +7,7 @@ import Link from "next/link";
 import { FiArrowLeft } from "react-icons/fi";
 import { slugify, getCityPath } from "@/lib/utils/formatSlug";
 import type { Community } from "@prisma/client"; // Import Prisma Community type
+import { parseServices, deriveCommunityType } from '@/lib/utils/communityUtils';
 
 // Helper function to decode and format city name from slug
 const getDecodedCityName = (slug: string): string => {
@@ -24,27 +25,6 @@ const getDecodedCityName = (slug: string): string => {
     ).join(" ");
   }
 };
-
-// Helper function to parse services (assuming it might be a string)
-const parseServices = (services: string | string[] | null | undefined): string[] => {
-  if (Array.isArray(services)) {
-    return services;
-  }
-  if (typeof services === 'string') {
-    try {
-      // Attempt to parse if it's a JSON string array
-      const parsed = JSON.parse(services);
-      if (Array.isArray(parsed)) {
-        return parsed.filter(item => typeof item === 'string');
-      }
-    } catch (e) {
-      // If parsing fails, treat as comma-separated or single string
-      return services.split(',').map(s => s.trim()).filter(Boolean);
-    }
-  }
-  return []; // Return empty array if null, undefined, or unexpected type
-};
-
 
 // Generate metadata for each city page
 export async function generateMetadata({ params }: { params: { city: string } }): Promise<Metadata> {
@@ -151,7 +131,7 @@ export default async function CityPage({ params }: { params: { city: string } })
       city: true,
       state: true,
       imageUrl: true, 
-      services: true, 
+      services: true,
       address: true, 
       description: true,
     }
@@ -227,11 +207,7 @@ export default async function CityPage({ params }: { params: { city: string } })
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-fr">
                 {cityCommunities.map((community) => {
                   const amenitiesList = parseServices(community.services);
-                  // ... rest of ProviderCard mapping
-                  const derivedType = community.description?.includes("Memory Care") ? "Memory Care" : 
-                                    community.description?.includes("Assisted Living") ? "Assisted Living" :
-                                    community.description?.includes("Independent Living") ? "Independent Living" :
-                                    "Senior Living"; // Default fallback
+                  const derivedType = deriveCommunityType(community.description, community.services);
 
                   // Log image URLs for debugging
                   console.log(`Community: ${community.name}, imageUrl: ${community.imageUrl || 'NULL/UNDEFINED'}`);

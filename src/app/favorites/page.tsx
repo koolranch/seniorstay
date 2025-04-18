@@ -8,6 +8,7 @@ import { FiHeart, FiStar, FiMapPin, FiFilter, FiArrowLeft, FiTrash2, FiLoader } 
 import { useRouter } from 'next/navigation';
 import FavoriteButton from '@/components/FavoriteButton';
 import type { Community } from '@/types/community';
+import { parseServices, deriveCommunityType } from '@/lib/utils/communityUtils';
 
 export default function FavoritesPage() {
   const { user, isFavorite } = useAuth();
@@ -210,140 +211,153 @@ export default function FavoritesPage() {
         ) : view === 'grid' ? (
           // Grid view
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {favoritedCommunities.map((community) => (
-              <div key={community.id} className="bg-white rounded-xl shadow-sm border border-[#A7C4A0] overflow-hidden relative">
-                <div className="absolute top-3 left-3 z-10">
-                  <input
-                    type="checkbox"
-                    id={`select-${community.id}`}
-                    checked={selectedCommunities.includes(community.id)}
-                    onChange={() => handleToggleSelection(community.id)}
-                    className="w-5 h-5 rounded border-[#A7C4A0] text-[#1b4d70] focus:ring-[#1b4d70]"
-                  />
-                </div>
+            {favoritedCommunities.map((community) => {
+              const imageUrl = community.imageUrl ?? '/images/hero-banner.png';
+              const displayType = deriveCommunityType(community.description, community.services);
+              const rating = 0;
 
-                <div className="absolute top-3 right-3 z-10">
-                  <FavoriteButton
-                    providerId={community.id}
-                    providerName={community.name}
-                  />
-                </div>
-
-                <Link href={`/provider/${community.slug}`}>
-                  <div className="relative aspect-[16/10] w-full">
-                    <Image
-                      src={community.image}
-                      alt={community.name}
-                      fill
-                      sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
-                      className="object-cover"
+              return (
+                <div key={community.id} className="bg-white rounded-xl shadow-sm border border-[#A7C4A0] overflow-hidden relative">
+                  <div className="absolute top-3 left-3 z-10">
+                    <input
+                      type="checkbox"
+                      id={`select-${community.id}`}
+                      checked={selectedCommunities.includes(community.id)}
+                      onChange={() => handleToggleSelection(community.id)}
+                      className="w-5 h-5 rounded border-[#A7C4A0] text-[#1b4d70] focus:ring-[#1b4d70]"
                     />
-                    <div className="absolute bottom-3 left-3 bg-black bg-opacity-50 text-white px-2 py-1 rounded-md text-xs">
-                      {community.type}
-                    </div>
                   </div>
-                  <div className="p-4">
-                    <h3 className="font-semibold text-lg text-[#1b4d70] line-clamp-1">{community.name}</h3>
 
-                    <div className="flex items-center text-sm mt-1 mb-2">
-                      <FiStar className="text-[#F5A623] fill-[#F5A623]" />
-                      <span className="ml-1 font-medium">{community.rating}</span>
-                      <span className="text-gray-400 text-xs ml-1">
-                        ({community.reviewCount || 0} reviews)
-                      </span>
-                    </div>
-
-                    <div className="flex items-center text-gray-500 text-sm">
-                      <FiMapPin size={14} className="mr-1 flex-shrink-0" />
-                      <span className="truncate">{community.city}, {community.state}</span>
-                    </div>
+                  <div className="absolute top-3 right-3 z-10">
+                    <FavoriteButton
+                      providerId={community.id}
+                      providerName={community.name}
+                    />
                   </div>
-                </Link>
-              </div>
-            ))}
+
+                  <Link href={`/provider/${community.slug}`}>
+                    <div className="relative aspect-[16/10] w-full">
+                      <Image
+                        src={imageUrl}
+                        alt={community.name}
+                        fill
+                        sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
+                        className="object-cover"
+                      />
+                      <div className="absolute bottom-3 left-3 bg-black bg-opacity-50 text-white px-2 py-1 rounded-md text-xs">
+                        {displayType}
+                      </div>
+                    </div>
+                    <div className="p-4">
+                      <h3 className="font-semibold text-lg text-[#1b4d70] line-clamp-1">{community.name}</h3>
+
+                      <div className="flex items-center text-sm mt-1 mb-2">
+                        <FiStar className="text-[#F5A623] fill-[#F5A623]" />
+                        <span className="ml-1 font-medium">{rating}</span>
+                        <span className="text-gray-400 text-xs ml-1">
+                          ({community.reviewCount || 0} reviews)
+                        </span>
+                      </div>
+
+                      <div className="flex items-center text-gray-500 text-sm">
+                        <FiMapPin size={14} className="mr-1 flex-shrink-0" />
+                        <span className="truncate">{community.city}, {community.state}</span>
+                      </div>
+                    </div>
+                  </Link>
+                </div>
+              );
+            })}
           </div>
         ) : (
           // List view
           <div className="space-y-4">
-            {favoritedCommunities.map((community) => (
-              <div key={community.id} className="bg-white rounded-xl shadow-sm border border-[#A7C4A0] overflow-hidden">
-                <div className="flex flex-col md:flex-row">
-                  <div className="relative md:w-1/3 h-[200px] md:h-auto">
-                    <Image
-                      src={community.image}
-                      alt={community.name}
-                      fill
-                      sizes="(max-width: 640px) 100vw, 33vw"
-                      className="object-cover"
-                    />
-                    <div className="absolute top-3 left-3 z-10">
-                      <input
-                        type="checkbox"
-                        id={`select-list-${community.id}`}
-                        checked={selectedCommunities.includes(community.id)}
-                        onChange={() => handleToggleSelection(community.id)}
-                        className="w-5 h-5 rounded border-[#A7C4A0] text-[#1b4d70] focus:ring-[#1b4d70]"
+            {favoritedCommunities.map((community) => {
+              const imageUrl = community.imageUrl ?? '/images/hero-banner.png';
+              const displayType = deriveCommunityType(community.description, community.services);
+              const rating = 0;
+              const amenitiesList = parseServices(community.services);
+
+              return (
+                <div key={community.id} className="bg-white rounded-xl shadow-sm border border-[#A7C4A0] overflow-hidden">
+                  <div className="flex flex-col md:flex-row">
+                    <div className="relative md:w-1/3 h-[200px] md:h-auto">
+                      <Image
+                        src={imageUrl}
+                        alt={community.name}
+                        fill
+                        sizes="(max-width: 640px) 100vw, 33vw"
+                        className="object-cover"
                       />
-                    </div>
-                    <div className="absolute top-3 right-3 z-10">
-                      <FavoriteButton
-                        providerId={community.id}
-                        providerName={community.name}
-                      />
-                    </div>
-                    <div className="absolute bottom-3 left-3 bg-black bg-opacity-50 text-white px-2 py-1 rounded-md text-xs">
-                      {community.type}
-                    </div>
-                  </div>
-
-                  <div className="p-4 md:p-6 flex-1">
-                    <Link href={`/provider/${community.slug}`} className="hover:underline">
-                      <h3 className="font-semibold text-xl text-[#1b4d70]">{community.name}</h3>
-                    </Link>
-
-                    <div className="flex items-center text-sm mt-1 mb-2">
-                      <FiStar className="text-[#F5A623] fill-[#F5A623]" />
-                      <span className="ml-1 font-medium">{community.rating}</span>
-                      <span className="text-gray-400 text-xs ml-1">
-                        ({community.reviewCount || 0} reviews)
-                      </span>
-                    </div>
-
-                    <div className="flex items-center text-gray-500 text-sm mb-3">
-                      <FiMapPin size={14} className="mr-1 flex-shrink-0" />
-                      <span>{community.city}, {community.state}</span>
-                    </div>
-
-                    {community.amenities && community.amenities.length > 0 && (
-                      <div className="mt-2 space-y-1">
-                        <h4 className="text-sm font-medium text-[#333333] mb-1">Amenities:</h4>
-                        <div className="flex flex-wrap gap-2">
-                          {community.amenities.slice(0, 3).map((amenity, i) => (
-                            <span key={`${community.id}-${i}`} className="text-xs bg-[#f1f6f0] text-[#1b4d70] px-2 py-1 rounded">
-                              {amenity}
-                            </span>
-                          ))}
-                          {community.amenities.length > 3 && (
-                            <span className="text-xs bg-[#f1f6f0] text-[#1b4d70] px-2 py-1 rounded">
-                              +{community.amenities.length - 3} more
-                            </span>
-                          )}
-                        </div>
+                      <div className="absolute top-3 left-3 z-10">
+                        <input
+                          type="checkbox"
+                          id={`select-list-${community.id}`}
+                          checked={selectedCommunities.includes(community.id)}
+                          onChange={() => handleToggleSelection(community.id)}
+                          className="w-5 h-5 rounded border-[#A7C4A0] text-[#1b4d70] focus:ring-[#1b4d70]"
+                        />
                       </div>
-                    )}
+                      <div className="absolute top-3 right-3 z-10">
+                        <FavoriteButton
+                          providerId={community.id}
+                          providerName={community.name}
+                        />
+                      </div>
+                      <div className="absolute bottom-3 left-3 bg-black bg-opacity-50 text-white px-2 py-1 rounded-md text-xs">
+                        {displayType}
+                      </div>
+                    </div>
 
-                    <div className="mt-4 flex gap-2">
-                      <Link
-                        href={`/provider/${community.slug}`}
-                        className="bg-[#1b4d70] text-white px-4 py-2 rounded-lg text-sm"
-                      >
-                        View Details
+                    <div className="p-4 md:p-6 flex-1">
+                      <Link href={`/provider/${community.slug}`} className="hover:underline">
+                        <h3 className="font-semibold text-xl text-[#1b4d70]">{community.name}</h3>
                       </Link>
+
+                      <div className="flex items-center text-sm mt-1 mb-2">
+                        <FiStar className="text-[#F5A623] fill-[#F5A623]" />
+                        <span className="ml-1 font-medium">{rating}</span>
+                        <span className="text-gray-400 text-xs ml-1">
+                          ({community.reviewCount || 0} reviews)
+                        </span>
+                      </div>
+
+                      <div className="flex items-center text-gray-500 text-sm mb-3">
+                        <FiMapPin size={14} className="mr-1 flex-shrink-0" />
+                        <span>{community.city}, {community.state}</span>
+                      </div>
+
+                      {amenitiesList && amenitiesList.length > 0 && (
+                        <div className="mt-2 space-y-1">
+                          <h4 className="text-sm font-medium text-[#333333] mb-1">Amenities:</h4>
+                          <div className="flex flex-wrap gap-2">
+                            {amenitiesList.slice(0, 3).map((amenity: string, i: number) => (
+                              <span key={`${community.id}-${i}`} className="text-xs bg-[#f1f6f0] text-[#1b4d70] px-2 py-1 rounded">
+                                {amenity}
+                              </span>
+                            ))}
+                            {amenitiesList.length > 3 && (
+                              <span className="text-xs bg-[#f1f6f0] text-[#1b4d70] px-2 py-1 rounded">
+                                +{amenitiesList.length - 3} more
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      )}
+
+                      <div className="mt-4 flex gap-2">
+                        <Link
+                          href={`/provider/${community.slug}`}
+                          className="bg-[#1b4d70] text-white px-4 py-2 rounded-lg text-sm"
+                        >
+                          View Details
+                        </Link>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>
