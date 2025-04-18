@@ -176,7 +176,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     if (user) {
       // Add to user's favorites if logged in
       // Ensure providerId is treated as string even if passed differently
-      const stringProviderId = String(providerId); 
+      console.log('Original providerId:', providerId); const stringProviderId = String(providerId); 
       if (!user.favorites.includes(stringProviderId)) {
         const updatedUser = {
           ...user,
@@ -203,7 +203,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       }
 
       // Ensure providerId is treated as string
-      const stringProviderId = String(providerId); 
+      console.log('Original providerId:', providerId); const stringProviderId = String(providerId); 
 
       if (!favIds.includes(stringProviderId)) {
         favIds.push(stringProviderId);
@@ -220,7 +220,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const removeFromFavorites = (providerId: string) => { 
     if (user) {
       // Remove from user's favorites if logged in
-      const stringProviderId = String(providerId); // Ensure string
+      console.log('Original providerId:', providerId); const stringProviderId = String(providerId); // Ensure string
       const updatedUser = {
         ...user,
         favorites: user.favorites.filter(id => id !== stringProviderId),
@@ -234,7 +234,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       if (localFavorites) {
         try {
           const parsedFavs = JSON.parse(localFavorites) as string[];
-          const stringProviderId = String(providerId); // Ensure string
+          console.log('Original providerId:', providerId); const stringProviderId = String(providerId); // Ensure string
 
           if (Array.isArray(parsedFavs) && parsedFavs.every(id => typeof id === 'string')) {
              const updatedFavs = parsedFavs.filter(id => id !== stringProviderId);
