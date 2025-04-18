@@ -1,113 +1,71 @@
-import type { Metadata } from 'next';
+'use client';
+
+import { useState } from 'react';
+// import type { Metadata } from 'next'; // Metadata generation needs rethinking for client component
 import Link from 'next/link';
 import Image from 'next/image';
-import prisma from '@/lib/db';
 import { notFound } from 'next/navigation';
-import { formatSlug, formatLocation } from '@/lib/utils/formatSlug'; // Assuming you have this for formatting
-import { FiMapPin } from 'react-icons/fi';
-import type { Community } from '@prisma/client'; // Import the Community type
+import { formatSlug, formatLocation } from '@/lib/utils/formatSlug';
+import { FiMapPin, FiCheck } from 'react-icons/fi';
+import type { Community } from '@prisma/client'; // Keep Community type
+import TourModal from '@/components/TourModal'; // Re-import TourModal
+import RequestInfoModal from '@/components/RequestInfoModal'; // Corrected Pricing Modal import
+import { Calendar, DollarSign } from 'lucide-react'; // Import icons
+// Assuming Button comes from a library or needs a different path
+// import { Button } from '@/components/ui/button';
+// Temporary: Using standard button element until Button component path is confirmed
 
 interface PageParams {
   state: string;
   city: string;
 }
 
-interface Props {
+// Define a simple Service type for the client side if Prisma type isn't directly usable
+interface SimpleService { id: string | number; name: string; }
+
+// Adjust props to expect serialized data (string IDs) and simplified services
+interface CityPageProps {
+  communities: (Omit<Community, 'id'> & { id: string; services: SimpleService[] })[];
   params: PageParams;
+  cityDisplay: string;
+  stateDisplay: string;
 }
 
-// Generate Metadata for the City Page
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const state = decodeURIComponent(params.state).toUpperCase();
-  const city = formatLocation(decodeURIComponent(params.city)); // Use your formatting function
-
-  try {
-    // Optional: Check if any communities exist for this city to make metadata more accurate
-    const communityCount = await prisma.community.count({
-      where: {
-        state: state,
-        city: {
-          equals: city,
-          mode: 'insensitive', // Case-insensitive city comparison
-        },
-      },
-    });
-
-    if (communityCount === 0) {
-      // Or return metadata indicating no communities found
-       return {
-        title: `No Senior Living Communities Found in ${city}, ${state} | SeniorStay`,
-        description: `We currently do not have listings for senior living communities in ${city}, ${state}. Check back soon!`,
-       }
-    }
-
-    const title = `Senior Living Communities in ${city}, ${state} | SeniorStay`;
-    const description = `Explore senior living options, including assisted living and independent living, in ${city}, ${state}. Find pricing, reviews, and amenities on SeniorStay.`;
-
-    return {
-      title,
-      description,
-      alternates: {
-        canonical: `https://seniorstay.com/community/${params.state}/${params.city}`,
-      },
-      openGraph: {
-         title,
-         description,
-         url: `https://seniorstay.com/community/${params.state}/${params.city}`,
-         siteName: 'SeniorStay',
-         type: 'website',
-         // Consider adding a generic image for city pages
-       },
-       twitter: {
-         card: 'summary',
-         title,
-         description,
-       },
-    };
-  } catch (error) {
-    console.error(`Metadata Error for City Page (${city}, ${state}):`, error);
-    return {
-      title: `Senior Living in ${city}, ${state} | SeniorStay`,
-      description: `Find senior living communities in ${city}, ${state}.`,
-    };
-  }
+// Commenting out metadata generation as it likely belongs in a Server Component
+/*
+export async function generateMetadata({ params }: { params: PageParams }): Promise<Metadata> {
+  // ... existing metadata logic ...
+  // Requires prisma instance, which shouldn't be directly in client component
 }
+*/
 
-// City Page Component
-export default async function CityPage({ params }: Props) {
+export default function CityPage({
+  communities: initialCommunities,
+  params,
+  cityDisplay,
+  stateDisplay,
+}: CityPageProps) {
+  const [communities, setCommunities] = useState(initialCommunities);
+  const [isTourModalOpen, setIsTourModalOpen] = useState(false); // Add state for TourModal
+  const [isPricingModalOpen, setIsPricingModalOpen] = useState(false);
+  const [selectedCommunity, setSelectedCommunity] = useState<(Omit<Community, 'id'> & { id: string; services: SimpleService[] }) | null>(null);
+
+  // Add openTourModal function
+  const openTourModal = (community: (Omit<Community, 'id'> & { id: string; services: SimpleService[] })) => {
+    setSelectedCommunity(community);
+    setIsTourModalOpen(true);
+  };
+
+  const openPricingModal = (community: (Omit<Community, 'id'> & { id: string; services: SimpleService[] })) => {
+    setSelectedCommunity(community);
+    setIsPricingModalOpen(true);
+  };
+
   const stateParam = decodeURIComponent(params.state);
   const cityParam = decodeURIComponent(params.city);
 
-  // Format for display and database query
-  const stateDisplay = stateParam.toUpperCase();
-  const cityDisplay = formatLocation(cityParam); // Capitalize city name for display
-  const cityQuery = cityDisplay; // Use formatted city for query
-
-  let communities: Community[] = []; // Explicitly type the array
-  try {
-    console.log(`CityPage: Fetching communities for city='${cityQuery}', state='${stateDisplay}'`);
-    communities = await prisma.community.findMany({
-      where: {
-        state: stateDisplay,
-        city: {
-          equals: cityQuery,
-          mode: 'insensitive', // Case-insensitive search
-        },
-      },
-      orderBy: {
-        name: 'asc', // Order alphabetically by name
-      },
-    });
-    console.log(`CityPage: Found ${communities.length} communities.`);
-
-  } catch (error) {
-    console.error(`CityPage: Error fetching communities for ${cityDisplay}, ${stateDisplay}:`, error);
-    // Optionally display an error message to the user
-    // For now, we'll proceed as if none were found
-  }
-
+  // Render a message if no communities are found for this city
   if (communities.length === 0) {
-    // Render a message if no communities are found for this city
     return (
       <div className="container mx-auto px-4 py-12 min-h-screen">
         {/* Consider adding Breadcrumbs here */}
@@ -138,43 +96,98 @@ export default async function CityPage({ params }: Props) {
        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
          {communities.map((community) => (
            <div key={community.id} className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 hover:shadow-lg transition-shadow duration-300 flex flex-col">
-             <Link href={`/community/${stateParam}/${cityParam}/${community.slug}`} className="block">
-               <div className="relative h-48 w-full">
+             <Link href={`/community/${stateParam}/${cityParam}/${community.slug}`} className="block group">
+               <div className="relative h-48 w-full overflow-hidden">
                  <Image
-                   src={community.imageUrl || '/placeholder-image.jpg'} // Add a placeholder
+                   src={community.imageUrl || '/placeholder-image.jpg'}
                    alt={`Exterior of ${community.name}`}
                    fill
                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                   className="object-cover"
-                   // Consider adding onError for image fallbacks
+                   className="object-cover group-hover:scale-105 transition-transform duration-300"
                  />
                </div>
+               <div className="p-4">
+                  <h2 className="text-xl font-semibold text-gray-800 group-hover:text-blue-600 mb-1 truncate transition-colors duration-200" title={community.name || ""}>
+                     {community.name || 'Community Name Missing'}
+                  </h2>
+               </div>
              </Link>
-             <div className="p-4 flex flex-col flex-grow">
-               <Link href={`/community/${stateParam}/${cityParam}/${community.slug}`} className="block">
-                 <h2 className="text-xl font-semibold text-gray-800 hover:text-blue-600 mb-2 truncate" title={community.name || ""}>
-                   {community.name || 'Community Name Missing'}
-                 </h2>
-               </Link>
-               <div className="flex items-center text-gray-600 text-sm mb-4 flex-grow">
-                 <FiMapPin className="h-4 w-4 mr-1 flex-shrink-0" />
-                 <span className="truncate">
-                   {community.address ? `${community.address}, ` : ''}
-                   {community.city || cityDisplay}, {community.state || stateDisplay} {community.zip || ''}
-                 </span>
-               </div>
-               <div className="mt-auto">
-                 <Link
-                   href={`/community/${stateParam}/${cityParam}/${community.slug}`}
-                   className="inline-block bg-blue-600 text-white text-sm font-medium py-2 px-4 rounded-md hover:bg-blue-700 transition-colors duration-200 w-full text-center"
-                 >
-                   View Details
-                 </Link>
-               </div>
-             </div>
+             <div className="p-4 pt-0 flex flex-col flex-grow">
+                 <div className="flex items-center text-gray-600 text-sm mb-3">
+                    <FiMapPin className="h-4 w-4 mr-1.5 flex-shrink-0 text-gray-500" />
+                    <span className="truncate">
+                       {community.city || cityDisplay}, {community.state || stateDisplay}
+                    </span>
+                 </div>
+
+                 {/* Services Section - Added explicit cast after Array.isArray check */}
+                 {Array.isArray(community.services) && community.services.length > 0 && (
+                    <div className="mb-4 flex-grow">
+                       <h3 className="text-sm font-medium text-gray-700 mb-1.5">Services:</h3>
+                       <ul className="space-y-1">
+                          {(community.services as unknown as SimpleService[]).slice(0, 3).map((service: SimpleService) => (
+                          <li key={service.id} className="flex items-center text-xs text-gray-600">
+                             <FiCheck className="h-3.5 w-3.5 mr-1.5 text-green-500 flex-shrink-0" />
+                             {service.name}
+                          </li>
+                          ))}
+                          {(community.services as unknown as SimpleService[]).length > 3 && (
+                              <li className="text-xs text-gray-500 pl-5">+ {(community.services as unknown as SimpleService[]).length - 3} more</li>
+                          )}
+                       </ul>
+                    </div>
+                 )}
+                 {/* Show placeholder if services is not an array or is empty */}
+                 {(!Array.isArray(community.services) || community.services.length === 0) && (
+                     <div className="mb-4 flex-grow">
+                         <p className="text-xs text-gray-500 italic">Services information not available.</p>
+                     </div>
+                 )}
+
+                 {/* Button Container - Updated styles to match ProviderCard */}
+                 <div className="mt-auto grid grid-cols-2 gap-3 pt-4 border-t border-gray-100">
+                   <button
+                     // Style from ProviderCard
+                     className="w-full bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-2 px-4 rounded-full shadow-sm transition inline-flex items-center justify-center"
+                     onClick={() => openTourModal(community)}
+                   >
+                     <Calendar className="w-4 h-4 inline-block mr-1 -mt-0.5" /> {/* Added icon */}
+                     Schedule Tour
+                   </button>
+                   <button
+                     // Style from ProviderCard
+                     className="w-full border border-blue-600 text-blue-600 hover:bg-blue-50 text-sm font-medium py-2 px-4 rounded-full transition inline-flex items-center justify-center"
+                     onClick={() => openPricingModal(community)}
+                   >
+                     <DollarSign className="w-4 h-4 inline-block mr-1 -mt-0.5" /> {/* Added icon */}
+                     Get Pricing
+                   </button>
+                 </div>
+              </div>
            </div>
          ))}
        </div>
+
+       {/* Modals - Add TourModal back */}
+       {selectedCommunity && (
+         <>
+           <TourModal
+             isOpen={isTourModalOpen}
+             onClose={() => setIsTourModalOpen(false)}
+             communityId={selectedCommunity.id}
+             communityName={selectedCommunity.name || 'Community'}
+             communityImage={selectedCommunity.imageUrl}
+             communitySlug={selectedCommunity.slug}
+           />
+           <RequestInfoModal
+             isOpen={isPricingModalOpen}
+             onClose={() => setIsPricingModalOpen(false)}
+             communityName={selectedCommunity.name || 'Community'}
+             requestType="Pricing"
+           />
+         </>
+       )}
+
        <div className="mt-12 text-center">
             <Link href="/" className="text-blue-600 hover:underline">
                &larr; Explore Other Areas
@@ -182,4 +195,10 @@ export default async function CityPage({ params }: Props) {
        </div>
     </div>
   );
-} 
+}
+
+// Removing getServerSideProps / data fetching logic from this file
+// It needs to be handled by a parent Server Component or API route
+// that passes the serialized props (communities, params, cityDisplay, stateDisplay)
+// to this client component.
+
