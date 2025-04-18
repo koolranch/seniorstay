@@ -17,7 +17,7 @@ import { InternalCommunity } from "@/lib/types/community";
 // Helper function to convert InternalCommunity to Community format
 function mapInternalToDisplay(internalCommunities: InternalCommunity[]) {
   return internalCommunities.map(community => ({
-    id: parseInt(community.id) || Math.floor(Math.random() * 10000),
+    id: community.id,
     name: community.name,
     slug: community.slug,
     address: `${community.city}, ${community.state}`,

@@ -62,7 +62,7 @@ function generateDescription(name: string, services: string[]): string {
 
 // Interface for the static community data
 export interface Community {
-  id: number;
+  id: string;
   name: string;
   slug: string;
   address: string;
@@ -81,7 +81,7 @@ export interface Community {
 // Hardcoded community data array
 export const communities: Community[] = [
   {
-    id: 1,
+    id: "1",
     name: "Westwood Place",
     slug: generateSlug("Westwood Place", "Cleveland", "OH"),
     address: "Cleveland, OH",
@@ -95,7 +95,7 @@ export const communities: Community[] = [
     image: "https://images.unsplash.com/photo-1591088398332-8a7791972843?q=80&w=2074&auto=format&fit=crop"
   },
   {
-    id: 2,
+    id: "2",
     name: "Summit Point",
     slug: generateSlug("Summit Point", "Macedonia", "OH"),
     address: "9633 Valley View Rd, Macedonia, OH 44056",
@@ -109,7 +109,7 @@ export const communities: Community[] = [
     image: "https://images.unsplash.com/photo-1556155092-490a1ba16284?q=80&w=2070&auto=format&fit=crop"
   },
   {
-    id: 3,
+    id: "3",
     name: "Mount Alverna Village",
     slug: "mount-alverna-village-parma-oh",
     address: "6765 State Rd, Parma, OH 44134",
@@ -123,7 +123,7 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/random/800x600/?retirement,home",
   },
   {
-    id: 4,
+    id: "4",
     name: "Rose Senior Living at Beachwood",
     slug: "rose-senior-living-beachwood-oh",
     address: "23611 Harvard Rd, Beachwood, OH 44122",
@@ -137,7 +137,7 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/random/800x600/?senior,residence",
   },
   {
-    id: 5,
+    id: "5",
     name: "Vitalia Rockside",
     slug: "vitalia-rockside-seven-hills-oh",
     address: "6101 Lombardo Center, Seven Hills, OH 44131",
@@ -151,7 +151,7 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/random/800x600/?senior,apartment",
   },
   {
-    id: 6,
+    id: "6",
     name: "StoryPoint Shaker Heights",
     slug: "storypoint-shaker-heights-shaker-heights-oh",
     address: "16300 Chagrin Blvd, Shaker Heights, OH 44120",
@@ -165,7 +165,7 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/random/800x600/?senior,community",
   },
   {
-    id: 7,
+    id: "7",
     name: "The Woodlands by Heritage Retirement Communities",
     slug: "woodlands-heritage-retirement-shaker-heights-oh",
     address: "16333 Chagrin Blvd, Shaker Heights, OH 44120",
@@ -179,7 +179,7 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/random/800x600/?retirement,community",
   },
   {
-    id: 8,
+    id: "8",
     name: "Forest Hills Place",
     slug: "forest-hills-place-cleveland-oh",
     address: "3151 Mayfield Rd, Cleveland Heights, OH 44118",
@@ -193,7 +193,7 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/random/800x600/?senior,living",
   },
   {
-    id: 9,
+    id: "9",
     name: "Woodside Senior Living",
     slug: "woodside-senior-living-bedford-oh",
     address: "19455 Rockside Rd, Bedford, OH 44146",
@@ -207,7 +207,7 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/random/800x600/?senior,residence",
   },
   {
-    id: 10,
+    id: "10",
     name: "Eliza Jennings",
     slug: "eliza-jennings-cleveland-oh",
     address: "10603 Detroit Ave, Cleveland, OH 44102",
@@ -221,7 +221,7 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/random/800x600/?senior,community",
   },
   {
-    id: 11,
+    id: "11",
     name: "Brooklyn Pointe Assisted Living and Memory Care",
     slug: "brooklyn-pointe-assisted-living-brooklyn-oh",
     address: "4800 Idlewood Dr, Brooklyn, OH 44144",
@@ -235,7 +235,7 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/random/800x600/?senior,living",
   },
   {
-    id: 12,
+    id: "12",
     name: "HarborChase of Shaker Heights",
     slug: "harborchase-shaker-heights-shaker-heights-oh",
     address: "17050 Van Aken Blvd, Shaker Heights, OH 44120",
@@ -249,7 +249,7 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/random/800x600/?senior,residence",
   },
   {
-    id: 13,
+    id: "13",
     name: "Marymount Place",
     slug: "marymount-place-garfield-heights-oh",
     address: "5100 Marymount Village Dr, Garfield Heights, OH 44125",
@@ -263,7 +263,7 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/random/800x600/?senior,community",
   },
   {
-    id: 14,
+    id: "14",
     name: "Vista Springs Ravinia",
     slug: "vista-springs-ravinia-independence-oh",
     address: "6046 Brecksville Rd, Independence, OH 44131",
@@ -277,7 +277,7 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/random/800x600/?senior,living",
   },
   {
-    id: 15,
+    id: "15",
     name: "Haven at Lakewood",
     slug: "haven-at-lakewood-lakewood-oh",
     address: "1341 Marlowe Ave, Lakewood, OH 44107",
@@ -291,7 +291,7 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/random/800x600/?senior,residence",
   },
   {
-    id: 16,
+    id: "16",
     name: "American House Macedonia",
     slug: "american-house-macedonia-macedonia-oh",
     address: "8401 S Bedford Rd, Macedonia, OH 44056",
@@ -305,7 +305,7 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/random/800x600/?senior,community",
   },
   {
-    id: 17,
+    id: "17",
     name: "Arden Courts of Parma",
     slug: "arden-courts-parma-parma-oh",
     address: "9205 W Sprague Rd, Parma, OH 44133",
@@ -319,7 +319,7 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/random/800x600/?senior,living",
   },
   {
-    id: 18,
+    id: "18",
     name: "Berea Alzheimer's Care Center",
     slug: "berea-alzheimers-care-center-berea-oh",
     address: "255 Front St, Berea, OH 44017",
@@ -333,7 +333,7 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/random/800x600/?senior,care",
   },
   {
-    id: 19,
+    id: "19",
     name: "Bickford of Rocky River",
     slug: "bickford-rocky-river-rocky-river-oh",
     address: "21600 Detroit Rd, Rocky River, OH 44116",
@@ -347,7 +347,7 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/random/800x600/?senior,residence",
   },
   {
-    id: 20,
+    id: "20",
     name: "Cardinal Court Alzheimer's Special Care Center",
     slug: "cardinal-court-alzheimers-strongsville-oh",
     address: "18719 Drake Rd, Strongsville, OH 44136",
@@ -361,7 +361,7 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/random/800x600/?senior,care",
   },
   {
-    id: 21,
+    id: "21",
     name: "Danbury Senior Living Brunswick",
     slug: "danbury-senior-living-brunswick-brunswick-oh",
     address: "3430 Brunswick Lake Pkwy, Brunswick, OH 44212",
@@ -375,7 +375,7 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/random/800x600/?senior,community",
   },
   {
-    id: 22,
+    id: "22",
     name: "Elmcroft of Sagamore Hills",
     slug: "elmcroft-sagamore-hills-northfield-oh",
     address: "997 W Aurora Rd, Northfield, OH 44067",
@@ -389,7 +389,7 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/random/800x600/?senior,living",
   },
   {
-    id: 23,
+    id: "23",
     name: "Kemper House Strongsville",
     slug: "kemper-house-strongsville-strongsville-oh",
     address: "10890 Prospect Rd, Strongsville, OH 44149",
@@ -403,7 +403,7 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/random/800x600/?senior,residence",
   },
   {
-    id: 24,
+    id: "24",
     name: "Paramount Senior Living",
     slug: "paramount-senior-living-middleburg-heights-oh",
     address: "15435 Bagley Rd, Middleburg Heights, OH 44130",
@@ -417,7 +417,7 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/random/800x600/?senior,community",
   },
   {
-    id: 25,
+    id: "25",
     name: "Sunrise of Westlake",
     slug: "sunrise-westlake-westlake-oh",
     address: "27819 Center Ridge Rd, Westlake, OH 44145",
@@ -431,7 +431,7 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/random/800x600/?senior,living",
   },
   {
-    id: 26,
+    id: "26",
     name: "The Grande at Middleburg Heights",
     slug: "grande-middleburg-heights-middleburg-heights-oh",
     address: "7510 Pearl Rd, Middleburg Heights, OH 44130",
@@ -445,7 +445,7 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/random/800x600/?senior,residence",
   },
   {
-    id: 27,
+    id: "27",
     name: "The Grande at Westlake",
     slug: "grande-westlake-westlake-oh",
     address: "28777 Detroit Rd, Westlake, OH 44145",
@@ -459,7 +459,7 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/random/800x600/?senior,residence",
   },
   {
-    id: 28,
+    id: "28",
     name: "Sunrise At Parma",
     slug: "sunrise-parma-parma-oh",
     address: "7766 Broadview Rd, Parma, OH 44134",
@@ -473,7 +473,7 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/random/800x600/?senior,living",
   },
   {
-    id: 29,
+    id: "29",
     name: "Legacy Place Parma",
     slug: "legacy-place-parma-parma-oh",
     address: "7377 Ridge Rd, Parma, OH 44129",
@@ -487,7 +487,7 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/random/800x600/?senior,residence",
   },
   {
-    id: 30,
+    id: "30",
     name: "SHEVCHENKO MANOR",
     slug: "shevchenko-manor-parma-oh",
     address: "2222 Westbrook Dr, Parma, OH 44134",
@@ -501,7 +501,7 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/random/800x600/?senior,living",
   },
   {
-    id: 31,
+    id: "31",
     name: "StoryPoint Strongsville",
     slug: "storypoint-strongsville-strongsville-oh",
     address: "19205 Pearl Rd, Strongsville, OH 44136",
@@ -515,7 +515,7 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/random/800x600/?senior,community",
   },
   {
-    id: 32,
+    id: "32",
     name: "Brookdale Westlake Village",
     slug: "brookdale-westlake-village-westlake-oh",
     address: "28460 Westlake Village Dr, Westlake, OH 44145",
@@ -529,7 +529,7 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/random/800x600/?senior,residence",
   },
   {
-    id: 33,
+    id: "33",
     name: "Brookdale Gardens at Westlake",
     slug: "brookdale-gardens-westlake-westlake-oh",
     address: "27569 Detroit Rd, Westlake, OH 44145",
@@ -543,7 +543,7 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/random/800x600/?senior,community",
   },
   {
-    id: 34,
+    id: "34",
     name: "Fairmont of Westlake",
     slug: "fairmont-westlake-westlake-oh",
     address: "27819 Center Ridge Rd, Westlake, OH 44145",
@@ -557,7 +557,7 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/random/800x600/?senior,living",
   },
   {
-    id: 35,
+    id: "35",
     name: "Light of Hearts Villa",
     slug: "light-hearts-villa-bedford-oh",
     address: "283 Union St, Bedford, OH 44146",
@@ -571,7 +571,7 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/random/800x600/?senior,residence",
   },
   {
-    id: 36,
+    id: "36",
     name: "Arden Courts of Westlake",
     slug: "arden-courts-westlake-westlake-oh",
     address: "28400 Center Ridge Rd, Westlake, OH 44145",
@@ -586,7 +586,7 @@ export const communities: Community[] = [
   },
   // Add the remaining 39 communities... (Example structure)
   {
-    id: 37,
+    id: "37",
     name: "Atria North Olmsted",
     slug: "atria-north-olmsted-north-olmsted-oh",
     address: "29543 Lorain Rd, North Olmsted, OH 44070",
@@ -600,7 +600,7 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/random/800x600/?senior,community"
   },
   {
-    id: 38,
+    id: "38",
     name: "Brookdale North Olmsted",
     slug: "brookdale-north-olmsted-north-olmsted-oh",
     address: "27500 Mills Creek Ln, North Olmsted, OH 44070",
@@ -614,7 +614,7 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/random/800x600/?senior,living"
   },
   {
-    id: 39,
+    id: "39",
     name: "Emerald Village",
     slug: "emerald-village-north-olmsted-oh",
     address: "30344 Lorain Rd, North Olmsted, OH 44070",
@@ -628,7 +628,7 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/random/800x600/?senior,residence"
   },
   {
-    id: 40,
+    id: "40",
     name: "Northridge Health Center",
     slug: "northridge-health-center-north-ridgeville-oh",
     address: "35990 Westminster Ave, North Ridgeville, OH 44039",
@@ -642,7 +642,7 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/random/800x600/?health,center"
   },
   {
-    id: 41,
+    id: "41",
     name: "Independence Village of Avon Lake",
     slug: "independence-village-avon-lake-avon-lake-oh",
     address: "345 Lear Rd, Avon Lake, OH 44012",
@@ -656,7 +656,7 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/random/800x600/?senior,community"
   },
   {
-    id: 42,
+    id: "42",
     name: "Oaks of Avon",
     slug: "oaks-of-avon-avon-oh",
     address: "31600 Detroit Rd, Avon, OH 44011",
@@ -670,7 +670,7 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/random/800x600/?senior,living"
   },
   {
-    id: 43,
+    id: "43",
     name: "Rose Senior Living - Avon",
     slug: "rose-senior-living-avon-avon-oh",
     address: "33200 Health Campus Blvd, Avon, OH 44011",
@@ -684,7 +684,7 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/random/800x600/?senior,residence"
   },
   {
-    id: 44,
+    id: "44",
     name: "Independence Village of Berea",
     slug: "independence-village-berea-berea-oh",
     address: "455 Front St, Berea, OH 44017",
@@ -698,7 +698,7 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/random/800x600/?senior,community"
   },
   {
-    id: 45,
+    id: "45",
     name: "Generations Senior Living of Strongsville",
     slug: "generations-senior-living-strongsville-strongsville-oh",
     address: "18960 Falling Water Rd, Strongsville, OH 44136",
@@ -712,7 +712,7 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/random/800x600/?senior,living"
   },
   {
-    id: 46,
+    id: "46",
     name: "Park Creek Center",
     slug: "park-creek-center-strongsville-oh",
     address: "18820 Royalton Rd, Strongsville, OH 44136",
@@ -726,7 +726,7 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/random/800x600/?health,center"
   },
   {
-    id: 47,
+    id: "47",
     name: "Breckenridge Village",
     slug: "breckenridge-village-willoughby-oh",
     address: "36855 Ridge Rd, Willoughby, OH 44094",
@@ -740,7 +740,7 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/random/800x600/?retirement,village"
   },
   {
-    id: 48,
+    id: "48",
     name: "Brookdale Willoughby",
     slug: "brookdale-willoughby-willoughby-oh",
     address: "4235 River St, Willoughby, OH 44094",
@@ -754,7 +754,7 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/random/800x600/?senior,residence"
   },
   {
-    id: 49,
+    id: "49",
     name: "Governor's Village",
     slug: "governors-village-mayfield-village-oh",
     address: "6701 Governor's Way, Mayfield Village, OH 44143",
@@ -768,7 +768,7 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/random/800x600/?senior,community"
   },
   {
-    id: 50,
+    id: "50",
     name: "Haven Home Assisted Living",
     slug: "haven-home-assisted-living-chardon-oh",
     address: "11660 Station St, Chardon, OH 44024",
@@ -782,7 +782,7 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/random/800x600/?assisted,living"
   },
   {
-    id: 51,
+    id: "51",
     name: "Maplewood at Chardon",
     slug: "maplewood-at-chardon-chardon-oh",
     address: "12350 Bass Lake Rd, Chardon, OH 44024",
@@ -796,7 +796,7 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/random/800x600/?senior,living"
   },
   {
-    id: 52,
+    id: "52",
     name: "Mentor Woods",
     slug: "mentor-woods-mentor-oh",
     address: "8750 Mentor Ave, Mentor, OH 44060",
@@ -810,7 +810,7 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/random/800x600/?senior,community"
   },
   {
-    id: 53,
+    id: "53",
     name: "Parker Place",
     slug: "parker-place-mentor-oh",
     address: "7100 Mentor Ave, Mentor, OH 44060",
@@ -824,7 +824,7 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/random/800x600/?senior,residence"
   },
   {
-    id: 54,
+    id: "54",
     name: "Homestead Hills",
     slug: "homestead-hills-mentor-oh",
     address: "8800 Lakeshore Blvd, Mentor, OH 44060",
@@ -838,7 +838,7 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/random/800x600/?senior,living"
   },
   {
-    id: 55,
+    id: "55",
     name: "Legacy Place Twinsburg",
     slug: "legacy-place-twinsburg-twinsburg-oh",
     address: "8440 Remington Rd, Twinsburg, OH 44087",
@@ -852,7 +852,7 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/random/800x600/?senior,residence"
   },
   {
-    id: 56,
+    id: "56",
     name: "The Willows Assisted Living",
     slug: "willows-assisted-living-twinsburg-oh",
     address: "10150 Ravenna Rd, Twinsburg, OH 44087",
@@ -866,7 +866,7 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/random/800x600/?senior,living"
   },
   {
-    id: 57,
+    id: "57",
     name: "Brookdale Solon",
     slug: "brookdale-solon-solon-oh",
     address: "6335 Som Center Rd, Solon, OH 44139",
@@ -880,7 +880,7 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/random/800x600/?senior,residence"
   },
   {
-    id: 58,
+    id: "58",
     name: "Solon Pointe",
     slug: "solon-pointe-solon-oh",
     address: "5625 Emerald Ridge Pkwy, Solon, OH 44139",
@@ -894,7 +894,7 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/random/800x600/?health,center"
   },
   {
-    id: 59,
+    id: "59",
     name: "Vitality Living Hudson",
     slug: "vitality-living-hudson-hudson-oh",
     address: "5000 Vitality Dr, Hudson, OH 44236",
@@ -908,7 +908,7 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/random/800x600/?senior,community"
   },
   {
-    id: 60,
+    id: "60",
     name: "Laurel Lake Retirement Community",
     slug: "laurel-lake-retirement-community-hudson-oh",
     address: "200 Laurel Lake Dr, Hudson, OH 44236",
@@ -922,7 +922,7 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/random/800x600/?retirement,community"
   },
   {
-    id: 61,
+    id: "61",
     name: "Sunrise of Cuyahoga Falls",
     slug: "sunrise-cuyahoga-falls-cuyahoga-falls-oh",
     address: "1805 Portage Trl, Cuyahoga Falls, OH 44223",
@@ -936,7 +936,7 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/random/800x600/?senior,living"
   },
   {
-    id: 62,
+    id: "62",
     name: "Danbury Senior Living Cuyahoga Falls",
     slug: "danbury-senior-living-cuyahoga-falls-cuyahoga-falls-oh",
     address: "175 N Birdwood Ave, Cuyahoga Falls, OH 44223",
@@ -950,7 +950,7 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/random/800x600/?senior,residence"
   },
   {
-    id: 63,
+    id: "63",
     name: "Brookdale Bath",
     slug: "brookdale-bath-akron-oh",
     address: "101 N Cleveland Massillon Rd, Akron, OH 44333",
@@ -964,7 +964,7 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/random/800x600/?senior,community"
   },
   {
-    id: 64,
+    id: "64",
     name: "Pleasant View Health Care Center",
     slug: "pleasant-view-health-care-center-akron-oh",
     address: "401 Snyder Ave, Barberton, OH 44203",
@@ -978,7 +978,7 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/random/800x600/?health,care"
   },
   {
-    id: 65,
+    id: "65",
     name: "The Village of St. Edward",
     slug: "village-st-edward-fairlawn-oh",
     address: "3131 Smith Rd, Fairlawn, OH 44333",
@@ -992,7 +992,7 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/random/800x600/?retirement,village"
   },
   {
-    id: 66,
+    id: "66",
     name: "Danbury Senior Living Tallmadge",
     slug: "danbury-senior-living-tallmadge-tallmadge-oh",
     address: "65 S Munroe Rd, Tallmadge, OH 44278",
@@ -1006,7 +1006,7 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/random/800x600/?senior,residence"
   },
   {
-    id: 67,
+    id: "67",
     name: "KentRidge Senior Living",
     slug: "kentridge-senior-living-kent-oh",
     address: "500 Loop Rd, Kent, OH 44240",
@@ -1020,7 +1020,7 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/random/800x600/?senior,living"
   },
   {
-    id: 68,
+    id: "68",
     name: "Hudson Meadows",
     slug: "hudson-meadows-hudson-oh",
     address: "1275 Barlow Rd, Hudson, OH 44236",
@@ -1034,7 +1034,7 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/random/800x600/?senior,community"
   },
   {
-    id: 69,
+    id: "69",
     name: "Maplewood at Twinsburg",
     slug: "maplewood-at-twinsburg-twinsburg-oh",
     address: "2463 E Aurora Rd, Twinsburg, OH 44087",
@@ -1048,7 +1048,7 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/random/800x600/?senior,residence"
   },
   {
-    id: 70,
+    id: "70",
     name: "Vitalia Stow",
     slug: "vitalia-stow-stow-oh",
     address: "4950 Darrow Rd, Stow, OH 44224",
@@ -1062,7 +1062,7 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/random/800x600/?senior,living"
   },
   {
-    id: 71,
+    id: "71",
     name: "Gardens of Western Reserve",
     slug: "gardens-western-reserve-streetsboro-oh",
     address: "9975 Greentree Pkwy, Streetsboro, OH 44241",
@@ -1076,7 +1076,7 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/random/800x600/?senior,residence"
   },
   {
-    id: 72,
+    id: "72",
     name: "Altercare Integrated Health Services of Streetsboro",
     slug: "altercare-streetsboro-streetsboro-oh",
     address: "10001 State Route 43, Streetsboro, OH 44241",
@@ -1090,7 +1090,7 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/random/800x600/?health,center"
   },
   {
-    id: 73,
+    id: "73",
     name: "Aurora Manor Special Care Centre",
     slug: "aurora-manor-special-care-aurora-oh",
     address: "101 South Bissell Rd, Aurora, OH 44202",
@@ -1104,7 +1104,7 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/random/800x600/?memory,care"
   },
   {
-    id: 74,
+    id: "74",
     name: "Anna Maria of Aurora",
     slug: "anna-maria-aurora-aurora-oh",
     address: "889 N Aurora Rd, Aurora, OH 44202",
@@ -1118,7 +1118,7 @@ export const communities: Community[] = [
     image: "https://source.unsplash.com/random/800x600/?retirement,village"
   },
   {
-    id: 75,
+    id: "75",
     name: "The Residence at Kensington Place",
     slug: "residence-kensington-place-columbus-oh",
     address: "1001 Kensington Place Dr, Columbus, OH 43240",
