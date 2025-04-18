@@ -24,6 +24,12 @@ export async function GET(request: NextRequest) {
   }
 
   try {
+    // Log detailed info about each ID for debugging
+    console.log("API: ID debug information:");
+    providerIds.forEach((id, index) => {
+      console.log(`ID ${index + 1}: "${id}" (type: ${typeof id}, length: ${id.length})`);
+    });
+    
     // Fetch communities from the database based on the provided IDs
     console.log("API: Attempting database query with IDs:", providerIds);
     const communities: Community[] = await prisma.community.findMany({
@@ -40,6 +46,19 @@ export async function GET(request: NextRequest) {
     // Log the first community ID and name if available (for debugging)
     if (communities.length > 0) {
       console.log("API: First community:", { id: communities[0].id, name: communities[0].name });
+    } else {
+      // Log more details about why no communities were found
+      console.log("API: No communities found. Trying to determine why...");
+      
+      // Check if IDs exist in the database (one by one for detailed debugging)
+      for (const id of providerIds) {
+        const community = await prisma.community.findUnique({
+          where: { id },
+          select: { id: true, name: true }
+        });
+        
+        console.log(`API: Checking ID "${id}" directly: ${community ? 'Found' : 'Not found'}`);
+      }
     }
 
     return NextResponse.json({
