@@ -13,6 +13,7 @@ import CategoryPillBar from "@/components/CategoryPillBar";
 import CommunityGrid from "@/components/CommunityGrid";
 import TourModal from "@/components/TourModal";
 import { InternalCommunity } from "@/lib/types/community";
+import CompareFloatingButton from "@/components/CompareFloatingButton";
 
 // Helper function to convert InternalCommunity to Community format
 function mapInternalToDisplay(internalCommunities: InternalCommunity[]) {
@@ -71,6 +72,7 @@ export default function HomePage() {
       <RegionalDirectory />
       <CommunityGrid communities={mappedCommunities} filterByCategory={selectedCategory} />
       <TourModal />
+      <CompareFloatingButton />
     </main>
   );
 }

@@ -8,6 +8,7 @@ import { FiArrowLeft } from "react-icons/fi";
 import { slugify, getCityPath } from "@/lib/utils/formatSlug";
 import type { Community } from "@prisma/client"; // Import Prisma Community type
 import { parseServices, deriveCommunityType } from '@/lib/utils/communityUtils';
+import CompareFloatingButton from "@/components/CompareFloatingButton"; // Import the button
 
 // Helper function to decode and format city name from slug
 const getDecodedCityName = (slug: string): string => {
@@ -297,6 +298,8 @@ export default async function CityPage({ params }: { params: { city: string } })
           </div>
         </div>
       </div>
+
+      <CompareFloatingButton /> {/* Add the floating button here */}
     </div>
   );
 } 

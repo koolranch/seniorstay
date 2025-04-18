@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, ChangeEvent } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { FiStar, FiCheck, FiMapPin, FiHome, FiUsers, FiCalendar, FiDollarSign, FiArrowRight } from 'react-icons/fi';
+import { FiStar, FiCheck, FiMapPin, FiHome, FiUsers, FiCalendar, FiDollarSign, FiArrowRight, FiSquare, FiCheckSquare } from 'react-icons/fi';
 import { useComparison } from '@/context/ComparisonContext';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import FavoriteButton from './FavoriteButton';
@@ -87,13 +87,42 @@ const ProviderCard = ({
     setIsModalOpen(true);
   };
 
+  const handleComparisonChange = (e: ChangeEvent<HTMLInputElement>) => {
+    e.stopPropagation();
+    if (e.target.checked) {
+      addToComparison(id);
+    } else {
+      removeFromComparison(id);
+    }
+  };
+
   const closeModal = () => {
     setIsModalOpen(false);
   };
 
   const cardContent = (
     <>
-      <div className="relative aspect-[16/10] w-full rounded-xl overflow-hidden mb-4">
+      <div className="relative aspect-[16/10] w-full rounded-xl overflow-hidden mb-4 group">
+        <label 
+          className="absolute top-3 left-3 z-20 cursor-pointer p-1.5 bg-white/80 hover:bg-white rounded-md shadow transition-opacity opacity-0 group-hover:opacity-100 focus-within:opacity-100" 
+          onClick={(e) => e.stopPropagation()}
+          htmlFor={`compare-${id}`}
+        >
+          <input
+            type="checkbox"
+            id={`compare-${id}`}
+            checked={inComparison}
+            onChange={handleComparisonChange}
+            className="hidden"
+            aria-label={`Select ${name} for comparison`}
+          />
+          {inComparison ? (
+            <FiCheckSquare size={20} className="text-blue-600" />
+          ) : (
+            <FiSquare size={20} className="text-gray-500" />
+          )}
+        </label>
+
         <Image
           src={imageSource}
           alt={`Front exterior of ${name} senior living community in ${city || 'Unknown City'}, ${state || 'Unknown State'}`}
@@ -122,7 +151,7 @@ const ProviderCard = ({
         </div>
         
         {rating >= 4.8 && (
-          <div className="absolute top-3 left-3 bg-yellow-200 px-2 py-1 rounded-md text-xs font-semibold text-yellow-800 shadow-sm flex items-center">
+          <div className="absolute bottom-3 right-3 bg-yellow-200 px-2 py-1 rounded-md text-xs font-semibold text-yellow-800 shadow-sm flex items-center">
             <FiStar className="!text-yellow-600 mr-1 drop-shadow-sm" size={12} />
             Featured
           </div>

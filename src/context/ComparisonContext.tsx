@@ -1,7 +1,13 @@
 "use client";
 
-import type React from "react";
-import { createContext, useState, useContext, useEffect } from "react";
+import {
+  createContext,
+  useState,
+  useContext,
+  useEffect,
+  type ReactNode,
+  useCallback,
+} from "react";
 
 // Define the type for a community
 export type Community = {
@@ -20,93 +26,112 @@ export type Community = {
   description?: string;
 };
 
-// Define the context type
+// Comparison context type
 type ComparisonContextType = {
-  comparedCommunities: Community[];
-  addToComparison: (community: Community) => void;
-  removeFromComparison: (communityId: string) => void;
-  isInComparison: (communityId: string) => boolean;
+  comparisonItems: string[]; // Array of community IDs
+  addToComparison: (providerId: string) => void;
+  removeFromComparison: (providerId: string) => void;
+  isInComparison: (providerId: string) => boolean;
   clearComparison: () => void;
+  isLoading: boolean; // Added loading state for persistence
 };
 
-// Create the context with default values
+// Create context with default values
 const ComparisonContext = createContext<ComparisonContextType>({
-  comparedCommunities: [],
+  comparisonItems: [],
   addToComparison: () => {},
   removeFromComparison: () => {},
   isInComparison: () => false,
   clearComparison: () => {},
+  isLoading: true, // Default to true until loaded from storage
 });
 
 // Custom hook to use the comparison context
 export const useComparison = () => useContext(ComparisonContext);
 
-// Provider component
-export const ComparisonProvider = ({ children }: { children: React.ReactNode }) => {
-  const [comparedCommunities, setComparedCommunities] = useState<Community[]>([]);
+// Comparison provider component
+export const ComparisonProvider = ({ children }: { children: ReactNode }) => {
+  const [comparisonItems, setComparisonItems] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const storageKey = "comparisonItems";
 
-  // Load saved comparison from localStorage on mount
+  // Load comparison items from localStorage on mount
   useEffect(() => {
-    const savedComparison = localStorage.getItem("comparedCommunities");
-    if (savedComparison) {
-      try {
-        const parsedData = JSON.parse(savedComparison);
-        if (Array.isArray(parsedData) && parsedData.every(item => typeof item.id === 'string')) {
-           setComparedCommunities(parsedData);
+    try {
+      const storedItems = localStorage.getItem(storageKey);
+      if (storedItems) {
+        const parsedItems = JSON.parse(storedItems);
+        // Validate that it's an array of strings
+        if (
+          Array.isArray(parsedItems) &&
+          parsedItems.every((item) => typeof item === "string")
+        ) {
+          setComparisonItems(parsedItems);
         } else {
-            console.warn("Saved comparison data structure mismatch (expected id: string).");
-            localStorage.removeItem("comparedCommunities");
+          console.warn(
+            "Invalid format in localStorage comparisonItems. Clearing."
+          );
+          localStorage.removeItem(storageKey);
         }
-      } catch (error) {
-        console.error("Failed to parse saved comparison", error);
-        localStorage.removeItem("comparedCommunities");
       }
+    } catch (error) {
+      console.error("Failed to parse comparison items from localStorage", error);
+      localStorage.removeItem(storageKey);
     }
+    setIsLoading(false); // Loading finished
   }, []);
 
-  // Save comparison to localStorage whenever it changes
+  // Save comparison items to localStorage whenever they change
   useEffect(() => {
-    localStorage.setItem("comparedCommunities", JSON.stringify(comparedCommunities));
-  }, [comparedCommunities]);
+    if (!isLoading) { // Only save after initial load
+      localStorage.setItem(storageKey, JSON.stringify(comparisonItems));
+    }
+  }, [comparisonItems, isLoading]);
 
-  // Add a community to comparison (max 3)
-  const addToComparison = (community: Community) => {
-    setComparedCommunities((prev) => {
-      // Check if already in comparison
-      if (prev.some((c) => c.id === community.id)) return prev;
-
-      // Limit to 3 communities max
-      if (prev.length >= 3) {
-        console.log("Comparison limit reached (3).");
-        return [...prev.slice(1), community];
+  // Add to comparison
+  const addToComparison = useCallback((providerId: string) => {
+    setComparisonItems((prevItems) => {
+      if (!prevItems.includes(providerId)) {
+        console.log("ComparisonContext: Adding ID:", providerId);
+        return [...prevItems, providerId];
       }
-
-      return [...prev, community];
+      return prevItems; // Return unchanged if already present
     });
-  };
+  }, []);
 
-  // Remove a community from comparison
-  const removeFromComparison = (communityId: string) => {
-    setComparedCommunities((prev) => prev.filter((c) => c.id !== communityId));
-  };
+  // Remove from comparison
+  const removeFromComparison = useCallback((providerId: string) => {
+    setComparisonItems((prevItems) => {
+      const updatedItems = prevItems.filter((id) => id !== providerId);
+       if (updatedItems.length !== prevItems.length) {
+         console.log("ComparisonContext: Removing ID:", providerId);
+       }
+      return updatedItems;
+    });
+  }, []);
 
-  // Check if a community is in comparison
-  const isInComparison = (communityId: string) => {
-    return comparedCommunities.some((c) => c.id === communityId);
-  };
+  // Check if item is in comparison
+  const isInComparison = useCallback(
+    (providerId: string) => {
+      return comparisonItems.includes(providerId);
+    },
+    [comparisonItems]
+  );
 
-  // Clear all compared communities
-  const clearComparison = () => {
-    setComparedCommunities([]);
-  };
+  // Clear all comparison items
+  const clearComparison = useCallback(() => {
+    console.log("ComparisonContext: Clearing all items.");
+    setComparisonItems([]);
+  }, []);
 
-  // Provide the context value
+  // Context value
   const value = {
-    comparedCommunities,
+    comparisonItems,
     addToComparison,
     removeFromComparison,
     isInComparison,
     clearComparison,
+    isLoading,
   };
 
   return (

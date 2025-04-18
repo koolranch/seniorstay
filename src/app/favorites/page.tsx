@@ -1,14 +1,16 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, ChangeEvent } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import Image from 'next/image';
 import Link from 'next/link';
-import { FiHeart, FiStar, FiMapPin, FiFilter, FiArrowLeft, FiTrash2, FiLoader } from 'react-icons/fi';
+import { FiHeart, FiStar, FiMapPin, FiFilter, FiArrowLeft, FiTrash2, FiLoader, FiSquare, FiCheckSquare } from 'react-icons/fi';
 import { useRouter } from 'next/navigation';
 import FavoriteButton from '@/components/FavoriteButton';
 import type { Community } from '@/types/community';
 import { parseServices, deriveCommunityType } from '@/lib/utils/communityUtils';
+import { useComparison } from '@/context/ComparisonContext';
+import CompareFloatingButton from "@/components/CompareFloatingButton";
 
 // Add a debugging function to inspect the favorited communities
 const logCommunityData = (community: any) => {
@@ -23,9 +25,15 @@ const logCommunityData = (community: any) => {
 };
 
 export default function FavoritesPage() {
-  const { user, isFavorite } = useAuth();
+  const { user } = useAuth();
   const router = useRouter();
-  const [selectedCommunities, setSelectedCommunities] = useState<string[]>([]);
+  const { 
+    comparisonItems, 
+    addToComparison, 
+    removeFromComparison, 
+    isInComparison, 
+    clearComparison 
+  } = useComparison();
   const [favoritedCommunities, setFavoritedCommunities] = useState<Community[]>([]);
   const [view, setView] = useState<'grid' | 'list'>('grid');
   const [isLoading, setIsLoading] = useState(true);
@@ -109,30 +117,31 @@ export default function FavoritesPage() {
 
   }, [user]);
 
-  const handleToggleSelection = (communityId: string) => {
-    setSelectedCommunities(prev => {
-      if (prev.includes(communityId)) {
-        return prev.filter(id => id !== communityId);
-      }
-      return [...prev, communityId];
-    });
+  const handleComparisonChange = (communityId: string) => {
+    if (isInComparison(communityId)) {
+      removeFromComparison(communityId);
+    } else {
+      addToComparison(communityId);
+    }
   };
 
   const handleCompare = () => {
-    if (selectedCommunities.length >= 2) {
-       // Pass selected IDs (which are strings) to compare page if needed
-      // router.push(`/compare?ids=${selectedCommunities.join(',')}`); // Example
-      router.push('/compare'); // Assuming compare page handles selection separately
+    if (comparisonItems.length >= 2) {
+      const ids = comparisonItems.join(',');
+      router.push(`/compare?ids=${ids}`);
     }
   };
 
   const selectAll = () => {
-    const allIds = favoritedCommunities.map(community => community.id);
-    setSelectedCommunities(allIds);
+    favoritedCommunities.forEach(community => {
+      if (!isInComparison(community.id)) {
+        addToComparison(community.id);
+      }
+    });
   };
 
   const clearSelection = () => {
-    setSelectedCommunities([]);
+    clearComparison();
   };
 
   return (
@@ -183,30 +192,30 @@ export default function FavoritesPage() {
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div className="flex items-center gap-3">
                 <span className="text-[#333333]">
-                  {selectedCommunities.length} of {favoritedCommunities.length} selected
+                  {comparisonItems.length} of {favoritedCommunities.length} selected for comparison
                 </span>
                 <button
                   onClick={selectAll}
                   className="text-[#1b4d70] text-sm font-medium hover:underline"
                 >
-                  Select All
+                  Select All for Comparison
                 </button>
-                {selectedCommunities.length > 0 && (
+                {comparisonItems.length > 0 && (
                   <button
                     onClick={clearSelection}
                     className="text-[#F5A623] text-sm font-medium hover:underline"
                   >
-                    Clear Selection
+                    Clear Comparison Selection
                   </button>
                 )}
               </div>
 
-              {selectedCommunities.length >= 2 && (
+              {comparisonItems.length >= 2 && (
                 <button
                   onClick={handleCompare}
                   className="bg-[#1b4d70] text-white px-4 py-2 rounded-lg flex items-center"
                 >
-                  Compare Selected ({selectedCommunities.length})
+                  Compare Selected ({comparisonItems.length})
                 </button>
               )}
             </div>
@@ -239,18 +248,29 @@ export default function FavoritesPage() {
               const imageUrl = community.imageUrl ?? '/images/hero-banner.png';
               const displayType = deriveCommunityType(community.description, community.services);
               const rating = 0;
+              const isChecked = isInComparison(community.id);
 
               return (
-                <div key={community.id} className="bg-white rounded-xl shadow-sm border border-[#A7C4A0] overflow-hidden relative">
-                  <div className="absolute top-3 left-3 z-10">
+                <div key={community.id} className="bg-white rounded-xl shadow-sm border border-[#A7C4A0] overflow-hidden relative group">
+                  <label 
+                    className="absolute top-3 left-3 z-20 cursor-pointer p-1.5 bg-white/80 hover:bg-white rounded-md shadow transition-opacity opacity-0 group-hover:opacity-100 focus-within:opacity-100" 
+                    onClick={(e) => e.stopPropagation()}
+                    htmlFor={`compare-fav-${community.id}`}
+                  >
                     <input
                       type="checkbox"
-                      id={`select-${community.id}`}
-                      checked={selectedCommunities.includes(community.id)}
-                      onChange={() => handleToggleSelection(community.id)}
-                      className="w-5 h-5 rounded border-[#A7C4A0] text-[#1b4d70] focus:ring-[#1b4d70]"
+                      id={`compare-fav-${community.id}`}
+                      checked={isChecked}
+                      onChange={() => handleComparisonChange(community.id)}
+                      className="hidden"
+                      aria-label={`Select ${community.name} for comparison`}
                     />
-                  </div>
+                    {isChecked ? (
+                      <FiCheckSquare size={20} className="text-blue-600" />
+                    ) : (
+                      <FiSquare size={20} className="text-gray-500" />
+                    )}
+                  </label>
 
                   <div className="absolute top-3 right-3 z-10">
                     <FavoriteButton
@@ -301,11 +321,32 @@ export default function FavoritesPage() {
               const displayType = deriveCommunityType(community.description, community.services);
               const rating = 0;
               const amenitiesList = parseServices(community.services);
+              const isChecked = isInComparison(community.id);
 
               return (
-                <div key={community.id} className="bg-white rounded-xl shadow-sm border border-[#A7C4A0] overflow-hidden">
+                <div key={community.id} className="bg-white rounded-xl shadow-sm border border-[#A7C4A0] overflow-hidden group">
                   <div className="flex flex-col md:flex-row">
                     <div className="relative md:w-1/3 h-[200px] md:h-auto">
+                      <label 
+                        className="absolute top-3 left-3 z-20 cursor-pointer p-1.5 bg-white/80 hover:bg-white rounded-md shadow transition-opacity opacity-0 group-hover:opacity-100 focus-within:opacity-100" 
+                        onClick={(e) => e.stopPropagation()}
+                        htmlFor={`compare-fav-list-${community.id}`}
+                      >
+                        <input
+                          type="checkbox"
+                          id={`compare-fav-list-${community.id}`}
+                          checked={isChecked}
+                          onChange={() => handleComparisonChange(community.id)}
+                          className="hidden"
+                          aria-label={`Select ${community.name} for comparison`}
+                        />
+                        {isChecked ? (
+                          <FiCheckSquare size={20} className="text-blue-600" />
+                        ) : (
+                          <FiSquare size={20} className="text-gray-500" />
+                        )}
+                      </label>
+
                       <Image
                         src={imageUrl}
                         alt={community.name}
@@ -313,21 +354,14 @@ export default function FavoritesPage() {
                         sizes="(max-width: 640px) 100vw, 33vw"
                         className="object-cover"
                       />
-                      <div className="absolute top-3 left-3 z-10">
-                        <input
-                          type="checkbox"
-                          id={`select-list-${community.id}`}
-                          checked={selectedCommunities.includes(community.id)}
-                          onChange={() => handleToggleSelection(community.id)}
-                          className="w-5 h-5 rounded border-[#A7C4A0] text-[#1b4d70] focus:ring-[#1b4d70]"
-                        />
-                      </div>
+
                       <div className="absolute top-3 right-3 z-10">
                         <FavoriteButton
                           providerId={community.id}
                           providerName={community.name}
                         />
                       </div>
+
                       <div className="absolute bottom-3 left-3 bg-black bg-opacity-50 text-white px-2 py-1 rounded-md text-xs">
                         {displayType}
                       </div>
@@ -385,6 +419,7 @@ export default function FavoritesPage() {
           </div>
         )}
       </div>
+      <CompareFloatingButton />
     </div>
   );
 }
