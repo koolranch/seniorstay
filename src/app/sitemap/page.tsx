@@ -107,7 +107,7 @@ export default async function SitemapPage() {
           <ul className="list-none grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-4 gap-y-2">
             {uniqueCities.map((city) => (
               <li key={city.slug}>
-                <Link href={`/community?location=${encodeURIComponent(city.city)}`} className="text-blue-600 hover:underline">
+                <Link href={`/ohio/${city.slug}`} className="text-blue-600 hover:underline">
                   {city.city}
                 </Link>
               </li>
