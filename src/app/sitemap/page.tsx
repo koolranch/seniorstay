@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { supabase } from 'src/lib/supabase'; // Adjusted import path
+import { prisma } from '@/lib/prisma'; // Replace Supabase import with Prisma import
 
 // Define the expected shape of the city data
 interface CityData {
@@ -8,20 +8,25 @@ interface CityData {
   city: string;
 }
 
-// Fetch data directly in the Server Component
+// Fetch data directly in the Server Component using Prisma
 async function getCities(): Promise<CityData[]> {
-  const { data, error } = await supabase
-    .from('communities') // Adjust table name if needed
-    .select('slug, city')
-    .order('city', { ascending: true });
-
-  if (error) {
+  try {
+    const communities = await prisma.community.findMany({
+      select: {
+        slug: true,
+        city: true,
+      },
+      orderBy: {
+        city: 'asc',
+      },
+    });
+    
+    // Filter out entries with null slugs or cities if necessary
+    return communities.filter(city => city.slug && city.city) as CityData[];
+  } catch (error) {
     console.error('Error fetching cities for sitemap:', error);
     return []; // Return empty array on error
   }
-
-  // Filter out entries with null slugs or cities if necessary and type the parameter
-  return (data || []).filter((city: any) => city.slug && city.city) as CityData[];
 }
 
 export default async function SitemapPage() {
@@ -91,7 +96,7 @@ export default async function SitemapPage() {
             {cities.map((city) => (
               <li key={city.slug}>
                 <Link href={`/senior-living/${city.slug}`} className="text-blue-600 hover:underline">
-                  {city.city} {/* Use city.city as per user example */}
+                  {city.city}
                 </Link>
               </li>
             ))}

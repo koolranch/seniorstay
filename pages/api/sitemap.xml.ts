@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { supabase } from 'src/lib/supabase'; // Adjusted import path again
+import { prisma } from '@/lib/prisma'; // Replace Supabase import with Prisma import
 
 export default async function handler(
   req: NextApiRequest,
@@ -45,20 +45,19 @@ export default async function handler(
 
   let dynamicUrls = '';
   try {
-    // Fetch only the slug column from the communities table
-    const { data: communities, error } = await supabase
-      .from('communities') // Adjust table name if needed
-      .select('slug, updated_at'); // Fetch slug and optionally updated_at for lastmod
-
-    if (error) {
-      throw error; // Throw error to be caught below
-    }
+    // Fetch communities using Prisma instead of Supabase
+    const communities = await prisma.community.findMany({
+      select: {
+        slug: true,
+        updatedAt: true, // Use updatedAt from Prisma schema
+      }
+    });
 
     dynamicUrls = communities
-      ?.map(({ slug, updated_at }: { slug: any; updated_at: any }) => { // Added types
+      .map(({ slug, updatedAt }) => {
         // Ensure slug exists before creating the URL
         if (!slug) return null;
-        const lastModDate = updated_at ? new Date(updated_at).toISOString().split('T')[0] : today;
+        const lastModDate = updatedAt ? updatedAt.toISOString().split('T')[0] : today;
         return `
     <url>
       <loc>${baseUrl}/senior-living/${slug}</loc>
@@ -69,7 +68,7 @@ export default async function handler(
   `;
       })
       .filter(Boolean) // Remove any null entries from map
-      .join('') || '';
+      .join('');
 
   } catch (error) {
     console.error('Error fetching dynamic URLs for sitemap:', error);
