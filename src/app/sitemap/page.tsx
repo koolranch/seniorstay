@@ -34,6 +34,17 @@ export default async function SitemapPage() {
   // Fetch the cities data
   const cities = await getCities();
 
+  // Deduplicate cities based on the city name
+  const uniqueCitiesMap = new Map<string, CityData>();
+  cities.forEach(city => {
+    if (!uniqueCitiesMap.has(city.city)) {
+      uniqueCitiesMap.set(city.city, city);
+    }
+  });
+  const uniqueCities = Array.from(uniqueCitiesMap.values());
+  // Sort unique cities alphabetically by city name
+  uniqueCities.sort((a, b) => a.city.localeCompare(b.city));
+
   return (
     <StaticPageLayout>
       <h1 className="text-3xl font-bold mb-6">Sitemap</h1>
@@ -92,9 +103,9 @@ export default async function SitemapPage() {
       {/* Dynamic Cities & Regions Section */}
       <section className="mb-8">
         <h2 className="text-2xl font-semibold mb-4">📍 Cities & Regions</h2>
-        {cities.length > 0 ? (
+        {uniqueCities.length > 0 ? (
           <ul className="list-none grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-4 gap-y-2">
-            {cities.map((city) => (
+            {uniqueCities.map((city) => (
               <li key={city.slug}>
                 <Link href={`/community?location=${encodeURIComponent(city.city)}`} className="text-blue-600 hover:underline">
                   {city.city}
