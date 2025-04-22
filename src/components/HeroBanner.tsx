@@ -23,7 +23,7 @@ const HeroBanner = ({
   };
   
   return (
-    <section className="relative w-full h-[400px] md:h-[500px] lg:h-[600px] overflow-hidden">
+    <section className="relative w-full h-[400px] md:h-[500px] lg:h-[600px] overflow-hidden bg-gradient-to-b from-blue-50 to-white">
       <Image
         src="/images/hero-banner.png"
         alt="Senior Living Search Banner"
@@ -34,17 +34,15 @@ const HeroBanner = ({
 
       {/* Content overlay */}
       <div className="absolute inset-0 flex flex-col justify-center items-center text-center px-4">
-        <h1 className="text-3xl md:text-5xl font-bold text-gray-900 text-center leading-tight">
-          <span className="inline-block border-b-4 border-blue-300 pb-1">
-            Discover Senior Living Options in Your Area
-          </span>
-          <br />
-          Backed by Local Experts
-        </h1>
+        <div className="bg-white/80 p-4 rounded-md shadow-md max-w-3xl">
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 max-w-3xl leading-tight">
+            Find Senior Living in Northeast Ohio — Backed by Trusted Local Advisors
+          </h1>
 
-        <p className="mt-4 text-lg text-gray-700 text-center max-w-2xl mx-auto">
-          We're not a national call center. We're a real, local team helping you explore and connect with nearby communities.
-        </p>
+          <p className="text-lg text-gray-600 mt-2">
+            We're a local team — not a national call center. Get free, no-pressure support from people who know Northeast Ohio.
+          </p>
+        </div>
         
         {/* Search bar */}
         <div className="mt-6 w-full max-w-xl">
