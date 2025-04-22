@@ -213,6 +213,10 @@ export default async function CityPage({ params }: { params: { city: string } })
                   // Log image URLs for debugging
                   console.log(`Community: ${community.name}, imageUrl: ${community.imageUrl || 'NULL/UNDEFINED'}`);
                   
+                  // ** Added Debug Logging **
+                  const finalImage = community.imageUrl || "https://source.unsplash.com/random/800x600/?senior,living";
+                  console.log(`Community Image Debug: Name=${community.name}, Original imageUrl=${community.imageUrl}, Final image prop=${finalImage}`);
+                  
                   return (
                     <ProviderCard
                       key={community.id}
@@ -222,7 +226,7 @@ export default async function CityPage({ params }: { params: { city: string } })
                       city={community.city ?? undefined}
                       state={community.state ?? 'N/A'}
                       type={derivedType}
-                      image={community.imageUrl || "https://source.unsplash.com/random/800x600/?senior,living"}
+                      image={finalImage} // Use the variable with fallback
                       rating={0}
                       amenities={amenitiesList}
                     />

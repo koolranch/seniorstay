@@ -10,48 +10,46 @@ const ClientFooter = () => {
           <div>
             <h3 className="text-base font-semibold mb-4 text-[#1b4d70]">Support</h3>
             <ul className="space-y-3 text-sm text-[#333333]">
-              <li><Link href="#" className="hover:text-[#F5A623] block py-1">Help Center</Link></li>
-              <li><Link href="#" className="hover:text-[#F5A623] block py-1">FAQ</Link></li>
-              <li><Link href="/contact" className="hover:text-[#F5A623] block py-1">Contact a Care Advisor</Link></li>
-              <li><Link href="#" className="hover:text-[#F5A623] block py-1">Accessibility</Link></li>
+              <li><Link href="/help-center" className="hover:text-[#F5A623] block py-1">Help Center</Link></li>
+              <li><Link href="/faq" className="hover:text-[#F5A623] block py-1">FAQ</Link></li>
+              <li><Link href="/contact-a-care-advisor" className="hover:text-[#F5A623] block py-1">Contact a Care Advisor</Link></li>
+              <li><Link href="/accessibility" className="hover:text-[#F5A623] block py-1">Accessibility</Link></li>
             </ul>
           </div>
           <div>
             <h3 className="text-base font-semibold mb-4 text-[#1b4d70]">Community</h3>
             <ul className="space-y-3 text-sm text-[#333333]">
-              <li><Link href="/blog" className="hover:text-[#F5A623] block py-1">Family Resources</Link></li>
-              <li><Link href="/blog" className="hover:text-[#F5A623] block py-1">Caregiver Support</Link></li>
-              <li><Link href="#" className="hover:text-[#F5A623] block py-1">Senior Living Guide</Link></li>
-              <li><Link href="#" className="hover:text-[#F5A623] block py-1">Testimonials</Link></li>
+              <li><Link href="/family-resources" className="hover:text-[#F5A623] block py-1">Family Resources</Link></li>
+              <li><Link href="/caregiver-support" className="hover:text-[#F5A623] block py-1">Caregiver Support</Link></li>
+              <li><Link href="/senior-living-guide" className="hover:text-[#F5A623] block py-1">Senior Living Guide</Link></li>
+              <li><Link href="/testimonials" className="hover:text-[#F5A623] block py-1">Testimonials</Link></li>
+              <li><Link href="/success-stories" className="hover:text-[#F5A623] block py-1">Success Stories</Link></li>
             </ul>
           </div>
           <div>
             <h3 className="text-base font-semibold mb-4 text-[#1b4d70]">For Providers</h3>
             <ul className="space-y-3 text-sm text-[#333333]">
-              <li><Link href="#" className="hover:text-[#F5A623] block py-1">List Your Community</Link></li>
-              <li><Link href="#" className="hover:text-[#F5A623] block py-1">Provider Resources</Link></li>
-              <li><Link href="#" className="hover:text-[#F5A623] block py-1">Community Guidelines</Link></li>
-              <li><Link href="#" className="hover:text-[#F5A623] block py-1">Success Stories</Link></li>
+              <li><Link href="/list-your-community" className="hover:text-[#F5A623] block py-1">List Your Community</Link></li>
+              <li><Link href="/provider-resources" className="hover:text-[#F5A623] block py-1">Provider Resources</Link></li>
+              <li><Link href="/community-guidelines" className="hover:text-[#F5A623] block py-1">Community Guidelines</Link></li>
             </ul>
           </div>
           <div>
             <h3 className="text-base font-semibold mb-4 text-[#1b4d70]">About</h3>
             <ul className="space-y-3 text-sm text-[#333333]">
-              <li><Link href="#" className="hover:text-[#F5A623] block py-1">How GuideForSeniors works</Link></li>
-              <li><Link href="#" className="hover:text-[#F5A623] block py-1">Our Mission</Link></li>
-              <li><Link href="#" className="hover:text-[#F5A623] block py-1">Privacy Policy</Link></li>
-              <li><Link href="#" className="hover:text-[#F5A623] block py-1">Terms of Service</Link></li>
+              <li><Link href="/how-it-works" className="hover:text-[#F5A623] block py-1">How GuideForSeniors Works</Link></li>
+              <li><Link href="/our-mission" className="hover:text-[#F5A623] block py-1">Our Mission</Link></li>
+              <li><Link href="/privacy-policy" className="hover:text-[#F5A623] block py-1">Privacy Policy</Link></li>
+              <li><Link href="/terms-of-service" className="hover:text-[#F5A623] block py-1">Terms of Service</Link></li>
             </ul>
           </div>
         </div>
         <div className="border-t border-[#A7C4A0] mt-8 pt-8 flex flex-col md:flex-row md:items-center justify-between text-sm">
           <div className="text-[#333333]">
-            © {new Date().getFullYear()} GuideForSeniors, Inc.
+            © {new Date().getFullYear()} Orchard Street LLC dba GuideForSeniors
           </div>
           <div className="flex space-x-4 mt-4 md:mt-0">
-            <Link href="#" className="text-[#333333] hover:text-[#F5A623]">Privacy</Link>
-            <Link href="#" className="text-[#333333] hover:text-[#F5A623]">Terms</Link>
-            <Link href="#" className="text-[#333333] hover:text-[#F5A623]">Sitemap</Link>
+            <Link href="/sitemap" className="text-[#333333] hover:text-[#F5A623]">Sitemap</Link>
           </div>
         </div>
       </div>
