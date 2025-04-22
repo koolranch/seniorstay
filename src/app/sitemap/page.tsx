@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { prisma } from '@/lib/prisma'; // Replace Supabase import with Prisma import
+import StaticPageLayout from '@/components/StaticPageLayout';
 
 // Define the expected shape of the city data
 interface CityData {
@@ -34,7 +35,7 @@ export default async function SitemapPage() {
   const cities = await getCities();
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <StaticPageLayout>
       <h1 className="text-3xl font-bold mb-6">Sitemap</h1>
 
       <p className="mb-6">Explore all major sections of GuideForSeniors:</p>
@@ -105,6 +106,6 @@ export default async function SitemapPage() {
           <p className="text-gray-500">Could not load city pages at this time.</p>
         )}
       </section>
-    </div>
+    </StaticPageLayout>
   );
 } 

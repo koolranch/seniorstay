@@ -1,8 +1,9 @@
 import React from 'react';
+import StaticPageLayout from '@/components/StaticPageLayout';
 
 export default function OurMissionPage() {
   return (
-    <div className="container mx-auto px-4 py-8">
+    <StaticPageLayout>
       <h1 className="text-3xl font-bold mb-6">Our Mission</h1>
 
       <p className="text-lg italic mb-6 text-center">
@@ -70,6 +71,6 @@ export default function OurMissionPage() {
         Whether you're just beginning your search or narrowing down your
         options, GuideForSeniors is here to help you navigate with confidence.
       </p>
-    </div>
+    </StaticPageLayout>
   );
 } 

@@ -1,8 +1,9 @@
 import React from 'react';
+import StaticPageLayout from '@/components/StaticPageLayout';
 
 export default function SeniorLivingGuidePage() {
   return (
-    <div className="container mx-auto px-4 py-8">
+    <StaticPageLayout>
       <h1 className="text-3xl font-bold mb-6">Senior Living Guide</h1>
 
       <h3 className="text-xl font-semibold mb-4 text-center">
@@ -133,6 +134,6 @@ export default function SeniorLivingGuidePage() {
           Schedule a Tour →
         </a>
       </div>
-    </div>
+    </StaticPageLayout>
   );
 } 

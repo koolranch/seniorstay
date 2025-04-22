@@ -1,8 +1,9 @@
 import React from 'react';
+import StaticPageLayout from '@/components/StaticPageLayout';
 
 export default function TermsOfServicePage() {
   return (
-    <div className="container mx-auto px-4 py-8">
+    <StaticPageLayout>
       <h1 className="text-3xl font-bold mb-6">Terms of Service</h1>
 
       <p className="mb-4">
@@ -13,15 +14,15 @@ export default function TermsOfServicePage() {
         Welcome to GuideForSeniors. This website and its services are owned and
         operated by <strong>Orchard Street LLC</strong>, a [Your State] limited
         liability company, doing business as <strong>GuideForSeniors</strong>{' '}
-        (“GuideForSeniors,” “we,” “our,” or “us”).
+        ("GuideForSeniors," "we," "our," or "us").
       </p>
 
       <p className="mb-6">
-        By using our website [www.guideforseniors.com] (the “Site”) or any
+        By using our website [www.guideforseniors.com] (the "Site") or any
         tools, forms, or services provided through the Site (collectively, the
-        “Services”), you agree to be bound by the following terms and
+        "Services"), you agree to be bound by the following terms and
         conditions, along with our Privacy Policy (collectively, the
-        “Agreement”). If you do not agree to these Terms, please do not use our
+        "Agreement"). If you do not agree to these Terms, please do not use our
         Site or Services.
       </p>
 
@@ -32,7 +33,7 @@ export default function TermsOfServicePage() {
         GuideForSeniors offers a no-cost resource for individuals and families
         seeking senior living options. Based on user input, we may connect you
         with senior living communities, care providers, or other service
-        partners (collectively, “Participating Communities”). GuideForSeniors
+        partners (collectively, "Participating Communities"). GuideForSeniors
         is not a placement agency, broker, or medical provider. We do not
         endorse or evaluate communities beyond publicly available and
         user-provided information.
@@ -109,7 +110,7 @@ export default function TermsOfServicePage() {
 
       <h2 className="text-2xl font-semibold mt-6 mb-3">8. Disclaimer</h2>
       <p className="mb-6">
-        The Site and Services are provided “as is” without warranties of any
+        The Site and Services are provided "as is" without warranties of any
         kind. We make no guarantees regarding the accuracy, availability, or
         suitability of any community listing or referral.
       </p>
@@ -151,6 +152,6 @@ export default function TermsOfServicePage() {
         effective date. Your continued use of the Site after changes means you
         accept the updated Terms.
       </p>
-    </div>
+    </StaticPageLayout>
   );
 } 

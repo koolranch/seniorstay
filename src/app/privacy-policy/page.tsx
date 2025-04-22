@@ -1,8 +1,9 @@
 import React from 'react';
+import StaticPageLayout from '@/components/StaticPageLayout';
 
 export default function PrivacyPolicyPage() {
   return (
-    <div className="container mx-auto px-4 py-8">
+    <StaticPageLayout>
       <h1 className="text-3xl font-bold mb-6">Privacy Policy</h1>
 
       <p className="mb-4">
@@ -143,6 +144,6 @@ export default function PrivacyPolicyPage() {
       <p className="font-semibold">Orchard Street LLC dba GuideForSeniors</p>
       <p>[Insert Business Address]</p>
       <p className="mb-6">[Insert Email Address]</p>
-    </div>
+    </StaticPageLayout>
   );
 } 

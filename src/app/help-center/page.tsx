@@ -1,9 +1,10 @@
 import React from 'react';
 import Link from 'next/link'; // Import Link for internal navigation
+import StaticPageLayout from '@/components/StaticPageLayout';
 
 export default function HelpCenterPage() {
   return (
-    <div className="container mx-auto px-4 py-8">
+    <StaticPageLayout>
       <h1 className="text-3xl font-bold mb-6">Help Center</h1>
 
       <h3 className="text-xl font-semibold mb-4 text-center">
@@ -160,6 +161,6 @@ export default function HelpCenterPage() {
         </a>{' '}
         and we'll respond within 1 business day.
       </p>
-    </div>
+    </StaticPageLayout>
   );
 } 

@@ -1,8 +1,10 @@
 import React from 'react';
+import Link from 'next/link';
+import StaticPageLayout from '@/components/StaticPageLayout';
 
 export default function HowItWorksPage() {
   return (
-    <div className="container mx-auto px-4 py-8">
+    <StaticPageLayout>
       <h1 className="text-3xl font-bold mb-6">How GuideForSeniors Works</h1>
 
       <h3 className="text-xl font-semibold mb-4">
@@ -83,6 +85,6 @@ export default function HowItWorksPage() {
         personalized help. Whether you're planning ahead or facing a quick
         decision, we're here to support your family with clarity and care.
       </p>
-    </div>
+    </StaticPageLayout>
   );
 } 

@@ -1,8 +1,9 @@
 import React from 'react';
+import StaticPageLayout from '@/components/StaticPageLayout';
 
 export default function CommunityGuidelinesPage() {
   return (
-    <div className="container mx-auto px-4 py-8">
+    <StaticPageLayout>
       <h1 className="text-3xl font-bold mb-6">Community Guidelines</h1>
 
       <h3 className="text-xl font-semibold mb-4">
@@ -120,6 +121,6 @@ export default function CommunityGuidelinesPage() {
           providers@guideforseniors.com
         </a>.
       </p>
-    </div>
+    </StaticPageLayout>
   );
 } 

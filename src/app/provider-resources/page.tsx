@@ -1,9 +1,10 @@
 import React from 'react';
 import Link from 'next/link'; // Import Link for internal navigation
+import StaticPageLayout from '@/components/StaticPageLayout';
 
 export default function ProviderResourcesPage() {
   return (
-    <div className="container mx-auto px-4 py-8">
+    <StaticPageLayout>
       <h1 className="text-3xl font-bold mb-6">Provider Resources</h1>
 
       <h3 className="text-xl font-semibold mb-4">
@@ -111,6 +112,6 @@ export default function ProviderResourcesPage() {
         </Link>{' '}
         page to get started.
       </p>
-    </div>
+    </StaticPageLayout>
   );
 } 
