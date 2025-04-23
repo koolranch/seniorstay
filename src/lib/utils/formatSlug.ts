@@ -1,4 +1,4 @@
-import type { Community } from "@/lib/data/communities";
+import type { Community } from "@/lib/data/staticCommunities";
 
 /**
  * Formats a string into a URL-friendly slug
@@ -16,13 +16,25 @@ export function slugify(text: string): string {
   return text
     .toString()
     .toLowerCase()
-    .trim()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
     .replace(/\s+/g, '-')        // Replace spaces with hyphens
     .replace(/[^\w\-]+/g, '')    // Remove all non-word chars
     .replace(/\-\-+/g, '-')      // Replace multiple hyphens with single hyphen
     .replace(/^-+/, '')          // Trim hyphens from start
     .replace(/-+$/, '');         // Trim hyphens from end
 }
+
+/**
+ * Converts a slug back into a more readable string.
+ * - Replaces hyphens with spaces
+ * - Capitalizes the first letter of each word
+ */
+export const unslugify = (slug: string): string => {
+  return slug
+    .replace(/-/g, ' ')
+    .replace(/\b\w/g, (char) => char.toUpperCase());
+};
 
 /**
  * Formats a path for community URLs
