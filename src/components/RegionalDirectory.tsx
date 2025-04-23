@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { FiMapPin } from 'react-icons/fi';
 import { communities } from '@/lib/data/staticCommunities';
+import { slugify } from '@/lib/utils/formatSlug';
 
 type RegionalDirectoryProps = {
   className?: string;
@@ -54,7 +55,7 @@ export default function RegionalDirectory({ className = "" }: RegionalDirectoryP
           {citiesWithCommunities.map((cityData) => (
             <Link
               key={cityData.city}
-              href={`/ohio/${cityData.city.toLowerCase()}`}
+              href={`/ohio/${slugify(cityData.city)}`}
               className="block bg-white rounded-lg shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-200 py-3 px-4 border border-gray-100 text-center"
             >
               <div className="flex items-center justify-center mb-2">

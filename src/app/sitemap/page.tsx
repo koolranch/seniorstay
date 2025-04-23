@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { prisma } from '@/lib/prisma'; // Replace Supabase import with Prisma import
 import StaticPageLayout from '@/components/StaticPageLayout';
+import { slugify } from '@/lib/utils/formatSlug';
 
 // Define the expected shape of the city data
 interface CityData {
@@ -106,8 +107,8 @@ export default async function SitemapPage() {
         {uniqueCities.length > 0 ? (
           <ul className="list-none grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-4 gap-y-2">
             {uniqueCities.map((city) => (
-              <li key={city.slug}>
-                <Link href={`/ohio/${city.slug}`} className="text-blue-600 hover:underline">
+              <li key={city.city}>
+                <Link href={`/ohio/${slugify(city.city)}`} className="text-blue-600 hover:underline">
                   {city.city}
                 </Link>
               </li>

@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import Link from "next/link";
 import { communities } from "@/lib/data/staticCommunities";
+import { slugify } from "@/lib/utils/formatSlug";
 
 export const metadata: Metadata = {
   title: "Senior Living in Ohio | SeniorStay",
@@ -38,7 +39,7 @@ export default function OhioLayout({
                   {ohioCities.map((city) => (
                     <li key={city}>
                       <Link
-                        href={`/ohio/${city.toLowerCase()}`}
+                        href={`/ohio/${slugify(city)}`}
                         className="text-[#1b4d70] hover:text-[#2F5061] hover:underline"
                       >
                         {city}
