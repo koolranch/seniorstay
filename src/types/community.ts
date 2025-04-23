@@ -15,7 +15,8 @@ export interface Community {
   
   // Optional properties that may be used in different contexts
   amenities?: string[];
-  services?: string | null;
+  // Support both string and array formats for services
+  services?: string | string[] | null;
   price?: string;
   address?: string | null;
   phone?: string | null;

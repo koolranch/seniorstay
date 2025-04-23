@@ -10,7 +10,13 @@ export default function CommunityGrid({ communities, filterByCategory = null }: 
   const filteredCommunities = filterByCategory
     ? communities.filter((community) => 
         community.type === filterByCategory || 
-        (community.services && community.services.includes(filterByCategory)))
+        (community.services && (
+          // Handle both string and array types for services
+          Array.isArray(community.services) 
+            ? community.services.includes(filterByCategory)
+            : typeof community.services === 'string' && community.services.includes(filterByCategory)
+        ))
+      )
     : communities;
 
   return (
@@ -34,7 +40,14 @@ export default function CommunityGrid({ communities, filterByCategory = null }: 
               type={community.type}
               image={community.image}
               rating={community.rating}
-              amenities={community.services ? community.services.split(',').map(s => s.trim()).filter(Boolean) : []}
+              amenities={
+                // Convert services to amenities array, handling both string and array types
+                Array.isArray(community.services)
+                  ? community.services
+                  : typeof community.services === 'string'
+                    ? community.services.split(',').map(s => s.trim()).filter(Boolean)
+                    : community.amenities || []
+              }
             />
           ))}
         </div>
