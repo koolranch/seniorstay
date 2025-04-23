@@ -161,6 +161,9 @@ export default function LeadForm({
     }
   };
 
+  // Use Formspree endpoint for submission
+  const formspreeEndpoint = "https://formspree.io/f/xnnpaply";
+
   if (isSuccess) {
     return (
       <motion.div
@@ -184,7 +187,7 @@ export default function LeadForm({
       className={`bg-white p-6 rounded-lg shadow-md ${className}`}
     >
       <h2 className="text-xl font-bold mb-4">Request Information</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form action={formspreeEndpoint} method="POST" className="space-y-4">
         {/* Full Name */}
         <div>
           <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 mb-1">
