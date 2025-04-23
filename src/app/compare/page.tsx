@@ -39,16 +39,28 @@ const featureCategories: FeatureCategory[] = [
   },
 ];
 
-// Helper function to check if a service exists in the comma-separated string
+// Helper function to check if a service exists in the services (works with both string and array)
 const hasFeature = (community: Community, featureKey: string) => {
-  if (!community.services || typeof community.services !== 'string') {
+  if (!community.services) {
     return false;
   }
-  // Split the string and check for the feature (case-insensitive)
-  const servicesList = community.services.split(',').map(s => s.trim());
-  return servicesList.some((item) =>
-    item.toLowerCase().includes(featureKey.toLowerCase())
-  );
+  
+  // Handle array of services
+  if (Array.isArray(community.services)) {
+    return community.services.some(service => 
+      service.toLowerCase().includes(featureKey.toLowerCase())
+    );
+  }
+  
+  // Handle string of services
+  if (typeof community.services === 'string') {
+    const servicesList = community.services.split(',').map(s => s.trim());
+    return servicesList.some(item =>
+      item.toLowerCase().includes(featureKey.toLowerCase())
+    );
+  }
+  
+  return false;
 };
 
 // --- Compare Page Content Component ---

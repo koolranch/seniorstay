@@ -107,7 +107,7 @@ const getCachedAllCommunities = cache(async (): Promise<SafeCommunity[]> => {
     const internalCommunities = await getAllCommunitiesData(); 
     const safeCommunities = internalCommunities.map(c => {
         // Minimal conversion needed for related links
-        const servicesArray = parseServices(c.services?.join(',')); // Assuming services is array in InternalCommunity
+        const servicesArray = parseServices(c.services); // Use parseServices instead of directly joining
         return {
             id: c.id,
             name: c.name,
@@ -129,8 +129,9 @@ const getCachedAllCommunities = cache(async (): Promise<SafeCommunity[]> => {
 });
 
 // Helper functions
-function parseServices(services: string | null | undefined): string[] {
+function parseServices(services: string | string[] | null | undefined): string[] {
   if (!services) return [];
+  if (Array.isArray(services)) return services; // Already an array
   return services.split(',').map(s => s.trim()).filter(s => s.length > 0);
 }
 function determineType(services: string[]): string {

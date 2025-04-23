@@ -10,6 +10,25 @@ function generateSlug(name: string, city: string, state: string): string {
     .replace(/(^-|-$)/g, '');
 }
 
+// Helper to parse services from different formats
+function parseServices(services: any): string[] {
+  if (!services) {
+    return [];
+  }
+  
+  // Already an array
+  if (Array.isArray(services)) {
+    return services.map(s => String(s).trim()).filter(Boolean);
+  }
+  
+  // String that needs splitting
+  if (typeof services === 'string') {
+    return services.split(',').map(s => s.trim()).filter(Boolean);
+  }
+  
+  return [];
+}
+
 export function loadFallbackCommunities(): InternalCommunity[] {
   const filePath = path.join(process.cwd(), 'src/lib/data/fallback-communities.json')
   try {
@@ -34,12 +53,7 @@ export function loadFallbackCommunities(): InternalCommunity[] {
       const slug = item.slug || generateSlug(name, city, state);
       const id = item.id ? String(item.id) : `fallback-${slug}-${Math.random().toString(36).substring(2, 5)}`;
       const type = item.type || "Senior Living"; // Default type
-      let services: string[] = [];
-      if (Array.isArray(item.services)) {
-          services = item.services.map((s: any) => String(s).trim()).filter((s: string) => s);
-      } else if (typeof item.services === 'string') {
-          services = item.services.split(',').map((s: string) => s.trim()).filter((s: string) => s);
-      }
+      const services = parseServices(item.services);
 
       // Basic validation check
       if (!name || !city || !state || !slug || !id) {
