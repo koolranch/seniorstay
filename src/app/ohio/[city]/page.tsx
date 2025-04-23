@@ -13,6 +13,7 @@ import { Suspense } from 'react';
 import CommunityGrid from '@/components/CommunityGrid';
 import { InternalCommunity } from '@/lib/types/community'; // Assuming this type exists
 import { unslugify } from '@/lib/utils/formatSlug'; // Need an unslugify function
+import LeadForm from '@/components/forms/LeadForm'; // Import LeadForm
 // import { Community as CommunityDisplayTypeFromLib } from '@/lib/types/community'; // Remove this problematic import
 // import { Community as PrismaCommunity } from '@prisma/client';
 
@@ -199,6 +200,26 @@ export default async function OhioCityPage({ params }: { params: { city: string 
              </Link>
           </div>
         )}
+      </div>
+
+      {/* Lead Form Section */}
+      <div className="bg-white border-t border-neutral-200 py-12">
+        <div className="container mx-auto px-6 md:px-10 lg:px-20">
+          <div className="max-w-3xl mx-auto">
+            <h2 className="text-2xl font-bold text-[#1b4d70] mb-6 text-center">
+              Get Help Finding Senior Living in {cityName}, Ohio
+            </h2>
+            <p className="text-gray-600 mb-8 text-center">
+              Our senior living advisors can help you find the perfect community that meets your needs.
+            </p>
+            <LeadForm
+              city={cityName}
+              state="OH"
+              sourceSlug={`city-${citySlug}`}
+              className="shadow-lg rounded-lg"
+            />
+          </div>
+        </div>
       </div>
     </main>
   );

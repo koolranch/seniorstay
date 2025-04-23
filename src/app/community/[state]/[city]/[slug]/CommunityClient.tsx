@@ -6,6 +6,7 @@ import Link from "next/link";
 import { FiMapPin, FiMail, FiStar, FiCheck, FiPhone, FiCalendar } from "react-icons/fi";
 import { Calendar } from 'lucide-react';
 import { sendGAEvent } from '@/lib/utils/gtag'; // Import GA event function
+import LeadForm from '@/components/forms/LeadForm'; // Import the LeadForm component
 // Import Community type from Prisma Client
 import type { Community } from '@prisma/client';
 // Remove old import
@@ -198,22 +199,36 @@ export default function CommunityClient({ community }: CommunityClientProps) {
               </div>
             </div>
             
-            <div className="mt-8">
-              <h3 className="text-xl font-semibold text-gray-900 mb-4">Schedule a Tour</h3>
-              <p className="text-gray-600 mb-4">
-                We'd love to show you around our community. Schedule a tour today to see all that {name} has to offer.
-              </p>
-              <button
-                onClick={() => {
-                  // Add original button logic here if any (e.g., open modal)
-                  sendGAEvent('schedule_tour_click', name);
-                }}
-                className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-2 px-4 rounded-full shadow-sm transition inline-flex items-center justify-center"
-                aria-label={`Schedule a tour at ${name}`}
-              >
-                <Calendar className="w-4 h-4 inline-block mr-1 -mt-0.5" />
-                Schedule a Tour
-              </button>
+            <div className="mt-8 grid md:grid-cols-2 gap-8">
+              <div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-4">Schedule a Tour</h3>
+                <p className="text-gray-600 mb-4">
+                  We'd love to show you around our community. Schedule a tour today to see all that {name} has to offer.
+                </p>
+                <button
+                  onClick={() => {
+                    // Add original button logic here if any (e.g., open modal)
+                    sendGAEvent('schedule_tour_click', name);
+                  }}
+                  className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-2 px-4 rounded-full shadow-sm transition inline-flex items-center justify-center"
+                  aria-label={`Schedule a tour at ${name}`}
+                >
+                  <Calendar className="w-4 h-4 inline-block mr-1 -mt-0.5" />
+                  Schedule a Tour
+                </button>
+              </div>
+              
+              <div>
+                <LeadForm 
+                  communityName={name}
+                  sourceSlug={community.slug}
+                  city={community.city || ''}
+                  state={community.state || ''}
+                  address={community.address || ''}
+                  services={community.services || ''}
+                  className="bg-gray-50"
+                />
+              </div>
             </div>
           </section>
         </main>
