@@ -1,9 +1,9 @@
-import type { Community } from "@/context/ComparisonContext";
+import type { Community } from "@/types/community";
 
 // Sample dataset of senior living communities
 export const communities: Community[] = [
   {
-    id: 1,
+    id: "1",
     slug: "sunshine-meadows",
     name: "Sunshine Meadows",
     city: "Cleveland",
@@ -31,7 +31,7 @@ export const communities: Community[] = [
     description: "Sunshine Meadows is a premier independent living community located in Cleveland, offering a vibrant and active lifestyle for seniors. Our community provides spacious apartments, chef-prepared meals, and a wide range of social activities to foster connections and engagement."
   },
   {
-    id: 2,
+    id: "2",
     slug: "cedar-ridge",
     name: "Cedar Ridge Retirement",
     city: "Columbus",
@@ -58,7 +58,7 @@ export const communities: Community[] = [
     description: "Cedar Ridge Retirement is a compassionate assisted living community in Columbus offering personalized care services and comfortable accommodations. Our trained staff is available 24/7 to assist with daily activities while respecting residents' independence and dignity."
   },
   {
-    id: 3,
+    id: "3",
     slug: "lakeside-gardens",
     name: "Lakeside Gardens",
     city: "Cincinnati",
@@ -85,7 +85,7 @@ export const communities: Community[] = [
     description: "Lakeside Gardens provides specialized memory care in a secure, nurturing environment designed for seniors with Alzheimer's and dementia. Our unique programs focus on engaging residents through sensory stimulation, familiar routines, and personalized care plans."
   },
   {
-    id: 4,
+    id: "4",
     slug: "maple-grove",
     name: "Maple Grove Living",
     city: "Toledo",
@@ -113,7 +113,7 @@ export const communities: Community[] = [
     description: "Maple Grove Living offers a comprehensive continuing care retirement community where residents can age in place. With a full spectrum of living options from independent cottages to skilled nursing care, our community provides security and peace of mind for the future."
   },
   {
-    id: 5,
+    id: "5",
     slug: "evergreen-commons",
     name: "Evergreen Commons",
     city: "Akron",
@@ -141,7 +141,7 @@ export const communities: Community[] = [
     description: "Evergreen Commons offers active, independent living for seniors in the heart of Akron. Our community focuses on wellness, lifelong learning, and building meaningful connections through a variety of amenities and activities designed for an engaging retirement lifestyle."
   },
   {
-    id: 6,
+    id: "6",
     slug: "riverside-retreat",
     name: "Riverside Retreat",
     city: "Dayton",
@@ -169,7 +169,7 @@ export const communities: Community[] = [
     description: "Riverside Retreat provides personalized assisted living care in a serene setting along the river in Dayton. Our focus is on supporting residents' independence while providing the right level of assistance with daily activities in a comfortable, homelike environment."
   },
   {
-    id: 7,
+    id: "7",
     slug: "harmony-hills",
     name: "Harmony Hills",
     city: "Cleveland",
@@ -197,7 +197,7 @@ export const communities: Community[] = [
     description: "Harmony Hills is an innovative memory care community in Cleveland designed specifically for those with Alzheimer's and dementia. Our evidence-based programs, specialized staff training, and purpose-built environment create a supportive setting where residents thrive through meaningful engagement."
   },
   {
-    id: 8,
+    id: "8",
     slug: "golden-horizons",
     name: "Golden Horizons",
     city: "Columbus",
@@ -225,7 +225,7 @@ export const communities: Community[] = [
     description: "Golden Horizons is Columbus's premier continuing care retirement community offering a full spectrum of living options and care services. Our residents enjoy the security of knowing their changing needs can be met within our community, from independent living to skilled nursing care."
   },
   {
-    id: 9,
+    id: "9",
     slug: "whispering-pines",
     name: "Whispering Pines",
     city: "Toledo",
@@ -253,7 +253,7 @@ export const communities: Community[] = [
     description: "Whispering Pines offers resort-style independent living for active seniors in Toledo. Our community emphasizes choice, convenience, and connection, with spacious apartments and abundant amenities that support an engaged, fulfilling retirement lifestyle."
   },
   {
-    id: 10,
+    id: "10",
     slug: "oak-haven",
     name: "Oak Haven",
     city: "Cincinnati",

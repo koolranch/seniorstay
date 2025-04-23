@@ -1,12 +1,11 @@
-// Define the shape of the community data we'll work with internally
-// Use string for ID as it comes from Prisma
-export interface InternalCommunity {
-  id: string; // Changed to string to match Prisma
-  name: string;
-  city: string;
-  slug: string;
-  state: string;
-  type: string; // Type will be derived or defaulted
-  services?: string[]; // Keep services if needed later
-  imageUrl?: string; // URL to the community image
+// This file is maintained for backward compatibility
+// Import the unified Community type from the central location
+import type { Community as CentralCommunity, InternalCommunity as CentralInternalCommunity } from "@/types/community";
+
+// Create type aliases for backward compatibility
+export type Community = CentralCommunity;
+
+// Legacy InternalCommunity type for backward compatibility
+export interface InternalCommunity extends CentralInternalCommunity {
+  // Any additional properties needed for backward compatibility can be added here
 } 

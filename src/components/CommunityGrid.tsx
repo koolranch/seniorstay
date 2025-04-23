@@ -1,4 +1,4 @@
-import { Community } from "@/lib/data/communities";
+import { Community } from "@/types/community";
 import ProviderCard from "./ProviderCard";
 
 interface CommunityGridProps {
@@ -8,7 +8,9 @@ interface CommunityGridProps {
 
 export default function CommunityGrid({ communities, filterByCategory = null }: CommunityGridProps) {
   const filteredCommunities = filterByCategory
-    ? communities.filter((community) => community.type === filterByCategory || community.services.includes(filterByCategory))
+    ? communities.filter((community) => 
+        community.type === filterByCategory || 
+        (community.services && community.services.includes(filterByCategory)))
     : communities;
 
   return (
@@ -32,7 +34,7 @@ export default function CommunityGrid({ communities, filterByCategory = null }: 
               type={community.type}
               image={community.image}
               rating={community.rating}
-              amenities={community.services}
+              amenities={community.services ? community.services.split(',').map(s => s.trim()).filter(Boolean) : []}
             />
           ))}
         </div>

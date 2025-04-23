@@ -8,23 +8,7 @@ import {
   type ReactNode,
   useCallback,
 } from "react";
-
-// Define the type for a community
-export type Community = {
-  id: string;
-  slug: string;
-  name: string;
-  city: string;
-  state: string;
-  type: string;
-  image: string;
-  rating: number;
-  amenities?: string[];
-  price?: string;
-  phone?: string;
-  address?: string;
-  description?: string;
-};
+import { type Community } from "@/types/community";
 
 // Comparison context type
 type ComparisonContextType = {
