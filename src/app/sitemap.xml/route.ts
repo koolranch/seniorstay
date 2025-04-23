@@ -59,6 +59,11 @@ export async function GET() {
       const citySlug = city.toLowerCase().replace(/\s+/g, '-');
       const cityPath = getCityPath("OH", city);
       
+      // DEBUG LOGGING for Macedonia
+      if (city.toLowerCase() === 'macedonia') {
+        console.log(`Sitemap Generation - Macedonia City: ${city}, Path: ${cityPath}`);
+      }
+      
       xml += `  <url>\n`;
       xml += `    <loc>${BASE_URL}${cityPath}</loc>\n`;
       xml += `    <lastmod>${getCurrentDate()}</lastmod>\n`;
