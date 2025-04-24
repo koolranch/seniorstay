@@ -2,109 +2,81 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 // import { communities } from "@/lib/data/staticCommunities"; // Remove static import
 import { prisma } from "@/lib/prisma"; // Import Prisma client
-import ProviderCard from "@/components/ProviderCard";
-import Link from "next/link";
-import { FiArrowLeft } from "react-icons/fi";
-import { slugify, getCityPath } from "@/lib/utils/formatSlug";
+import CommunitySearchClientWrapper from '@/components/CommunitySearchClientWrapper';
+import ProviderCard from '@/components/ProviderCard';
+import Link from 'next/link';
+import { FiArrowLeft } from 'react-icons/fi';
+import { slugify, unslugify } from '@/lib/utils/formatSlug';
 import type { Community } from "@prisma/client"; // Import Prisma Community type
 import { parseServices, deriveCommunityType } from '@/lib/utils/communityUtils';
 import CompareFloatingButton from "@/components/CompareFloatingButton"; // Import the button
-import { Suspense } from 'react';
 // Import CommunityCard (assuming default export)
 import CommunityCard from '@/components/CommunityCard';
 import { InternalCommunity } from '@/lib/types/community'; // Assuming this type exists
-import { unslugify } from '@/lib/utils/formatSlug'; // Need an unslugify function
 import LeadForm from '@/components/forms/LeadForm'; // Import LeadForm
 // import { Community as CommunityDisplayTypeFromLib } from '@/lib/types/community'; // Remove this problematic import
 // import { Community as PrismaCommunity } from '@prisma/client';
 
-// Update the shape needed by CommunityCard - remove 'id'
+// Update the shape needed by ProviderCard - only include ProviderCard props
 interface CommunityDisplayType {
-  // id: string; // Removed id as CommunityCard expects optional number
-  name: string;
+  id: string;
   slug: string;
-  address: string;
-  city: string;
-  state: string;
+  name: string;
   type: string;
   services: string[];
-  amenities: string[];
-  rating: number;
-  description: string;
   image: string;
+  rating: number;
   reviewCount: number;
+  city: string;
+  state: string;
 }
 
-// Helper function to decode and format city name from slug
-const getDecodedCityName = (slug: string): string => {
-  try {
-    const decoded = decodeURIComponent(slug);
-    // Capitalize each word (handles spaces correctly after decoding)
-    return decoded.split(" ").map(word => 
-      word.charAt(0).toUpperCase() + word.slice(1)
-    ).join(" ");
-  } catch (e) {
-    console.error(`Failed to decode city slug: ${slug}`, e);
-    // Fallback: Use the original capitalization logic on the raw slug
-    return slug.split("-").map(word => 
-      word.charAt(0).toUpperCase() + word.slice(1)
-    ).join(" ");
-  }
-};
-
-// Helper function to map fetched data to Display Community
-function mapPrismaToCommunityDisplay(prismaCommunity: any): CommunityDisplayType {
-  const servicesArray = prismaCommunity.services?.split(',').map((s: string) => s.trim()) ?? [];
-  let derivedType = 'Community';
+// Replace old mapping function with mapToDisplay
+// (Note: ProviderCard needs 'type' derived and 'rating' defaulted)
+function mapToDisplay(c: any) {
+  const servicesArray = c.services?.split(',').map((s: string) => s.trim()) ?? [];
+  let derivedType = 'Community'; // Basic type derivation
   if (servicesArray.some((s: string) => s.toLowerCase().includes('assisted living'))) { derivedType = 'Assisted Living'; }
   else if (servicesArray.some((s: string) => s.toLowerCase().includes('memory care'))) { derivedType = 'Memory Care'; }
   else if (servicesArray.some((s: string) => s.toLowerCase().includes('independent living'))) { derivedType = 'Independent Living'; }
 
   return {
-    // id: prismaCommunity.id, // Removed id mapping
-    name: prismaCommunity.name,
-    slug: prismaCommunity.slug,
-    address: `${prismaCommunity.city ?? ''}, ${prismaCommunity.state ?? ''}`.trim() === ',' ? 'Address not available' : `${prismaCommunity.city}, ${prismaCommunity.state}`,
-    city: prismaCommunity.city ?? 'Unknown City',
-    state: prismaCommunity.state ?? 'N/A',
-    type: derivedType,
-    services: servicesArray,
-    amenities: [],
-    rating: 0,
-    description: prismaCommunity.description ?? 'No description available.',
-    image: prismaCommunity.imageUrl ?? "https://source.unsplash.com/random/800x600/?senior,living",
-    reviewCount: 0,
+    id: c.id,
+    slug: c.slug,
+    name: c.name,
+    city: c.city,
+    state: c.state,
+    services: servicesArray, // Pass parsed services array
+    image: c.imageUrl ?? "https://source.unsplash.com/random/800x600/?senior,living", // Map from imageUrl
+    type: derivedType, // Derived type
+    rating: 0, // Default rating to 0 as it's not in DB
   };
 }
 
-// Fetch communities for a specific city slug
-async function getCommunitiesByCity(citySlug: string): Promise<CommunityDisplayType[]> {
+// Fetch communities for a specific city slug - ensure select matches mapToDisplay needs
+async function getCommunitiesByCity(citySlug: string) { // Removed Promise<CommunityDisplayType[]> for simplicity, mapToDisplay handles shape
   const cityName = unslugify(citySlug);
-  
   try {
     const communitiesData = await prisma.community.findMany({
       where: {
         city: { equals: cityName, mode: 'insensitive' },
         state: 'OH',
       },
-      select: { // Select only the fields needed for mapping (removed id)
-          // id: true, // Removed id selection
-          name: true,
-          slug: true,
-          city: true,
-          state: true,
-          services: true,
-          description: true,
-          imageUrl: true,
-       },
+      select: { // Ensure these fields are selected
+        id: true,
+        name: true,
+        slug: true,
+        city: true,
+        state: true,
+        services: true, // Needed for services prop and type derivation
+        imageUrl: true, // Needed for image prop
+      },
       orderBy: {
         name: 'asc',
       },
     });
-
-    // Type assertion might be needed if inference fails, but try without first
-    return communitiesData.map(mapPrismaToCommunityDisplay);
-
+    // Map using the new function
+    return communitiesData.map(mapToDisplay);
   } catch (error) {
     console.error(`Error fetching communities for city ${cityName}:`, error);
     return [];
@@ -185,15 +157,22 @@ export default async function OhioCityPage({ params }: { params: { city: string 
         </div>
       </div>
       
-      {/* Communities Grid */}
+      {/* Communities Grid - Replace with requested markup */}
       <div className="container mx-auto px-6 md:px-10 lg:px-20 py-12">
         {communities.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {communities.map(c => (
-              // Pass the entire community object to the 'community' prop
-              <CommunityCard
-                key={c.slug}
-                community={c} // Pass the whole object
+              <ProviderCard
+                key={c.id}
+                id={c.id}
+                slug={c.slug}
+                name={c.name}
+                city={c.city}
+                state={c.state}
+                type={c.type} // Use derived type
+                image={c.image} // Use mapped image
+                rating={c.rating} // Use default rating
+                amenities={c.services} // Pass services to amenities prop
               />
             ))}
           </div>
