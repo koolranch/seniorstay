@@ -10,16 +10,17 @@ import type { Community } from "@prisma/client"; // Import Prisma Community type
 import { parseServices, deriveCommunityType } from '@/lib/utils/communityUtils';
 import CompareFloatingButton from "@/components/CompareFloatingButton"; // Import the button
 import { Suspense } from 'react';
-import CommunityGrid from '@/components/CommunityGrid';
+// Import CommunityCard (assuming default export)
+import CommunityCard from '@/components/CommunityCard';
 import { InternalCommunity } from '@/lib/types/community'; // Assuming this type exists
 import { unslugify } from '@/lib/utils/formatSlug'; // Need an unslugify function
 import LeadForm from '@/components/forms/LeadForm'; // Import LeadForm
 // import { Community as CommunityDisplayTypeFromLib } from '@/lib/types/community'; // Remove this problematic import
 // import { Community as PrismaCommunity } from '@prisma/client';
 
-// Define the shape needed by CommunityGrid
+// Update the shape needed by CommunityCard - remove 'id'
 interface CommunityDisplayType {
-  id: string;
+  // id: string; // Removed id as CommunityCard expects optional number
   name: string;
   slug: string;
   address: string;
@@ -52,28 +53,24 @@ const getDecodedCityName = (slug: string): string => {
 };
 
 // Helper function to map fetched data to Display Community
-// Let TypeScript infer the type of prismaCommunity based on the 'select' below
 function mapPrismaToCommunityDisplay(prismaCommunity: any): CommunityDisplayType {
-  let derivedType = 'Community'; 
-  if (prismaCommunity.services?.toLowerCase().includes('assisted living')) {
-    derivedType = 'Assisted Living';
-  } else if (prismaCommunity.services?.toLowerCase().includes('memory care')) {
-    derivedType = 'Memory Care';
-  } else if (prismaCommunity.services?.toLowerCase().includes('independent living')) {
-    derivedType = 'Independent Living';
-  }
-  
+  const servicesArray = prismaCommunity.services?.split(',').map((s: string) => s.trim()) ?? [];
+  let derivedType = 'Community';
+  if (servicesArray.some((s: string) => s.toLowerCase().includes('assisted living'))) { derivedType = 'Assisted Living'; }
+  else if (servicesArray.some((s: string) => s.toLowerCase().includes('memory care'))) { derivedType = 'Memory Care'; }
+  else if (servicesArray.some((s: string) => s.toLowerCase().includes('independent living'))) { derivedType = 'Independent Living'; }
+
   return {
-    id: prismaCommunity.id,
+    // id: prismaCommunity.id, // Removed id mapping
     name: prismaCommunity.name,
     slug: prismaCommunity.slug,
     address: `${prismaCommunity.city ?? ''}, ${prismaCommunity.state ?? ''}`.trim() === ',' ? 'Address not available' : `${prismaCommunity.city}, ${prismaCommunity.state}`,
     city: prismaCommunity.city ?? 'Unknown City',
     state: prismaCommunity.state ?? 'N/A',
     type: derivedType,
-    services: prismaCommunity.services?.split(',').map((s: string) => s.trim()) ?? [], // Add type annotation for s
-    amenities: [], 
-    rating: 0, 
+    services: servicesArray,
+    amenities: [],
+    rating: 0,
     description: prismaCommunity.description ?? 'No description available.',
     image: prismaCommunity.imageUrl ?? "https://source.unsplash.com/random/800x600/?senior,living",
     reviewCount: 0,
@@ -90,13 +87,13 @@ async function getCommunitiesByCity(citySlug: string): Promise<CommunityDisplayT
         city: { equals: cityName, mode: 'insensitive' },
         state: 'OH',
       },
-      select: { // Select only the fields needed for mapping
-          id: true,
+      select: { // Select only the fields needed for mapping (removed id)
+          // id: true, // Removed id selection
           name: true,
           slug: true,
           city: true,
           state: true,
-          services: true, 
+          services: true,
           description: true,
           imageUrl: true,
        },
@@ -191,7 +188,15 @@ export default async function OhioCityPage({ params }: { params: { city: string 
       {/* Communities Grid */}
       <div className="container mx-auto px-6 md:px-10 lg:px-20 py-12">
         {communities.length > 0 ? (
-           <CommunityGrid communities={communities} />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {communities.map(c => (
+              // Pass the entire community object to the 'community' prop
+              <CommunityCard
+                key={c.slug}
+                community={c} // Pass the whole object
+              />
+            ))}
+          </div>
         ) : (
           <div className="text-center py-10">
              <p className="text-lg text-gray-600">We couldn't find any communities listed in {cityName}, Ohio currently.</p>
