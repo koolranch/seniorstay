@@ -66,7 +66,7 @@ export default async function OhioCityPage({ params }: { params: { city: string 
   const { data: rows } = await supabase
     .from('communities')
     .select('id,slug,name,city,state,services,image_url,type,rating')
-    .eq('city', params.city);
+    .eq('city', cityName);
   
   const communities = (rows || []).map(c => ({
     id: c.id,
