@@ -64,15 +64,21 @@ export default async function OhioCityPage({ params }: { params: { city: string 
   const citySlug = params.city;
   const cityName = unslugify(citySlug);
   console.log('DEBUG citySlug:', citySlug);
+  
+  // DEBUG: list all distinct city names in your table
+  const { data: allRows } = await supabase
+    .from('communities')
+    .select('city');
+  const distinctCities = Array.from(new Set(allRows?.map(r => r.city)));
+  console.log('DEBUG allDistintCities:', distinctCities);
+  
   console.log('DEBUG cityName:', cityName);
-  console.log('DEBUG state filter: OH');
   const { data: rows } = await supabase
     .from('communities')
     .select('id,slug,name,city,state,services,image_url,type,rating')
     .eq('city', cityName)
     .eq('state', 'OH');
-  console.log('DEBUG fetched rows count:', rows?.length);
-  console.log('DEBUG fetched rows data:', rows);
+  console.log('DEBUG fetched rows count:', rows?.length, 'rows data:', rows);
   
   const communities = (rows || []).map(c => ({
     id: c.id,
