@@ -16,72 +16,9 @@ import { InternalCommunity } from '@/lib/types/community'; // Assuming this type
 import LeadForm from '@/components/forms/LeadForm'; // Import LeadForm
 // import { Community as CommunityDisplayTypeFromLib } from '@/lib/types/community'; // Remove this problematic import
 // import { Community as PrismaCommunity } from '@prisma/client';
+import { createClient } from '@supabase/supabase-js';
 
-// Update the shape needed by ProviderCard - only include ProviderCard props
-interface CommunityDisplayType {
-  id: string;
-  slug: string;
-  name: string;
-  type: string;
-  services: string[];
-  image: string;
-  rating: number;
-  reviewCount: number;
-  city: string;
-  state: string;
-}
-
-// Replace old mapping function with mapToDisplay
-// (Note: ProviderCard needs 'type' derived and 'rating' defaulted)
-function mapToDisplay(c: any) {
-  const servicesArray = c.services?.split(',').map((s: string) => s.trim()) ?? [];
-  let derivedType = 'Community'; // Basic type derivation
-  if (servicesArray.some((s: string) => s.toLowerCase().includes('assisted living'))) { derivedType = 'Assisted Living'; }
-  else if (servicesArray.some((s: string) => s.toLowerCase().includes('memory care'))) { derivedType = 'Memory Care'; }
-  else if (servicesArray.some((s: string) => s.toLowerCase().includes('independent living'))) { derivedType = 'Independent Living'; }
-
-  return {
-    id: c.id,
-    slug: c.slug,
-    name: c.name,
-    city: c.city,
-    state: c.state,
-    services: servicesArray, // Pass parsed services array
-    image: c.imageUrl ?? "https://source.unsplash.com/random/800x600/?senior,living", // Map from imageUrl
-    type: derivedType, // Derived type
-    rating: 0, // Default rating to 0 as it's not in DB
-  };
-}
-
-// Fetch communities for a specific city slug - ensure select matches mapToDisplay needs
-async function getCommunitiesByCity(citySlug: string) { // Removed Promise<CommunityDisplayType[]> for simplicity, mapToDisplay handles shape
-  const cityName = unslugify(citySlug);
-  try {
-    const communitiesData = await prisma.community.findMany({
-      where: {
-        city: { equals: cityName, mode: 'insensitive' },
-        state: 'OH',
-      },
-      select: { // Ensure these fields are selected
-        id: true,
-        name: true,
-        slug: true,
-        city: true,
-        state: true,
-        services: true, // Needed for services prop and type derivation
-        imageUrl: true, // Needed for image prop
-      },
-      orderBy: {
-        name: 'asc',
-      },
-    });
-    // Map using the new function
-    return communitiesData.map(mapToDisplay);
-  } catch (error) {
-    console.error(`Error fetching communities for city ${cityName}:`, error);
-    return [];
-  }
-}
+const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
 
 // Generate metadata for each city page
 export async function generateMetadata({ params }: { params: { city: string } }): Promise<Metadata> {
@@ -126,7 +63,22 @@ export async function generateStaticParams() {
 export default async function OhioCityPage({ params }: { params: { city: string } }) {
   const citySlug = params.city;
   const cityName = unslugify(citySlug);
-  const communities = await getCommunitiesByCity(citySlug);
+  const { data: rows } = await supabase
+    .from('communities')
+    .select('id,slug,name,city,state,services,image_url,type,rating')
+    .eq('city', params.city);
+  
+  const communities = (rows || []).map(c => ({
+    id: c.id,
+    slug: c.slug,
+    name: c.name,
+    city: c.city,
+    state: c.state,
+    services: c.services,
+    type: c.type,
+    rating: c.rating,
+    image: supabase.storage.from('community-images').getPublicUrl(c.image_url).data.publicUrl!,
+  }));
 
   if (communities.length === 0) {
     // Optionally, you could show a message or redirect
