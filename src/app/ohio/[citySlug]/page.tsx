@@ -53,7 +53,8 @@ export async function generateStaticParams() {
 
 // The actual page component
 export default async function OhioCityPage({ params }: { params: { citySlug: string } }) {
-  const { citySlug } = params;
+  const rawSlug = params.citySlug;
+  const citySlug = rawSlug.replace(/%20/g, '-');
   const cityName = citySlug.replace(/-/g, ' ').replace(/%20/g, ' ');
   console.log('DEBUG citySlug:', citySlug);
   console.log('DEBUG cityName:', cityName);
@@ -68,7 +69,7 @@ export default async function OhioCityPage({ params }: { params: { citySlug: str
   const { data: rows } = await supabase
     .from('Community')
     .select('id,slug,name,city,state,services,image_url,type,rating,city_slug')
-    .eq('city_slug', params.citySlug);
+    .eq('city_slug', citySlug);
 
   console.log('DEBUG fetched rows count:', rows?.length, 'rows data:', rows);
   
