@@ -56,7 +56,6 @@ export async function generateStaticParams() {
 // The actual page component
 export default async function OhioCityPage({ params }: { params: { city: string } }) {
   const citySlug = params.city;
-  const cityName = unslugify(citySlug);
   console.log('DEBUG citySlug:', citySlug);
   
   // DEBUG: list all distinct city names in your table
@@ -66,12 +65,10 @@ export default async function OhioCityPage({ params }: { params: { city: string 
   const distinctCities = Array.from(new Set(allRows?.map(r => r.city)));
   console.log('DEBUG allDistintCities:', distinctCities);
   
-  console.log('DEBUG cityName:', cityName);
   const { data: rows } = await supabase
     .from('communities')
-    .select('id,slug,name,city,state,services,image_url,type,rating')   // type & rating restored
-    .ilike('city', cityName);                                           // case-insensitive match
-  // .eq('state', 'OH');           // optional state guard
+    .select('id,slug,name,city,state,services,image_url,type,rating')
+    .eq('slug', params.city);   // slug match is guaranteed
 
   console.log('DEBUG fetched rows count:', rows?.length, 'rows data:', rows);
   
@@ -111,12 +108,12 @@ export default async function OhioCityPage({ params }: { params: { city: string 
             Back to Ohio Communities
           </Link>
           <h1 className="text-3xl font-bold text-[#1b4d70] mb-4">
-            Senior Living Communities in {cityName}, Ohio
+            Senior Living Communities in {citySlug}, Ohio
           </h1>
           <p className="text-gray-600">
             {communities.length > 0 
-              ? `Explore ${communities.length} senior living options in ${cityName}.`
-              : `No communities found matching your criteria in ${cityName}. Try broadening your search.`}
+              ? `Explore ${communities.length} senior living options in ${citySlug}.`
+              : `No communities found matching your criteria in ${citySlug}. Try broadening your search.`}
           </p>
         </div>
       </div>
@@ -131,7 +128,7 @@ export default async function OhioCityPage({ params }: { params: { city: string 
           </div>
         ) : (
           <div className="text-center py-10">
-             <p className="text-lg text-gray-600">We couldn't find any communities listed in {cityName}, Ohio currently.</p>
+             <p className="text-lg text-gray-600">We couldn't find any communities listed in {citySlug}, Ohio currently.</p>
              <Link href="/ohio" className="mt-4 inline-block bg-[#F5A623] text-[#1b4d70] font-medium rounded-full py-3 px-6 hover:bg-[#FFC65C] transition">
                View All Ohio Cities
              </Link>
@@ -144,13 +141,13 @@ export default async function OhioCityPage({ params }: { params: { city: string 
         <div className="container mx-auto px-6 md:px-10 lg:px-20">
           <div className="max-w-3xl mx-auto">
             <h2 className="text-2xl font-bold text-[#1b4d70] mb-6 text-center">
-              Get Help Finding Senior Living in {cityName}, Ohio
+              Get Help Finding Senior Living in {citySlug}, Ohio
             </h2>
             <p className="text-gray-600 mb-8 text-center">
               Our senior living advisors can help you find the perfect community that meets your needs.
             </p>
             <LeadForm
-              city={cityName}
+              city={citySlug}
               state="OH"
               sourceSlug={`city-${citySlug}`}
               className="shadow-lg rounded-lg"
