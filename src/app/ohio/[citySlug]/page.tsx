@@ -5,7 +5,7 @@ import { prisma } from "@/lib/prisma"; // Import Prisma client
 import ProviderCard from '@/components/ProviderCard';
 import Link from 'next/link';
 import { FiArrowLeft } from 'react-icons/fi';
-import { slugify, unslugify } from '@/lib/utils/formatSlug';
+import { slugify } from '@/lib/utils/formatSlug';
 // import { Community as CommunityDisplayTypeFromLib } from '@/lib/types/community'; // Remove this problematic import
 // import { Community as PrismaCommunity } from '@prisma/client';
 import { createClient } from '@supabase/supabase-js';
@@ -15,8 +15,8 @@ import LeadForm from '@/components/forms/LeadForm';
 const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
 
 // Generate metadata for each city page
-export async function generateMetadata({ params }: { params: { city: string } }): Promise<Metadata> {
-  const cityName = unslugify(params.city);
+export async function generateMetadata({ params }: { params: { citySlug: string } }): Promise<Metadata> {
+  const cityName = params.citySlug.replace(/-/g, ' ').replace(/%20/g, ' ');
   // Fetch count for description
   const count = await prisma.community.count({
      where: {
@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: { params: { city: string } })
     title: `Senior Living in ${cityName}, Ohio | GuideForSeniors`,
     description: `Find and compare ${count > 0 ? count : ''} senior living communities in ${cityName}, OH. Explore options for assisted living, memory care, and more.`,
     alternates: {
-      canonical: `/ohio/${params.city}`,
+      canonical: `/ohio/${params.citySlug}`,
     },
   };
 }
@@ -44,9 +44,7 @@ export async function generateStaticParams() {
     
     return cities
       .filter(item => item.city) // Ensure city is not null/empty
-      .map((item) => ({
-        city: slugify(item.city!), // Use slugify and non-null assertion
-    }));
+      .map((item) => ({ citySlug: slugify(item.city!) }));
   } catch (error) {
       console.error("Error generating static params for Ohio cities:", error);
       return [];
@@ -54,9 +52,9 @@ export async function generateStaticParams() {
 }
 
 // The actual page component
-export default async function OhioCityPage({ params }: { params: { city: string } }) {
-  const citySlug = params.city;
-  const cityName = unslugify(citySlug);
+export default async function OhioCityPage({ params }: { params: { citySlug: string } }) {
+  const { citySlug } = params;
+  const cityName = citySlug.replace(/-/g, ' ').replace(/%20/g, ' ');
   console.log('DEBUG citySlug:', citySlug);
   console.log('DEBUG cityName:', cityName);
   
@@ -71,7 +69,7 @@ export default async function OhioCityPage({ params }: { params: { city: string 
     .from('communities')
     .select('id,slug,name,city,state,services,image_url,type,rating')
     .ilike('city', `%${cityName}%`);   // case-insensitive, wildcard match
-    // .eq('state', 'OH')              // keep if you still want it
+    // .eq('state', 'OH')              // optional state guard
 
   console.log('DEBUG fetched rows count:', rows?.length, 'rows data:', rows);
   
@@ -111,12 +109,12 @@ export default async function OhioCityPage({ params }: { params: { city: string 
             Back to Ohio Communities
           </Link>
           <h1 className="text-3xl font-bold text-[#1b4d70] mb-4">
-            Senior Living Communities in {citySlug}, Ohio
+            Senior Living Communities in {cityName}, Ohio
           </h1>
           <p className="text-gray-600">
             {communities.length > 0 
-              ? `Explore ${communities.length} senior living options in ${citySlug}.`
-              : `No communities found matching your criteria in ${citySlug}. Try broadening your search.`}
+              ? `Explore ${communities.length} senior living options in ${cityName}.`
+              : `No communities found matching your criteria in ${cityName}. Try broadening your search.`}
           </p>
         </div>
       </div>
@@ -131,7 +129,7 @@ export default async function OhioCityPage({ params }: { params: { city: string 
           </div>
         ) : (
           <div className="text-center py-10">
-             <p className="text-lg text-gray-600">We couldn't find any communities listed in {citySlug}, Ohio currently.</p>
+             <p className="text-lg text-gray-600">We couldn't find any communities listed in {cityName}, Ohio currently.</p>
              <Link href="/ohio" className="mt-4 inline-block bg-[#F5A623] text-[#1b4d70] font-medium rounded-full py-3 px-6 hover:bg-[#FFC65C] transition">
                View All Ohio Cities
              </Link>
@@ -144,13 +142,13 @@ export default async function OhioCityPage({ params }: { params: { city: string 
         <div className="container mx-auto px-6 md:px-10 lg:px-20">
           <div className="max-w-3xl mx-auto">
             <h2 className="text-2xl font-bold text-[#1b4d70] mb-6 text-center">
-              Get Help Finding Senior Living in {citySlug}, Ohio
+              Get Help Finding Senior Living in {cityName}, Ohio
             </h2>
             <p className="text-gray-600 mb-8 text-center">
               Our senior living advisors can help you find the perfect community that meets your needs.
             </p>
             <LeadForm
-              city={citySlug}
+              city={cityName}
               state="OH"
               sourceSlug={`city-${citySlug}`}
               className="shadow-lg rounded-lg"
