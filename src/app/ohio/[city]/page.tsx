@@ -56,7 +56,9 @@ export async function generateStaticParams() {
 // The actual page component
 export default async function OhioCityPage({ params }: { params: { city: string } }) {
   const citySlug = params.city;
+  const cityName = unslugify(citySlug);
   console.log('DEBUG citySlug:', citySlug);
+  console.log('DEBUG cityName:', cityName);
   
   // DEBUG: list all distinct city names in your table
   const { data: allRows } = await supabase
@@ -68,7 +70,8 @@ export default async function OhioCityPage({ params }: { params: { city: string 
   const { data: rows } = await supabase
     .from('communities')
     .select('id,slug,name,city,state,services,image_url,type,rating')
-    .eq('slug', params.city);   // slug match is guaranteed
+    .ilike('city', `%${cityName}%`);   // case-insensitive, wildcard match
+    // .eq('state', 'OH')              // keep if you still want it
 
   console.log('DEBUG fetched rows count:', rows?.length, 'rows data:', rows);
   
