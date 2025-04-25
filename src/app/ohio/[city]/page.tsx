@@ -2,21 +2,15 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 // import { communities } from "@/lib/data/staticCommunities"; // Remove static import
 import { prisma } from "@/lib/prisma"; // Import Prisma client
-import CommunitySearchClientWrapper from '@/components/CommunitySearchClientWrapper';
 import ProviderCard from '@/components/ProviderCard';
 import Link from 'next/link';
 import { FiArrowLeft } from 'react-icons/fi';
 import { slugify, unslugify } from '@/lib/utils/formatSlug';
-import type { Community } from "@prisma/client"; // Import Prisma Community type
-import { parseServices, deriveCommunityType } from '@/lib/utils/communityUtils';
-import CompareFloatingButton from "@/components/CompareFloatingButton"; // Import the button
-// Import CommunityCard (assuming default export)
-import CommunityCard from '@/components/CommunityCard';
-import { InternalCommunity } from '@/lib/types/community'; // Assuming this type exists
-import LeadForm from '@/components/forms/LeadForm'; // Import LeadForm
 // import { Community as CommunityDisplayTypeFromLib } from '@/lib/types/community'; // Remove this problematic import
 // import { Community as PrismaCommunity } from '@prisma/client';
 import { createClient } from '@supabase/supabase-js';
+import { parseServices } from '@/lib/utils/communityUtils';
+import LeadForm from '@/components/forms/LeadForm';
 
 const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
 
@@ -76,21 +70,25 @@ export default async function OhioCityPage({ params }: { params: { city: string 
   const { data: rows } = await supabase
     .from('communities')
     .select('id,slug,name,city,state,services,image_url,type,rating')
-    .eq('city', cityName)
-    .eq('state', 'OH');
+    .ilike('city', cityName);
   console.log('DEBUG fetched rows count:', rows?.length, 'rows data:', rows);
   
-  const communities = (rows || []).map(c => ({
-    id: c.id,
-    slug: c.slug,
-    name: c.name,
-    city: c.city,
-    state: c.state,
-    services: c.services,
-    type: c.type,
-    rating: c.rating,
-    image: supabase.storage.from('community-images').getPublicUrl(c.image_url).data.publicUrl!,
-  }));
+  const communities = (rows ?? []).map(c => {
+    const imageUrl = supabase.storage
+      .from('community-images')
+      .getPublicUrl(c.image_url).data.publicUrl ?? '/placeholder.jpg';
+    return {
+      id: c.id,
+      slug: c.slug,
+      name: c.name,
+      city: c.city,
+      state: c.state,
+      type: c.type,
+      rating: c.rating,
+      amenities: parseServices(c.services),
+      image: imageUrl,
+    };
+  });
 
   if (communities.length === 0) {
     // Optionally, you could show a message or redirect
@@ -126,18 +124,7 @@ export default async function OhioCityPage({ params }: { params: { city: string 
         {communities.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {communities.map(c => (
-              <ProviderCard
-                key={c.id}
-                id={c.id}
-                slug={c.slug}
-                name={c.name}
-                city={c.city}
-                state={c.state}
-                type={c.type} // Use derived type
-                image={c.image} // Use mapped image
-                rating={c.rating} // Use default rating
-                amenities={c.services} // Pass services to amenities prop
-              />
+              <ProviderCard key={c.id} {...c} />
             ))}
           </div>
         ) : (
