@@ -66,10 +66,9 @@ export default async function OhioCityPage({ params }: { params: { citySlug: str
   console.log('DEBUG allDistintCities:', distinctCities);
   
   const { data: rows } = await supabase
-    .from('communities')
-    .select('id,slug,name,city,state,services,image_url,type,rating')
-    .ilike('city', `%${cityName}%`);   // case-insensitive, wildcard match
-    // .eq('state', 'OH')              // optional state guard
+    .from('Community')
+    .select('id,slug,name,city,state,services,image_url,type,rating,city_slug')
+    .eq('city_slug', params.citySlug);
 
   console.log('DEBUG fetched rows count:', rows?.length, 'rows data:', rows);
   
