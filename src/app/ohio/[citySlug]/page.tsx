@@ -12,6 +12,12 @@ import { createClient } from '@supabase/supabase-js';
 import { parseServices } from '@/lib/utils/communityUtils';
 import LeadForm from '@/components/forms/LeadForm';
 
+// One-time environment sanity check for Supabase
+console.log('ENV_CHECK', {
+  url: process.env.NEXT_PUBLIC_SUPABASE_URL,
+  key: !!process.env.SUPABASE_SERVICE_ROLE_KEY,
+});
+
 const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
 
 // Generate metadata for each city page
