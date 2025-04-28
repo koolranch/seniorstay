@@ -74,11 +74,12 @@ export default async function OhioCityPage({ params }: { params: { citySlug: str
   const distinctCities = Array.from(new Set(allRows?.map(r => r.city)));
   console.log('DEBUG allDistintCities:', distinctCities);
   
-  const { data: rows } = await supabase
-    .from('Community')
+  const { data: rows, error: supabaseError } = await supabase
+    .from('community')
     .select('id,slug,name,city,state,services,image_url,type,rating,city_slug')
-    .eq('city_slug', citySlug);
-
+    .ilike('city', cityName);
+  if (supabaseError) console.error('SUPABASE_QUERY_ERROR', supabaseError);
+  
   console.log('DEBUG fetched rows count:', rows?.length, 'rows data:', rows);
   
   const communities = (rows ?? []).map(c => {
