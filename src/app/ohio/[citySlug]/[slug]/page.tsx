@@ -118,53 +118,30 @@ interface PageParams {
 // Main page component
 export default async function CommunityPage({ params }: { params: PageParams }) {
   if (!params?.citySlug || !params.slug) {
-    console.error("Ohio community page: Invalid or missing params.");
-    return (
-      <div className="bg-gray-50 min-h-screen">
-        <div className="bg-white border-b border-neutral-200 py-8">
-          <div className="container mx-auto px-6 md:px-10 lg:px-20">
-            <div className="max-w-3xl mx-auto text-center py-12">
-              <h1 className="text-3xl font-bold text-gray-900 mb-6">Invalid Page Request</h1>
-              <p className="text-lg text-gray-600 mb-8">The requested community page URL is invalid.</p>
-              <div className="flex flex-col md:flex-row justify-center gap-4">
-                <Link
-                  href="/ohio"
-                  className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700"
-                >
-                  Browse Ohio Communities
-                </Link>
-                <Link
-                  href="/"
-                  className="inline-flex items-center px-6 py-3 border border-gray-300 text-base font-medium rounded-md shadow-sm text-gray-700 bg-white hover:bg-gray-50"
-                >
-                  Return to Home
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
+    console.error('INVALID_PARAMS', params);
+    return notFound();
   }
   
   const slugParam = decodeURIComponent(params.slug);
-  
+
   const { data: rows, error } = await supabase
     .from('Community')
     .select('id, name, city, state, description, image_url, services')
     .eq('slug', slugParam)
-    .limit(1)
+    .limit(1);
 
   if (error) {
-    console.error('SUPABASE_ERROR', error)
-    throw new Error('Could not fetch community')
+    console.error('SUPABASE_ERROR', error);
+    throw error;
   }
 
-  const community = rows?.[0]
-  console.log('DEBUG fetched community:', community)
-  if (!community) {
-    notFound()
+  if (!rows || rows.length === 0) {
+    console.error('NO_COMMUNITY_FOUND', { slugParam });
+    return notFound();
   }
 
-  return <CommunityClient community={community} />
+  const community = rows[0];
+  console.log('DEBUG fetched community:', community);
+
+  return <CommunityClient community={community} />;
 }
