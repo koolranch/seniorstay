@@ -11,6 +11,7 @@ import { slugify } from '@/lib/utils/formatSlug';
 import { createClient } from '@supabase/supabase-js';
 import { parseServices } from '@/lib/utils/communityUtils';
 import LeadForm from '@/components/forms/LeadForm';
+export const dynamic = 'force-dynamic';
 
 // One-time environment sanity check for Supabase
 console.log('ENV_CHECK', {
