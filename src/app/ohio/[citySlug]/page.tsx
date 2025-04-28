@@ -85,17 +85,19 @@ export default async function OhioCityPage({ params }: { params: { citySlug: str
   
   console.log('DEBUG fetched rows count:', rows?.length, 'rows data:', rows);
   
-  const communities = (rows ?? []).map(c => ({
+  const communities = (rows ?? []).map((c) => ({
     id: c.id,
     slug: c.slug,
     name: c.name,
     city: c.city,
     state: c.state,
     services: c.services,
-
-    image: c.image_url
-      ? c.image_url
-      : '/images/placeholder-community.jpg',
+    type: c.type ?? undefined,        // optional
+    rating: c.rating ?? undefined,    // optional
+    image:
+      c.image_url
+        ? `https://hncgnxbooghjhpncujzx.supabase.co/storage/v1/object/public/community-images/${c.image_url}`
+        : null                       // 👈 shows "No Image" placeholder if null
   }));
 
   if (communities.length === 0) {
