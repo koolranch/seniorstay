@@ -13,20 +13,19 @@ import { sendGAEvent } from '@/lib/utils/gtag';
 import RequestInfoModal from './RequestInfoModal';
 
 interface ProviderCardProps {
-  id: string;
-  slug?: string;
+  id?: string;
+  slug: string;
   name: string;
-  type: string;
-  image: string;
-  imageUrl?: string;
-  rating: number;
-  reviewCount?: number;
-  city?: string;
+  city: string;
   state: string;
+  amenities?: string[];
+  image?: string | null;
+  type?: string;
+  rating?: number | null;
+  reviewCount?: number;
   price?: number;
   distance?: string;
   isFeatured?: boolean;
-  amenities?: string[];
   onScheduleTour?: () => void;
   onRequestPricing?: () => void;
   compact?: boolean;
@@ -38,8 +37,7 @@ const ProviderCard = ({
   slug,
   name,
   type,
-  image,
-  imageUrl,
+  image = '',
   rating,
   reviewCount = 0,
   city,
@@ -66,8 +64,8 @@ const ProviderCard = ({
 
   const hasRequiredData = city && slug && state;
 
-  const communityPath = hasRequiredData ? getCommunityPath(state, city, slug) : '#';
-  const cityPath = hasRequiredData ? getCityPath(state, city) : '#';
+  const communityPath = getCommunityPath(state, city, slug);
+  const cityPath = getCityPath(state, city);
 
   const imageSource = image;
 
@@ -146,11 +144,13 @@ const ProviderCard = ({
           )}
         </div>
 
+        {type && (
         <div className="absolute bottom-3 left-3 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-md text-xs font-medium text-[#1b4d70]">
           {type}
         </div>
+        )}
         
-        {rating >= 4.8 && (
+        {rating != null && rating >= 4.8 && (
           <div className="absolute bottom-3 right-3 bg-yellow-200 px-2 py-1 rounded-md text-xs font-semibold text-yellow-800 shadow-sm flex items-center">
             <FiStar className="!text-yellow-600 mr-1 drop-shadow-sm" size={12} />
             Featured
@@ -161,7 +161,7 @@ const ProviderCard = ({
       <div className="space-y-3">
         <div className="flex justify-between items-start">
           <h3 className="font-semibold text-lg text-[#1b4d70] line-clamp-2">{name}</h3>
-          {rating > 0 && (
+          {rating != null && rating > 0 && (
             <div className="flex items-center bg-[#f1f6f0] px-2 py-1 rounded-md shadow-sm">
               <FiStar className="!text-yellow-500 mr-1 text-base drop-shadow-sm" />
               <span className="!text-yellow-600 text-sm !font-bold drop-shadow-sm" aria-label={`Rated ${rating.toFixed(1)} out of 5`}>
@@ -219,7 +219,7 @@ const ProviderCard = ({
     <>
       <article className={`flex flex-col justify-between h-full p-4 shadow rounded-md min-h-[380px] ${className} transition-all duration-200 hover:shadow-lg hover:-translate-y-1 hover:border-blue-300 ${
         !hasRequiredData ? 'cursor-not-allowed bg-white' :
-        rating >= 4.8 ? 'border border-yellow-300 bg-yellow-50 hover:ring-2 hover:ring-yellow-300' :
+        rating != null && rating >= 4.8 ? 'border border-yellow-300 bg-yellow-50 hover:ring-2 hover:ring-yellow-300' :
         'bg-white border border-gray-200 hover:ring-2 hover:ring-primary'
       }`}>
         <div>
