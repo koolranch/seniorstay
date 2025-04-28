@@ -1,4 +1,5 @@
 export const dynamic = 'force-dynamic';
+console.log('SLUG_PAGE_ENV', { slugParam: 'initialized' });
 
 import { notFound } from "next/navigation";
 import { generateSEOContentForCommunities, getAllCommunities as getAllCommunitiesData } from "@/lib/data/communities";
@@ -14,6 +15,9 @@ import path from 'path';
 import fs from 'fs';
 import React, { cache } from 'react';
 import CommunityActions from '../../../../components/CommunityActions';
+import { createClient } from '@supabase/supabase-js';
+
+const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
 
 // Optimize for static generation, error on unknown paths
 export const dynamicParams = false; // Tell Next.js not to generate pages for paths not in generateStaticParams
@@ -40,6 +44,7 @@ interface SafeCommunity {
   amenities?: string[]; // Derived from services
   services?: string[]; // Parsed from DB services string
   images?: string[];
+  image?: string | null; // Added for direct image URL path
   phone?: string | null;
 }
 
@@ -150,90 +155,53 @@ function generateAmenities(services: string[]): string[] {
   return [...new Set(base)];
 }
 
-// UPDATED fetchCommunityData with fallback logic
+// Replace the existing fetchCommunityData function with this new implementation
 async function fetchCommunityData(city: string, slug: string): Promise<SafeCommunity | null> {
-  if (!city || !slug) return null;
-  console.log(`[${city}/${slug}] fetchCommunityData: Fetching...`);
-  let communityData: SafeCommunity | null = null;
+  const slugParam = decodeURIComponent(slug);
+  console.log('SLUG_PAGE_ENV', { slugParam });
 
-  try {
-    // Try fetching from database first
-    const dbCommunity = await prisma.community.findFirst({
-      where: { 
-        slug: { equals: slug, mode: 'insensitive' },
-      },
-      select: { 
-        id: true,
-        name: true,
-        city: true,
-        state: true,
-        slug: true,
-        description: true,
-        address: true,
-        zip: true,
-        phone: true,
-        services: true,
-      }
-    });
+  // Basic fetch: 1 row where slug matches (case-insensitive)
+  const { data: rows, error } = await supabase
+    .from('Community')
+    .select(
+      'id, slug, name, city, state, services, image_url, type, rating'
+    )
+    .ilike('slug', slugParam)        // 🔥 case-insensitive match
+    .limit(1);
 
-    if (dbCommunity) {
-      console.log(`[${city}/${slug}] fetchCommunityData: Found in DB: ${dbCommunity.name}`);
-      const servicesArray = parseServices(dbCommunity.services);
-      const derivedType = determineType(servicesArray);
-      const derivedAmenities = generateAmenities(servicesArray); 
-
-      communityData = {
-        id: dbCommunity.id,
-        name: dbCommunity.name,
-        city: dbCommunity.city,
-        state: dbCommunity.state,
-        slug: dbCommunity.slug,
-        description: dbCommunity.description,
-        address: dbCommunity.address,
-        zipCode: dbCommunity.zip,
-        type: derivedType,
-        amenities: derivedAmenities,
-        services: servicesArray,
-        phone: dbCommunity.phone,
-      };
-      return communityData;
-    } else {
-      console.warn(`[${city}/${slug}] fetchCommunityData: Not found in DB. Attempting fallback to static data...`);
-      // Fallback to static data if not found in DB
-      const staticCommunity = findCommunityInStaticData(city, slug);
-      if (staticCommunity) {
-        console.log(`[${city}/${slug}] fetchCommunityData: Found in static data: ${staticCommunity.name}`);
-        communityData = convertToSafeCommunity(staticCommunity);
-        return communityData;
-      } else {
-        console.warn(`[${city}/${slug}] fetchCommunityData: Not found in static data either.`);
-        return null; // Not found in DB or static data
-      }
-    }
-  } catch (error) {
-    // If database connection fails, attempt fallback
-    if (error instanceof PrismaClientInitializationError) {
-      console.warn(`[${city}/${slug}] fetchCommunityData: Prisma connection error. Attempting fallback to static data...`, error.message);
-    } else {
-      console.error(`[${city}/${slug}] fetchCommunityData: DB error occurred. Attempting fallback to static data...`, error);
-    }
-    
-    // Attempt fallback to static data on any DB error
-    try {
-      const staticCommunity = findCommunityInStaticData(city, slug);
-      if (staticCommunity) {
-        console.log(`[${city}/${slug}] fetchCommunityData: Found in static data after DB error: ${staticCommunity.name}`);
-        communityData = convertToSafeCommunity(staticCommunity);
-        return communityData;
-      } else {
-        console.warn(`[${city}/${slug}] fetchCommunityData: Not found in static data after DB error.`);
-        return null; // Not found in static data after error
-      }
-    } catch (fallbackError) {
-      console.error(`[${city}/${slug}] fetchCommunityData: Error during static data fallback:`, fallbackError);
-      return null; // Error during fallback attempt
-    }
+  if (error) {
+    console.error('SUPABASE_QUERY_ERROR', error);
+    return null;              // bail out on hard error
   }
+
+  if (!rows || rows.length === 0) {
+    console.warn('SUPABASE_EMPTY', { slugParam });
+    return null;              // no match ⇒ 404
+  }
+
+  const c = rows[0];
+
+  // Map to the shape ProviderPage / CommunityClient expects
+  const community = {
+    id: c.id,
+    slug: c.slug,
+    name: c.name,
+    city: c.city,
+    state: c.state,
+    services: c.services,
+    type: c.type ?? undefined,
+    rating: c.rating ?? undefined,
+    image:
+      c.image_url
+        ? `https://hncgnxbooghjhpncujzx.supabase.co/storage/v1/object/public/community-images/${c.image_url}`
+        : null,
+    description: '', // Add blank values for other required fields
+    address: '',
+    zipCode: null,
+    amenities: []
+  };
+  
+  return community;
 }
 
 // Updated generateMetadata to ONLY handle title and description
@@ -515,7 +483,8 @@ export default async function Page({ params }: { params: PageParams | undefined 
     },
     url: `https://www.seniorstay.com/ohio/${slugify(communityData.city).toLowerCase()}/${communityData.slug}`,
     telephone: communityData.phone || undefined, // Omit if null/empty
-    // aggregateRating omitted as rating is not available
+    // Image property - add if available
+    image: communityData.image || undefined,
     // Map directly over services array (already string[])
     amenityFeature: (communityData.services && communityData.services.length > 0) 
       ? communityData.services.map((service) => ({
@@ -530,6 +499,7 @@ export default async function Page({ params }: { params: PageParams | undefined 
   if (!jsonLd.address.streetAddress) delete jsonLd.address.streetAddress;
   if (!jsonLd.address.postalCode) delete jsonLd.address.postalCode;
   if (!jsonLd.telephone) delete jsonLd.telephone;
+  if (!jsonLd.image) delete jsonLd.image;
   if (!jsonLd.amenityFeature) delete jsonLd.amenityFeature;
 
   // --- Prepare page content --- 
@@ -551,6 +521,16 @@ export default async function Page({ params }: { params: PageParams | undefined 
           <div className="container mx-auto px-6 md:px-10 lg:px-20">
             <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">{h1Text}</h1>
             <h2 className="text-xl md:text-2xl text-blue-600 font-semibold mb-6">{h2Text}</h2>
+            {/* Add image element if available */}
+            {communityData.image && (
+              <div className="mb-6 relative overflow-hidden rounded-lg max-h-96">
+                <img 
+                  src={communityData.image} 
+                  alt={`${communityData.name} in ${communityData.city}, ${communityData.state}`} 
+                  className="w-full object-cover"
+                />
+              </div>
+            )}
             <CommunityContent
               name={communityData.name}
               type={communityData.type || "Senior Living"}
