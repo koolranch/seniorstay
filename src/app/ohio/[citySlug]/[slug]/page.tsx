@@ -481,7 +481,7 @@ export default async function Page({ params }: { params: PageParams | undefined 
       postalCode: communityData.zipCode || undefined, // Omit if null/empty
       addressCountry: 'US',
     },
-    url: `https://www.seniorstay.com/ohio/${slugify(communityData.city).toLowerCase()}/${communityData.slug}`,
+    url: `https://www.guideforseniors.com/ohio/${slugify(communityData.city).toLowerCase()}/${communityData.slug}`,
     telephone: communityData.phone || undefined, // Omit if null/empty
     // Image property - add if available
     image: communityData.image || undefined,
