@@ -76,9 +76,11 @@ export default async function OhioCityPage({ params }: { params: { citySlug: str
   
   const { data: rows, error: supabaseError } = await supabase
     .from('Community')
-    .select('id,slug,name,city,state,services,imageUrl')
-    .eq('state', 'OH')
-    .eq('city_slug', citySlug);
+    .select(
+      'id, slug, name, city, state, services, image_url, type, rating'
+    )
+    .eq('city_slug', citySlug)   // ✅ exact match on slug
+    .eq('state', 'OH');
   if (supabaseError) console.error('SUPABASE_QUERY_ERROR', supabaseError);
   
   console.log('DEBUG fetched rows count:', rows?.length, 'rows data:', rows);
@@ -91,12 +93,8 @@ export default async function OhioCityPage({ params }: { params: { citySlug: str
     state: c.state,
     services: c.services,
 
-    image: c.imageUrl
-      ? supabase
-          .storage
-          .from('community-images')
-          .getPublicUrl(c.imageUrl).data
-          .publicUrl
+    image: c.image_url
+      ? c.image_url
       : '/images/placeholder-community.jpg',
   }));
 
