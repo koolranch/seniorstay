@@ -10,6 +10,9 @@ import prisma from '@/lib/db'; // Import the shared Prisma instance
 import type { Community } from '@prisma/client'; 
 import fs from 'fs';
 import path from 'path';
+import { createClient } from '@supabase/supabase-js';
+
+const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
 
 // Function to load fallback communities from JSON
 async function loadFallbackCommunitiesForStaticParams() {
@@ -48,6 +51,7 @@ export async function generateStaticParams() {
       select: {
         slug: true,
         city: true,
+        city_slug: true,
         state: true,
       },
     });
@@ -56,7 +60,7 @@ export async function generateStaticParams() {
 
     const params = communities.map((community) => ({
       state: community.state.toLowerCase(),
-      city: community.city.toLowerCase(),
+      city: community.city_slug || formatSlug(community.city).toLowerCase(),
       slug: community.slug,
     }));
 
@@ -110,19 +114,30 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       };
     }
 
-    // Fetch the specific community using Prisma with the unique slug
-    community = await prisma.community.findUnique({
-      where: {
-        slug: resolvedParams.slug, // Use the unique slug field for lookup
-      },
-    });
+    // Fetch the specific community using Supabase with the unique slug and city_slug
+    const { data, error } = await supabase
+      .from('Community')
+      .select('*')
+      .eq('state', resolvedParams.state.toUpperCase())
+      .eq('city_slug', resolvedParams.city)
+      .eq('slug', resolvedParams.slug);
 
-    if (!community) {
+    if (error) {
+      console.error('Metadata Error: Supabase query error:', error);
+      return {
+        title: "Error Loading Community | SeniorStay",
+        description: "There was an error loading the community details.",
+      };
+    }
+
+    if (!data?.length) {
       console.error('Metadata Error: Community not found for params:',
         `state=${resolvedParams.state}, city=${resolvedParams.city}, slug=${resolvedParams.slug}`);
       // Use notFound() for App Router instead of returning metadata for a non-existent page
       return notFound();
     }
+
+    community = data[0];
 
     // Add safety checks for community properties
     if (!community.name || !community.city || !community.state) {
@@ -222,18 +237,26 @@ export default async function Page(props: Props) {
     console.log('Community Page: Looking for community with params:',
       `state=${resolvedParams.state}, city=${resolvedParams.city}, slug=${resolvedParams.slug}`);
 
-    // Fetch the specific community using Prisma
-    community = await prisma.community.findUnique({
-       where: {
-         slug: resolvedParams.slug, // Use unique slug
-       },
-    });
+    // Fetch the specific community using Supabase
+    const { data, error } = await supabase
+      .from('Community')
+      .select('*')
+      .eq('state', resolvedParams.state.toUpperCase())
+      .eq('city_slug', resolvedParams.city)
+      .eq('slug', resolvedParams.slug);
 
-    if (!community) {
+    if (error) {
+      console.error('Community Page Error: Supabase query error:', error);
+      return notFound();
+    }
+
+    if (!data?.length) {
       console.error('Community Page Error: Community not found for params:',
         `state=${resolvedParams.state}, city=${resolvedParams.city}, slug=${resolvedParams.slug}`);
       return notFound();
     }
+
+    community = data[0];
 
     // Generate structured data with safe fallbacks for all properties
     const structuredData = {

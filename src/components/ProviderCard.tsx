@@ -17,6 +17,7 @@ interface ProviderCardProps {
   slug: string;
   name: string;
   city: string;
+  city_slug?: string;
   state: string;
   amenities?: string[];
   image?: string | null;
@@ -41,6 +42,7 @@ const ProviderCard = ({
   rating,
   reviewCount = 0,
   city,
+  city_slug,
   state,
   price = 0,
   distance,
@@ -64,7 +66,9 @@ const ProviderCard = ({
 
   const hasRequiredData = city && slug && state;
 
-  const communityPath = getCommunityPath(state, city, slug);
+  const communityPath = city_slug 
+    ? `/community/${state.toLowerCase()}/${city_slug}/${slug}`
+    : getCommunityPath(state, city, slug);
   const cityPath = getCityPath(state, city);
 
   const imageSource = image;
