@@ -76,35 +76,17 @@ export default async function OhioCityPage({ params }: { params: { citySlug: str
   
   const { data: rows, error: supabaseError } = await supabase
     .from('Community')
-    .select(
-      'id, slug, name, city, state, services, image_url, type, rating'
-    )
-    .eq('city_slug', citySlug)   // ✅ exact match on slug
-    .eq('state', 'OH');
-  if (supabaseError) console.error('SUPABASE_QUERY_ERROR', supabaseError);
-  
-  console.log('DEBUG fetched rows count:', rows?.length, 'rows data:', rows);
-  
-  const communities = (rows ?? []).map((c) => ({
-    id: c.id,
-    slug: c.slug,
-    name: c.name,
-    city: c.city,
-    state: c.state,
-    services: c.services,
-    type: c.type ?? undefined,        // optional
-    rating: c.rating ?? undefined,    // optional
-    image:
-      c.image_url
-        ? `https://hncgnxbooghjhpncujzx.supabase.co/storage/v1/object/public/community-images/${c.image_url}`
-        : null                       // 👈 shows "No Image" placeholder if null
-  }));
+    .select('id, slug, name, city, state, services, image_url')
+    .eq('city', cityName)
+    .eq('state', 'OH')
 
-  if (communities.length === 0) {
-    // Optionally, you could show a message or redirect
-    // For now, let's just show a basic message, though notFound() might be better SEO if no communities *ever* exist
-    // notFound(); // Uncomment if you want a 404 for cities with no results
+  if (supabaseError) {
+    console.error('SUPABASE_ERROR', supabaseError)
+    throw new Error('Could not fetch communities')
   }
+
+  const communities = rows ?? []
+  console.log('DEBUG communities:', communities)
 
   return (
     <main className="bg-gray-50 min-h-screen">
@@ -129,22 +111,19 @@ export default async function OhioCityPage({ params }: { params: { citySlug: str
         </div>
       </div>
       
-      {/* Communities Grid - Replace with requested markup */}
+      {/* Communities Grid */}
       <div className="container mx-auto px-6 md:px-10 lg:px-20 py-12">
         {communities.length > 0 ? (
-          console.log('DEBUG communities typeof:', typeof communities, 'isArray:', Array.isArray(communities)),
-          console.log('DEBUG communities value:', communities),
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {communities.map(c => (
               <ProviderCard
                 key={c.id}
-                id={c.id}
                 slug={c.slug}
                 name={c.name}
                 city={c.city}
                 state={c.state}
                 amenities={c.services}
-                image={c.image}
+                image={c.image_url}
               />
             ))}
           </div>
