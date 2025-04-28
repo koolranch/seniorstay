@@ -90,7 +90,7 @@ export async function generateMetadata({ params }: { params: PageParams }): Prom
   const { data: rows, error } = await supabase
     .from('Community')
     .select('id, name, city, state, description, image_url, services')
-    .eq('slug', slugParam)
+    .ilike('slug', `${slugParam}%`)
     .limit(1)
 
   if (error) {
@@ -132,7 +132,7 @@ export default async function CommunityPage({ params }: { params: PageParams }) 
   const { data: rows, error } = await supabase
     .from('Community')
     .select('id, name, city, state, description, image_url, services')
-    .eq('slug', slugParam)
+    .ilike('slug', `${slugParam}%`)
     .limit(1);
 
   console.log('DEBUG_ROWS_COUNT', rows?.length, 'DEBUG_ERROR', error);
