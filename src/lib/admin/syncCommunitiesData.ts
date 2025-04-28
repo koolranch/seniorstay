@@ -31,6 +31,8 @@ export async function syncCommunitiesData() {
         
         // Ensure consistent slug formatting using the slugify function
         const formattedSlug = slugify(community.slug || community.name);
+        // Create city_slug for exact matching
+        const citySlug = community.city.toLowerCase().replace(/\s+/g, '-');
         
         // Try to find the community in the database
         const existingCommunity = await prisma.community.findFirst({
@@ -52,6 +54,7 @@ export async function syncCommunitiesData() {
               // Ensure these critical fields are consistent
               slug: formattedSlug,
               city: community.city,
+              city_slug: citySlug,
               state: community.state === "OH" ? "Ohio" : community.state, // Normalize state
               
               // Update other fields if they've changed
@@ -80,6 +83,7 @@ export async function syncCommunitiesData() {
               name: community.name,
               slug: formattedSlug,
               city: community.city,
+              city_slug: citySlug,
               state: community.state === "OH" ? "Ohio" : community.state, // Normalize state
               
               // Optional fields

@@ -71,6 +71,7 @@ model Community {
   name        String
   slug        String   @unique
   city        String
+  city_slug   String?
   state       String
   description String?
   imageUrl    String?

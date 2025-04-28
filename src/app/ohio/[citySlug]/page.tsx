@@ -76,8 +76,9 @@ export default async function OhioCityPage({ params }: { params: { citySlug: str
   
   const { data: rows, error: supabaseError } = await supabase
     .from('Community')
-    .select('id,slug,name,city,state,services,imageUrl,type,rating')
-    .ilike('city', cityName);
+    .select('id,slug,name,city,state,services,imageUrl')
+    .eq('state', 'OH')
+    .eq('city_slug', citySlug);
   if (supabaseError) console.error('SUPABASE_QUERY_ERROR', supabaseError);
   
   console.log('DEBUG fetched rows count:', rows?.length, 'rows data:', rows);
@@ -88,14 +89,15 @@ export default async function OhioCityPage({ params }: { params: { citySlug: str
     name: c.name,
     city: c.city,
     state: c.state,
-    type: c.type,
-    rating: c.rating,
-    amenities: parseServices(c.services),
-    image: supabase
-      .storage
-      .from('community-images')           // bucket
-      .getPublicUrl(c.imageUrl).data
-      .publicUrl,
+    services: c.services,
+
+    image: c.imageUrl
+      ? supabase
+          .storage
+          .from('community-images')
+          .getPublicUrl(c.imageUrl).data
+          .publicUrl
+      : '/images/placeholder-community.jpg',
   }));
 
   if (communities.length === 0) {
@@ -132,7 +134,16 @@ export default async function OhioCityPage({ params }: { params: { citySlug: str
         {communities.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {communities.map(c => (
-              <ProviderCard key={c.id} {...c} />
+              <ProviderCard
+                key={c.id}
+                id={c.id}
+                slug={c.slug}
+                name={c.name}
+                city={c.city}
+                state={c.state}
+                amenities={c.services}
+                image={c.image}
+              />
             ))}
           </div>
         ) : (
