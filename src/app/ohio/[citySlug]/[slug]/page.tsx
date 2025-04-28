@@ -90,6 +90,9 @@ export async function generateMetadata({ params }: { params: PageParams }): Prom
   const { data: rows, error } = await supabase
     .from('Community')
     .select('id, name, city, state, description, image_url, services')
+    // first filter by the city slug from the URL
+    .eq('city_slug', params.citySlug)
+    // then allow prefix match on the community slug
     .ilike('slug', `${slugParam}%`)
     .limit(1)
 
@@ -132,13 +135,16 @@ export default async function CommunityPage({ params }: { params: PageParams }) 
   const { data: rows, error } = await supabase
     .from('Community')
     .select('id, name, city, state, description, image_url, services')
+    // match the city_slug param so we only look up within that city
+    .eq('city_slug', params.citySlug)
+    // then prefix-match the slug
     .ilike('slug', `${slugParam}%`)
     .limit(1);
 
-  console.log('DEBUG_ROWS_COUNT', rows?.length, 'DEBUG_ERROR', error);
-  if (error) throw new Error(`Supabase error: ${error.message}`);
+  console.log('DEBUG_LOOKUP', { citySlug: params.citySlug, slugParam, rowsCount: rows?.length, error });
+  if (error) throw new Error(`Supabase lookup error: ${error.message}`);
   if (!rows || rows.length === 0) {
-    console.error('NO_COMMUNITY_FOUND', { slugParam });
+    console.error('NO_COMMUNITY_FOUND', { citySlug: params.citySlug, slugParam });
     return notFound();
   }
 
