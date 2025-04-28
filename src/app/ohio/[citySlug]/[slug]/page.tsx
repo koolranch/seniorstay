@@ -1,5 +1,8 @@
 export const dynamic = 'force-dynamic';
-console.log('SLUG_PAGE_ENV', { NODE_ENV: process.env.NODE_ENV });
+console.log('PAGE_RUNTIME_ENV', {
+  NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
+  SERVICE_ROLE_KEY_SET: !!process.env.SUPABASE_SERVICE_ROLE_KEY,
+});
 
 import { notFound } from "next/navigation";
 import CommunityContent from "./CommunityContent";
@@ -117,12 +120,14 @@ interface PageParams {
 
 // Main page component
 export default async function CommunityPage({ params }: { params: PageParams }) {
-  if (!params?.citySlug || !params.slug) {
+  console.log('DEBUG_SLUG_PARAM', params);
+  if (!params.citySlug || !params.slug) {
     console.error('INVALID_PARAMS', params);
     return notFound();
   }
-  
+
   const slugParam = decodeURIComponent(params.slug);
+  console.log('DEBUG_LOOKUP_SLUG', slugParam);
 
   const { data: rows, error } = await supabase
     .from('Community')
@@ -130,18 +135,12 @@ export default async function CommunityPage({ params }: { params: PageParams }) 
     .eq('slug', slugParam)
     .limit(1);
 
-  if (error) {
-    console.error('SUPABASE_ERROR', error);
-    throw error;
-  }
-
+  console.log('DEBUG_ROWS_COUNT', rows?.length, 'DEBUG_ERROR', error);
+  if (error) throw new Error(`Supabase error: ${error.message}`);
   if (!rows || rows.length === 0) {
     console.error('NO_COMMUNITY_FOUND', { slugParam });
     return notFound();
   }
 
-  const community = rows[0];
-  console.log('DEBUG fetched community:', community);
-
-  return <CommunityClient community={community} />;
+  return <CommunityClient community={rows[0]} />;
 }
