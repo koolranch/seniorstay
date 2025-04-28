@@ -132,6 +132,8 @@ export default async function OhioCityPage({ params }: { params: { citySlug: str
       {/* Communities Grid - Replace with requested markup */}
       <div className="container mx-auto px-6 md:px-10 lg:px-20 py-12">
         {communities.length > 0 ? (
+          console.log('DEBUG communities typeof:', typeof communities, 'isArray:', Array.isArray(communities)),
+          console.log('DEBUG communities value:', communities),
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {communities.map(c => (
               <ProviderCard
