@@ -67,9 +67,10 @@ export default async function OhioCityPage({ params }: { params: { citySlug: str
   console.log('DEBUG cityName:', cityName);
   
   // DEBUG: list all distinct city names in your table
-  const { data: allRows } = await supabase
-    .from('communities')
+  const { data: allRows, error } = await supabase
+    .from('Community')
     .select('city');
+  if (error) console.error('SUPABASE_QUERY_ERROR', error);
   const distinctCities = Array.from(new Set(allRows?.map(r => r.city)));
   console.log('DEBUG allDistintCities:', distinctCities);
   
