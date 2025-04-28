@@ -76,7 +76,7 @@ export default async function OhioCityPage({ params }: { params: { citySlug: str
   
   const { data: rows, error: supabaseError } = await supabase
     .from('Community')
-    .select('id,slug,name,city,state,services,imageUrl,type,rating')
+    .select('id,slug,name,city,state,services,imageUrl')
     .ilike('city', cityName);
   if (supabaseError) console.error('SUPABASE_QUERY_ERROR', supabaseError);
   
@@ -88,8 +88,6 @@ export default async function OhioCityPage({ params }: { params: { citySlug: str
     name: c.name,
     city: c.city,
     state: c.state,
-    type: c.type,
-    rating: c.rating,
     amenities: parseServices(c.services),
     image: c.imageUrl,
   }));
