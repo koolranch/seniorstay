@@ -5,7 +5,7 @@ import { prisma } from "@/lib/prisma"; // Import Prisma client
 import ProviderCard from '@/components/ProviderCard';
 import Link from 'next/link';
 import { FiArrowLeft } from 'react-icons/fi';
-import { slugify } from '@/lib/utils/formatSlug';
+// import { slugify } from '@/lib/utils/formatSlug';
 // import { Community as CommunityDisplayTypeFromLib } from '@/lib/types/community'; // Remove this problematic import
 // import { Community as PrismaCommunity } from '@prisma/client';
 import { createClient } from '@supabase/supabase-js';
@@ -40,23 +40,23 @@ export async function generateMetadata({ params }: { params: { citySlug: string 
   };
 }
 
-// Generate static paths for all Ohio cities with communities FROM DB
-export async function generateStaticParams() {
-  try {
-    const cities = await prisma.community.findMany({
-      where: { state: 'OH' },
-      distinct: ['city'],
-      select: { city: true },
-    });
-    
-    return cities
-      .filter(item => item.city) // Ensure city is not null/empty
-      .map((item) => ({ citySlug: slugify(item.city!) }));
-  } catch (error) {
-      console.error("Error generating static params for Ohio cities:", error);
-      return [];
-  }
-}
+// // Generate static paths for all Ohio cities with communities FROM DB
+// export async function generateStaticParams() {
+//   try {
+//     const cities = await prisma.community.findMany({
+//       where: { state: 'OH' },
+//       distinct: ['city'],
+//       select: { city: true },
+//     });
+//     
+//     return cities
+//       .filter(item => item.city) // Ensure city is not null/empty
+//       .map((item) => ({ citySlug: slugify(item.city!) }));
+//   } catch (error) {
+//     console.error("Error generating static params for Ohio cities:", error);
+//     return [];
+//   }
+// }
 
 // The actual page component
 export default async function OhioCityPage({ params }: { params: { citySlug: string } }) {
