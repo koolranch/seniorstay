@@ -75,7 +75,7 @@ export default async function OhioCityPage({ params }: { params: { citySlug: str
   console.log('DEBUG allDistintCities:', distinctCities);
   
   const { data: rows, error: supabaseError } = await supabase
-    .from('community')
+    .from('Community')
     .select('id,slug,name,city,state,services,image_url,type,rating,city_slug')
     .ilike('city', cityName);
   if (supabaseError) console.error('SUPABASE_QUERY_ERROR', supabaseError);
