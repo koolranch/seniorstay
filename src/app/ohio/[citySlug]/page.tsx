@@ -76,28 +76,23 @@ export default async function OhioCityPage({ params }: { params: { citySlug: str
   
   const { data: rows, error: supabaseError } = await supabase
     .from('Community')
-    .select('id,slug,name,city,state,services,image_url,type,rating,city_slug')
+    .select('id,slug,name,city,state,services,imageUrl,type,rating')
     .ilike('city', cityName);
   if (supabaseError) console.error('SUPABASE_QUERY_ERROR', supabaseError);
   
   console.log('DEBUG fetched rows count:', rows?.length, 'rows data:', rows);
   
-  const communities = (rows ?? []).map(c => {
-    const imageUrl = supabase.storage
-      .from('community-images')
-      .getPublicUrl(c.image_url).data.publicUrl ?? '/placeholder.jpg';
-    return {
-      id: c.id,
-      slug: c.slug,
-      name: c.name,
-      city: c.city,
-      state: c.state,
-      type: c.type,
-      rating: c.rating,
-      amenities: parseServices(c.services),
-      image: imageUrl,
-    };
-  });
+  const communities = (rows ?? []).map(c => ({
+    id: c.id,
+    slug: c.slug,
+    name: c.name,
+    city: c.city,
+    state: c.state,
+    type: c.type,
+    rating: c.rating,
+    amenities: parseServices(c.services),
+    image: c.imageUrl,
+  }));
 
   if (communities.length === 0) {
     // Optionally, you could show a message or redirect
