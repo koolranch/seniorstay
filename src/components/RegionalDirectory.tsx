@@ -30,6 +30,8 @@ export default function RegionalDirectory({ className = "" }: RegionalDirectoryP
     .map(([city, data]) => ({
       city,
       count: data.count,
+      // Use a consistent city slug for all links
+      city_slug: slugify(city),
       topRatedCommunity: data.communities.reduce(
         (top, current) => (current.rating > (top?.rating || 0) ? current : top),
         null as typeof communities[0] | null
@@ -55,7 +57,7 @@ export default function RegionalDirectory({ className = "" }: RegionalDirectoryP
           {citiesWithCommunities.map((cityData) => (
             <Link
               key={cityData.city}
-              href={`/ohio/${slugify(cityData.city)}`}
+              href={`/ohio/${cityData.city_slug}`}
               className="block bg-white rounded-lg shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-200 py-3 px-4 border border-gray-100 text-center"
             >
               <div className="flex items-center justify-center mb-2">

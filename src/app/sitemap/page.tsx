@@ -8,6 +8,7 @@ import { slugify } from '@/lib/utils/formatSlug';
 interface CityData {
   slug: string;
   city: string;
+  city_slug?: string;
 }
 
 // Fetch data directly in the Server Component using Prisma
@@ -17,6 +18,7 @@ async function getCities(): Promise<CityData[]> {
       select: {
         slug: true,
         city: true,
+        city_slug: true,
       },
       orderBy: {
         city: 'asc',
@@ -108,7 +110,7 @@ export default async function SitemapPage() {
           <ul className="list-none grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-4 gap-y-2">
             {uniqueCities.map((city) => (
               <li key={city.city}>
-                <Link href={`/ohio/${slugify(city.city)}`} className="text-blue-600 hover:underline">
+                <Link href={`/ohio/${city.city_slug || slugify(city.city)}`} className="text-blue-600 hover:underline">
                   {city.city}
                 </Link>
               </li>

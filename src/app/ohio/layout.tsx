@@ -24,6 +24,12 @@ export default function OhioLayout({
     }, [] as string[])
     .sort();
 
+  // Create a map from city to its slug
+  const cityToSlugMap: Record<string, string> = {};
+  ohioCities.forEach((city) => {
+    cityToSlugMap[city] = slugify(city);
+  });
+
   return (
     <div className="bg-[#FAFAF5] min-h-screen">
       <div className="container mx-auto px-6 md:px-10 lg:px-20 py-8">
@@ -39,7 +45,7 @@ export default function OhioLayout({
                   {ohioCities.map((city) => (
                     <li key={city}>
                       <Link
-                        href={`/ohio/${slugify(city)}`}
+                        href={`/ohio/${cityToSlugMap[city] || slugify(city)}`}
                         className="text-[#1b4d70] hover:text-[#2F5061] hover:underline"
                       >
                         {city}
