@@ -14,6 +14,7 @@ interface CommunityContentProps {
   reviewCount?: number;
   cityName?: string;
   slug?: string;
+  citySlug?: string;
 }
 
 export default function CommunityContent({ 
@@ -25,7 +26,8 @@ export default function CommunityContent({
   rating,
   reviewCount,
   cityName = "Unknown City",
-  slug
+  slug,
+  citySlug
 }: CommunityContentProps) {
   // Ensure we have a valid city name
   const displayCityName = cityName || "Unknown City";
@@ -34,7 +36,7 @@ export default function CommunityContent({
     <>
       {/* Back Link */}
       <Link 
-        href={`/ohio/${slugify(displayCityName).toLowerCase()}`}
+        href={citySlug ? `/ohio/${citySlug}` : `/ohio/${slugify(displayCityName).toLowerCase()}`}
         className="inline-flex items-center text-[#1b4d70] mb-6 hover:underline"
       >
         <FiArrowLeft className="mr-2" />

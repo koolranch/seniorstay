@@ -28,7 +28,7 @@ const CommunityClient = ({ community }: { community: any }) => {
       addressRegion: community.state,
       addressCountry: 'US',
     },
-    url: `https://www.guideforseniors.com/ohio/${slugify(community.city).toLowerCase()}/${community.slug}`,
+    url: `https://www.guideforseniors.com/ohio/${community.city_slug}/${community.slug}`,
     image: community.image_url || undefined,
   };
 
@@ -71,6 +71,7 @@ const CommunityClient = ({ community }: { community: any }) => {
               address=""
               amenities={community.services || []}
               cityName={community.city}
+              citySlug={community.city_slug}
             />
             
             <div className="mt-8 pt-8 border-t border-gray-200">
@@ -90,7 +91,7 @@ export async function generateMetadata({ params }: { params: PageParams }): Prom
   const { data: rows, error } = await supabase
     .from('Community')
     .select('id, name, slug, city, city_slug, state, services, image_url, type, rating, description')
-    .eq('slug', slugParam)
+    .ilike('slug', `${slugParam}%`)
     .eq('city_slug', params.citySlug)
     .limit(1);
 
@@ -134,7 +135,7 @@ export default async function CommunityPage({ params }: { params: PageParams }) 
   const { data: rows, error } = await supabase
     .from('Community')
     .select('id, name, slug, city, city_slug, state, services, image_url, type, rating, description')
-    .eq('slug', slugParam)
+    .ilike('slug', `${slugParam}%`)
     .eq('city_slug', params.citySlug)
     .limit(1);
 
