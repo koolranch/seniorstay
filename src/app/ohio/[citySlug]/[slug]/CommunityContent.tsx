@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { FiArrowLeft } from "react-icons/fi";
-import { getCityPath } from "@/lib/utils/formatSlug";
+import { getCityPath, slugify } from "@/lib/utils/formatSlug";
 
 interface CommunityContentProps {
   name?: string;
@@ -13,6 +13,7 @@ interface CommunityContentProps {
   rating?: number;
   reviewCount?: number;
   cityName?: string;
+  slug?: string;
 }
 
 export default function CommunityContent({ 
@@ -23,7 +24,8 @@ export default function CommunityContent({
   amenities = [],
   rating,
   reviewCount,
-  cityName = "Unknown City"
+  cityName = "Unknown City",
+  slug
 }: CommunityContentProps) {
   // Ensure we have a valid city name
   const displayCityName = cityName || "Unknown City";
@@ -32,7 +34,7 @@ export default function CommunityContent({
     <>
       {/* Back Link */}
       <Link 
-        href={getCityPath("OH", displayCityName)}
+        href={`/ohio/${slugify(displayCityName).toLowerCase()}`}
         className="inline-flex items-center text-[#1b4d70] mb-6 hover:underline"
       >
         <FiArrowLeft className="mr-2" />
