@@ -113,6 +113,7 @@ export default async function OhioCityPage({ params }: { params: { citySlug: str
                 slug={c.slug}
                 name={c.name}
                 city={c.city}
+                city_slug={c.city_slug}
                 state={c.state}
                 amenities={c.services}
                 image={c.image_url}
