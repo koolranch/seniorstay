@@ -167,7 +167,7 @@ export default function CommunitySearchClientWrapper() {
                   type={community.type}
                   image={community.image}
                   rating={community.rating}
-                  amenities={community.services}
+                  amenities={community.services ? (Array.isArray(community.services) ? community.services : community.services.split(/,\s*/)) : []}
                   onScheduleTour={() => handleScheduleTour({ id: community.id, name: community.name })}
                   onRequestPricing={() => handleRequestPricing({ id: community.id, name: community.name })}
                 />
@@ -186,7 +186,7 @@ export default function CommunitySearchClientWrapper() {
                   type={community.type}
                   image={community.image}
                   rating={community.rating}
-                  amenities={community.services}
+                  amenities={community.services ? (Array.isArray(community.services) ? community.services : community.services.split(/,\s*/)) : []}
                   onScheduleTour={() => handleScheduleTour({ id: community.id, name: community.name })}
                   onRequestPricing={() => handleRequestPricing({ id: community.id, name: community.name })}
                   className="flex flex-col md:flex-row"

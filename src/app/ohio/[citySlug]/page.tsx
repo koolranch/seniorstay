@@ -115,7 +115,7 @@ export default async function OhioCityPage({ params }: { params: { citySlug: str
                 city={c.city}
                 city_slug={c.city_slug}
                 state={c.state}
-                amenities={c.services}
+                amenities={c.services ? (Array.isArray(c.services) ? c.services : c.services.split(/,\s*/)) : []}
                 image={c.image_url}
               />
             ))}

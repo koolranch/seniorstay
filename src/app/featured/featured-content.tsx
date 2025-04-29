@@ -64,9 +64,9 @@ export function FeaturedPageContent() {
                   state={community.state}
                   type={community.type}
                   image={community.image}
-                  rating={community.rating}
+                  rating={community.rating || 4.5}
                   reviewCount={community.reviewCount}
-                  amenities={community.services}
+                  amenities={community.services ? (Array.isArray(community.services) ? community.services : community.services.split(/,\s*/)) : []}
                   onScheduleTour={() => handleScheduleTour(community.id)}
                   onRequestPricing={() => handleRequestPricing(community.id)}
                 />

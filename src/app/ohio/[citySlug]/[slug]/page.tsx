@@ -69,7 +69,7 @@ const CommunityClient = ({ community }: { community: any }) => {
               type={community.type || "Senior Living"}
               description={community.description || ""}
               address=""
-              amenities={community.services || []}
+              amenities={community.services ? (Array.isArray(community.services) ? community.services : community.services.split(/,\s*/)) : []}
               cityName={community.city}
               citySlug={community.city_slug}
             />
