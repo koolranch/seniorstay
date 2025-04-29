@@ -40,23 +40,15 @@ export async function generateMetadata({ params }: { params: { citySlug: string 
   };
 }
 
-// // Generate static paths for all Ohio cities with communities FROM DB
-// export async function generateStaticParams() {
-//   try {
-//     const cities = await prisma.community.findMany({
-//       where: { state: 'OH' },
-//       distinct: ['city'],
-//       select: { city: true },
-//     });
-//     
-//     return cities
-//       .filter(item => item.city) // Ensure city is not null/empty
-//       .map((item) => ({ citySlug: slugify(item.city!) }));
-//   } catch (error) {
-//     console.error("Error generating static params for Ohio cities:", error);
-//     return [];
-//   }
-// }
+export async function generateStaticParams() {
+  const { data: communities } = await supabase
+    .from('Community')
+    .select('city_slug, slug');
+  return communities!.map(c => ({
+    citySlug: c.city_slug!,
+    slug: c.slug!
+  }));
+}
 
 // The actual page component
 export default async function OhioCityPage({ params }: { params: { citySlug: string } }) {
