@@ -89,7 +89,7 @@ export async function generateMetadata({ params }: { params: PageParams }): Prom
   
   const { data: rows, error } = await supabase
     .from('Community')
-    .select('id, name, city, state, description, image_url, services')
+    .select('id, name, slug, city, city_slug, state, services, image_url, type, rating, description')
     .eq('slug', slugParam)
     .eq('city_slug', params.citySlug)
     .limit(1);
@@ -133,7 +133,7 @@ export default async function CommunityPage({ params }: { params: PageParams }) 
 
   const { data: rows, error } = await supabase
     .from('Community')
-    .select('id, name, city, state, description, image_url, services')
+    .select('id, name, slug, city, city_slug, state, services, image_url, type, rating, description')
     .eq('slug', slugParam)
     .eq('city_slug', params.citySlug)
     .limit(1);

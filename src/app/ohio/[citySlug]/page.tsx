@@ -76,8 +76,8 @@ export default async function OhioCityPage({ params }: { params: { citySlug: str
   
   const { data: rows, error: supabaseError } = await supabase
     .from('Community')
-    .select('id, slug, name, city, state, services, image_url')
-    .eq('city', cityName)
+    .select('id, name, slug, city, city_slug, state, services, image_url, type, rating, description')
+    .eq('city_slug', params.citySlug)
     .eq('state', 'OH')
 
   if (supabaseError) {
