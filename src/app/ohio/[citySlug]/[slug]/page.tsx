@@ -76,6 +76,40 @@ const CommunityClient = ({ community }: { community: any }) => {
             <div className="mt-8 pt-8 border-t border-gray-200">
               <CommunityActions communityName={community.name} />
             </div>
+
+            {/* ----- Phase 2: Placeholder Reviews & "You May Also Like" ----- */}
+            <div className="mt-12 space-y-8">
+              {/* 4. Placeholder Reviews */}
+              <div className="bg-white p-6 rounded-lg shadow-md">
+                <span className="text-xl font-semibold">★ 4.7 (based on 24 reviews)</span>
+                <a href="#" className="ml-4 text-blue-600 hover:underline">
+                  Read More
+                </a>
+              </div>
+
+              {/* 5. You May Also Like */}
+              <div>
+                <h3 className="text-2xl font-semibold mb-4">
+                  You May Also Like
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  {[1, 2, 3].map((idx) => (
+                    <Link
+                      key={idx}
+                      href="#"
+                      className="block bg-white p-4 rounded-lg shadow hover:shadow-lg transition"
+                    >
+                      <h4 className="text-lg font-medium mb-1">
+                        Community Name {idx}
+                      </h4>
+                      <p className="text-sm text-gray-600">
+                        {community.city}, {community.state}
+                      </p>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
