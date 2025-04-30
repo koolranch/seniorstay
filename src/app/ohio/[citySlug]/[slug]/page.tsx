@@ -17,9 +17,25 @@ const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env
 // Define fallback image
 const FALLBACK_IMAGE = "https://images.unsplash.com/photo-1519974719765-e6559eac2575?q=80&w=2070&auto=format&fit=crop";
 
+// Function to ensure image URL is complete
+const getFullImageUrl = (imageUrl: string | null): string => {
+  if (!imageUrl) return FALLBACK_IMAGE;
+  
+  // If URL starts with /community-images/, prepend Supabase URL
+  if (imageUrl.startsWith('/community-images/')) {
+    return `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public${imageUrl}`;
+  }
+  
+  // Otherwise return as is
+  return imageUrl;
+};
+
 // Define Community Client Component
 const CommunityClient = ({ community }: { community: any }) => {
-  const jsonLd = {
+  // Format the image URL properly
+  const imageUrl = getFullImageUrl(community.image_url);
+  
+  const jsonLd: Record<string, any> = {
     '@context': 'https://schema.org',
     '@type': 'LocalBusiness',
     name: community.name,
@@ -31,11 +47,12 @@ const CommunityClient = ({ community }: { community: any }) => {
       addressCountry: 'US',
     },
     url: `https://www.guideforseniors.com/ohio/${community.city_slug}/${community.slug}`,
-    image: community.image_url || FALLBACK_IMAGE,
   };
 
-  // Clean up undefined properties
-  if (!jsonLd.image) delete jsonLd.image;
+  // Add image only if it exists
+  if (imageUrl !== FALLBACK_IMAGE) {
+    jsonLd.image = imageUrl;
+  }
 
   return (
     <>
@@ -58,7 +75,7 @@ const CommunityClient = ({ community }: { community: any }) => {
             {/* Add image element if available */}
             <div className="mb-6 relative overflow-hidden rounded-lg max-h-96">
               <img 
-                src={community.image_url || FALLBACK_IMAGE} 
+                src={imageUrl} 
                 alt={`${community.name} in ${community.city}, ${community.state}`} 
                 className="w-full object-cover"
               />
