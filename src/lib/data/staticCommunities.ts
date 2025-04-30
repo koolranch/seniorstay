@@ -140,7 +140,7 @@ export const communities: Community[] = [
   {
     id: "5",
     name: "Vitalia Rockside",
-    slug: "vitalia-rockside-seven-hills-oh",
+    slug: "vitalia-rockside",
     address: "6101 Lombardo Center, Seven Hills, OH 44131",
     city: "Seven Hills",
     state: "OH",

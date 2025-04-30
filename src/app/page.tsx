@@ -27,6 +27,16 @@ function mapInternalToDisplay(internalCommunities: InternalCommunity[]): Communi
     // Extract just the name part from the slug if it contains city and state
     let cleanSlug = community.slug;
     
+    // Add debugging for this specific community
+    if (community.name === "Vitalia Rockside") {
+      console.log("Processing Vitalia Rockside:", {
+        originalSlug: cleanSlug,
+        city: community.city,
+        cityLower: community.city.toLowerCase(),
+        includes: cleanSlug.includes(community.city.toLowerCase())
+      });
+    }
+    
     // For cases like "vitalia-rockside-seven-hills-oh", we want just "vitalia-rockside"
     if (cleanSlug.includes(community.city.toLowerCase()) || cleanSlug.includes('-oh')) {
       const cityParts = community.city.toLowerCase().split(' ').map(part => part.trim()).filter(Boolean);
@@ -34,22 +44,49 @@ function mapInternalToDisplay(internalCommunities: InternalCommunity[]): Communi
       
       // More precise approach: remove the city and state parts from the end of the slug
       const slugParts = cleanSlug.split('-');
-      const cityIndex = slugParts.findIndex(part => 
-        cityParts.some(cityPart => cityPart === part) ||
-        part === 'ohio' || 
-        part === 'oh'
-      );
       
-      if (cityIndex > 0) {
-        // Take everything before the city name starts
-        cleanSlug = slugParts.slice(0, cityIndex).join('-');
-      } else {
-        // Fallback to original approach if city index not found
-        cleanSlug = cleanSlug.split('-').slice(0, -2).join('-');
+      // Handle specific known cases - this is more reliable than detection for specific communities
+      if (community.name === "Vitalia Rockside" && cleanSlug === "vitalia-rockside-seven-hills-oh") {
+        cleanSlug = "vitalia-rockside";
+      } 
+      // General city part detection - improved to check partial matches too
+      else {
+        // Try to find where city name starts in the slug
+        let cityIndex = -1;
+        
+        // First check for exact part matches
+        cityIndex = slugParts.findIndex(part => 
+          cityParts.some(cityPart => cityPart === part) ||
+          part === 'ohio' || 
+          part === 'oh'
+        );
+        
+        // If no exact match, try to find any part of the city that might appear in the slug
+        if (cityIndex === -1) {
+          // Look for the first part of the city name (e.g. "seven" from "Seven Hills")
+          if (cityParts.length > 0) {
+            cityIndex = slugParts.findIndex(part => part === cityParts[0]);
+          }
+        }
+        
+        if (cityIndex > 0) {
+          // Take everything before the city name starts
+          cleanSlug = slugParts.slice(0, cityIndex).join('-');
+        } else {
+          // Fallback to original approach if city index not found
+          cleanSlug = cleanSlug.split('-').slice(0, -2).join('-');
+        }
       }
       
       // If it's empty (rare case), default to the name
       if (!cleanSlug) cleanSlug = community.name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+      
+      // Add debugging for this specific community
+      if (community.name === "Vitalia Rockside") {
+        console.log("Processed Vitalia Rockside:", {
+          cleanedSlug: cleanSlug
+        });
+      }
     }
     
     return {
@@ -81,28 +118,65 @@ export default function HomePage() {
       // Clean up slugs for static communities
       let cleanSlug = community.slug;
       
+      // Add debugging for this specific community
+      if (community.name === "Vitalia Rockside") {
+        console.log("Static: Processing Vitalia Rockside:", {
+          originalSlug: cleanSlug,
+          city: community.city,
+          cityLower: community.city.toLowerCase(),
+          includes: cleanSlug.includes(community.city.toLowerCase())
+        });
+      }
+      
       // For cases like "vitalia-rockside-seven-hills-oh", we want just "vitalia-rockside"
       if (cleanSlug.includes(community.city.toLowerCase()) || cleanSlug.includes('-oh')) {
         const cityParts = community.city.toLowerCase().split(' ').map(part => part.trim()).filter(Boolean);
         
         // More precise approach: remove the city and state parts from the end of the slug
         const slugParts = cleanSlug.split('-');
-        const cityIndex = slugParts.findIndex(part => 
-          cityParts.some(cityPart => cityPart === part) ||
-          part === 'ohio' || 
-          part === 'oh'
-        );
         
-        if (cityIndex > 0) {
-          // Take everything before the city name starts
-          cleanSlug = slugParts.slice(0, cityIndex).join('-');
-        } else {
-          // Fallback to original approach if city index not found
-          cleanSlug = cleanSlug.split('-').slice(0, -2).join('-');
+        // Handle specific known cases - this is more reliable than detection for specific communities
+        if (community.name === "Vitalia Rockside" && cleanSlug === "vitalia-rockside-seven-hills-oh") {
+          cleanSlug = "vitalia-rockside";
+        } 
+        // General city part detection - improved to check partial matches too
+        else {
+          // Try to find where city name starts in the slug
+          let cityIndex = -1;
+          
+          // First check for exact part matches
+          cityIndex = slugParts.findIndex(part => 
+            cityParts.some(cityPart => cityPart === part) ||
+            part === 'ohio' || 
+            part === 'oh'
+          );
+          
+          // If no exact match, try to find any part of the city that might appear in the slug
+          if (cityIndex === -1) {
+            // Look for the first part of the city name (e.g. "seven" from "Seven Hills")
+            if (cityParts.length > 0) {
+              cityIndex = slugParts.findIndex(part => part === cityParts[0]);
+            }
+          }
+          
+          if (cityIndex > 0) {
+            // Take everything before the city name starts
+            cleanSlug = slugParts.slice(0, cityIndex).join('-');
+          } else {
+            // Fallback to original approach if city index not found
+            cleanSlug = cleanSlug.split('-').slice(0, -2).join('-');
+          }
         }
         
         // If it's empty (rare case), default to the name
         if (!cleanSlug) cleanSlug = community.name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+        
+        // Add debugging for this specific community
+        if (community.name === "Vitalia Rockside") {
+          console.log("Static: Processed Vitalia Rockside:", {
+            cleanedSlug: cleanSlug
+          });
+        }
       }
       
       return {
