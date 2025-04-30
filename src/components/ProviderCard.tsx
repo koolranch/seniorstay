@@ -12,6 +12,9 @@ import { Calendar, DollarSign } from 'lucide-react';
 import { sendGAEvent } from '@/lib/utils/gtag';
 import RequestInfoModal from './RequestInfoModal';
 
+// Define a consistent fallback image
+const FALLBACK_IMAGE = "https://images.unsplash.com/photo-1519974719765-e6559eac2575?q=80&w=2070&auto=format&fit=crop";
+
 interface ProviderCardProps {
   id?: string;
   slug: string;
@@ -34,7 +37,7 @@ interface ProviderCardProps {
 }
 
 const ProviderCard = ({
-  id,
+  id = '',
   slug,
   name,
   type,
@@ -42,7 +45,7 @@ const ProviderCard = ({
   rating,
   reviewCount = 0,
   city,
-  city_slug,
+  city_slug = '',
   state,
   price = 0,
   distance,
@@ -61,16 +64,18 @@ const ProviderCard = ({
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalRequestType, setModalRequestType] = useState<'Pricing' | 'Tour'>('Pricing');
+  const [imageError, setImageError] = useState(false);
 
   const displayAmenities = amenities.slice(0, 3);
 
-  const hasRequiredData = city && slug && state && city_slug;
+  const hasRequiredData = Boolean(city && slug && state && city_slug);
 
   // Update communityPath to use only city_slug and slug
   const communityPath = hasRequiredData ? `/ohio/${city_slug}/${slug}` : '#';
   const cityPath = getCityPath(state, city);
 
-  const imageSource = image;
+  // Use the consistent fallback image instead of random Unsplash image
+  const imageSource = (imageError || !image) ? FALLBACK_IMAGE : image;
 
   const handleScheduleTour = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -131,6 +136,7 @@ const ProviderCard = ({
           sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
           className="object-cover"
           priority
+          onError={() => setImageError(true)}
         />
 
         <div className="absolute top-3 right-3 z-10">
