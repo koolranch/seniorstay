@@ -14,6 +14,9 @@ import { createClient } from '@supabase/supabase-js';
 
 const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
 
+// Define fallback image
+const FALLBACK_IMAGE = "https://images.unsplash.com/photo-1519974719765-e6559eac2575?q=80&w=2070&auto=format&fit=crop";
+
 // Define Community Client Component
 const CommunityClient = ({ community }: { community: any }) => {
   const jsonLd = {
@@ -28,7 +31,7 @@ const CommunityClient = ({ community }: { community: any }) => {
       addressCountry: 'US',
     },
     url: `https://www.guideforseniors.com/ohio/${community.city_slug}/${community.slug}`,
-    image: community.image_url || undefined,
+    image: community.image_url || FALLBACK_IMAGE,
   };
 
   // Clean up undefined properties
@@ -53,15 +56,17 @@ const CommunityClient = ({ community }: { community: any }) => {
             </h2>
             
             {/* Add image element if available */}
-            {community.image_url && (
-              <div className="mb-6 relative overflow-hidden rounded-lg max-h-96">
-                <img 
-                  src={community.image_url} 
-                  alt={`${community.name} in ${community.city}, ${community.state}`} 
-                  className="w-full object-cover"
-                />
-              </div>
-            )}
+            <div className="mb-6 relative overflow-hidden rounded-lg max-h-96">
+              <img 
+                src={community.image_url || FALLBACK_IMAGE} 
+                alt={`${community.name} in ${community.city}, ${community.state}`} 
+                className="w-full object-cover"
+                onError={(e) => {
+                  // @ts-ignore - Set src to fallback image if error occurs
+                  e.currentTarget.src = FALLBACK_IMAGE;
+                }}
+              />
+            </div>
             
             <CommunityContent
               name={community.name}
