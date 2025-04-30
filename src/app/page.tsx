@@ -23,34 +23,57 @@ function generateCitySlug(city: string): string {
 
 // Helper function to convert InternalCommunity to Community format
 function mapInternalToDisplay(internalCommunities: InternalCommunity[]): Community[] {
-  return internalCommunities.map(community => ({
-    id: community.id,
-    name: community.name,
-    slug: community.slug,
-    address: `${community.city}, ${community.state}`,
-    city: community.city,
-    city_slug: community.city_slug || generateCitySlug(community.city), // Add city_slug with fallback
-    state: community.state,
-    type: community.type || "Senior Living",
-    services: Array.isArray(community.services) ? community.services : 
-              typeof community.services === 'string' ? [community.services] : [],
-    amenities: Array.isArray(community.services) ? community.services : 
-              typeof community.services === 'string' ? [community.services] : [],
-    rating: 4.5,
-    description: `${community.name} is a ${community.type || "Senior Living"} community in ${community.city}, ${community.state}.`,
-    image: community.imageUrl || "https://source.unsplash.com/random/800x600/?senior,living",
-    reviewCount: 0
-  }));
+  return internalCommunities.map(community => {
+    // Extract just the name part from the slug if it contains city and state
+    let cleanSlug = community.slug;
+    if (cleanSlug.includes(community.city.toLowerCase()) || cleanSlug.includes('-oh')) {
+      // Take only the first part before city or OH state
+      cleanSlug = cleanSlug.split('-').slice(0, -2).join('-');
+      // If it's empty (rare case), default to the name
+      if (!cleanSlug) cleanSlug = community.name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    }
+    
+    return {
+      id: community.id,
+      name: community.name,
+      slug: cleanSlug, // Use the cleaned slug
+      address: `${community.city}, ${community.state}`,
+      city: community.city,
+      city_slug: community.city_slug || generateCitySlug(community.city), // Add city_slug with fallback
+      state: community.state,
+      type: community.type || "Senior Living",
+      services: Array.isArray(community.services) ? community.services : 
+                typeof community.services === 'string' ? [community.services] : [],
+      amenities: Array.isArray(community.services) ? community.services : 
+                typeof community.services === 'string' ? [community.services] : [],
+      rating: 4.5,
+      description: `${community.name} is a ${community.type || "Senior Living"} community in ${community.city}, ${community.state}.`,
+      image: community.imageUrl || "https://source.unsplash.com/random/800x600/?senior,living",
+      reviewCount: 0
+    };
+  });
 }
 
 export default function HomePage() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [mappedCommunities, setMappedCommunities] = useState<Community[]>(
     // Apply the city_slug generation to the static communities as well
-    staticCommunities.map(community => ({
-      ...community,
-      city_slug: community.city_slug || generateCitySlug(community.city)
-    }))
+    staticCommunities.map(community => {
+      // Clean up slugs for static communities
+      let cleanSlug = community.slug;
+      if (cleanSlug.includes(community.city.toLowerCase()) || cleanSlug.includes('-oh')) {
+        // Take only the first part before city or OH state 
+        cleanSlug = cleanSlug.split('-').slice(0, -2).join('-');
+        // If it's empty (rare case), default to the name
+        if (!cleanSlug) cleanSlug = community.name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+      }
+      
+      return {
+        ...community,
+        slug: cleanSlug,
+        city_slug: community.city_slug || generateCitySlug(community.city)
+      };
+    })
   );
   const [isLoading, setIsLoading] = useState(false);
   const [showTourModal, setShowTourModal] = useState(false);
@@ -58,6 +81,14 @@ export default function HomePage() {
   
   // Fetch communities from the API
   useEffect(() => {
+    // Debug log static communities
+    console.log('Static communities with processed slugs:', mappedCommunities.slice(0, 3).map(c => ({
+      name: c.name,
+      slug: c.slug,
+      city: c.city,
+      city_slug: c.city_slug
+    })));
+    
     async function fetchCommunities() {
       setIsLoading(true);
       try {
