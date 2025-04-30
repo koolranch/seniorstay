@@ -78,6 +78,7 @@ export default async function OhioCityPage({ params }: { params: { citySlug: str
 
   const communities = rows ?? []
   console.log('DEBUG communities:', communities)
+  const communityGridLength = Array.isArray(communities) ? communities.length : 0;
 
   return (
     <main className="bg-gray-50 min-h-screen">
@@ -91,14 +92,22 @@ export default async function OhioCityPage({ params }: { params: { citySlug: str
             <FiArrowLeft className="mr-2" />
             Back to Ohio Communities
           </Link>
-          <h1 className="text-3xl font-bold text-[#1b4d70] mb-4">
-            Senior Living Communities in {cityName}, Ohio
+          <h1 className="text-4xl font-bold text-gray-900 mb-2">
+            Find Your Perfect Senior Living in {cityName}, Ohio
           </h1>
-          <p className="text-gray-600">
-            {communities.length > 0 
-              ? `Explore ${communities.length} senior living options in ${cityName}.`
-              : `No communities found matching your criteria in ${cityName}. Try broadening your search.`}
+          <p className="mt-2 text-lg text-gray-700 max-w-2xl">
+            We've curated {communityGridLength} top-rated communities in {cityName}. Compare amenities, get insider tips, and schedule your free tour today.
           </p>
+          <button
+            className="mt-6 px-8 py-4 bg-blue-600 text-white font-semibold rounded shadow hover:bg-blue-700"
+            onClick={() =>
+              document
+                .getElementById('city-lead-form')
+                ?.scrollIntoView({ behavior: 'smooth' })
+            }
+          >
+            Get Free Tour Options
+          </button>
         </div>
       </div>
       
