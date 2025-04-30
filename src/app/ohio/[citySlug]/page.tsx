@@ -206,7 +206,7 @@ export default async function OhioCityPage({ params }: { params: { citySlug: str
           {/* ── Trust Signals Section ── */}
           <section id="trust-signals" className="mt-12 mb-16 bg-white py-8 rounded-lg shadow">
             <div className="container mx-auto px-6">
-              <h3 className="text-2xl font-bold text-center mb-6">Why Families Trust Guide for Seniors</h3>
+              <h3 className="text-2xl font-bold text-center mb-6 text-gray-900">Why Families Trust Guide for Seniors</h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
                 <div>
                   <p className="text-4xl font-semibold text-blue-600">4.8/5</p>
