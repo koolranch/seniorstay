@@ -34,10 +34,10 @@ const RequestInfoModal: React.FC<RequestInfoModalProps> = ({
           <FiX size={24} />
         </button>
 
-        <h2 className="text-2xl font-semibold text-[#1b4d70] mb-2">
+        <h2 className="text-2xl font-semibold text-[#0c3552] mb-2">
           Request {requestType} for {communityName}
         </h2>
-        <p className="text-gray-600 mb-6 text-sm">
+        <p className="text-[#333333] mb-6 text-sm">
           Please fill out the form below, and we'll get back to you shortly.
         </p>
 
@@ -52,7 +52,7 @@ const RequestInfoModal: React.FC<RequestInfoModalProps> = ({
 
           <div className="space-y-4">
             <div>
-              <label htmlFor="name" className="block text-sm font-medium font-semibold text-gray-700 mb-1">Full Name</label>
+              <label htmlFor="name" className="block text-sm font-medium font-semibold text-[#0c3552] mb-1">Full Name</label>
               <input 
                 type="text" 
                 name="name" 
@@ -64,7 +64,7 @@ const RequestInfoModal: React.FC<RequestInfoModalProps> = ({
             </div>
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium font-semibold text-gray-700 mb-1">Email Address</label>
+              <label htmlFor="email" className="block text-sm font-medium font-semibold text-[#0c3552] mb-1">Email Address</label>
               <input 
                 type="email" 
                 name="email" 
@@ -76,7 +76,7 @@ const RequestInfoModal: React.FC<RequestInfoModalProps> = ({
             </div>
 
             <div>
-              <label htmlFor="phone" className="block text-sm font-medium font-semibold text-gray-700 mb-1">Phone Number</label>
+              <label htmlFor="phone" className="block text-sm font-medium font-semibold text-[#0c3552] mb-1">Phone Number</label>
               <input 
                 type="tel" 
                 name="phone" 
@@ -88,7 +88,7 @@ const RequestInfoModal: React.FC<RequestInfoModalProps> = ({
             </div>
 
             <div>
-              <label htmlFor="message" className="block text-sm font-medium font-semibold text-gray-700 mb-1">Message (Optional)</label>
+              <label htmlFor="message" className="block text-sm font-medium font-semibold text-[#0c3552] mb-1">Message (Optional)</label>
               <textarea 
                 name="message" 
                 id="message" 

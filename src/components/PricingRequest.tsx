@@ -120,7 +120,7 @@ const PricingRequest = ({
     <div className={`bg-white rounded-xl shadow-lg ${isModal ? 'p-4 sm:p-6' : 'p-6'} ${className}`}>
       {/* Header with Close Button */}
       <div className="mb-6 flex items-center justify-between">
-        <h2 className="text-xl font-semibold text-[#1b4d70]">
+        <h2 className="text-xl font-semibold text-[#0c3552]">
           Get Hassle-Free Pricing for {communityName}
         </h2>
         {isModal && onClose && (
@@ -134,14 +134,14 @@ const PricingRequest = ({
         )}
       </div>
 
-      <p className="text-[#666666] text-sm -mt-4 mb-6">
+      <p className="text-[#333333] text-sm -mt-4 mb-6">
         Skip the sales pitch. Just clear, upfront pricing—sent straight to your inbox.
       </p>
 
       {formStatus.submitted && (
         <div
           className={`mb-6 p-4 rounded-lg ${
-            formStatus.success ? 'bg-[#f1f6f0] text-[#1b4d70]' : 'bg-red-50 text-red-700'
+            formStatus.success ? 'bg-[#f1f6f0] text-[#0c3552]' : 'bg-red-50 text-red-700'
           }`}
         >
           <div className="flex items-start">
@@ -160,7 +160,7 @@ const PricingRequest = ({
           {/* Name Fields */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label htmlFor="firstName" className="block text-[#1b4d70] font-medium font-semibold mb-1">
+              <label htmlFor="firstName" className="block text-[#0c3552] font-medium font-semibold mb-1">
                 First Name*
               </label>
               <div className="relative">
@@ -180,7 +180,7 @@ const PricingRequest = ({
               </div>
             </div>
             <div>
-              <label htmlFor="lastName" className="block text-[#1b4d70] font-medium font-semibold mb-1">
+              <label htmlFor="lastName" className="block text-[#0c3552] font-medium font-semibold mb-1">
                 Last Name*
               </label>
               <div className="relative">
@@ -204,7 +204,7 @@ const PricingRequest = ({
           {/* Contact Fields */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label htmlFor="email" className="block text-[#1b4d70] font-medium font-semibold mb-1">
+              <label htmlFor="email" className="block text-[#0c3552] font-medium font-semibold mb-1">
                 Email*
               </label>
               <div className="relative">
@@ -224,7 +224,7 @@ const PricingRequest = ({
               </div>
             </div>
             <div>
-              <label htmlFor="phone" className="block text-[#1b4d70] font-medium font-semibold mb-1">
+              <label htmlFor="phone" className="block text-[#0c3552] font-medium font-semibold mb-1">
                 Phone*
               </label>
               <div className="relative">
@@ -247,7 +247,7 @@ const PricingRequest = ({
 
           {/* Message */}
           <div>
-            <label htmlFor="message" className="block text-[#1b4d70] font-medium font-semibold mb-1">
+            <label htmlFor="message" className="block text-[#0c3552] font-medium font-semibold mb-1">
               Additional Information (Optional)
             </label>
             <textarea
@@ -268,7 +268,7 @@ const PricingRequest = ({
             >
               {isSubmitting ? 'Submitting...' : 'Get My Pricing Info'}
             </button>
-            <p className="text-xs text-center text-gray-500 mt-2">
+            <p className="text-xs text-center text-[#333333] mt-2">
               We'll respond within 24 hours with pricing information.
             </p>
           </div>
