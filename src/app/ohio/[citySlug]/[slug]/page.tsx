@@ -149,5 +149,65 @@ export default async function CommunityPage({ params }: { params: PageParams }) 
     return notFound();
   }
 
-  return <CommunityClient community={rows[0]} />;
+  return (
+    <>
+      <CommunityClient community={rows[0]} />
+
+      {/* ─── Inline Lead Form (#3) ─────────────────────────────── */}
+      <div className="container mx-auto px-6 md:px-10 lg:px-20 mt-8">
+        <div className="bg-white p-6 rounded-lg shadow-md max-w-xl mx-auto">
+          <h3 className="text-2xl font-semibold mb-4">Get Your Free Quote</h3>
+          <form 
+            action="https://formspree.io/f/xnnpaply" 
+            method="POST" 
+            className="space-y-4"
+          >
+            <div>
+              <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                Full Name
+              </label>
+              <input 
+                type="text" 
+                name="name" 
+                id="name" 
+                required 
+                className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring focus:ring-blue-200"
+              />
+            </div>
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                Email Address
+              </label>
+              <input 
+                type="email" 
+                name="email" 
+                id="email" 
+                required 
+                className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring focus:ring-blue-200"
+              />
+            </div>
+            <div>
+              <label htmlFor="zip" className="block text-sm font-medium text-gray-700">
+                ZIP Code
+              </label>
+              <input 
+                type="text" 
+                name="zip" 
+                id="zip" 
+                required 
+                className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring focus:ring-blue-200"
+              />
+            </div>
+            <button 
+              type="submit" 
+              className="w-full inline-flex justify-center items-center px-4 py-2 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300"
+            >
+              Submit Request
+            </button>
+          </form>
+        </div>
+      </div>
+      {/* ─────────────────────────────────────────────────────────── */}
+    </>
+  );
 }
