@@ -61,10 +61,6 @@ const CommunityClient = ({ community }: { community: any }) => {
                 src={community.image_url || FALLBACK_IMAGE} 
                 alt={`${community.name} in ${community.city}, ${community.state}`} 
                 className="w-full object-cover"
-                onError={(e) => {
-                  // @ts-ignore - Set src to fallback image if error occurs
-                  e.currentTarget.src = FALLBACK_IMAGE;
-                }}
               />
             </div>
             
