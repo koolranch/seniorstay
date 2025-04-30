@@ -199,7 +199,7 @@ export default function LeadForm({
             name="fullName"
             value={formData.fullName}
             onChange={handleChange}
-            className={`w-full p-2 border rounded-md text-gray-900 ${
+            className={`w-full p-2 border rounded-md text-gray-800 ${
               errors.fullName ? 'border-red-500' : 'border-gray-300'
             } focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
             placeholder="Enter your full name"
@@ -220,7 +220,7 @@ export default function LeadForm({
             name="email"
             value={formData.email}
             onChange={handleChange}
-            className={`w-full p-2 border rounded-md text-gray-900 ${
+            className={`w-full p-2 border rounded-md text-gray-800 ${
               errors.email ? 'border-red-500' : 'border-gray-300'
             } focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
             placeholder="Enter your email address"
@@ -241,7 +241,7 @@ export default function LeadForm({
             name="phone"
             value={formData.phone}
             onChange={handleChange}
-            className={`w-full p-2 border rounded-md text-gray-900 ${
+            className={`w-full p-2 border rounded-md text-gray-800 ${
               errors.phone ? 'border-red-500' : 'border-gray-300'
             } focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
             placeholder="Enter your phone number"
@@ -265,7 +265,7 @@ export default function LeadForm({
             name="cityOrZip"
             value={formData.cityOrZip}
             onChange={handleChange}
-            className="w-full p-2 border border-gray-300 rounded-md text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full p-2 border border-gray-300 rounded-md text-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             placeholder="Enter your city or zip code"
           />
         </div>
@@ -280,7 +280,7 @@ export default function LeadForm({
             name="careType"
             value={formData.careType}
             onChange={handleChange}
-            className="w-full p-2 border border-gray-300 rounded-md text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full p-2 border border-gray-300 rounded-md text-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           >
             <option value="">Select care type</option>
             {careTypeOptions.map((option) => (
@@ -301,7 +301,7 @@ export default function LeadForm({
             name="moveInTimeline"
             value={formData.moveInTimeline}
             onChange={handleChange}
-            className="w-full p-2 border border-gray-300 rounded-md text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full p-2 border border-gray-300 rounded-md text-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           >
             <option value="">Select timeline</option>
             {timelineOptions.map((option) => (
@@ -323,7 +323,7 @@ export default function LeadForm({
             value={formData.notes}
             onChange={handleChange}
             rows={3}
-            className="w-full p-2 border border-gray-300 rounded-md text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full p-2 border border-gray-300 rounded-md text-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             placeholder="Any specific requirements or questions..."
           />
         </div>
