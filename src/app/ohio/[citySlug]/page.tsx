@@ -202,6 +202,30 @@ export default async function OhioCityPage({ params }: { params: { citySlug: str
               Submit Request
             </button>
           </form>
+
+          {/* ── Trust Signals Section ── */}
+          <section id="trust-signals" className="mt-12 mb-16 bg-white py-8 rounded-lg shadow">
+            <div className="container mx-auto px-6">
+              <h3 className="text-2xl font-bold text-center mb-6">Why Families Trust Guide for Seniors</h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                <div>
+                  <p className="text-4xl font-semibold text-blue-600">4.8/5</p>
+                  <p className="mt-2 font-medium">Average Rating</p>
+                  <p className="text-gray-500 text-sm">From 250+ Reviews</p>
+                </div>
+                <div>
+                  <p className="text-4xl font-semibold text-blue-600">3K+</p>
+                  <p className="mt-2 font-medium">Families Served</p>
+                  <p className="text-gray-500 text-sm">Across Ohio Communities</p>
+                </div>
+                <div>
+                  <p className="text-4xl font-semibold text-blue-600">✔️</p>
+                  <p className="mt-2 font-medium">Verified Listings</p>
+                  <p className="text-gray-500 text-sm">Accurate & Up-to-Date</p>
+                </div>
+              </div>
+            </div>
+          </section>
         </div>
       </section>
     </main>
