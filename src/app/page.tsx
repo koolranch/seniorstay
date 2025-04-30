@@ -26,9 +26,28 @@ function mapInternalToDisplay(internalCommunities: InternalCommunity[]): Communi
   return internalCommunities.map(community => {
     // Extract just the name part from the slug if it contains city and state
     let cleanSlug = community.slug;
+    
+    // For cases like "vitalia-rockside-seven-hills-oh", we want just "vitalia-rockside"
     if (cleanSlug.includes(community.city.toLowerCase()) || cleanSlug.includes('-oh')) {
-      // Take only the first part before city or OH state
-      cleanSlug = cleanSlug.split('-').slice(0, -2).join('-');
+      const cityParts = community.city.toLowerCase().split(' ').map(part => part.trim()).filter(Boolean);
+      const statePart = '-oh';
+      
+      // More precise approach: remove the city and state parts from the end of the slug
+      const slugParts = cleanSlug.split('-');
+      const cityIndex = slugParts.findIndex(part => 
+        cityParts.some(cityPart => cityPart === part) ||
+        part === 'ohio' || 
+        part === 'oh'
+      );
+      
+      if (cityIndex > 0) {
+        // Take everything before the city name starts
+        cleanSlug = slugParts.slice(0, cityIndex).join('-');
+      } else {
+        // Fallback to original approach if city index not found
+        cleanSlug = cleanSlug.split('-').slice(0, -2).join('-');
+      }
+      
       // If it's empty (rare case), default to the name
       if (!cleanSlug) cleanSlug = community.name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
     }
@@ -61,9 +80,27 @@ export default function HomePage() {
     staticCommunities.map(community => {
       // Clean up slugs for static communities
       let cleanSlug = community.slug;
+      
+      // For cases like "vitalia-rockside-seven-hills-oh", we want just "vitalia-rockside"
       if (cleanSlug.includes(community.city.toLowerCase()) || cleanSlug.includes('-oh')) {
-        // Take only the first part before city or OH state 
-        cleanSlug = cleanSlug.split('-').slice(0, -2).join('-');
+        const cityParts = community.city.toLowerCase().split(' ').map(part => part.trim()).filter(Boolean);
+        
+        // More precise approach: remove the city and state parts from the end of the slug
+        const slugParts = cleanSlug.split('-');
+        const cityIndex = slugParts.findIndex(part => 
+          cityParts.some(cityPart => cityPart === part) ||
+          part === 'ohio' || 
+          part === 'oh'
+        );
+        
+        if (cityIndex > 0) {
+          // Take everything before the city name starts
+          cleanSlug = slugParts.slice(0, cityIndex).join('-');
+        } else {
+          // Fallback to original approach if city index not found
+          cleanSlug = cleanSlug.split('-').slice(0, -2).join('-');
+        }
+        
         // If it's empty (rare case), default to the name
         if (!cleanSlug) cleanSlug = community.name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
       }

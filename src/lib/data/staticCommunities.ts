@@ -67,6 +67,7 @@ export interface Community {
   slug: string;
   address: string;
   city: string;
+  city_slug?: string;
   state: string;
   type: string;
   services: string[];
