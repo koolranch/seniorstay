@@ -98,16 +98,12 @@ export default async function OhioCityPage({ params }: { params: { citySlug: str
           <p className="mt-2 text-lg text-gray-700 max-w-2xl">
             We've curated {communityGridLength} top-rated communities in {cityName}. Compare amenities, get insider tips, and schedule your free tour today.
           </p>
-          <button
-            className="mt-6 px-8 py-4 bg-blue-600 text-white font-semibold rounded shadow hover:bg-blue-700"
-            onClick={() =>
-              document
-                .getElementById('city-lead-form')
-                ?.scrollIntoView({ behavior: 'smooth' })
-            }
+          <a
+            href="#city-lead-form"
+            className="mt-6 inline-block px-8 py-4 bg-blue-600 text-white font-semibold rounded shadow hover:bg-blue-700 transition"
           >
             Get Free Tour Options
-          </button>
+          </a>
         </div>
       </div>
       
@@ -148,12 +144,121 @@ export default async function OhioCityPage({ params }: { params: { citySlug: str
             <p className="text-gray-600 mb-8 text-center">
               Our senior living advisors can help you find the perfect community that meets your needs.
             </p>
-            <LeadForm
-              city={cityName}
-              state="OH"
-              sourceSlug={`city-${citySlug}`}
-              className="shadow-lg rounded-lg"
-            />
+            <form
+              id="city-lead-form"
+              action="https://formspree.io/f/xnnpaply"
+              method="POST"
+              className="mt-12 bg-white p-8 rounded-lg shadow-md max-w-lg mx-auto"
+            >
+              {/* Hidden metadata for better lead context */}
+              <input type="hidden" name="_subject" value={`New lead: ${cityName}`} />
+              <input type="hidden" name="city" value={cityName} />
+              <input type="hidden" name="pageUrl" value={typeof window !== 'undefined' ? window.location.href : ''} />
+              
+              {/* Full Name */}
+              <div className="mb-6">
+                <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 mb-1">
+                  Full Name*
+                </label>
+                <input
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  required
+                  className="w-full p-2 border rounded-md border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Enter your full name"
+                />
+              </div>
+
+              {/* Email */}
+              <div className="mb-6">
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                  Email Address*
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  required
+                  className="w-full p-2 border rounded-md border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Enter your email address"
+                />
+              </div>
+
+              {/* Phone */}
+              <div className="mb-6">
+                <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
+                  Phone Number
+                </label>
+                <input
+                  type="tel"
+                  id="phone"
+                  name="phone"
+                  className="w-full p-2 border rounded-md border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Enter your phone number"
+                />
+              </div>
+
+              {/* Care Type */}
+              <div className="mb-6">
+                <label htmlFor="careType" className="block text-sm font-medium text-gray-700 mb-1">
+                  Type of Care Needed
+                </label>
+                <select
+                  id="careType"
+                  name="careType"
+                  className="w-full p-2 border rounded-md border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
+                  <option value="">Select care type</option>
+                  <option value="Assisted Living">Assisted Living</option>
+                  <option value="Memory Care">Memory Care</option>
+                  <option value="Independent Living">Independent Living</option>
+                  <option value="Nursing Home">Nursing Home</option>
+                  <option value="Home Care">Home Care</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+
+              {/* Timeline */}
+              <div className="mb-6">
+                <label htmlFor="moveInTimeline" className="block text-sm font-medium text-gray-700 mb-1">
+                  Move-in Timeline
+                </label>
+                <select
+                  id="moveInTimeline"
+                  name="moveInTimeline"
+                  className="w-full p-2 border rounded-md border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
+                  <option value="">Select timeline</option>
+                  <option value="ASAP">ASAP</option>
+                  <option value="30 days">30 days</option>
+                  <option value="60 days">60 days</option>
+                  <option value="90+ days">90+ days</option>
+                  <option value="Just researching">Just researching</option>
+                </select>
+              </div>
+
+              {/* Notes */}
+              <div className="mb-6">
+                <label htmlFor="notes" className="block text-sm font-medium text-gray-700 mb-1">
+                  Additional Information
+                </label>
+                <textarea
+                  id="notes"
+                  name="notes"
+                  rows={3}
+                  className="w-full p-2 border rounded-md border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Tell us more about your needs..."
+                ></textarea>
+              </div>
+
+              <button
+                type="submit"
+                className="w-full py-3 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition"
+              >
+                Request Free Consultation
+              </button>
+            </form>
           </div>
         </div>
       </div>
