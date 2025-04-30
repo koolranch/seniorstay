@@ -149,7 +149,7 @@ export default async function OhioCityPage({ params }: { params: { citySlug: str
       {/* ── Inline Lead Form ── */}
       <section id="city-lead-form" className="mt-16 bg-white p-8 rounded-lg shadow">
         <div className="container mx-auto px-6 md:px-10 lg:px-20">
-          <h2 className="text-2xl font-bold mb-4">Get Personalized Tours & Pricing</h2>
+          <h2 className="text-2xl font-bold mb-4 text-gray-900">Get Personalized Tours & Pricing</h2>
           <p className="mb-6 text-gray-800">
             Fill out the form below and our Senior Living Advisors will reach out with options in {cityName}.
           </p>
@@ -230,18 +230,18 @@ export default async function OhioCityPage({ params }: { params: { citySlug: str
           {/* ── FAQ Section ── */}
           <section id="faqs" className="mt-12 mb-16 bg-white py-8 rounded-lg shadow">
             <div className="container mx-auto px-6">
-              <h3 className="text-2xl font-bold text-center mb-6">Frequently Asked Questions</h3>
+              <h3 className="text-2xl font-bold text-center mb-6 text-gray-900">Frequently Asked Questions</h3>
               <div className="space-y-4 max-w-3xl mx-auto">
                 <details className="p-4 border rounded">
-                  <summary className="font-medium font-semibold cursor-pointer">What senior-living options are available in {params.citySlug.replace('-', ' ')?.charAt(0).toUpperCase() + params.citySlug.replace('-', ' ').slice(1)}?</summary>
+                  <summary className="font-medium font-semibold cursor-pointer text-gray-900">What senior-living options are available in {params.citySlug.replace('-', ' ')?.charAt(0).toUpperCase() + params.citySlug.replace('-', ' ').slice(1)}?</summary>
                   <p className="mt-2 text-gray-800">You'll find Assisted Living, Memory Care, Independent Living, Skilled Nursing and more—each community listing shows exactly which services they offer.</p>
                 </details>
                 <details className="p-4 border rounded">
-                  <summary className="font-medium font-semibold cursor-pointer">How do I schedule a tour?</summary>
+                  <summary className="font-medium font-semibold cursor-pointer text-gray-900">How do I schedule a tour?</summary>
                   <p className="mt-2 text-gray-800">Use the "Schedule a Tour" button at the top of the page or fill out the form above—our local advisors will reach out in under 24 hours to book your visit.</p>
                 </details>
                 <details className="p-4 border rounded">
-                  <summary className="font-medium font-semibold cursor-pointer">Are your community listings up to date?</summary>
+                  <summary className="font-medium font-semibold cursor-pointer text-gray-900">Are your community listings up to date?</summary>
                   <p className="mt-2 text-gray-800">Absolutely—each community is verified by our team monthly to ensure address, services and availability are current.</p>
                 </details>
               </div>
