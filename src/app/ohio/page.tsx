@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import Link from "next/link";
+import CityCard from '@/components/CityCard';
 import { communities } from "@/lib/data/staticCommunities";
 import { FiMapPin, FiArrowRight } from "react-icons/fi";
 import { getCityPath } from "@/lib/utils/formatSlug";
@@ -92,41 +93,15 @@ export default function OhioIndexPage() {
           <h2 className="text-2xl font-semibold text-[#1b4d70] mb-6">
             Cities in Ohio
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {citiesWithCommunities.map((cityData) => {
-              const cityPath = getCityPath("OH", cityData.city);
-              return (
-                <Link
-                  key={cityData.city}
-                  href={cityPath}
-                  className="block bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-6 border border-gray-100"
-                >
-                  <div className="flex items-center mb-2">
-                    <FiMapPin className="text-[#1b4d70] mr-2" />
-                    <h3 className="text-lg font-medium text-[#1b4d70]">
-                      {cityData.city}, OH
-                    </h3>
-                  </div>
-                  <div className="text-sm text-gray-600 mb-3">
-                    {cityData.count} {cityData.count === 1 ? "community" : "communities"}
-                  </div>
-                  {cityData.topRatedCommunity && (
-                    <div className="text-sm text-gray-700 mb-4">
-                      <div className="font-medium">
-                        Top Rated: {cityData.topRatedCommunity.name}
-                      </div>
-                      <div className="text-gray-500">
-                        Rated {cityData.topRatedCommunity.rating.toFixed(1)} out of 5
-                      </div>
-                    </div>
-                  )}
-                  <div className="text-[#1b4d70] font-medium flex items-center">
-                    <span>View Communities</span>
-                    <FiArrowRight className="ml-2" />
-                  </div>
-                </Link>
-              );
-            })}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {citiesWithCommunities.map((cityData) => (
+              <CityCard
+                key={cityData.city}
+                name={cityData.city}
+                slug={cityData.city.toLowerCase().replace(/ /g, '-')}
+                count={cityData.count}
+              />
+            ))}
           </div>
         </div>
       </div>
