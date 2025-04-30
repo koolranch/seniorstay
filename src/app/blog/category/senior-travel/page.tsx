@@ -52,7 +52,7 @@ export default function SeniorTravelCategoryPage() {
               <li>
                 <Link 
                   href="/senior-travel/5-best-cruises-for-seniors/"
-                  className="text-[#1b4d70] hover:text-[#F5A623] text-lg font-medium transition-colors flex items-center"
+                  className="text-[#1b4d70] hover:text-[#F5A623] text-lg font-medium font-semibold transition-colors flex items-center"
                 >
                   <span className="mr-2">→</span>
                   <span>5 Best Cruises for Seniors</span>
@@ -61,7 +61,7 @@ export default function SeniorTravelCategoryPage() {
               <li>
                 <Link 
                   href="/blog/uss-yorktown/"
-                  className="text-[#1b4d70] hover:text-[#F5A623] text-lg font-medium transition-colors flex items-center"
+                  className="text-[#1b4d70] hover:text-[#F5A623] text-lg font-medium font-semibold transition-colors flex items-center"
                 >
                   <span className="mr-2">→</span>
                   <span>Visiting the USS Yorktown</span>
@@ -70,7 +70,7 @@ export default function SeniorTravelCategoryPage() {
               <li>
                 <Link 
                   href="/blog/cruises-for-seniors/"
-                  className="text-[#1b4d70] hover:text-[#F5A623] text-lg font-medium transition-colors flex items-center"
+                  className="text-[#1b4d70] hover:text-[#F5A623] text-lg font-medium font-semibold transition-colors flex items-center"
                 >
                   <span className="mr-2">→</span>
                   <span>Why Cruises Are Great for Seniors</span>
@@ -79,7 +79,7 @@ export default function SeniorTravelCategoryPage() {
               <li>
                 <Link 
                   href="/blog/magnesium-for-health/"
-                  className="text-[#1b4d70] hover:text-[#F5A623] text-lg font-medium transition-colors flex items-center"
+                  className="text-[#1b4d70] hover:text-[#F5A623] text-lg font-medium font-semibold transition-colors flex items-center"
                 >
                   <span className="mr-2">→</span>
                   <span>How Travel Helps Brain and Body Health</span>

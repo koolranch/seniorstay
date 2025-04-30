@@ -39,7 +39,7 @@ export default function ThailandTravelPage() {
         <article className="max-w-4xl mx-auto prose prose-lg">
           {/* Introduction */}
           <section className="mb-8">
-            <p className="text-gray-700 leading-relaxed">
+            <p className="text-gray-700 leading-7">
               Thailand is one of Southeast Asia's most welcoming and accessible destinations — and it's increasingly popular among senior travelers. With beautiful scenery, kind locals, delicious food, and top-tier medical care, it's an ideal place to visit in retirement.
             </p>
           </section>
@@ -90,7 +90,7 @@ export default function ThailandTravelPage() {
           {/* Final Thoughts */}
           <section>
             <h2 className="text-2xl font-semibold text-[#1b4d70] mb-4">Final Thoughts</h2>
-            <p className="text-gray-700 leading-relaxed">
+            <p className="text-gray-700 leading-7">
               With its warm weather, rich traditions, and welcoming communities, Thailand offers senior travelers the perfect blend of adventure and relaxation. Whether you're exploring temples, taking a cooking class, or just relaxing by the sea — Thailand is an experience you'll never forget.
             </p>
           </section>

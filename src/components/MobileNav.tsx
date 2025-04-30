@@ -73,7 +73,7 @@ const MobileNav = ({ isOpen, onClose, user, onLogout, onLogin, onSignup }: Mobil
                     <FiUser size={20} />
                   </div>
                   <div>
-                    <p className="font-medium text-[#1b4d70]">{user.name || user.email.split('@')[0]}</p>
+                    <p className="font-medium font-semibold text-[#1b4d70]">{user.name || user.email.split('@')[0]}</p>
                     <p className="text-sm text-[#333333]">{user.email}</p>
                   </div>
                 </div>
@@ -97,7 +97,7 @@ const MobileNav = ({ isOpen, onClose, user, onLogout, onLogin, onSignup }: Mobil
                 <li>
                   <Link
                     href="/"
-                    className="flex items-center py-2 text-lg font-medium text-[#1b4d70]"
+                    className="flex items-center py-2 text-lg font-medium font-semibold text-[#1b4d70]"
                     onClick={onClose}
                   >
                     <FiHome className="mr-3" size={20} />
@@ -107,7 +107,7 @@ const MobileNav = ({ isOpen, onClose, user, onLogout, onLogin, onSignup }: Mobil
                 <li>
                   <Link
                     href="/search"
-                    className="flex items-center py-2 text-lg font-medium text-[#1b4d70]"
+                    className="flex items-center py-2 text-lg font-medium font-semibold text-[#1b4d70]"
                     onClick={onClose}
                   >
                     <FiSearch className="mr-3" size={20} />
@@ -117,7 +117,7 @@ const MobileNav = ({ isOpen, onClose, user, onLogout, onLogin, onSignup }: Mobil
                 <li>
                   <Link
                     href="/favorites"
-                    className="flex items-center py-2 text-lg font-medium text-[#1b4d70]"
+                    className="flex items-center py-2 text-lg font-medium font-semibold text-[#1b4d70]"
                     onClick={onClose}
                   >
                     <FiHeart className="mr-3" size={20} />
@@ -127,7 +127,7 @@ const MobileNav = ({ isOpen, onClose, user, onLogout, onLogin, onSignup }: Mobil
                 <li>
                   <Link
                     href="/compare"
-                    className="flex items-center py-2 text-lg font-medium text-[#1b4d70]"
+                    className="flex items-center py-2 text-lg font-medium font-semibold text-[#1b4d70]"
                     onClick={onClose}
                   >
                     <FiHeart className="mr-3" size={20} />
@@ -137,7 +137,7 @@ const MobileNav = ({ isOpen, onClose, user, onLogout, onLogin, onSignup }: Mobil
                 <li>
                   <Link
                     href="/contact"
-                    className="flex items-center py-2 text-lg font-medium text-[#1b4d70]"
+                    className="flex items-center py-2 text-lg font-medium font-semibold text-[#1b4d70]"
                     onClick={onClose}
                   >
                     <FiMessageSquare className="mr-3" size={20} />
@@ -147,7 +147,7 @@ const MobileNav = ({ isOpen, onClose, user, onLogout, onLogin, onSignup }: Mobil
                 <li>
                   <Link
                     href="/blog"
-                    className="flex items-center py-2 text-lg font-medium text-[#1b4d70]"
+                    className="flex items-center py-2 text-lg font-medium font-semibold text-[#1b4d70]"
                     onClick={onClose}
                   >
                     <FiInfo className="mr-3" size={20} />
@@ -160,7 +160,7 @@ const MobileNav = ({ isOpen, onClose, user, onLogout, onLogin, onSignup }: Mobil
                     <li>
                       <Link
                         href="/profile"
-                        className="flex items-center py-2 text-lg font-medium text-[#1b4d70]"
+                        className="flex items-center py-2 text-lg font-medium font-semibold text-[#1b4d70]"
                         onClick={onClose}
                       >
                         <FiUser className="mr-3" size={20} />
@@ -169,7 +169,7 @@ const MobileNav = ({ isOpen, onClose, user, onLogout, onLogin, onSignup }: Mobil
                     </li>
                     <li>
                       <button
-                        className="flex items-center py-2 text-lg font-medium text-[#1b4d70] w-full text-left"
+                        className="flex items-center py-2 text-lg font-medium font-semibold text-[#1b4d70] w-full text-left"
                         onClick={() => {
                           onLogout();
                           onClose();
@@ -184,7 +184,7 @@ const MobileNav = ({ isOpen, onClose, user, onLogout, onLogin, onSignup }: Mobil
                   <>
                     <li>
                       <button
-                        className="flex items-center py-2 text-lg font-medium text-[#1b4d70] w-full text-left"
+                        className="flex items-center py-2 text-lg font-medium font-semibold text-[#1b4d70] w-full text-left"
                         onClick={() => {
                           onLogin();
                           onClose();
@@ -196,7 +196,7 @@ const MobileNav = ({ isOpen, onClose, user, onLogout, onLogin, onSignup }: Mobil
                     </li>
                     <li>
                       <button
-                        className="flex items-center py-2 text-lg font-medium text-[#1b4d70] w-full text-left"
+                        className="flex items-center py-2 text-lg font-medium font-semibold text-[#1b4d70] w-full text-left"
                         onClick={() => {
                           onSignup();
                           onClose();
@@ -213,7 +213,7 @@ const MobileNav = ({ isOpen, onClose, user, onLogout, onLogin, onSignup }: Mobil
 
             {/* Secondary links */}
             <div className="mt-8 px-6 py-4 border-t border-gray-200">
-              <h3 className="text-sm font-medium text-gray-500 mb-4">POPULAR LOCATIONS</h3>
+              <h3 className="text-sm font-medium font-semibold text-gray-500 mb-4">POPULAR LOCATIONS</h3>
               <ul className="space-y-3">
                 <li>
                   <Link
@@ -252,7 +252,7 @@ const MobileNav = ({ isOpen, onClose, user, onLogout, onLogin, onSignup }: Mobil
             <div className="mt-auto px-6 py-6 border-t border-gray-200">
               <Link
                 href="/contact"
-                className="block w-full py-3 px-4 bg-[#1b4d70] text-white text-center rounded-lg font-medium hover:bg-[#2F5061] transition"
+                className="block w-full py-3 px-4 bg-[#1b4d70] text-white text-center rounded-lg font-medium font-semibold hover:bg-[#2F5061] transition"
                 onClick={onClose}
               >
                 Talk to a Care Advisor

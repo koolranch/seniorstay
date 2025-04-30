@@ -39,7 +39,7 @@ export default function SeniorOnlineGamesPage() {
         <div className="max-w-4xl mx-auto">
           {/* Introduction */}
           <section className="prose prose-lg max-w-none mb-12">
-            <p className="text-gray-700 leading-relaxed">
+            <p className="text-gray-700 leading-7">
               Online games can offer more than entertainment — they help seniors stay mentally active, reduce stress, and connect socially. Whether you're solving puzzles or playing card games, these options are designed to be easy, fun, and accessible for older adults.
             </p>
           </section>

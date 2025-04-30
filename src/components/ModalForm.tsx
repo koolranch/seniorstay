@@ -168,7 +168,7 @@ const ModalForm: React.FC<ModalFormProps> = ({
         {submitStatus === 'success' ? (
           <div className="text-center py-6">
             <svg className="w-16 h-16 mx-auto text-green-500 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-            <p className="text-lg font-medium text-gray-700">Thank you!</p>
+            <p className="text-lg font-medium font-semibold text-gray-700">Thank you!</p>
             <p className="text-gray-600 mb-6">Your request has been sent successfully. We'll be in touch soon.</p>
             <button
               onClick={handleClose}
@@ -186,7 +186,7 @@ const ModalForm: React.FC<ModalFormProps> = ({
 
             <div className="space-y-4">
               <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                <label htmlFor="name" className="block text-sm font-medium font-semibold text-gray-700 mb-1">Full Name</label>
                 <input
                   ref={firstFocusableElementRef} // Focus trap start
                   type="text"
@@ -200,7 +200,7 @@ const ModalForm: React.FC<ModalFormProps> = ({
                 />
               </div>
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                <label htmlFor="email" className="block text-sm font-medium font-semibold text-gray-700 mb-1">Email Address</label>
                 <input
                   type="email"
                   id="email"
@@ -213,7 +213,7 @@ const ModalForm: React.FC<ModalFormProps> = ({
                 />
               </div>
               <div>
-                <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+                <label htmlFor="phone" className="block text-sm font-medium font-semibold text-gray-700 mb-1">Phone Number</label>
                 <input
                   type="tel"
                   id="phone"
@@ -226,7 +226,7 @@ const ModalForm: React.FC<ModalFormProps> = ({
                 />
               </div>
               <div>
-                <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="message" className="block text-sm font-medium font-semibold text-gray-700 mb-1">
                   Message <span className="text-gray-500">(Optional)</span>
                 </label>
                 <textarea

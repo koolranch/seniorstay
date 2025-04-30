@@ -140,7 +140,7 @@ export default function DatingAfterDivorcePage() {
             <div className="p-6">
               <h3 className="text-xl font-semibold text-gray-800 mb-2">Building a Support Network in Retirement</h3>
               <p className="text-gray-600 mb-4">Learn how to create meaningful connections and maintain a strong support system as you age.</p>
-              <Link href="/blog/support-network-retirement" className="text-[#1b4d70] font-medium hover:text-[#F5A623] transition-colors">
+              <Link href="/blog/support-network-retirement" className="text-[#1b4d70] font-medium font-semibold hover:text-[#F5A623] transition-colors">
                 Read More →
               </Link>
             </div>

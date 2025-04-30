@@ -139,7 +139,7 @@ export default async function OhioCityPage({ params }: { params: { citySlug: str
         ) : (
           <div className="text-center py-10">
              <p className="text-lg text-gray-600">We couldn't find any communities listed in {cityName}, Ohio currently.</p>
-             <Link href="/ohio" className="mt-4 inline-block bg-[#F5A623] text-[#1b4d70] font-medium rounded-full py-3 px-6 hover:bg-[#FFC65C] transition">
+             <Link href="/ohio" className="mt-4 inline-block bg-[#F5A623] text-[#1b4d70] font-medium font-semibold rounded-full py-3 px-6 hover:bg-[#FFC65C] transition">
                View All Ohio Cities
              </Link>
           </div>
@@ -210,17 +210,17 @@ export default async function OhioCityPage({ params }: { params: { citySlug: str
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
                 <div>
                   <p className="text-4xl font-semibold text-blue-600">4.8/5</p>
-                  <p className="mt-2 font-medium">Average Rating</p>
+                  <p className="mt-2 font-medium font-semibold">Average Rating</p>
                   <p className="text-gray-900 text-sm">From 250+ Reviews</p>
                 </div>
                 <div>
                   <p className="text-4xl font-semibold text-blue-600">3K+</p>
-                  <p className="mt-2 font-medium">Families Served</p>
+                  <p className="mt-2 font-medium font-semibold">Families Served</p>
                   <p className="text-gray-900 text-sm">Across Ohio Communities</p>
                 </div>
                 <div>
                   <p className="text-4xl font-semibold text-blue-600">✔️</p>
-                  <p className="mt-2 font-medium">Verified Listings</p>
+                  <p className="mt-2 font-medium font-semibold">Verified Listings</p>
                   <p className="text-gray-900 text-sm">Accurate & Up-to-Date</p>
                 </div>
               </div>
@@ -233,15 +233,15 @@ export default async function OhioCityPage({ params }: { params: { citySlug: str
               <h3 className="text-2xl font-bold text-center mb-6">Frequently Asked Questions</h3>
               <div className="space-y-4 max-w-3xl mx-auto">
                 <details className="p-4 border rounded">
-                  <summary className="font-medium cursor-pointer">What senior-living options are available in {params.citySlug.replace('-', ' ')?.charAt(0).toUpperCase() + params.citySlug.replace('-', ' ').slice(1)}?</summary>
+                  <summary className="font-medium font-semibold cursor-pointer">What senior-living options are available in {params.citySlug.replace('-', ' ')?.charAt(0).toUpperCase() + params.citySlug.replace('-', ' ').slice(1)}?</summary>
                   <p className="mt-2 text-gray-800">You'll find Assisted Living, Memory Care, Independent Living, Skilled Nursing and more—each community listing shows exactly which services they offer.</p>
                 </details>
                 <details className="p-4 border rounded">
-                  <summary className="font-medium cursor-pointer">How do I schedule a tour?</summary>
+                  <summary className="font-medium font-semibold cursor-pointer">How do I schedule a tour?</summary>
                   <p className="mt-2 text-gray-800">Use the "Schedule a Tour" button at the top of the page or fill out the form above—our local advisors will reach out in under 24 hours to book your visit.</p>
                 </details>
                 <details className="p-4 border rounded">
-                  <summary className="font-medium cursor-pointer">Are your community listings up to date?</summary>
+                  <summary className="font-medium font-semibold cursor-pointer">Are your community listings up to date?</summary>
                   <p className="mt-2 text-gray-800">Absolutely—each community is verified by our team monthly to ensure address, services and availability are current.</p>
                 </details>
               </div>

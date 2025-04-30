@@ -60,7 +60,7 @@ export default function RegionalDirectory({ className = "" }: RegionalDirectoryP
             >
               <div className="flex items-center justify-center mb-2">
                 <FiMapPin className="text-[#1b4d70] mr-2 flex-shrink-0" />
-                <h3 className="text-lg font-medium text-[#1b4d70] truncate">
+                <h3 className="text-lg font-medium font-semibold text-[#1b4d70] truncate">
                   {cityData.city}, OH
                 </h3>
               </div>
@@ -69,7 +69,7 @@ export default function RegionalDirectory({ className = "" }: RegionalDirectoryP
               </div>
               {cityData.topRatedCommunity && (
                 <div className="text-sm text-gray-700 mt-2">
-                  <div className="font-medium truncate">
+                  <div className="font-medium font-semibold truncate">
                     Top: {cityData.topRatedCommunity.name}
                   </div>
                   <div className="text-gray-500">
@@ -79,7 +79,7 @@ export default function RegionalDirectory({ className = "" }: RegionalDirectoryP
               )}
               <Link
                 href={`/ohio/${cityData.city_slug}`}
-                className="inline-block mt-4 px-4 py-2 text-sm font-medium bg-blue-600 text-white rounded hover:bg-blue-700"
+                className="inline-block mt-4 px-4 py-2 text-sm font-medium font-semibold bg-blue-600 text-white rounded hover:bg-blue-700"
               >
                 Browse {cityData.city}
               </Link>
@@ -91,7 +91,7 @@ export default function RegionalDirectory({ className = "" }: RegionalDirectoryP
         <div className="text-center mt-8">
           <Link
             href="/ohio"
-            className="inline-flex items-center text-[#1b4d70] font-medium hover:underline"
+            className="inline-flex items-center text-[#1b4d70] font-medium font-semibold hover:underline"
           >
             View all cities in Ohio
             <svg

@@ -196,14 +196,14 @@ export default function FavoritesPage() {
                 </span>
                 <button
                   onClick={selectAll}
-                  className="text-[#1b4d70] text-sm font-medium hover:underline"
+                  className="text-[#1b4d70] text-sm font-medium font-semibold hover:underline"
                 >
                   Select All for Comparison
                 </button>
                 {comparisonItems.length > 0 && (
                   <button
                     onClick={clearSelection}
-                    className="text-[#F5A623] text-sm font-medium hover:underline"
+                    className="text-[#F5A623] text-sm font-medium font-semibold hover:underline"
                   >
                     Clear Comparison Selection
                   </button>
@@ -297,7 +297,7 @@ export default function FavoritesPage() {
 
                       <div className="flex items-center text-sm mt-1 mb-2">
                         <FiStar className="text-[#F5A623] fill-[#F5A623]" />
-                        <span className="ml-1 font-medium">{rating}</span>
+                        <span className="ml-1 font-medium font-semibold">{rating}</span>
                         <span className="text-gray-400 text-xs ml-1">
                           ({community.reviewCount || 0} reviews)
                         </span>
@@ -374,7 +374,7 @@ export default function FavoritesPage() {
 
                       <div className="flex items-center text-sm mt-1 mb-2">
                         <FiStar className="text-[#F5A623] fill-[#F5A623]" />
-                        <span className="ml-1 font-medium">{rating}</span>
+                        <span className="ml-1 font-medium font-semibold">{rating}</span>
                         <span className="text-gray-400 text-xs ml-1">
                           ({community.reviewCount || 0} reviews)
                         </span>
@@ -387,7 +387,7 @@ export default function FavoritesPage() {
 
                       {amenitiesList && amenitiesList.length > 0 && (
                         <div className="mt-2 space-y-1">
-                          <h4 className="text-sm font-medium text-[#333333] mb-1">Amenities:</h4>
+                          <h4 className="text-sm font-medium font-semibold text-[#333333] mb-1">Amenities:</h4>
                           <div className="flex flex-wrap gap-2">
                             {amenitiesList.slice(0, 3).map((amenity: string, i: number) => (
                               <span key={`${community.id}-${i}`} className="text-xs bg-[#f1f6f0] text-[#1b4d70] px-2 py-1 rounded">

@@ -151,7 +151,7 @@ const SingleTestimonial = ({ testimonial }: { testimonial: Testimonial }) => (
         </div>
       )}
       <div>
-        <p className="font-medium text-[#1b4d70]">{testimonial.author}</p>
+        <p className="font-medium font-semibold text-[#1b4d70]">{testimonial.author}</p>
         {testimonial.relation && (
           <p className="text-sm text-[#666666]">{testimonial.relation}</p>
         )}

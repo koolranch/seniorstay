@@ -42,7 +42,7 @@ export default function ContactCareAdvisorPage() {
         className="space-y-4 max-w-md mx-auto"
       >
         <div>
-          <label htmlFor="name" className="block text-sm font-medium mb-1">
+          <label htmlFor="name" className="block text-sm font-medium font-semibold mb-1">
             Your Name
           </label>
           <input
@@ -56,7 +56,7 @@ export default function ContactCareAdvisorPage() {
         </div>
 
         <div>
-          <label htmlFor="email" className="block text-sm font-medium mb-1">
+          <label htmlFor="email" className="block text-sm font-medium font-semibold mb-1">
             Email Address
           </label>
           <input
@@ -70,7 +70,7 @@ export default function ContactCareAdvisorPage() {
         </div>
 
         <div>
-          <label htmlFor="phone" className="block text-sm font-medium mb-1">
+          <label htmlFor="phone" className="block text-sm font-medium font-semibold mb-1">
             Phone Number (optional)
           </label>
           <input
@@ -83,7 +83,7 @@ export default function ContactCareAdvisorPage() {
         </div>
 
         <div>
-          <label htmlFor="message" className="block text-sm font-medium mb-1">
+          <label htmlFor="message" className="block text-sm font-medium font-semibold mb-1">
             Tell us about your situation
           </label>
           <textarea

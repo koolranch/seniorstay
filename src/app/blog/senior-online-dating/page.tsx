@@ -39,7 +39,7 @@ export default function SeniorOnlineDatingPage() {
         <article className="max-w-4xl mx-auto prose prose-lg">
           {/* Introduction */}
           <section className="mb-8">
-            <p className="text-gray-700 leading-relaxed">
+            <p className="text-gray-700 leading-7">
               It's never too late to find love — or even just companionship. Online dating has opened new doors for seniors, making it easier than ever to meet others who share your interests, values, and life stage. Whether you're newly single or just curious, here's how to get started safely and confidently.
             </p>
           </section>
@@ -90,7 +90,7 @@ export default function SeniorOnlineDatingPage() {
           {/* Final Thoughts */}
           <section>
             <h2 className="text-2xl font-semibold text-[#1b4d70] mb-4">Final Thoughts</h2>
-            <p className="text-gray-700 leading-relaxed">
+            <p className="text-gray-700 leading-7">
               Online dating can feel intimidating at first — but it's also full of possibility. With a little patience and awareness, you might just meet someone who brings joy, laughter, and connection to your life. You deserve that — no matter your age.
             </p>
           </section>

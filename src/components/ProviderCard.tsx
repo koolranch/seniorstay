@@ -148,7 +148,7 @@ const ProviderCard = ({
         </div>
 
         {type && (
-        <div className="absolute bottom-3 left-3 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-md text-xs font-medium text-[#1b4d70]">
+        <div className="absolute bottom-3 left-3 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-md text-xs font-medium font-semibold text-[#1b4d70]">
           {type}
         </div>
         )}
@@ -248,7 +248,7 @@ const ProviderCard = ({
             disabled={!hasRequiredData}
           >
             <Calendar className="w-4 h-4 inline-block mr-1 -mt-0.5" />
-            Schedule Tour
+            Book a Free Tour
           </button>
           <button
             className="w-full border border-blue-600 text-blue-600 hover:bg-blue-50 text-sm font-medium py-2 px-4 rounded-full transition inline-flex items-center justify-center"
@@ -256,7 +256,7 @@ const ProviderCard = ({
             disabled={!hasRequiredData}
           >
             <DollarSign className="w-4 h-4 inline-block mr-1 -mt-0.5" />
-            Get Pricing
+            See Your Customized Pricing
           </button>
         </div>
       </article>

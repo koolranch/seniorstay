@@ -27,7 +27,7 @@ export default function NotFound({ params }: { params: { city: string } }) {
           </p>
           <Link
             href={getCityPath("OH", cityName)}
-            className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-[#1b4d70] hover:bg-[#2F5061] transition-colors"
+            className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium font-semibold rounded-md text-white bg-[#1b4d70] hover:bg-[#2F5061] transition-colors"
           >
             View All Communities in {cityName}
           </Link>

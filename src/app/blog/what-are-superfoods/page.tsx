@@ -39,7 +39,7 @@ export default function SuperfoodsPage() {
         <article className="max-w-4xl mx-auto prose prose-lg">
           {/* Introduction */}
           <section className="mb-8">
-            <p className="text-gray-700 leading-relaxed">
+            <p className="text-gray-700 leading-7">
               "Superfoods" is a term you've probably heard before — but what does it really mean? Simply put, superfoods are whole foods that are especially rich in nutrients that support good health. For seniors, adding the right superfoods to your diet can help improve energy, brain health, digestion, and more.
             </p>
           </section>
@@ -84,7 +84,7 @@ export default function SuperfoodsPage() {
           {/* Final Thoughts */}
           <section>
             <h2 className="text-2xl font-semibold text-[#1b4d70] mb-4">Final Thoughts</h2>
-            <p className="text-gray-700 leading-relaxed">
+            <p className="text-gray-700 leading-7">
               Superfoods don't have to be exotic or expensive — many are simple, everyday ingredients. By incorporating a few of these nutrient-rich foods into your weekly meals, you can support your overall health, maintain energy, and age well with confidence.
             </p>
           </section>

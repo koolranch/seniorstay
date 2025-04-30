@@ -92,7 +92,7 @@ const MapToggleView = ({
               aria-label="Show as list"
             >
               <FiList className="mr-2" />
-              <span className="text-sm font-medium">List</span>
+              <span className="text-sm font-medium font-semibold">List</span>
             </button>
 
             <button
@@ -103,7 +103,7 @@ const MapToggleView = ({
               }`}
               aria-label="Show split view"
             >
-              <span className="text-sm font-medium">Split</span>
+              <span className="text-sm font-medium font-semibold">Split</span>
             </button>
 
             <button
@@ -115,7 +115,7 @@ const MapToggleView = ({
               aria-label="Show as map"
             >
               <FiMap className="mr-2" />
-              <span className="text-sm font-medium">Map</span>
+              <span className="text-sm font-medium font-semibold">Map</span>
             </button>
           </div>
         </div>
@@ -173,7 +173,7 @@ const MapToggleView = ({
         <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-40">
           <button
             onClick={() => handleViewChange('map')}
-            className="bg-[#1b4d70] text-white px-4 py-3 rounded-full font-medium shadow-lg flex items-center space-x-2 hover:bg-[#2F5061] transition-colors"
+            className="bg-[#1b4d70] text-white px-4 py-3 rounded-full font-medium font-semibold shadow-lg flex items-center space-x-2 hover:bg-[#2F5061] transition-colors"
           >
             <FiMap className="mr-2" />
             <span>Show map</span>
@@ -186,7 +186,7 @@ const MapToggleView = ({
         <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-40">
           <button
             onClick={() => handleViewChange('list')}
-            className="bg-white text-[#1b4d70] border border-[#1b4d70] px-4 py-3 rounded-full font-medium shadow-lg flex items-center space-x-2 hover:bg-gray-50 transition-colors"
+            className="bg-white text-[#1b4d70] border border-[#1b4d70] px-4 py-3 rounded-full font-medium font-semibold shadow-lg flex items-center space-x-2 hover:bg-gray-50 transition-colors"
           >
             <FiList className="mr-2" />
             <span>Show list</span>

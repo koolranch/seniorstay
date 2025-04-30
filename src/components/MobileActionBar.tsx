@@ -101,7 +101,7 @@ const MobileActionBar = () => {
       <div className="absolute -top-16 right-4">
         <Link
           href="/contact"
-          className="flex items-center bg-[#1b4d70] text-white px-4 py-2 rounded-full shadow-lg text-sm font-medium hover:bg-[#2F5061] transition"
+          className="flex items-center bg-[#1b4d70] text-white px-4 py-2 rounded-full shadow-lg text-sm font-medium font-semibold hover:bg-[#2F5061] transition"
         >
           <FiPhone className="mr-2" />
           <span>Care Advisor</span>

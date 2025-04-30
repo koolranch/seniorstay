@@ -27,7 +27,7 @@ export default function Page() {
           <li>
             <span className="mx-2">/</span>
           </li>
-          <li className="text-gray-900 font-medium">
+          <li className="text-gray-900 font-medium font-semibold">
             {state.charAt(0).toUpperCase() + state.slice(1)}
           </li>
         </ol>

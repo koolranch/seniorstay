@@ -245,7 +245,7 @@ export default function ProviderPage() {
               {community.careTypes.map((careType) => (
                 <span
                   key={careType}
-                  className="inline-block bg-[#f1f6f0] rounded-full px-3 py-1 text-sm font-medium text-[#1b4d70]"
+                  className="inline-block bg-[#f1f6f0] rounded-full px-3 py-1 text-sm font-medium font-semibold text-[#1b4d70]"
                 >
                   {careType}
                 </span>
@@ -307,7 +307,7 @@ export default function ProviderPage() {
                     <h2 className="text-xl font-semibold text-[#1b4d70]">Reviews</h2>
                     <div className="flex items-center bg-[#f1f6f0] px-4 py-2 rounded-lg">
                       <FiStar className="text-[#F5A623] fill-[#F5A623]" />
-                      <span className="ml-1 font-medium">{community.rating}</span>
+                      <span className="ml-1 font-medium font-semibold">{community.rating}</span>
                       <span className="ml-1 text-[#666666]">({community.reviewCount} reviews)</span>
                     </div>
                   </div>
@@ -358,14 +358,14 @@ export default function ProviderPage() {
               <div className="mb-6">
                 <div className="flex items-center mb-3">
                   <FiPhoneCall className="text-[#1b4d70] mr-2" />
-                  <span className="font-medium">Call directly: <a href="tel:2162323354" className="hover:underline">{community.phoneNumber}</a></span>
+                  <span className="font-medium font-semibold">Call directly: <a href="tel:2162323354" className="hover:underline">{community.phoneNumber}</a></span>
                 </div>
                 <span className="text-sm text-[#666666] block ml-6">Available 24/7</span>
               </div>
 
               <form className="space-y-4">
                 <div>
-                  <label htmlFor="name" className="block text-[#1b4d70] font-medium mb-1">Your Name</label>
+                  <label htmlFor="name" className="block text-[#1b4d70] font-medium font-semibold mb-1">Your Name</label>
                   <input
                     type="text"
                     id="name"
@@ -375,7 +375,7 @@ export default function ProviderPage() {
                 </div>
 
                 <div>
-                  <label htmlFor="email" className="block text-[#1b4d70] font-medium mb-1">Your Email</label>
+                  <label htmlFor="email" className="block text-[#1b4d70] font-medium font-semibold mb-1">Your Email</label>
                   <input
                     type="email"
                     id="email"
@@ -385,7 +385,7 @@ export default function ProviderPage() {
                 </div>
 
                 <div>
-                  <label htmlFor="phone" className="block text-[#1b4d70] font-medium mb-1">Your Phone</label>
+                  <label htmlFor="phone" className="block text-[#1b4d70] font-medium font-semibold mb-1">Your Phone</label>
                   <input
                     type="tel"
                     id="phone"
@@ -395,7 +395,7 @@ export default function ProviderPage() {
                 </div>
 
                 <div>
-                  <label htmlFor="message" className="block text-[#1b4d70] font-medium mb-1">Message</label>
+                  <label htmlFor="message" className="block text-[#1b4d70] font-medium font-semibold mb-1">Message</label>
                   <textarea
                     id="message"
                     rows={4}

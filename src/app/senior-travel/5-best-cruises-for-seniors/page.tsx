@@ -152,7 +152,7 @@ export default function BestCruisesPage() {
             <div className="p-6">
               <h3 className="text-xl font-semibold text-gray-800 mb-2">Cruises for Seniors</h3>
               <p className="text-gray-600 mb-4">Discover why cruises are an excellent travel option for seniors and how to choose the right one.</p>
-              <Link href="/blog/cruises-for-seniors" className="text-[#1b4d70] font-medium hover:text-[#F5A623] transition-colors">
+              <Link href="/blog/cruises-for-seniors" className="text-[#1b4d70] font-medium font-semibold hover:text-[#F5A623] transition-colors">
                 Read More →
               </Link>
             </div>

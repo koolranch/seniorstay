@@ -147,7 +147,7 @@ export default function GamesForSeniorsPage() {
             <div className="p-6">
               <h3 className="text-xl font-semibold text-gray-800 mb-2">Senior Online Games</h3>
               <p className="text-gray-600 mb-4">Discover the best online games for seniors to stay sharp and have fun.</p>
-              <Link href="/blog/senior-online-games" className="text-[#1b4d70] font-medium hover:text-[#F5A623] transition-colors">
+              <Link href="/blog/senior-online-games" className="text-[#1b4d70] font-medium font-semibold hover:text-[#F5A623] transition-colors">
                 Read More →
               </Link>
             </div>

@@ -95,7 +95,7 @@ const MobileFilterDrawer: React.FC<MobileFilterDrawerProps> = ({
               <div className="flex items-center">
                 <button
                   onClick={onClearFilters}
-                  className="mr-4 text-sm text-[#1b4d70] font-medium"
+                  className="mr-4 text-sm text-[#1b4d70] font-medium font-semibold"
                   aria-label="Clear all filters"
                 >
                   Clear all
@@ -114,7 +114,7 @@ const MobileFilterDrawer: React.FC<MobileFilterDrawerProps> = ({
             <div className="overflow-y-auto px-4 py-2 flex-grow">
               {/* Care Types Section */}
               <div className="py-4 border-b">
-                <h3 className="text-base font-medium mb-3 text-[#1b4d70]">Care Type</h3>
+                <h3 className="text-base font-medium font-semibold mb-3 text-[#1b4d70]">Care Type</h3>
                 <div className="space-y-2">
                   {CARE_TYPES.map(type => (
                     <label key={type.id} className="flex items-center space-x-2 cursor-pointer p-2 rounded hover:bg-gray-50">
@@ -135,7 +135,7 @@ const MobileFilterDrawer: React.FC<MobileFilterDrawerProps> = ({
 
               {/* Amenities Section */}
               <div className="py-4">
-                <h3 className="text-base font-medium mb-3 text-[#1b4d70]">Amenities</h3>
+                <h3 className="text-base font-medium font-semibold mb-3 text-[#1b4d70]">Amenities</h3>
                 <div className="grid grid-cols-1 gap-y-2">
                   {AMENITIES.map(amenity => (
                     <label key={amenity.id} className="flex items-center space-x-2 cursor-pointer p-2 rounded hover:bg-gray-50">
@@ -162,7 +162,7 @@ const MobileFilterDrawer: React.FC<MobileFilterDrawerProps> = ({
                   onApplyFilters();
                   onClose();
                 }}
-                className="w-full bg-[#1b4d70] text-white py-3 rounded-lg font-medium hover:bg-[#2F5061] transition"
+                className="w-full bg-[#1b4d70] text-white py-3 rounded-lg font-medium font-semibold hover:bg-[#2F5061] transition"
               >
                 Show {activeFilterCount > 0 ? `(${activeFilterCount} filters)` : 'results'}
               </button>

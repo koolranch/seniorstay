@@ -59,7 +59,7 @@ const HeroBanner = ({
             </div>
             <button 
               type="submit"
-              className="bg-[#F5A623] text-[#1b4d70] font-medium rounded-full py-3 px-6 md:px-8 flex items-center hover:bg-[#FFC65C] transition"
+              className="bg-[#F5A623] text-[#1b4d70] font-medium font-semibold rounded-full py-3 px-6 md:px-8 flex items-center hover:bg-[#FFC65C] transition"
             >
               <FiSearch className="mr-2" />
               Find Communities
@@ -71,13 +71,13 @@ const HeroBanner = ({
         <div className="flex flex-col sm:flex-row gap-4 mt-6">
           <Link
             href="/download-guide"
-            className="bg-white text-[#1b4d70] rounded-full py-2 px-6 font-medium hover:bg-[#FAFAF5] transition flex items-center justify-center"
+            className="bg-white text-[#1b4d70] rounded-full py-2 px-6 font-medium font-semibold hover:bg-[#FAFAF5] transition flex items-center justify-center"
           >
             Download Free Senior Living Guide
           </Link>
           <Link
             href="/contact"
-            className="bg-[#1b4d70] border-2 border-white text-white rounded-full py-2 px-6 font-medium hover:bg-[#2F5061] transition flex items-center justify-center"
+            className="bg-[#1b4d70] border-2 border-white text-white rounded-full py-2 px-6 font-medium font-semibold hover:bg-[#2F5061] transition flex items-center justify-center"
           >
             Talk to a Care Advisor
           </Link>

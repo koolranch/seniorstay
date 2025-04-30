@@ -147,7 +147,7 @@ export default function CruisesForSeniorsPage() {
             <div className="p-6">
               <h3 className="text-xl font-semibold text-gray-800 mb-2">Travel Tips for Seniors</h3>
               <p className="text-gray-600 mb-4">Essential advice for making your senior travel experience smooth and enjoyable.</p>
-              <Link href="/blog/travel-tips-for-seniors" className="text-[#1b4d70] font-medium hover:text-[#F5A623] transition-colors">
+              <Link href="/blog/travel-tips-for-seniors" className="text-[#1b4d70] font-medium font-semibold hover:text-[#F5A623] transition-colors">
                 Read More →
               </Link>
             </div>

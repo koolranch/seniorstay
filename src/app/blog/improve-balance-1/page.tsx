@@ -60,31 +60,31 @@ export default function ImproveBalancePage() {
             </p>
             <div className="space-y-6">
               <div>
-                <h3 className="text-xl font-medium text-[#1b4d70] mb-2">1. Heel-to-Toe Walk</h3>
+                <h3 className="text-xl font-medium font-semibold text-[#1b4d70] mb-2">1. Heel-to-Toe Walk</h3>
                 <p className="text-gray-700">
                   Walk in a straight line, placing the heel of one foot directly in front of the toes of the other. Great for coordination and leg strength.
                 </p>
               </div>
               <div>
-                <h3 className="text-xl font-medium text-[#1b4d70] mb-2">2. Single-Leg Stance</h3>
+                <h3 className="text-xl font-medium font-semibold text-[#1b4d70] mb-2">2. Single-Leg Stance</h3>
                 <p className="text-gray-700">
                   Stand near a chair or wall and lift one foot off the ground for 10–15 seconds. Switch legs. Improves ankle and core stability.
                 </p>
               </div>
               <div>
-                <h3 className="text-xl font-medium text-[#1b4d70] mb-2">3. Sit-to-Stand</h3>
+                <h3 className="text-xl font-medium font-semibold text-[#1b4d70] mb-2">3. Sit-to-Stand</h3>
                 <p className="text-gray-700">
                   From a seated position, stand up and sit down slowly. Strengthens quads, glutes, and promotes better posture and balance.
                 </p>
               </div>
               <div>
-                <h3 className="text-xl font-medium text-[#1b4d70] mb-2">4. Side Leg Raises</h3>
+                <h3 className="text-xl font-medium font-semibold text-[#1b4d70] mb-2">4. Side Leg Raises</h3>
                 <p className="text-gray-700">
                   Stand straight, hold onto a support, and raise one leg to the side. Strengthens hip muscles and improves lateral stability.
                 </p>
               </div>
               <div>
-                <h3 className="text-xl font-medium text-[#1b4d70] mb-2">5. Marching in Place</h3>
+                <h3 className="text-xl font-medium font-semibold text-[#1b4d70] mb-2">5. Marching in Place</h3>
                 <p className="text-gray-700">
                   Slowly lift each knee in a marching motion. Builds coordination and strengthens lower body.
                 </p>

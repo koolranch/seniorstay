@@ -113,7 +113,7 @@ const ContactPage = () => {
                 </p>
                 <Link
                   href="/"
-                  className="inline-flex items-center justify-center px-6 py-3 bg-[#1b4d70] text-white font-medium rounded-md hover:bg-[#2F5061] transition-colors"
+                  className="inline-flex items-center justify-center px-6 py-3 bg-[#1b4d70] text-white font-medium font-semibold rounded-md hover:bg-[#2F5061] transition-colors"
                 >
                   Return to Home
                 </Link>
@@ -125,7 +125,7 @@ const ContactPage = () => {
                   {/* Name fields */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <label htmlFor="firstName" className="block text-[#1b4d70] font-medium mb-1">First Name*</label>
+                      <label htmlFor="firstName" className="block text-[#1b4d70] font-medium font-semibold mb-1">First Name*</label>
                       <input
                         type="text"
                         id="firstName"
@@ -137,7 +137,7 @@ const ContactPage = () => {
                       />
                     </div>
                     <div>
-                      <label htmlFor="lastName" className="block text-[#1b4d70] font-medium mb-1">Last Name*</label>
+                      <label htmlFor="lastName" className="block text-[#1b4d70] font-medium font-semibold mb-1">Last Name*</label>
                       <input
                         type="text"
                         id="lastName"
@@ -153,7 +153,7 @@ const ContactPage = () => {
                   {/* Contact fields */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <label htmlFor="email" className="block text-[#1b4d70] font-medium mb-1">Email Address*</label>
+                      <label htmlFor="email" className="block text-[#1b4d70] font-medium font-semibold mb-1">Email Address*</label>
                       <input
                         type="email"
                         id="email"
@@ -165,7 +165,7 @@ const ContactPage = () => {
                       />
                     </div>
                     <div>
-                      <label htmlFor="phone" className="block text-[#1b4d70] font-medium mb-1">Phone Number*</label>
+                      <label htmlFor="phone" className="block text-[#1b4d70] font-medium font-semibold mb-1">Phone Number*</label>
                       <input
                         type="tel"
                         id="phone"
@@ -180,7 +180,7 @@ const ContactPage = () => {
 
                   {/* Preferred contact method */}
                   <div>
-                    <label className="block text-[#1b4d70] font-medium mb-1">Preferred Contact Method</label>
+                    <label className="block text-[#1b4d70] font-medium font-semibold mb-1">Preferred Contact Method</label>
                     <div className="flex space-x-4">
                       <label className="inline-flex items-center">
                         <input
@@ -220,7 +220,7 @@ const ContactPage = () => {
 
                   {/* Who is this inquiry for? */}
                   <div>
-                    <label className="block text-[#1b4d70] font-medium mb-1">Who is this inquiry for?</label>
+                    <label className="block text-[#1b4d70] font-medium font-semibold mb-1">Who is this inquiry for?</label>
                     <select
                       name="inquiryFor"
                       value={formData.inquiryFor}
@@ -236,7 +236,7 @@ const ContactPage = () => {
 
                   {/* Type of care */}
                   <div>
-                    <label className="block text-[#1b4d70] font-medium mb-1">Type of Care Interested In</label>
+                    <label className="block text-[#1b4d70] font-medium font-semibold mb-1">Type of Care Interested In</label>
                     <select
                       name="careType"
                       value={formData.careType}
@@ -254,7 +254,7 @@ const ContactPage = () => {
 
                   {/* Message */}
                   <div>
-                    <label htmlFor="message" className="block text-[#1b4d70] font-medium mb-1">Message</label>
+                    <label htmlFor="message" className="block text-[#1b4d70] font-medium font-semibold mb-1">Message</label>
                     <textarea
                       id="message"
                       name="message"
@@ -285,7 +285,7 @@ const ContactPage = () => {
 
                   <button
                     type="submit"
-                    className="w-full bg-[#1b4d70] text-white py-3 px-4 rounded-md hover:bg-[#2F5061] transition-colors font-medium"
+                    className="w-full bg-[#1b4d70] text-white py-3 px-4 rounded-md hover:bg-[#2F5061] transition-colors font-medium font-semibold"
                   >
                     Submit Inquiry
                   </button>
@@ -303,7 +303,7 @@ const ContactPage = () => {
                 <div className="flex items-start">
                   <FiPhoneCall className="text-[#1b4d70] mr-3 mt-1" size={18} />
                   <div>
-                    <p className="font-medium">Call Us</p>
+                    <p className="font-medium font-semibold">Call Us</p>
                     <a href="tel:2162323354" className="text-[#333333] hover:text-[#1b4d70]">(216) 232-3354</a>
                     <p className="text-sm text-[#666666]">Available 24/7</p>
                   </div>
@@ -312,7 +312,7 @@ const ContactPage = () => {
                 <div className="flex items-start">
                   <FiMail className="text-[#1b4d70] mr-3 mt-1" size={18} />
                   <div>
-                    <p className="font-medium">Email</p>
+                    <p className="font-medium font-semibold">Email</p>
                     <p className="text-[#333333]">info@guideforseniors.com</p>
                     <p className="text-sm text-[#666666]">We respond within 24 hours</p>
                   </div>
@@ -321,7 +321,7 @@ const ContactPage = () => {
                 <div className="flex items-start">
                   <FiClock className="text-[#1b4d70] mr-3 mt-1" size={18} />
                   <div>
-                    <p className="font-medium">Hours of Operation</p>
+                    <p className="font-medium font-semibold">Hours of Operation</p>
                     <p className="text-[#333333]">Monday - Friday: 8am - 8pm</p>
                     <p className="text-[#333333]">Saturday - Sunday: 9am - 5pm</p>
                   </div>
@@ -330,7 +330,7 @@ const ContactPage = () => {
                 <div className="flex items-start">
                   <FiMapPin className="text-[#1b4d70] mr-3 mt-1" size={18} />
                   <div>
-                    <p className="font-medium">Headquarters</p>
+                    <p className="font-medium font-semibold">Headquarters</p>
                     <p className="text-[#333333]">123 Guide Avenue</p>
                     <p className="text-[#333333]">Columbus, OH 43215</p>
                   </div>

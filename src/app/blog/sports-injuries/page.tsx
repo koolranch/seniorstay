@@ -137,7 +137,7 @@ export default function SportsInjuriesPage() {
             <div className="p-6">
               <h3 className="text-xl font-semibold text-gray-800 mb-2">Magnesium for Senior Health</h3>
               <p className="text-gray-600 mb-4">Discover the benefits of magnesium for seniors and how it can support overall health.</p>
-              <Link href="/blog/magnesium-for-health" className="text-[#1b4d70] font-medium hover:text-[#F5A623] transition-colors">
+              <Link href="/blog/magnesium-for-health" className="text-[#1b4d70] font-medium font-semibold hover:text-[#F5A623] transition-colors">
                 Read More →
               </Link>
             </div>

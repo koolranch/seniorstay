@@ -220,7 +220,7 @@ function ComparePageContent() {
                     <div className="mt-2">
                       <Link
                         href={`/provider/${community.slug}`}
-                        className="text-blue-600 text-xs font-medium hover:underline transition"
+                        className="text-blue-600 text-xs font-medium font-semibold hover:underline transition"
                       >
                         View Details
                       </Link>
@@ -245,7 +245,7 @@ function ComparePageContent() {
                 {/* Category Features */}
                 {category.features.map((feature) => (
                   <tr key={feature.name} className="border-b border-gray-200 hover:bg-gray-50/50">
-                    <td className="p-3 text-gray-600 font-medium bg-white sticky left-0 z-10">{feature.name}</td>
+                    <td className="p-3 text-gray-600 font-medium font-semibold bg-white sticky left-0 z-10">{feature.name}</td>
                     {communities.map((community) => (
                       <td key={`${community.id}-${feature.name}`} className="p-3 text-center border-l border-gray-200">
                         {feature.accessor ? (
@@ -276,11 +276,11 @@ function ComparePageContent() {
 
             {/* Contact Row */}
             <tr className="border-t border-gray-300">
-              <td className="p-3 text-gray-600 font-medium bg-white sticky left-0 z-10">Contact</td>
+              <td className="p-3 text-gray-600 font-medium font-semibold bg-white sticky left-0 z-10">Contact</td>
               {communities.map((community) => (
                 <td key={`${community.id}-contact`} className="p-3 text-center border-l border-gray-200">
                   <a
-                    className="inline-flex items-center text-blue-600 text-xs font-medium hover:underline mb-1"
+                    className="inline-flex items-center text-blue-600 text-xs font-medium font-semibold hover:underline mb-1"
                     href={`tel:${community.phone || ''}`}
                     aria-label={`Call ${community.name}`}
                   >

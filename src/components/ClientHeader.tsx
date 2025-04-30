@@ -76,7 +76,7 @@ const ClientHeader = () => {
               <input
                 type="text"
                 placeholder="Where to?"
-                className="flex-1 px-4 font-medium text-sm text-[#333333] focus:outline-none"
+                className="flex-1 px-4 font-medium font-semibold text-sm text-[#333333] focus:outline-none"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onKeyDown={handleKeyDown}
@@ -129,7 +129,7 @@ const ClientHeader = () => {
                   <div className="bg-[#1b4d70] text-white rounded-full p-1 flex items-center justify-center">
                     <FiUser size={16} />
                   </div>
-                  <span className="hidden md:block ml-2 text-sm font-medium">
+                  <span className="hidden md:block ml-2 text-sm font-medium font-semibold">
                     {user.name || user.email.split('@')[0]}
                   </span>
                 </button>
@@ -295,7 +295,7 @@ const AuthModal = ({ mode, onClose, onToggleMode }: AuthModalProps) => {
         <form onSubmit={handleSubmit}>
           {mode === 'signup' && (
             <div className="mb-4">
-              <label htmlFor="name" className="block text-sm font-medium text-[#333333] mb-1">
+              <label htmlFor="name" className="block text-sm font-medium font-semibold text-[#333333] mb-1">
                 Name
               </label>
               <input
@@ -310,7 +310,7 @@ const AuthModal = ({ mode, onClose, onToggleMode }: AuthModalProps) => {
           )}
 
           <div className="mb-4">
-            <label htmlFor="email" className="block text-sm font-medium text-[#333333] mb-1">
+            <label htmlFor="email" className="block text-sm font-medium font-semibold text-[#333333] mb-1">
               Email
             </label>
             <input
@@ -325,7 +325,7 @@ const AuthModal = ({ mode, onClose, onToggleMode }: AuthModalProps) => {
           </div>
 
           <div className="mb-6">
-            <label htmlFor="password" className="block text-sm font-medium text-[#333333] mb-1">
+            <label htmlFor="password" className="block text-sm font-medium font-semibold text-[#333333] mb-1">
               Password
             </label>
             <input
@@ -353,7 +353,7 @@ const AuthModal = ({ mode, onClose, onToggleMode }: AuthModalProps) => {
             {mode === 'login' ? "Don't have an account?" : "Already have an account?"}
             <button
               onClick={onToggleMode}
-              className="text-[#1b4d70] hover:text-[#2F5061] font-medium ml-1"
+              className="text-[#1b4d70] hover:text-[#2F5061] font-medium font-semibold ml-1"
             >
               {mode === 'login' ? 'Sign Up' : 'Login'}
             </button>

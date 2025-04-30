@@ -39,7 +39,7 @@ export default function BlueLightPage() {
         <article className="max-w-4xl mx-auto prose prose-lg">
           {/* Introduction */}
           <section className="mb-8">
-            <p className="text-gray-700 leading-relaxed">
+            <p className="text-gray-700 leading-7">
               Digital devices like smartphones, tablets, and TVs are a regular part of life — even for seniors. But all that screen time can expose you to blue light, which may impact your sleep, eye comfort, and overall wellness.
             </p>
           </section>
@@ -88,7 +88,7 @@ export default function BlueLightPage() {
           {/* Final Thoughts */}
           <section>
             <h2 className="text-2xl font-semibold text-[#1b4d70] mb-4">Final Thoughts</h2>
-            <p className="text-gray-700 leading-relaxed">
+            <p className="text-gray-700 leading-7">
               Blue light doesn't need to be feared — just managed. With a few easy adjustments, seniors can continue enjoying their favorite shows, apps, and video calls without sacrificing sleep or eye comfort.
             </p>
           </section>

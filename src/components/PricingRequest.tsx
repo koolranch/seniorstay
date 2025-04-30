@@ -160,7 +160,7 @@ const PricingRequest = ({
           {/* Name Fields */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label htmlFor="firstName" className="block text-[#1b4d70] font-medium mb-1">
+              <label htmlFor="firstName" className="block text-[#1b4d70] font-medium font-semibold mb-1">
                 First Name*
               </label>
               <div className="relative">
@@ -180,7 +180,7 @@ const PricingRequest = ({
               </div>
             </div>
             <div>
-              <label htmlFor="lastName" className="block text-[#1b4d70] font-medium mb-1">
+              <label htmlFor="lastName" className="block text-[#1b4d70] font-medium font-semibold mb-1">
                 Last Name*
               </label>
               <div className="relative">
@@ -204,7 +204,7 @@ const PricingRequest = ({
           {/* Contact Fields */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label htmlFor="email" className="block text-[#1b4d70] font-medium mb-1">
+              <label htmlFor="email" className="block text-[#1b4d70] font-medium font-semibold mb-1">
                 Email*
               </label>
               <div className="relative">
@@ -224,7 +224,7 @@ const PricingRequest = ({
               </div>
             </div>
             <div>
-              <label htmlFor="phone" className="block text-[#1b4d70] font-medium mb-1">
+              <label htmlFor="phone" className="block text-[#1b4d70] font-medium font-semibold mb-1">
                 Phone*
               </label>
               <div className="relative">
@@ -247,7 +247,7 @@ const PricingRequest = ({
 
           {/* Message */}
           <div>
-            <label htmlFor="message" className="block text-[#1b4d70] font-medium mb-1">
+            <label htmlFor="message" className="block text-[#1b4d70] font-medium font-semibold mb-1">
               Additional Information (Optional)
             </label>
             <textarea
@@ -264,7 +264,7 @@ const PricingRequest = ({
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full bg-[#1b4d70] text-white py-3 px-4 rounded-lg font-medium hover:bg-[#2F5061] disabled:bg-gray-400 disabled:cursor-not-allowed transition"
+              className="w-full bg-[#1b4d70] text-white py-3 px-4 rounded-lg font-medium font-semibold hover:bg-[#2F5061] disabled:bg-gray-400 disabled:cursor-not-allowed transition"
             >
               {isSubmitting ? 'Submitting...' : 'Get My Pricing Info'}
             </button>

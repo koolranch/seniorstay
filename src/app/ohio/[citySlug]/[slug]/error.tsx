@@ -35,7 +35,7 @@ export default function CommunityError({
         <div className="space-y-4">
           <button
             onClick={() => reset()}
-            className="w-full flex items-center justify-center bg-[#1b4d70] text-white py-3 px-6 rounded-md font-medium hover:bg-[#2F5061] transition-colors"
+            className="w-full flex items-center justify-center bg-[#1b4d70] text-white py-3 px-6 rounded-md font-medium font-semibold hover:bg-[#2F5061] transition-colors"
           >
             <FiRefreshCw className="mr-2" />
             Try Again
@@ -44,7 +44,7 @@ export default function CommunityError({
           <div className="grid grid-cols-2 gap-4">
             <Link
               href="/"
-              className="flex items-center justify-center bg-white border border-[#1b4d70] text-[#1b4d70] py-3 px-6 rounded-md font-medium hover:bg-gray-50 transition-colors"
+              className="flex items-center justify-center bg-white border border-[#1b4d70] text-[#1b4d70] py-3 px-6 rounded-md font-medium font-semibold hover:bg-gray-50 transition-colors"
             >
               <FiHome className="mr-2" />
               Home
@@ -52,7 +52,7 @@ export default function CommunityError({
             
             <Link
               href="/search"
-              className="flex items-center justify-center bg-white border border-[#1b4d70] text-[#1b4d70] py-3 px-6 rounded-md font-medium hover:bg-gray-50 transition-colors"
+              className="flex items-center justify-center bg-white border border-[#1b4d70] text-[#1b4d70] py-3 px-6 rounded-md font-medium font-semibold hover:bg-gray-50 transition-colors"
             >
               <FiSearch className="mr-2" />
               Search

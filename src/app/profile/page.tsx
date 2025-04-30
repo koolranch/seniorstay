@@ -169,7 +169,7 @@ export default function ProfilePage() {
               <h2 className="text-xl font-semibold text-[#1b4d70] mb-4">Edit Profile</h2>
               <form onSubmit={handleSubmitProfileUpdate}>
                 <div className="mb-4">
-                  <label htmlFor="name" className="block text-sm font-medium text-[#333333] mb-1">
+                  <label htmlFor="name" className="block text-sm font-medium font-semibold text-[#333333] mb-1">
                     Name
                   </label>
                   <input
@@ -181,7 +181,7 @@ export default function ProfilePage() {
                   />
                 </div>
                 <div className="mb-4">
-                  <label htmlFor="email" className="block text-sm font-medium text-[#333333] mb-1">
+                  <label htmlFor="email" className="block text-sm font-medium font-semibold text-[#333333] mb-1">
                     Email (cannot be changed)
                   </label>
                   <input
@@ -259,7 +259,7 @@ export default function ProfilePage() {
               {favoritedCommunities.length === 0 ? (
                 <div className="text-center py-8">
                   <FiHeart size={48} className="mx-auto text-[#A7C4A0] mb-4" />
-                  <h3 className="text-lg font-medium text-[#1b4d70] mb-2">No saved communities yet</h3>
+                  <h3 className="text-lg font-medium font-semibold text-[#1b4d70] mb-2">No saved communities yet</h3>
                   <p className="text-[#333333] mb-4">Browse communities and click the heart icon to save them here.</p>
                   <Link
                     href="/"
@@ -319,7 +319,7 @@ export default function ProfilePage() {
                   {user.referralHistory.map((referral) => (
                     <div key={referral.id} className="border border-[#A7C4A0] rounded-lg p-4 flex flex-col md:flex-row justify-between">
                       <div>
-                        <h3 className="font-medium text-[#1b4d70]">{referral.providerName}</h3>
+                        <h3 className="font-medium font-semibold text-[#1b4d70]">{referral.providerName}</h3>
                         <p className="text-sm text-[#333333]">
                           Status: <span className={`font-medium ${
                             referral.status === 'completed' ? 'text-green-600' :
@@ -336,7 +336,7 @@ export default function ProfilePage() {
                       <div className="mt-3 md:mt-0">
                         <Link
                           href={`/provider/${referral.providerId}`}
-                          className="text-[#1b4d70] font-medium hover:underline text-sm"
+                          className="text-[#1b4d70] font-medium font-semibold hover:underline text-sm"
                         >
                           View Community
                         </Link>
@@ -347,7 +347,7 @@ export default function ProfilePage() {
               ) : (
                 <div className="text-center py-8">
                   <FiMessageSquare size={48} className="mx-auto text-[#A7C4A0] mb-4" />
-                  <h3 className="text-lg font-medium text-[#1b4d70] mb-2">No referral history yet</h3>
+                  <h3 className="text-lg font-medium font-semibold text-[#1b4d70] mb-2">No referral history yet</h3>
                   <p className="text-[#333333] mb-4">Contact a care advisor to get help finding the right senior living community.</p>
                   <Link
                     href="/contact"
@@ -367,15 +367,15 @@ export default function ProfilePage() {
 
               <div className="space-y-6">
                 <div className="border border-[#A7C4A0] rounded-lg p-6">
-                  <h3 className="font-medium text-lg text-[#1b4d70] mb-4">Profile Information</h3>
+                  <h3 className="font-medium font-semibold text-lg text-[#1b4d70] mb-4">Profile Information</h3>
                   <div className="space-y-4">
                     <div>
                       <p className="text-sm text-[#666666]">Name</p>
-                      <p className="font-medium">{user.name || 'Not provided'}</p>
+                      <p className="font-medium font-semibold">{user.name || 'Not provided'}</p>
                     </div>
                     <div>
                       <p className="text-sm text-[#666666]">Email</p>
-                      <p className="font-medium">{user.email}</p>
+                      <p className="font-medium font-semibold">{user.email}</p>
                     </div>
                   </div>
                   <button
@@ -388,7 +388,7 @@ export default function ProfilePage() {
                 </div>
 
                 <div className="border border-[#F5A623] rounded-lg p-6">
-                  <h3 className="font-medium text-lg text-[#F5A623] mb-4">Account Actions</h3>
+                  <h3 className="font-medium font-semibold text-lg text-[#F5A623] mb-4">Account Actions</h3>
                   <button
                     onClick={handleLogout}
                     className="bg-white border border-[#F5A623] text-[#F5A623] px-4 py-2 rounded-lg flex items-center"

@@ -10,7 +10,7 @@ export default function CityCard({ name, slug, count }: CityCardProps) {
   return (
     <div className="border rounded-lg p-4 flex flex-col justify-between hover:shadow-md transition-shadow">
       <div>
-        <h3 className="text-lg font-medium text-gray-900">{name}, OH</h3>
+        <h3 className="text-lg font-medium font-semibold text-gray-900">{name}, OH</h3>
         <p className="text-sm text-gray-600 mt-1">{count} Community{count !== 1 ? 'ies' : ''}</p>
       </div>
       <Link

@@ -140,14 +140,14 @@ export default function CommunityCard({
               className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-2 px-4 rounded-full shadow-sm transition inline-flex items-center justify-center"
             >
               <Calendar className="w-4 h-4 inline-block mr-1 -mt-0.5" />
-              Schedule Tour
+              Book a Free Tour
             </button>
             <button
               onClick={handleRequestPricing}
               className="border border-blue-600 text-blue-600 hover:bg-blue-50 text-sm font-medium py-2 px-4 rounded-full transition inline-flex items-center justify-center"
             >
               <DollarSign className="w-4 h-4 inline-block mr-1 -mt-0.5" />
-              Get Pricing
+              See Your Customized Pricing
             </button>
           </div>
         )}

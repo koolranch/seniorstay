@@ -71,14 +71,14 @@ const ReferralCTA = ({
             <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
               <Link
                 href={`tel:${phoneNumber.replace(/[^0-9]/g, '')}`}
-                className="inline-flex items-center justify-center px-6 py-3 bg-[#F5A623] text-[#1b4d70] text-lg font-medium rounded-md hover:bg-[#FFC65C] transition-colors"
+                className="inline-flex items-center justify-center px-6 py-3 bg-[#F5A623] text-[#1b4d70] text-lg font-medium font-semibold rounded-md hover:bg-[#FFC65C] transition-colors"
               >
                 <FiPhoneCall className="mr-2" />
                 <span>{phoneNumber}</span>
               </Link>
               <Link
                 href="/contact"
-                className="inline-flex items-center justify-center px-6 py-3 bg-white text-[#1b4d70] text-lg font-medium rounded-md hover:bg-[#f1f6f0] transition-colors"
+                className="inline-flex items-center justify-center px-6 py-3 bg-white text-[#1b4d70] text-lg font-medium font-semibold rounded-md hover:bg-[#f1f6f0] transition-colors"
               >
                 <FiMessageCircle className="mr-2" />
                 <span>Contact a Care Advisor</span>
@@ -120,14 +120,14 @@ const ReferralCTA = ({
           <div className="space-y-3">
             <Link
               href={`tel:${phoneNumber.replace(/[^0-9]/g, '')}`}
-              className="flex items-center justify-center w-full py-3 bg-[#F5A623] text-[#1b4d70] font-medium rounded-md hover:bg-[#FFC65C] transition-colors"
+              className="flex items-center justify-center w-full py-3 bg-[#F5A623] text-[#1b4d70] font-medium font-semibold rounded-md hover:bg-[#FFC65C] transition-colors"
             >
               <FiPhoneCall className="mr-2" />
               <span>Call Now</span>
             </Link>
             <Link
               href="/contact"
-              className="flex items-center justify-center w-full py-3 bg-white text-[#1b4d70] font-medium rounded-md hover:bg-gray-100 transition-colors"
+              className="flex items-center justify-center w-full py-3 bg-white text-[#1b4d70] font-medium font-semibold rounded-md hover:bg-gray-100 transition-colors"
             >
               Get Personalized Recommendations
               <FiArrowRight className="ml-2" />

@@ -190,7 +190,7 @@ export default function LeadForm({
       <form action={formspreeEndpoint} method="POST" className="space-y-4">
         {/* Full Name */}
         <div>
-          <label htmlFor="fullName" className="block text-sm font-medium text-gray-900 mb-1">
+          <label htmlFor="fullName" className="block text-sm font-medium font-semibold text-gray-900 mb-1">
             Full Name*
           </label>
           <input
@@ -211,7 +211,7 @@ export default function LeadForm({
 
         {/* Email */}
         <div>
-          <label htmlFor="email" className="block text-sm font-medium text-gray-900 mb-1">
+          <label htmlFor="email" className="block text-sm font-medium font-semibold text-gray-900 mb-1">
             Email Address
           </label>
           <input
@@ -232,7 +232,7 @@ export default function LeadForm({
 
         {/* Phone */}
         <div>
-          <label htmlFor="phone" className="block text-sm font-medium text-gray-900 mb-1">
+          <label htmlFor="phone" className="block text-sm font-medium font-semibold text-gray-900 mb-1">
             Phone Number
           </label>
           <input
@@ -256,7 +256,7 @@ export default function LeadForm({
 
         {/* City or Zip */}
         <div>
-          <label htmlFor="cityOrZip" className="block text-sm font-medium text-gray-900 mb-1">
+          <label htmlFor="cityOrZip" className="block text-sm font-medium font-semibold text-gray-900 mb-1">
             City or Zip Code
           </label>
           <input
@@ -272,7 +272,7 @@ export default function LeadForm({
 
         {/* Care Type */}
         <div>
-          <label htmlFor="careType" className="block text-sm font-medium text-gray-900 mb-1">
+          <label htmlFor="careType" className="block text-sm font-medium font-semibold text-gray-900 mb-1">
             Care Type
           </label>
           <select
@@ -293,7 +293,7 @@ export default function LeadForm({
 
         {/* Move-in Timeline */}
         <div>
-          <label htmlFor="moveInTimeline" className="block text-sm font-medium text-gray-900 mb-1">
+          <label htmlFor="moveInTimeline" className="block text-sm font-medium font-semibold text-gray-900 mb-1">
             Move-in Timeline
           </label>
           <select
@@ -314,7 +314,7 @@ export default function LeadForm({
 
         {/* Notes */}
         <div>
-          <label htmlFor="notes" className="block text-sm font-medium text-gray-900 mb-1">
+          <label htmlFor="notes" className="block text-sm font-medium font-semibold text-gray-900 mb-1">
             Additional Notes
           </label>
           <textarea
@@ -333,7 +333,7 @@ export default function LeadForm({
           type="submit"
           disabled={isSubmitting}
           whileTap={{ scale: 0.98 }}
-          className="w-full bg-blue-600 text-white py-2 px-4 rounded-md font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50"
+          className="w-full bg-blue-600 text-white py-2 px-4 rounded-md font-medium font-semibold hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50"
         >
           {isSubmitting ? (
             <span className="flex items-center justify-center">

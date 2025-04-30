@@ -39,7 +39,7 @@ export default function PrismaticSpringPage() {
         <article className="max-w-4xl mx-auto prose prose-lg">
           {/* Introduction */}
           <section className="mb-8">
-            <p className="text-gray-700 leading-relaxed">
+            <p className="text-gray-700 leading-7">
               If you're planning a bucket-list adventure through Yellowstone National Park, don't miss Grand Prismatic Spring — the park's most colorful and captivating natural feature. Its vivid rings of blue, green, orange, and red are caused by microbial life and minerals, and the view is truly breathtaking.
             </p>
           </section>
@@ -89,7 +89,7 @@ export default function PrismaticSpringPage() {
           {/* Final Thoughts */}
           <section>
             <h2 className="text-2xl font-semibold text-[#1b4d70] mb-4">Final Thoughts</h2>
-            <p className="text-gray-700 leading-relaxed">
+            <p className="text-gray-700 leading-7">
               Grand Prismatic Spring is one of those rare places that leaves you awestruck — and it's accessible enough for senior travelers who plan ahead. Whether you're a nature enthusiast or simply seeking beauty and serenity, it's a stop you won't forget.
             </p>
           </section>

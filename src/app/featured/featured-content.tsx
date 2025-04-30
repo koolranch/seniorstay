@@ -77,7 +77,7 @@ export function FeaturedPageContent() {
               <p className="text-lg text-gray-600">No featured communities available at this time.</p>
               <Link 
                 href="/"
-                className="inline-block mt-4 bg-[#1b4d70] text-white py-2 px-4 rounded-md font-medium hover:bg-[#2F5061] transition-colors"
+                className="inline-block mt-4 bg-[#1b4d70] text-white py-2 px-4 rounded-md font-medium font-semibold hover:bg-[#2F5061] transition-colors"
               >
                 Explore All Communities
               </Link>

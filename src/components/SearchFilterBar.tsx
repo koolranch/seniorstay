@@ -266,7 +266,7 @@ const SearchFilterBar = ({ onFilterChange, className = '' }: SearchFilterBarProp
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {/* Care Types Section */}
               <div>
-                <h3 className="font-medium mb-3 text-[#1b4d70]">Care Type</h3>
+                <h3 className="font-medium font-semibold mb-3 text-[#1b4d70]">Care Type</h3>
                 <div className="space-y-2">
                   {CARE_TYPES.map(type => (
                     <label key={type.id} className="flex items-center space-x-2 cursor-pointer">
@@ -284,7 +284,7 @@ const SearchFilterBar = ({ onFilterChange, className = '' }: SearchFilterBarProp
 
               {/* Amenities Section */}
               <div>
-                <h3 className="font-medium mb-3 text-[#1b4d70]">Amenities</h3>
+                <h3 className="font-medium font-semibold mb-3 text-[#1b4d70]">Amenities</h3>
                 <div className="space-y-2">
                   {AMENITIES.slice(0, 6).map(amenity => (
                     <label key={amenity.id} className="flex items-center space-x-2 cursor-pointer">
@@ -302,7 +302,7 @@ const SearchFilterBar = ({ onFilterChange, className = '' }: SearchFilterBarProp
 
               {/* More Amenities */}
               <div>
-                <h3 className="font-medium mb-3 text-[#1b4d70]">More Amenities</h3>
+                <h3 className="font-medium font-semibold mb-3 text-[#1b4d70]">More Amenities</h3>
                 <div className="space-y-2">
                   {AMENITIES.slice(6).map(amenity => (
                     <label key={amenity.id} className="flex items-center space-x-2 cursor-pointer">

@@ -123,7 +123,7 @@ export default function CityPage({
                  {/* Services Section - Added explicit cast after Array.isArray check */}
                  {Array.isArray(community.services) && community.services.length > 0 && (
                     <div className="mb-4 flex-grow">
-                       <h3 className="text-sm font-medium text-gray-700 mb-1.5">Services:</h3>
+                       <h3 className="text-sm font-medium font-semibold text-gray-700 mb-1.5">Services:</h3>
                        <ul className="space-y-1">
                           {(community.services as unknown as SimpleService[]).slice(0, 3).map((service: SimpleService) => (
                           <li key={service.id} className="flex items-center text-xs text-gray-600">
@@ -148,7 +148,7 @@ export default function CityPage({
                  <div className="mt-auto grid grid-cols-2 gap-3 pt-4 border-t border-gray-100">
                    <button
                      // Style from ProviderCard
-                     className="w-full bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-2 px-4 rounded-full shadow-sm transition inline-flex items-center justify-center"
+                     className="w-full bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium font-semibold py-2 px-4 rounded-full shadow-sm transition inline-flex items-center justify-center"
                      onClick={() => openTourModal(community)}
                    >
                      <Calendar className="w-4 h-4 inline-block mr-1 -mt-0.5" /> {/* Added icon */}
@@ -156,7 +156,7 @@ export default function CityPage({
                    </button>
                    <button
                      // Style from ProviderCard
-                     className="w-full border border-blue-600 text-blue-600 hover:bg-blue-50 text-sm font-medium py-2 px-4 rounded-full transition inline-flex items-center justify-center"
+                     className="w-full border border-blue-600 text-blue-600 hover:bg-blue-50 text-sm font-medium font-semibold py-2 px-4 rounded-full transition inline-flex items-center justify-center"
                      onClick={() => openPricingModal(community)}
                    >
                      <DollarSign className="w-4 h-4 inline-block mr-1 -mt-0.5" /> {/* Added icon */}

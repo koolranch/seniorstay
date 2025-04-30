@@ -151,7 +151,7 @@ export default function BrainPuzzlesPage() {
             <div className="p-6">
               <h3 className="text-xl font-semibold text-gray-800 mb-2">Fun and Engaging Games for Seniors</h3>
               <p className="text-gray-600 mb-4">Discover games that keep your mind sharp and bring joy to your day.</p>
-              <Link href="/senior-entertainment/games/games-for-seniors" className="text-[#1b4d70] font-medium hover:text-[#F5A623] transition-colors">
+              <Link href="/senior-entertainment/games/games-for-seniors" className="text-[#1b4d70] font-medium font-semibold hover:text-[#F5A623] transition-colors">
                 Read More →
               </Link>
             </div>

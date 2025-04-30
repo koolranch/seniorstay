@@ -278,7 +278,7 @@ function SearchPageContent() {
                         {/* Community Info */}
                         <div className="mt-3">
                           <div className="flex justify-between">
-                            <h3 className="font-medium text-gray-900">{`${community.city}, ${community.state}`}</h3>
+                            <h3 className="font-medium font-semibold text-gray-900">{`${community.city}, ${community.state}`}</h3>
                             <div className="flex items-center">
                               <FiStar className="fill-yellow-400 text-yellow-400 drop-shadow-sm" size={16} />
                               <span className="ml-1 font-semibold" aria-label={`Rated ${community.rating} out of 5`}>{community.rating}</span>
@@ -372,7 +372,7 @@ function SearchPageContent() {
 
       {/* Show Map Button - Fixed at bottom */}
       <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-40">
-        <button className="bg-black text-white px-4 py-3 rounded-full font-medium shadow-lg flex items-center space-x-2">
+        <button className="bg-black text-white px-4 py-3 rounded-full font-medium font-semibold shadow-lg flex items-center space-x-2">
           <span>Show map</span>
           <span className="inline-flex items-center justify-center w-5 h-5 bg-white text-black rounded-full text-xs">⊞</span>
         </button>
