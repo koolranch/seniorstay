@@ -226,6 +226,27 @@ export default async function OhioCityPage({ params }: { params: { citySlug: str
               </div>
             </div>
           </section>
+
+          {/* ── FAQ Section ── */}
+          <section id="faqs" className="mt-12 mb-16 bg-white py-8 rounded-lg shadow">
+            <div className="container mx-auto px-6">
+              <h3 className="text-2xl font-bold text-center mb-6">Frequently Asked Questions</h3>
+              <div className="space-y-4 max-w-3xl mx-auto">
+                <details className="p-4 border rounded">
+                  <summary className="font-medium cursor-pointer">What senior-living options are available in {params.citySlug.replace('-', ' ')?.charAt(0).toUpperCase() + params.citySlug.replace('-', ' ').slice(1)}?</summary>
+                  <p className="mt-2 text-gray-600">You'll find Assisted Living, Memory Care, Independent Living, Skilled Nursing and more—each community listing shows exactly which services they offer.</p>
+                </details>
+                <details className="p-4 border rounded">
+                  <summary className="font-medium cursor-pointer">How do I schedule a tour?</summary>
+                  <p className="mt-2 text-gray-600">Use the "Schedule a Tour" button at the top of the page or fill out the form above—our local advisors will reach out in under 24 hours to book your visit.</p>
+                </details>
+                <details className="p-4 border rounded">
+                  <summary className="font-medium cursor-pointer">Are your community listings up to date?</summary>
+                  <p className="mt-2 text-gray-600">Absolutely—each community is verified by our team monthly to ensure address, services and availability are current.</p>
+                </details>
+              </div>
+            </div>
+          </section>
         </div>
       </section>
     </main>
