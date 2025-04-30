@@ -99,15 +99,15 @@ const CommunityClient = ({ community }: { community: any }) => {
             <div className="mt-12 space-y-8">
               {/* 4. Placeholder Reviews */}
               <div className="bg-white p-6 rounded-lg shadow-md">
-                <span className="text-xl font-semibold">★ 4.7 (based on 24 reviews)</span>
-                <a href="#" className="ml-4 text-blue-600 hover:underline">
+                <span className="text-xl font-semibold text-[#111111]">★ 4.7 (based on 24 reviews)</span>
+                <a href="#" className="ml-4 text-blue-600 hover:underline font-medium">
                   Read More
                 </a>
               </div>
 
               {/* 5. You May Also Like */}
               <div>
-                <h3 className="text-2xl font-semibold mb-4">
+                <h3 className="text-2xl font-semibold mb-4 text-[#111111]">
                   You May Also Like
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -117,10 +117,10 @@ const CommunityClient = ({ community }: { community: any }) => {
                       href="#"
                       className="block bg-white p-4 rounded-lg shadow hover:shadow-lg transition"
                     >
-                      <h4 className="text-lg font-medium mb-1">
+                      <h4 className="text-lg font-medium mb-1 text-[#111111]">
                         Community Name {idx}
                       </h4>
-                      <p className="text-sm text-gray-700 font-medium">
+                      <p className="text-sm font-medium text-[#111111]">
                         {community.city}, {community.state}
                       </p>
                     </Link>
@@ -208,14 +208,14 @@ export default async function CommunityPage({ params }: { params: PageParams }) 
       {/* ─── Inline Lead Form (#3) ─────────────────────────────── */}
       <div className="container mx-auto px-6 md:px-10 lg:px-20 mt-8">
         <div className="bg-white p-6 rounded-lg shadow-md max-w-xl mx-auto">
-          <h3 className="text-2xl font-semibold mb-4">Get Your Free Quote</h3>
+          <h3 className="text-2xl font-semibold mb-4 text-[#111111]">Get Your Free Quote</h3>
           <form 
             action="https://formspree.io/f/xnnpaply" 
             method="POST" 
             className="space-y-4"
           >
             <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="name" className="block text-sm font-semibold text-[#111111]">
                 Full Name
               </label>
               <input 
@@ -227,7 +227,7 @@ export default async function CommunityPage({ params }: { params: PageParams }) 
               />
             </div>
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="email" className="block text-sm font-semibold text-[#111111]">
                 Email Address
               </label>
               <input 
@@ -239,7 +239,7 @@ export default async function CommunityPage({ params }: { params: PageParams }) 
               />
             </div>
             <div>
-              <label htmlFor="zip" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="zip" className="block text-sm font-semibold text-[#111111]">
                 ZIP Code
               </label>
               <input 
