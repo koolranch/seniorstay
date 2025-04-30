@@ -190,7 +190,7 @@ export default function LeadForm({
       <form action={formspreeEndpoint} method="POST" className="space-y-4">
         {/* Full Name */}
         <div>
-          <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="fullName" className="block text-sm font-medium text-gray-900 mb-1">
             Full Name*
           </label>
           <input
@@ -199,7 +199,7 @@ export default function LeadForm({
             name="fullName"
             value={formData.fullName}
             onChange={handleChange}
-            className={`w-full p-2 border rounded-md ${
+            className={`w-full p-2 border rounded-md text-gray-900 ${
               errors.fullName ? 'border-red-500' : 'border-gray-300'
             } focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
             placeholder="Enter your full name"
@@ -211,7 +211,7 @@ export default function LeadForm({
 
         {/* Email */}
         <div>
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="email" className="block text-sm font-medium text-gray-900 mb-1">
             Email Address
           </label>
           <input
@@ -220,7 +220,7 @@ export default function LeadForm({
             name="email"
             value={formData.email}
             onChange={handleChange}
-            className={`w-full p-2 border rounded-md ${
+            className={`w-full p-2 border rounded-md text-gray-900 ${
               errors.email ? 'border-red-500' : 'border-gray-300'
             } focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
             placeholder="Enter your email address"
@@ -232,7 +232,7 @@ export default function LeadForm({
 
         {/* Phone */}
         <div>
-          <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="phone" className="block text-sm font-medium text-gray-900 mb-1">
             Phone Number
           </label>
           <input
@@ -241,7 +241,7 @@ export default function LeadForm({
             name="phone"
             value={formData.phone}
             onChange={handleChange}
-            className={`w-full p-2 border rounded-md ${
+            className={`w-full p-2 border rounded-md text-gray-900 ${
               errors.phone ? 'border-red-500' : 'border-gray-300'
             } focus:ring-2 focus:ring-blue-500 focus:border-transparent`}
             placeholder="Enter your phone number"
@@ -249,14 +249,14 @@ export default function LeadForm({
           {errors.phone && (
             <p className="mt-1 text-sm text-red-500">{errors.phone}</p>
           )}
-          <p className="mt-1 text-xs text-gray-500">
+          <p className="mt-1 text-xs text-gray-900">
             * Either email or phone is required
           </p>
         </div>
 
         {/* City or Zip */}
         <div>
-          <label htmlFor="cityOrZip" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="cityOrZip" className="block text-sm font-medium text-gray-900 mb-1">
             City or Zip Code
           </label>
           <input
@@ -265,14 +265,14 @@ export default function LeadForm({
             name="cityOrZip"
             value={formData.cityOrZip}
             onChange={handleChange}
-            className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full p-2 border border-gray-300 rounded-md text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             placeholder="Enter your city or zip code"
           />
         </div>
 
         {/* Care Type */}
         <div>
-          <label htmlFor="careType" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="careType" className="block text-sm font-medium text-gray-900 mb-1">
             Care Type
           </label>
           <select
@@ -280,7 +280,7 @@ export default function LeadForm({
             name="careType"
             value={formData.careType}
             onChange={handleChange}
-            className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full p-2 border border-gray-300 rounded-md text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           >
             <option value="">Select care type</option>
             {careTypeOptions.map((option) => (
@@ -293,7 +293,7 @@ export default function LeadForm({
 
         {/* Move-in Timeline */}
         <div>
-          <label htmlFor="moveInTimeline" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="moveInTimeline" className="block text-sm font-medium text-gray-900 mb-1">
             Move-in Timeline
           </label>
           <select
@@ -301,7 +301,7 @@ export default function LeadForm({
             name="moveInTimeline"
             value={formData.moveInTimeline}
             onChange={handleChange}
-            className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full p-2 border border-gray-300 rounded-md text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           >
             <option value="">Select timeline</option>
             {timelineOptions.map((option) => (
@@ -314,7 +314,7 @@ export default function LeadForm({
 
         {/* Notes */}
         <div>
-          <label htmlFor="notes" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="notes" className="block text-sm font-medium text-gray-900 mb-1">
             Additional Notes
           </label>
           <textarea
@@ -323,7 +323,7 @@ export default function LeadForm({
             value={formData.notes}
             onChange={handleChange}
             rows={3}
-            className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full p-2 border border-gray-300 rounded-md text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             placeholder="Any specific requirements or questions..."
           />
         </div>

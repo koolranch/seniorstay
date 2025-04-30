@@ -150,7 +150,7 @@ export default async function OhioCityPage({ params }: { params: { citySlug: str
       <section id="city-lead-form" className="mt-16 bg-white p-8 rounded-lg shadow">
         <div className="container mx-auto px-6 md:px-10 lg:px-20">
           <h2 className="text-2xl font-bold mb-4">Get Personalized Tours & Pricing</h2>
-          <p className="mb-6 text-gray-700">
+          <p className="mb-6 text-gray-800">
             Fill out the form below and our Senior Living Advisors will reach out with options in {cityName}.
           </p>
           <form
@@ -164,20 +164,20 @@ export default async function OhioCityPage({ params }: { params: { citySlug: str
                 name="name"
                 placeholder="Full Name"
                 required
-                className="w-full px-4 py-2 border rounded"
+                className="w-full px-4 py-2 border rounded text-gray-900"
               />
               <input
                 type="email"
                 name="email"
                 placeholder="Email Address"
                 required
-                className="w-full px-4 py-2 border rounded"
+                className="w-full px-4 py-2 border rounded text-gray-900"
               />
               <input
                 type="tel"
                 name="phone"
                 placeholder="Phone Number"
-                className="w-full px-4 py-2 border rounded"
+                className="w-full px-4 py-2 border rounded text-gray-900"
               />
               <input
                 type="text"
@@ -185,7 +185,7 @@ export default async function OhioCityPage({ params }: { params: { citySlug: str
                 defaultValue={cityName}
                 placeholder="City"
                 required
-                className="w-full px-4 py-2 border rounded bg-gray-100"
+                className="w-full px-4 py-2 border rounded bg-gray-100 text-gray-900"
                 readOnly
               />
             </div>
@@ -193,7 +193,7 @@ export default async function OhioCityPage({ params }: { params: { citySlug: str
               name="message"
               placeholder="Any specific needs or questions?"
               rows={4}
-              className="w-full px-4 py-2 border rounded"
+              className="w-full px-4 py-2 border rounded text-gray-900"
             />
             <button
               type="submit"
@@ -211,17 +211,17 @@ export default async function OhioCityPage({ params }: { params: { citySlug: str
                 <div>
                   <p className="text-4xl font-semibold text-blue-600">4.8/5</p>
                   <p className="mt-2 font-medium">Average Rating</p>
-                  <p className="text-gray-500 text-sm">From 250+ Reviews</p>
+                  <p className="text-gray-900 text-sm">From 250+ Reviews</p>
                 </div>
                 <div>
                   <p className="text-4xl font-semibold text-blue-600">3K+</p>
                   <p className="mt-2 font-medium">Families Served</p>
-                  <p className="text-gray-500 text-sm">Across Ohio Communities</p>
+                  <p className="text-gray-900 text-sm">Across Ohio Communities</p>
                 </div>
                 <div>
                   <p className="text-4xl font-semibold text-blue-600">✔️</p>
                   <p className="mt-2 font-medium">Verified Listings</p>
-                  <p className="text-gray-500 text-sm">Accurate & Up-to-Date</p>
+                  <p className="text-gray-900 text-sm">Accurate & Up-to-Date</p>
                 </div>
               </div>
             </div>
@@ -234,15 +234,15 @@ export default async function OhioCityPage({ params }: { params: { citySlug: str
               <div className="space-y-4 max-w-3xl mx-auto">
                 <details className="p-4 border rounded">
                   <summary className="font-medium cursor-pointer">What senior-living options are available in {params.citySlug.replace('-', ' ')?.charAt(0).toUpperCase() + params.citySlug.replace('-', ' ').slice(1)}?</summary>
-                  <p className="mt-2 text-gray-600">You'll find Assisted Living, Memory Care, Independent Living, Skilled Nursing and more—each community listing shows exactly which services they offer.</p>
+                  <p className="mt-2 text-gray-800">You'll find Assisted Living, Memory Care, Independent Living, Skilled Nursing and more—each community listing shows exactly which services they offer.</p>
                 </details>
                 <details className="p-4 border rounded">
                   <summary className="font-medium cursor-pointer">How do I schedule a tour?</summary>
-                  <p className="mt-2 text-gray-600">Use the "Schedule a Tour" button at the top of the page or fill out the form above—our local advisors will reach out in under 24 hours to book your visit.</p>
+                  <p className="mt-2 text-gray-800">Use the "Schedule a Tour" button at the top of the page or fill out the form above—our local advisors will reach out in under 24 hours to book your visit.</p>
                 </details>
                 <details className="p-4 border rounded">
                   <summary className="font-medium cursor-pointer">Are your community listings up to date?</summary>
-                  <p className="mt-2 text-gray-600">Absolutely—each community is verified by our team monthly to ensure address, services and availability are current.</p>
+                  <p className="mt-2 text-gray-800">Absolutely—each community is verified by our team monthly to ensure address, services and availability are current.</p>
                 </details>
               </div>
             </div>

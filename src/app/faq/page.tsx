@@ -17,7 +17,7 @@ export default function FaqPage() {
       <div className="space-y-6">
         <div>
           <h4 className="text-lg font-semibold mb-1">What is GuideForSeniors?</h4>
-          <p className="text-gray-700">
+          <p className="text-gray-800">
             We're a free senior living referral service that helps families find
             trusted communities in their area — without pressure or hidden fees.
           </p>
@@ -25,7 +25,7 @@ export default function FaqPage() {
 
         <div>
           <h4 className="text-lg font-semibold mb-1">Is your service really free?</h4>
-          <p className="text-gray-700">
+          <p className="text-gray-800">
             Yes. We're paid by the community only if someone moves in. There's no
             cost to families, ever.
           </p>
@@ -33,7 +33,7 @@ export default function FaqPage() {
 
         <div>
           <h4 className="text-lg font-semibold mb-1">Do you sell my information?</h4>
-          <p className="text-gray-700">
+          <p className="text-gray-800">
             No. We only share your contact info with the communities you ask to
             hear from. We never sell data or send spam.
           </p>
@@ -41,7 +41,7 @@ export default function FaqPage() {
 
         <div>
           <h4 className="text-lg font-semibold mb-1">Will I get sales calls?</h4>
-          <p className="text-gray-700">
+          <p className="text-gray-800">
             Not unless you request info. You can browse quietly until you're
             ready to engage.
           </p>
@@ -49,7 +49,7 @@ export default function FaqPage() {
 
         <div>
           <h4 className="text-lg font-semibold mb-1">How do you choose which communities to show?</h4>
-          <p className="text-gray-700">
+          <p className="text-gray-800">
             You can browse by location and filter by care type. We show
             communities that match your search and participate in our referral
             program — but we don't endorse or rank them.
@@ -58,7 +58,7 @@ export default function FaqPage() {
 
         <div>
           <h4 className="text-lg font-semibold mb-1">Do you provide medical advice?</h4>
-          <p className="text-gray-700">
+          <p className="text-gray-800">
             No — we offer information, not clinical assessments. Always consult a
             healthcare provider when making medical decisions.
           </p>
@@ -66,7 +66,7 @@ export default function FaqPage() {
 
         <div>
           <h4 className="text-lg font-semibold mb-1">How do communities get listed?</h4>
-          <p className="text-gray-700">
+          <p className="text-gray-800">
             Communities can request to join by visiting our{' '}
             <Link href="/list-your-community" className="text-blue-600 hover:underline">
               List Your Community
@@ -78,7 +78,7 @@ export default function FaqPage() {
 
         <div>
           <h4 className="text-lg font-semibold mb-1">Is my information safe?</h4>
-          <p className="text-gray-700">
+          <p className="text-gray-800">
             Yes. We use secure forms, don't store sensitive data without
             permission, and comply with privacy best practices. View our full{' '}
             <Link href="/privacy-policy" className="text-blue-600 hover:underline">
