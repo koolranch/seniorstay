@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 import { communities } from "@/lib/data/staticCommunities";
 import { FiMapPin, FiArrowRight } from "react-icons/fi";
-import { slugify, getCityPath } from "@/lib/utils/formatSlug";
+import { getCityPath } from "@/lib/utils/formatSlug";
 
 export const metadata: Metadata = {
   title: "Senior Living Communities in Ohio",

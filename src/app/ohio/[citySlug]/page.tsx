@@ -5,7 +5,6 @@ import { prisma } from "@/lib/prisma"; // Import Prisma client
 import ProviderCard from '@/components/ProviderCard';
 import Link from 'next/link';
 import { FiArrowLeft } from 'react-icons/fi';
-// import { slugify } from '@/lib/utils/formatSlug';
 // import { Community as CommunityDisplayTypeFromLib } from '@/lib/types/community'; // Remove this problematic import
 // import { Community as PrismaCommunity } from '@prisma/client';
 import { createClient } from '@supabase/supabase-js';
