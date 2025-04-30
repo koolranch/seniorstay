@@ -3,7 +3,7 @@ export interface Community {
   slug: string;
   name: string;
   city: string;
-  city_slug?: string;
+  city_slug: string;
   state: string;
   type: string;
   
