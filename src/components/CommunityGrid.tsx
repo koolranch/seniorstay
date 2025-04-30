@@ -19,6 +19,8 @@ export default function CommunityGrid({ communities, filterByCategory = null }: 
       )
     : communities;
 
+  console.log('First community with city_slug:', filteredCommunities[0]?.city_slug);
+
   return (
     <div className="bg-neutral-50 pt-12 border-t border-neutral-200">
       <div className="container mx-auto px-6 md:px-10 lg:px-20 py-4">
@@ -36,6 +38,7 @@ export default function CommunityGrid({ communities, filterByCategory = null }: 
               slug={community.slug}
               name={community.name}
               city={community.city}
+              city_slug={community.city_slug}
               state={community.state}
               type={community.type}
               image={community.image}
