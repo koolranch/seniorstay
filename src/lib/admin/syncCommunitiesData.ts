@@ -1,6 +1,23 @@
 import { communities, Community } from "@/lib/data/staticCommunities";
 import { prisma } from "@/lib/prisma";
-import { slugify } from "@/lib/utils/formatSlug";
+
+/**
+ * Manually format a string into a URL-friendly slug
+ */
+function formatSlug(text: string): string {
+  if (!text) return '';
+  
+  return text
+    .toString()
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/\s+/g, '-')        // Replace spaces with hyphens
+    .replace(/[^\w\-]+/g, '')    // Remove all non-word chars
+    .replace(/\-\-+/g, '-')      // Replace multiple hyphens with single hyphen
+    .replace(/^-+/, '')          // Trim hyphens from start
+    .replace(/-+$/, '');         // Trim hyphens from end
+}
 
 /**
  * Synchronizes communities data between the static array and database.
@@ -29,8 +46,8 @@ export async function syncCommunitiesData() {
       try {
         results.totalProcessed++;
         
-        // Ensure consistent slug formatting using the slugify function
-        const formattedSlug = slugify(community.slug || community.name);
+        // Ensure consistent slug formatting using the formatSlug function
+        const formattedSlug = formatSlug(community.slug || community.name);
         // Create city_slug for exact matching
         const citySlug = community.city.toLowerCase().replace(/\s+/g, '-');
         

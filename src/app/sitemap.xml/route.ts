@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { communities } from '@/lib/data/staticCommunities';
-import { getCityPath, getCommunityPath } from '@/lib/utils/formatSlug';
+import { getCityPath } from '@/lib/utils/formatSlug';
 
 // Base URL for the site
 const BASE_URL = 'https://www.guideforseniors.com';
@@ -76,7 +76,9 @@ export async function GET() {
   communities
     .filter(community => community.state === "OH")
     .forEach(community => {
-      const communityPath = getCommunityPath(community.state, community.city, community.name);
+      // Create communityPath from city and slug
+      const citySlug = community.city.toLowerCase().replace(/\s+/g, '-');
+      const communityPath = `/ohio/${citySlug}/${community.slug}`;
       
       xml += `  <url>\n`;
       xml += `    <loc>${BASE_URL}${communityPath}</loc>\n`;

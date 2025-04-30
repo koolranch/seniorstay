@@ -1,7 +1,6 @@
 import { Metadata } from "next";
 import Link from "next/link";
 import { communities } from "@/lib/data/staticCommunities";
-import { slugify } from "@/lib/utils/formatSlug";
 
 export const metadata: Metadata = {
   title: "Senior Living in Ohio | SeniorStay",
@@ -27,7 +26,8 @@ export default function OhioLayout({
   // Create a map from city to its slug
   const cityToSlugMap: Record<string, string> = {};
   ohioCities.forEach((city) => {
-    cityToSlugMap[city] = slugify(city);
+    // Create slug from city name
+    cityToSlugMap[city] = city.toLowerCase().replace(/\s+/g, '-');
   });
 
   return (
@@ -45,7 +45,7 @@ export default function OhioLayout({
                   {ohioCities.map((city) => (
                     <li key={city}>
                       <Link
-                        href={`/ohio/${cityToSlugMap[city] || slugify(city)}`}
+                        href={`/ohio/${cityToSlugMap[city]}`}
                         className="text-[#1b4d70] hover:text-[#2F5061] hover:underline"
                       >
                         {city}
