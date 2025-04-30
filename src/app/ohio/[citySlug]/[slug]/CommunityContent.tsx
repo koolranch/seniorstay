@@ -36,7 +36,7 @@ export default function CommunityContent({
     <>
       {/* Back Link */}
       <Link 
-        href={citySlug ? `/ohio/${citySlug}` : `/ohio/${slugify(displayCityName).toLowerCase()}`}
+        href={`/ohio/${citySlug || slugify(displayCityName).toLowerCase()}`}
         className="inline-flex items-center text-[#1b4d70] mb-6 hover:underline"
       >
         <FiArrowLeft className="mr-2" />

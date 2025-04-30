@@ -51,7 +51,6 @@ export async function generateStaticParams() {
       select: {
         slug: true,
         city: true,
-        city_slug: true,
         state: true,
       },
     });
@@ -60,7 +59,7 @@ export async function generateStaticParams() {
 
     const params = communities.map((community) => ({
       state: community.state.toLowerCase(),
-      city: community.city_slug || formatSlug(community.city).toLowerCase(),
+      city: formatSlug(community.city).toLowerCase(),
       slug: community.slug,
     }));
 
@@ -80,7 +79,7 @@ export async function generateStaticParams() {
     
     const params = ohioCommunities.map((community) => ({
       state: community.state.toLowerCase(),
-      city: community.city.toLowerCase(),
+      city: formatSlug(community.city).toLowerCase(),
       slug: community.slug,
     }));
     
@@ -114,13 +113,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       };
     }
 
-    // Fetch the specific community using Supabase with the unique slug and city_slug
+    // Fetch the specific community using Supabase
     const { data, error } = await supabase
       .from('Community')
       .select('*')
       .eq('state', resolvedParams.state.toUpperCase())
-      .eq('city_slug', resolvedParams.city)
-      .eq('slug', resolvedParams.slug);
+      .eq('slug', resolvedParams.slug)
+      .ilike('city', resolvedParams.city.replace(/-/g, ' '));
 
     if (error) {
       console.error('Metadata Error: Supabase query error:', error);
@@ -242,8 +241,8 @@ export default async function Page(props: Props) {
       .from('Community')
       .select('*')
       .eq('state', resolvedParams.state.toUpperCase())
-      .eq('city_slug', resolvedParams.city)
-      .eq('slug', resolvedParams.slug);
+      .eq('slug', resolvedParams.slug)
+      .ilike('city', resolvedParams.city.replace(/-/g, ' '));
 
     if (error) {
       console.error('Community Page Error: Supabase query error:', error);

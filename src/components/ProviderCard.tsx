@@ -66,7 +66,8 @@ const ProviderCard = ({
 
   const hasRequiredData = city && slug && state;
 
-  const communityPath = city_slug && slug ? `/ohio/${city_slug}/${slug}` : (city && slug ? `/ohio/${slugify(city).toLowerCase()}/${slug}` : '#');
+  // Simplified path creation, prioritizing city_slug if available
+  const communityPath = hasRequiredData ? `/ohio/${city_slug || slugify(city)}/${slug}` : '#';
   const cityPath = getCityPath(state, city);
 
   const imageSource = image;
