@@ -7,7 +7,7 @@ import { FiStar, FiCheck, FiMapPin, FiHome, FiUsers, FiCalendar, FiDollarSign, F
 import { useComparison } from '@/context/ComparisonContext';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import FavoriteButton from './FavoriteButton';
-import { getCommunityPath, getCityPath, slugify } from '@/lib/utils/formatSlug';
+import { getCommunityPath, getCityPath } from '@/lib/utils/formatSlug';
 import { Calendar, DollarSign } from 'lucide-react';
 import { sendGAEvent } from '@/lib/utils/gtag';
 import RequestInfoModal from './RequestInfoModal';
@@ -64,10 +64,10 @@ const ProviderCard = ({
 
   const displayAmenities = amenities.slice(0, 3);
 
-  const hasRequiredData = city && slug && state;
+  const hasRequiredData = city && slug && state && city_slug;
 
-  // Simplified path creation, prioritizing city_slug if available
-  const communityPath = hasRequiredData ? `/ohio/${city_slug || slugify(city)}/${slug}` : '#';
+  // Update communityPath to use only city_slug and slug
+  const communityPath = hasRequiredData ? `/ohio/${city_slug}/${slug}` : '#';
   const cityPath = getCityPath(state, city);
 
   const imageSource = image;

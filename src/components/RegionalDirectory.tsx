@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { FiMapPin } from 'react-icons/fi';
 import { communities } from '@/lib/data/staticCommunities';
-import { slugify } from '@/lib/utils/formatSlug';
 
 type RegionalDirectoryProps = {
   className?: string;
@@ -31,7 +30,7 @@ export default function RegionalDirectory({ className = "" }: RegionalDirectoryP
       city,
       count: data.count,
       // Use a consistent city slug for all links
-      city_slug: slugify(city),
+      city_slug: city.toLowerCase().replace(/ /g, '-'),
       topRatedCommunity: data.communities.reduce(
         (top, current) => (current.rating > (top?.rating || 0) ? current : top),
         null as typeof communities[0] | null

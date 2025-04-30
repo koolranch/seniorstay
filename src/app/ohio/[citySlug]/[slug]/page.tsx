@@ -8,7 +8,6 @@ import { notFound } from "next/navigation";
 import CommunityContent from "./CommunityContent";
 import Link from 'next/link';
 import { Metadata } from 'next';
-import { slugify } from "@/lib/utils/formatSlug";
 import React from 'react';
 import CommunityActions from '../../../../components/CommunityActions';
 import { createClient } from '@supabase/supabase-js';

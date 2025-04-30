@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { FiArrowLeft } from "react-icons/fi";
-import { getCityPath, slugify } from "@/lib/utils/formatSlug";
+import { getCityPath } from "@/lib/utils/formatSlug";
 
 interface CommunityContentProps {
   name?: string;
@@ -36,7 +36,7 @@ export default function CommunityContent({
     <>
       {/* Back Link */}
       <Link 
-        href={`/ohio/${citySlug || slugify(displayCityName).toLowerCase()}`}
+        href={`/ohio/${citySlug}`}
         className="inline-flex items-center text-[#1b4d70] mb-6 hover:underline"
       >
         <FiArrowLeft className="mr-2" />
