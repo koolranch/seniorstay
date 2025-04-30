@@ -51,10 +51,10 @@ export default function CommunityContent({
             <h2 className="text-xl font-semibold text-[#1b4d70] mb-4">
               About {name}
             </h2>
-            <p className="text-gray-600 mb-4">
+            <p className="text-gray-700 font-medium mb-4">
               {description}
             </p>
-            <div className="flex items-center text-gray-600">
+            <div className="flex items-center text-gray-700 font-medium">
               <span className="mr-2">Address:</span>
               <span>{address}, {displayCityName}, OH</span>
             </div>
@@ -70,7 +70,7 @@ export default function CommunityContent({
                 {amenities.map((amenity, index) => (
                   <div 
                     key={index}
-                    className="flex items-center text-gray-600"
+                    className="flex items-center text-gray-700 font-medium"
                   >
                     <span className="mr-2">•</span>
                     {amenity}
@@ -90,12 +90,12 @@ export default function CommunityContent({
             <div className="space-y-4">
               <div>
                 <h3 className="font-medium font-semibold text-gray-700">Type</h3>
-                <p className="text-gray-600">{type}</p>
+                <p className="text-gray-700 font-medium">{type}</p>
               </div>
               {rating && rating > 0 && (
                 <div>
                   <h3 className="font-medium font-semibold text-gray-700">Rating</h3>
-                  <p className="text-gray-600">
+                  <p className="text-gray-700 font-medium">
                     {rating.toFixed(1)} out of 5
                     {reviewCount && ` (${reviewCount} reviews)`}
                   </p>
@@ -103,7 +103,7 @@ export default function CommunityContent({
               )}
               <div>
                 <h3 className="font-medium font-semibold text-gray-700">Location</h3>
-                <p className="text-gray-600">{displayCityName}, Ohio</p>
+                <p className="text-gray-700 font-medium">{displayCityName}, Ohio</p>
               </div>
             </div>
           </div>

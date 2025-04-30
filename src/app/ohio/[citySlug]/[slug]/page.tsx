@@ -102,7 +102,7 @@ const CommunityClient = ({ community }: { community: any }) => {
                       <h4 className="text-lg font-medium mb-1">
                         Community Name {idx}
                       </h4>
-                      <p className="text-sm text-gray-600">
+                      <p className="text-sm text-gray-700 font-medium">
                         {community.city}, {community.state}
                       </p>
                     </Link>

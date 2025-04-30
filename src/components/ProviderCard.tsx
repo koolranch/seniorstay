@@ -181,7 +181,7 @@ const ProviderCard = ({
           <p className="text-red-500 text-xs mt-1">⚠ Missing required data (city/slug)</p>
         )}
 
-        <div className="flex items-center text-gray-600 text-sm">
+        <div className="flex items-center text-gray-700 font-medium text-sm">
           <FiMapPin className="mr-1 text-[#1b4d70]" />
           <span>{city || 'N/A'}, {state || 'N/A'}</span>
         </div>
@@ -191,7 +191,7 @@ const ProviderCard = ({
             {displayAmenities.map((amenity, index) => (
               <div 
                 key={index} 
-                className="flex items-center bg-gray-100 px-2 py-1 rounded-md text-xs text-gray-700"
+                className="flex items-center bg-gray-100 px-2 py-1 rounded-md text-xs text-gray-700 font-medium"
               >
                 <FiCheck className="mr-1 text-green-600" />
                 <span className="line-clamp-1">{amenity}</span>
