@@ -119,6 +119,102 @@ export default async function OhioCityPage({ params }: { params: { citySlug: str
         </div>
       </div>
       
+      <section className="bg-white py-16">
+        <div className="container mx-auto px-6 md:px-10 lg:px-20">
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+            Senior Living in Beachwood, OH
+          </h1>
+          <p className="text-lg font-semibold text-gray-700 leading-relaxed mb-6">
+            Explore top-rated senior living communities in Beachwood, OH. Compare amenities, services, and pricing to find the perfect fit for your loved one.
+          </p>
+          <a
+            href="#lead-form"
+            className="inline-block px-6 py-3 font-semibold rounded-lg shadow-sm text-white bg-blue-600 hover:bg-blue-700"
+          >
+            Get Your Free Quote
+          </a>
+        </div>
+      </section>
+
+      <section id="lead-form" className="bg-gray-50 py-12">
+        <div className="container mx-auto px-6 md:px-10 lg:px-20">
+          <h3 className="text-2xl font-semibold text-gray-900 mb-4">
+            Ready to learn more?
+          </h3>
+          <form
+            action="https://formspree.io/f/xnnpaply"
+            method="POST"
+            className="max-w-xl space-y-4"
+          >
+            {/* Name */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">
+                Full Name
+              </label>
+              <input
+                name="name"
+                type="text"
+                required
+                className="w-full border border-gray-300 rounded-md px-3 py-2"
+              />
+            </div>
+            {/* Email */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">
+                Email Address
+              </label>
+              <input
+                name="email"
+                type="email"
+                required
+                className="w-full border border-gray-300 rounded-md px-3 py-2"
+              />
+            </div>
+            {/* Phone */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">
+                Phone Number
+              </label>
+              <input
+                name="phone"
+                type="tel"
+                required
+                className="w-full border border-gray-300 rounded-md px-3 py-2"
+              />
+            </div>
+            {/* Submit */}
+            <button
+              type="submit"
+              className="w-full inline-block text-center px-6 py-3 font-semibold rounded-lg shadow-sm text-white bg-blue-600 hover:bg-blue-700"
+            >
+              Get Your Free Quote
+            </button>
+          </form>
+        </div>
+      </section>
+
+      <section className="bg-white py-12">
+        <div className="container mx-auto px-6 md:px-10 lg:px-20">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">
+            Frequently Asked Questions
+          </h2>
+          <ul className="space-y-4">
+            <li>
+              <h3 className="text-lg font-semibold text-gray-800">What services are included?</h3>
+              <p className="mt-1 text-gray-700">Assisted living, memory care, independent living, and more. See each community for specifics.</p>
+            </li>
+            <li>
+              <h3 className="text-lg font-semibold text-gray-800">How do I schedule a tour?</h3>
+              <p className="mt-1 text-gray-700">Fill out the "Get Your Free Quote" form or click the "Schedule a Tour" button on any community card.</p>
+            </li>
+            <li>
+              <h3 className="text-lg font-semibold text-gray-800">Is financial assistance available?</h3>
+              <p className="mt-1 text-gray-700">Many of our partner communities accept VA benefits, Medicaid, and other aid—check individual listings for details.</p>
+            </li>
+          </ul>
+        </div>
+      </section>
+      
       {/* Communities Grid */}
       <div className="container mx-auto px-6 md:px-10 lg:px-20 py-12">
         {communities.length > 0 ? (
