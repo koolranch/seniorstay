@@ -24,6 +24,13 @@ const slugify = (text: string) => {
     .replace(/--+/g, '-');
 };
 
+// Utility function to capitalize city name
+const capitalizeCityName = (name: string) => {
+  return name.split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(' ');
+};
+
 // One-time environment sanity check for Supabase
 console.log('ENV_CHECK', {
   url: process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -65,7 +72,7 @@ export async function generateStaticParams() {
 export default async function OhioCityPage({ params }: { params: { citySlug: string } }) {
   const rawSlug = params.citySlug;
   const citySlug = rawSlug.replace(/%20/g, '-');
-  const cityName = citySlug.replace(/-/g, ' ').replace(/%20/g, ' ');
+  const cityName = capitalizeCityName(citySlug.replace(/-/g, ' ').replace(/%20/g, ' '));
   console.log('DEBUG citySlug:', citySlug);
   console.log('DEBUG cityName:', cityName);
   
@@ -122,10 +129,10 @@ export default async function OhioCityPage({ params }: { params: { citySlug: str
       <section className="bg-white py-16">
         <div className="container mx-auto px-6 md:px-10 lg:px-20">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            Senior Living in Beachwood, OH
+            Senior Living in {cityName}, OH
           </h1>
           <p className="text-lg font-semibold text-gray-700 leading-relaxed mb-6">
-            Explore top-rated senior living communities in Beachwood, OH. Compare amenities, services, and pricing to find the perfect fit for your loved one.
+            Explore top-rated senior living communities in {cityName}, OH. Compare amenities, services, and pricing to find the perfect fit for your loved one.
           </p>
           <a
             href="#lead-form"
