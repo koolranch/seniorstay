@@ -34,10 +34,11 @@ export function SchemaOrg({ community }: SchemaOrgProps) {
       longitude: community.coordinates.lng,
     } : undefined,
     // Use default values for missing properties
-    telephone: '(800) 555-1234', // Default phone number
-    url: `https://clevelandsr.com/community/${community.id}/${community.name.toLowerCase().replace(/\s+/g, '-')}`,
+    telephone: "(800) 555-1234", // Default phone number since it's not in the Community type
+    email: community.email || "info@example.com",
+    url: `https://guideforseniors.com/community/${community.id}/${community.name.toLowerCase().replace(/\s+/g, '-')}`,
     image: community.images[0],
-    priceRange: '$$$', // Default price range
+    priceRange: "$$$",
     aggregateRating: {
       '@type': 'AggregateRating',
       ratingValue: '4.5', // Default rating

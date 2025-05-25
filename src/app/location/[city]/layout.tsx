@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       title: `Senior Living Options in ${cityName}, Ohio | Cleveland Senior Guide`,
       description: `Find the perfect senior living community in ${cityName} with Cleveland Senior Guide. Browse assisted living, memory care, and independent living options.`,
-      url: `https://rayseniorplacement.com/location/${city}`,
+      url: `https://guideforseniors.com/location/${city}`,
       siteName: 'Cleveland Senior Guide',
       locale: 'en_US',
       type: 'website',

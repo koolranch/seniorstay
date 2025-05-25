@@ -18,7 +18,7 @@ const SchemaOrg: React.FC<SchemaOrgProps> = ({ cityName, stateAbbr, communities 
     "@type": "LocalBusiness",
     "name": `Cleveland Senior Guide - Senior Living in ${cityName}, ${stateAbbr}`,
     "description": `Find senior living communities in ${cityName}, ${stateAbbr} with Cleveland Senior Guide. Compare assisted living, memory care, and independent living options.`,
-    "url": `https://rayseniorplacement.com/location/${cityName.toLowerCase().replace(/\s+/g, '-')}`,
+    "url": `https://guideforseniors.com/location/${cityName.toLowerCase().replace(/\s+/g, '-')}`,
     "address": {
       "@type": "PostalAddress",
       "addressLocality": cityName,
@@ -26,9 +26,9 @@ const SchemaOrg: React.FC<SchemaOrgProps> = ({ cityName, stateAbbr, communities 
     },
     "telephone": "(800) 555-1234",
     "sameAs": [
-      "https://www.facebook.com/rayseniorplacement",
-      "https://twitter.com/rayseniorplacement",
-      "https://www.linkedin.com/company/ray-senior-placement"
+      "https://www.facebook.com/guideforseniors",
+      "https://twitter.com/guideforseniors",
+      "https://www.linkedin.com/company/guide-for-seniors"
     ]
   };
 
@@ -61,7 +61,7 @@ const SchemaOrg: React.FC<SchemaOrgProps> = ({ cityName, stateAbbr, communities 
             "longitude": community.coordinates.lng,
           } : undefined,
           "telephone": "(800) 555-1234",
-          "url": `https://clevelandsr.com/community/${community.id}/${community.name.toLowerCase().replace(/\s+/g, '-')}`,
+          "url": `https://guideforseniors.com/community/${community.id}/${community.name.toLowerCase().replace(/\s+/g, '-')}`,
           "image": community.images[0],
         }
       };

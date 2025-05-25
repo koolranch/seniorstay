@@ -52,7 +52,7 @@ export const metadata: Metadata = {
     title: 'Cleveland Senior Guide | Find Assisted Living & Senior Care Options',
     description: 'Find the perfect senior living community with Cleveland Senior Guide. Compare assisted living, memory care, and independent living options.',
     images: ['/images/twitter-image.jpg'],
-    creator: '@clevelandsenguide',
+    creator: '@guideforseniors',
   },
   verification: {
     google: 'your-google-site-verification',

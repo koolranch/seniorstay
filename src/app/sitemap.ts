@@ -23,8 +23,8 @@ const createCitySlugs = (): string[] => {
   return cities.map(city => city.toLowerCase().replace(/\s+/g, '-'));
 };
 
-export default function sitemap(): SitemapEntry[] {
-  const baseUrl = 'https://rayseniorplacement.com';
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const baseUrl = 'https://guideforseniors.com';
   const citySlugs = createCitySlugs();
 
   // Basic pages
