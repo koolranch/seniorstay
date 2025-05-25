@@ -16,8 +16,8 @@ const SchemaOrg: React.FC<SchemaOrgProps> = ({ cityName, stateAbbr, communities 
   const localBusinessSchema = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
-    "name": `Cleveland Senior Guide - Senior Living in ${cityName}, ${stateAbbr}`,
-    "description": `Find senior living communities in ${cityName}, ${stateAbbr} with Cleveland Senior Guide. Compare assisted living, memory care, and independent living options.`,
+          "name": `Guide for Seniors - Senior Living in ${cityName}, ${stateAbbr}`,
+      "description": `Find senior living communities in ${cityName}, ${stateAbbr} with Guide for Seniors. Compare assisted living, memory care, and independent living options.`,
     "url": `https://guideforseniors.com/location/${cityName.toLowerCase().replace(/\s+/g, '-')}`,
     "address": {
       "@type": "PostalAddress",

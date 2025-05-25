@@ -116,7 +116,7 @@ function SearchContainer() {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <h1 className="text-4xl font-bold mb-4 text-center">
-              Find Senior Living Options in Northeast Ohio
+              Find the Perfect Senior Living Community
             </h1>
             <p className="text-lg text-gray-700 mb-8 text-center">
               Discover the best assisted living, memory care, and independent living communities for yourself or your loved one. We help you make informed decisions with comprehensive information on {communityData.length} senior care communities.
@@ -251,10 +251,10 @@ export default function Home() {
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    "name": "Cleveland Senior Guide",
+    "name": "Guide for Seniors",
     "url": "https://guideforseniors.com",
     "logo": "https://guideforseniors.com/logo.png",
-    "description": "Cleveland Senior Guide helps seniors and families find the right senior living options in Northeast Ohio including assisted living, memory care, and independent living communities.",
+    "description": "Guide for Seniors helps seniors and families find the right senior living options including assisted living, memory care, and independent living communities.",
     "address": {
       "@type": "PostalAddress",
       "addressRegion": "OH",
@@ -274,10 +274,10 @@ export default function Home() {
     "mainEntity": [
       {
         "@type": "Question",
-        "name": "How much does senior living cost in Northeast Ohio?",
+        "name": "How much does senior living cost?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "The cost of senior living in Northeast Ohio varies based on the level of care, location, and amenities. Independent living typically ranges from $1,500 to $3,500 per month, assisted living from $3,000 to $6,000 per month, and memory care from $4,000 to $8,000 per month. Use our 'Get Pricing' button on any community to receive specific cost information."
+          "text": "The cost of senior living varies based on the level of care, location, and amenities. Independent living typically ranges from $1,500 to $3,500 per month, assisted living from $3,000 to $6,000 per month, and memory care from $4,000 to $8,000 per month. Use our 'Get Pricing' button on any community to receive specific cost information."
         }
       },
       {
@@ -315,18 +315,18 @@ export default function Home() {
       {/* SEO Content Section */}
       <div className="bg-gray-50 py-12 border-t border-gray-200">
         <div className="container mx-auto px-4">
-          <h2 className="text-2xl font-semibold mb-4">Senior Living Options in Northeast Ohio</h2>
+          <h2 className="text-2xl font-semibold mb-4">Senior Living Options</h2>
 
           <div className="prose max-w-none text-gray-700">
             <p className="mb-4">
-              Northeast Ohio offers a wide variety of senior living options to meet the diverse needs of aging adults. Whether you're looking for assisted living, memory care, or independent living, our comprehensive directory helps you explore and compare communities across Cleveland, Beachwood, Shaker Heights, and other communities in the region.
+              We offer a comprehensive directory of senior living options to meet the diverse needs of aging adults. Whether you're looking for assisted living, memory care, or independent living, our platform helps you explore and compare communities across multiple locations.
             </p>
 
             <p className="mb-4">
               Choosing the right senior living community is a significant decision. Factors to consider include location, level of care provided, amenities, staff-to-resident ratio, and cost. Our platform provides detailed information on each community, allowing you to make informed comparisons and find the perfect fit for yourself or your loved one.
             </p>
 
-            <h3 className="text-xl font-semibold my-4">Types of Senior Care Available in Northeast Ohio</h3>
+            <h3 className="text-xl font-semibold my-4">Types of Senior Care Available</h3>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
               <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
@@ -365,9 +365,9 @@ export default function Home() {
 
           <div className="space-y-6">
             <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-              <h3 className="text-lg font-medium mb-2">How much does senior living cost in Northeast Ohio?</h3>
+              <h3 className="text-lg font-medium mb-2">How much does senior living cost?</h3>
               <p className="text-gray-700">
-                The cost of senior living in Northeast Ohio varies based on the level of care, location, and amenities. Independent living typically ranges from $1,500 to $3,500 per month, assisted living from $3,000 to $6,000 per month, and memory care from $4,000 to $8,000 per month. Use our "Get Pricing" button on any community to receive specific cost information.
+                The cost of senior living varies based on the level of care, location, and amenities. Independent living typically ranges from $1,500 to $3,500 per month, assisted living from $3,000 to $6,000 per month, and memory care from $4,000 to $8,000 per month. Use our "Get Pricing" button on any community to receive specific cost information.
               </p>
             </div>
 

@@ -5,12 +5,12 @@ import { ComparisonProvider } from '@/context/ComparisonContext';
 import GoogleMapsScript from '@/components/map/GoogleMapsScript';
 
 export const metadata: Metadata = {
-  title: 'Cleveland Senior Guide | Find Assisted Living & Senior Care Options',
-  description: 'Find the perfect senior living community with Cleveland Senior Guide. Compare assisted living, memory care, and independent living options.',
-  keywords: 'senior living, assisted living, memory care, independent living, senior care, Cleveland senior living, Ohio senior living, senior housing',
-  authors: [{ name: 'Cleveland Senior Guide' }],
-  creator: 'Cleveland Senior Guide',
-  publisher: 'Cleveland Senior Guide',
+  title: 'Guide for Seniors | Find Assisted Living & Senior Care Options',
+  description: 'Find the perfect senior living community with Guide for Seniors. Compare assisted living, memory care, and independent living options.',
+  keywords: 'senior living, assisted living, memory care, independent living, senior care, senior housing, senior communities',
+  authors: [{ name: 'Guide for Seniors' }],
+  creator: 'Guide for Seniors',
+  publisher: 'Guide for Seniors',
   formatDetection: {
     email: false,
     address: false,
@@ -32,16 +32,16 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: 'Cleveland Senior Guide | Find Assisted Living & Senior Care Options',
-    description: 'Find the perfect senior living community with Cleveland Senior Guide. Compare assisted living, memory care, and independent living options.',
+    title: 'Guide for Seniors | Find Assisted Living & Senior Care Options',
+    description: 'Find the perfect senior living community with Guide for Seniors. Compare assisted living, memory care, and independent living options.',
     url: 'https://guideforseniors.com',
-    siteName: 'Cleveland Senior Guide',
+    siteName: 'Guide for Seniors',
     images: [
       {
         url: '/images/og-image.jpg',
         width: 1200,
         height: 630,
-        alt: 'Cleveland Senior Guide - Senior Living Directory',
+        alt: 'Guide for Seniors - Senior Living Directory',
       },
     ],
     locale: 'en_US',
@@ -49,8 +49,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Cleveland Senior Guide | Find Assisted Living & Senior Care Options',
-    description: 'Find the perfect senior living community with Cleveland Senior Guide. Compare assisted living, memory care, and independent living options.',
+    title: 'Guide for Seniors | Find Assisted Living & Senior Care Options',
+    description: 'Find the perfect senior living community with Guide for Seniors. Compare assisted living, memory care, and independent living options.',
     images: ['/images/twitter-image.jpg'],
     creator: '@guideforseniors',
   },

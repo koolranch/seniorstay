@@ -22,14 +22,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const cityName = formatCityName(city);
 
   return {
-    title: `Senior Living in ${cityName}, OH | Cleveland Senior Guide`,
-    description: `Discover top-rated senior living communities in ${cityName}, Ohio with Cleveland Senior Guide. Compare prices, amenities, and care levels for independent living, assisted living, and memory care facilities.`,
+          title: `Senior Living in ${cityName}, OH | Guide for Seniors`,
+      description: `Discover top-rated senior living communities in ${cityName}, Ohio with Guide for Seniors. Compare prices, amenities, and care levels for independent living, assisted living, and memory care facilities.`,
     keywords: `senior living ${cityName}, assisted living ${cityName}, memory care ${cityName}, retirement communities ${cityName}, elder care ${cityName}, senior housing ${cityName}`,
     openGraph: {
-      title: `Senior Living Options in ${cityName}, Ohio | Cleveland Senior Guide`,
-      description: `Find the perfect senior living community in ${cityName} with Cleveland Senior Guide. Browse assisted living, memory care, and independent living options.`,
+      title: `Senior Living Options in ${cityName}, Ohio | Guide for Seniors`,
+      description: `Find the perfect senior living community in ${cityName} with Guide for Seniors. Browse assisted living, memory care, and independent living options.`,
       url: `https://guideforseniors.com/location/${city}`,
-      siteName: 'Cleveland Senior Guide',
+      siteName: 'Guide for Seniors',
       locale: 'en_US',
       type: 'website',
     },

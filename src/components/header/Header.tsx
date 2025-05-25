@@ -42,7 +42,7 @@ const Header = () => {
           <Link href="/" className="flex-shrink-0">
             <div className="flex items-center">
               <Home className="h-6 w-6 md:h-7 md:w-7 text-primary mr-2" />
-              <span className="text-base md:text-lg font-semibold">Cleveland Senior Guide</span>
+              <span className="text-base md:text-lg font-semibold">Guide for Seniors</span>
             </div>
           </Link>
 
@@ -136,7 +136,7 @@ const Header = () => {
                   <SheetHeader className="mb-6">
                     <SheetTitle className="flex items-center">
                       <Home className="h-5 w-5 text-primary mr-2" />
-                      Cleveland Senior Guide
+                      Guide for Seniors
                     </SheetTitle>
                   </SheetHeader>
 

@@ -72,7 +72,7 @@ export async function generateMetadata({ params }: CommunityPageProps): Promise<
       title,
       description,
       type: 'article',
-      siteName: 'Cleveland Senior Guide',
+      siteName: 'Guide for Seniors',
       images: community.images?.length ? [
         {
           url: community.images[0],

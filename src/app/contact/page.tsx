@@ -102,9 +102,7 @@ export default function ContactPage() {
                     <h3 className="font-semibold mb-1">Headquarters</h3>
                     <p className="text-gray-600">
                       Guide for Seniors, Inc.<br />
-                      123 Main Street<br />
-                      Suite 100<br />
-                      Cleveland, OH 44114
+                      United States
                     </p>
                   </div>
                 </div>
