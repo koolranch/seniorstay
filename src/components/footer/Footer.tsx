@@ -6,23 +6,23 @@ import { Globe } from 'lucide-react';
 
 const footerLinks = {
   support: [
-    { label: 'Help Center', href: '#' },
-    { label: 'Resources Guide', href: '#' },
-    { label: 'Contact Us', href: '#' },
-    { label: 'Financial Options', href: '#' },
+    { label: 'Help Center', href: '/help' },
+    { label: 'Resources Guide', href: '/resources' },
+    { label: 'Contact Us', href: '/contact' },
+    { label: 'Financial Options', href: '/resources/financial-options' },
   ],
   seniorCare: [
-    { label: 'Independent Living', href: '#' },
-    { label: 'Assisted Living', href: '#' },
-    { label: 'Memory Care', href: '#' },
-    { label: 'Nursing Homes', href: '#' },
-    { label: 'Senior Apartments', href: '#' },
+    { label: 'Independent Living', href: '/facilities?careLevel=Independent%20Living' },
+    { label: 'Assisted Living', href: '/facilities?careLevel=Assisted%20Living' },
+    { label: 'Memory Care', href: '/facilities?careLevel=Memory%20Care' },
+    { label: 'Nursing Homes', href: '/facilities?careLevel=Nursing%20Home' },
+    { label: 'Senior Apartments', href: '/facilities?careLevel=Senior%20Apartments' },
   ],
   company: [
-    { label: 'About Us', href: '#' },
-    { label: 'Blog', href: '#' },
-    { label: 'Partners', href: '#' },
-    { label: 'Testimonials', href: '#' },
+    { label: 'About Us', href: '/about' },
+    { label: 'Blog', href: '/blog' },
+    { label: 'Partners', href: '/partners' },
+    { label: 'Testimonials', href: '/testimonials' },
   ],
 };
 
@@ -80,15 +80,15 @@ const Footer = () => {
 
         <div className="border-t border-gray-200 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
           <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-6">
-            <p className="text-sm">© 2024 Cleveland Senior Guide, Inc.</p>
+            <p className="text-sm">© 2024 Guide for Seniors, Inc.</p>
             <div className="flex items-center space-x-6">
-              <Link href="#" className="text-sm text-gray-600 hover:underline">
+              <Link href="/privacy-policy" className="text-sm text-gray-600 hover:underline">
                 Privacy
               </Link>
-              <Link href="#" className="text-sm text-gray-600 hover:underline">
+              <Link href="/terms-of-service" className="text-sm text-gray-600 hover:underline">
                 Terms
               </Link>
-              <Link href="#" className="text-sm text-gray-600 hover:underline">
+              <Link href="/sitemap" className="text-sm text-gray-600 hover:underline">
                 Sitemap
               </Link>
             </div>

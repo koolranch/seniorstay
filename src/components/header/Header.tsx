@@ -81,7 +81,7 @@ const Header = () => {
             </Button>
             <Button variant="outline" className="flex items-center rounded-full text-sm font-medium gap-2 border-primary text-primary">
               <Phone className="h-4 w-4" />
-              (800) 555-1234
+              1-888-SENIORS
             </Button>
 
             {isMounted && (
@@ -115,7 +115,7 @@ const Header = () => {
               className="text-primary rounded-full"
               asChild
             >
-              <a href="tel:8005551234" aria-label="Call us">
+              <a href="tel:1888736467" aria-label="Call us">
                 <Phone className="h-5 w-5" />
               </a>
             </Button>
@@ -166,9 +166,9 @@ const Header = () => {
                   </nav>
 
                   <div className="absolute bottom-6 left-6 right-6">
-                    <a href="tel:8005551234" className="flex items-center justify-center gap-2 text-center py-3 px-4 bg-primary/10 text-primary rounded-md font-medium">
+                    <a href="tel:1888736467" className="flex items-center justify-center gap-2 text-center py-3 px-4 bg-primary/10 text-primary rounded-md font-medium">
                       <Phone className="h-4 w-4" />
-                      (800) 555-1234
+                      1-888-SENIORS
                     </a>
                   </div>
                 </SheetContent>

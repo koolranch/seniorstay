@@ -33,10 +33,10 @@ export default function CommunityOverview({ community }: CommunityOverviewProps)
               Contact
             </h3>
             <p className="text-gray-600">
-              Phone: (800) 555-1234
+              Phone: 1-888-SENIORS (1-888-736-4677)
             </p>
             <p className="text-gray-600">
-              Email: info@example.com
+              Email: info@guideforseniors.com
             </p>
           </div>
         </div>

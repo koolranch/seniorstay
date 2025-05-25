@@ -260,7 +260,7 @@ export default function Home() {
       "addressRegion": "OH",
       "addressCountry": "US"
     },
-    "telephone": "(800) 555-1234",
+            "telephone": "1-888-736-4677",
     "sameAs": [
       "https://www.facebook.com/guideforseniors",
       "https://twitter.com/guideforseniors"

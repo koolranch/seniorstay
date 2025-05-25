@@ -22,12 +22,12 @@ export default function CommunityContact({ community }: CommunityContactProps) {
             <div className="space-y-4">
               <div>
                 <p className="text-gray-600">
-                  <span className="font-semibold">Phone:</span> (800) 555-1234
+                  <span className="font-semibold">Phone:</span> 1-888-SENIORS (1-888-736-4677)
                 </p>
               </div>
               <div>
                 <p className="text-gray-600">
-                  <span className="font-semibold">Email:</span> info@example.com
+                  <span className="font-semibold">Email:</span> info@guideforseniors.com
                 </p>
               </div>
               <div>
