@@ -23,40 +23,52 @@ const createCitySlugs = (): string[] => {
   return cities.map(city => city.toLowerCase().replace(/\s+/g, '-'));
 };
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = 'https://guideforseniors.com';
-  const citySlugs = createCitySlugs();
+export default function sitemap(): MetadataRoute.Sitemap {
+  const baseUrl = 'https://www.guideforseniors.com';
+  const currentDate = new Date().toISOString();
 
-  // Basic pages
-  const routes: SitemapEntry[] = [
+  return [
     {
       url: baseUrl,
-      lastModified: new Date(),
-      changeFrequency: "daily",
-      priority: 1.0,
+      lastModified: currentDate,
+      changeFrequency: 'weekly',
+      priority: 1,
+    },
+    {
+      url: `${baseUrl}/facilities`,
+      lastModified: currentDate,
+      changeFrequency: 'daily',
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/resources`,
+      lastModified: currentDate,
+      changeFrequency: 'weekly',
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/about`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/contact`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/privacy-policy`,
+      lastModified: currentDate,
+      changeFrequency: 'yearly',
+      priority: 0.5,
+    },
+    {
+      url: `${baseUrl}/terms-of-service`,
+      lastModified: currentDate,
+      changeFrequency: 'yearly',
+      priority: 0.5,
     },
   ];
-
-  // Add city pages
-  for (const citySlug of citySlugs) {
-    routes.push({
-      url: `${baseUrl}/location/${citySlug}`,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 0.8,
-    });
-  }
-
-  // Add individual community pages
-  for (const community of communityData) {
-    const communitySlug = community.name.toLowerCase().replace(/\s+/g, '-');
-    routes.push({
-      url: `${baseUrl}/community/${community.id}/${communitySlug}`,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 0.7,
-    });
-  }
-
-  return routes;
 }

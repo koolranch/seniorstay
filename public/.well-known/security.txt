@@ -1,0 +1,11 @@
+# Security Policy for Guide for Seniors
+# https://www.guideforseniors.com
+
+Contact: security@guideforseniors.com
+Expires: 2025-12-31T23:59:59.000Z
+Preferred-Languages: en
+Canonical: https://www.guideforseniors.com/.well-known/security.txt
+
+# Reporting Security Issues
+# Please report security vulnerabilities to security@guideforseniors.com
+# We appreciate your efforts in responsible disclosure. 
