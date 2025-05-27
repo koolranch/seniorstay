@@ -35,7 +35,7 @@ export function SchemaOrg({ community }: SchemaOrgProps) {
     } : undefined,
     // Use default values for missing properties
     telephone: "(800) 555-1234", // Default phone number since it's not in the Community type
-    email: community.email || "info@example.com",
+    email: "info@example.com",
     url: `https://guideforseniors.com/community/${community.id}/${community.name.toLowerCase().replace(/\s+/g, '-')}`,
     image: community.images[0],
     priceRange: "$$$",
