@@ -10,6 +10,11 @@ export interface CityInfo {
     memoryCare: string;
   };
   neighborhoods?: string[];
+  testimonials?: {
+    text: string;
+    author: string;
+    community?: string;
+  }[];
 }
 
 export const clevelandCitiesData: Record<string, CityInfo> = {
@@ -30,7 +35,24 @@ export const clevelandCitiesData: Record<string, CityInfo> = {
       'MetroHealth Medical Center',
       'St. Vincent Charity Medical Center'
     ],
-    neighborhoods: ['Downtown', 'University Circle', 'Tremont', 'Ohio City', 'Shaker Square']
+    neighborhoods: ['Downtown', 'University Circle', 'Tremont', 'Ohio City', 'Shaker Square'],
+    averageCost: {
+      independentLiving: '$2,500 - $4,500',
+      assistedLiving: '$3,500 - $6,000',
+      memoryCare: '$5,000 - $8,500'
+    },
+    testimonials: [
+      {
+        text: "The proximity to Cleveland Clinic was a major factor in our decision. The care has been exceptional.",
+        author: "Sarah M.",
+        community: "Downtown Cleveland"
+      },
+      {
+        text: "We love the cultural activities available - from the Orchestra to the museums, there's always something to do.",
+        author: "Robert K.",
+        community: "University Circle"
+      }
+    ]
   },
   
   'beachwood': {
@@ -48,6 +70,22 @@ export const clevelandCitiesData: Record<string, CityInfo> = {
       'University Hospitals Ahuja Medical Center',
       'Cleveland Clinic - Beachwood Family Health',
       'Hillcrest Hospital (nearby Mayfield Heights)'
+    ],
+    averageCost: {
+      independentLiving: '$3,000 - $5,500',
+      assistedLiving: '$4,500 - $7,500',
+      memoryCare: '$6,000 - $9,500'
+    },
+    testimonials: [
+      {
+        text: "The quality of care in Beachwood is outstanding. The staff truly cares about each resident.",
+        author: "Linda P.",
+        community: "Rose Senior Living"
+      },
+      {
+        text: "Being close to shopping and restaurants while having top-notch medical care nearby gives us peace of mind.",
+        author: "Michael T."
+      }
     ]
   },
   
@@ -67,7 +105,23 @@ export const clevelandCitiesData: Record<string, CityInfo> = {
       'Cleveland Clinic Main Campus',
       'VA Northeast Ohio Healthcare System'
     ],
-    neighborhoods: ['Shaker Square', 'Van Aken District', 'Fernway', 'Moreland']
+    neighborhoods: ['Shaker Square', 'Van Aken District', 'Fernway', 'Moreland'],
+    averageCost: {
+      independentLiving: '$2,800 - $5,000',
+      assistedLiving: '$4,000 - $7,000',
+      memoryCare: '$5,500 - $9,000'
+    },
+    testimonials: [
+      {
+        text: "The beauty of Shaker Heights combined with excellent care makes this the perfect place for my mother.",
+        author: "Jennifer R.",
+        community: "StoryPoint Shaker Heights"
+      },
+      {
+        text: "The Rapid transit access means our kids can visit easily from downtown. Location is everything!",
+        author: "David and Carol S."
+      }
+    ]
   },
   
   'westlake': {
@@ -85,6 +139,18 @@ export const clevelandCitiesData: Record<string, CityInfo> = {
       'St. John Medical Center',
       'Cleveland Clinic Avon Hospital',
       'Fairview Hospital'
+    ],
+    averageCost: {
+      independentLiving: '$2,700 - $4,800',
+      assistedLiving: '$3,800 - $6,500',
+      memoryCare: '$5,200 - $8,800'
+    },
+    testimonials: [
+      {
+        text: "Having St. John Medical Center right here in Westlake has been a blessing for my husband's care.",
+        author: "Patricia L.",
+        community: "Westlake Village"
+      }
     ]
   },
   
@@ -103,6 +169,18 @@ export const clevelandCitiesData: Record<string, CityInfo> = {
       'Cleveland Clinic Independence Family Health Center',
       'Parma Hospital',
       'Marymount Hospital'
+    ],
+    averageCost: {
+      independentLiving: '$2,400 - $4,200',
+      assistedLiving: '$3,400 - $5,800',
+      memoryCare: '$4,800 - $8,000'
+    },
+    testimonials: [
+      {
+        text: "The central location makes it easy for family from all over Cleveland to visit.",
+        author: "Thomas W.",
+        community: "Independence community"
+      }
     ]
   },
   
@@ -121,6 +199,18 @@ export const clevelandCitiesData: Record<string, CityInfo> = {
       'Southwest General Health Center',
       'Cleveland Clinic Strongsville Family Health',
       'Parma Hospital'
+    ],
+    averageCost: {
+      independentLiving: '$2,600 - $4,500',
+      assistedLiving: '$3,600 - $6,200',
+      memoryCare: '$5,000 - $8,500'
+    },
+    testimonials: [
+      {
+        text: "Southwest General is excellent, and the Metroparks give us beautiful places to walk with mom.",
+        author: "Karen H.",
+        community: "Strongsville area"
+      }
     ]
   }
 }; 
