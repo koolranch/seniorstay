@@ -1,22 +1,33 @@
-"use client";
-
 import React from 'react';
 import { communityData } from '@/data/facilities';
 import { notFound } from 'next/navigation';
-import LocationHeader from '@/components/location/LocationHeader';
-import LocationStats from '@/components/location/LocationStats';
-import LocationMap from '@/components/location/LocationMap';
-import LocationCommunities from '@/components/location/LocationCommunities';
-import LocationFAQ from '@/components/location/LocationFAQ';
-import SchemaOrg from './SchemaOrg';
+import CityLocationClient from './CityLocationClient';
+
+// Generate static params for all cities with communities
+export async function generateStaticParams() {
+  const cities = Array.from(new Set(
+    communityData.map(community => 
+      community.location.split(',')[0].trim()
+    )
+  ));
+  
+  return cities.map((city) => ({
+    city: city.toLowerCase().replace(/\s+/g, '-'),
+  }));
+}
 
 export default function LocationPage({ params }: { params: { city: string } }) {
   const { city } = params;
-  const decodedCity = decodeURIComponent(city);
+  
+  // Convert slug back to city name
+  const cityName = city
+    .split('-')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
 
   // Filter communities by city
   const communities = communityData.filter(
-    community => community.location.split(',')[0].trim() === decodedCity
+    community => community.location.split(',')[0].trim() === cityName
   );
 
   if (communities.length === 0) {
@@ -24,19 +35,10 @@ export default function LocationPage({ params }: { params: { city: string } }) {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <LocationHeader city={decodedCity} />
-      <div className="container mx-auto px-4 py-8">
-        <LocationStats city={decodedCity} />
-        <LocationMap city={decodedCity} />
-        <LocationCommunities city={decodedCity} communities={communities} />
-        <LocationFAQ city={decodedCity} />
-      </div>
-      <SchemaOrg
-        cityName={decodedCity}
-        stateAbbr={communities[0].location.split(',')[1]?.trim() || 'OH'}
-        communities={communities}
-      />
-    </div>
+    <CityLocationClient
+      cityName={cityName}
+      stateAbbr="OH"
+      communities={communities}
+    />
   );
 }

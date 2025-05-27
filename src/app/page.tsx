@@ -158,8 +158,7 @@ function SearchContainer() {
                   {allCities.map(city => (
                     <Link
                       key={city}
-                      href="#communities"
-                      onClick={() => setSelectedLocation(city)}
+                      href={`/location/${city.toLowerCase().replace(/\s+/g, '-')}`}
                       className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-primary/5 hover:border-primary/20 border border-gray-100 transition-all"
                     >
                       <span>{city}</span>
@@ -172,14 +171,24 @@ function SearchContainer() {
               </div>
             </div>
 
-            <div className="text-center">
+            <div className="text-center space-y-2">
               <Link
-                href="#communities"
-                className="inline-flex items-center text-primary hover:underline"
+                href="/greater-cleveland"
+                className="inline-flex items-center text-primary hover:underline font-semibold"
               >
-                <span>View all {communityData.length} communities</span>
+                <MapPin className="mr-1 h-4 w-4" />
+                <span>Explore Greater Cleveland Communities</span>
                 <ArrowRight className="ml-1 h-4 w-4" />
               </Link>
+              <div>
+                <Link
+                  href="#communities"
+                  className="inline-flex items-center text-gray-600 hover:text-primary text-sm"
+                >
+                  <span>Or view all {communityData.length} communities</span>
+                  <ArrowRight className="ml-1 h-3 w-3" />
+                </Link>
+              </div>
             </div>
           </div>
         </div>
