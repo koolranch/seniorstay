@@ -25,6 +25,10 @@ export default function CommunityClient({ community }: CommunityClientProps) {
   const [pricingSubmitted, setPricingSubmitted] = useState(false);
   const [tourSubmitted, setTourSubmitted] = useState(false);
 
+  // Formspree configuration
+  const formspreeId = "xnnpaply";
+  const formspreeEndpoint = `https://formspree.io/f/${formspreeId}`;
+
   // Destructure community data
   const { name, location, careTypes, images, description, amenities, staff, testimonials } = community;
 
@@ -65,26 +69,64 @@ export default function CommunityClient({ community }: CommunityClientProps) {
     }
   ];
 
-  const handlePricingSubmit = (e: React.FormEvent) => {
+  const handlePricingSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsPricingSubmitting(true);
 
-    // Simulate form submission
-    setTimeout(() => {
-      setPricingSubmitted(true);
+    const formData = new FormData(e.currentTarget);
+    // Add additional fields for tracking
+    formData.append('form_type', 'pricing_request');
+    formData.append('community_name', name);
+    formData.append('community_location', location);
+    formData.append('source_page', typeof window !== 'undefined' ? window.location.href : '');
+
+    try {
+      const response = await fetch(formspreeEndpoint, {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'Accept': 'application/json'
+        }
+      });
+
+      if (response.ok) {
+        setPricingSubmitted(true);
+      }
+    } catch (error) {
+      console.error('Form submission error:', error);
+    } finally {
       setIsPricingSubmitting(false);
-    }, 1000);
+    }
   };
 
-  const handleTourSubmit = (e: React.FormEvent) => {
+  const handleTourSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsTourSubmitting(true);
 
-    // Simulate form submission
-    setTimeout(() => {
-      setTourSubmitted(true);
+    const formData = new FormData(e.currentTarget);
+    // Add additional fields for tracking
+    formData.append('form_type', 'tour_request');
+    formData.append('community_name', name);
+    formData.append('community_location', location);
+    formData.append('source_page', typeof window !== 'undefined' ? window.location.href : '');
+
+    try {
+      const response = await fetch(formspreeEndpoint, {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'Accept': 'application/json'
+        }
+      });
+
+      if (response.ok) {
+        setTourSubmitted(true);
+      }
+    } catch (error) {
+      console.error('Form submission error:', error);
+    } finally {
       setIsTourSubmitting(false);
-    }, 1000);
+    }
   };
 
   return (
@@ -308,8 +350,12 @@ export default function CommunityClient({ community }: CommunityClientProps) {
                         <Input id="detail-name" name="name" required />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="detail-contact">Phone/Email</Label>
-                        <Input id="detail-contact" name="contact" required />
+                        <Label htmlFor="detail-email">Email</Label>
+                        <Input id="detail-email" name="email" type="email" required />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="detail-phone">Phone</Label>
+                        <Input id="detail-phone" name="phone" type="tel" required />
                       </div>
                       <Button
                         type="submit"
@@ -348,16 +394,20 @@ export default function CommunityClient({ community }: CommunityClientProps) {
                         <Input id="detail-tour-name" name="name" required />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="detail-tour-contact">Phone/Email</Label>
-                        <Input id="detail-tour-contact" name="contact" required />
+                        <Label htmlFor="detail-tour-email">Email</Label>
+                        <Input id="detail-tour-email" name="email" type="email" required />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="detail-tour-phone">Phone</Label>
+                        <Input id="detail-tour-phone" name="phone" type="tel" required />
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="detail-tour-date">Preferred Date</Label>
-                        <Input id="detail-tour-date" name="date" type="date" required />
+                        <Input id="detail-tour-date" name="preferred_date" type="date" required />
                       </div>
                       <div className="space-y-2">
                         <Label>Preferred Time</Label>
-                        <RadioGroup defaultValue="morning" name="timePreference">
+                        <RadioGroup defaultValue="morning" name="preferred_time">
                           <div className="flex items-center space-x-2">
                             <RadioGroupItem value="morning" id="detail-morning" />
                             <Label htmlFor="detail-morning">Morning</Label>

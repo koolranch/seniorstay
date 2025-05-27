@@ -65,26 +65,60 @@ export default function CommunityClient({ community }: CommunityClientProps) {
     }
   ];
 
-  const handlePricingSubmit = (e: React.FormEvent) => {
+  const handlePricingSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsPricingSubmitting(true);
 
-    // Simulate form submission
-    setTimeout(() => {
-      setPricingSubmitted(true);
+    const form = e.target as HTMLFormElement;
+    const formData = new FormData(form);
+
+    try {
+      const response = await fetch(form.action, {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'Accept': 'application/json'
+        }
+      });
+
+      if (response.ok) {
+        setPricingSubmitted(true);
+      } else {
+        console.error('Form submission failed');
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+    } finally {
       setIsPricingSubmitting(false);
-    }, 1000);
+    }
   };
 
-  const handleTourSubmit = (e: React.FormEvent) => {
+  const handleTourSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsTourSubmitting(true);
 
-    // Simulate form submission
-    setTimeout(() => {
-      setTourSubmitted(true);
+    const form = e.target as HTMLFormElement;
+    const formData = new FormData(form);
+
+    try {
+      const response = await fetch(form.action, {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'Accept': 'application/json'
+        }
+      });
+
+      if (response.ok) {
+        setTourSubmitted(true);
+      } else {
+        console.error('Form submission failed');
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+    } finally {
       setIsTourSubmitting(false);
-    }, 1000);
+    }
   };
 
   return (
@@ -302,7 +336,9 @@ export default function CommunityClient({ community }: CommunityClientProps) {
                       <p className="text-gray-600">Our team will contact you shortly.</p>
                     </div>
                   ) : (
-                    <form onSubmit={handlePricingSubmit} className="space-y-4">
+                    <form onSubmit={handlePricingSubmit} className="space-y-4" action="https://formspree.io/f/xnnpaply" method="POST">
+                      <input type="hidden" name="form_type" value="pricing_request" />
+                      <input type="hidden" name="facility_name" value={name} />
                       <div className="space-y-2">
                         <Label htmlFor="detail-name">Name</Label>
                         <Input id="detail-name" name="name" required />
@@ -342,7 +378,9 @@ export default function CommunityClient({ community }: CommunityClientProps) {
                       <p className="text-gray-600">Our team will contact you to confirm your tour details.</p>
                     </div>
                   ) : (
-                    <form onSubmit={handleTourSubmit} className="space-y-4">
+                    <form onSubmit={handleTourSubmit} className="space-y-4" action="https://formspree.io/f/xnnpaply" method="POST">
+                      <input type="hidden" name="form_type" value="tour_request" />
+                      <input type="hidden" name="facility_name" value={name} />
                       <div className="space-y-2">
                         <Label htmlFor="detail-tour-name">Name</Label>
                         <Input id="detail-tour-name" name="name" required />

@@ -27,6 +27,10 @@ export default function LocationCard({ community }: LocationCardProps) {
   const router = useRouter();
   const { addToComparison, isInComparison, removeFromComparison } = useComparison();
 
+  // Formspree configuration
+  const formspreeId = "xnnpaply";
+  const formspreeEndpoint = `https://formspree.io/f/${formspreeId}`;
+
   // Early return with an error indicator if community is null/undefined
   if (!community) {
     return (
@@ -48,26 +52,64 @@ export default function LocationCard({ community }: LocationCardProps) {
     }
   };
 
-  const handlePricingSubmit = (e: React.FormEvent) => {
+  const handlePricingSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsPricingSubmitting(true);
 
-    // Simulate API request
-    setTimeout(() => {
+    const formData = new FormData(e.currentTarget);
+    // Add additional fields for tracking
+    formData.append('form_type', 'pricing_request');
+    formData.append('community_name', community.name || 'Unknown Community');
+    formData.append('community_location', community.location || 'Unknown location');
+    formData.append('source_page', typeof window !== 'undefined' ? window.location.href : '');
+
+    try {
+      const response = await fetch(formspreeEndpoint, {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'Accept': 'application/json'
+        }
+      });
+
+      if (response.ok) {
+        setPricingSubmitted(true);
+      }
+    } catch (error) {
+      console.error('Form submission error:', error);
+    } finally {
       setIsPricingSubmitting(false);
-      setPricingSubmitted(true);
-    }, 1000);
+    }
   };
 
-  const handleTourSubmit = (e: React.FormEvent) => {
+  const handleTourSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsTourSubmitting(true);
 
-    // Simulate API request
-    setTimeout(() => {
+    const formData = new FormData(e.currentTarget);
+    // Add additional fields for tracking
+    formData.append('form_type', 'tour_request');
+    formData.append('community_name', community.name || 'Unknown Community');
+    formData.append('community_location', community.location || 'Unknown location');
+    formData.append('source_page', typeof window !== 'undefined' ? window.location.href : '');
+
+    try {
+      const response = await fetch(formspreeEndpoint, {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'Accept': 'application/json'
+        }
+      });
+
+      if (response.ok) {
+        setTourSubmitted(true);
+      }
+    } catch (error) {
+      console.error('Form submission error:', error);
+    } finally {
       setIsTourSubmitting(false);
-      setTourSubmitted(true);
-    }, 1000);
+    }
   };
 
   // Use the actual community name and location, only use fallbacks if undefined
@@ -167,22 +209,22 @@ export default function LocationCard({ community }: LocationCardProps) {
                 <form onSubmit={handlePricingSubmit} className="space-y-4 pt-4">
                   <div className="space-y-2">
                     <Label htmlFor={`${formId}-name`}>Your Name</Label>
-                    <Input id={`${formId}-name`} required placeholder="Enter your full name" className="h-10" />
+                    <Input id={`${formId}-name`} name="name" required placeholder="Enter your full name" className="h-10" />
                   </div>
 
                   <div className="space-y-2">
                     <Label htmlFor={`${formId}-email`}>Email</Label>
-                    <Input id={`${formId}-email`} type="email" required placeholder="your@email.com" className="h-10" />
+                    <Input id={`${formId}-email`} name="email" type="email" required placeholder="your@email.com" className="h-10" />
                   </div>
 
                   <div className="space-y-2">
                     <Label htmlFor={`${formId}-phone`}>Phone Number</Label>
-                    <Input id={`${formId}-phone`} type="tel" required placeholder="(555) 555-5555" className="h-10" />
+                    <Input id={`${formId}-phone`} name="phone" type="tel" required placeholder="(555) 555-5555" className="h-10" />
                   </div>
 
                   <div className="space-y-2">
                     <Label>Move-in Timeframe</Label>
-                    <RadioGroup defaultValue="asap">
+                    <RadioGroup name="timeframe" defaultValue="asap">
                       <div className="flex items-center space-x-2 py-1">
                         <RadioGroupItem value="asap" id={`${formId}-asap`} />
                         <Label htmlFor={`${formId}-asap`} className="cursor-pointer">As soon as possible</Label>
@@ -235,22 +277,22 @@ export default function LocationCard({ community }: LocationCardProps) {
                 <form onSubmit={handleTourSubmit} className="space-y-4 pt-4">
                   <div className="space-y-2">
                     <Label htmlFor={`${formId}-tour-name`}>Your Name</Label>
-                    <Input id={`${formId}-tour-name`} required placeholder="Enter your full name" className="h-10" />
+                    <Input id={`${formId}-tour-name`} name="name" required placeholder="Enter your full name" className="h-10" />
                   </div>
 
                   <div className="space-y-2">
                     <Label htmlFor={`${formId}-tour-email`}>Email</Label>
-                    <Input id={`${formId}-tour-email`} type="email" required placeholder="your@email.com" className="h-10" />
+                    <Input id={`${formId}-tour-email`} name="email" type="email" required placeholder="your@email.com" className="h-10" />
                   </div>
 
                   <div className="space-y-2">
                     <Label htmlFor={`${formId}-tour-phone`}>Phone Number</Label>
-                    <Input id={`${formId}-tour-phone`} type="tel" required placeholder="(555) 555-5555" className="h-10" />
+                    <Input id={`${formId}-tour-phone`} name="phone" type="tel" required placeholder="(555) 555-5555" className="h-10" />
                   </div>
 
                   <div className="space-y-2">
                     <Label htmlFor={`${formId}-preferred-date`}>Preferred Tour Date</Label>
-                    <Input id={`${formId}-preferred-date`} type="date" required className="h-10" />
+                    <Input id={`${formId}-preferred-date`} name="preferred_date" type="date" required className="h-10" />
                   </div>
 
                   <Button type="submit" className="w-full h-11" disabled={isTourSubmitting}>
