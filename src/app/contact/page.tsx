@@ -9,11 +9,6 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 
-export const metadata = {
-  title: 'Contact Us | Guide for Seniors',
-  description: 'Get in touch with Guide for Seniors. We\'re here to help you find the perfect senior living community.',
-};
-
 export default function ContactPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState('');
