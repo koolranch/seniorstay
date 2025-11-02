@@ -217,7 +217,7 @@ export const communityData: Community[] = [
       lng: -81.7468
     },
     images: [
-      "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800",
+      "https://images.unsplash.com/photo-1581579438747-1dc8d17bbce4?w=800",
       "https://images.unsplash.com/photo-1583795128727-6ec3642408f8?w=800",
     ],
     careTypes: ["Assisted Living", "Memory Care"],
@@ -265,7 +265,7 @@ export const communityData: Community[] = [
       lng: -81.6386
     },
     images: [
-      "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800",
+      "https://images.unsplash.com/photo-1581579438747-1dc8d17bbce4?w=800",
       "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800",
     ],
     careTypes: ["Assisted Living", "Memory Care"],
@@ -281,8 +281,8 @@ export const communityData: Community[] = [
       lng: -81.7982
     },
     images: [
-      "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800",
-      "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800",
+      "https://images.unsplash.com/photo-1581579438747-1dc8d17bbce4?w=800",
+      "https://images.unsplash.com/photo-1581579438747-1dc8d17bbce4?w=800",
     ],
     careTypes: ["Assisted Living"],
     description: "Haven at Lakewood provides personalized assisted living services in a comfortable environment. Our dedicated staff delivers 24-hour assistance with daily activities, medication management, and health monitoring while promoting dignity and independence."
@@ -314,7 +314,7 @@ export const communityData: Community[] = [
     },
     images: [
       "https://images.unsplash.com/photo-1582719508461-905c673771fd?w=800",
-      "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800",
+      "https://images.unsplash.com/photo-1581579438747-1dc8d17bbce4?w=800",
     ],
     careTypes: ["Assisted Living", "Memory Care"],
     description: "Arden Courts of Parma provides compassionate assisted living and specialized memory care services in a supportive environment. Our dedicated care team offers 24-hour assistance, medication management, and innovative memory care programming to enhance quality of life for all residents."
@@ -329,7 +329,7 @@ export const communityData: Community[] = [
       lng: -81.8543
     },
     images: [
-      "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800",
+      "https://images.unsplash.com/photo-1581579438747-1dc8d17bbce4?w=800",
       "https://images.unsplash.com/photo-1582719508461-905c673771fd?w=800",
     ],
     careTypes: ["Assisted Living", "Memory Care"],
@@ -346,7 +346,7 @@ export const communityData: Community[] = [
     },
     images: [
       "https://images.unsplash.com/photo-1559757175-5700dde675bc?w=800",
-      "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800",
+      "https://images.unsplash.com/photo-1581579438747-1dc8d17bbce4?w=800",
     ],
     careTypes: ["Assisted Living", "Memory Care"],
     description: "Bickford of Rocky River provides compassionate assisted living and specialized memory care services in a supportive environment. Our dedicated care team offers 24-hour assistance, medication management, and innovative memory care programming to enhance quality of life for all residents."
@@ -442,7 +442,7 @@ export const communityData: Community[] = [
     },
     images: [
       "https://images.unsplash.com/photo-1582719508461-905c673771fd?w=800",
-      "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800",
+      "https://images.unsplash.com/photo-1581579438747-1dc8d17bbce4?w=800",
     ],
     careTypes: ["Assisted Living", "Memory Care"],
     description: "Sunrise of Westlake provides compassionate assisted living and specialized memory care services in a supportive environment. Our dedicated care team offers 24-hour assistance, medication management, and innovative memory care programming to enhance quality of life for all residents."
@@ -457,8 +457,8 @@ export const communityData: Community[] = [
       lng: -81.8143
     },
     images: [
-      "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800",
-      "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800",
+      "https://images.unsplash.com/photo-1581579438747-1dc8d17bbce4?w=800",
+      "https://images.unsplash.com/photo-1581579438747-1dc8d17bbce4?w=800",
     ],
     careTypes: ["Assisted Living"],
     description: "The Grande at Middleburg Heights provides personalized assisted living services in a comfortable environment. Our dedicated staff delivers 24-hour assistance with daily activities, medication management, and health monitoring while promoting dignity and independence."
@@ -522,7 +522,7 @@ export const communityData: Community[] = [
     },
     images: [
       "https://images.unsplash.com/photo-1582719508461-905c673771fd?w=800",
-      "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800",
+      "https://images.unsplash.com/photo-1581579438747-1dc8d17bbce4?w=800",
     ],
     careTypes: ["Assisted Living"],
     description: "SHEVCHENKO MANOR provides personalized assisted living services in a comfortable environment. Our dedicated staff delivers 24-hour assistance with daily activities, medication management, and health monitoring while promoting dignity and independence."
@@ -649,8 +649,8 @@ export const communityData: Community[] = [
       lng: -81.9235
     },
     images: [
-      "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800",
-      "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800",
+      "https://images.unsplash.com/photo-1581579438747-1dc8d17bbce4?w=800",
+      "https://images.unsplash.com/photo-1581579438747-1dc8d17bbce4?w=800",
     ],
     careTypes: ["Independent Living"],
     description: "Vitalia Active Adult Community North Olmsted offers premium independent living for active seniors in a beautiful setting. Our community features spacious apartments, restaurant-style dining, engaging activities, and a wide range of amenities designed to support an active, maintenance-free lifestyle."
@@ -905,7 +905,7 @@ export const communityData: Community[] = [
       lng: -81.3397
     },
     images: [
-      "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800",
+      "https://images.unsplash.com/photo-1581579438747-1dc8d17bbce4?w=800",
       "https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?w=800",
     ],
     careTypes: ["Assisted Living", "Memory Care"],
@@ -938,7 +938,7 @@ export const communityData: Community[] = [
     },
     images: [
       "https://images.unsplash.com/photo-1583795128727-6ec3642408f8?w=800",
-      "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800",
+      "https://images.unsplash.com/photo-1581579438747-1dc8d17bbce4?w=800",
     ],
     careTypes: ["Assisted Living", "Memory Care"],
     description: "Danbury Senior Living Wooster provides compassionate assisted living and specialized memory care services in a supportive environment. Our dedicated care team offers 24-hour assistance, medication management, and innovative memory care programming to enhance quality of life for all residents."
@@ -969,7 +969,7 @@ export const communityData: Community[] = [
       lng: -81.519
     },
     images: [
-      "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800",
+      "https://images.unsplash.com/photo-1581579438747-1dc8d17bbce4?w=800",
       "https://images.unsplash.com/photo-1578496781379-7dcfb995293d?w=800",
     ],
     careTypes: ["Assisted Living", "Memory Care"],
