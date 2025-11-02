@@ -14,4 +14,4 @@ Crawl-delay: 1
 # Disallow admin or private paths (if any exist)
 Disallow: /api/
 Disallow: /_next/
-Disallow: /admin/ 
+Disallow: /admin/
