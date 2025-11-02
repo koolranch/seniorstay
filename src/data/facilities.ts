@@ -42,9 +42,9 @@ export const communityData: Community[] = [
     amenities: ["Fitness Center", "Swimming Pool", "Library", "Beauty Salon", "Restaurant-Style Dining"],
     coordinates: { lat: 41.4822, lng: -81.5697 },
     images: [
-      "/images/communities/woodlands-1.jpg",
-      "/images/communities/woodlands-2.jpg",
-      "/images/communities/woodlands-3.jpg"
+      "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800",
+      "https://images.unsplash.com/photo-1497366216548-37526070297c?w=800",
+      "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800"
     ]
   },
   {
@@ -185,7 +185,7 @@ export const communityData: Community[] = [
       lng: -81.5368
     },
     images: [
-      "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=800",
+      "https://images.unsplash.com/photo-1511818966892-d7d671e672a2?w=800",
       "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800",
     ],
     careTypes: ["Assisted Living"],
@@ -249,7 +249,7 @@ export const communityData: Community[] = [
       lng: -81.606
     },
     images: [
-      "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=800",
+      "https://images.unsplash.com/photo-1511818966892-d7d671e672a2?w=800",
       "https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=800",
     ],
     careTypes: ["Assisted Living"],
@@ -489,7 +489,7 @@ export const communityData: Community[] = [
       lng: -81.7228
     },
     images: [
-      "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=800",
+      "https://images.unsplash.com/photo-1511818966892-d7d671e672a2?w=800",
       "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800",
     ],
     careTypes: ["Assisted Living", "Memory Care"],
@@ -569,7 +569,7 @@ export const communityData: Community[] = [
       lng: -81.9179
     },
     images: [
-      "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=800",
+      "https://images.unsplash.com/photo-1511818966892-d7d671e672a2?w=800",
       "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800",
     ],
     careTypes: ["Independent Living"],
@@ -602,7 +602,7 @@ export const communityData: Community[] = [
     },
     images: [
       "https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=800",
-      "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=800",
+      "https://images.unsplash.com/photo-1511818966892-d7d671e672a2?w=800",
     ],
     careTypes: ["Assisted Living", "Memory Care"],
     description: "Light of Hearts Villa provides compassionate assisted living and specialized memory care services in a supportive environment. Our dedicated care team offers 24-hour assistance, medication management, and innovative memory care programming to enhance quality of life for all residents."
@@ -618,7 +618,7 @@ export const communityData: Community[] = [
     },
     images: [
       "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800",
-      "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=800",
+      "https://images.unsplash.com/photo-1511818966892-d7d671e672a2?w=800",
     ],
     careTypes: ["Assisted Living", "Memory Care"],
     description: "Arden Courts of Westlake provides compassionate assisted living and specialized memory care services in a supportive environment. Our dedicated care team offers 24-hour assistance, medication management, and innovative memory care programming to enhance quality of life for all residents."
@@ -634,7 +634,7 @@ export const communityData: Community[] = [
     },
     images: [
       "https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=800",
-      "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=800",
+      "https://images.unsplash.com/photo-1511818966892-d7d671e672a2?w=800",
     ],
     careTypes: ["Independent Living", "Assisted Living", "Memory Care"],
     description: "Vitalia North Royalton offers a full continuum of care with independent living, assisted living, and memory care options. Our beautiful community features spacious apartments, chef-prepared dining, engaging activities, and personalized care services tailored to each resident's unique needs and preferences."
@@ -665,7 +665,7 @@ export const communityData: Community[] = [
       lng: -82.0354
     },
     images: [
-      "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=800",
+      "https://images.unsplash.com/photo-1511818966892-d7d671e672a2?w=800",
       "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800",
     ],
     careTypes: ["Assisted Living", "Memory Care"],
@@ -761,7 +761,7 @@ export const communityData: Community[] = [
       lng: -81.6697
     },
     images: [
-      "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=800",
+      "https://images.unsplash.com/photo-1511818966892-d7d671e672a2?w=800",
       "https://images.unsplash.com/photo-1497366216548-37526070297c?w=800",
     ],
     careTypes: ["Independent Living", "Assisted Living", "Memory Care", "Skilled Nursing"],
@@ -809,7 +809,7 @@ export const communityData: Community[] = [
       lng: -81.6697
     },
     images: [
-      "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=800",
+      "https://images.unsplash.com/photo-1511818966892-d7d671e672a2?w=800",
       "https://images.unsplash.com/photo-1497366216548-37526070297c?w=800",
     ],
     careTypes: ["Assisted Living"],
@@ -1162,7 +1162,7 @@ export const communityData: Community[] = [
     },
     images: [
       "https://images.unsplash.com/photo-1516979187457-637abb4f9353?w=800",
-      "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=800",
+      "https://images.unsplash.com/photo-1511818966892-d7d671e672a2?w=800",
     ],
     careTypes: ["Assisted Living", "Memory Care"],
     description: "Sunrise of Poland provides compassionate assisted living and specialized memory care services in a supportive environment. Our dedicated care team offers 24-hour assistance, medication management, and innovative memory care programming to enhance quality of life for all residents."
