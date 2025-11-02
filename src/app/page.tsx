@@ -316,7 +316,7 @@ function SearchContainer() {
         <h2 className="text-2xl md:text-3xl font-semibold mb-2 text-center">
           {showViewAll ? 'Featured Cleveland-Area Communities' : `${filteredCommunities.length} ${filteredCommunities.length === 1 ? 'Community' : 'Communities'} Found`}
           {activeLocationLabel && ` in ${activeLocationLabel}`}
-          {activeCareFilter && activeCareFilter !== 'all' && ` for ${activeCareLabel}`}
+          {selectedCareFilter && selectedCareFilter !== 'all' && ` for ${activeCareLabel}`}
         </h2>
         {showViewAll && (
           <p className="text-gray-600 text-center mb-8">
