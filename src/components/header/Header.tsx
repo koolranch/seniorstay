@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Search, Phone, Menu, User, Home, X } from 'lucide-react';
+import { Search, Menu, User, Home, X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 import { Button } from '@/components/ui/button';
@@ -73,16 +73,11 @@ const Header = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-2">
-            <Button variant="ghost" className="rounded-full text-sm font-medium">
-              For families
-            </Button>
-            <Button variant="ghost" className="rounded-full text-sm font-medium">
-              For providers
-            </Button>
-            <Button variant="outline" className="flex items-center rounded-full text-sm font-medium gap-2 border-primary text-primary">
-              <Phone className="h-4 w-4" />
-              1-888-SENIORS
-            </Button>
+            <Link href="/contact">
+              <Button variant="outline" className="rounded-full text-sm font-medium">
+                Contact Us
+              </Button>
+            </Link>
 
             {isMounted && (
               <DropdownMenu>
@@ -108,18 +103,6 @@ const Header = () => {
 
           {/* Mobile Navigation */}
           <div className="flex items-center md:hidden gap-3">
-            {/* Phone button - Always visible on mobile */}
-            <Button
-              variant="ghost"
-              size="icon"
-              className="text-primary rounded-full"
-              asChild
-            >
-              <a href="tel:1888736467" aria-label="Call us">
-                <Phone className="h-5 w-5" />
-              </a>
-            </Button>
-
             {/* Mobile Menu - Only render after mount */}
             {isMounted && (
               <Sheet>
@@ -144,32 +127,25 @@ const Header = () => {
                     <Link href="/" className="py-3 px-2 hover:bg-gray-50 rounded-md">
                       Home
                     </Link>
-                    <Link href="#" className="py-3 px-2 hover:bg-gray-50 rounded-md">
-                      For families
+                    <Link href="/greater-cleveland" className="py-3 px-2 hover:bg-gray-50 rounded-md">
+                      Browse Communities
                     </Link>
-                    <Link href="#" className="py-3 px-2 hover:bg-gray-50 rounded-md">
-                      For providers
+                    <Link href="/about" className="py-3 px-2 hover:bg-gray-50 rounded-md">
+                      About Us
+                    </Link>
+                    <Link href="/contact" className="py-3 px-2 hover:bg-gray-50 rounded-md">
+                      Contact Us
                     </Link>
                     <hr className="my-2" />
                     <Link href="#" className="py-3 px-2 hover:bg-gray-50 rounded-md">
                       Saved communities
                     </Link>
-                    <Link href="#" className="py-3 px-2 hover:bg-gray-50 rounded-md">
-                      Resources
-                    </Link>
-                    <Link href="#" className="py-3 px-2 hover:bg-gray-50 rounded-md">
-                      Contact us
-                    </Link>
-                    <hr className="my-2" />
-                    <Button className="mt-4 w-full">Sign up</Button>
-                    <Button variant="outline" className="mt-2 w-full">Login</Button>
                   </nav>
 
                   <div className="absolute bottom-6 left-6 right-6">
-                    <a href="tel:1888736467" className="flex items-center justify-center gap-2 text-center py-3 px-4 bg-primary/10 text-primary rounded-md font-medium">
-                      <Phone className="h-4 w-4" />
-                      1-888-SENIORS
-                    </a>
+                    <Link href="/contact" className="w-full">
+                      <Button className="w-full">Get Help Finding Care</Button>
+                    </Link>
                   </div>
                 </SheetContent>
               </Sheet>
