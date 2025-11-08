@@ -11,11 +11,11 @@ const footerLinks = {
     { label: 'Greater Cleveland', href: '/greater-cleveland' },
   ],
   seniorCare: [
-    { label: 'Independent Living', href: '/facilities?careLevel=Independent%20Living' },
-    { label: 'Assisted Living', href: '/facilities?careLevel=Assisted%20Living' },
-    { label: 'Memory Care', href: '/facilities?careLevel=Memory%20Care' },
-    { label: 'Nursing Homes', href: '/facilities?careLevel=Nursing%20Home' },
-    { label: 'Senior Apartments', href: '/facilities?careLevel=Senior%20Apartments' },
+    { label: 'Assisted Living', href: '/assisted-living-cleveland' },
+    { label: 'Memory Care', href: '/memory-care-cleveland' },
+    { label: 'Pricing Guide', href: '/senior-living-costs-cleveland' },
+    { label: 'Choosing Guide', href: '/choosing-senior-living' },
+    { label: 'Resources', href: '/resources' },
   ],
   company: [
     { label: 'Privacy Policy', href: '/privacy-policy' },
@@ -86,7 +86,7 @@ const Footer = () => {
               <Link href="/terms-of-service" className="text-sm text-gray-600 hover:underline">
                 Terms
               </Link>
-              <Link href="/sitemap" className="text-sm text-gray-600 hover:underline">
+              <Link href="/sitemap.xml" className="text-sm text-gray-600 hover:underline">
                 Sitemap
               </Link>
             </div>
