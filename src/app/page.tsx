@@ -16,6 +16,7 @@ import Footer from '@/components/footer/Footer';
 import LocationCard from '@/components/property/LocationCard';
 import StickyTourButton from '@/components/tour/StickyTourButton';
 import ExitIntentPopup from '@/components/forms/ExitIntentPopup';
+import HowItWorks from '@/components/landing/HowItWorks';
 import { communityData } from '@/data/facilities';
 import { testimonials } from '@/data/testimonials';
 
@@ -132,7 +133,7 @@ function SearchContainer() {
   });
   
   const featuredCommunities = selectedCareFilter === 'all' && selectedLocation === 'all' && !searchQuery
-    ? sortedClevelandCommunities.slice(0, 12)
+    ? sortedClevelandCommunities.slice(0, 6)
     : filteredCommunities;
   
   const showViewAll = selectedCareFilter === 'all' && selectedLocation === 'all' && !searchQuery;
@@ -151,12 +152,6 @@ function SearchContainer() {
           </div>
         </div>
       </div>
-
-      <CategoryTabs
-        communities={filteredCommunities}
-        selectedFilter={selectedCareFilter}
-        onFilterChange={setSelectedCareFilter}
-      />
 
       {/* Hero Section - Cleveland-Focused */}
       <div className="bg-gradient-to-r from-primary/5 to-primary/10 py-12 md:py-16 border-b border-gray-200">
@@ -192,8 +187,8 @@ function SearchContainer() {
 
             {/* Lead Capture Form */}
             <div className="bg-white p-6 md:p-8 rounded-xl shadow-lg border border-gray-200 mb-8">
-              <h2 className="text-xl font-semibold mb-4 text-center">Get Free Personalized Help</h2>
-              <p className="text-gray-600 text-center mb-6">Our Cleveland advisors will help you find the right community, schedule tours, and answer all your questions.</p>
+              <h2 className="text-xl md:text-2xl font-bold mb-2 text-center">Get Free Help Finding the Right Community</h2>
+              <p className="text-gray-600 text-center mb-6">Our Cleveland advisors will call you to discuss your needs and schedule tours</p>
               <form action="https://formspree.io/f/xnnpaply" method="POST" className="space-y-4">
                 <input type="hidden" name="form_type" value="homepage_hero_lead" />
                 <input type="hidden" name="source_page" value="homepage_hero" />
@@ -203,124 +198,43 @@ function SearchContainer() {
                     name="name"
                     required
                     placeholder="Your Name *"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                    className="w-full px-5 py-4 text-lg border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
                   />
                   <input
-                    type="email"
-                    name="email"
+                    type="tel"
+                    name="phone"
                     required
-                    placeholder="Your Email *"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                    placeholder="Your Phone *"
+                    className="w-full px-5 py-4 text-lg border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
                   />
                 </div>
-                <input
-                  type="tel"
-                  name="phone"
-                  required
-                  placeholder="Your Phone Number *"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                />
-                <select
-                  name="area"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                >
-                  <option value="">Preferred Area (Optional)</option>
-                  <option value="Cleveland">Cleveland</option>
-                  <option value="Shaker Heights">Shaker Heights</option>
-                  <option value="Beachwood">Beachwood</option>
-                  <option value="Lakewood">Lakewood</option>
-                  <option value="Parma">Parma</option>
-                  <option value="Westlake">Westlake</option>
-                  <option value="Other Cleveland Area">Other Cleveland Area</option>
-                </select>
                 <button
                   type="submit"
-                  className="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
+                  className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold text-lg py-4 px-8 rounded-lg transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2"
                 >
-                  Connect With a Local Advisor
+                  Schedule Free Tours
+                  <ArrowRight className="h-5 w-5" />
                 </button>
-                <p className="text-xs text-gray-500 text-center">100% free service. We're here to help.</p>
+                <p className="text-sm text-gray-600 text-center">We'll call you within 24 hours. 100% free service, no obligations.</p>
               </form>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-              <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                <div className="text-xl font-semibold mb-4 flex items-center">
-                  <span className="bg-primary/10 text-primary p-2 rounded-full mr-2">
-                    <Search size={18} />
-                  </span>
-                  Find Senior Living By Care Type
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  {allCareTypes.map(careType => (
-                    <Link
-                      key={careType}
-                      href="#communities"
-                      onClick={() => setSelectedCareFilter(careType.toLowerCase())}
-                      className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-primary/5 hover:border-primary/20 border border-gray-100 transition-all"
-                    >
-                      <span>{careType}</span>
-                      <span className="bg-primary/10 text-primary px-2 py-1 rounded-full text-sm">
-                        {communityCounts[careType]}
-                      </span>
-                    </Link>
-                  ))}
-                </div>
-              </div>
-
-              <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                <div className="text-xl font-semibold mb-4 flex items-center">
-                  <span className="bg-primary/10 text-primary p-2 rounded-full mr-2">
-                    <MapPin size={18} />
-                  </span>
-                  Find Senior Living By Location
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[240px] overflow-y-auto pr-1">
-                  {allCities.map(city => (
-                    <Link
-                      key={city}
-                      href={`/location/${city.toLowerCase().replace(/\s+/g, '-')}`}
-                      className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-primary/5 hover:border-primary/20 border border-gray-100 transition-all"
-                    >
-                      <span>{city}</span>
-                      <span className="bg-primary/10 text-primary px-2 py-1 rounded-full text-sm">
-                        {cityCounts[city]}
-                      </span>
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            <div className="text-center space-y-2">
+            <div className="text-center space-y-3">
+              <p className="text-sm text-gray-600">or</p>
               <Link
-                href="/greater-cleveland"
-                className="inline-flex items-center text-primary hover:underline font-semibold"
+                href="#communities"
+                className="inline-flex items-center text-primary hover:underline font-semibold text-lg"
               >
-                <MapPin className="mr-1 h-4 w-4" />
-                <span>Explore Greater Cleveland Communities</span>
-                <ArrowRight className="ml-1 h-4 w-4" />
+                <span>Browse all {communityData.length} Cleveland communities</span>
+                <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
-              <div>
-                <Link
-                  href="#communities"
-                  className="inline-flex items-center text-gray-600 hover:text-primary text-sm"
-                >
-                  <span>Or view all {communityData.length} communities</span>
-                  <ArrowRight className="ml-1 h-3 w-3" />
-                </Link>
-              </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Location Filter */}
-      <LocationTabs
-        communities={filteredCommunities}
-        selectedLocation={selectedLocation}
-        onLocationChange={setSelectedLocation}
-      />
+      {/* How It Works Section */}
+      <HowItWorks />
 
       {/* Filter Indicators */}
       <div className="container mx-auto px-4 py-4">
@@ -343,6 +257,43 @@ function SearchContainer() {
         <SearchResults query={searchQuery} results={filteredCommunities} />
       )}
 
+      {/* Testimonials Section - Show only when not filtering */}
+      {!searchQuery && selectedCareFilter === 'all' && selectedLocation === 'all' && (
+        <div className="bg-gray-50 py-16 border-t border-gray-200">
+          <div className="container mx-auto px-4">
+            <h2 className="text-3xl font-bold text-center mb-2">Trusted by Cleveland Families</h2>
+            <div className="flex items-center justify-center gap-2 mb-12">
+              <div className="flex">
+                {[1,2,3,4,5].map(i => (
+                  <Star key={i} className="h-5 w-5 text-yellow-400 fill-yellow-400" />
+                ))}
+              </div>
+              <span className="text-gray-600 font-semibold">4.8/5 from 500+ families</span>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+              {testimonials.slice(0, 3).map((testimonial) => (
+                <div key={testimonial.id} className="bg-white p-6 rounded-lg shadow-sm">
+                  <div className="flex mb-3">
+                    {[1,2,3,4,5].map(i => (
+                      <Star key={i} className="h-4 w-4 text-yellow-400 fill-yellow-400" />
+                    ))}
+                  </div>
+                  <p className="text-gray-700 italic mb-4">"{testimonial.quote}"</p>
+                  <div className="border-t pt-4">
+                    <p className="font-semibold text-gray-900">{testimonial.author}</p>
+                    <p className="text-sm text-gray-500">{testimonial.location}</p>
+                    {testimonial.careType && (
+                      <p className="text-xs text-primary mt-1">{testimonial.careType}</p>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Community Listings */}
       <div id="communities" className="container mx-auto px-4 py-12">
         <h2 className="text-2xl md:text-3xl font-semibold mb-2 text-center">
@@ -352,7 +303,7 @@ function SearchContainer() {
         </h2>
         {showViewAll && (
           <p className="text-gray-600 text-center mb-8">
-            Handpicked senior living options in Greater Cleveland and Northeast Ohio
+            Our top 6 recommended memory care and assisted living communities in Cleveland
           </p>
         )}
 
@@ -363,15 +314,16 @@ function SearchContainer() {
                 <LocationCard key={community.id} community={community} />
               ))}
             </div>
-            {showViewAll && communityData.length > 12 && (
+            {showViewAll && communityData.length > 6 && (
               <div className="text-center mt-10">
                 <Link
                   href="/greater-cleveland"
-                  className="inline-flex items-center gap-2 bg-primary hover:bg-primary/90 text-white font-semibold px-8 py-3 rounded-lg transition-colors"
+                  className="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-bold text-lg px-10 py-4 rounded-lg transition-all shadow-md hover:shadow-lg"
                 >
-                  <span>View All {communityData.length} Communities</span>
-                  <ArrowRight className="h-5 w-5" />
+                  <span>View All {communityData.length} Cleveland Communities</span>
+                  <ArrowRight className="h-6 w-6" />
                 </Link>
+                <p className="text-sm text-gray-500 mt-4">Filter by city, care type, and amenities</p>
               </div>
             )}
           </>
@@ -389,6 +341,34 @@ function SearchContainer() {
             </button>
           </div>
         )}
+      </div>
+
+      {/* Advanced Filters - Location Tabs */}
+      {(selectedCareFilter !== 'all' || selectedLocation !== 'all' || searchQuery) && (
+        <>
+          <div className="bg-gray-100 py-4 border-t border-gray-200">
+            <div className="container mx-auto px-4">
+              <p className="text-center text-sm text-gray-600 mb-4">Filter by location:</p>
+            </div>
+          </div>
+          <LocationTabs
+            communities={filteredCommunities}
+            selectedLocation={selectedLocation}
+            onLocationChange={setSelectedLocation}
+          />
+        </>
+      )}
+
+      {/* Category Tabs - For Advanced Users */}
+      <div className="bg-white py-8 border-t border-gray-200">
+        <div className="container mx-auto px-4">
+          <p className="text-center text-gray-600 mb-6">Want to filter communities? Use the tabs below:</p>
+          <CategoryTabs
+            communities={filteredCommunities}
+            selectedFilter={selectedCareFilter}
+            onFilterChange={setSelectedCareFilter}
+          />
+        </div>
       </div>
     </>
   );
