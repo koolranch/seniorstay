@@ -22,17 +22,17 @@ export default function CommunityContact({ community }: CommunityContactProps) {
             <div className="space-y-4">
               <div>
                 <p className="text-gray-600">
-                  <span className="font-semibold">Phone:</span> 1-888-SENIORS (1-888-736-4677)
-                </p>
-              </div>
-              <div>
-                <p className="text-gray-600">
                   <span className="font-semibold">Email:</span> info@guideforseniors.com
                 </p>
               </div>
               <div>
                 <p className="text-gray-600">
                   <span className="font-semibold">Address:</span> {community.address || 'Address not available'}
+                </p>
+              </div>
+              <div>
+                <p className="text-sm text-gray-500 mt-4">
+                  Fill out the form to get personalized information about this community, pricing, and tour availability.
                 </p>
               </div>
             </div>

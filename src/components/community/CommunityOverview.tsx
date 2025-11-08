@@ -30,13 +30,13 @@ export default function CommunityOverview({ community }: CommunityOverviewProps)
           </div>
           <div>
             <h3 className="text-lg font-semibold text-gray-900 mb-2">
-              Contact
+              Get Information
             </h3>
             <p className="text-gray-600">
-              Phone: 1-888-SENIORS (1-888-736-4677)
-            </p>
-            <p className="text-gray-600">
               Email: info@guideforseniors.com
+            </p>
+            <p className="text-sm text-gray-500 mt-2">
+              Use the buttons below to request pricing or schedule a tour.
             </p>
           </div>
         </div>

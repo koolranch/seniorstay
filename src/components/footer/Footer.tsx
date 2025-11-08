@@ -6,10 +6,9 @@ import { Globe } from 'lucide-react';
 
 const footerLinks = {
   support: [
-    { label: 'Help Center', href: '/help' },
-    { label: 'Resources Guide', href: '/resources' },
     { label: 'Contact Us', href: '/contact' },
-    { label: 'Financial Options', href: '/resources/financial-options' },
+    { label: 'About Us', href: '/about' },
+    { label: 'Greater Cleveland', href: '/greater-cleveland' },
   ],
   seniorCare: [
     { label: 'Independent Living', href: '/facilities?careLevel=Independent%20Living' },
@@ -19,10 +18,9 @@ const footerLinks = {
     { label: 'Senior Apartments', href: '/facilities?careLevel=Senior%20Apartments' },
   ],
   company: [
-    { label: 'About Us', href: '/about' },
-    { label: 'Blog', href: '/blog' },
-    { label: 'Partners', href: '/partners' },
-    { label: 'Testimonials', href: '/testimonials' },
+    { label: 'Privacy Policy', href: '/privacy-policy' },
+    { label: 'Terms of Service', href: '/terms-of-service' },
+    { label: 'Sitemap', href: '/sitemap.xml' },
   ],
 };
 

@@ -35,16 +35,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1,
     },
     {
-      url: `${baseUrl}/facilities`,
+      url: `${baseUrl}/greater-cleveland`,
       lastModified: currentDate,
       changeFrequency: 'daily',
       priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/resources`,
-      lastModified: currentDate,
-      changeFrequency: 'weekly',
-      priority: 0.8,
     },
     {
       url: `${baseUrl}/about`,

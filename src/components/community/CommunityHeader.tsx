@@ -1,23 +1,208 @@
 "use client";
 
 import * as React from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { ArrowLeft, MapPin, Calendar, DollarSign } from 'lucide-react';
 import { Community } from '@/data/facilities';
+import { Button } from '@/components/ui/button';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
 interface CommunityHeaderProps {
   community: Community;
 }
 
 export default function CommunityHeader({ community }: CommunityHeaderProps) {
+  const [tourSubmitted, setTourSubmitted] = React.useState(false);
+  const [pricingSubmitted, setPricingSubmitted] = React.useState(false);
+
+  const handleTourSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    
+    try {
+      await fetch('https://formspree.io/f/xnnpaply', {
+        method: 'POST',
+        body: formData,
+        headers: { Accept: 'application/json' },
+      });
+      setTourSubmitted(true);
+    } catch (error) {
+      console.error('Error submitting form:', error);
+    }
+  };
+
+  const handlePricingSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    
+    try {
+      await fetch('https://formspree.io/f/xnnpaply', {
+        method: 'POST',
+        body: formData,
+        headers: { Accept: 'application/json' },
+      });
+      setPricingSubmitted(true);
+    } catch (error) {
+      console.error('Error submitting form:', error);
+    }
+  };
+
   return (
-    <div className="bg-white py-8">
-      <div className="container mx-auto px-4">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">
-          {community.name}
-        </h1>
-        <div className="flex items-center gap-2 text-gray-600">
-          <span>{community.location}</span>
-          <span>•</span>
-          <span>{community.careTypes.join(', ')}</span>
+    <div className="bg-white">
+      {/* Breadcrumb */}
+      <div className="border-b border-gray-200">
+        <div className="container mx-auto px-4 py-3">
+          <Link href="/" className="inline-flex items-center text-sm text-primary hover:underline">
+            <ArrowLeft className="h-4 w-4 mr-1" />
+            Back to Search
+          </Link>
+        </div>
+      </div>
+
+      {/* Image Gallery */}
+      {community.images && community.images.length > 0 && (
+        <div className="container mx-auto px-4 py-6">
+          <Carousel className="w-full">
+            <CarouselContent>
+              {community.images.map((image, index) => (
+                <CarouselItem key={index}>
+                  <div className="relative w-full h-[400px] md:h-[500px] rounded-xl overflow-hidden">
+                    <Image
+                      src={image}
+                      alt={`${community.name} - Image ${index + 1}`}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 768px) 100vw, 1200px"
+                    />
+                  </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            {community.images.length > 1 && (
+              <>
+                <CarouselPrevious className="left-4" />
+                <CarouselNext className="right-4" />
+              </>
+            )}
+          </Carousel>
+        </div>
+      )}
+
+      {/* Header Info with CTAs */}
+      <div className="container mx-auto px-4 pb-8">
+        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
+          <div className="flex-1">
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
+              {community.name}
+            </h1>
+            <div className="flex items-center gap-2 text-gray-600 mb-4">
+              <MapPin className="h-5 w-5 text-primary" />
+              <span className="text-lg">{community.location}</span>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {community.careTypes.map((type, index) => (
+                <span
+                  key={index}
+                  className="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-medium"
+                >
+                  {type}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          {/* CTA Buttons */}
+          <div className="flex flex-col sm:flex-row md:flex-col gap-3 md:min-w-[200px]">
+            {/* Get Pricing Dialog */}
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button className="w-full" size="lg">
+                  <DollarSign className="h-5 w-5 mr-2" />
+                  Get Pricing
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-md">
+                <DialogHeader>
+                  <DialogTitle>Request Pricing Information</DialogTitle>
+                </DialogHeader>
+                {!pricingSubmitted ? (
+                  <form onSubmit={handlePricingSubmit} className="space-y-4 pt-4">
+                    <input type="hidden" name="form_type" value="community_pricing" />
+                    <input type="hidden" name="community_name" value={community.name} />
+                    <input type="hidden" name="community_id" value={community.id} />
+                    <div className="space-y-2">
+                      <Label htmlFor="pricing-name">Your Name</Label>
+                      <Input id="pricing-name" name="name" required />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="pricing-email">Email</Label>
+                      <Input id="pricing-email" name="email" type="email" required />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="pricing-phone">Phone Number</Label>
+                      <Input id="pricing-phone" name="phone" type="tel" required />
+                    </div>
+                    <Button type="submit" className="w-full">Get Pricing Info</Button>
+                  </form>
+                ) : (
+                  <div className="text-center py-6">
+                    <p className="text-green-600 font-semibold mb-2">Thank you!</p>
+                    <p className="text-gray-600">We'll send you pricing information shortly.</p>
+                  </div>
+                )}
+              </DialogContent>
+            </Dialog>
+
+            {/* Schedule Tour Dialog */}
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button variant="outline" className="w-full" size="lg">
+                  <Calendar className="h-5 w-5 mr-2" />
+                  Schedule Tour
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-md">
+                <DialogHeader>
+                  <DialogTitle>Schedule a Tour</DialogTitle>
+                </DialogHeader>
+                {!tourSubmitted ? (
+                  <form onSubmit={handleTourSubmit} className="space-y-4 pt-4">
+                    <input type="hidden" name="form_type" value="community_tour" />
+                    <input type="hidden" name="community_name" value={community.name} />
+                    <input type="hidden" name="community_id" value={community.id} />
+                    <div className="space-y-2">
+                      <Label htmlFor="tour-name">Your Name</Label>
+                      <Input id="tour-name" name="name" required />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="tour-email">Email</Label>
+                      <Input id="tour-email" name="email" type="email" required />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="tour-phone">Phone Number</Label>
+                      <Input id="tour-phone" name="phone" type="tel" required />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="tour-date">Preferred Date</Label>
+                      <Input id="tour-date" name="preferred_date" type="date" />
+                    </div>
+                    <Button type="submit" className="w-full">Request Tour</Button>
+                  </form>
+                ) : (
+                  <div className="text-center py-6">
+                    <p className="text-green-600 font-semibold mb-2">Tour request received!</p>
+                    <p className="text-gray-600">We'll contact you shortly to confirm your tour.</p>
+                  </div>
+                )}
+              </DialogContent>
+            </Dialog>
+          </div>
         </div>
       </div>
     </div>
