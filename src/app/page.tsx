@@ -154,10 +154,16 @@ function SearchContainer() {
       </div>
 
       {/* Hero Section - Cleveland-Focused */}
-      <div className="bg-gradient-to-r from-primary/5 to-primary/10 py-12 md:py-16 border-b border-gray-200">
-        <div className="container mx-auto px-4">
+      <div className="bg-gradient-to-r from-blue-900/5 to-blue-800/10 py-12 md:py-20 border-b border-gray-200 relative overflow-hidden">
+        {/* Subtle background pattern */}
+        <div className="absolute inset-0 opacity-[0.03]">
+          <div className="absolute inset-0" style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%231E3A8A' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
+          }} />
+        </div>
+        <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto">
-            <h1 className="text-3xl md:text-5xl font-bold mb-4 text-center">
+            <h1 className="text-4xl md:text-6xl font-bold mb-6 text-center leading-tight">
               Find Assisted Living & Memory Care in Cleveland, Ohio
             </h1>
             <p className="text-base md:text-lg text-gray-700 mb-6 text-center max-w-3xl mx-auto">
@@ -165,23 +171,23 @@ function SearchContainer() {
             </p>
 
             {/* Trust Signals */}
-            <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6 mb-8 text-sm">
-              <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-sm">
+            <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6 mb-10 text-sm">
+              <div className="flex items-center gap-2 bg-white px-5 py-3 rounded-full shadow-md hover:shadow-lg transition-shadow">
                 <div className="flex">
                   {[1,2,3,4,5].map(i => (
-                    <Star key={i} className="h-4 w-4 text-yellow-400 fill-yellow-400" />
+                    <Star key={i} className="h-5 w-5 text-yellow-400 fill-yellow-400" />
                   ))}
                 </div>
-                <span className="font-semibold text-gray-900">4.8/5</span>
+                <span className="font-bold text-gray-900 text-base">4.8/5</span>
               </div>
-              <div className="bg-white px-4 py-2 rounded-full shadow-sm font-semibold text-gray-900">
-                500+ Families Helped
+              <div className="bg-gradient-to-r from-blue-50 to-blue-100 px-5 py-3 rounded-full shadow-md border border-blue-200 font-bold text-gray-900">
+                <span className="text-primary">500+</span> Families Helped
               </div>
-              <div className="bg-green-50 px-4 py-2 rounded-full border border-green-200 font-semibold text-green-700">
-                100% Free Service
+              <div className="bg-gradient-to-r from-green-50 to-emerald-100 px-5 py-3 rounded-full border border-green-300 font-bold text-green-800 shadow-md">
+                ✓ 100% Free Service
               </div>
-              <div className="bg-blue-50 px-4 py-2 rounded-full border border-blue-200 font-semibold text-blue-700">
-                Local Cleveland Experts
+              <div className="bg-gradient-to-r from-orange-50 to-amber-100 px-5 py-3 rounded-full border border-orange-200 font-bold text-orange-800 shadow-md">
+                📍 Local Experts
               </div>
             </div>
 
@@ -273,18 +279,28 @@ function SearchContainer() {
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
               {testimonials.slice(0, 3).map((testimonial) => (
-                <div key={testimonial.id} className="bg-white p-6 rounded-lg shadow-sm">
-                  <div className="flex mb-3">
-                    {[1,2,3,4,5].map(i => (
-                      <Star key={i} className="h-4 w-4 text-yellow-400 fill-yellow-400" />
-                    ))}
+                <div key={testimonial.id} className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                  <div className="flex items-center gap-3 mb-4">
+                    {/* Avatar with initials */}
+                    <div className="w-14 h-14 bg-gradient-to-br from-primary to-primary/60 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-md flex-shrink-0">
+                      {testimonial.author.split(' ').map(n => n[0]).join('')}
+                    </div>
+                    <div className="flex flex-col">
+                      <div className="flex mb-1">
+                        {[1,2,3,4,5].map(i => (
+                          <Star key={i} className="h-4 w-4 text-yellow-400 fill-yellow-400" />
+                        ))}
+                      </div>
+                      <p className="text-sm font-semibold text-gray-900">{testimonial.author}</p>
+                    </div>
                   </div>
-                  <p className="text-gray-700 italic mb-4">"{testimonial.quote}"</p>
-                  <div className="border-t pt-4">
-                    <p className="font-semibold text-gray-900">{testimonial.author}</p>
+                  <p className="text-gray-700 italic mb-4 leading-relaxed">"{testimonial.quote}"</p>
+                  <div className="border-t pt-4 flex items-center justify-between">
                     <p className="text-sm text-gray-500">{testimonial.location}</p>
                     {testimonial.careType && (
-                      <p className="text-xs text-primary mt-1">{testimonial.careType}</p>
+                      <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full font-medium">
+                        {testimonial.careType}
+                      </span>
                     )}
                   </div>
                 </div>
@@ -310,8 +326,17 @@ function SearchContainer() {
         {featuredCommunities.length > 0 ? (
           <>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-              {featuredCommunities.map((community) => (
-                <LocationCard key={community.id} community={community} />
+              {featuredCommunities.map((community, index) => (
+                <div key={community.id} className="relative">
+                  {/* Featured badge for top 3 */}
+                  {showViewAll && index < 3 && (
+                    <div className="absolute -top-2 -right-2 z-10 bg-gradient-to-br from-yellow-400 to-orange-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg flex items-center gap-1">
+                      <Star className="h-3 w-3 fill-white" />
+                      FEATURED
+                    </div>
+                  )}
+                  <LocationCard community={community} />
+                </div>
               ))}
             </div>
             {showViewAll && communityData.length > 6 && (
@@ -447,7 +472,7 @@ export default function Home() {
       <ExitIntentPopup cityName="Cleveland" />
 
       {/* Browse by City Section */}
-      <div className="bg-gray-100 py-12 border-t border-gray-200">
+      <div className="bg-gray-100 py-16 border-t border-gray-200">
         <div className="container mx-auto px-4">
           <h2 className="text-2xl font-bold text-center mb-2">Browse Senior Living by Cleveland-Area City</h2>
           <p className="text-gray-600 text-center mb-8">Find assisted living and memory care in your preferred neighborhood</p>
@@ -502,7 +527,7 @@ export default function Home() {
       </div>
 
       {/* Why Choose Guide for Seniors - Cleveland Focus */}
-      <div className="bg-white py-16 border-t border-gray-200">
+      <div className="bg-white py-20 border-t border-gray-200">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-4">Why Cleveland Families Choose Guide for Seniors</h2>
           <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">

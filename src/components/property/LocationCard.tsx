@@ -124,7 +124,7 @@ export default function LocationCard({ community }: LocationCardProps) {
   const careTypes = community.careTypes || [];
 
   return (
-    <div className="group bg-white border border-gray-200 hover:border-primary/50 rounded-xl overflow-hidden transition-all duration-200 hover:shadow-md flex flex-col h-full">
+    <div className="group bg-white border border-gray-200 hover:border-primary/50 rounded-xl overflow-hidden transition-all duration-300 hover:shadow-xl hover:scale-[1.02] flex flex-col h-full">
       {/* Card Header/Image */}
       <div className="relative w-full h-48">
         <Link href={communityUrl} className="block w-full h-full">

@@ -39,10 +39,12 @@ const Header = () => {
       <div className="container px-4 mx-auto">
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
-          <Link href="/" className="flex-shrink-0">
-            <div className="flex items-center">
-              <Home className="h-6 w-6 md:h-7 md:w-7 text-primary mr-2" />
-              <span className="text-base md:text-lg font-semibold">Guide for Seniors</span>
+          <Link href="/" className="flex-shrink-0 group">
+            <div className="flex items-center gap-2">
+              <div className="bg-gradient-to-br from-primary to-primary/70 p-2 rounded-lg shadow-md group-hover:shadow-lg transition-shadow">
+                <Home className="h-5 w-5 md:h-6 md:w-6 text-white" />
+              </div>
+              <span className="text-base md:text-lg font-bold text-gray-900 group-hover:text-primary transition-colors">Guide for Seniors</span>
             </div>
           </Link>
 

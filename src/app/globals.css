@@ -19,8 +19,8 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222 47% 11%;
 
-    /* New primary color: Calm teal */
-    --primary: 174 63% 40%;
+    /* Primary color: Navy Blue (trust, stability) */
+    --primary: 217 91% 30%;
     --primary-foreground: 0 0% 98%;
 
     --secondary: 220 14% 96%;
@@ -33,7 +33,7 @@
     --destructive-foreground: 0 0% 98%;
     --border: 214 32% 91%;
     --input: 214 32% 91%;
-    --ring: 174 63% 40%;
+    --ring: 217 91% 30%;
     --radius: 0.75rem;
   }
 
@@ -45,8 +45,8 @@
     --popover: 222 47% 11%;
     --popover-foreground: 210 40% 98%;
 
-    /* Dark mode primary color: Calm teal */
-    --primary: 174 63% 40%;
+    /* Dark mode primary color: Navy Blue */
+    --primary: 217 91% 30%;
     --primary-foreground: 0 0% 98%;
 
     --secondary: 217 33% 17%;
@@ -59,7 +59,7 @@
     --destructive-foreground: 0 0% 98%;
     --border: 217 33% 17%;
     --input: 217 33% 17%;
-    --ring: 174 63% 40%;
+    --ring: 217 91% 30%;
   }
 }
 
