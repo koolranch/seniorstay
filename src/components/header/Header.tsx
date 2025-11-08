@@ -90,12 +90,22 @@ const Header = () => {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-60 mt-2">
-                  <DropdownMenuItem className="font-medium">Sign up</DropdownMenuItem>
-                  <DropdownMenuItem>Login</DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/greater-cleveland" className="cursor-pointer">Browse Communities</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/resources" className="cursor-pointer">Resources & Guides</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/compare" className="cursor-pointer">Compare Communities</Link>
+                  </DropdownMenuItem>
                   <hr className="my-1" />
-                  <DropdownMenuItem>Saved communities</DropdownMenuItem>
-                  <DropdownMenuItem>Resources</DropdownMenuItem>
-                  <DropdownMenuItem>Contact us</DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/about" className="cursor-pointer">About Us</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/contact" className="cursor-pointer">Contact Us</Link>
+                  </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             )}
@@ -130,6 +140,9 @@ const Header = () => {
                     <Link href="/greater-cleveland" className="py-3 px-2 hover:bg-gray-50 rounded-md">
                       Browse Communities
                     </Link>
+                    <Link href="/resources" className="py-3 px-2 hover:bg-gray-50 rounded-md">
+                      Resources & Guides
+                    </Link>
                     <Link href="/about" className="py-3 px-2 hover:bg-gray-50 rounded-md">
                       About Us
                     </Link>
@@ -137,8 +150,8 @@ const Header = () => {
                       Contact Us
                     </Link>
                     <hr className="my-2" />
-                    <Link href="#" className="py-3 px-2 hover:bg-gray-50 rounded-md">
-                      Saved communities
+                    <Link href="/compare" className="py-3 px-2 hover:bg-gray-50 rounded-md">
+                      Compare Communities
                     </Link>
                   </nav>
 
