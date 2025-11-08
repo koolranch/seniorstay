@@ -39,48 +39,58 @@ export default function CommunityContact({ community }: CommunityContactProps) {
           </div>
           <div>
             <h3 className="text-lg font-semibold text-gray-900 mb-4">
-              Schedule a Visit
+              Request Information & Tour
             </h3>
-            <form className="space-y-4">
+            <form action="https://formspree.io/f/xnnpaply" method="POST" className="space-y-4">
+              <input type="hidden" name="form_type" value="community_contact" />
+              <input type="hidden" name="community_name" value={community.name} />
+              <input type="hidden" name="community_id" value={community.id} />
               <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                  Name
+                <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+                  Your Name *
                 </label>
                 <input
                   type="text"
                   id="name"
                   name="name"
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  required
+                  placeholder="John Smith"
+                  className="block w-full rounded-lg border border-gray-300 px-4 py-2.5 focus:border-primary focus:ring-2 focus:ring-primary focus:ring-offset-0"
                 />
               </div>
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                  Email
+                <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
+                  Phone Number *
+                </label>
+                <input
+                  type="tel"
+                  id="phone"
+                  name="phone"
+                  required
+                  placeholder="(216) 555-0100"
+                  className="block w-full rounded-lg border border-gray-300 px-4 py-2.5 focus:border-primary focus:ring-2 focus:ring-primary focus:ring-offset-0"
+                />
+              </div>
+              <div>
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                  Email *
                 </label>
                 <input
                   type="email"
                   id="email"
                   name="email"
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                />
-              </div>
-              <div>
-                <label htmlFor="message" className="block text-sm font-medium text-gray-700">
-                  Message
-                </label>
-                <textarea
-                  id="message"
-                  name="message"
-                  rows={4}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  required
+                  placeholder="john@example.com"
+                  className="block w-full rounded-lg border border-gray-300 px-4 py-2.5 focus:border-primary focus:ring-2 focus:ring-primary focus:ring-offset-0"
                 />
               </div>
               <button
                 type="submit"
-                className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                className="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 px-4 rounded-lg font-semibold transition-colors"
               >
-                Send Message
+                Request Information & Tour
               </button>
+              <p className="text-xs text-gray-500 text-center">We'll contact you within 24 hours.</p>
             </form>
           </div>
         </div>

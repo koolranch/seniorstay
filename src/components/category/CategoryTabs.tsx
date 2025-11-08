@@ -41,7 +41,12 @@ interface CategoryTabsProps {
 }
 
 export default function CategoryTabs({ communities, selectedFilter = 'all', onFilterChange }: CategoryTabsProps) {
-  const careTypes = ['all', ...Array.from(new Set(communities.flatMap(community => community.careTypes)))];
+  // Filter to show only primary care types (exclude Skilled Nursing and Rehabilitation)
+  const allCareTypes = Array.from(new Set(communities.flatMap(community => community.careTypes)));
+  const primaryCareTypes = allCareTypes.filter(type => 
+    type !== 'Skilled Nursing' && type !== 'Rehabilitation'
+  );
+  const careTypes = ['all', ...primaryCareTypes];
 
   return (
     <Tabs value={selectedFilter} onValueChange={onFilterChange} className="w-full">

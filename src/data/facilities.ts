@@ -61,6 +61,7 @@ export const communityData: Community[] = [
       "https://images.unsplash.com/photo-1516979187457-637abb4f9353?w=800",
     ],
     careTypes: ["Assisted Living"],
+    amenities: ["24-Hour Staff", "Medication Management", "Restaurant-Style Dining", "Personal Care Assistance", "Social Activities", "Housekeeping Services", "Emergency Response System", "Transportation Services"],
     description: "Westwood Place provides personalized assisted living services in a comfortable environment. Our dedicated staff delivers 24-hour assistance with daily activities, medication management, and health monitoring while promoting dignity and independence."
   },
   {

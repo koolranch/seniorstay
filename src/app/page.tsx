@@ -14,6 +14,7 @@ import SearchResults from '@/components/search/SearchResults';
 import ComparisonFloatingButton from '@/components/comparison/ComparisonFloatingButton';
 import Footer from '@/components/footer/Footer';
 import LocationCard from '@/components/property/LocationCard';
+import StickyTourButton from '@/components/tour/StickyTourButton';
 import { communityData } from '@/data/facilities';
 
 // Create a separate component for the search functionality
@@ -108,8 +109,28 @@ function SearchContainer() {
   const clevelandCommunities = communityData.filter(c => 
     clevelandCities.some(city => c.location.toLowerCase().includes(city.toLowerCase()))
   );
+  
+  // Prioritize Memory Care communities first, then Assisted Living
+  const sortedClevelandCommunities = [...clevelandCommunities].sort((a, b) => {
+    const aHasMemoryCare = a.careTypes.includes('Memory Care');
+    const bHasMemoryCare = b.careTypes.includes('Memory Care');
+    const aHasAssistedLiving = a.careTypes.includes('Assisted Living');
+    const bHasAssistedLiving = b.careTypes.includes('Assisted Living');
+    
+    // Memory Care first
+    if (aHasMemoryCare && !bHasMemoryCare) return -1;
+    if (!aHasMemoryCare && bHasMemoryCare) return 1;
+    
+    // Then Assisted Living
+    if (aHasAssistedLiving && !bHasAssistedLiving) return -1;
+    if (!aHasAssistedLiving && bHasAssistedLiving) return 1;
+    
+    // Then by number of care types (more comprehensive = better)
+    return b.careTypes.length - a.careTypes.length;
+  });
+  
   const featuredCommunities = selectedCareFilter === 'all' && selectedLocation === 'all' && !searchQuery
-    ? clevelandCommunities.slice(0, 12)
+    ? sortedClevelandCommunities.slice(0, 12)
     : filteredCommunities;
   
   const showViewAll = selectedCareFilter === 'all' && selectedLocation === 'all' && !searchQuery;
@@ -140,10 +161,10 @@ function SearchContainer() {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <h1 className="text-3xl md:text-5xl font-bold mb-4 text-center">
-              Find the Perfect Senior Living Community in Cleveland, Ohio
+              Find Assisted Living & Memory Care in Cleveland, Ohio
             </h1>
             <p className="text-base md:text-lg text-gray-700 mb-6 text-center max-w-3xl mx-auto">
-              Helping Cleveland families discover the best assisted living, memory care, and independent living communities. Compare {communityData.length} senior care options with personalized guidance—at no cost to you.
+              Helping Cleveland families find the right memory care and assisted living communities. Compare top-rated options, schedule tours, and get pricing—all free with personalized local guidance.
             </p>
 
             {/* Trust Signals */}
@@ -427,6 +448,32 @@ export default function Home() {
       <Suspense fallback={<div>Loading...</div>}>
         <SearchContainer />
       </Suspense>
+      
+      {/* Sticky Tour Request Button */}
+      <StickyTourButton />
+      
+      {/* Exit Intent Popup */}
+      <ExitIntentPopup cityName="Cleveland" />
+
+      {/* Browse by City Section */}
+      <div className="bg-gray-100 py-12 border-t border-gray-200">
+        <div className="container mx-auto px-4">
+          <h2 className="text-2xl font-bold text-center mb-2">Browse Senior Living by Cleveland-Area City</h2>
+          <p className="text-gray-600 text-center mb-8">Find assisted living and memory care in your preferred neighborhood</p>
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4 max-w-4xl mx-auto">
+            {['Cleveland', 'Shaker Heights', 'Beachwood', 'Parma', 'Lakewood', 'Westlake', 'Strongsville', 'Independence', 'Seven Hills', 'Rocky River'].map(city => (
+              <Link
+                key={city}
+                href={`/location/${city.toLowerCase().replace(/\s+/g, '-')}`}
+                className="bg-white hover:bg-primary/5 border border-gray-200 hover:border-primary/30 rounded-lg p-4 text-center transition-all group"
+              >
+                <MapPin className="h-5 w-5 text-primary mx-auto mb-2" />
+                <span className="text-sm font-medium text-gray-900 group-hover:text-primary">{city}</span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </div>
 
       {/* Why Choose Guide for Seniors - Cleveland Focus */}
       <div className="bg-white py-16 border-t border-gray-200">

@@ -10,6 +10,9 @@ import CommunityCareTypes from '@/components/community/CommunityCareTypes';
 import CommunityStaff from '@/components/community/CommunityStaff';
 import CommunityTestimonials from '@/components/community/CommunityTestimonials';
 import CommunityContact from '@/components/community/CommunityContact';
+import SimilarCommunities from '@/components/community/SimilarCommunities';
+import StickyTourButton from '@/components/tour/StickyTourButton';
+import ExitIntentPopup from '@/components/forms/ExitIntentPopup';
 import { SchemaOrg } from './SchemaOrg';
 
 export default function CommunityPage({ params }: { params: { id: string; slug: string } }) {
@@ -41,7 +44,10 @@ export default function CommunityPage({ params }: { params: { id: string; slug: 
         <CommunityTestimonials community={community} />
         <CommunityContact community={community} />
       </div>
+      <SimilarCommunities community={community} />
       <SchemaOrg community={community} />
+      <StickyTourButton />
+      <ExitIntentPopup cityName={community.location.split(',')[0].trim()} />
     </div>
   );
 }

@@ -335,6 +335,25 @@ export default function CityLocationClient({ cityName, stateAbbr, communities }:
                 and asking about staff-to-resident ratios and available activities.
               </p>
             </div>
+
+            {cityData?.nearbyHospitals && cityData.nearbyHospitals.length > 0 && (
+              <div>
+                <h3 className="text-lg font-medium mb-2">What hospitals and medical facilities are near {cityName} senior living communities?</h3>
+                <p className="text-gray-700">
+                  {cityName} senior living residents have access to excellent healthcare including {cityData.nearbyHospitals.slice(0, 3).join(', ')}.
+                  Proximity to quality healthcare is one of the key advantages of choosing senior living in {cityName}.
+                </p>
+              </div>
+            )}
+
+            <div>
+              <h3 className="text-lg font-medium mb-2">When should I consider memory care vs. assisted living in {cityName}?</h3>
+              <p className="text-gray-700">
+                Memory care is specialized for residents with Alzheimer's, dementia, or other cognitive impairments, offering secure environments and specialized programming.
+                Assisted living is appropriate for those who need help with daily activities but don't require memory care supervision.
+                Many {cityName} communities offer both, allowing for transitions as needs change.
+              </p>
+            </div>
           </div>
         </div>
       </div>

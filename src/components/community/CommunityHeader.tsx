@@ -162,7 +162,7 @@ export default function CommunityHeader({ community }: CommunityHeaderProps) {
             {/* Schedule Tour Dialog */}
             <Dialog>
               <DialogTrigger asChild>
-                <Button variant="outline" className="w-full" size="lg">
+                <Button variant="outline" className="w-full border-2 border-orange-500 text-orange-600 hover:bg-orange-50" size="lg">
                   <Calendar className="h-5 w-5 mr-2" />
                   Schedule Tour
                 </Button>
@@ -178,21 +178,18 @@ export default function CommunityHeader({ community }: CommunityHeaderProps) {
                     <input type="hidden" name="community_id" value={community.id} />
                     <div className="space-y-2">
                       <Label htmlFor="tour-name">Your Name</Label>
-                      <Input id="tour-name" name="name" required />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="tour-email">Email</Label>
-                      <Input id="tour-email" name="email" type="email" required />
+                      <Input id="tour-name" name="name" required placeholder="John Smith" />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="tour-phone">Phone Number</Label>
-                      <Input id="tour-phone" name="phone" type="tel" required />
+                      <Input id="tour-phone" name="phone" type="tel" required placeholder="(216) 555-0100" />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="tour-date">Preferred Date</Label>
-                      <Input id="tour-date" name="preferred_date" type="date" />
+                      <Label htmlFor="tour-email">Email</Label>
+                      <Input id="tour-email" name="email" type="email" required placeholder="john@example.com" />
                     </div>
-                    <Button type="submit" className="w-full">Request Tour</Button>
+                    <Button type="submit" className="w-full bg-orange-500 hover:bg-orange-600">Request Tour</Button>
+                    <p className="text-xs text-gray-500 text-center">We'll contact you within 24 hours to schedule.</p>
                   </form>
                 ) : (
                   <div className="text-center py-6">

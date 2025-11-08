@@ -212,5 +212,165 @@ export const clevelandCitiesData: Record<string, CityInfo> = {
         community: "Strongsville area"
       }
     ]
+  },
+  
+  'parma': {
+    name: 'Parma',
+    slug: 'parma',
+    description: 'Parma is one of Ohio\'s largest suburbs, offering affordable senior living options with easy access to healthcare and amenities. The city has a strong Polish heritage and tight-knit community feel.',
+    highlights: [
+      'Parma Hospital and UH Parma Medical Center',
+      'Multiple shopping centers and restaurants',
+      'Excellent senior center programs',
+      'Close to Cleveland Metroparks',
+      'Affordable cost of living'
+    ],
+    nearbyHospitals: [
+      'UH Parma Medical Center',
+      'Parma Hospital',
+      'Southwest General Health Center',
+      'Cleveland Clinic Parma Family Health'
+    ],
+    neighborhoods: ['Old Brooklyn', 'Pleasant Valley', 'Ridgewood', 'State Road'],
+    averageCost: {
+      independentLiving: '$2,200 - $3,800',
+      assistedLiving: '$3,200 - $5,500',
+      memoryCare: '$4,500 - $7,500'
+    },
+    testimonials: [
+      {
+        text: "The combination of quality care and affordable pricing made Parma the perfect choice for us.",
+        author: "Margaret F.",
+        community: "Mount Alverna Village"
+      },
+      {
+        text: "UH Parma is excellent and only minutes away. That peace of mind is priceless.",
+        author: "Joseph K."
+      }
+    ]
+  },
+  
+  'lakewood': {
+    name: 'Lakewood',
+    slug: 'lakewood',
+    description: 'Lakewood is a vibrant, walkable community on Cleveland\'s west side with Lake Erie access. Known for its diverse population and active lifestyle, it offers quality senior care in an urban suburban setting.',
+    highlights: [
+      'Lake Erie waterfront and Lakewood Park',
+      'Walkable downtown with shops and restaurants',
+      'Lakewood Hospital legacy and strong healthcare',
+      'RTA public transportation',
+      'Active arts and culture scene'
+    ],
+    nearbyHospitals: [
+      'Cleveland Clinic Lakewood Family Health Center',
+      'Fairview Hospital',
+      'MetroHealth Medical Center',
+      'St. John Medical Center'
+    ],
+    averageCost: {
+      independentLiving: '$2,400 - $4,200',
+      assistedLiving: '$3,400 - $5,800',
+      memoryCare: '$4,800 - $8,200'
+    },
+    testimonials: [
+      {
+        text: "The walkability of Lakewood means mom can still enjoy the neighborhood feel she's always loved.",
+        author: "Emily R.",
+        community: "Lakewood senior community"
+      }
+    ]
+  },
+  
+  'seven-hills': {
+    name: 'Seven Hills',
+    slug: 'seven-hills',
+    description: 'Seven Hills is a quiet residential suburb offering peaceful senior living communities with easy highway access to all of Cleveland. The city provides a safe, family-friendly environment.',
+    highlights: [
+      'Quiet residential neighborhoods',
+      'Easy I-77 and I-480 access',
+      'Low crime rates',
+      'Close to shopping and dining',
+      'Proximity to Cuyahoga Valley National Park'
+    ],
+    nearbyHospitals: [
+      'Parma Hospital',
+      'Cleveland Clinic Independence',
+      'Southwest General Health Center',
+      'MetroHealth Brecksville Health Center'
+    ],
+    averageCost: {
+      independentLiving: '$2,500 - $4,300',
+      assistedLiving: '$3,500 - $6,000',
+      memoryCare: '$4,900 - $8,300'
+    },
+    testimonials: [
+      {
+        text: "Seven Hills offers the perfect balance - quiet and safe, but close to everything we need.",
+        author: "Richard S.",
+        community: "Vitalia Rockside"
+      }
+    ]
+  },
+  
+  'rocky-river': {
+    name: 'Rocky River',
+    slug: 'rocky-river',
+    description: 'Rocky River is an affluent western suburb known for its excellent schools, parks, and quality of life. The city offers upscale senior living options with scenic views and top-notch amenities.',
+    highlights: [
+      'Rocky River Reservation (Metroparks)',
+      'Lake Erie access and marina',
+      'Safe, walkable neighborhoods',
+      'Excellent city services',
+      'Close to Crocker Park and shopping'
+    ],
+    nearbyHospitals: [
+      'Fairview Hospital',
+      'St. John Medical Center',
+      'Cleveland Clinic Fairview Hospital',
+      'Lutheran Hospital'
+    ],
+    averageCost: {
+      independentLiving: '$3,000 - $5,200',
+      assistedLiving: '$4,200 - $7,200',
+      memoryCare: '$5,800 - $9,500'
+    },
+    testimonials: [
+      {
+        text: "The Metroparks right outside the door provide beautiful scenery and walking paths for residents.",
+        author: "Susan B.",
+        community: "Bickford of Rocky River"
+      }
+    ]
+  },
+  
+  'north-olmsted': {
+    name: 'North Olmsted',
+    slug: 'north-olmsted',
+    description: 'North Olmsted is a growing western suburb offering modern senior living facilities with convenient shopping and healthcare access. The city balances suburban comfort with urban conveniences.',
+    highlights: [
+      'Great Northern Shopping Center',
+      'Cleveland Metroparks close by',
+      'I-480 access to all of Cleveland',
+      'Strong community programs',
+      'Affordable housing and services'
+    ],
+    nearbyHospitals: [
+      'Southwest General Health Center',
+      'Fairview Hospital',
+      'St. John Medical Center',
+      'Lutheran Hospital'
+    ],
+    averageCost: {
+      independentLiving: '$2,400 - $4,100',
+      assistedLiving: '$3,300 - $5,700',
+      memoryCare: '$4,700 - $7,900'
+    },
+    testimonials: [
+      {
+        text: "The Great Northern area has everything - shopping, dining, and healthcare all within minutes.",
+        author: "James P.",
+        community: "North Olmsted community"
+      }
+    ]
   }
 }; 

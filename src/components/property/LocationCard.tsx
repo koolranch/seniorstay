@@ -143,6 +143,13 @@ export default function LocationCard({ community }: LocationCardProps) {
           )}
         </Link>
 
+        {/* Memory Care Badge */}
+        {careTypes.includes('Memory Care') && (
+          <div className="absolute top-3 left-3 bg-red-500 text-white px-3 py-1 rounded-full text-xs font-semibold shadow-md">
+            Memory Care Available
+          </div>
+        )}
+
         {/* Compare Button - increased tap target size for mobile */}
         <button
           onClick={toggleComparison}
@@ -264,7 +271,7 @@ export default function LocationCard({ community }: LocationCardProps) {
           {/* Schedule Tour Button */}
           <Dialog>
             <DialogTrigger asChild>
-              <Button variant="default" size="sm" className="w-full py-2 h-auto">
+              <Button variant="default" size="sm" className="w-full py-2.5 h-auto text-base font-semibold bg-orange-500 hover:bg-orange-600">
                 Tour
               </Button>
             </DialogTrigger>
@@ -281,23 +288,19 @@ export default function LocationCard({ community }: LocationCardProps) {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor={`${formId}-tour-email`}>Email</Label>
-                    <Input id={`${formId}-tour-email`} name="email" type="email" required placeholder="your@email.com" className="h-10" />
-                  </div>
-
-                  <div className="space-y-2">
                     <Label htmlFor={`${formId}-tour-phone`}>Phone Number</Label>
                     <Input id={`${formId}-tour-phone`} name="phone" type="tel" required placeholder="(555) 555-5555" className="h-10" />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor={`${formId}-preferred-date`}>Preferred Tour Date</Label>
-                    <Input id={`${formId}-preferred-date`} name="preferred_date" type="date" required className="h-10" />
+                    <Label htmlFor={`${formId}-tour-email`}>Email</Label>
+                    <Input id={`${formId}-tour-email`} name="email" type="email" required placeholder="your@email.com" className="h-10" />
                   </div>
 
                   <Button type="submit" className="w-full h-11" disabled={isTourSubmitting}>
-                    {isTourSubmitting ? 'Sending...' : 'Schedule Tour'}
+                    {isTourSubmitting ? 'Sending...' : 'Request Tour'}
                   </Button>
+                  <p className="text-xs text-gray-500 text-center">We'll call you within 24 hours to schedule your visit.</p>
                 </form>
               ) : (
                 <div className="pt-4 text-center space-y-4">
