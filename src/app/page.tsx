@@ -15,6 +15,7 @@ import ComparisonFloatingButton from '@/components/comparison/ComparisonFloating
 import Footer from '@/components/footer/Footer';
 import LocationCard from '@/components/property/LocationCard';
 import StickyTourButton from '@/components/tour/StickyTourButton';
+import ExitIntentPopup from '@/components/forms/ExitIntentPopup';
 import { communityData } from '@/data/facilities';
 
 // Create a separate component for the search functionality
