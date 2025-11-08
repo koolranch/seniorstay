@@ -22,7 +22,10 @@ export default function CommunityContact({ community }: CommunityContactProps) {
             <div className="space-y-4">
               <div>
                 <p className="text-gray-600">
-                  <span className="font-semibold">Email:</span> info@guideforseniors.com
+                  <span className="font-semibold">Email:</span>{' '}
+                  <a href="mailto:info@guideforseniors.com" className="text-primary hover:underline">
+                    info@guideforseniors.com
+                  </a>
                 </p>
               </div>
               <div>

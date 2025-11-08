@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { trackTourRequest, trackFormSubmission } from '@/components/analytics/GoogleAnalytics';
 
 export default function StickyTourButton() {
   const [isVisible, setIsVisible] = useState(false);
@@ -32,6 +33,11 @@ export default function StickyTourButton() {
         body: formData,
         headers: { Accept: 'application/json' },
       });
+      
+      // Track successful form submission
+      trackTourRequest('sticky_button', 'sticky_tour_button');
+      trackFormSubmission('sticky_tour_request');
+      
       setSubmitted(true);
       setTimeout(() => {
         setSubmitted(false);

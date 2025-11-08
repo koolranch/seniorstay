@@ -3,11 +3,13 @@ import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { ComparisonProvider } from '@/context/ComparisonContext';
 import GoogleMapsScript from '@/components/map/GoogleMapsScript';
+import GoogleAnalytics from '@/components/analytics/GoogleAnalytics';
+import MetaPixel from '@/components/analytics/MetaPixel';
 
 export const metadata: Metadata = {
-  title: 'Guide for Seniors | Find Assisted Living & Senior Care Options',
-  description: 'Find the perfect senior living community with Guide for Seniors. Compare assisted living, memory care, and independent living options.',
-  keywords: 'senior living, assisted living, memory care, independent living, senior care, senior housing, senior communities',
+  title: 'Assisted Living & Memory Care in Cleveland, OH | Guide for Seniors',
+  description: 'Find the best assisted living and memory care in Cleveland, Ohio. Compare 70+ communities, get free local guidance, and schedule tours. Serving Greater Cleveland families since 2024.',
+  keywords: 'assisted living cleveland, memory care cleveland ohio, senior living cleveland, cleveland assisted living facilities, dementia care cleveland, alzheimers care cleveland',
   authors: [{ name: 'Guide for Seniors' }],
   creator: 'Guide for Seniors',
   publisher: 'Guide for Seniors',
@@ -32,9 +34,9 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: 'Guide for Seniors | Find Assisted Living & Senior Care Options',
-    description: 'Find the perfect senior living community with Guide for Seniors. Compare assisted living, memory care, and independent living options.',
-    url: 'https://guideforseniors.com',
+    title: 'Assisted Living & Memory Care in Cleveland, OH | Guide for Seniors',
+    description: 'Find the best assisted living and memory care communities in Cleveland with free expert guidance. Compare options, schedule tours, get pricing.',
+    url: 'https://www.guideforseniors.com',
     siteName: 'Guide for Seniors',
     images: [
       {
@@ -81,6 +83,8 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/icon-192x192.png" />
       </head>
       <body className="min-h-screen bg-white antialiased">
+        <GoogleAnalytics />
+        <MetaPixel />
         <ComparisonProvider>
           {children}
         </ComparisonProvider>

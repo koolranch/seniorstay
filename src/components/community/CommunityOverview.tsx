@@ -33,7 +33,10 @@ export default function CommunityOverview({ community }: CommunityOverviewProps)
               Get Information
             </h3>
             <p className="text-gray-600">
-              Email: info@guideforseniors.com
+              Email:{' '}
+              <a href="mailto:info@guideforseniors.com" className="text-primary hover:underline">
+                info@guideforseniors.com
+              </a>
             </p>
             <p className="text-sm text-gray-500 mt-2">
               Use the buttons below to request pricing or schedule a tour.

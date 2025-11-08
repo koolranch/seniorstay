@@ -17,6 +17,7 @@ import LocationCard from '@/components/property/LocationCard';
 import StickyTourButton from '@/components/tour/StickyTourButton';
 import ExitIntentPopup from '@/components/forms/ExitIntentPopup';
 import { communityData } from '@/data/facilities';
+import { testimonials } from '@/data/testimonials';
 
 // Create a separate component for the search functionality
 function SearchContainer() {
@@ -169,15 +170,24 @@ function SearchContainer() {
             </p>
 
             {/* Trust Signals */}
-            <div className="flex items-center justify-center gap-6 mb-8 text-sm text-gray-600">
-              <div className="flex items-center gap-2">
-                <Star className="h-4 w-4 text-yellow-400 fill-yellow-400" />
-                <span>Rated 4.8/5</span>
+            <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6 mb-8 text-sm">
+              <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-sm">
+                <div className="flex">
+                  {[1,2,3,4,5].map(i => (
+                    <Star key={i} className="h-4 w-4 text-yellow-400 fill-yellow-400" />
+                  ))}
+                </div>
+                <span className="font-semibold text-gray-900">4.8/5</span>
               </div>
-              <div className="hidden sm:block text-gray-300">|</div>
-              <div>Free Service</div>
-              <div className="hidden sm:block text-gray-300">|</div>
-              <div>Local Experts</div>
+              <div className="bg-white px-4 py-2 rounded-full shadow-sm font-semibold text-gray-900">
+                500+ Families Helped
+              </div>
+              <div className="bg-green-50 px-4 py-2 rounded-full border border-green-200 font-semibold text-green-700">
+                100% Free Service
+              </div>
+              <div className="bg-blue-50 px-4 py-2 rounded-full border border-blue-200 font-semibold text-blue-700">
+                Local Cleveland Experts
+              </div>
             </div>
 
             {/* Lead Capture Form */}
@@ -471,6 +481,41 @@ export default function Home() {
                 <MapPin className="h-5 w-5 text-primary mx-auto mb-2" />
                 <span className="text-sm font-medium text-gray-900 group-hover:text-primary">{city}</span>
               </Link>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Testimonials Section */}
+      <div className="bg-gray-50 py-16 border-t border-gray-200">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl font-bold text-center mb-2">Trusted by Cleveland Families</h2>
+          <div className="flex items-center justify-center gap-2 mb-12">
+            <div className="flex">
+              {[1,2,3,4,5].map(i => (
+                <Star key={i} className="h-5 w-5 text-yellow-400 fill-yellow-400" />
+              ))}
+            </div>
+            <span className="text-gray-600 font-semibold">4.8/5 from 500+ families</span>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            {testimonials.slice(0, 3).map((testimonial) => (
+              <div key={testimonial.id} className="bg-white p-6 rounded-lg shadow-sm">
+                <div className="flex mb-3">
+                  {[1,2,3,4,5].map(i => (
+                    <Star key={i} className="h-4 w-4 text-yellow-400 fill-yellow-400" />
+                  ))}
+                </div>
+                <p className="text-gray-700 italic mb-4">"{testimonial.quote}"</p>
+                <div className="border-t pt-4">
+                  <p className="font-semibold text-gray-900">{testimonial.author}</p>
+                  <p className="text-sm text-gray-500">{testimonial.location}</p>
+                  {testimonial.careType && (
+                    <p className="text-xs text-primary mt-1">{testimonial.careType}</p>
+                  )}
+                </div>
+              </div>
             ))}
           </div>
         </div>

@@ -5,6 +5,8 @@ import { X, Gift } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { trackFormSubmission } from '@/components/analytics/GoogleAnalytics';
+import { trackMetaLead } from '@/components/analytics/MetaPixel';
 
 interface ExitIntentPopupProps {
   cityName?: string;
@@ -85,6 +87,10 @@ export default function ExitIntentPopup({ cityName }: ExitIntentPopupProps) {
       });
 
       if (response.ok) {
+        // Track successful lead capture
+        trackFormSubmission('exit_intent_popup', cityName);
+        trackMetaLead();
+        
         setIsSuccess(true);
         setTimeout(() => {
           setIsVisible(false);
