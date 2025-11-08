@@ -4,7 +4,7 @@ import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Search, MapPin, Star, ArrowRight, Info } from 'lucide-react';
+import { Search, MapPin, Star, ArrowRight, Info, CheckCircle } from 'lucide-react';
 import Header from '@/components/header/Header';
 import CategoryTabs from '@/components/category/CategoryTabs';
 import LocationTabs from '@/components/location/LocationTabs';
@@ -228,6 +228,14 @@ function SearchContainer() {
             <div className="text-center space-y-3">
               <p className="text-sm text-gray-600">or</p>
               <Link
+                href="/assessment"
+                className="inline-flex items-center gap-2 bg-[#1e3a5f] hover:bg-[#2d4a6f] text-white font-bold px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all text-lg"
+              >
+                <span>Find Your Ideal Care Level (2 min)</span>
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Link>
+              <p className="text-sm text-gray-600">or</p>
+              <Link
                 href="#communities"
                 className="inline-flex items-center text-primary hover:underline font-semibold text-lg"
               >
@@ -241,6 +249,43 @@ function SearchContainer() {
 
       {/* How It Works Section */}
       <HowItWorks />
+
+      {/* Assessment CTA Section */}
+      <div className="bg-gradient-to-br from-orange-50 to-blue-50 py-16 border-y border-gray-200">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto text-center">
+            <h2 className="text-3xl md:text-4xl font-bold text-[#1e3a5f] mb-4">
+              Not Sure What Level of Care You Need?
+            </h2>
+            <p className="text-lg text-gray-700 mb-8 max-w-2xl mx-auto">
+              Take our free 2-minute assessment to get personalized recommendations 
+              for memory care or assisted living based on your loved one's specific needs.
+            </p>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <Link href="/assessment">
+                <button className="w-full sm:w-auto bg-[#ff5a5f] hover:bg-[#ff4449] text-white font-bold px-10 py-5 rounded-xl shadow-lg hover:shadow-xl transition-all text-lg flex items-center justify-center gap-2">
+                  Take Free Assessment
+                  <ArrowRight className="h-5 w-5" />
+                </button>
+              </Link>
+            </div>
+            <div className="mt-6 flex flex-wrap items-center justify-center gap-6 text-sm text-gray-600">
+              <div className="flex items-center gap-2">
+                <CheckCircle className="h-5 w-5 text-green-600" />
+                <span>Takes 2 minutes</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle className="h-5 w-5 text-green-600" />
+                <span>100% free</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle className="h-5 w-5 text-green-600" />
+                <span>Instant results</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
       {/* Filter Indicators */}
       <div className="container mx-auto px-4 py-4">
@@ -650,6 +695,35 @@ export default function Home() {
                 Look for amenities that match your or your loved one's lifestyle and needs, such as dining options, social activities, fitness centers, transportation services, outdoor spaces, and housekeeping. Consider security features, on-site medical support, and accessibility accommodations. Most importantly, visit communities to experience the atmosphere firsthand.
               </p>
             </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Final Assessment CTA Banner */}
+      <div className="bg-gradient-to-r from-[#1e3a5f] to-[#2d4a6f] py-16">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto text-center">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+              Ready to Find the Right Community?
+            </h2>
+            <p className="text-xl text-gray-200 mb-8">
+              Take our 2-minute assessment and get matched with the perfect care communities in Cleveland
+            </p>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <Link href="/assessment">
+                <button className="w-full sm:w-auto bg-[#ff5a5f] hover:bg-[#ff4449] text-white font-bold px-12 py-5 rounded-xl shadow-xl hover:shadow-2xl transition-all text-lg">
+                  Start Free Assessment
+                </button>
+              </Link>
+              <a href="tel:+12165550100">
+                <button className="w-full sm:w-auto bg-white hover:bg-gray-100 text-[#1e3a5f] font-bold px-12 py-5 rounded-xl shadow-xl hover:shadow-2xl transition-all text-lg">
+                  Call: (216) 555-0100
+                </button>
+              </a>
+            </div>
+            <p className="text-gray-300 mt-6 text-sm">
+              Join hundreds of Cleveland families who have found the perfect care community
+            </p>
           </div>
         </div>
       </div>

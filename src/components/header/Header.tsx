@@ -75,6 +75,11 @@ const Header = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-2">
+            <Link href="/assessment">
+              <Button className="rounded-full text-sm font-medium bg-[#ff5a5f] hover:bg-[#ff4449] text-white">
+                Find Your Care Level
+              </Button>
+            </Link>
             <Link href="/contact">
               <Button variant="outline" className="rounded-full text-sm font-medium">
                 Contact Us
@@ -92,6 +97,10 @@ const Header = () => {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-60 mt-2">
+                  <DropdownMenuItem asChild>
+                    <Link href="/assessment" className="cursor-pointer font-semibold text-[#ff5a5f]">Find Your Care Level</Link>
+                  </DropdownMenuItem>
+                  <hr className="my-1" />
                   <DropdownMenuItem asChild>
                     <Link href="/greater-cleveland" className="cursor-pointer">Browse Communities</Link>
                   </DropdownMenuItem>
@@ -139,6 +148,10 @@ const Header = () => {
                     <Link href="/" className="py-3 px-2 hover:bg-gray-50 rounded-md">
                       Home
                     </Link>
+                    <Link href="/assessment" className="py-3 px-2 bg-orange-50 hover:bg-orange-100 rounded-md font-semibold text-[#ff5a5f] border border-[#ff5a5f]">
+                      Find Your Care Level ✨
+                    </Link>
+                    <hr className="my-2" />
                     <Link href="/greater-cleveland" className="py-3 px-2 hover:bg-gray-50 rounded-md">
                       Browse Communities
                     </Link>
