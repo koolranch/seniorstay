@@ -101,9 +101,9 @@ export default function CommunityQualityHighlights({ ccn }: CommunityQualityHigh
                 </h3>
                 <div className="ml-2">
                   {measure.direction === 'lower' ? (
-                    <TrendingDown className="w-5 h-5 text-green-600" title="Lower is better" />
+                    <TrendingDown className="w-5 h-5 text-green-600" />
                   ) : (
-                    <TrendingUp className="w-5 h-5 text-blue-600" title="Higher is better" />
+                    <TrendingUp className="w-5 h-5 text-blue-600" />
                   )}
                 </div>
               </div>
