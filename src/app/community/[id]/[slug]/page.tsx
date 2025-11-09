@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Community } from '@/data/facilities';
-import { fetchCommunityById } from '@/lib/fetch-community';
+import { fetchCommunityById, fetchCommunityBySlug } from '@/lib/fetch-community';
 import { notFound } from 'next/navigation';
 import CommunityHeader from '@/components/community/CommunityHeader';
 import CommunityOverview from '@/components/community/CommunityOverview';
@@ -25,12 +25,20 @@ export default function CommunityPage({ params }: { params: { id: string; slug: 
 
   React.useEffect(() => {
     async function loadCommunity() {
-      const data = await fetchCommunityById(id);
+      // Try by ID first (for UUID links)
+      let data = await fetchCommunityById(id);
+      
+      // If not found by ID, try by slug (for old static data links)
+      if (!data) {
+        console.log(`ID not found, trying slug: ${slug}`);
+        data = await fetchCommunityBySlug(slug);
+      }
+      
       setCommunity(data);
       setLoading(false);
     }
     loadCommunity();
-  }, [id]);
+  }, [id, slug]);
 
   if (loading) {
     return <div className="min-h-screen bg-gray-50 flex items-center justify-center">

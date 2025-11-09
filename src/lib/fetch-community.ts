@@ -7,6 +7,29 @@ import { supabase } from './supabase-client';
 import { Community } from '@/data/facilities';
 
 /**
+ * Fetch a single community by slug
+ */
+export async function fetchCommunityBySlug(slug: string): Promise<Community | null> {
+  try {
+    const { data, error } = await supabase
+      .from('Community')
+      .select('*')
+      .eq('slug', slug)
+      .single();
+
+    if (error || !data) {
+      console.warn(`No community found with slug: ${slug}`);
+      return null;
+    }
+
+    return transformDatabaseToCommunity(data);
+  } catch (error) {
+    console.error('Error fetching community by slug:', error);
+    return null;
+  }
+}
+
+/**
  * Fetch a single community by ID
  */
 export async function fetchCommunityById(id: string): Promise<Community | null> {
