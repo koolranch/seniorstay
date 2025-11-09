@@ -12,6 +12,7 @@ export interface CommunityTestimonial {
 export interface Community {
   id: string;
   name: string;
+  slug?: string; // URL slug for routing
   location: string;
   address?: string; // Full street address
   coordinates?: {
