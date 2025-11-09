@@ -28,6 +28,31 @@ export interface Community {
   };
   testimonials?: CommunityTestimonial[];
   rating?: number; // Optional rating property
+  
+  // CMS Certification and Official Data
+  ccn?: string; // CMS Certification Number
+  facilityType?: 'assisted-living' | 'skilled-nursing' | 'nursing-home' | 'memory-care';
+  bedCount?: number;
+  acceptsMedicare?: boolean;
+  acceptsMedicaid?: boolean;
+  
+  // CMS Star Ratings (1-5)
+  overallRating?: number;
+  healthInspectionRating?: number;
+  staffingRating?: number;
+  qualityRating?: number;
+  
+  // Quality Flags
+  abuseIcon?: boolean;
+  specialFocusFacility?: boolean;
+  lastInspectionDate?: string; // ISO date string
+  
+  // Source Tracking
+  cmsLastUpdated?: string; // ISO datetime string
+  careCompareUrl?: string;
+  
+  // Payer Mix (from cost reports, Phase 4)
+  medicaidPercentage?: number;
 }
 
 // Export the community data
