@@ -17,8 +17,9 @@ import LocationCard from '@/components/property/LocationCard';
 import StickyTourButton from '@/components/tour/StickyTourButton';
 import ExitIntentPopup from '@/components/forms/ExitIntentPopup';
 import HowItWorks from '@/components/landing/HowItWorks';
-import { communityData } from '@/data/facilities';
+import { Community, communityData } from '@/data/facilities';
 import { testimonials } from '@/data/testimonials';
+import { fetchAllCommunities } from '@/lib/fetch-community';
 
 // Create a separate component for the search functionality
 function SearchContainer() {
@@ -28,25 +29,46 @@ function SearchContainer() {
   // Filters
   const [selectedCareFilter, setSelectedCareFilter] = useState('all');
   const [selectedLocation, setSelectedLocation] = useState('all');
-  const [filteredCommunities, setFilteredCommunities] = useState(communityData);
+  const [communities, setCommunities] = useState<Community[]>(communityData); // Start with static data
+  const [filteredCommunities, setFilteredCommunities] = useState<Community[]>(communityData);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch communities from Supabase on mount
+  useEffect(() => {
+    async function loadCommunities() {
+      try {
+        const data = await fetchAllCommunities();
+        if (data && data.length > 0) {
+          setCommunities(data);
+          setFilteredCommunities(data);
+        }
+      } catch (error) {
+        console.error('Error loading communities:', error);
+        // Keep using static data as fallback
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadCommunities();
+  }, []);
 
   // Store active filter labels for display
   const [activeCareLabel, setActiveCareLabel] = useState('');
   const [activeLocationLabel, setActiveLocationLabel] = useState('');
 
   // Extract all unique cities from communities
-  const allCities = Array.from(new Set(communityData.map(community =>
+  const allCities = Array.from(new Set(communities.map(community =>
     community.location.split(',')[0].trim()
   ))).sort();
 
   // Get all unique care types across all communities
   const allCareTypes = Array.from(new Set(
-    communityData.flatMap(community => community.careTypes)
+    communities.flatMap(community => community.careTypes)
   )).sort();
 
   // Apply filters
   useEffect(() => {
-    let results = [...communityData];
+    let results = [...communities];
 
     // Apply care type filter
     if (selectedCareFilter !== 'all') {
