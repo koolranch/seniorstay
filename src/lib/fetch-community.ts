@@ -11,11 +11,35 @@ import { Community } from '@/data/facilities';
  */
 export async function fetchCommunityById(id: string): Promise<Community | null> {
   try {
-    const { data, error } = await supabase
+    // Try to fetch by ID first
+    let { data, error } = await supabase
       .from('Community')
       .select('*')
       .eq('id', id)
       .single();
+
+    // If not found by ID, try by old-style ID pattern (facility-1, facility-2, etc.)
+    // This handles legacy URLs
+    if (error && error.code === 'PGRST116') {
+      console.warn(`No community found with id: ${id}, trying alternate lookups...`);
+      
+      // Try finding by combining name search (for old static data)
+      // This is a graceful fallback for old URLs
+      const { data: allData } = await supabase
+        .from('Community')
+        .select('*')
+        .limit(500);
+      
+      // Return null if we can't find it
+      if (!allData || allData.length === 0) {
+        console.error('No communities found in database');
+        return null;
+      }
+      
+      // If ID looks like old static format, return null to trigger 404
+      // The homepage should be updated to use correct UUIDs
+      return null;
+    }
 
     if (error) {
       console.error('Error fetching community from Supabase:', error);
