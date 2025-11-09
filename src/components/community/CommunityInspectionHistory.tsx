@@ -59,7 +59,7 @@ export default function CommunityInspectionHistory({ ccn }: CommunityInspectionH
     return acc;
   }, {} as Record<string, number>);
 
-  const mostRecent Deficiencies = deficiencies
+  const mostRecentDeficiencies = deficiencies
     .sort((a, b) => new Date(b.survey_date).getTime() - new Date(a.survey_date).getTime())
     .slice(0, 5);
 
