@@ -20,7 +20,32 @@ export default function CommunityOwnership({ ccn }: CommunityOwnershipProps) {
   const [ownership, setOwnership] = React.useState<OwnershipData | null>(null);
   const [loading, setLoading] = React.useState(true);
 
-  // TODO: Fetch ownership data from Supabase when available
+  React.useEffect(() => {
+    async function fetchOwnership() {
+      if (!ccn) {
+        setLoading(false);
+        return;
+      }
+
+      try {
+        // Fetch ownership from Supabase (placeholder - will work when data is imported)
+        // const { data } = await supabase
+        //   .from('CommunityOwnership')
+        //   .select('*')
+        //   .eq('ccn', ccn)
+        //   .order('effective_date', { ascending: false })
+        //   .limit(1);
+        
+        // setOwnership(data?.[0] || null);
+      } catch (error) {
+        console.error('Error fetching ownership:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchOwnership();
+  }, [ccn]);
 
   if (!ccn) return null;
   if (loading) return null;

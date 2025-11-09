@@ -45,8 +45,38 @@ export default function CommunityInspectionHistory({ ccn }: CommunityInspectionH
   const [inspectionPDFs, setInspectionPDFs] = React.useState<InspectionPDF[]>([]);
   const [loading, setLoading] = React.useState(true);
 
-  // TODO: Fetch data from Supabase when available
-  // This is a placeholder for when deficiency and inspection PDF data is imported
+  React.useEffect(() => {
+    async function fetchData() {
+      if (!ccn) {
+        setLoading(false);
+        return;
+      }
+
+      try {
+        // Fetch deficiencies from Supabase (placeholder - will work when data is imported)
+        // const { data: defData } = await supabase
+        //   .from('CommunityDeficiency')
+        //   .select('*')
+        //   .eq('ccn', ccn)
+        //   .order('survey_date', { ascending: false });
+        
+        // const { data: pdfData } = await supabase
+        //   .from('InspectionReport')
+        //   .select('*')
+        //   .eq('ccn', ccn)
+        //   .order('survey_date', { ascending: false});
+        
+        // setDeficiencies(defData || []);
+        // setInspectionPDFs(pdfData || []);
+      } catch (error) {
+        console.error('Error fetching inspection data:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchData();
+  }, [ccn]);
 
   if (!ccn) return null;
   if (loading) return null;
