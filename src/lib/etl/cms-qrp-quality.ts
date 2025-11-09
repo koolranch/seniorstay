@@ -90,8 +90,8 @@ function transformQRPRecords(records: QRPMeasureRecord[]): QualityMeasureData[] 
       quarter_ending: record.quarter_ending || new Date().toISOString().split('T')[0],
     };
 
-    // Set the measure value
-    facilityData[measureField] = score;
+    // Set the measure value (using type assertion for dynamic key assignment)
+    (facilityData as any)[measureField] = score;
 
     facilityMap.set(ccn, facilityData);
   }
