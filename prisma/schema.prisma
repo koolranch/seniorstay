@@ -1,0 +1,137 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String     @id @default(uuid())
+  name          String?
+  email         String     @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  accounts      Account[]
+  favorites     Favorite[]
+  sessions      Session[]
+}
+
+model Favorite {
+  id         String   @id @default(uuid())
+  userId     String
+  providerId String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, providerId])
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Community {
+  id          String   @id @default(uuid())
+  name        String
+  slug        String   @unique
+  city        String
+  city_slug   String?
+  state       String
+  description String?
+  imageUrl    String?
+  zip         String?
+  address     String?
+  phone       String?
+  website     String?
+  email       String?
+  services    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // CMS Certification and Official Data
+  ccn                      String?   @unique
+  facility_type            String?
+  bed_count                Int?
+  accepts_medicare         Boolean?  @default(false)
+  accepts_medicaid         Boolean?  @default(false)
+  
+  // CMS Star Ratings (1-5)
+  overall_rating           Decimal?
+  health_inspection_rating Decimal?
+  staffing_rating          Decimal?
+  quality_rating           Decimal?
+  
+  // Quality Flags
+  abuse_icon               Boolean?  @default(false)
+  special_focus_facility   Boolean?  @default(false)
+  last_inspection_date     DateTime?
+  
+  // Source Tracking
+  cms_last_updated         DateTime?
+  care_compare_url         String?
+  
+  // Payer Mix (from cost reports, Phase 4)
+  medicaid_percentage      Decimal?
+  
+  // VBP Fields (Phase 4)
+  vbp_participates         Boolean?  @default(false)
+  vbp_payment_adjustment   Decimal?
+  vbp_program_year         String?
+}
+
+model Lead {
+  id            String   @id @default(cuid())
+  fullName      String
+  email         String?
+  phone         String?
+  cityOrZip     String?
+  careType      String?
+  moveInTimeline String?  
+  notes         String?
+  communityName String?
+  pageType      String?
+  sourceSlug    String?
+  city          String?
+  state         String?
+  address       String?
+  services      String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  status        String   @default("new")
+}
