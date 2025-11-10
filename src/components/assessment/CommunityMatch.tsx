@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { generateMatchReason } from '@/utils/assessmentScoring';
 import { AssessmentAnswers } from '@/utils/assessmentScoring';
 import { trackResultsCommunityClicked } from '@/components/analytics/AssessmentAnalytics';
+import { getCommunityImage } from '@/lib/communityImages';
 
 interface CommunityMatchProps {
   community: Community;
@@ -42,18 +43,12 @@ export default function CommunityMatch({
     >
       {/* Community Image */}
       <div className="relative h-48 sm:h-56 bg-gray-200">
-        {community.images && community.images.length > 0 ? (
-          <Image
-            src={community.images[0]}
-            alt={community.name}
-            fill
-            className="object-cover"
-          />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center bg-gray-300">
-            <span className="text-gray-500">No image available</span>
-          </div>
-        )}
+        <Image
+          src={getCommunityImage(community.images?.[0], community.id)}
+          alt={community.name}
+          fill
+          className="object-cover"
+        />
         
         {/* Match badge */}
         <div className="absolute top-3 right-3">

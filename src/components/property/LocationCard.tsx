@@ -12,6 +12,7 @@ import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { useComparison } from '@/context/ComparisonContext';
 import { Community } from '@/data/facilities';
+import { getCommunityImage } from '@/lib/communityImages';
 
 interface LocationCardProps {
   community: Community;
@@ -128,19 +129,13 @@ export default function LocationCard({ community }: LocationCardProps) {
       {/* Card Header/Image */}
       <div className="relative w-full h-48">
         <Link href={communityUrl} className="block w-full h-full">
-          {community.images && community.images.length > 0 ? (
-            <Image
-              src={community.images[0]}
-              alt={communityName}
-              fill
-              className="object-cover transition-transform duration-300 group-hover:scale-105"
-              sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
-            />
-          ) : (
-            <div className="w-full h-full bg-gradient-to-r from-gray-200 to-gray-300 flex items-center justify-center">
-              <span className="text-gray-500">No image available</span>
-            </div>
-          )}
+          <Image
+            src={getCommunityImage(community.images?.[0], communityId)}
+            alt={communityName}
+            fill
+            className="object-cover transition-transform duration-300 group-hover:scale-105"
+            sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+          />
         </Link>
 
         {/* Memory Care Badge */}
