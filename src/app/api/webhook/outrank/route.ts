@@ -182,6 +182,7 @@ export async function DELETE(request: NextRequest) {
 
 // Generic webhook handler for all methods except POST (which has special logic)
 async function handleWebhook(request: NextRequest, method: string) {
+  console.log(`[${new Date().toISOString()}] Outrank webhook ${method} request received`);
   try {
     // For non-POST methods, just acknowledge and log
     console.log(`Outrank webhook: ${method} method handled successfully`);
