@@ -56,10 +56,26 @@ export default function CommunityPage({ params }: { params: { id: string; slug: 
     notFound();
   }
 
+  // Check if this is a skilled nursing-only facility
+  const isOnlySkilledNursing = community.careTypes.every(type => 
+    type.toLowerCase().includes('skilled nursing')
+  ) && !community.careTypes.some(type =>
+    type.toLowerCase().includes('assisted living') ||
+    type.toLowerCase().includes('memory care')
+  );
+
   return (
     <div className="min-h-screen bg-gray-50">
-      <CommunityHeader community={community} />
+      <CommunityHeader community={community} isOnlySkilledNursing={isOnlySkilledNursing} />
       <div className="container mx-auto px-4 py-8">
+        {isOnlySkilledNursing && (
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+            <p className="text-sm text-gray-700">
+              <strong>Note:</strong> Guide for Seniors specializes in assisted living and memory care communities. 
+              For information about this skilled nursing facility, please contact them directly.
+            </p>
+          </div>
+        )}
         <CommunityOverview community={community} />
         
         {/* CMS Official Data Sections */}
@@ -71,12 +87,12 @@ export default function CommunityPage({ params }: { params: { id: string; slug: 
         <CommunityCareTypes community={community} />
         <CommunityStaff community={community} />
         <CommunityTestimonials community={community} />
-        <CommunityContact community={community} />
+        {!isOnlySkilledNursing && <CommunityContact community={community} />}
       </div>
       <SimilarCommunities community={community} />
       <SchemaOrg community={community} />
-      <StickyTourButton />
-      <ExitIntentPopup cityName={community.location.split(',')[0].trim()} />
+      {!isOnlySkilledNursing && <StickyTourButton />}
+      {!isOnlySkilledNursing && <ExitIntentPopup cityName={community.location.split(',')[0].trim()} />}
     </div>
   );
 }

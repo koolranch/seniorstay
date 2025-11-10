@@ -124,10 +124,18 @@ export default function LocationCard({ community }: LocationCardProps) {
   // Use actual care types or fallback to empty array only if undefined
   const careTypes = community.careTypes || [];
 
+  // Check if this is a skilled nursing-only facility (no AL/MC services)
+  const isOnlySkilledNursing = careTypes.every(type => 
+    type.toLowerCase().includes('skilled nursing')
+  ) && !careTypes.some(type =>
+    type.toLowerCase().includes('assisted living') ||
+    type.toLowerCase().includes('memory care')
+  );
+
   return (
     <div className="group bg-white border border-gray-200 hover:border-primary/50 rounded-xl overflow-hidden transition-all duration-300 hover:shadow-xl hover:scale-[1.02] flex flex-col h-full">
       {/* Card Header/Image */}
-      <div className="relative w-full h-48">
+      <div className="relative w-full h-56">
         <Link href={communityUrl} className="block w-full h-full">
           <Image
             src={getCommunityImage(community.images?.[0], communityId)}
@@ -159,7 +167,7 @@ export default function LocationCard({ community }: LocationCardProps) {
       </div>
 
       {/* Card Content */}
-      <div className="flex-grow p-4">
+      <div className="flex-grow p-5">
         <h3 className="font-semibold text-lg mb-1 line-clamp-1">
           <Link href={communityUrl} className="hover:text-primary transition-colors">
             {communityName}
@@ -172,11 +180,11 @@ export default function LocationCard({ community }: LocationCardProps) {
         </div>
 
         {/* Care Types */}
-        <div className="flex flex-wrap gap-1.5 mb-3">
+        <div className="flex flex-wrap gap-2 mb-3">
           {careTypes.map((type, index) => (
             <span
               key={`${communityId}-${type}-${index}`}
-              className="bg-primary/10 text-primary px-2 py-0.5 rounded-full text-xs"
+              className="bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-medium"
             >
               {type}
             </span>
@@ -193,128 +201,137 @@ export default function LocationCard({ community }: LocationCardProps) {
       </div>
 
       {/* Card Actions - Improved for mobile */}
-      <div className="p-4 pt-0 mt-auto">
-        <div className="grid grid-cols-2 gap-3">
-          {/* Get Pricing Button */}
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button variant="outline" size="sm" className="w-full py-2 h-auto">
-                Get Pricing
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-md mx-auto">
-              <DialogHeader>
-                <DialogTitle>Request Pricing Info</DialogTitle>
-              </DialogHeader>
+      {!isOnlySkilledNursing ? (
+        <div className="p-4 pt-0 mt-auto">
+          <div className="grid grid-cols-2 gap-3">
+            {/* Get Pricing Button */}
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button variant="outline" size="sm" className="w-full py-2 h-auto">
+                  Get Pricing
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-md mx-auto">
+                <DialogHeader>
+                  <DialogTitle>Request Pricing Info</DialogTitle>
+                </DialogHeader>
 
-              {!pricingSubmitted ? (
-                <form onSubmit={handlePricingSubmit} className="space-y-4 pt-4">
-                  <div className="space-y-2">
-                    <Label htmlFor={`${formId}-name`}>Your Name</Label>
-                    <Input id={`${formId}-name`} name="name" required placeholder="Enter your full name" className="h-10" />
+                {!pricingSubmitted ? (
+                  <form onSubmit={handlePricingSubmit} className="space-y-4 pt-4">
+                    <div className="space-y-2">
+                      <Label htmlFor={`${formId}-name`}>Your Name</Label>
+                      <Input id={`${formId}-name`} name="name" required placeholder="Enter your full name" className="h-10" />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor={`${formId}-email`}>Email</Label>
+                      <Input id={`${formId}-email`} name="email" type="email" required placeholder="your@email.com" className="h-10" />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor={`${formId}-phone`}>Phone Number</Label>
+                      <Input id={`${formId}-phone`} name="phone" type="tel" required placeholder="(555) 555-5555" className="h-10" />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label>Move-in Timeframe</Label>
+                      <RadioGroup name="timeframe" defaultValue="asap">
+                        <div className="flex items-center space-x-2 py-1">
+                          <RadioGroupItem value="asap" id={`${formId}-asap`} />
+                          <Label htmlFor={`${formId}-asap`} className="cursor-pointer">As soon as possible</Label>
+                        </div>
+                        <div className="flex items-center space-x-2 py-1">
+                          <RadioGroupItem value="1-3months" id={`${formId}-1-3months`} />
+                          <Label htmlFor={`${formId}-1-3months`} className="cursor-pointer">1-3 months</Label>
+                        </div>
+                        <div className="flex items-center space-x-2 py-1">
+                          <RadioGroupItem value="future" id={`${formId}-future`} />
+                          <Label htmlFor={`${formId}-future`} className="cursor-pointer">Just researching</Label>
+                        </div>
+                      </RadioGroup>
+                    </div>
+
+                    <Button type="submit" className="w-full h-11" disabled={isPricingSubmitting}>
+                      {isPricingSubmitting ? 'Sending...' : 'Get Pricing Information'}
+                    </Button>
+                  </form>
+                ) : (
+                  <div className="pt-4 text-center space-y-4">
+                    <div className="rounded-full bg-green-100 w-16 h-16 mx-auto flex items-center justify-center">
+                      <Check className="h-8 w-8 text-green-600" />
+                    </div>
+                    <h3 className="font-medium text-lg">Request Sent!</h3>
+                    <p className="text-gray-600">
+                      Thank you for your interest in {communityName}. A senior living advisor will contact you shortly with pricing information.
+                    </p>
+                    <Button variant="outline" onClick={() => setPricingSubmitted(false)}>
+                      Send Another Request
+                    </Button>
                   </div>
+                )}
+              </DialogContent>
+            </Dialog>
 
-                  <div className="space-y-2">
-                    <Label htmlFor={`${formId}-email`}>Email</Label>
-                    <Input id={`${formId}-email`} name="email" type="email" required placeholder="your@email.com" className="h-10" />
+            {/* Schedule Tour Button */}
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button variant="default" size="sm" className="w-full py-2.5 h-auto text-base font-semibold bg-orange-500 hover:bg-orange-600">
+                  Tour
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-md mx-auto">
+                <DialogHeader>
+                  <DialogTitle>Schedule a Tour</DialogTitle>
+                </DialogHeader>
+
+                {!tourSubmitted ? (
+                  <form onSubmit={handleTourSubmit} className="space-y-4 pt-4">
+                    <div className="space-y-2">
+                      <Label htmlFor={`${formId}-tour-name`}>Your Name</Label>
+                      <Input id={`${formId}-tour-name`} name="name" required placeholder="Enter your full name" className="h-10" />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor={`${formId}-tour-phone`}>Phone Number</Label>
+                      <Input id={`${formId}-tour-phone`} name="phone" type="tel" required placeholder="(555) 555-5555" className="h-10" />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor={`${formId}-tour-email`}>Email</Label>
+                      <Input id={`${formId}-tour-email`} name="email" type="email" required placeholder="your@email.com" className="h-10" />
+                    </div>
+
+                    <Button type="submit" className="w-full h-11" disabled={isTourSubmitting}>
+                      {isTourSubmitting ? 'Sending...' : 'Request Tour'}
+                    </Button>
+                    <p className="text-xs text-gray-500 text-center">We'll call you within 24 hours to schedule your visit.</p>
+                  </form>
+                ) : (
+                  <div className="pt-4 text-center space-y-4">
+                    <div className="rounded-full bg-green-100 w-16 h-16 mx-auto flex items-center justify-center">
+                      <Clock className="h-8 w-8 text-green-600" />
+                    </div>
+                    <h3 className="font-medium text-lg">Tour Request Sent!</h3>
+                    <p className="text-gray-600">
+                      Thank you for scheduling a tour at {communityName}. A representative will contact you shortly to confirm your tour date and time.
+                    </p>
+                    <Button variant="outline" onClick={() => setTourSubmitted(false)}>
+                      Request Another Tour
+                    </Button>
                   </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor={`${formId}-phone`}>Phone Number</Label>
-                    <Input id={`${formId}-phone`} name="phone" type="tel" required placeholder="(555) 555-5555" className="h-10" />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label>Move-in Timeframe</Label>
-                    <RadioGroup name="timeframe" defaultValue="asap">
-                      <div className="flex items-center space-x-2 py-1">
-                        <RadioGroupItem value="asap" id={`${formId}-asap`} />
-                        <Label htmlFor={`${formId}-asap`} className="cursor-pointer">As soon as possible</Label>
-                      </div>
-                      <div className="flex items-center space-x-2 py-1">
-                        <RadioGroupItem value="1-3months" id={`${formId}-1-3months`} />
-                        <Label htmlFor={`${formId}-1-3months`} className="cursor-pointer">1-3 months</Label>
-                      </div>
-                      <div className="flex items-center space-x-2 py-1">
-                        <RadioGroupItem value="future" id={`${formId}-future`} />
-                        <Label htmlFor={`${formId}-future`} className="cursor-pointer">Just researching</Label>
-                      </div>
-                    </RadioGroup>
-                  </div>
-
-                  <Button type="submit" className="w-full h-11" disabled={isPricingSubmitting}>
-                    {isPricingSubmitting ? 'Sending...' : 'Get Pricing Information'}
-                  </Button>
-                </form>
-              ) : (
-                <div className="pt-4 text-center space-y-4">
-                  <div className="rounded-full bg-green-100 w-16 h-16 mx-auto flex items-center justify-center">
-                    <Check className="h-8 w-8 text-green-600" />
-                  </div>
-                  <h3 className="font-medium text-lg">Request Sent!</h3>
-                  <p className="text-gray-600">
-                    Thank you for your interest in {communityName}. A senior living advisor will contact you shortly with pricing information.
-                  </p>
-                  <Button variant="outline" onClick={() => setPricingSubmitted(false)}>
-                    Send Another Request
-                  </Button>
-                </div>
-              )}
-            </DialogContent>
-          </Dialog>
-
-          {/* Schedule Tour Button */}
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button variant="default" size="sm" className="w-full py-2.5 h-auto text-base font-semibold bg-orange-500 hover:bg-orange-600">
-                Tour
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-md mx-auto">
-              <DialogHeader>
-                <DialogTitle>Schedule a Tour</DialogTitle>
-              </DialogHeader>
-
-              {!tourSubmitted ? (
-                <form onSubmit={handleTourSubmit} className="space-y-4 pt-4">
-                  <div className="space-y-2">
-                    <Label htmlFor={`${formId}-tour-name`}>Your Name</Label>
-                    <Input id={`${formId}-tour-name`} name="name" required placeholder="Enter your full name" className="h-10" />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor={`${formId}-tour-phone`}>Phone Number</Label>
-                    <Input id={`${formId}-tour-phone`} name="phone" type="tel" required placeholder="(555) 555-5555" className="h-10" />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor={`${formId}-tour-email`}>Email</Label>
-                    <Input id={`${formId}-tour-email`} name="email" type="email" required placeholder="your@email.com" className="h-10" />
-                  </div>
-
-                  <Button type="submit" className="w-full h-11" disabled={isTourSubmitting}>
-                    {isTourSubmitting ? 'Sending...' : 'Request Tour'}
-                  </Button>
-                  <p className="text-xs text-gray-500 text-center">We'll call you within 24 hours to schedule your visit.</p>
-                </form>
-              ) : (
-                <div className="pt-4 text-center space-y-4">
-                  <div className="rounded-full bg-green-100 w-16 h-16 mx-auto flex items-center justify-center">
-                    <Clock className="h-8 w-8 text-green-600" />
-                  </div>
-                  <h3 className="font-medium text-lg">Tour Request Sent!</h3>
-                  <p className="text-gray-600">
-                    Thank you for scheduling a tour at {communityName}. A representative will contact you shortly to confirm your tour date and time.
-                  </p>
-                  <Button variant="outline" onClick={() => setTourSubmitted(false)}>
-                    Request Another Tour
-                  </Button>
-                </div>
-              )}
-            </DialogContent>
-          </Dialog>
+                )}
+              </DialogContent>
+            </Dialog>
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className="p-4 pt-0 mt-auto">
+          <div className="text-center text-sm text-gray-500 py-3 border-t">
+            <p className="italic">Contact facility directly</p>
+            <p className="text-xs mt-1">We specialize in assisted living and memory care</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

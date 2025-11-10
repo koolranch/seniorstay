@@ -131,31 +131,38 @@ function SearchContainer() {
 
   // Filter Cleveland-area communities for featured section
   const clevelandCities = ['Cleveland', 'Shaker Heights', 'Beachwood', 'Parma', 'Lakewood', 'Strongsville', 'Westlake', 'North Olmsted', 'Richmond Heights'];
-  const clevelandCommunities = communityData.filter(c => 
-    clevelandCities.some(city => c.location.toLowerCase().includes(city.toLowerCase()))
-  );
   
-  // Prioritize Memory Care communities first, then Assisted Living
-  const sortedClevelandCommunities = [...clevelandCommunities].sort((a, b) => {
-    const aHasMemoryCare = a.careTypes.includes('Memory Care');
-    const bHasMemoryCare = b.careTypes.includes('Memory Care');
-    const aHasAssistedLiving = a.careTypes.includes('Assisted Living');
-    const bHasAssistedLiving = b.careTypes.includes('Assisted Living');
+  // Only show Assisted Living and Memory Care on homepage (exclude skilled nursing-only)
+  const qualityCommunities = communityData.filter(c => {
+    const isInCleveland = clevelandCities.some(city => 
+      c.location.toLowerCase().includes(city.toLowerCase())
+    );
     
-    // Memory Care first
+    const isAssistedOrMemoryCare = c.careTypes.some(type => 
+      type.toLowerCase().includes('assisted living') || 
+      type.toLowerCase().includes('memory care')
+    );
+    
+    // Exclude if ONLY skilled nursing (keep if it has AL/MC + SN)
+    const isOnlySkilledNursing = c.careTypes.every(type => 
+      type.toLowerCase().includes('skilled nursing')
+    );
+    
+    return isInCleveland && isAssistedOrMemoryCare && !isOnlySkilledNursing;
+  });
+  
+  // Sort by Memory Care first, then Assisted Living
+  const sortedQualityCommunities = [...qualityCommunities].sort((a, b) => {
+    const aHasMemoryCare = a.careTypes.some(t => t.toLowerCase().includes('memory care'));
+    const bHasMemoryCare = b.careTypes.some(t => t.toLowerCase().includes('memory care'));
+    
     if (aHasMemoryCare && !bHasMemoryCare) return -1;
     if (!aHasMemoryCare && bHasMemoryCare) return 1;
-    
-    // Then Assisted Living
-    if (aHasAssistedLiving && !bHasAssistedLiving) return -1;
-    if (!aHasAssistedLiving && bHasAssistedLiving) return 1;
-    
-    // Then by number of care types (more comprehensive = better)
-    return b.careTypes.length - a.careTypes.length;
+    return 0;
   });
   
   const featuredCommunities = selectedCareFilter === 'all' && selectedLocation === 'all' && !searchQuery
-    ? sortedClevelandCommunities.slice(0, 6)
+    ? sortedQualityCommunities.slice(0, 6)
     : filteredCommunities;
   
   const showViewAll = selectedCareFilter === 'all' && selectedLocation === 'all' && !searchQuery;
@@ -185,7 +192,7 @@ function SearchContainer() {
         </div>
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto">
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 text-center leading-tight">
+            <h1 className="text-4xl md:text-5xl font-bold mb-6 text-center leading-tight">
               Find Assisted Living & Memory Care in Cleveland, Ohio
             </h1>
             <p className="text-base md:text-lg text-gray-700 mb-6 text-center max-w-3xl mx-auto">
@@ -378,21 +385,21 @@ function SearchContainer() {
       )}
 
       {/* Community Listings */}
-      <div id="communities" className="container mx-auto px-4 py-12">
+      <div id="communities" className="container mx-auto px-4 py-16">
         <h2 className="text-2xl md:text-3xl font-semibold mb-2 text-center">
-          {showViewAll ? 'Featured Cleveland-Area Communities' : `${filteredCommunities.length} ${filteredCommunities.length === 1 ? 'Community' : 'Communities'} Found`}
+          {showViewAll ? 'Featured Assisted Living & Memory Care in Cleveland' : `${filteredCommunities.length} ${filteredCommunities.length === 1 ? 'Community' : 'Communities'} Found`}
           {activeLocationLabel && ` in ${activeLocationLabel}`}
           {selectedCareFilter && selectedCareFilter !== 'all' && ` for ${activeCareLabel}`}
         </h2>
         {showViewAll && (
           <p className="text-gray-600 text-center mb-8">
-            Our top 6 recommended memory care and assisted living communities in Cleveland
+            Hand-selected communities offering assisted living and specialized memory care services
           </p>
         )}
 
         {featuredCommunities.length > 0 ? (
           <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
               {featuredCommunities.map((community, index) => (
                 <div key={community.id} className="relative">
                   {/* Featured badge for top 3 */}
@@ -406,16 +413,16 @@ function SearchContainer() {
                 </div>
               ))}
             </div>
-            {showViewAll && communityData.length > 6 && (
+            {showViewAll && qualityCommunities.length > 6 && (
               <div className="text-center mt-10">
                 <Link
                   href="/greater-cleveland"
                   className="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-bold text-lg px-10 py-4 rounded-lg transition-all shadow-md hover:shadow-lg"
                 >
-                  <span>View All {communityData.length} Cleveland Communities</span>
+                  <span>View All Assisted Living & Memory Care</span>
                   <ArrowRight className="h-6 w-6" />
                 </Link>
-                <p className="text-sm text-gray-500 mt-4">Filter by city, care type, and amenities</p>
+                <p className="text-sm text-gray-500 mt-4">Browse all our featured communities across Greater Cleveland</p>
               </div>
             )}
           </>
