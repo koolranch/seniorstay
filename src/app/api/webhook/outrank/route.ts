@@ -113,7 +113,7 @@ export default blogPosts;
     return { success: true, newArticlesCount: newPosts.length, updatedArticlesCount: articles.length - newPosts.length };
   } catch (error) {
     console.error('Error updating blog posts:', error);
-    return { success: false, error: error.message };
+    return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
   }
 }
 
@@ -151,7 +151,7 @@ async function triggerVercelRedeploy() {
     }
   } catch (error) {
     console.error('Error triggering Vercel redeploy:', error);
-    return { success: false, error: error.message };
+    return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
   }
 }
 
