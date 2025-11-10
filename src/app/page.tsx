@@ -38,8 +38,22 @@ function SearchContainer() {
       try {
         const data = await fetchAllCommunities();
         if (data && data.length > 0) {
-          setCommunities(data);
-          setFilteredCommunities(data);
+          // Filter to only Assisted Living and Memory Care (exclude skilled nursing-only)
+          const filteredData = data.filter(c => {
+            const isAssistedOrMemoryCare = c.careTypes.some(type => 
+              type.toLowerCase().includes('assisted living') || 
+              type.toLowerCase().includes('memory care')
+            );
+            
+            const isOnlySkilledNursing = c.careTypes.every(type => 
+              type.toLowerCase().includes('skilled nursing')
+            );
+            
+            return isAssistedOrMemoryCare && !isOnlySkilledNursing;
+          });
+          
+          setCommunities(filteredData);
+          setFilteredCommunities(filteredData);
         }
       } catch (error) {
         console.error('Error loading communities:', error);
