@@ -4,6 +4,9 @@ import { blogPosts } from '@/data/blog-posts';
 // Secure access token - should be stored in environment variables
 const ACCESS_TOKEN = process.env.OUTRANK_WEBHOOK_ACCESS_TOKEN;
 
+// Supported HTTP methods
+const SUPPORTED_METHODS = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS', 'TRACE', 'CONNECT'];
+
 interface OutrankArticle {
   id: string;
   title: string;
@@ -157,4 +160,59 @@ export async function HEAD() {
       'Content-Type': 'application/json',
     },
   });
+}
+
+// Catch-all handler for any unsupported methods
+export async function PUT(request: NextRequest) {
+  console.log('Outrank webhook: PUT method received');
+  return handleWebhook(request, 'PUT');
+}
+
+export async function PATCH(request: NextRequest) {
+  console.log('Outrank webhook: PATCH method received');
+  return handleWebhook(request, 'PATCH');
+}
+
+export async function DELETE(request: NextRequest) {
+  console.log('Outrank webhook: DELETE method received');
+  return handleWebhook(request, 'DELETE');
+}
+
+export async function TRACE(request: NextRequest) {
+  console.log('Outrank webhook: TRACE method received');
+  return NextResponse.json({
+    message: 'TRACE method supported',
+    method: 'TRACE',
+    timestamp: new Date().toISOString(),
+  });
+}
+
+export async function CONNECT(request: NextRequest) {
+  console.log('Outrank webhook: CONNECT method received');
+  return NextResponse.json({
+    message: 'CONNECT method supported',
+    method: 'CONNECT',
+    timestamp: new Date().toISOString(),
+  });
+}
+
+// Generic webhook handler for all methods except POST (which has special logic)
+async function handleWebhook(request: NextRequest, method: string) {
+  try {
+    // For non-POST methods, just acknowledge and log
+    console.log(`Outrank webhook: ${method} method handled successfully`);
+
+    return NextResponse.json({
+      message: `${method} method processed successfully`,
+      method: method,
+      timestamp: new Date().toISOString(),
+      note: 'This endpoint supports all HTTP methods for webhook testing'
+    });
+  } catch (error) {
+    console.error(`Outrank webhook ${method} error:`, error);
+    return NextResponse.json(
+      { error: `Internal server error for ${method}` },
+      { status: 500 }
+    );
+  }
 }
