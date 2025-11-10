@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { blogPosts } from '@/data/blog-posts';
+import fs from 'fs';
+import path from 'path';
 
 // Secure access token - should be stored in environment variables
 const ACCESS_TOKEN = process.env.OUTRANK_WEBHOOK_ACCESS_TOKEN;
@@ -38,7 +40,7 @@ function validateAccessToken(request: NextRequest): boolean {
   return token === ACCESS_TOKEN;
 }
 
-function processOutrankArticle(article: OutrankArticle) {
+async function processOutrankArticle(article: OutrankArticle) {
   // Convert Outrank article format to your blog post format
   const blogPost = {
     slug: article.slug,
@@ -57,13 +59,100 @@ function processOutrankArticle(article: OutrankArticle) {
       .join('\n\n'),
   };
 
-  // Here you could add logic to:
-  // 1. Save to a database
-  // 2. Update your blog-posts.ts file
-  // 3. Send notifications
-  // 4. Trigger a rebuild
-
   return blogPost;
+}
+
+async function addArticlesToBlog(articles: OutrankArticle[]) {
+  try {
+    // Get the current blog posts
+    const currentPosts = [...blogPosts];
+
+    // Process new articles
+    const newPosts = [];
+    for (const article of articles) {
+      const processedPost = await processOutrankArticle(article);
+
+      // Check if article already exists (by slug)
+      const existingIndex = currentPosts.findIndex(post => post.slug === processedPost.slug);
+      if (existingIndex >= 0) {
+        // Update existing article
+        currentPosts[existingIndex] = processedPost;
+        console.log(`Updated existing article: ${processedPost.slug}`);
+      } else {
+        // Add new article
+        currentPosts.unshift(processedPost); // Add to beginning
+        newPosts.push(processedPost);
+        console.log(`Added new article: ${processedPost.slug}`);
+      }
+    }
+
+    // Write updated blog posts to file
+    const blogPostsPath = path.join(process.cwd(), 'src', 'data', 'blog-posts.ts');
+    const fileContent = `import { BlogPost } from '@/types/blog';
+
+export interface BlogPost {
+  slug: string;
+  title: string;
+  description: string;
+  date: string;
+  author: string;
+  category: string;
+  readTime: string;
+  image?: string;
+  content: string;
+}
+
+export const blogPosts: BlogPost[] = ${JSON.stringify(currentPosts, null, 2)};
+
+export default blogPosts;
+`;
+
+    fs.writeFileSync(blogPostsPath, fileContent);
+    console.log(`Successfully updated blog-posts.ts with ${newPosts.length} new articles`);
+
+    return { success: true, newArticlesCount: newPosts.length, updatedArticlesCount: articles.length - newPosts.length };
+  } catch (error) {
+    console.error('Error updating blog posts:', error);
+    return { success: false, error: error.message };
+  }
+}
+
+async function triggerVercelRedeploy() {
+  try {
+    const VERCEL_TOKEN = process.env.VERCEL_ACCESS_TOKEN;
+    const VERCEL_PROJECT_ID = process.env.VERCEL_PROJECT_ID;
+    const VERCEL_TEAM_ID = process.env.VERCEL_TEAM_ID;
+
+    if (!VERCEL_TOKEN || !VERCEL_PROJECT_ID) {
+      console.log('Vercel credentials not configured, skipping redeploy');
+      return { success: false, message: 'Vercel credentials not configured' };
+    }
+
+    // Trigger a new deployment
+    const response = await fetch(`https://api.vercel.com/v1/integrations/deploy/${VERCEL_PROJECT_ID}`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${VERCEL_TOKEN}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name: 'Redeploy triggered by Outrank webhook',
+        source: 'api',
+      }),
+    });
+
+    if (response.ok) {
+      console.log('Successfully triggered Vercel redeploy');
+      return { success: true };
+    } else {
+      const errorText = await response.text();
+      console.error('Failed to trigger Vercel redeploy:', errorText);
+      return { success: false, error: errorText };
+    }
+  } catch (error) {
+    console.error('Error triggering Vercel redeploy:', error);
+    return { success: false, error: error.message };
+  }
 }
 
 export async function POST(request: NextRequest) {
@@ -95,29 +184,29 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Process each article
-    const processedArticles = payload.data.articles.map(article => {
-      try {
-        const processedArticle = processOutrankArticle(article);
-        console.log('Processed article:', article.title, '->', processedArticle.slug);
-        return processedArticle;
-      } catch (error) {
-        console.error('Error processing article:', article.title, error);
-        return null;
-      }
-    }).filter(Boolean);
+    // Process and add articles to blog
+    const blogUpdateResult = await addArticlesToBlog(payload.data.articles);
 
-    // Here you could add logic to:
-    // - Save articles to database
-    // - Update the blog-posts.ts file
-    // - Trigger a site rebuild
-    // - Send notifications
+    if (!blogUpdateResult.success) {
+      console.error('Failed to update blog posts:', blogUpdateResult.error);
+      return NextResponse.json(
+        { error: 'Failed to update blog posts', details: blogUpdateResult.error },
+        { status: 500 }
+      );
+    }
 
-    console.log(`Successfully processed ${processedArticles.length} articles from Outrank`);
+    // Trigger Vercel redeploy
+    const redeployResult = await triggerVercelRedeploy();
+
+    console.log(`Successfully processed ${payload.data.articles.length} articles from Outrank`);
+    console.log(`Added ${blogUpdateResult.newArticlesCount} new articles, updated ${blogUpdateResult.updatedArticlesCount} existing articles`);
 
     return NextResponse.json({
-      message: 'Webhook processed successfully',
-      processed_count: processedArticles.length,
+      message: 'Webhook processed successfully - articles added and redeploy triggered',
+      processed_count: payload.data.articles.length,
+      new_articles: blogUpdateResult.newArticlesCount,
+      updated_articles: blogUpdateResult.updatedArticlesCount,
+      redeploy_triggered: redeployResult.success,
       timestamp: new Date().toISOString(),
     });
 
