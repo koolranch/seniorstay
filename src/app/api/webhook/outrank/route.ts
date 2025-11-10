@@ -4,8 +4,8 @@ import { blogPosts } from '@/data/blog-posts';
 // Secure access token - should be stored in environment variables
 const ACCESS_TOKEN = process.env.OUTRANK_WEBHOOK_ACCESS_TOKEN;
 
-// Supported HTTP methods
-const SUPPORTED_METHODS = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS', 'TRACE', 'CONNECT'];
+// Supported HTTP methods (Next.js compatible)
+const SUPPORTED_METHODS = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'];
 
 interface OutrankArticle {
   id: string;
@@ -178,23 +178,7 @@ export async function DELETE(request: NextRequest) {
   return handleWebhook(request, 'DELETE');
 }
 
-export async function TRACE(request: NextRequest) {
-  console.log('Outrank webhook: TRACE method received');
-  return NextResponse.json({
-    message: 'TRACE method supported',
-    method: 'TRACE',
-    timestamp: new Date().toISOString(),
-  });
-}
-
-export async function CONNECT(request: NextRequest) {
-  console.log('Outrank webhook: CONNECT method received');
-  return NextResponse.json({
-    message: 'CONNECT method supported',
-    method: 'CONNECT',
-    timestamp: new Date().toISOString(),
-  });
-}
+// Note: TRACE and CONNECT methods are not supported by Next.js API routes
 
 // Generic webhook handler for all methods except POST (which has special logic)
 async function handleWebhook(request: NextRequest, method: string) {
