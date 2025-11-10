@@ -15,7 +15,6 @@ import ComparisonFloatingButton from '@/components/comparison/ComparisonFloating
 import Footer from '@/components/footer/Footer';
 import LocationCard from '@/components/property/LocationCard';
 import StickyTourButton from '@/components/tour/StickyTourButton';
-import ExitIntentPopup from '@/components/forms/ExitIntentPopup';
 import HowItWorks from '@/components/landing/HowItWorks';
 import { Community, communityData } from '@/data/facilities';
 import { testimonials } from '@/data/testimonials';
@@ -541,9 +540,6 @@ export default function Home() {
       
       {/* Sticky Tour Request Button */}
       <StickyTourButton />
-      
-      {/* Exit Intent Popup */}
-      <ExitIntentPopup cityName="Cleveland" />
 
       {/* Browse by City Section */}
       <div className="bg-gray-100 py-16 border-t border-gray-200">
