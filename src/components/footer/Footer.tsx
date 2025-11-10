@@ -16,6 +16,7 @@ const footerLinks = {
     { label: 'Pricing Guide', href: '/senior-living-costs-cleveland' },
     { label: 'Choosing Guide', href: '/choosing-senior-living' },
     { label: 'Resources', href: '/resources' },
+    { label: 'Blog & Advice', href: '/blog' },
   ],
   company: [
     { label: 'Privacy Policy', href: '/privacy-policy' },

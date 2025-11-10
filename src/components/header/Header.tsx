@@ -108,6 +108,9 @@ const Header = () => {
                     <Link href="/resources" className="cursor-pointer">Resources & Guides</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
+                    <Link href="/blog" className="cursor-pointer">Blog & Advice</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
                     <Link href="/compare" className="cursor-pointer">Compare Communities</Link>
                   </DropdownMenuItem>
                   <hr className="my-1" />
@@ -157,6 +160,9 @@ const Header = () => {
                     </Link>
                     <Link href="/resources" className="py-3 px-2 hover:bg-gray-50 rounded-md">
                       Resources & Guides
+                    </Link>
+                    <Link href="/blog" className="py-3 px-2 hover:bg-gray-50 rounded-md">
+                      Blog & Advice
                     </Link>
                     <Link href="/about" className="py-3 px-2 hover:bg-gray-50 rounded-md">
                       About Us

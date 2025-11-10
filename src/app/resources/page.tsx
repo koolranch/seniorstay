@@ -2,12 +2,15 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { BookOpen, DollarSign, Heart, HelpCircle, MapPin, Building2, ArrowRight } from 'lucide-react';
+import { BookOpen, DollarSign, Heart, HelpCircle, MapPin, Building2, ArrowRight, FileText } from 'lucide-react';
 import Header from '@/components/header/Header';
 import Footer from '@/components/footer/Footer';
 import StickyTourButton from '@/components/tour/StickyTourButton';
+import { getRecentPosts } from '@/data/blog-posts';
 
 export default function ResourcesPage() {
+  const recentBlogPosts = getRecentPosts(3);
+  
   const resources = [
     {
       icon: Heart,
@@ -83,11 +86,38 @@ export default function ResourcesPage() {
         </div>
       </div>
 
+      {/* Blog Link Card */}
+      <div className="py-8 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="max-w-6xl mx-auto">
+            <Link
+              href="/blog"
+              className="group bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-200 hover:border-blue-400 rounded-xl p-8 transition-all hover:shadow-lg flex items-center justify-between"
+            >
+              <div className="flex items-center gap-4">
+                <div className="bg-blue-500 text-white p-3 rounded-lg">
+                  <FileText className="h-8 w-8" />
+                </div>
+                <div>
+                  <h3 className="text-2xl font-bold mb-2 text-gray-900 group-hover:text-blue-600">
+                    Senior Living Blog & Advice
+                  </h3>
+                  <p className="text-gray-600">
+                    Expert tips, practical advice, and helpful insights for Cleveland families
+                  </p>
+                </div>
+              </div>
+              <ArrowRight className="h-8 w-8 text-blue-500 group-hover:translate-x-2 transition-transform" />
+            </Link>
+          </div>
+        </div>
+      </div>
+
       {/* Resources Grid */}
       <div className="py-16">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
-            <h2 className="text-3xl font-bold mb-4 text-center">Explore Our Guides</h2>
+            <h2 className="text-3xl font-bold mb-4 text-center">Comprehensive Guides</h2>
             <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
               Everything you need to know about senior living in Cleveland, from understanding different care types to finding the perfect community
             </p>
@@ -124,8 +154,51 @@ export default function ResourcesPage() {
         </div>
       </div>
 
+      {/* Recent Blog Posts */}
+      <div className="py-16 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <div className="max-w-6xl mx-auto">
+            <h2 className="text-3xl font-bold mb-4 text-center">Recent Blog Posts</h2>
+            <p className="text-gray-600 text-center mb-12">
+              Latest tips and advice for Cleveland families
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+              {recentBlogPosts.map((post) => (
+                <Link
+                  key={post.slug}
+                  href={`/blog/${post.slug}`}
+                  className="group bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow"
+                >
+                  <div className="mb-3">
+                    <span className="text-sm font-medium text-primary">{post.category}</span>
+                  </div>
+                  <h3 className="text-lg font-bold mb-3 text-gray-900 group-hover:text-primary transition-colors line-clamp-2">
+                    {post.title}
+                  </h3>
+                  <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+                    {post.description}
+                  </p>
+                  <div className="text-sm font-semibold text-primary group-hover:underline">
+                    Read More →
+                  </div>
+                </Link>
+              ))}
+            </div>
+            <div className="text-center">
+              <Link
+                href="/blog"
+                className="inline-flex items-center gap-2 text-primary hover:underline font-semibold"
+              >
+                View All Blog Posts
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Quick Stats Section */}
-      <div className="bg-gray-50 py-12 border-t">
+      <div className="bg-white py-12 border-t">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <h2 className="text-2xl font-bold text-center mb-8">Why Families Trust Our Resources</h2>
