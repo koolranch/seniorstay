@@ -19,6 +19,16 @@ const nextConfig = {
       },
     ],
   },
+  // Redirects for old URLs that ranked well
+  async redirects() {
+    return [
+      {
+        source: '/senior-entertainment/games/senior-online-games',
+        destination: '/blog/senior-online-games',
+        permanent: true, // 301 redirect - preserves SEO ranking
+      },
+    ];
+  },
 };
 
 export default nextConfig;
