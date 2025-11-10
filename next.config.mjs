@@ -1,5 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Force fresh deployment - disable all caching
+  generateBuildId: async () => {
+    return `build-${Date.now()}`;
+  },
   images: {
     unoptimized: true,
     remotePatterns: [
