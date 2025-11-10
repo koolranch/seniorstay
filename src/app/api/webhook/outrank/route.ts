@@ -127,10 +127,34 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// Optional: Handle other HTTP methods
+// Handle OPTIONS requests (CORS preflight)
+export async function OPTIONS() {
+  return new NextResponse(null, {
+    status: 200,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    },
+  });
+}
+
+// Handle GET requests (for testing/verification)
 export async function GET() {
   return NextResponse.json({
     message: 'Outrank webhook endpoint is active',
     timestamp: new Date().toISOString(),
+    supported_methods: ['POST', 'GET', 'OPTIONS'],
+    note: 'Use POST for webhook events, GET for testing'
+  });
+}
+
+// Handle HEAD requests (sometimes used for health checks)
+export async function HEAD() {
+  return new NextResponse(null, {
+    status: 200,
+    headers: {
+      'Content-Type': 'application/json',
+    },
   });
 }
