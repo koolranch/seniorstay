@@ -1,6 +1,6 @@
 import { MetadataRoute } from 'next';
 import { communityData } from '@/data/facilities';
-import { blogPosts } from '@/data/blog-posts';
+import { fetchAllBlogPosts } from '@/lib/blog-posts';
 
 type SitemapEntry = {
   url: string;
@@ -24,9 +24,10 @@ const createCitySlugs = (): string[] => {
   return cities.map(city => city.toLowerCase().replace(/\s+/g, '-'));
 };
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://www.guideforseniors.com';
   const currentDate = new Date().toISOString();
+  const blogPosts = await fetchAllBlogPosts();
 
   // Generate blog post entries
   const blogEntries: MetadataRoute.Sitemap = blogPosts.map(post => ({

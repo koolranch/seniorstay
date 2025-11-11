@@ -1,8 +1,8 @@
 import { Metadata } from 'next';
-import { blogPosts } from '@/data/blog-posts';
+import { fetchBlogPostBySlug } from '@/lib/blog-posts';
 
-export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
-  const post = blogPosts.find(p => p.slug === params.slug);
+export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+  const post = await fetchBlogPostBySlug(params.slug);
 
   if (!post) {
     return {

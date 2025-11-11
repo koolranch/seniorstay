@@ -1,13 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { blogPosts } from '@/data/blog-posts';
-import fs from 'fs';
-import path from 'path';
+import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 
 // Secure access token - should be stored in environment variables
 const ACCESS_TOKEN = process.env.OUTRANK_WEBHOOK_ACCESS_TOKEN;
 
-// Supported HTTP methods (Next.js compatible)
-const SUPPORTED_METHODS = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'];
+let supabase: SupabaseClient | null = null;
 
 interface OutrankArticle {
   id: string;
@@ -32,85 +29,108 @@ interface OutrankWebhookPayload {
 function validateAccessToken(request: NextRequest): boolean {
   const authHeader = request.headers.get('authorization');
 
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
     return false;
   }
 
-  const token = authHeader.split(" ")[1];
+  const token = authHeader.split(' ')[1];
   return token === ACCESS_TOKEN;
 }
 
+function getSupabaseServiceClient(): SupabaseClient | null {
+  if (supabase) {
+    return supabase;
+  }
+
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (!supabaseUrl || !supabaseServiceKey) {
+    console.error('Supabase service credentials missing. Set NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY.');
+    return null;
+  }
+
+  supabase = createClient(supabaseUrl, supabaseServiceKey, {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false,
+    },
+  });
+
+  return supabase;
+}
+
 async function processOutrankArticle(article: OutrankArticle) {
-  // Convert Outrank article format to your blog post format
-  const blogPost = {
+  const wordCount = article.content_markdown.split(/\s+/).filter(Boolean).length;
+  const readTimeMinutes = Math.max(5, Math.ceil(wordCount / 200));
+
+  const normalizedMarkdown = article.content_markdown
+    .split('\n')
+    .map((line) => line.trim())
+    .filter((line) => line.length > 0)
+    .map((line) => (line.startsWith('#') ? `##${line}` : line))
+    .join('\n\n');
+
+  return {
     slug: article.slug,
     title: article.title,
     description: article.meta_description,
-    date: new Date(article.created_at).toISOString().split('T')[0], // Format: YYYY-MM-DD
-    author: "Guide for Seniors Team",
-    category: article.tags.length > 0 ? article.tags[0] : "General",
-    readTime: `${Math.max(5, Math.ceil(article.content_markdown.split(' ').length / 200))} min read`,
-    image: article.image_url,
-    content: article.content_markdown
-      .split('\n')
-      .map(line => line.trim())
-      .filter(line => line.length > 0)
-      .map(line => line.startsWith('#') ? `##${line}` : line) // Convert headers
-      .join('\n\n'),
+    category: article.tags.length > 0 ? article.tags[0] : 'General',
+    author: 'Guide for Seniors Team',
+    published_at: new Date(article.created_at).toISOString().split('T')[0],
+    read_time_minutes: readTimeMinutes,
+    image_url: article.image_url ?? null,
+    content_markdown: normalizedMarkdown,
   };
-
-  return blogPost;
 }
 
 async function addArticlesToBlog(articles: OutrankArticle[]) {
   try {
-    // Get the current blog posts
-    const currentPosts = [...blogPosts];
+    const client = getSupabaseServiceClient();
+    if (!client) {
+      return { success: false, error: 'Supabase not configured' };
+    }
 
-    // Process new articles
-    const newPosts = [];
+    let newArticlesCount = 0;
+    let updatedArticlesCount = 0;
+
     for (const article of articles) {
       const processedPost = await processOutrankArticle(article);
 
-      // Check if article already exists (by slug)
-      const existingIndex = currentPosts.findIndex(post => post.slug === processedPost.slug);
-      if (existingIndex >= 0) {
-        // Update existing article
-        currentPosts[existingIndex] = processedPost;
+      const { data: existing, error: fetchError } = await client
+        .from('blog_posts')
+        .select('slug')
+        .eq('slug', processedPost.slug)
+        .maybeSingle();
+
+      if (fetchError) {
+        console.error('Error checking existing blog post:', fetchError);
+        return { success: false, error: fetchError.message };
+      }
+
+      const { error: upsertError } = await client.from('blog_posts').upsert(
+        {
+          ...processedPost,
+          updated_at: new Date().toISOString(),
+        },
+        { onConflict: 'slug' }
+      );
+
+      if (upsertError) {
+        console.error('Error upserting blog post:', upsertError);
+        return { success: false, error: upsertError.message };
+      }
+
+      if (existing) {
+        updatedArticlesCount += 1;
         console.log(`Updated existing article: ${processedPost.slug}`);
       } else {
-        // Add new article
-        currentPosts.unshift(processedPost); // Add to beginning
-        newPosts.push(processedPost);
+        newArticlesCount += 1;
         console.log(`Added new article: ${processedPost.slug}`);
       }
     }
 
-    // Write updated blog posts to file
-    const blogPostsPath = path.join(process.cwd(), 'src', 'data', 'blog-posts.ts');
-    const fileContent = `import { BlogPost } from '@/types/blog';
-
-export interface BlogPost {
-  slug: string;
-  title: string;
-  description: string;
-  date: string;
-  author: string;
-  category: string;
-  readTime: string;
-  image?: string;
-  content: string;
-}
-
-export const blogPosts: BlogPost[] = ${JSON.stringify(currentPosts, null, 2)};
-
-export default blogPosts;
-`;
-
-    fs.writeFileSync(blogPostsPath, fileContent);
-    console.log(`Successfully updated blog-posts.ts with ${newPosts.length} new articles`);
-
-    return { success: true, newArticlesCount: newPosts.length, updatedArticlesCount: articles.length - newPosts.length };
+    return { success: true, newArticlesCount, updatedArticlesCount };
   } catch (error) {
     console.error('Error updating blog posts:', error);
     return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };

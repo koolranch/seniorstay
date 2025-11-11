@@ -1,43 +1,26 @@
-"use client";
-
-import React from 'react';
-import { useParams } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { Calendar, Clock, Tag, ArrowLeft, User } from 'lucide-react';
 import Header from '@/components/header/Header';
 import Footer from '@/components/footer/Footer';
-import { blogPosts, getRecentPosts } from '@/data/blog-posts';
 import ReactMarkdown from 'react-markdown';
+import { fetchBlogPostBySlug, fetchRecentBlogPosts } from '@/lib/blog-posts';
 
-export default function BlogPostPage() {
-  const params = useParams();
-  const slug = params?.slug as string;
+export const revalidate = 300;
 
-  const post = blogPosts.find(p => p.slug === slug);
-  const recentPosts = getRecentPosts(3).filter(p => p.slug !== slug);
+const formatDate = (dateString: string) => {
+  const date = new Date(dateString);
+  return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+};
+
+export default async function BlogPostPage({ params }: { params: { slug: string } }) {
+  const post = await fetchBlogPostBySlug(params.slug);
 
   if (!post) {
-    return (
-      <main className="flex min-h-screen flex-col bg-white">
-        <Header />
-        <div className="flex-1 flex items-center justify-center py-20">
-          <div className="text-center">
-            <h1 className="text-4xl font-bold mb-4">Article Not Found</h1>
-            <p className="text-gray-600 mb-8">Sorry, we couldn't find the article you're looking for.</p>
-            <Link href="/blog" className="text-primary hover:underline font-semibold">
-              ← Back to Blog
-            </Link>
-          </div>
-        </div>
-        <Footer />
-      </main>
-    );
+    notFound();
   }
 
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-  };
+  const recentPosts = (await fetchRecentBlogPosts(3)).filter((p) => p.slug !== params.slug);
 
   return (
     <main className="flex min-h-screen flex-col bg-white">

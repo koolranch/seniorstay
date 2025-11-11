@@ -1,15 +1,15 @@
-"use client";
-
 import React from 'react';
 import Link from 'next/link';
 import { BookOpen, DollarSign, Heart, HelpCircle, MapPin, Building2, ArrowRight, FileText } from 'lucide-react';
 import Header from '@/components/header/Header';
 import Footer from '@/components/footer/Footer';
 import StickyTourButton from '@/components/tour/StickyTourButton';
-import { getRecentPosts } from '@/data/blog-posts';
+import { fetchRecentBlogPosts } from '@/lib/blog-posts';
 
-export default function ResourcesPage() {
-  const recentBlogPosts = getRecentPosts(3);
+export const revalidate = 300;
+
+export default async function ResourcesPage() {
+  const recentBlogPosts = await fetchRecentBlogPosts(3);
   
   const resources = [
     {
