@@ -17,6 +17,11 @@ const nextConfig = {
         hostname: 'images.unsplash.com',
         pathname: '**',
       },
+      {
+        protocol: 'https',
+        hostname: 'hncgnxbooghjhpncujzx.supabase.co',
+        pathname: '/storage/v1/object/public/community-images/**',
+      },
     ],
   },
   // Redirects for old URLs that ranked well

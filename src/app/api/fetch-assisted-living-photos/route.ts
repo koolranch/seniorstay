@@ -15,6 +15,7 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
+export const dynamic = 'force-dynamic'; // Don't prerender this API route
 export const maxDuration = 300;
 
 async function fetchGooglePlacesPhotos(
