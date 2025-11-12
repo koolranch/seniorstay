@@ -36,12 +36,17 @@ export function getCommunityImage(imageUrl: string | null | undefined, community
   if (imageUrl) {
     // If URL starts with /community-images/, prepend Supabase URL
     if (imageUrl.startsWith('/community-images/')) {
-      return `https://hncgnxbooghjhpncujzx.supabase.co/storage/v1/object/public${imageUrl}`;
+      const fullUrl = `https://hncgnxbooghjhpncujzx.supabase.co/storage/v1/object/public${imageUrl}`;
+      console.log('[getCommunityImage] Transforming:', imageUrl, '→', fullUrl);
+      return fullUrl;
     }
+    console.log('[getCommunityImage] External URL:', imageUrl);
     return imageUrl;
   }
   
+  const placeholder = getPlaceholderImage(communityId);
+  console.log('[getCommunityImage] No image, using placeholder for:', communityId);
   // Return consistent placeholder based on community ID
-  return getPlaceholderImage(communityId);
+  return placeholder;
 }
 
