@@ -50,11 +50,8 @@ export default function CommunityPage({ params }: { params: { id: string; slug: 
     notFound();
   }
 
-  // Verify the slug matches the community name
-  const expectedSlug = community.slug || community.name.toLowerCase().replace(/\s+/g, '-');
-  if (slug !== expectedSlug) {
-    notFound();
-  }
+  // Note: We don't validate slug because links might use various slug formats
+  // The ID is sufficient to ensure we're loading the correct community
 
   // Check if this is a skilled nursing-only facility
   const isOnlySkilledNursing = community.careTypes.every(type => 
