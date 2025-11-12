@@ -146,7 +146,8 @@ function SearchContainer() {
   const clevelandCities = ['Cleveland', 'Shaker Heights', 'Beachwood', 'Parma', 'Lakewood', 'Strongsville', 'Westlake', 'North Olmsted', 'Richmond Heights'];
   
   // Only show Assisted Living and Memory Care on homepage (exclude skilled nursing-only)
-  const qualityCommunities = communityData.filter(c => {
+  // Use 'communities' state (from Supabase) not 'communityData' (static)
+  const qualityCommunities = communities.filter(c => {
     const isInCleveland = clevelandCities.some(city => 
       c.location.toLowerCase().includes(city.toLowerCase())
     );
