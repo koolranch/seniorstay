@@ -1,6 +1,7 @@
 /**
  * Community Image Utilities
  * Handles varied placeholders and image URL management
+ * Updated: 2025-11-12 - Supabase image integration
  */
 
 // 8 varied high-quality placeholder images for senior living communities
