@@ -35,7 +35,7 @@ export function getCommunityImage(imageUrl: string | null | undefined, community
   if (imageUrl) {
     // If URL starts with /community-images/, prepend Supabase URL
     if (imageUrl.startsWith('/community-images/')) {
-      return `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public${imageUrl}`;
+      return `https://hncgnxbooghjhpncujzx.supabase.co/storage/v1/object/public${imageUrl}`;
     }
     return imageUrl;
   }
