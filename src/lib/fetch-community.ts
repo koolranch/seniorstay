@@ -111,7 +111,7 @@ function transformDatabaseToCommunity(data: any): Community {
     location: `${data.city}, ${data.state}`,
     address: data.address || undefined,
     coordinates: undefined, // TODO: Add lat/lng from location field if needed
-    images: data.imageUrl ? [data.imageUrl] : [], // Use imageUrl from database
+    images: (data.image_url || data.imageUrl) ? [data.image_url || data.imageUrl] : [], // Use image_url from database (snake_case)
     careTypes: data.services?.split(',').map((s: string) => s.trim()) || [],
     description: data.description || undefined,
     amenities: undefined,
