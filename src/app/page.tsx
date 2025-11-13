@@ -14,9 +14,9 @@ import SearchResults from '@/components/search/SearchResults';
 import ComparisonFloatingButton from '@/components/comparison/ComparisonFloatingButton';
 import Footer from '@/components/footer/Footer';
 import LocationCard from '@/components/property/LocationCard';
-import StickyTourButton from '@/components/tour/StickyTourButton';
 import HowItWorks from '@/components/landing/HowItWorks';
 import ZipTourScheduler from '@/components/tour/ZipTourScheduler';
+import ZipSearchWidget from '@/components/tour/ZipSearchWidget';
 import ScheduleTourFAB from '@/components/tour/ScheduleTourFAB';
 import { Community, communityData } from '@/data/facilities';
 import { testimonials } from '@/data/testimonials';
@@ -236,38 +236,15 @@ function SearchContainer() {
               </div>
             </div>
 
-            {/* Lead Capture Form */}
+            {/* Zip-Based Tour Search - MOVED TO HERO */}
             <div className="bg-white p-6 md:p-8 rounded-xl shadow-lg border border-gray-200 mb-8">
-              <h2 className="text-xl md:text-2xl font-bold mb-2 text-center">Get Free Help Finding the Right Community</h2>
-              <p className="text-gray-600 text-center mb-6">Our Cleveland advisors will call you to discuss your needs and schedule tours</p>
-              <form action="https://formspree.io/f/xnnpaply" method="POST" className="space-y-4">
-                <input type="hidden" name="form_type" value="homepage_hero_lead" />
-                <input type="hidden" name="source_page" value="homepage_hero" />
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <input
-                    type="text"
-                    name="name"
-                    required
-                    placeholder="Your Name *"
-                    className="w-full px-5 py-4 text-lg border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
-                  />
-                  <input
-                    type="tel"
-                    name="phone"
-                    required
-                    placeholder="Your Phone *"
-                    className="w-full px-5 py-4 text-lg border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
-                  />
-                </div>
-                <button
-                  type="submit"
-                  className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold text-lg py-4 px-8 rounded-lg transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2"
-                >
-                  Schedule Free Tours
-                  <ArrowRight className="h-5 w-5" />
-                </button>
-                <p className="text-sm text-gray-600 text-center">We'll call you within 24 hours. 100% free service, no obligations.</p>
-              </form>
+              <ZipSearchWidget onSearch={(zip) => {
+                // Scroll to results section
+                const resultsSection = document.getElementById('zip-search-results');
+                if (resultsSection) {
+                  resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+              }} />
             </div>
 
             <div className="text-center space-y-3">
@@ -295,8 +272,10 @@ function SearchContainer() {
       {/* How It Works Section */}
       <HowItWorks />
 
-      {/* Zip-Based Tour Scheduler */}
-      <ZipTourScheduler />
+      {/* Zip Search Results Section */}
+      <div id="zip-search-results">
+        <ZipTourScheduler />
+      </div>
 
       {/* Assessment CTA Section */}
       <div className="bg-gradient-to-br from-orange-50 to-blue-50 py-16 border-y border-gray-200">
@@ -557,9 +536,6 @@ export default function Home() {
       <Suspense fallback={<div>Loading...</div>}>
         <SearchContainer />
       </Suspense>
-      
-      {/* Sticky Tour Request Button */}
-      <StickyTourButton />
 
       {/* Browse by City Section */}
       <div className="bg-gray-100 py-16 border-t border-gray-200">

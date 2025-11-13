@@ -84,7 +84,7 @@ export default function TourConfirmationScreen({
               <ul className="space-y-2 text-sm text-gray-700">
                 <li className="flex items-start gap-2">
                   <span className="text-blue-600 font-bold mt-0.5">1.</span>
-                  <span>We'll call you <span className="font-semibold">within 2 hours</span> to confirm your tour</span>
+                  <span>We'll contact you <span className="font-semibold">within 2 hours</span> to confirm your tour</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-blue-600 font-bold mt-0.5">2.</span>
@@ -92,7 +92,7 @@ export default function TourConfirmationScreen({
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-blue-600 font-bold mt-0.5">3.</span>
-                  <span>You'll receive a confirmation with tour details</span>
+                  <span>You'll receive a confirmation with all tour details</span>
                 </li>
               </ul>
             </div>
