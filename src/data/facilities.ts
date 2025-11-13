@@ -15,6 +15,7 @@ export interface Community {
   slug?: string; // URL slug for routing
   location: string;
   address?: string; // Full street address
+  zip?: string; // 5-digit zip code
   coordinates?: {
     lat: number;
     lng: number;
