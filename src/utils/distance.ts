@@ -2,6 +2,8 @@
  * Distance calculation utilities for proximity-based community search
  */
 
+import { extractZipFromAddress, extractZipFromLocation } from './zipCodeParser';
+
 /**
  * Calculate distance between two points using Haversine formula
  * Returns distance in miles

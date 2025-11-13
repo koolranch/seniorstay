@@ -16,6 +16,8 @@ import Footer from '@/components/footer/Footer';
 import LocationCard from '@/components/property/LocationCard';
 import StickyTourButton from '@/components/tour/StickyTourButton';
 import HowItWorks from '@/components/landing/HowItWorks';
+import ZipTourScheduler from '@/components/tour/ZipTourScheduler';
+import ScheduleTourFAB from '@/components/tour/ScheduleTourFAB';
 import { Community, communityData } from '@/data/facilities';
 import { testimonials } from '@/data/testimonials';
 import { fetchAllCommunities } from '@/lib/fetch-community';
@@ -292,6 +294,9 @@ function SearchContainer() {
 
       {/* How It Works Section */}
       <HowItWorks />
+
+      {/* Zip-Based Tour Scheduler */}
+      <ZipTourScheduler />
 
       {/* Assessment CTA Section */}
       <div className="bg-gradient-to-br from-orange-50 to-blue-50 py-16 border-y border-gray-200">
@@ -770,6 +775,9 @@ export default function Home() {
 
       {/* Comparison Floating Button */}
       <ComparisonFloatingButton />
+
+      {/* Schedule Tour FAB */}
+      <ScheduleTourFAB />
 
       <div className="mt-auto">
         <Footer />
