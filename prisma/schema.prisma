@@ -75,6 +75,7 @@ model Community {
   state       String
   description String?
   imageUrl    String?
+  image_urls  String[] // Photo gallery support
   zip         String?
   address     String?
   phone       String?
@@ -83,6 +84,10 @@ model Community {
   services    String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  
+  // Photo enrichment tracking
+  photos_source        String?   // "facility_website", "caring.com", etc.
+  photos_last_updated  DateTime?
   
   // CMS Certification and Official Data
   ccn                      String?   @unique

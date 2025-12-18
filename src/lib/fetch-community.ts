@@ -111,7 +111,12 @@ function transformDatabaseToCommunity(data: any): Community {
     location: `${data.city}, ${data.state}`,
     address: data.address || undefined,
     coordinates: undefined, // TODO: Add lat/lng from location field if needed
-    images: (data.image_url || data.imageUrl) ? [data.image_url || data.imageUrl] : [], // Use image_url from database (snake_case)
+    // Support photo galleries: prefer image_urls array, fallback to single image_url
+    images: data.image_urls && data.image_urls.length > 0 
+      ? data.image_urls 
+      : (data.image_url || data.imageUrl) 
+        ? [data.image_url || data.imageUrl] 
+        : [],
     careTypes: data.services?.split(',').map((s: string) => s.trim()) || [],
     description: data.description || undefined,
     amenities: undefined,
