@@ -32,6 +32,11 @@ const nextConfig = {
         destination: '/blog/senior-online-games',
         permanent: true, // 301 redirect - preserves SEO ranking
       },
+      {
+        source: '/senior-lifestyle/family/11-places-seniors-meet-seniors',
+        destination: '/blog/11-places-seniors-meet-seniors',
+        permanent: true,
+      },
     ];
   },
 };
