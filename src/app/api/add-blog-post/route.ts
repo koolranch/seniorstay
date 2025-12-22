@@ -1,7 +1,27 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { readFileSync } from 'fs';
+import { join } from 'path';
 
 export const dynamic = 'force-dynamic';
+
+// Load blog posts from old-blog-data.ts
+function loadOldBlogPosts() {
+  try {
+    const filePath = join(process.cwd(), 'scripts', 'old-blog-data.ts');
+    const content = readFileSync(filePath, 'utf-8');
+    
+    // Extract blog posts array from TypeScript file
+    const match = content.match(/export const blogPosts: BlogPost\[\] = \[([\s\S]*)\];/);
+    if (!match) return [];
+    
+    // Parse the data (this is a simplified extraction)
+    return eval('(' + '[' + match[1] + ']' + ')');
+  } catch (error) {
+    console.error('Error loading old blog posts:', error);
+    return [];
+  }
+}
 
 const FULL_CONTENT = `
 Socializing is one of the most important factors in healthy aging. Maintaining a strong social network can improve mental health, boost cognitive function, and even increase longevity. However, meeting new people can sometimes feel challenging later in life.
