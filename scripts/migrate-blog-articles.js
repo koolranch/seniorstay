@@ -4,19 +4,12 @@
  * Run: node scripts/migrate-blog-articles.js
  */
 
-require('dotenv').config({ path: '.env.local' });
 const { createClient } = require('@supabase/supabase-js');
 const fs = require('fs');
 const path = require('path');
 
 const supabaseUrl = 'https://hncgnxbooghjhpncujzx.supabase.co';
-const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-
-if (!serviceRoleKey) {
-  console.error('❌ SUPABASE_SERVICE_ROLE_KEY not found in .env.local');
-  console.error('Please ensure your .env.local file has the service role key');
-  process.exit(1);
-}
+const serviceRoleKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhuY2dueGJvb2doamhwbmN1anp4Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0NDIxMjQ4MiwiZXhwIjoyMDU5Nzg4NDgyfQ.EzBdP_vgXkCPsdqky6Hf-CLvAr1hmvC1rqTbln4HFzg';
 
 const supabase = createClient(supabaseUrl, serviceRoleKey);
 
