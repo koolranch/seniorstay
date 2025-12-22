@@ -29,7 +29,7 @@ const MISSING_ARTICLES = [
   {
     slug: 'keep-up-with-tech',
     title: 'How Seniors Can Keep Up With Technology: A Practical Guide',
-    description: 'Technology doesn't have to be intimidating. Learn practical strategies to master smartphones, computers, and new tech at your own pace—with Cleveland resources to help.',
+    description: 'Technology doesn\'t have to be intimidating. Learn practical strategies to master smartphones, computers, and new tech at your own pace—with Cleveland resources to help.',
     category: 'Technology & Apps',
     author: 'Guide for Seniors Team',
     published_at: '2025-03-15',
