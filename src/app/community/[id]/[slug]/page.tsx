@@ -127,10 +127,10 @@ export default async function CommunityPage({ params }: CommunityPageProps) {
       "postalCode": community.zip || "",
       "addressCountry": "US"
     },
-    "geo": community.latitude && community.longitude ? {
+    "geo": community.coordinates ? {
       "@type": "GeoCoordinates",
-      "latitude": community.latitude,
-      "longitude": community.longitude
+      "latitude": community.coordinates.lat,
+      "longitude": community.coordinates.lng
     } : undefined,
     "image": community.images?.[0] || "https://www.guideforseniors.com/images/default-community.jpg",
     "priceRange": "$$$",
