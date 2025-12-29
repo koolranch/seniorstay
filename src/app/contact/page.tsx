@@ -1,17 +1,23 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Header from '@/components/header/Header';
 import Footer from '@/components/footer/Footer';
-import { Phone, Mail, MapPin, Clock } from 'lucide-react';
+import { Phone, Mail, MapPin, Clock, Building2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 
 export default function ContactPage() {
+  const searchParams = useSearchParams();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState('');
+  
+  // Get community info from URL parameters (from sticky CTA)
+  const communityName = searchParams.get('community');
+  const cityName = searchParams.get('city');
   
   const formspreeId = "xnnpaply";
   const formspreeEndpoint = `https://formspree.io/f/${formspreeId}`;
@@ -52,10 +58,27 @@ export default function ContactPage() {
       <main className="flex-grow">
         <div className="bg-gradient-to-b from-gray-50 to-white py-16">
           <div className="container mx-auto px-4">
-            <h1 className="text-4xl font-bold text-center mb-4">Contact Us</h1>
+            {/* Show context banner if coming from a community page */}
+            {communityName && (
+              <div className="bg-primary/10 border border-primary/20 rounded-lg p-4 mb-6 max-w-2xl mx-auto flex items-center gap-3">
+                <Building2 className="h-5 w-5 text-primary flex-shrink-0" />
+                <p className="text-gray-700">
+                  <strong>Interested in {communityName}</strong>
+                  {cityName && ` in ${cityName}`}? Our advisor will help you learn more about this community.
+                </p>
+              </div>
+            )}
+            
+            <h1 className="text-4xl font-bold text-center mb-4">
+              {communityName 
+                ? `Speak to a ${cityName || 'Cleveland'} Advisor` 
+                : 'Contact Us'}
+            </h1>
             <p className="text-xl text-gray-600 text-center max-w-2xl mx-auto">
-              We're here to help you find the perfect senior living community. 
-              Reach out to our experienced advisors for personalized assistance.
+              {communityName
+                ? `Our local advisors know ${communityName} well. Get personalized help with pricing, tours, and availability.`
+                : `We're here to help you find the perfect senior living community. 
+                   Reach out to our experienced advisors for personalized assistance.`}
             </p>
           </div>
         </div>
@@ -120,6 +143,15 @@ export default function ContactPage() {
               <h2 className="text-2xl font-semibold mb-6">Send Us a Message</h2>
               
               <form className="space-y-4" onSubmit={handleSubmit}>
+                {/* Hidden fields for community context tracking */}
+                {communityName && (
+                  <>
+                    <input type="hidden" name="community_interest" value={communityName} />
+                    <input type="hidden" name="city" value={cityName || ''} />
+                    <input type="hidden" name="source" value="community_page_cta" />
+                  </>
+                )}
+                
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <Label htmlFor="firstName">First Name</Label>
@@ -138,12 +170,17 @@ export default function ContactPage() {
 
                 <div>
                   <Label htmlFor="phone">Phone Number</Label>
-                  <Input id="phone" name="phone" type="tel" placeholder="(555) 555-5555" />
+                  <Input id="phone" name="phone" type="tel" placeholder="(216) 677-4630" />
                 </div>
 
                 <div>
                   <Label htmlFor="subject">Subject</Label>
-                  <select id="subject" name="subject" className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary">
+                  <select 
+                    id="subject" 
+                    name="subject" 
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                    defaultValue={communityName ? 'Help Finding a Community' : 'General Inquiry'}
+                  >
                     <option>General Inquiry</option>
                     <option>Help Finding a Community</option>
                     <option>Financial Assistance Questions</option>
@@ -158,7 +195,9 @@ export default function ContactPage() {
                   <Textarea 
                     id="message" 
                     name="message"
-                    placeholder="How can we help you?" 
+                    placeholder={communityName 
+                      ? `I'm interested in learning more about ${communityName}. Please contact me about pricing and availability.`
+                      : "How can we help you?"} 
                     rows={5}
                     required 
                   />

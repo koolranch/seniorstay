@@ -24,6 +24,23 @@ const createCitySlugs = (): string[] => {
   return cities.map(city => city.toLowerCase().replace(/\s+/g, '-'));
 };
 
+/**
+ * Generate a clean, SEO-friendly slug from community name
+ * Example: "Danbury Senior Living - Brunswick" → "danbury-senior-living-brunswick"
+ * 
+ * URL Structure: /community/{uuid}/{slug}
+ * - UUID ensures unique identification in backend
+ * - Slug provides clean, readable URL for Google
+ */
+const createCommunitySlug = (name: string): string => {
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, '') // Remove special chars
+    .replace(/\s+/g, '-')          // Replace spaces with hyphens
+    .replace(/-+/g, '-')           // Remove consecutive hyphens
+    .trim();
+};
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://www.guideforseniors.com';
   const currentDate = new Date().toISOString();
@@ -111,5 +128,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'monthly',
       priority: 0.7,
     },
+    // Community detail pages
+    ...communityData.map(community => ({
+      url: `${baseUrl}/community/${community.id}/${createCommunitySlug(community.name)}`,
+      lastModified: currentDate,
+      changeFrequency: 'weekly' as const,
+      priority: 0.8,
+    })),
+    // Location/city pages
+    ...createCitySlugs().map(citySlug => ({
+      url: `${baseUrl}/location/${citySlug}`,
+      lastModified: currentDate,
+      changeFrequency: 'weekly' as const,
+      priority: 0.8,
+    })),
   ];
 }
