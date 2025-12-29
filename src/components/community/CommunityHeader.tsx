@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowLeft, MapPin, Calendar, DollarSign } from 'lucide-react';
 import { Community } from '@/data/facilities';
@@ -10,6 +9,7 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import CommunityImage from '@/components/ui/CommunityImage';
 
 interface CommunityHeaderProps {
   community: Community;
@@ -74,7 +74,7 @@ export default function CommunityHeader({ community, isOnlySkilledNursing = fals
               {community.images.map((image, index) => (
                 <CarouselItem key={index}>
                   <div className="relative w-full h-[400px] md:h-[500px] rounded-xl overflow-hidden">
-                    <Image
+                    <CommunityImage
                       src={image}
                       alt={`${community.name} - Image ${index + 1}`}
                       fill

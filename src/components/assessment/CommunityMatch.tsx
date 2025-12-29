@@ -1,7 +1,6 @@
 "use client";
 
 import { motion } from 'framer-motion';
-import Image from 'next/image';
 import Link from 'next/link';
 import { MapPin, ArrowRight } from 'lucide-react';
 import { Community } from '@/data/facilities';
@@ -11,6 +10,7 @@ import { generateMatchReason } from '@/utils/assessmentScoring';
 import { AssessmentAnswers } from '@/utils/assessmentScoring';
 import { trackResultsCommunityClicked } from '@/components/analytics/AssessmentAnalytics';
 import { getCommunityImage } from '@/lib/communityImages';
+import CommunityImage from '@/components/ui/CommunityImage';
 
 interface CommunityMatchProps {
   community: Community;
@@ -43,7 +43,7 @@ export default function CommunityMatch({
     >
       {/* Community Image */}
       <div className="relative h-48 sm:h-56 bg-gray-200">
-        <Image
+        <CommunityImage
           src={getCommunityImage(community.images?.[0], community.id)}
           alt={community.name}
           fill

@@ -1,12 +1,12 @@
 "use client";
 
 import React from 'react';
-import Image from 'next/image';
 import { MapPin, Star, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Community } from '@/data/facilities';
 import { formatDistance } from '@/utils/distance';
 import { getCommunityImage } from '@/lib/communityImages';
+import CommunityImage from '@/components/ui/CommunityImage';
 
 interface CommunityWithDistance extends Community {
   distance: number;
@@ -75,7 +75,7 @@ export default function NearbyCommunitiesResults({
             >
               {/* Image */}
               <div className="relative w-full h-48">
-                <Image
+                <CommunityImage
                   src={getCommunityImage(community.images?.[0], community.id)}
                   alt={community.name}
                   fill

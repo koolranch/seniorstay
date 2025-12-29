@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useId } from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Heart, MapPin, Phone, Star, Clock, Check } from 'lucide-react';
@@ -13,6 +12,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { useComparison } from '@/context/ComparisonContext';
 import { Community } from '@/data/facilities';
 import { getCommunityImage } from '@/lib/communityImages';
+import CommunityImage from '@/components/ui/CommunityImage';
 
 interface LocationCardProps {
   community: Community;
@@ -137,7 +137,7 @@ export default function LocationCard({ community }: LocationCardProps) {
       {/* Card Header/Image */}
       <div className="relative w-full h-56">
         <Link href={communityUrl} className="block w-full h-full">
-          <Image
+          <CommunityImage
             src={getCommunityImage(community.images?.[0], communityId)}
             alt={communityName}
             fill
