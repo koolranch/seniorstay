@@ -151,7 +151,7 @@ export default async function CommunityPage({ params }: CommunityPageProps) {
       "ratingValue": community.overallRating,
       "bestRating": "5",
       "worstRating": "1",
-      "ratingCount": community.reviewCount || 1
+      "ratingCount": 1
     } : undefined,
     "openingHoursSpecification": {
       "@type": "OpeningHoursSpecification",
