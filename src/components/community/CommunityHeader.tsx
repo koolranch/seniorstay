@@ -184,7 +184,7 @@ export default function CommunityHeader({ community, isOnlySkilledNursing = fals
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="tour-phone">Phone Number</Label>
-                        <Input id="tour-phone" name="phone" type="tel" required placeholder="(216) 555-0100" />
+                        <Input id="tour-phone" name="phone" type="tel" required placeholder="(216) 677-4630" />
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="tour-email">Email</Label>

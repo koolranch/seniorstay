@@ -201,11 +201,11 @@ export default function ResultsScreen({ onRestart }: ResultsScreenProps) {
             <strong>Need immediate assistance?</strong>
           </p>
           <a
-            href="tel:+12165550100"
+            href="tel:+12166774630"
             className="inline-flex items-center text-[#ff5a5f] font-semibold hover:underline"
           >
             <Phone className="w-5 h-5 mr-2" />
-            Call us now: (216) 555-0100
+            Call us now: (216) 677-4630
           </a>
         </div>
       </motion.div>

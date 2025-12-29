@@ -35,7 +35,7 @@ export const SchemaOrg: React.FC<SchemaOrgProps> = ({ community }: SchemaOrgProp
       "postalCode": zip,
       "addressCountry": "US"
     },
-    "telephone": "(800) 555-1234", // Default phone number since it's not in the Community type
+    "telephone": "(216) 677-4630", // Default phone number since it's not in the Community type
     "email": "info@example.com", // Default email since it's not in the Community type
     "amenityFeature": community.amenities?.map(amenity => ({
       "@type": "LocationFeatureSpecification",

@@ -72,8 +72,8 @@ export default function ContactPage() {
                   <div>
                     <h3 className="font-semibold mb-1">Phone</h3>
                     <p className="text-gray-600">Call us toll-free</p>
-                    <a href="tel:1888736467" className="text-primary hover:underline text-lg font-medium">
-                      1-888-SENIORS (1-888-736-4677)
+                    <a href="tel:+12166774630" className="text-primary hover:underline text-lg font-medium">
+                      (216) 677-4630
                     </a>
                     <p className="text-sm text-gray-500 mt-1">Monday - Friday: 8:00 AM - 8:00 PM EST</p>
                     <p className="text-sm text-gray-500">Saturday - Sunday: 9:00 AM - 5:00 PM EST</p>

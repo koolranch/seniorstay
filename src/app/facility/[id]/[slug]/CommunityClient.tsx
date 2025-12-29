@@ -247,7 +247,7 @@ export default function CommunityClient({ community }: CommunityClientProps) {
             {/* Phone Contact */}
             <div className="flex items-center mb-6 text-gray-700">
               <Phone className="h-5 w-5 mr-3 text-primary" />
-              <span>(800) 555-1234</span>
+              <span>(216) 677-4630</span>
             </div>
 
             {/* Location and Contact Section */}
@@ -267,7 +267,7 @@ export default function CommunityClient({ community }: CommunityClientProps) {
                 )}
                 <div className="mb-6">
                   <h3 className="text-sm font-medium text-gray-600">Contact:</h3>
-                  <p className="text-gray-800">(800) 555-1234</p>
+                  <p className="text-gray-800">(216) 677-4630</p>
                 </div>
 
                 {community.coordinates && (

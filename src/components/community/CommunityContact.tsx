@@ -70,7 +70,7 @@ export default function CommunityContact({ community }: CommunityContactProps) {
                   id="phone"
                   name="phone"
                   required
-                  placeholder="(216) 555-0100"
+                  placeholder="(216) 677-4630"
                   className="block w-full rounded-lg border border-gray-300 px-4 py-2.5 focus:border-primary focus:ring-2 focus:ring-primary focus:ring-offset-0"
                 />
               </div>

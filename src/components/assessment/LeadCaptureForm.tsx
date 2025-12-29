@@ -88,7 +88,7 @@ export default function LeadCaptureForm({ assessmentData }: LeadCaptureFormProps
           We've received your information and will contact you within 24 hours with your personalized care guide.
         </p>
         <p className="text-sm text-green-600">
-          Need immediate assistance? Call us at <strong>(216) 555-0100</strong>
+          Need immediate assistance? Call us at <strong>(216) 677-4630</strong>
         </p>
       </motion.div>
     );
@@ -157,7 +157,7 @@ export default function LeadCaptureForm({ assessmentData }: LeadCaptureFormProps
             required
             value={formData.phone}
             onChange={handleChange}
-            placeholder="(216) 555-0100"
+            placeholder="(216) 677-4630"
             className="bg-white"
           />
         </div>

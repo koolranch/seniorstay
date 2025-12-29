@@ -77,7 +77,7 @@ export default function StickyTourButton() {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="sticky-phone">Phone Number *</Label>
-                <Input id="sticky-phone" name="phone" type="tel" required placeholder="(216) 555-0100" />
+                <Input id="sticky-phone" name="phone" type="tel" required placeholder="(216) 677-4630" />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="sticky-email">Email *</Label>

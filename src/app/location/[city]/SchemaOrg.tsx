@@ -24,7 +24,7 @@ const SchemaOrg: React.FC<SchemaOrgProps> = ({ cityName, stateAbbr, communities 
       "addressLocality": cityName,
       "addressRegion": stateAbbr
     },
-    "telephone": "(800) 555-1234",
+    "telephone": "(216) 677-4630",
     "sameAs": [
       "https://www.facebook.com/guideforseniors",
       "https://twitter.com/guideforseniors",
@@ -60,7 +60,7 @@ const SchemaOrg: React.FC<SchemaOrgProps> = ({ cityName, stateAbbr, communities 
             "latitude": community.coordinates.lat,
             "longitude": community.coordinates.lng,
           } : undefined,
-          "telephone": "(800) 555-1234",
+          "telephone": "(216) 677-4630",
           "url": `https://guideforseniors.com/community/${community.id}/${community.name.toLowerCase().replace(/\s+/g, '-')}`,
           "image": community.images[0],
         }

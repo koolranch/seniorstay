@@ -44,7 +44,7 @@ export async function generateMetadata({ params }: CommunityPageProps): Promise<
       "latitude": community.coordinates.lat,
       "longitude": community.coordinates.lng
     } : undefined,
-    "telephone": "(800) 555-1234",
+    "telephone": "(216) 677-4630",
     "openingHours": "Mo-Su 00:00-24:00",
     "priceRange": "$$",
     "amenityFeature": community.amenities?.map(amenity => ({

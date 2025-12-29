@@ -178,7 +178,7 @@ export default function GreaterClevelandPage() {
                 Get Free Assistance
               </Link>
               <a
-                href="tel:1888736467"
+                href="tel:+12166774630"
                 className="bg-white text-primary border-2 border-primary px-8 py-3 rounded-full font-semibold hover:bg-primary/5 transition-colors"
               >
                 Call 1-888-SENIORS

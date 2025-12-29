@@ -192,7 +192,7 @@ export default function TourBookingOverlay({
                     required
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    placeholder="(216) 555-0100"
+                    placeholder="(216) 677-4630"
                     className="h-12 text-base pl-11"
                     disabled={submitting}
                   />

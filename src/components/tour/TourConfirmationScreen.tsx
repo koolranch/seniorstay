@@ -133,8 +133,8 @@ export default function TourConfirmationScreen({
             <div className="mt-6 pt-6 border-t text-sm text-gray-500">
               <p>
                 Questions? Call us at{' '}
-                <a href="tel:+12165550100" className="text-primary hover:underline font-medium">
-                  (216) 555-0100
+                <a href="tel:+12166774630" className="text-primary hover:underline font-medium">
+                  (216) 677-4630
                 </a>
               </p>
             </div>
