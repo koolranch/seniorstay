@@ -14,6 +14,9 @@ import MapComponent from '@/components/map/GoogleMap';
 import CommunityMapFallback from '@/components/map/CommunityMapFallback';
 import { Community } from '@/data/facilities';
 import { clevelandCitiesData } from '@/data/cleveland-cities';
+import { getLocalResourcesForCity } from '@/data/local-resources';
+import LocalSeniorResources from '@/components/location/LocalSeniorResources';
+import TestimonialSection from '@/components/testimonials/TestimonialSection';
 import ExitIntentPopup from '@/components/forms/ExitIntentPopup';
 
 interface CityLocationClientProps {
@@ -31,6 +34,7 @@ export default function CityLocationClient({ cityName, stateAbbr, communities }:
   // Get city-specific data
   const citySlug = cityName.toLowerCase().replace(/\s+/g, '-');
   const cityData = clevelandCitiesData[citySlug];
+  const localResources = getLocalResourcesForCity(citySlug);
 
   useEffect(() => {
     setIsMounted(true);
@@ -239,29 +243,18 @@ export default function CityLocationClient({ cityName, stateAbbr, communities }:
         )}
       </div>
 
-      {/* Testimonials Section */}
-      {cityData?.testimonials && cityData.testimonials.length > 0 && (
-        <div className="bg-gray-50 py-12 border-t">
-          <div className="container mx-auto px-4">
-            <h2 className="text-2xl font-semibold mb-6 text-center">
-              What Families Say About {cityName} Senior Living
-            </h2>
-            <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-              {cityData.testimonials.map((testimonial, index) => (
-                <div key={index} className="bg-white p-6 rounded-lg shadow-sm">
-                  <MessageSquare className="h-8 w-8 text-primary/20 mb-3" />
-                  <p className="text-gray-700 italic mb-4">"{testimonial.text}"</p>
-                  <div className="text-sm">
-                    <p className="font-semibold">{testimonial.author}</p>
-                    {testimonial.community && (
-                      <p className="text-gray-500">{testimonial.community}</p>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
+      {/* Testimonials Section with Review Schema */}
+      <TestimonialSection
+        title={`What Cleveland Families Say About ${cityName} Senior Living`}
+        subtitle="Real experiences from families who found senior care with our help"
+        cityName={cityName}
+        limit={3}
+        className="bg-gray-50 border-t"
+      />
+
+      {/* Local Senior Resources Section */}
+      {localResources && (
+        <LocalSeniorResources cityName={cityName} resources={localResources} />
       )}
 
       {/* SEO Content Section */}

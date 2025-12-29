@@ -5,6 +5,7 @@ import Header from '@/components/header/Header';
 import Footer from '@/components/footer/Footer';
 import ReactMarkdown from 'react-markdown';
 import { fetchBlogPostBySlug, fetchRecentBlogPosts } from '@/lib/blog-posts';
+import SuburbLinksSection from '@/components/blog/SuburbLinksSection';
 
 export const revalidate = 300;
 
@@ -21,6 +22,12 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
   }
 
   const recentPosts = (await fetchRecentBlogPosts(3)).filter((p) => p.slug !== params.slug);
+
+  // Check if this is a Medicaid-related article to show suburb links
+  const isMedicaidRelated = post.slug.includes('medicaid') || 
+    post.category.toLowerCase().includes('medicaid') ||
+    post.title.toLowerCase().includes('medicaid') ||
+    post.content.toLowerCase().includes('medicaid waiver');
 
   return (
     <main className="flex min-h-screen flex-col bg-white">
@@ -111,6 +118,14 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
                 {post.content}
               </ReactMarkdown>
             </div>
+
+            {/* Suburb Links for Medicaid Articles - Internal Siloing */}
+            {isMedicaidRelated && (
+              <SuburbLinksSection 
+                title="Find Medicaid-Approved Communities Near You"
+                subtitle="Looking for a facility that accepts the Ohio Medicaid Assisted Living Waiver? Browse communities in these Cleveland suburbs:"
+              />
+            )}
 
             {/* CTA Box */}
             <div className="bg-primary/5 border border-primary/20 rounded-xl p-8 mt-12">

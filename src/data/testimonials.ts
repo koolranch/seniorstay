@@ -119,10 +119,16 @@ export function getTestimonialsByCareType(careType?: string, limit: number = 3):
     .slice(0, limit);
 }
 
-// Get testimonials by location
+// Get testimonials by location (more flexible matching)
 export function getTestimonialsByLocation(location: string, limit: number = 2): Testimonial[] {
+  const normalizedLocation = location.toLowerCase().replace(/\s+/g, '');
+  
   return testimonials
-    .filter(t => t.location.toLowerCase().includes(location.toLowerCase()))
+    .filter(t => {
+      const normalizedTestimonialLocation = t.location.toLowerCase().replace(/\s+/g, '');
+      return normalizedTestimonialLocation.includes(normalizedLocation) ||
+             normalizedLocation.includes(normalizedTestimonialLocation.split(',')[0]);
+    })
     .slice(0, limit);
 }
 
