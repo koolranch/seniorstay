@@ -1,5 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Ensure consistent URLs without trailing slashes
+  trailingSlash: false,
   // Force fresh deployment - disable all caching
   generateBuildId: async () => {
     return `build-${Date.now()}`;
@@ -35,6 +37,12 @@ const nextConfig = {
       {
         source: '/senior-lifestyle/family/11-places-seniors-meet-seniors',
         destination: '/blog/11-places-seniors-meet-seniors',
+        permanent: true,
+      },
+      // Redirect /contact-us (with or without trailing slash) to /contact
+      {
+        source: '/contact-us',
+        destination: '/contact',
         permanent: true,
       },
     ];

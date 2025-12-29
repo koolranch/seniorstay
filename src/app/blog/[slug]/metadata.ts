@@ -11,9 +11,14 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     };
   }
 
+  const canonicalUrl = `/blog/${params.slug}`;
+
   return {
     title: `${post.title} | Guide for Seniors Blog`,
     description: post.description,
+    alternates: {
+      canonical: canonicalUrl,
+    },
     openGraph: {
       title: post.title,
       description: post.description,
@@ -21,6 +26,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
       publishedTime: post.date,
       authors: [post.author],
       tags: [post.category],
+      url: `https://www.guideforseniors.com${canonicalUrl}`,
     },
     twitter: {
       card: 'summary_large_image',

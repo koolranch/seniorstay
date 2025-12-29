@@ -24,15 +24,20 @@ export async function generateMetadata({ params }: CommunityPageProps): Promise<
 
   const city = community.location.split(',')[0].trim();
   
+  const canonicalUrl = `/community/${id}/${slug}`;
+  
   return {
     title: `${community.name} | Senior Living in ${city}, OH | Guide for Seniors`,
     description: `Discover ${community.name} in ${city}, Ohio. ${community.description || 'Offering quality senior living services.'} Contact us for pricing, tours, and availability.`,
     keywords: `${community.name}, senior living ${city}, assisted living ${city}, ${community.careTypes.join(', ')}`,
+    alternates: {
+      canonical: canonicalUrl,
+    },
     openGraph: {
       title: `${community.name} | Senior Living in ${city}, OH`,
       description: community.description,
       images: community.images,
-      url: `https://www.guideforseniors.com/community/${id}/${slug}`,
+      url: `https://www.guideforseniors.com${canonicalUrl}`,
       siteName: 'Guide for Seniors',
       locale: 'en_US',
       type: 'website',

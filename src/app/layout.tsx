@@ -18,10 +18,7 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL('https://guideforseniors.com'),
-  alternates: {
-    canonical: '/',
-  },
+  metadataBase: new URL('https://www.guideforseniors.com'),
   robots: {
     index: true,
     follow: true,
