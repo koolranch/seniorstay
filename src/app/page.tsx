@@ -147,8 +147,9 @@ function SearchContainer() {
   // Filter Cleveland-area communities for featured section
   const clevelandCities = ['Cleveland', 'Shaker Heights', 'Beachwood', 'Parma', 'Lakewood', 'Strongsville', 'Westlake', 'North Olmsted', 'Richmond Heights', 'Seven Hills', 'Independence'];
   
-  // Curated list of community IDs with VERIFIED working images (tested 2024-12-30)
+  // Curated list of community IDs with VERIFIED working images (updated 2024-12-30)
   // Only these will show on homepage to ensure credibility - no broken images
+  // Images scraped via Firecrawl from official community websites
   const verifiedImageCommunityIds = [
     '698c2427-1daa-40fd-8541-d70adfaaa79f', // Arden Courts of Parma
     'b575720a-cbd9-4d7a-bb54-f384c4d74baf', // Brookdale Westlake Village
@@ -161,6 +162,10 @@ function SearchContainer() {
     '46f44534-0bb5-412b-b631-d7693c957bc2', // Vista Springs Ravinia
     'c802936d-a1e3-41e6-9175-9b72ec3a5ed6', // Vitalia Rockside
     '6268a07a-8d2c-4c1f-ac49-8fc88e42367c', // Westwood Place
+    // Added via Firecrawl scraping:
+    'd37abc69-b7b1-41dc-9d83-8addb8a13af1', // Mount Alverna Village (Parma)
+    'f99ea0c0-df19-4597-ac86-24076250d780', // StoryPoint Shaker Heights
+    '595c27ce-2d7a-4d52-8892-6bdd07d0df29', // HarborChase of Shaker Heights
   ];
   
   // Only show Assisted Living and Memory Care on homepage (exclude skilled nursing-only)
