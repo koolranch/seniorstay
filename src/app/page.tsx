@@ -172,6 +172,11 @@ function SearchContainer() {
     '067f4eb4-1a6d-4537-a17b-46374e853301', // Rose Senior Living at Beachwood
     'd513dee6-8f01-43bf-ae4c-9da58f0e1fb2', // Sunrise at Parma
     '8307a5ae-48b9-4055-97c8-970f219bf071', // Westlake Assisted Living
+    // Added via Firecrawl scraping (batch 3 - 2024-12-30):
+    'e6d78620-bd6f-4961-a067-6f79e3d47d00', // Arden Courts of Westlake
+    '64d20122-dceb-4715-9139-c0db8adc903b', // Ganzhorn Suites of Avon
+    '3af95a7c-6b08-41dc-816c-59dc2fcf95fe', // Summit Point Macedonia
+    '08ca2f88-da07-44b3-98af-3c47b3a8f675', // Vitalia Montrose
   ];
   
   // Only show Assisted Living and Memory Care on homepage (exclude skilled nursing-only)
