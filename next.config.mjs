@@ -7,7 +7,14 @@ const nextConfig = {
     return `build-${Date.now()}`;
   },
   images: {
-    unoptimized: true,
+    // Enable Next.js image optimization for better performance
+    unoptimized: false,
+    // Use modern formats for better compression
+    formats: ['image/avif', 'image/webp'],
+    // Optimize device sizes for responsive images
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    // Allow images from these domains
     remotePatterns: [
       {
         protocol: 'https',
@@ -22,7 +29,74 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'hncgnxbooghjhpncujzx.supabase.co',
-        pathname: '/storage/v1/object/public/community-images/**',
+        pathname: '/storage/v1/object/public/**',
+      },
+      // Community facility websites
+      {
+        protocol: 'https',
+        hostname: '**.brookdale.com',
+        pathname: '**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.brookdale.com',
+        pathname: '**',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.talkfurther.com',
+        pathname: '**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.talkfurther.com',
+        pathname: '**',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.ganzhorn.com',
+        pathname: '**',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.maplewoodseniorliving.com',
+        pathname: '**',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.cloudinary.com',
+        pathname: '**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'g5-assets-cld-res.cloudinary.com',
+        pathname: '**',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.elizajennings.org',
+        pathname: '**',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.winfieldrichmondheights.com',
+        pathname: '**',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.middleburgheightsal.com',
+        pathname: '**',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.vitaliamontrose.com',
+        pathname: '**',
+      },
+      // Catch-all for other facility websites (use wildcard carefully)
+      {
+        protocol: 'https',
+        hostname: '**',
+        pathname: '/wp-content/uploads/**',
       },
     ],
   },

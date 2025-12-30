@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { Building2 } from 'lucide-react';
+import { Building2, Home } from 'lucide-react';
 
 interface CommunityImageProps {
   src: string;
@@ -15,25 +15,65 @@ interface CommunityImageProps {
   priority?: boolean;
 }
 
-// Cleveland landmark fallback images (high quality, local relevance)
-const CLEVELAND_FALLBACK_IMAGES = [
-  'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80', // Cleveland skyline
-  'https://images.unsplash.com/photo-1582407947304-fd86f028f716?w=800&q=80', // Modern healthcare building
-  'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&q=80', // Professional building
-  'https://images.unsplash.com/photo-1564731071754-8f8cd0ba8f30?w=800&q=80', // Medical facility
-];
+// Reliable SVG-based placeholder generator (no external dependencies)
+function generatePlaceholderSVG(name: string, index: number): string {
+  // Color palette for senior living communities (warm, professional colors)
+  const colors = [
+    { bg: '#1e3a5f', accent: '#3b82f6' }, // Navy blue
+    { bg: '#065f46', accent: '#10b981' }, // Green
+    { bg: '#7c2d12', accent: '#f97316' }, // Warm brown
+    { bg: '#4c1d95', accent: '#8b5cf6' }, // Purple
+    { bg: '#0f766e', accent: '#14b8a6' }, // Teal
+    { bg: '#9a3412', accent: '#fb923c' }, // Orange
+  ];
+  
+  const colorSet = colors[index % colors.length];
+  const initials = name
+    .split(/[\s,]+/)
+    .slice(0, 2)
+    .map(word => word[0]?.toUpperCase() || '')
+    .join('');
+
+  const svg = `
+    <svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+      <defs>
+        <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:${colorSet.bg};stop-opacity:1" />
+          <stop offset="100%" style="stop-color:${colorSet.accent};stop-opacity:0.8" />
+        </linearGradient>
+        <pattern id="pattern" width="40" height="40" patternUnits="userSpaceOnUse">
+          <circle cx="20" cy="20" r="1.5" fill="white" fill-opacity="0.1"/>
+        </pattern>
+      </defs>
+      <rect width="800" height="600" fill="url(#grad)"/>
+      <rect width="800" height="600" fill="url(#pattern)"/>
+      <g transform="translate(400, 240)">
+        <circle r="80" fill="white" fill-opacity="0.15"/>
+        <path d="M-40 20 L0 -30 L40 20 L40 50 L-40 50 Z" fill="white" fill-opacity="0.9"/>
+        <rect x="-15" y="25" width="30" height="25" fill="${colorSet.bg}" fill-opacity="0.6"/>
+        <rect x="-30" y="35" width="15" height="15" fill="${colorSet.accent}" fill-opacity="0.4"/>
+        <rect x="15" y="35" width="15" height="15" fill="${colorSet.accent}" fill-opacity="0.4"/>
+      </g>
+      <text x="400" y="380" text-anchor="middle" fill="white" font-family="system-ui, sans-serif" font-size="32" font-weight="600" opacity="0.9">${initials}</text>
+      <text x="400" y="520" text-anchor="middle" fill="white" font-family="system-ui, sans-serif" font-size="16" opacity="0.7">Senior Living Community</text>
+      <text x="400" y="550" text-anchor="middle" fill="white" font-family="system-ui, sans-serif" font-size="14" opacity="0.5">Guide for Seniors</text>
+    </svg>
+  `;
+  
+  return `data:image/svg+xml,${encodeURIComponent(svg.trim())}`;
+}
 
 /**
- * Get a consistent fallback image based on the alt text (community name)
+ * Get a consistent placeholder based on community name
  */
-function getFallbackImage(alt: string): string {
-  const hash = alt.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-  return CLEVELAND_FALLBACK_IMAGES[hash % CLEVELAND_FALLBACK_IMAGES.length];
+function getPlaceholderDataUrl(name: string): string {
+  const hash = name.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+  return generatePlaceholderSVG(name, hash);
 }
 
 /**
  * CommunityImage component with built-in fallback for broken images
- * Shows branded placeholder when images fail to load
+ * Uses SVG data URLs for instant, reliable placeholders (no external requests)
  */
 export default function CommunityImage({
   src,
@@ -47,50 +87,60 @@ export default function CommunityImage({
 }: CommunityImageProps) {
   const [imgSrc, setImgSrc] = useState(src);
   const [hasError, setHasError] = useState(false);
-  const [showPlaceholder, setShowPlaceholder] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Reset state when src changes
+  useEffect(() => {
+    setImgSrc(src);
+    setHasError(false);
+    setIsLoading(true);
+  }, [src]);
 
   const handleError = () => {
     if (!hasError) {
-      // First error: try Cleveland landmark fallback
+      // Use inline SVG placeholder (no external request needed)
       setHasError(true);
-      setImgSrc(getFallbackImage(alt));
-    } else {
-      // Second error: show branded placeholder
-      setShowPlaceholder(true);
+      setImgSrc(getPlaceholderDataUrl(alt));
     }
   };
 
-  // Show branded placeholder if all images failed
-  if (showPlaceholder) {
-    return (
-      <div 
-        className={`bg-gradient-to-br from-slate-100 to-slate-200 flex flex-col items-center justify-center ${className}`}
-        style={fill ? { position: 'absolute', inset: 0 } : { width, height }}
-      >
-        <div className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-sm text-center">
-          <div className="w-16 h-16 mx-auto mb-3 bg-primary/10 rounded-full flex items-center justify-center">
-            <Building2 className="w-8 h-8 text-primary" />
-          </div>
-          <p className="text-sm font-medium text-gray-700">Image Coming Soon</p>
-          <p className="text-xs text-gray-500 mt-1">Guide for Seniors</p>
-        </div>
-      </div>
-    );
-  }
+  const handleLoad = () => {
+    setIsLoading(false);
+  };
 
+  // For data URLs (our SVG placeholders), use unoptimized
+  const isDataUrl = imgSrc.startsWith('data:');
+  
   return (
-    <Image
-      src={imgSrc}
-      alt={alt}
-      fill={fill}
-      width={!fill ? width : undefined}
-      height={!fill ? height : undefined}
-      className={className}
-      sizes={sizes}
-      priority={priority}
-      onError={handleError}
-      unoptimized
-    />
+    <div 
+      className={`relative ${fill ? 'w-full h-full' : ''}`}
+      style={!fill ? { width, height } : undefined}
+    >
+      {/* Loading skeleton */}
+      {isLoading && !isDataUrl && (
+        <div 
+          className={`absolute inset-0 bg-gradient-to-br from-slate-100 to-slate-200 animate-pulse flex items-center justify-center ${className}`}
+        >
+          <Home className="w-12 h-12 text-slate-300" />
+        </div>
+      )}
+      
+      <Image
+        src={imgSrc}
+        alt={alt || 'Senior living community'}
+        fill={fill}
+        width={!fill ? width : undefined}
+        height={!fill ? height : undefined}
+        className={`${className} ${isLoading && !isDataUrl ? 'opacity-0' : 'opacity-100'} transition-opacity duration-300`}
+        sizes={sizes || '(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw'}
+        priority={priority}
+        onError={handleError}
+        onLoad={handleLoad}
+        unoptimized={isDataUrl}
+        loading={priority ? undefined : 'lazy'}
+      />
+    </div>
   );
 }
+
 

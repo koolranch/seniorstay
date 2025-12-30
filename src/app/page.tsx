@@ -145,7 +145,23 @@ function SearchContainer() {
   }, {} as Record<string, number>);
 
   // Filter Cleveland-area communities for featured section
-  const clevelandCities = ['Cleveland', 'Shaker Heights', 'Beachwood', 'Parma', 'Lakewood', 'Strongsville', 'Westlake', 'North Olmsted', 'Richmond Heights'];
+  const clevelandCities = ['Cleveland', 'Shaker Heights', 'Beachwood', 'Parma', 'Lakewood', 'Strongsville', 'Westlake', 'North Olmsted', 'Richmond Heights', 'Seven Hills', 'Independence'];
+  
+  // Curated list of community IDs with VERIFIED working images (tested 2024-12-30)
+  // Only these will show on homepage to ensure credibility - no broken images
+  const verifiedImageCommunityIds = [
+    '698c2427-1daa-40fd-8541-d70adfaaa79f', // Arden Courts of Parma
+    'b575720a-cbd9-4d7a-bb54-f384c4d74baf', // Brookdale Westlake Village
+    'b1c7f9ca-12f8-427f-958b-96395e2f87f9', // Eliza Jennings
+    'cced7602-0584-4b10-b928-fb69de53e683', // Kemper House Strongsville
+    '10019adc-665b-49a2-8aea-40214df552c0', // Legacy Place Parma
+    '217c0b13-e5c0-480c-9131-a171e2b707e7', // O'Neill Healthcare Lakewood
+    '29be3edb-d31b-413f-8d67-5c8910043849', // StoryPoint Rockside
+    'bc68a68b-51c9-4490-858d-a8656427e027', // StoryPoint Strongsville
+    '46f44534-0bb5-412b-b631-d7693c957bc2', // Vista Springs Ravinia
+    'c802936d-a1e3-41e6-9175-9b72ec3a5ed6', // Vitalia Rockside
+    '6268a07a-8d2c-4c1f-ac49-8fc88e42367c', // Westwood Place
+  ];
   
   // Only show Assisted Living and Memory Care on homepage (exclude skilled nursing-only)
   // Use 'communities' state (from Supabase) not 'communityData' (static)
@@ -164,7 +180,10 @@ function SearchContainer() {
       type.toLowerCase().includes('skilled nursing')
     );
     
-    return isInCleveland && isAssistedOrMemoryCare && !isOnlySkilledNursing;
+    // For featured section: only show communities with verified working images
+    const hasVerifiedImage = verifiedImageCommunityIds.includes(c.id);
+    
+    return isInCleveland && isAssistedOrMemoryCare && !isOnlySkilledNursing && hasVerifiedImage;
   });
   
   // Sort by Memory Care first, then Assisted Living

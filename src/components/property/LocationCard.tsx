@@ -138,8 +138,8 @@ export default function LocationCard({ community }: LocationCardProps) {
       <div className="relative w-full h-56">
         <Link href={communityUrl} className="block w-full h-full">
           <CommunityImage
-            src={getCommunityImage(community.images?.[0], communityId)}
-            alt={communityName}
+            src={getCommunityImage(community.images?.[0], communityId, communityName)}
+            alt={`${communityName} - ${careTypes.join(', ') || 'Senior Living'} in ${communityLocation}`}
             fill
             className="object-cover transition-transform duration-300 group-hover:scale-105"
             sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
