@@ -162,10 +162,16 @@ function SearchContainer() {
     '46f44534-0bb5-412b-b631-d7693c957bc2', // Vista Springs Ravinia
     'c802936d-a1e3-41e6-9175-9b72ec3a5ed6', // Vitalia Rockside
     '6268a07a-8d2c-4c1f-ac49-8fc88e42367c', // Westwood Place
-    // Added via Firecrawl scraping:
+    // Added via Firecrawl scraping (batch 1):
     'd37abc69-b7b1-41dc-9d83-8addb8a13af1', // Mount Alverna Village (Parma)
     'f99ea0c0-df19-4597-ac86-24076250d780', // StoryPoint Shaker Heights
     '595c27ce-2d7a-4d52-8892-6bdd07d0df29', // HarborChase of Shaker Heights
+    // Added via Firecrawl scraping (batch 2 - 2024-12-30):
+    '53439bfd-9ef2-4890-8496-aae88638175d', // Forest Hills Place
+    '82b7522b-3cc5-46d0-aacc-4aa61a4da223', // Haven at Lakewood
+    '067f4eb4-1a6d-4537-a17b-46374e853301', // Rose Senior Living at Beachwood
+    'd513dee6-8f01-43bf-ae4c-9da58f0e1fb2', // Sunrise at Parma
+    '8307a5ae-48b9-4055-97c8-970f219bf071', // Westlake Assisted Living
   ];
   
   // Only show Assisted Living and Memory Care on homepage (exclude skilled nursing-only)

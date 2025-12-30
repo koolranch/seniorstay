@@ -92,6 +92,18 @@ const nextConfig = {
         hostname: '**.vitaliamontrose.com',
         pathname: '**',
       },
+      // Sunrise Senior Living (Stylelabs CDN)
+      {
+        protocol: 'https',
+        hostname: 'mss-p-045-delivery.stylelabs.cloud',
+        pathname: '**',
+      },
+      // GoDaddy Website Builder (Westlake AL)
+      {
+        protocol: 'https',
+        hostname: 'img1.wsimg.com',
+        pathname: '**',
+      },
       // Catch-all for other facility websites (use wildcard carefully)
       {
         protocol: 'https',
