@@ -145,38 +145,57 @@ function SearchContainer() {
   }, {} as Record<string, number>);
 
   // Filter Cleveland-area communities for featured section
-  const clevelandCities = ['Cleveland', 'Shaker Heights', 'Beachwood', 'Parma', 'Lakewood', 'Strongsville', 'Westlake', 'North Olmsted', 'Richmond Heights', 'Seven Hills', 'Independence'];
+  // Expanded to include all Greater Cleveland and Northeast Ohio cities with communities
+  const clevelandCities = [
+    'Cleveland', 'Shaker Heights', 'Beachwood', 'Parma', 'Lakewood', 'Strongsville', 
+    'Westlake', 'North Olmsted', 'Richmond Heights', 'Seven Hills', 'Independence',
+    'Brooklyn', 'Bedford', 'Avon', 'Brunswick', 'Macedonia', 'Berea', 'Chardon',
+    'Mentor', 'North Ridgeville', 'Medina', 'Cuyahoga Falls', 'Akron'
+  ];
   
   // Curated list of community IDs with VERIFIED working images (updated 2024-12-30)
   // Only these will show on homepage to ensure credibility - no broken images
-  // Images scraped via Firecrawl from official community websites
+  // All images hosted on Supabase Storage for reliability (no hotlinking issues)
   const verifiedImageCommunityIds = [
+    // Cleveland Core
     '698c2427-1daa-40fd-8541-d70adfaaa79f', // Arden Courts of Parma
-    'b575720a-cbd9-4d7a-bb54-f384c4d74baf', // Brookdale Westlake Village
-    'b1c7f9ca-12f8-427f-958b-96395e2f87f9', // Eliza Jennings
-    'cced7602-0584-4b10-b928-fb69de53e683', // Kemper House Strongsville
-    '10019adc-665b-49a2-8aea-40214df552c0', // Legacy Place Parma
-    '217c0b13-e5c0-480c-9131-a171e2b707e7', // O'Neill Healthcare Lakewood
-    '29be3edb-d31b-413f-8d67-5c8910043849', // StoryPoint Rockside
-    'bc68a68b-51c9-4490-858d-a8656427e027', // StoryPoint Strongsville
-    '46f44534-0bb5-412b-b631-d7693c957bc2', // Vista Springs Ravinia
-    'c802936d-a1e3-41e6-9175-9b72ec3a5ed6', // Vitalia Rockside
-    '6268a07a-8d2c-4c1f-ac49-8fc88e42367c', // Westwood Place
-    // Added via Firecrawl scraping (batch 1):
-    'd37abc69-b7b1-41dc-9d83-8addb8a13af1', // Mount Alverna Village (Parma)
-    'f99ea0c0-df19-4597-ac86-24076250d780', // StoryPoint Shaker Heights
-    '595c27ce-2d7a-4d52-8892-6bdd07d0df29', // HarborChase of Shaker Heights
-    // Added via Firecrawl scraping (batch 2 - 2024-12-30):
-    '53439bfd-9ef2-4890-8496-aae88638175d', // Forest Hills Place
-    '82b7522b-3cc5-46d0-aacc-4aa61a4da223', // Haven at Lakewood
-    '067f4eb4-1a6d-4537-a17b-46374e853301', // Rose Senior Living at Beachwood
-    'd513dee6-8f01-43bf-ae4c-9da58f0e1fb2', // Sunrise at Parma
-    '8307a5ae-48b9-4055-97c8-970f219bf071', // Westlake Assisted Living
-    // Added via Firecrawl scraping (batch 3 - 2024-12-30):
     'e6d78620-bd6f-4961-a067-6f79e3d47d00', // Arden Courts of Westlake
-    '64d20122-dceb-4715-9139-c0db8adc903b', // Ganzhorn Suites of Avon
+    'b575720a-cbd9-4d7a-bb54-f384c4d74baf', // Brookdale Westlake Village
+    'b1c7f9ca-12f8-427f-958b-96395e2f87f9', // Eliza Jennings (Cleveland)
+    '53439bfd-9ef2-4890-8496-aae88638175d', // Forest Hills Place (Cleveland)
+    '595c27ce-2d7a-4d52-8892-6bdd07d0df29', // HarborChase of Shaker Heights
+    '82b7522b-3cc5-46d0-aacc-4aa61a4da223', // Haven at Lakewood
+    'cced7602-0584-4b10-b928-fb69de53e683', // Kemper House Strongsville
+    'd37abc69-b7b1-41dc-9d83-8addb8a13af1', // Mount Alverna Village (Parma)
+    '217c0b13-e5c0-480c-9131-a171e2b707e7', // O'Neill Healthcare Lakewood
+    '067f4eb4-1a6d-4537-a17b-46374e853301', // Rose Senior Living at Beachwood
+    'bc68a68b-51c9-4490-858d-a8656427e027', // StoryPoint Strongsville
+    'd513dee6-8f01-43bf-ae4c-9da58f0e1fb2', // Sunrise at Parma
+    '46f44534-0bb5-412b-b631-d7693c957bc2', // Vista Springs Ravinia (Independence)
+    '8307a5ae-48b9-4055-97c8-970f219bf071', // Westlake Assisted Living
+    // Greater Cleveland / Suburbs
+    '85b6c366-876c-434f-bc3c-cd9546b769c3', // American House Macedonia
+    'b64c4494-2ea7-45f6-bbe3-a66a33e777a2', // Berea Alzheimer's Care Center
+    '1364b89d-5f10-4497-885e-63bc1980a81c', // Brooklyn Pointe (Brooklyn)
+    'ebf24b4b-93e3-49a2-aa29-fe17ea13478e', // Cardinal Court
+    'd58d215c-f8a1-41f1-9d51-7f3cbd26a4c5', // Danbury Senior Living Brunswick
+    'baac72b7-478e-4306-9761-398355cbd5d6', // Light of Hearts Villa (Bedford)
     '3af95a7c-6b08-41dc-816c-59dc2fcf95fe', // Summit Point Macedonia
-    '08ca2f88-da07-44b3-98af-3c47b3a8f675', // Vitalia Montrose
+    '64d20122-dceb-4715-9139-0db8adc903b', // Ganzhorn Suites of Avon
+    // Northeast Ohio (Mentor, Medina, etc.)
+    'b287add2-1b83-4c9f-b364-44e5117575e1', // Danbury Senior Living Mentor
+    'dff5aeab-df72-481b-b9f1-0a8540630d20', // Danbury Senior Living North Ridgeville
+    'ca38eb95-4ed5-441b-824e-160386034910', // Brookdale Medina South
+    '93a420ab-7890-4e8b-a08d-e31404698847', // StoryPoint Medina
+    '3c3fbde5-0117-4da8-9eb3-1b660240131f', // Maplewood at Chardon
+    // Akron / Cuyahoga Falls Area
+    '24a1d6c9-83da-4e68-a7cc-6d61f420ee55', // Danbury Cuyahoga Falls
+    '220ef84c-9916-44aa-a649-621a936642f1', // Maplewood at Cuyahoga Falls
+    'be6426df-1380-48f4-b925-332fbb4e02bb', // Brookdale Montrose (Akron)
+    '08ca2f88-da07-44b3-98af-3c47b3a8f675', // Vitalia Montrose (Akron)
+    // Other verified
+    '8dde23b1-818e-4120-be39-4303dfaaa050', // Fairmont Senior Living of Westlake
+    'fb781978-f151-4ca4-b98c-f75fd8b1a5c4', // St. Augustine Towers Assisted Living
   ];
   
   // Only show Assisted Living and Memory Care on homepage (exclude skilled nursing-only)
