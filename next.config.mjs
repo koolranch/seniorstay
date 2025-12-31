@@ -104,6 +104,18 @@ const nextConfig = {
         hostname: 'img1.wsimg.com',
         pathname: '**',
       },
+      // Assisted Living Magazine CDN (aggregator with community photos)
+      {
+        protocol: 'https',
+        hostname: 'cdn.assistedlivingmagazine.com',
+        pathname: '**',
+      },
+      // Squarespace CDN (Middleburg Heights, etc.)
+      {
+        protocol: 'https',
+        hostname: 'images.squarespace-cdn.com',
+        pathname: '**',
+      },
       // Catch-all for other facility websites (use wildcard carefully)
       {
         protocol: 'https',
