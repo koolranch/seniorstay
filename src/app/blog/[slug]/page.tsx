@@ -6,12 +6,19 @@ import Footer from '@/components/footer/Footer';
 import ReactMarkdown from 'react-markdown';
 import { fetchBlogPostBySlug, fetchRecentBlogPosts } from '@/lib/blog-posts';
 import SuburbLinksSection from '@/components/blog/SuburbLinksSection';
+import Script from 'next/script';
 
 export const revalidate = 300;
 
 const formatDate = (dateString: string) => {
   const date = new Date(dateString);
   return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+};
+
+// Generate ISO date format for schema
+const formatISODate = (dateString: string) => {
+  const date = new Date(dateString);
+  return date.toISOString();
 };
 
 export default async function BlogPostPage({ params }: { params: { slug: string } }) {
@@ -29,8 +36,92 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
     post.title.toLowerCase().includes('medicaid') ||
     post.content.toLowerCase().includes('medicaid waiver');
 
+  // Author schema for E-E-A-T signals
+  const authorSchema = {
+    "@type": "Person",
+    "@id": "https://guideforseniors.com/#author",
+    "name": post.author || "Guide for Seniors Editorial Team",
+    "jobTitle": "Cleveland Senior Living Advisor",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Guide for Seniors",
+      "url": "https://guideforseniors.com"
+    },
+    "knowsAbout": [
+      "Assisted Living",
+      "Memory Care",
+      "Senior Care",
+      "Ohio Medicaid Waiver",
+      "Cleveland Senior Services"
+    ]
+  };
+
+  // Article schema with author reference
+  const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": post.title,
+    "description": post.description,
+    "author": authorSchema,
+    "publisher": {
+      "@type": "Organization",
+      "name": "Guide for Seniors",
+      "url": "https://guideforseniors.com",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://guideforseniors.com/images/logo.png"
+      }
+    },
+    "datePublished": formatISODate(post.date),
+    "dateModified": formatISODate(post.date),
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": `https://guideforseniors.com/blog/${params.slug}`
+    },
+    "articleSection": post.category,
+    "inLanguage": "en-US"
+  };
+
+  // Breadcrumb schema
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://guideforseniors.com"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Blog",
+        "item": "https://guideforseniors.com/blog"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": post.title,
+        "item": `https://guideforseniors.com/blog/${params.slug}`
+      }
+    ]
+  };
+
   return (
     <main className="flex min-h-screen flex-col bg-white">
+      {/* Structured Data for SEO */}
+      <Script
+        id="article-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+      />
+      <Script
+        id="breadcrumb-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      
       <Header />
       
       {/* Article Header */}

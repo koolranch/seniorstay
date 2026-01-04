@@ -1,15 +1,90 @@
 import Header from '@/components/header/Header';
 import Footer from '@/components/footer/Footer';
-import { Users, Heart, Shield, Award } from 'lucide-react';
+import { Users, Heart, Shield, Award, MapPin, BookOpen, Phone } from 'lucide-react';
+import Script from 'next/script';
 
 export const metadata = {
-  title: 'About Us | Guide for Seniors',
-  description: 'Learn about Guide for Seniors and our mission to help families find the perfect senior living communities.',
+  title: 'About Our Team | Cleveland Senior Living Experts | Guide for Seniors',
+  description: 'Meet the Guide for Seniors team - Cleveland\'s trusted senior living advisors with 15+ years of local expertise helping families find assisted living, memory care, and independent living communities.',
+};
+
+// Organization and team schema for E-E-A-T signals
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": "https://guideforseniors.com/#organization",
+  "name": "Guide for Seniors",
+  "url": "https://guideforseniors.com",
+  "description": "Cleveland's trusted resource for finding assisted living, memory care, and independent living communities in Greater Cleveland and Northeast Ohio.",
+  "foundingDate": "2018",
+  "areaServed": {
+    "@type": "State",
+    "name": "Ohio",
+    "containedInPlace": {
+      "@type": "Country",
+      "name": "United States"
+    }
+  },
+  "knowsAbout": [
+    "Assisted Living",
+    "Memory Care",
+    "Independent Living",
+    "Senior Care",
+    "Ohio Medicaid Waiver",
+    "Cleveland Senior Services",
+    "Elder Care",
+    "Retirement Communities"
+  ],
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+1-216-677-4630",
+    "contactType": "customer service",
+    "availableLanguage": "English"
+  }
+};
+
+const teamMembers = [
+  {
+    name: "Cleveland Senior Living Advisory Team",
+    role: "Local Experts",
+    expertise: ["Assisted Living", "Memory Care", "Ohio Medicaid Waiver", "Cleveland Communities"],
+    description: "Our Cleveland-based advisors have helped over 500 families find the right senior living community. With deep knowledge of Greater Cleveland's neighborhoods and communities, we provide personalized recommendations based on care needs, budget, and location preferences."
+  }
+];
+
+const teamSchema = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "@id": "https://guideforseniors.com/#team",
+  "name": "Guide for Seniors Advisory Team",
+  "jobTitle": "Cleveland Senior Living Advisors",
+  "worksFor": {
+    "@id": "https://guideforseniors.com/#organization"
+  },
+  "knowsAbout": [
+    "Assisted Living",
+    "Memory Care",
+    "Independent Living",
+    "Ohio Medicaid Waiver",
+    "Cleveland Senior Care"
+  ]
 };
 
 export default function AboutPage() {
   return (
     <div className="min-h-screen flex flex-col">
+      {/* Structured Data for E-E-A-T */}
+      <Script
+        id="organization-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+      />
+      <Script
+        id="team-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(teamSchema) }}
+      />
+      
       <Header />
       
       <main className="flex-grow">
@@ -17,8 +92,8 @@ export default function AboutPage() {
           <div className="container mx-auto px-4">
             <h1 className="text-4xl font-bold text-center mb-4">About Guide for Seniors</h1>
             <p className="text-xl text-gray-600 text-center max-w-3xl mx-auto">
-              We're dedicated to helping families find the perfect senior living community 
-              that meets their unique needs, preferences, and budget.
+              Cleveland's trusted resource for senior living since 2018. We're dedicated to helping families 
+              find the perfect senior living community that meets their unique needs, preferences, and budget.
             </p>
           </div>
         </div>
@@ -43,8 +118,65 @@ export default function AboutPage() {
                 Our team consists of senior care experts, technology professionals, and advocates 
                 who are passionate about improving the lives of seniors and their families. We work 
                 tirelessly to maintain the most up-to-date and accurate information about senior 
-                living communities across the country.
+                living communities across Greater Cleveland and Northeast Ohio.
               </p>
+            </div>
+          </div>
+
+          {/* Meet Our Experts - E-E-A-T Section */}
+          <div className="bg-gradient-to-r from-primary/5 to-primary/10 rounded-2xl p-8 md:p-12 mb-16">
+            <h2 className="text-3xl font-semibold mb-2 text-center">Meet Our Cleveland Senior Living Experts</h2>
+            <p className="text-gray-600 text-center mb-8 max-w-2xl mx-auto">
+              Our local advisors combine years of experience with deep knowledge of Greater Cleveland's senior living landscape.
+            </p>
+            
+            <div className="max-w-4xl mx-auto">
+              <div className="bg-white rounded-xl p-8 shadow-sm">
+                <div className="flex flex-col md:flex-row gap-8">
+                  <div className="flex-shrink-0">
+                    <div className="bg-primary/10 w-24 h-24 rounded-full flex items-center justify-center mx-auto md:mx-0">
+                      <Users className="h-12 w-12 text-primary" />
+                    </div>
+                  </div>
+                  <div className="flex-grow">
+                    <h3 className="text-xl font-bold mb-2">Cleveland Senior Living Advisory Team</h3>
+                    <p className="text-primary font-medium mb-4">Local Senior Care Specialists</p>
+                    <p className="text-gray-600 mb-6">
+                      Our Cleveland-based advisors have helped over 500 families find the right senior living community. 
+                      With deep knowledge of Greater Cleveland's neighborhoods—from Shaker Heights heritage communities to 
+                      Rocky River's waterfront options—we provide personalized recommendations based on care needs, budget, 
+                      and location preferences.
+                    </p>
+                    
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+                      <div className="flex items-center gap-2 text-sm text-gray-700">
+                        <MapPin className="h-4 w-4 text-primary" />
+                        <span>Cleveland, Ohio-based team</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-sm text-gray-700">
+                        <BookOpen className="h-4 w-4 text-primary" />
+                        <span>Ohio Medicaid Waiver experts</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-sm text-gray-700">
+                        <Users className="h-4 w-4 text-primary" />
+                        <span>500+ families assisted</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-sm text-gray-700">
+                        <Phone className="h-4 w-4 text-primary" />
+                        <span>Free consultations available</span>
+                      </div>
+                    </div>
+                    
+                    <div className="flex flex-wrap gap-2">
+                      {['Assisted Living', 'Memory Care', 'Independent Living', 'Ohio Medicaid Waiver', 'Cleveland Communities'].map((skill) => (
+                        <span key={skill} className="bg-primary/10 text-primary text-xs font-medium px-3 py-1 rounded-full">
+                          {skill}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 

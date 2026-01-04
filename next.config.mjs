@@ -124,9 +124,77 @@ const nextConfig = {
       },
     ],
   },
-  // Redirects for old URLs that ranked well
+  // Redirects for old URLs that ranked well + broken backlink recovery
   async redirects() {
     return [
+      // === CRITICAL: Broken Backlink Recovery (SEO Audit Jan 2026) ===
+      // These URLs have high-authority backlinks pointing to 404s
+      
+      // DR 75 backlink from rate.com - HIGHEST PRIORITY
+      {
+        source: '/blog/entertainment-ideas',
+        destination: '/resources',
+        permanent: true, // 301 - Preserves link equity
+      },
+      // DR 28 backlink from memorycherish.com
+      {
+        source: '/senior-health/general-health/:slug*',
+        destination: '/resources',
+        permanent: true,
+      },
+      // DR 37 backlink from itraveledthere.io  
+      {
+        source: '/senior-lifestyle/technology-for-seniors/:slug*',
+        destination: '/resources',
+        permanent: true,
+      },
+      // DR 23 backlinks from homecare-aid.com, thereviewstories.com
+      {
+        source: '/blog/adult-brain-puzzles',
+        destination: '/resources',
+        permanent: true,
+      },
+      {
+        source: '/senior-travel/destinations/:slug*',
+        destination: '/resources',
+        permanent: true,
+      },
+      // DR 21 backlink from edenwald.org
+      {
+        source: '/blog/fiction-novel',
+        destination: '/blog',
+        permanent: true,
+      },
+      // DR 12 backlink from hometostayhc.com
+      {
+        source: '/blog/packing-for-a-trip',
+        destination: '/resources',
+        permanent: true,
+      },
+      // DR 9 backlink from sanantonioseniors.com
+      {
+        source: '/senior-entertainment/games/games-for-seniors',
+        destination: '/blog/11-places-seniors-meet-seniors',
+        permanent: true,
+      },
+      // Games keyword redirects (position 79 for "free games for seniors")
+      {
+        source: '/blog/senior-games',
+        destination: '/blog/apps-for-seniors',
+        permanent: true,
+      },
+      {
+        source: '/blog/free-games-seniors',
+        destination: '/blog/apps-for-seniors',
+        permanent: true,
+      },
+      {
+        source: '/senior-games',
+        destination: '/blog/apps-for-seniors',
+        permanent: true,
+      },
+      
+      // === Existing redirects ===
       {
         source: '/senior-entertainment/games/senior-online-games',
         destination: '/blog/senior-online-games',

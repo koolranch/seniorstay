@@ -92,13 +92,13 @@ export const clevelandCitiesData: Record<string, CityInfo> = {
   'shaker-heights': {
     name: 'Shaker Heights',
     slug: 'shaker-heights',
-    description: 'Historic Shaker Heights combines architectural beauty with modern senior care facilities. This planned community offers tree-lined streets, beautiful homes, and excellent senior services.',
+    description: 'Historic Shaker Heights is home to premier assisted living and heritage retirement communities including The Woodlands by Heritage Retirement Communities. This planned community combines architectural beauty with modern senior care facilities, tree-lined streets, beautiful homes, and excellent senior services.',
     highlights: [
+      'Heritage retirement communities with full continuum of care',
       'Historic architecture and tree-lined streets',
       'Shaker Lakes and Nature Center',
-      'RTA Rapid Transit access to downtown',
-      'Highly rated city services',
-      'Walkable Van Aken District'
+      'RTA Rapid Transit access to downtown Cleveland Clinic',
+      'Highly rated city services and walkable Van Aken District'
     ],
     nearbyHospitals: [
       'University Hospitals Cleveland Medical Center',

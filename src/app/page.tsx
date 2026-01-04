@@ -705,7 +705,7 @@ export default function Home() {
 
           <div className="prose max-w-none text-gray-700">
             <p className="mb-4">
-              We offer a comprehensive directory of senior living options to meet the diverse needs of aging adults. Whether you're looking for assisted living, memory care, or independent living, our platform helps you explore and compare communities across multiple locations.
+              We offer a comprehensive directory of senior living options to meet the diverse needs of aging adults. Whether you're looking for assisted living, <Link href="/memory-care-cleveland" className="text-primary hover:underline">memory care in Cleveland</Link>, or independent living, our platform helps you explore and compare communities across multiple locations.
             </p>
 
             <p className="mb-4">
@@ -718,14 +718,14 @@ export default function Home() {
               <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
                 <h4 className="font-semibold mb-2">Independent Living</h4>
                 <p>
-                  For active seniors who can live on their own but want a maintenance-free lifestyle with social opportunities and amenities.
+                  For active seniors who can live on their own but want a maintenance-free lifestyle with social opportunities and amenities. Explore <Link href="/location/cleveland" className="text-primary hover:underline">independent living in Cleveland</Link>.
                 </p>
               </div>
 
               <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
                 <h4 className="font-semibold mb-2">Assisted Living</h4>
                 <p>
-                  Provides help with daily activities like bathing, dressing, medication management, and meals while promoting independence.
+                  Provides help with daily activities like bathing, dressing, medication management, and meals while promoting independence. View <Link href="/location/rocky-river" className="text-primary hover:underline">assisted living in Rocky River</Link>.
                 </p>
               </div>
 
@@ -737,8 +737,12 @@ export default function Home() {
               </div>
             </div>
 
-            <p>
+            <p className="mb-4">
               Our directory includes communities that offer various combinations of these care levels, allowing seniors to age in place as their needs change. Many communities also provide additional services such as skilled nursing, rehabilitation, and respite care.
+            </p>
+
+            <p>
+              Popular neighborhoods include <Link href="/location/shaker-heights" className="text-primary hover:underline">heritage retirement communities in Shaker Heights</Link>, <Link href="/location/beachwood" className="text-primary hover:underline">Beachwood senior living</Link>, and <Link href="/location/westlake" className="text-primary hover:underline">Westlake assisted living</Link>.
             </p>
           </div>
         </div>
