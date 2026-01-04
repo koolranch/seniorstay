@@ -12,6 +12,7 @@ import CommunityTestimonials from '@/components/community/CommunityTestimonials'
 import CommunityContact from '@/components/community/CommunityContact';
 import SimilarCommunities from '@/components/community/SimilarCommunities';
 import NeighborhoodSection from '@/components/community/NeighborhoodSection';
+import WhyChooseSection from '@/components/community/WhyChooseSection';
 import StickyMobileCTA from '@/components/community/StickyMobileCTA';
 import StickyTourButton from '@/components/tour/StickyTourButton';
 import ExitIntentPopup from '@/components/forms/ExitIntentPopup';
@@ -189,7 +190,15 @@ export default async function CommunityPage({ params }: CommunityPageProps) {
 
         <CommunityOverview community={community} />
         
-        {/* Neighborhood & Location Section - NEW */}
+        {/* Why Choose Section - SEO-rich content */}
+        {!isOnlySkilledNursing && (
+          <WhyChooseSection 
+            community={community} 
+            cityName={cityName} 
+          />
+        )}
+        
+        {/* Neighborhood & Location Section */}
         <NeighborhoodSection 
           communityName={community.name} 
           location={community.location} 

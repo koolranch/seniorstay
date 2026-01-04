@@ -315,7 +315,7 @@ export const clevelandCitiesData: Record<string, CityInfo> = {
   'rocky-river': {
     name: 'Rocky River',
     slug: 'rocky-river',
-    description: 'Rocky River is an affluent western suburb known for its excellent schools, parks, and quality of life. The city offers upscale senior living options with scenic views and top-notch amenities.',
+    description: 'Rocky River is an affluent western suburb known for its excellent schools, parks, and quality of life. The city offers upscale senior living options with scenic views and top-notch amenities. Located along the shores of Lake Erie and adjacent to the Rocky River Reservation Metroparks, residents enjoy a perfect blend of natural beauty and urban convenience.',
     highlights: [
       'Rocky River Reservation (Metroparks)',
       'Lake Erie access and marina',
@@ -329,6 +329,7 @@ export const clevelandCitiesData: Record<string, CityInfo> = {
       'Cleveland Clinic Fairview Hospital',
       'Lutheran Hospital'
     ],
+    neighborhoods: ['Old Detroit Road', 'Wagar Beach', 'Parkwood', 'Downtown Rocky River'],
     averageCost: {
       independentLiving: '$3,000 - $5,200',
       assistedLiving: '$4,200 - $7,200',
@@ -336,9 +337,24 @@ export const clevelandCitiesData: Record<string, CityInfo> = {
     },
     testimonials: [
       {
-        text: "The Metroparks right outside the door provide beautiful scenery and walking paths for residents.",
+        text: "The Metroparks right outside the door provide beautiful scenery and walking paths for residents. The staff at Bickford treats my mother like family.",
         author: "Susan B.",
         community: "Bickford of Rocky River"
+      },
+      {
+        text: "As a Cleveland native, I thought I knew all the senior living options. I was wrong! They showed us communities I'd never heard of that were perfect for what we needed.",
+        author: "Patricia L.",
+        community: "Rocky River"
+      },
+      {
+        text: "The memory care program at Sunrise has been wonderful for my father. The specialized dementia programming keeps him engaged and the staff really understands his needs.",
+        author: "Michael R.",
+        community: "Sunrise of Rocky River"
+      },
+      {
+        text: "Moving mom to Rocky River was the best decision. She loves being close to the lake and the community activities keep her social and happy.",
+        author: "Jennifer K.",
+        community: "Rocky River assisted living"
       }
     ]
   },

@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Image from 'next/image';
-import { Building2, Home } from 'lucide-react';
+import { Home } from 'lucide-react';
 
 interface CommunityImageProps {
   src: string;
@@ -72,6 +72,23 @@ function getPlaceholderDataUrl(name: string): string {
 }
 
 /**
+ * Check if a URL is valid for use as an image source
+ */
+function isValidImageUrl(url: string | undefined | null): boolean {
+  if (!url || typeof url !== 'string') return false;
+  const trimmed = url.trim();
+  if (!trimmed) return false;
+  
+  // Check for valid URL patterns
+  return (
+    trimmed.startsWith('http://') || 
+    trimmed.startsWith('https://') || 
+    trimmed.startsWith('/') ||
+    trimmed.startsWith('data:')
+  );
+}
+
+/**
  * CommunityImage component with built-in fallback for broken images
  * Uses SVG data URLs for instant, reliable placeholders (no external requests)
  */
@@ -85,22 +102,30 @@ export default function CommunityImage({
   sizes,
   priority = false,
 }: CommunityImageProps) {
-  const [imgSrc, setImgSrc] = useState(src);
-  const [hasError, setHasError] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  // Generate placeholder once, memoized based on alt text
+  const placeholder = useMemo(() => getPlaceholderDataUrl(alt || 'Community'), [alt]);
+  
+  // Determine initial image source - use placeholder if src is invalid
+  const initialSrc = isValidImageUrl(src) ? src : placeholder;
+  
+  const [imgSrc, setImgSrc] = useState(initialSrc);
+  const [hasError, setHasError] = useState(!isValidImageUrl(src));
+  const [isLoading, setIsLoading] = useState(isValidImageUrl(src));
 
   // Reset state when src changes
   useEffect(() => {
-    setImgSrc(src);
-    setHasError(false);
-    setIsLoading(true);
-  }, [src]);
+    const validSrc = isValidImageUrl(src);
+    setImgSrc(validSrc ? src : placeholder);
+    setHasError(!validSrc);
+    setIsLoading(validSrc);
+  }, [src, placeholder]);
 
   const handleError = () => {
     if (!hasError) {
       // Use inline SVG placeholder (no external request needed)
       setHasError(true);
-      setImgSrc(getPlaceholderDataUrl(alt));
+      setIsLoading(false);
+      setImgSrc(placeholder);
     }
   };
 

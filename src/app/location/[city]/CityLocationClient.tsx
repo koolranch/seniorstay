@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, MapPin, DollarSign, MessageSquare, Hospital, Star } from 'lucide-react';
 import Header from '@/components/header/Header';
@@ -18,6 +18,8 @@ import { getLocalResourcesForCity } from '@/data/local-resources';
 import LocalSeniorResources from '@/components/location/LocalSeniorResources';
 import TestimonialSection from '@/components/testimonials/TestimonialSection';
 import ExitIntentPopup from '@/components/forms/ExitIntentPopup';
+import CommunitySpotlight from '@/components/location/CommunitySpotlight';
+import CommunityComparisonTable from '@/components/location/CommunityComparisonTable';
 
 interface CityLocationClientProps {
   cityName: string;
@@ -35,6 +37,18 @@ export default function CityLocationClient({ cityName, stateAbbr, communities }:
   const citySlug = cityName.toLowerCase().replace(/\s+/g, '-');
   const cityData = clevelandCitiesData[citySlug];
   const localResources = getLocalResourcesForCity(citySlug);
+
+  // Get spotlight communities (top assisted living and memory care communities)
+  const spotlightCommunities = useMemo(() => {
+    return communities
+      .filter(c => 
+        c.careTypes.some(t => 
+          t.toLowerCase().includes('assisted living') || 
+          t.toLowerCase().includes('memory care')
+        )
+      )
+      .slice(0, 3); // Top 3 communities for spotlight
+  }, [communities]);
 
   useEffect(() => {
     setIsMounted(true);
@@ -242,6 +256,39 @@ export default function CityLocationClient({ cityName, stateAbbr, communities }:
           </div>
         )}
       </div>
+
+      {/* Featured Community Spotlights - SEO-rich content for each community */}
+      {spotlightCommunities.length > 0 && (
+        <section className="bg-gray-50 py-10 border-t border-gray-200">
+          <div className="container mx-auto px-4">
+            <h2 className="text-2xl font-semibold mb-2">
+              Featured {cityName} Senior Living Communities
+            </h2>
+            <p className="text-gray-600 mb-8">
+              Detailed information about assisted living and memory care options in {cityName}
+            </p>
+            <div className="space-y-6">
+              {spotlightCommunities.map((community, index) => (
+                <CommunitySpotlight
+                  key={community.id}
+                  community={community}
+                  cityName={cityName}
+                  position={index + 1}
+                />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Community Comparison Table */}
+      {communities.length > 1 && (
+        <CommunityComparisonTable
+          communities={communities}
+          cityName={cityName}
+          maxCommunities={6}
+        />
+      )}
 
       {/* Testimonials Section with Review Schema */}
       <TestimonialSection
