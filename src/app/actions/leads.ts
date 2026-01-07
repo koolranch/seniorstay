@@ -119,7 +119,7 @@ const URGENCY_KEYWORDS = [
  * @param data - Lead form data
  * @returns Score from 0-165+
  */
-export function calculateLeadScore(data: LeadInput): number {
+function calculateLeadScore(data: LeadInput): number {
   let score = 0;
 
   // Timeline scoring
