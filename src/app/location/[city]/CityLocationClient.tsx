@@ -20,6 +20,7 @@ import TestimonialSection from '@/components/testimonials/TestimonialSection';
 import ExitIntentPopup from '@/components/forms/ExitIntentPopup';
 import CommunitySpotlight from '@/components/location/CommunitySpotlight';
 import CommunityComparisonTable from '@/components/location/CommunityComparisonTable';
+import QuickFacts from '@/components/location/QuickFacts';
 
 interface CityLocationClientProps {
   cityName: string;
@@ -79,15 +80,24 @@ export default function CityLocationClient({ cityName, stateAbbr, communities }:
 
   return (
     <main className="flex min-h-screen flex-col">
-      {/* Add Schema.org structured data for SEO */}
+      {/* Add Schema.org structured data for SEO - includes FAQPage for AEO */}
       <SchemaOrg
         cityName={cityName}
         stateAbbr={stateAbbr}
         communities={communities}
+        cityData={cityData}
       />
 
       <Header />
       <CategoryTabs communities={communities} />
+
+      {/* Quick Facts AEO Block - Featured Snippet Target */}
+      <QuickFacts
+        cityName={cityName}
+        stateAbbr={stateAbbr}
+        communities={communities}
+        cityData={cityData}
+      />
 
       {/* City Header with Lead Capture */}
       <div className="bg-gray-50 py-8 border-b border-gray-200">
