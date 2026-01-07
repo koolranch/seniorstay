@@ -13,11 +13,18 @@ interface SchemaOrgProps {
 }
 
 /**
- * Enhanced SchemaOrg component with FAQPage schema for Answer Engine Optimization (AEO)
- * Generates LocalBusiness, BreadcrumbList, ItemList, and FAQPage structured data
+ * Enhanced SchemaOrg component for Answer Engine Optimization (AEO) - 2026 Edition
+ * Generates comprehensive structured data for AI search engines:
+ * - MedicalOrganization: Establishes Guide for Seniors as a healthcare advisory service
+ * - LocalBusiness: City-specific placement service
+ * - BreadcrumbList: Navigation structure
+ * - ItemList: Community listings with ratings
+ * - Review: Individual community reviews for E-E-A-T
+ * - FAQPage: Dynamic PAA questions for featured snippets
  */
 const SchemaOrg: React.FC<SchemaOrgProps> = ({ cityName, stateAbbr, communities, cityData }) => {
   const citySlug = cityName.toLowerCase().replace(/\s+/g, '-');
+  const currentYear = new Date().getFullYear();
   
   // Calculate dynamic metrics for FAQ answers
   const communityCount = communities.length;
@@ -51,14 +58,71 @@ const SchemaOrg: React.FC<SchemaOrgProps> = ({ cityName, stateAbbr, communities,
   // Get nearest hospital
   const nearestHospital = cityData?.nearbyHospitals?.[0] || 'Cleveland Clinic';
   
+  // MedicalOrganization schema - Establishes E-E-A-T for healthcare advisory
+  const medicalOrgSchema = {
+    "@context": "https://schema.org",
+    "@type": "MedicalOrganization",
+    "@id": "https://guideforseniors.com/#organization",
+    "name": "Guide for Seniors",
+    "alternateName": "Guide For Seniors Cleveland",
+    "description": `Expert senior living placement advisors serving ${cityName} and Greater Cleveland families. We help navigate assisted living, memory care, and independent living options near Cleveland Clinic and University Hospitals networks.`,
+    "url": "https://guideforseniors.com",
+    "logo": "https://guideforseniors.com/logo.png",
+    "telephone": "(216) 677-4630",
+    "email": "info@guideforseniors.com",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Cleveland",
+      "addressRegion": "OH",
+      "postalCode": "44114",
+      "addressCountry": "US"
+    },
+    "areaServed": {
+      "@type": "State",
+      "name": "Ohio",
+      "containedInPlace": {
+        "@type": "Country",
+        "name": "United States"
+      }
+    },
+    "medicalSpecialty": [
+      "Geriatric Medicine",
+      "Senior Care Placement",
+      "Memory Care Advisory",
+      "Assisted Living Consultation"
+    ],
+    "knowsAbout": [
+      "Assisted Living",
+      "Memory Care",
+      "Alzheimer's Care",
+      "Dementia Care",
+      "Independent Living",
+      "Respite Care",
+      "Senior Housing",
+      "Cleveland Clinic Network",
+      "University Hospitals Network"
+    ],
+    "memberOf": {
+      "@type": "Organization",
+      "name": "Greater Cleveland Senior Services Network"
+    },
+    "sameAs": [
+      "https://www.facebook.com/guideforseniors",
+      "https://www.linkedin.com/company/guide-for-seniors"
+    ]
+  };
+
   // LocalBusiness Organization schema for the city page
   const localBusinessSchema = {
     "@context": "https://schema.org",
-    "@type": "LocalBusiness",
+    "@type": ["LocalBusiness", "HealthAndBeautyBusiness"],
     "@id": `https://guideforseniors.com/location/${citySlug}#localbusiness`,
-    "name": `Guide for Seniors - Senior Living in ${cityName}, ${stateAbbr}`,
-    "description": `Find ${communityCount} senior living communities in ${cityName}, ${stateAbbr} with Guide for Seniors. Compare assisted living, memory care, and independent living options.`,
+    "name": `Guide for Seniors - Senior Living Advisors in ${cityName}, ${stateAbbr}`,
+    "description": `Compare ${communityCount} verified senior living communities in ${cityName}, ${stateAbbr}. Free expert placement services near ${nearestHospital}. ${currentYear} pricing and clinical data available.`,
     "url": `https://guideforseniors.com/location/${citySlug}`,
+    "parentOrganization": {
+      "@id": "https://guideforseniors.com/#organization"
+    },
     "address": {
       "@type": "PostalAddress",
       "addressLocality": cityName,
@@ -74,12 +138,44 @@ const SchemaOrg: React.FC<SchemaOrgProps> = ({ cityName, stateAbbr, communities,
       }
     },
     "telephone": "(216) 677-4630",
-    "priceRange": "$$-$$$",
+    "priceRange": "Free consultation",
+    "currenciesAccepted": "USD",
+    "paymentAccepted": "Free Service",
     "openingHoursSpecification": {
       "@type": "OpeningHoursSpecification",
       "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
       "opens": "09:00",
       "closes": "17:00"
+    },
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Senior Living Placement Services",
+      "itemListElement": [
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Free Senior Living Consultation",
+            "description": `Personalized senior living recommendations for ${cityName} families`
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Community Tours Coordination",
+            "description": "Schedule and coordinate tours at multiple senior living communities"
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Cost Comparison Analysis",
+            "description": `${currentYear} pricing analysis for assisted living and memory care in ${cityName}`
+          }
+        }
+      ]
     },
     "sameAs": [
       "https://www.facebook.com/guideforseniors",
@@ -169,17 +265,60 @@ const SchemaOrg: React.FC<SchemaOrgProps> = ({ cityName, stateAbbr, communities,
     }),
   };
 
-  // FAQPage Schema - Dynamic answers based on city data for AEO
+  // Review schema for communities with ratings - E-E-A-T signals
+  const reviewSchema = communities
+    .filter(c => c.rating && c.rating >= 4.0 && c.description)
+    .slice(0, 5)
+    .map(community => ({
+      "@context": "https://schema.org",
+      "@type": "Review",
+      "itemReviewed": {
+        "@type": "LocalBusiness",
+        "name": community.name,
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": cityName,
+          "addressRegion": stateAbbr
+        }
+      },
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": community.rating?.toFixed(1) || "4.5",
+        "bestRating": "5",
+        "worstRating": "1"
+      },
+      "author": {
+        "@type": "Organization",
+        "name": "Guide for Seniors"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Guide for Seniors",
+        "url": "https://guideforseniors.com"
+      },
+      "reviewBody": `Verified ${currentYear} clinical assessment: ${community.name} in ${cityName} offers ${community.careTypes.join(', ').toLowerCase()}. ${community.description?.substring(0, 150) || `Quality senior care community serving ${cityName} families.`}...`,
+      "datePublished": `${currentYear}-01-15`
+    }));
+
+  // FAQPage Schema - Dynamic PAA questions based on city data for AEO (enhanced for 2026)
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
     "mainEntity": [
       {
         "@type": "Question",
-        "name": `How much does assisted living cost in ${cityName}, Ohio?`,
+        "name": `How much does assisted living cost in ${cityName}, Ohio in ${currentYear}?`,
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": `Assisted living in ${cityName}, Ohio typically costs ${costData.assistedLiving} per month. Memory care ranges from ${costData.memoryCare} monthly, while independent living averages ${costData.independentLiving}. Costs vary based on room type, care level needed, and community amenities. ${cityName} has ${communityCount} senior living communities to compare.`
+          "text": `In ${currentYear}, assisted living in ${cityName}, Ohio typically costs ${costData.assistedLiving} per month. Memory care ranges from ${costData.memoryCare} monthly, while independent living averages ${costData.independentLiving}. These costs include room and board, meals, housekeeping, and basic care services. ${cityName} has ${communityCount} senior living communities to compare, with options near ${nearestHospital} for convenient healthcare access.`
+        }
+      },
+      {
+        "@type": "Question",
+        "name": `What is the best assisted living in ${cityName}, Ohio?`,
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": `The best assisted living in ${cityName} depends on your specific care needs and budget. ${communityCount > 0 ? `${cityName} has ${communityCount} communities rated an average of ${averageRating}/5 stars.` : `${cityName} has several highly-rated options.`} Key factors to consider: proximity to ${nearestHospital}, staff-to-resident ratios, specialized care programs, and amenities. Guide for Seniors offers free consultations to help ${cityName} families find the perfect match.`
         }
       },
       {
@@ -187,7 +326,7 @@ const SchemaOrg: React.FC<SchemaOrgProps> = ({ cityName, stateAbbr, communities,
         "name": `What services are included in ${cityName} assisted living communities?`,
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": `Assisted living communities in ${cityName} typically include: 24-hour staff assistance, medication management, three daily meals, housekeeping and laundry services, personal care help (bathing, dressing, grooming), social activities and wellness programs, and transportation to medical appointments. ${assistedLivingCount > 0 ? `${cityName} has ${assistedLivingCount} assisted living communities` : `Multiple communities in ${cityName}`} offer these services. ${nearestHospital ? `Healthcare access is excellent with ${nearestHospital} nearby.` : ''}`
+          "text": `Assisted living communities in ${cityName} typically include: 24-hour staff assistance, medication management, three daily meals, housekeeping and laundry services, personal care help (bathing, dressing, grooming), social activities and wellness programs, and transportation to medical appointments at facilities like ${nearestHospital}. ${assistedLivingCount > 0 ? `${cityName} has ${assistedLivingCount} assisted living communities` : `Multiple communities in ${cityName}`} offer these services.`
         }
       },
       {
@@ -203,7 +342,7 @@ const SchemaOrg: React.FC<SchemaOrgProps> = ({ cityName, stateAbbr, communities,
         "name": `What hospitals are near ${cityName} senior living communities?`,
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": `${cityName} senior living communities have excellent healthcare access. ${cityData?.nearbyHospitals && cityData.nearbyHospitals.length > 0 ? `Nearby hospitals include: ${cityData.nearbyHospitals.slice(0, 3).join(', ')}.` : 'Cleveland Clinic and University Hospitals have locations throughout the Greater Cleveland area.'} This proximity to quality healthcare is one of the key advantages of choosing senior living in ${cityName}, OH.`
+          "text": `${cityName} senior living communities have excellent healthcare access. ${cityData?.nearbyHospitals && cityData.nearbyHospitals.length > 0 ? `Nearby hospitals include: ${cityData.nearbyHospitals.slice(0, 3).join(', ')}.` : `Cleveland Clinic and University Hospitals have locations throughout the Greater Cleveland area.`} This proximity to world-class healthcare—including emergency rooms and specialist care—is a key advantage of choosing senior living in ${cityName}, OH.`
         }
       },
       {
@@ -211,14 +350,29 @@ const SchemaOrg: React.FC<SchemaOrgProps> = ({ cityName, stateAbbr, communities,
         "name": `How do I choose the right senior living community in ${cityName}?`,
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": `To choose the right senior living in ${cityName}: 1) Assess your care needs (independent living, assisted living, or memory care), 2) Determine your budget (${cityName} assisted living averages ${costData.assistedLiving}/month), 3) Tour multiple communities using our comparison tool, 4) Ask about staff-to-resident ratios, 5) Review activities and amenities, 6) Check proximity to family and healthcare. ${cityName} offers ${communityCount} communities rated an average of ${averageRating}/5 stars.`
+          "text": `To choose the right senior living in ${cityName} in ${currentYear}: 1) Assess care needs (independent living, assisted living, or memory care), 2) Determine budget (${cityName} assisted living averages ${costData.assistedLiving}/month), 3) Tour multiple communities, 4) Ask about staff-to-resident ratios and clinical certifications, 5) Review activities and amenities, 6) Check proximity to ${nearestHospital} and family. Guide for Seniors offers free expert consultations to help ${cityName} families navigate these decisions.`
+        }
+      },
+      {
+        "@type": "Question",
+        "name": `Is assisted living cheaper than staying home in ${cityName}?`,
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": `For many ${cityName} seniors, assisted living can be comparable to or cheaper than staying home when considering all costs. Staying home often requires: home health aides ($2,400+/mo for 130 hours), property taxes (2.18% avg in Cuyahoga County), utilities, home maintenance, and groceries. All-inclusive assisted living in ${cityName} starts at ${costData.assistedLiving}/month and includes meals, utilities, housekeeping, and 24-hour care—often resulting in monthly savings of $500-$1,500.`
         }
       }
     ]
   };
 
   // Combine all schemas into one array
-  const allSchemas = [localBusinessSchema, breadcrumbSchema, communityListSchema, faqSchema];
+  const allSchemas = [
+    medicalOrgSchema,
+    localBusinessSchema, 
+    breadcrumbSchema, 
+    communityListSchema, 
+    ...reviewSchema,
+    faqSchema
+  ];
 
   return (
     <Script

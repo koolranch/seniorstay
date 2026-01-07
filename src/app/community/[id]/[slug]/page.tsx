@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { fetchCommunityById, fetchCommunityBySlug } from '@/lib/fetch-community';
+import { findNearestHospital, getNearestHospitalForCity } from '@/lib/hospital-proximity';
 import CommunityHeader from '@/components/community/CommunityHeader';
 import CommunityOverview from '@/components/community/CommunityOverview';
 import CommunityQualityMetrics from '@/components/community/CommunityQualityMetrics';
@@ -16,6 +17,7 @@ import WhyChooseSection from '@/components/community/WhyChooseSection';
 import StickyMobileCTA from '@/components/community/StickyMobileCTA';
 import StickyTourButton from '@/components/tour/StickyTourButton';
 import ExitIntentPopup from '@/components/forms/ExitIntentPopup';
+import ClinicalProximityBadge from '@/components/community/ClinicalProximityBadge';
 
 // ISR: Revalidate every hour
 export const revalidate = 3600;
@@ -41,8 +43,10 @@ export async function generateMetadata({ params }: CommunityPageProps): Promise<
   }
 
   const city = community.location.split(',')[0].trim();
+  const citySlug = city.toLowerCase().replace(/\s+/g, '-');
   const baseUrl = 'https://www.guideforseniors.com';
   const canonicalUrl = `${baseUrl}/community/${id}/${slug}`;
+  const currentYear = new Date().getFullYear();
   
   // Determine care type for title
   const primaryCareType = community.careTypes.includes('Memory Care') 
@@ -51,8 +55,19 @@ export async function generateMetadata({ params }: CommunityPageProps): Promise<
       ? 'Assisted Living' 
       : 'Senior Living';
   
+  // GEO-READY: Get nearest hospital for conversational metadata
+  let nearestHospitalName = getNearestHospitalForCity(citySlug);
+  let hospitalDistance = '';
+  
+  if (community.coordinates) {
+    const nearestHospital = findNearestHospital(community.coordinates.lat, community.coordinates.lng, 'major_system');
+    if (nearestHospital) {
+      nearestHospitalName = nearestHospital.hospital.shortName;
+      hospitalDistance = `${nearestHospital.distance} miles from `;
+    }
+  }
+  
   // SEO SAFETY: Check if profile is "incomplete" (no description or placeholder image)
-  // Incomplete profiles should NOT be indexed to protect site authority
   const hasDescription = community.description && community.description.trim().length > 50;
   const imageUrl = community.images?.[0] || '';
   const hasPlaceholderImage = !imageUrl || 
@@ -61,16 +76,28 @@ export async function generateMetadata({ params }: CommunityPageProps): Promise<
     imageUrl.toLowerCase().includes('default-community');
   const isIncompleteProfile = !hasDescription || hasPlaceholderImage;
   
+  // GEO-READY: Conversational title optimized for AI overviews
+  const title = `${community.name} | ${primaryCareType} in ${city}, OH Near ${nearestHospitalName}`;
+  
+  // GEO-READY: Conversational description with clinical context
+  const description = community.description 
+    ? `${currentYear} guide: ${community.name} offers ${primaryCareType.toLowerCase()} in ${city}, Ohio—${hospitalDistance}${nearestHospitalName}. ${community.description.substring(0, 120)}... Free consultation available.`
+    : `${currentYear} guide: Explore ${community.name}, a ${primaryCareType.toLowerCase()} community in ${city}, OH near ${nearestHospitalName}. Get verified pricing, schedule tours, and compare with similar communities.`;
+  
+  // Enhanced keywords for GEO
+  const geoKeywords = `${community.name} reviews, ${primaryCareType.toLowerCase()} near ${nearestHospitalName}, ${city} ${primaryCareType.toLowerCase()} costs ${currentYear}`;
+  const keywords = `${community.name}, ${primaryCareType.toLowerCase()} ${city} ohio, senior living ${city}, ${community.careTypes.join(', ').toLowerCase()}, ${geoKeywords}`;
+  
   return {
-    title: `${community.name} | ${primaryCareType} in ${city}, OH | Guide for Seniors`,
-    description: `Discover ${community.name} in ${city}, Ohio. ${community.description || `Quality ${primaryCareType.toLowerCase()} with compassionate care.`} Get pricing, schedule tours, and learn about amenities.`,
-    keywords: `${community.name}, ${primaryCareType.toLowerCase()} ${city} ohio, senior living ${city}, ${community.careTypes.join(', ').toLowerCase()}`,
+    title,
+    description,
+    keywords,
     alternates: {
       canonical: canonicalUrl,
     },
     openGraph: {
-      title: `${community.name} | ${primaryCareType} in ${city}, OH`,
-      description: community.description || `Quality ${primaryCareType.toLowerCase()} in ${city}, Ohio.`,
+      title: `${community.name} | ${primaryCareType} Near ${nearestHospitalName} in ${city}`,
+      description,
       images: community.images?.[0] ? [community.images[0]] : [],
       url: canonicalUrl,
       siteName: 'Guide for Seniors',
@@ -80,7 +107,7 @@ export async function generateMetadata({ params }: CommunityPageProps): Promise<
     twitter: {
       card: 'summary_large_image',
       title: `${community.name} | ${primaryCareType} in ${city}`,
-      description: community.description || `Quality ${primaryCareType.toLowerCase()} in ${city}, Ohio.`,
+      description,
     },
     // SEO SAFETY: noindex incomplete profiles to protect site authority
     robots: isIncompleteProfile 
@@ -187,6 +214,14 @@ export default async function CommunityPage({ params }: CommunityPageProps) {
       />
 
       <CommunityHeader community={community} isOnlySkilledNursing={isOnlySkilledNursing} />
+      
+      {/* Clinical Proximity Banner - E-E-A-T Signal for AEO */}
+      <ClinicalProximityBadge 
+        communityName={community.name}
+        coordinates={community.coordinates}
+        citySlug={cityName.toLowerCase().replace(/\s+/g, '-')}
+        variant="banner"
+      />
       
       <div className="container mx-auto px-4 py-8">
         {isOnlySkilledNursing && (

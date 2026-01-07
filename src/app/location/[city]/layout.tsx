@@ -1,6 +1,12 @@
 import { Metadata } from 'next';
 import { supabase } from '@/lib/supabase-client';
 import { clevelandCitiesData } from '@/data/cleveland-cities';
+import { 
+  getNearestHospitalForCity, 
+  generateConversationalTitle, 
+  generateConversationalDescription,
+  getCityHospitals 
+} from '@/lib/hospital-proximity';
 
 type Props = {
   params: Promise<{ city: string }>;
@@ -90,7 +96,7 @@ async function getCityMetrics(citySlug: string) {
   };
 }
 
-// Generate metadata for each city page dynamically
+// Generate metadata for each city page dynamically - GEO-Ready for Answer Engine Optimization
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { city } = await params;
   const cityName = formatCityName(city);
@@ -102,35 +108,51 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const citySEO = citySpecificSEO[city];
   const cityData = clevelandCitiesData[city];
   
-  // Build high-CTR dynamic title with real data
+  // Get nearest hospital for GEO-ready conversational metadata
+  const nearestHospital = getNearestHospitalForCity(city);
+  const cityHospitals = getCityHospitals(city);
+  const hospitalNames = cityHospitals.map(h => h.shortName);
+  const costRange = cityData?.averageCost?.assistedLiving || '$3,500 - $6,500';
+  
+  // GEO-READY: Build conversational title optimized for AI overviews and featured snippets
+  // Format: "Compare the top X [City] assisted living communities near [Hospital]—verified 2026 pricing"
   let title: string;
   if (metrics.communityCount > 0) {
-    const ratingText = metrics.averageRating ? ` (Rated ${metrics.averageRating}/5)` : '';
-    title = `Top ${metrics.communityCount} Assisted Living Communities in ${cityName}, OH${ratingText} | Guide for Seniors`;
+    title = generateConversationalTitle(
+      cityName, 
+      metrics.communityCount, 
+      nearestHospital,
+      metrics.averageRating || undefined
+    );
   } else if (citySEO) {
-    title = `${cityName}, OH ${citySEO.titleSuffix} | Guide for Seniors`;
+    title = `${cityName}, OH ${citySEO.titleSuffix} Near ${nearestHospital} | Guide for Seniors`;
   } else {
-    title = `Senior Living in ${cityName}, OH | Guide for Seniors`;
+    title = `Find Senior Living in ${cityName}, OH Near ${nearestHospital} | Guide for Seniors`;
   }
   
-  // Build optimized description with real metrics
+  // GEO-READY: Build conversational description with clinical context for AEO
   let description: string;
   if (metrics.communityCount > 0) {
-    const memoryCareText = metrics.hasMemoryCare ? ', memory care' : '';
-    const costRange = cityData?.averageCost?.assistedLiving || '$3,500 - $6,500';
-    description = `Compare ${metrics.communityCount} assisted living${memoryCareText} communities in ${cityName}, Ohio. Average costs: ${costRange}/mo. ` +
-      `${citySEO?.descriptionExtra || `Find the perfect senior living option with our free comparison tool.`}`;
+    description = generateConversationalDescription(
+      cityName,
+      metrics.communityCount,
+      hospitalNames,
+      costRange,
+      metrics.hasMemoryCare
+    );
   } else if (citySEO) {
-    description = `Find ${citySEO.titleSuffix.toLowerCase()} in ${cityName}, Ohio. ${citySEO.descriptionExtra} Compare prices, amenities, and care levels.`;
+    description = `${new Date().getFullYear()} guide: Find ${citySEO.titleSuffix.toLowerCase()} in ${cityName}, Ohio near ${nearestHospital}. ${citySEO.descriptionExtra} Free expert consultations.`;
   } else {
-    description = `Discover top-rated senior living communities in ${cityName}, Ohio with Guide for Seniors. Compare prices, amenities, and care levels for independent living, assisted living, and memory care facilities.`;
+    description = `${new Date().getFullYear()} guide: Discover verified senior living communities in ${cityName}, Ohio near ${nearestHospital}. Compare prices, amenities, and care levels. Free consultations from Cleveland senior care experts.`;
   }
   
-  // Build optimized keywords
+  // Enhanced keywords for GEO and traditional SEO
+  const hospitalKeywords = hospitalNames.slice(0, 2).map(h => `senior living near ${h}`).join(', ');
   const baseKeywords = `senior living ${cityName}, assisted living ${cityName}, memory care ${cityName}, retirement communities ${cityName}`;
+  const geoKeywords = `${cityName} senior living costs ${new Date().getFullYear()}, best assisted living ${cityName} Ohio, ${hospitalKeywords}`;
   const keywords = citySEO 
-    ? `${citySEO.keywords}, ${baseKeywords}`
-    : `${baseKeywords}, elder care ${cityName}, senior housing ${cityName}`;
+    ? `${citySEO.keywords}, ${baseKeywords}, ${geoKeywords}`
+    : `${baseKeywords}, ${geoKeywords}, elder care ${cityName}`;
 
   return {
     title,
@@ -141,10 +163,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     },
     openGraph: {
       title: metrics.communityCount > 0 
-        ? `${metrics.communityCount} Senior Living Communities in ${cityName}, OH | Guide for Seniors`
+        ? `Compare ${metrics.communityCount} Senior Living Communities in ${cityName} Near ${nearestHospital}`
         : citySEO 
           ? `${citySEO.titleSuffix} in ${cityName}, Ohio | Guide for Seniors`
-          : `Senior Living Options in ${cityName}, Ohio | Guide for Seniors`,
+          : `Senior Living Options in ${cityName}, Ohio Near ${nearestHospital}`,
       description,
       url: `https://guideforseniors.com/location/${city}`,
       siteName: 'Guide for Seniors',
@@ -155,7 +177,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
           url: 'https://guideforseniors.com/og-image.png',
           width: 1200,
           height: 630,
-          alt: `Senior Living in ${cityName}, Ohio`,
+          alt: `Senior Living in ${cityName}, Ohio - Near ${nearestHospital}`,
         }
       ],
     },
