@@ -1,12 +1,13 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { X, Gift } from 'lucide-react';
+import { X, Gift, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { trackFormSubmission } from '@/components/analytics/GoogleAnalytics';
 import { trackMetaLead } from '@/components/analytics/MetaPixel';
+import { useLeadSubmit, getUtmParams, getSourceInfo } from '@/hooks/useLeadSubmit';
 
 interface ExitIntentPopupProps {
   cityName?: string;
@@ -15,11 +16,19 @@ interface ExitIntentPopupProps {
 export default function ExitIntentPopup({ cityName }: ExitIntentPopupProps) {
   const [isVisible, setIsVisible] = useState(false);
   const [hasShown, setHasShown] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
 
-  const formspreeId = "xnnpaply";
-  const formspreeEndpoint = `https://formspree.io/f/${formspreeId}`;
+  const { submit, isPending, result, isSuccess, isError, reset } = useLeadSubmit({
+    onSuccess: (result) => {
+      // Track successful lead capture
+      trackFormSubmission('exit_intent_popup', cityName);
+      trackMetaLead();
+      
+      // Close popup after 3 seconds
+      setTimeout(() => {
+        setIsVisible(false);
+      }, 3000);
+    },
+  });
 
   useEffect(() => {
     // Check if popup has been shown in this session
@@ -70,37 +79,20 @@ export default function ExitIntentPopup({ cityName }: ExitIntentPopupProps) {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsSubmitting(true);
-
+    
     const formData = new FormData(e.currentTarget);
-    formData.append('form_type', 'exit_intent');
-    formData.append('city', cityName || 'General');
-    formData.append('source', 'exit_intent_popup');
+    const utmParams = getUtmParams();
+    const sourceInfo = getSourceInfo();
 
-    try {
-      const response = await fetch(formspreeEndpoint, {
-        method: 'POST',
-        body: formData,
-        headers: {
-          'Accept': 'application/json'
-        }
-      });
-
-      if (response.ok) {
-        // Track successful lead capture
-        trackFormSubmission('exit_intent_popup', cityName);
-        trackMetaLead();
-        
-        setIsSuccess(true);
-        setTimeout(() => {
-          setIsVisible(false);
-        }, 3000);
-      }
-    } catch (error) {
-      console.error('Form submission error:', error);
-    } finally {
-      setIsSubmitting(false);
-    }
+    await submit({
+      fullName: formData.get('name') as string,
+      email: formData.get('email') as string,
+      cityOrZip: cityName,
+      pageType: 'pricing_guide',
+      sourceSlug: sourceInfo.sourceSlug || cityName?.toLowerCase().replace(/\s+/g, '-'),
+      notes: 'Exit intent popup - requested pricing guide and $500 discount',
+      ...utmParams,
+    });
   };
 
   if (!isVisible) return null;
@@ -127,8 +119,22 @@ export default function ExitIntentPopup({ cityName }: ExitIntentPopupProps) {
             <Gift className="h-16 w-16 text-primary mx-auto mb-4" />
             <h3 className="text-2xl font-bold mb-2">Thank You!</h3>
             <p className="text-gray-600">
-              Check your email for your free guide and exclusive offers.
+              {result?.message || 'Check your email for your free guide and exclusive offers.'}
             </p>
+            {result?.priority === 'high' && (
+              <p className="text-sm text-primary mt-2">
+                A senior advisor will reach out to you shortly.
+              </p>
+            )}
+          </div>
+        ) : isError ? (
+          <div className="text-center py-8">
+            <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
+            <h3 className="text-xl font-bold mb-2">Oops!</h3>
+            <p className="text-gray-600 mb-4">{result?.message}</p>
+            <Button onClick={() => reset()} variant="outline">
+              Try Again
+            </Button>
           </div>
         ) : (
           <>
@@ -168,9 +174,9 @@ export default function ExitIntentPopup({ cityName }: ExitIntentPopupProps) {
               <Button 
                 type="submit" 
                 className="w-full"
-                disabled={isSubmitting}
+                disabled={isPending}
               >
-                {isSubmitting ? 'Sending...' : 'Get My Free Guide + $500 Discount'}
+                {isPending ? 'Sending...' : 'Get My Free Guide + $500 Discount'}
               </Button>
               
               <p className="text-xs text-gray-500 text-center">
@@ -182,4 +188,4 @@ export default function ExitIntentPopup({ cityName }: ExitIntentPopupProps) {
       </div>
     </div>
   );
-} 
+}

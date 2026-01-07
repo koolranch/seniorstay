@@ -1,54 +1,73 @@
 'use client';
 
-import { useState, Suspense } from 'react';
+import { useState, Suspense, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Header from '@/components/header/Header';
 import Footer from '@/components/footer/Footer';
-import { Phone, Mail, MapPin, Clock, Building2 } from 'lucide-react';
+import { Phone, Mail, MapPin, Clock, Building2, CheckCircle2, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { useLeadSubmit, getUtmParams } from '@/hooks/useLeadSubmit';
 
 // Separate component that uses useSearchParams
 function ContactForm() {
   const searchParams = useSearchParams();
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitMessage, setSubmitMessage] = useState('');
+  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   
   // Get community info from URL parameters (from sticky CTA)
   const communityName = searchParams.get('community');
   const cityName = searchParams.get('city');
   
-  const formspreeId = "xnnpaply";
-  const formspreeEndpoint = `https://formspree.io/f/${formspreeId}`;
+  const { submit, isPending, result, isSuccess, isError, reset } = useLeadSubmit();
+
+  // Reset errors when result changes
+  useEffect(() => {
+    if (result?.errors) {
+      const errors: Record<string, string> = {};
+      Object.entries(result.errors).forEach(([field, messages]) => {
+        errors[field] = messages[0];
+      });
+      setFormErrors(errors);
+    } else {
+      setFormErrors({});
+    }
+  }, [result]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsSubmitting(true);
-    setSubmitMessage('');
-
-    const formData = new FormData(e.currentTarget);
+    setFormErrors({});
     
-    try {
-      const response = await fetch(formspreeEndpoint, {
-        method: 'POST',
-        body: formData,
-        headers: {
-          'Accept': 'application/json'
-        }
-      });
-
-      if (response.ok) {
-        setSubmitMessage('Thank you for your message! We\'ll get back to you soon.');
-        e.currentTarget.reset();
-      } else {
-        setSubmitMessage('Something went wrong. Please try again or call us directly.');
-      }
-    } catch (error) {
-      setSubmitMessage('Something went wrong. Please try again or call us directly.');
-    } finally {
-      setIsSubmitting(false);
+    const formData = new FormData(e.currentTarget);
+    const utmParams = getUtmParams();
+    
+    const firstName = formData.get('firstName') as string;
+    const lastName = formData.get('lastName') as string;
+    
+    // Determine care type from subject
+    const subject = formData.get('subject') as string;
+    let careType: string | undefined;
+    if (subject === 'Help Finding a Community') {
+      careType = 'Assisted Living'; // Default, will be refined by notes
+    }
+    
+    await submit({
+      fullName: `${firstName} ${lastName}`.trim(),
+      email: formData.get('email') as string,
+      phone: formData.get('phone') as string || undefined,
+      notes: formData.get('message') as string,
+      communityName: communityName || undefined,
+      cityOrZip: cityName || undefined,
+      careType: careType as any,
+      pageType: 'contact',
+      sourceSlug: cityName?.toLowerCase().replace(/\s+/g, '-'),
+      ...utmParams,
+    });
+    
+    // Reset form on success
+    if (result?.success) {
+      e.currentTarget.reset();
     }
   };
 
@@ -134,83 +153,167 @@ function ContactForm() {
                 </div>
               </div>
             </div>
+            
+            {/* High Priority Notice */}
+            <div className="mt-8 p-4 bg-amber-50 border border-amber-200 rounded-lg">
+              <h3 className="font-semibold text-amber-800 mb-2">Need Immediate Help?</h3>
+              <p className="text-amber-700 text-sm">
+                If you're dealing with a hospital discharge, safety concern, or urgent placement need, 
+                please call us directly at <a href="tel:+12166774630" className="font-semibold underline">(216) 677-4630</a> or 
+                mention "urgent" in your message for priority response.
+              </p>
+            </div>
           </div>
 
           {/* Contact Form */}
           <div>
             <h2 className="text-2xl font-semibold mb-6">Send Us a Message</h2>
             
-            <form className="space-y-4" onSubmit={handleSubmit}>
-              {/* Hidden fields for community context tracking */}
-              {communityName && (
-                <>
-                  <input type="hidden" name="community_interest" value={communityName} />
-                  <input type="hidden" name="city" value={cityName || ''} />
-                  <input type="hidden" name="source" value="community_page_cta" />
-                </>
-              )}
-              
-              <div className="grid grid-cols-2 gap-4">
+            {isSuccess ? (
+              <div className="bg-green-50 border border-green-200 p-6 rounded-lg">
+                <div className="flex items-start gap-3">
+                  <CheckCircle2 className="h-6 w-6 text-green-600 flex-shrink-0" />
+                  <div>
+                    <h3 className="font-semibold text-green-800">{result?.message}</h3>
+                    {result?.priority === 'high' && (
+                      <p className="text-green-700 mt-2">
+                        Based on your inquiry, a senior advisor will contact you very soon.
+                      </p>
+                    )}
+                    <Button 
+                      onClick={() => reset()} 
+                      variant="outline" 
+                      className="mt-4"
+                    >
+                      Send Another Message
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <form className="space-y-4" onSubmit={handleSubmit}>
+                {/* Hidden fields for community context tracking */}
+                {communityName && (
+                  <>
+                    <input type="hidden" name="community_interest" value={communityName} />
+                    <input type="hidden" name="city" value={cityName || ''} />
+                  </>
+                )}
+                
+                {/* Error Banner */}
+                {isError && (
+                  <div className="bg-red-50 border border-red-200 p-4 rounded-lg flex items-start gap-3">
+                    <AlertCircle className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <p className="text-red-800 font-medium">{result?.message}</p>
+                      <p className="text-red-700 text-sm mt-1">
+                        You can also call us directly at (216) 677-4630.
+                      </p>
+                    </div>
+                  </div>
+                )}
+                
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="firstName">First Name *</Label>
+                    <Input 
+                      id="firstName" 
+                      name="firstName" 
+                      placeholder="John" 
+                      required 
+                      className={formErrors.fullName ? 'border-red-500' : ''}
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="lastName">Last Name *</Label>
+                    <Input 
+                      id="lastName" 
+                      name="lastName" 
+                      placeholder="Doe" 
+                      required 
+                    />
+                  </div>
+                </div>
+                {formErrors.fullName && (
+                  <p className="text-red-500 text-sm -mt-2">{formErrors.fullName}</p>
+                )}
+
                 <div>
-                  <Label htmlFor="firstName">First Name</Label>
-                  <Input id="firstName" name="firstName" placeholder="John" required />
+                  <Label htmlFor="email">Email *</Label>
+                  <Input 
+                    id="email" 
+                    name="email" 
+                    type="email" 
+                    placeholder="john@example.com" 
+                    required 
+                    className={formErrors.email ? 'border-red-500' : ''}
+                  />
+                  {formErrors.email && (
+                    <p className="text-red-500 text-sm mt-1">{formErrors.email}</p>
+                  )}
                 </div>
+
                 <div>
-                  <Label htmlFor="lastName">Last Name</Label>
-                  <Input id="lastName" name="lastName" placeholder="Doe" required />
+                  <Label htmlFor="phone">Phone Number</Label>
+                  <Input 
+                    id="phone" 
+                    name="phone" 
+                    type="tel" 
+                    placeholder="(216) 677-4630" 
+                    className={formErrors.phone ? 'border-red-500' : ''}
+                  />
+                  <p className="text-xs text-gray-500 mt-1">
+                    Providing your phone helps us respond faster, especially for urgent inquiries.
+                  </p>
+                  {formErrors.phone && (
+                    <p className="text-red-500 text-sm mt-1">{formErrors.phone}</p>
+                  )}
                 </div>
-              </div>
 
-              <div>
-                <Label htmlFor="email">Email</Label>
-                <Input id="email" name="email" type="email" placeholder="john@example.com" required />
-              </div>
-
-              <div>
-                <Label htmlFor="phone">Phone Number</Label>
-                <Input id="phone" name="phone" type="tel" placeholder="(216) 677-4630" />
-              </div>
-
-              <div>
-                <Label htmlFor="subject">Subject</Label>
-                <select 
-                  id="subject" 
-                  name="subject" 
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                  defaultValue={communityName ? 'Help Finding a Community' : 'General Inquiry'}
-                >
-                  <option>General Inquiry</option>
-                  <option>Help Finding a Community</option>
-                  <option>Financial Assistance Questions</option>
-                  <option>Partner with Us</option>
-                  <option>Technical Support</option>
-                  <option>Other</option>
-                </select>
-              </div>
-
-              <div>
-                <Label htmlFor="message">Message</Label>
-                <Textarea 
-                  id="message" 
-                  name="message"
-                  placeholder={communityName 
-                    ? `I'm interested in learning more about ${communityName}. Please contact me about pricing and availability.`
-                    : "How can we help you?"} 
-                  rows={5}
-                  required 
-                />
-              </div>
-
-              {submitMessage && (
-                <div className={`p-4 rounded-md ${submitMessage.includes('Thank you') ? 'bg-green-50 text-green-800' : 'bg-red-50 text-red-800'}`}>
-                  {submitMessage}
+                <div>
+                  <Label htmlFor="subject">Subject</Label>
+                  <select 
+                    id="subject" 
+                    name="subject" 
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                    defaultValue={communityName ? 'Help Finding a Community' : 'General Inquiry'}
+                  >
+                    <option>General Inquiry</option>
+                    <option>Help Finding a Community</option>
+                    <option>Financial Assistance Questions</option>
+                    <option>Partner with Us</option>
+                    <option>Technical Support</option>
+                    <option>Other</option>
+                  </select>
                 </div>
-              )}
 
-              <Button type="submit" className="w-full" disabled={isSubmitting}>
-                {isSubmitting ? 'Sending...' : 'Send Message'}
-              </Button>
-            </form>
+                <div>
+                  <Label htmlFor="message">Message *</Label>
+                  <Textarea 
+                    id="message" 
+                    name="message"
+                    placeholder={communityName 
+                      ? `I'm interested in learning more about ${communityName}. Please contact me about pricing and availability.`
+                      : "How can we help you? Please include any relevant details about your situation."} 
+                    rows={5}
+                    required 
+                    className={formErrors.notes ? 'border-red-500' : ''}
+                  />
+                  {formErrors.notes && (
+                    <p className="text-red-500 text-sm mt-1">{formErrors.notes}</p>
+                  )}
+                </div>
+
+                <Button type="submit" className="w-full" disabled={isPending}>
+                  {isPending ? 'Sending...' : 'Send Message'}
+                </Button>
+                
+                <p className="text-xs text-gray-500 text-center">
+                  By submitting, you agree to our{' '}
+                  <a href="/privacy-policy" className="underline">Privacy Policy</a>.
+                </p>
+              </form>
+            )}
           </div>
         </div>
       </div>

@@ -121,22 +121,35 @@ model Community {
 }
 
 model Lead {
-  id            String   @id @default(cuid())
-  fullName      String
-  email         String?
-  phone         String?
-  cityOrZip     String?
-  careType      String?
-  moveInTimeline String?  
-  notes         String?
-  communityName String?
-  pageType      String?
-  sourceSlug    String?
-  city          String?
-  state         String?
-  address       String?
-  services      String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  status        String   @default("new")
+  id              String   @id @default(cuid())
+  fullName        String
+  email           String?
+  phone           String?
+  cityOrZip       String?
+  careType        String?
+  moveInTimeline  String?  
+  notes           String?
+  communityName   String?
+  pageType        String?       // "location_page", "community_page", "contact", "assessment"
+  sourceSlug      String?       // e.g., "westlake", "beachwood" (Cleveland suburb)
+  city            String?
+  state           String?
+  address         String?
+  services        String?
+  urgencyScore    Int       @default(0)  // Calculated lead score (0-150+)
+  priority        String    @default("normal") // "high", "normal", "low"
+  alertSent       Boolean   @default(false)    // Track if high-priority alert was sent
+  utmSource       String?   // UTM tracking
+  utmMedium       String?
+  utmCampaign     String?
+  userAgent       String?   // Browser/device info
+  ipAddress       String?   // For geo-location (hashed for privacy)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  status          String    @default("new") // "new", "contacted", "qualified", "converted", "lost"
+  
+  @@index([email])
+  @@index([urgencyScore])
+  @@index([sourceSlug])
+  @@index([createdAt])
 }
