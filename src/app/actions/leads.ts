@@ -49,6 +49,7 @@ export const LeadSchema = z.object({
     'homepage',
     'pricing_guide',
     'blog',
+    'other',
     ''
   ]).optional(),
   sourceSlug: z.string().max(100).optional(), // Cleveland suburb slug

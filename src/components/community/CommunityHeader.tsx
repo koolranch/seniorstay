@@ -10,6 +10,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import CommunityImage from '@/components/ui/CommunityImage';
+import { submitLead } from '@/app/actions/leads';
 
 interface CommunityHeaderProps {
   community: Community;
@@ -19,38 +20,53 @@ interface CommunityHeaderProps {
 export default function CommunityHeader({ community, isOnlySkilledNursing = false }: CommunityHeaderProps) {
   const [tourSubmitted, setTourSubmitted] = React.useState(false);
   const [pricingSubmitted, setPricingSubmitted] = React.useState(false);
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
 
   const handleTourSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const form = e.currentTarget;
-    const formData = new FormData(form);
+    setIsSubmitting(true);
+    const formData = new FormData(e.currentTarget);
     
     try {
-      await fetch('https://formspree.io/f/xnnpaply', {
-        method: 'POST',
-        body: formData,
-        headers: { Accept: 'application/json' },
+      const result = await submitLead({
+        fullName: formData.get('name')?.toString() || '',
+        email: formData.get('email')?.toString() || '',
+        phone: formData.get('phone')?.toString() || '',
+        communityName: community.name,
+        cityOrZip: community.location?.split(',')[0]?.trim() || '',
+        notes: `Tour request for ${community.name}`,
+        pageType: 'community_page',
+        sourceSlug: community.id,
       });
-      setTourSubmitted(true);
+      if (result.success) setTourSubmitted(true);
     } catch (error) {
       console.error('Error submitting form:', error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   const handlePricingSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const form = e.currentTarget;
-    const formData = new FormData(form);
+    setIsSubmitting(true);
+    const formData = new FormData(e.currentTarget);
     
     try {
-      await fetch('https://formspree.io/f/xnnpaply', {
-        method: 'POST',
-        body: formData,
-        headers: { Accept: 'application/json' },
+      const result = await submitLead({
+        fullName: formData.get('name')?.toString() || '',
+        email: formData.get('email')?.toString() || '',
+        phone: formData.get('phone')?.toString() || '',
+        communityName: community.name,
+        cityOrZip: community.location?.split(',')[0]?.trim() || '',
+        notes: `Pricing request for ${community.name}`,
+        pageType: 'community_page',
+        sourceSlug: community.id,
       });
-      setPricingSubmitted(true);
+      if (result.success) setPricingSubmitted(true);
     } catch (error) {
       console.error('Error submitting form:', error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 

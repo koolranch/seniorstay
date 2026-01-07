@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Community } from '@/data/facilities';
+import { submitLead } from '@/app/actions/leads';
 
 interface TourBookingOverlayProps {
   community: Community;
@@ -35,42 +36,38 @@ export default function TourBookingOverlay({
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
 
+  // Map timing to moveInTimeline
+  const timingToTimeline = (timing: string): string => {
+    switch (timing) {
+      case 'this-week': return 'Immediate';
+      case 'next-week': return '1-3 months';
+      case 'flexible': return 'Just researching';
+      default: return '';
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setSubmitting(true);
 
     try {
-      const formPayload = new FormData();
-      formPayload.append('form_type', 'tour_request_zip_search');
-      formPayload.append('community_name', community.name);
-      formPayload.append('community_id', community.id);
-      formPayload.append('community_location', community.location);
-      if (userZip) formPayload.append('user_zip', userZip);
-      if (distance) formPayload.append('distance_miles', distance.toString());
-      formPayload.append('name', formData.name);
-      formPayload.append('contact_method', formData.contactMethod);
-      if (formData.contactMethod === 'phone') {
-        formPayload.append('phone', formData.phone);
-      } else {
-        formPayload.append('email', formData.email);
-      }
-      formPayload.append('timing', formData.timing);
-      formPayload.append('time_preference', formData.timePreference);
-      formPayload.append('source_page', typeof window !== 'undefined' ? window.location.href : '');
-
-      const response = await fetch('https://formspree.io/f/xnnpaply', {
-        method: 'POST',
-        body: formPayload,
-        headers: {
-          Accept: 'application/json',
-        },
+      const result = await submitLead({
+        fullName: formData.name,
+        email: formData.contactMethod === 'email' ? formData.email : '',
+        phone: formData.contactMethod === 'phone' ? formData.phone : '',
+        communityName: community.name,
+        cityOrZip: userZip || community.location?.split(',')[0]?.trim() || '',
+        moveInTimeline: timingToTimeline(formData.timing) as any,
+        notes: `Tour request for ${community.name}. Timing: ${formData.timing}, Time preference: ${formData.timePreference}${distance ? `, Distance: ${distance.toFixed(1)} miles` : ''}`,
+        pageType: 'community_page',
+        sourceSlug: community.id,
       });
 
-      if (response.ok) {
+      if (result.success) {
         onSuccess();
       } else {
-        setError('Something went wrong. Please try again.');
+        setError(result.message || 'Something went wrong. Please try again.');
       }
     } catch (err) {
       setError('Unable to submit request. Please try again.');

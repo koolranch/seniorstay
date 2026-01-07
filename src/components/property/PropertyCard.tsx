@@ -14,6 +14,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import { Badge } from '@/components/ui/badge';
 import { Community } from '@/data/facilities';
+import { submitLead } from '@/app/actions/leads';
 
 interface PropertyCardProps {
   community: Community;
@@ -25,9 +26,6 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ community }) => {
   // Default image if no images provided
   const defaultImage = "https://ext.same-assets.com/3140348022/3950841709.jpeg";
   const displayImages = images.length > 0 ? images : [defaultImage];
-
-  const formspreeId = "xnnpaply";
-  const formspreeEndpoint = `https://formspree.io/f/${formspreeId}`;
 
   const [isPricingSubmitting, setIsPricingSubmitting] = useState(false);
   const [isTourSubmitting, setIsTourSubmitting] = useState(false);
@@ -43,20 +41,20 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ community }) => {
 
     const form = event.currentTarget;
     const formData = new FormData(form);
-    formData.append('facility', name);
-    formData.append('location', location);
-    formData.append('formType', 'pricing');
 
     try {
-      const response = await fetch(formspreeEndpoint, {
-        method: 'POST',
-        body: formData,
-        headers: {
-          'Accept': 'application/json'
-        }
+      const result = await submitLead({
+        fullName: formData.get('name')?.toString() || '',
+        email: formData.get('email')?.toString() || '',
+        phone: formData.get('phone')?.toString() || '',
+        communityName: name,
+        cityOrZip: location?.split(',')[0]?.trim() || '',
+        notes: `Pricing request for ${name}`,
+        pageType: 'location_page',
+        sourceSlug: id,
       });
 
-      if (response.ok) {
+      if (result.success) {
         setPricingSubmitted(true);
         form.reset();
       } else {
@@ -75,20 +73,20 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ community }) => {
 
     const form = event.currentTarget;
     const formData = new FormData(form);
-    formData.append('facility', name);
-    formData.append('location', location);
-    formData.append('formType', 'tour');
 
     try {
-      const response = await fetch(formspreeEndpoint, {
-        method: 'POST',
-        body: formData,
-        headers: {
-          'Accept': 'application/json'
-        }
+      const result = await submitLead({
+        fullName: formData.get('name')?.toString() || '',
+        email: formData.get('email')?.toString() || '',
+        phone: formData.get('phone')?.toString() || '',
+        communityName: name,
+        cityOrZip: location?.split(',')[0]?.trim() || '',
+        notes: `Tour request for ${name}`,
+        pageType: 'location_page',
+        sourceSlug: id,
       });
 
-      if (response.ok) {
+      if (result.success) {
         setTourSubmitted(true);
         form.reset();
       } else {

@@ -6,6 +6,7 @@ import { ArrowRight, AlertCircle, CheckCircle, HelpCircle, Users, Heart } from '
 import Header from '@/components/header/Header';
 import Footer from '@/components/footer/Footer';
 import StickyTourButton from '@/components/tour/StickyTourButton';
+import SimpleContactForm from '@/components/forms/SimpleContactForm';
 
 export default function ChoosingSeniorLivingPage() {
   return (
@@ -211,40 +212,11 @@ export default function ChoosingSeniorLivingPage() {
               Our Cleveland advisors will help you navigate this important decision. We'll match you with communities that fit your needs, budget, and preferences—completely free.
             </p>
             <div className="bg-white p-8 rounded-xl shadow-lg">
-              <form action="https://formspree.io/f/xnnpaply" method="POST" className="space-y-4">
-                <input type="hidden" name="form_type" value="choosing_guide_page" />
-                <input type="hidden" name="source_page" value="choosing-senior-living" />
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <input
-                    type="text"
-                    name="name"
-                    required
-                    placeholder="Your Name *"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg"
-                  />
-                  <input
-                    type="tel"
-                    name="phone"
-                    required
-                    placeholder="Your Phone *"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg"
-                  />
-                </div>
-                <input
-                  type="email"
-                  name="email"
-                  required
-                  placeholder="Your Email *"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg"
-                />
-                <button
-                  type="submit"
-                  className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
-                >
-                  Get Free Consultation
-                </button>
-                <p className="text-xs text-gray-500">We'll guide you through every step of the process.</p>
-              </form>
+              <SimpleContactForm 
+                sourcePage="choosing-senior-living" 
+                buttonText="Get Free Consultation"
+                showMessage={false}
+              />
             </div>
           </div>
         </div>

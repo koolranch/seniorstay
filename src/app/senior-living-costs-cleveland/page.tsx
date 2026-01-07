@@ -1,13 +1,54 @@
 "use client";
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { ArrowRight, DollarSign, TrendingUp, Shield, HelpCircle } from 'lucide-react';
 import Header from '@/components/header/Header';
 import Footer from '@/components/footer/Footer';
 import StickyTourButton from '@/components/tour/StickyTourButton';
+import { submitLead } from '@/app/actions/leads';
 
 export default function SeniorLivingCostsClevelandPage() {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [error, setError] = useState('');
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setError('');
+
+    const formData = new FormData(e.currentTarget);
+    const careTypeMap: Record<string, string> = {
+      'memory-care': 'Memory Care',
+      'assisted-living': 'Assisted Living',
+      'independent-living': 'Independent Living',
+      'not-sure': 'Not Sure',
+    };
+
+    try {
+      const result = await submitLead({
+        fullName: formData.get('name')?.toString() || '',
+        email: formData.get('email')?.toString() || '',
+        phone: formData.get('phone')?.toString() || '',
+        careType: careTypeMap[formData.get('care_type')?.toString() || ''] as any || '',
+        notes: 'Pricing guide request from Cleveland costs page',
+        pageType: 'pricing_guide',
+        sourceSlug: 'senior-living-costs-cleveland',
+      });
+
+      if (result.success) {
+        setIsSuccess(true);
+      } else {
+        setError(result.message || 'Something went wrong. Please try again.');
+      }
+    } catch (err) {
+      setError('Unable to submit. Please try again or call us directly.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <main className="flex min-h-screen flex-col bg-white">
       <Header />
@@ -192,50 +233,58 @@ export default function SeniorLivingCostsClevelandPage() {
               Every situation is unique. Tell us about your needs and we'll provide specific pricing for communities that match your requirements and budget.
             </p>
             <div className="bg-white p-8 rounded-xl shadow-lg">
-              <form action="https://formspree.io/f/xnnpaply" method="POST" className="space-y-4">
-                <input type="hidden" name="form_type" value="pricing_guide_cleveland_page" />
-                <input type="hidden" name="source_page" value="senior-living-costs-cleveland" />
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <input
-                    type="text"
-                    name="name"
-                    required
-                    placeholder="Your Name *"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg"
-                  />
-                  <input
-                    type="tel"
-                    name="phone"
-                    required
-                    placeholder="Your Phone *"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg"
-                  />
+              {isSuccess ? (
+                <div className="text-center py-6">
+                  <h3 className="text-xl font-bold text-green-800 mb-2">Thank You!</h3>
+                  <p className="text-green-700">We'll send you detailed pricing information shortly.</p>
+                  <p className="text-sm text-gray-600 mt-4">Need immediate help? Call <strong>(216) 677-4630</strong></p>
                 </div>
-                <input
-                  type="email"
-                  name="email"
-                  required
-                  placeholder="Your Email *"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg"
-                />
-                <select
-                  name="care_type"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg"
-                >
-                  <option value="">Type of care needed?</option>
-                  <option value="memory-care">Memory Care</option>
-                  <option value="assisted-living">Assisted Living</option>
-                  <option value="independent-living">Independent Living</option>
-                  <option value="not-sure">Not Sure</option>
-                </select>
-                <button
-                  type="submit"
-                  className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
-                >
-                  Get Your Free Pricing Guide
-                </button>
-                <p className="text-xs text-gray-500">We'll send detailed pricing for communities that match your needs.</p>
-              </form>
+              ) : (
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <input
+                      type="text"
+                      name="name"
+                      required
+                      placeholder="Your Name *"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg"
+                    />
+                    <input
+                      type="tel"
+                      name="phone"
+                      required
+                      placeholder="Your Phone *"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg"
+                    />
+                  </div>
+                  <input
+                    type="email"
+                    name="email"
+                    required
+                    placeholder="Your Email *"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg"
+                  />
+                  <select
+                    name="care_type"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg"
+                  >
+                    <option value="">Type of care needed?</option>
+                    <option value="memory-care">Memory Care</option>
+                    <option value="assisted-living">Assisted Living</option>
+                    <option value="independent-living">Independent Living</option>
+                    <option value="not-sure">Not Sure</option>
+                  </select>
+                  {error && <p className="text-red-500 text-sm">{error}</p>}
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="w-full bg-orange-500 hover:bg-orange-600 disabled:bg-orange-300 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
+                  >
+                    {isSubmitting ? 'Sending...' : 'Get Your Free Pricing Guide'}
+                  </button>
+                  <p className="text-xs text-gray-500">We'll send detailed pricing for communities that match your needs.</p>
+                </form>
+              )}
             </div>
           </div>
         </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { ArrowRight, CheckCircle, Heart, Shield, Users, Brain } from 'lucide-react';
 import Header from '@/components/header/Header';
@@ -8,8 +8,49 @@ import Footer from '@/components/footer/Footer';
 import LocationCard from '@/components/property/LocationCard';
 import StickyTourButton from '@/components/tour/StickyTourButton';
 import { communityData } from '@/data/facilities';
+import { submitLead } from '@/app/actions/leads';
 
 export default function MemoryCareClevelandPage() {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [error, setError] = useState('');
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setError('');
+
+    const formData = new FormData(e.currentTarget);
+    const urgencyMap: Record<string, string> = {
+      'immediate': 'Immediate',
+      '1-3-months': '1-3 months',
+      '3-6-months': '3-6 months',
+      'researching': 'Just researching',
+    };
+
+    try {
+      const result = await submitLead({
+        fullName: formData.get('name')?.toString() || '',
+        email: formData.get('email')?.toString() || '',
+        phone: formData.get('phone')?.toString() || '',
+        careType: 'Memory Care',
+        moveInTimeline: urgencyMap[formData.get('urgency')?.toString() || ''] as any || '',
+        notes: 'Memory care consultation request from Cleveland memory care page',
+        pageType: 'other',
+        sourceSlug: 'memory-care-cleveland',
+      });
+
+      if (result.success) {
+        setIsSuccess(true);
+      } else {
+        setError(result.message || 'Something went wrong. Please try again.');
+      }
+    } catch (err) {
+      setError('Unable to submit. Please try again or call us directly.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
   // Filter for Cleveland-area memory care communities
   const clevelandCities = ['Cleveland', 'Shaker Heights', 'Beachwood', 'Parma', 'Lakewood', 'Westlake', 'Strongsville', 'Independence', 'Seven Hills', 'Rocky River'];
   const memoryCareCommunities = communityData.filter(c => 
@@ -215,50 +256,58 @@ export default function MemoryCareClevelandPage() {
               Our Cleveland advisors specialize in memory care placement. We understand the unique challenges of dementia care and can help you find the right community—completely free.
             </p>
             <div className="bg-white p-8 rounded-xl shadow-lg">
-              <form action="https://formspree.io/f/xnnpaply" method="POST" className="space-y-4">
-                <input type="hidden" name="form_type" value="memory_care_cleveland_page" />
-                <input type="hidden" name="source_page" value="memory-care-cleveland" />
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <input
-                    type="text"
-                    name="name"
-                    required
-                    placeholder="Your Name *"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg"
-                  />
-                  <input
-                    type="tel"
-                    name="phone"
-                    required
-                    placeholder="Your Phone *"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg"
-                  />
+              {isSuccess ? (
+                <div className="text-center py-6">
+                  <h3 className="text-xl font-bold text-green-800 mb-2">Thank You!</h3>
+                  <p className="text-green-700">A memory care specialist will contact you within 24 hours.</p>
+                  <p className="text-sm text-gray-600 mt-4">Need immediate help? Call <strong>(216) 677-4630</strong></p>
                 </div>
-                <input
-                  type="email"
-                  name="email"
-                  required
-                  placeholder="Your Email *"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg"
-                />
-                <select
-                  name="urgency"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg"
-                >
-                  <option value="">How soon do you need memory care?</option>
-                  <option value="immediate">Immediately</option>
-                  <option value="1-3-months">Within 1-3 months</option>
-                  <option value="3-6-months">Within 3-6 months</option>
-                  <option value="researching">Just researching options</option>
-                </select>
-                <button
-                  type="submit"
-                  className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
-                >
-                  Get Free Memory Care Consultation
-                </button>
-                <p className="text-xs text-gray-500">We'll contact you within 24 hours to discuss your specific needs.</p>
-              </form>
+              ) : (
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <input
+                      type="text"
+                      name="name"
+                      required
+                      placeholder="Your Name *"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg"
+                    />
+                    <input
+                      type="tel"
+                      name="phone"
+                      required
+                      placeholder="Your Phone *"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg"
+                    />
+                  </div>
+                  <input
+                    type="email"
+                    name="email"
+                    required
+                    placeholder="Your Email *"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg"
+                  />
+                  <select
+                    name="urgency"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg"
+                  >
+                    <option value="">How soon do you need memory care?</option>
+                    <option value="immediate">Immediately</option>
+                    <option value="1-3-months">Within 1-3 months</option>
+                    <option value="3-6-months">Within 3-6 months</option>
+                    <option value="researching">Just researching options</option>
+                  </select>
+                  {error && <p className="text-red-500 text-sm">{error}</p>}
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="w-full bg-orange-500 hover:bg-orange-600 disabled:bg-orange-300 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
+                  >
+                    {isSubmitting ? 'Sending...' : 'Get Free Memory Care Consultation'}
+                  </button>
+                  <p className="text-xs text-gray-500">We'll contact you within 24 hours to discuss your specific needs.</p>
+                </form>
+              )}
             </div>
           </div>
         </div>

@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { trackLeadFormSubmitted } from '@/components/analytics/AssessmentAnalytics';
+import { submitLead } from '@/app/actions/leads';
 
 interface LeadCaptureFormProps {
   assessmentData: {
@@ -36,35 +37,39 @@ export default function LeadCaptureForm({ assessmentData }: LeadCaptureFormProps
     });
   };
 
+  // Map recommendation to care type
+  const recommendationToCareType = (rec: string): string => {
+    if (rec.toLowerCase().includes('memory')) return 'Memory Care';
+    if (rec.toLowerCase().includes('assisted')) return 'Assisted Living';
+    if (rec.toLowerCase().includes('independent')) return 'Independent Living';
+    if (rec.toLowerCase().includes('skilled')) return 'Skilled Nursing';
+    return 'Not Sure';
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     setError('');
 
     try {
-      const response = await fetch('https://formspree.io/f/xnnpaply', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ...formData,
-          assessment_score: assessmentData.score,
-          recommendation_type: assessmentData.recommendation,
-          matched_communities: assessmentData.matchedCommunities.join(', '),
-          assessment_answers: JSON.stringify(assessmentData.answers),
-          form_type: 'care_assessment',
-          timestamp: new Date().toISOString(),
-        }),
+      const result = await submitLead({
+        fullName: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        careType: recommendationToCareType(assessmentData.recommendation) as any,
+        notes: `Assessment Results: ${assessmentData.recommendation}. Score: ${assessmentData.score}. Matched Communities: ${assessmentData.matchedCommunities.join(', ')}. ${formData.message ? `Additional comments: ${formData.message}` : ''}`,
+        communityName: assessmentData.matchedCommunities[0] || '',
+        pageType: 'other',
+        sourceSlug: 'care-assessment',
       });
 
-      if (response.ok) {
+      if (result.success) {
         setIsSuccess(true);
         setFormData({ name: '', email: '', phone: '', message: '' });
         // Track successful form submission
         trackLeadFormSubmitted(assessmentData.recommendation, assessmentData.matchedCommunities);
       } else {
-        throw new Error('Submission failed');
+        throw new Error(result.message || 'Submission failed');
       }
     } catch (err) {
       setError('Failed to submit form. Please try again or call us directly.');

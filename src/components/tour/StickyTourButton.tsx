@@ -7,10 +7,12 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { trackTourRequest, trackFormSubmission } from '@/components/analytics/GoogleAnalytics';
+import { submitLead } from '@/app/actions/leads';
 
 export default function StickyTourButton() {
   const [isVisible, setIsVisible] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -24,26 +26,33 @@ export default function StickyTourButton() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const form = e.currentTarget;
-    const formData = new FormData(form);
+    setIsSubmitting(true);
+    const formData = new FormData(e.currentTarget);
     
     try {
-      await fetch('https://formspree.io/f/xnnpaply', {
-        method: 'POST',
-        body: formData,
-        headers: { Accept: 'application/json' },
+      const result = await submitLead({
+        fullName: formData.get('name')?.toString() || '',
+        email: formData.get('email')?.toString() || '',
+        phone: formData.get('phone')?.toString() || '',
+        notes: 'Tour request from sticky button',
+        pageType: 'other',
+        sourceSlug: typeof window !== 'undefined' ? window.location.pathname : 'sticky-tour',
       });
       
-      // Track successful form submission
-      trackTourRequest('sticky_button', 'sticky_tour_button');
-      trackFormSubmission('sticky_tour_request');
-      
-      setSubmitted(true);
-      setTimeout(() => {
-        setSubmitted(false);
-      }, 3000);
+      if (result.success) {
+        // Track successful form submission
+        trackTourRequest('sticky_button', 'sticky_tour_button');
+        trackFormSubmission('sticky_tour_request');
+        
+        setSubmitted(true);
+        setTimeout(() => {
+          setSubmitted(false);
+        }, 3000);
+      }
     } catch (error) {
       console.error('Error submitting form:', error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 

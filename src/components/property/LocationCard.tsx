@@ -13,6 +13,7 @@ import { useComparison } from '@/context/ComparisonContext';
 import { Community } from '@/data/facilities';
 import { getCommunityImage } from '@/lib/communityImages';
 import CommunityImage from '@/components/ui/CommunityImage';
+import { submitLead } from '@/app/actions/leads';
 
 interface LocationCardProps {
   community: Community;
@@ -27,10 +28,6 @@ export default function LocationCard({ community }: LocationCardProps) {
   const [tourSubmitted, setTourSubmitted] = useState(false);
   const router = useRouter();
   const { addToComparison, isInComparison, removeFromComparison } = useComparison();
-
-  // Formspree configuration
-  const formspreeId = "xnnpaply";
-  const formspreeEndpoint = `https://formspree.io/f/${formspreeId}`;
 
   // Early return with an error indicator if community is null/undefined
   if (!community) {
@@ -53,27 +50,36 @@ export default function LocationCard({ community }: LocationCardProps) {
     }
   };
 
+  // Map timeframe to moveInTimeline
+  const timeframeToTimeline = (timeframe: string): string => {
+    switch (timeframe) {
+      case 'asap': return 'Immediate';
+      case '1-3months': return '1-3 months';
+      case 'future': return 'Just researching';
+      default: return '';
+    }
+  };
+
   const handlePricingSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsPricingSubmitting(true);
 
     const formData = new FormData(e.currentTarget);
-    // Add additional fields for tracking
-    formData.append('form_type', 'pricing_request');
-    formData.append('community_name', community.name || 'Unknown Community');
-    formData.append('community_location', community.location || 'Unknown location');
-    formData.append('source_page', typeof window !== 'undefined' ? window.location.href : '');
 
     try {
-      const response = await fetch(formspreeEndpoint, {
-        method: 'POST',
-        body: formData,
-        headers: {
-          'Accept': 'application/json'
-        }
+      const result = await submitLead({
+        fullName: formData.get('name')?.toString() || '',
+        email: formData.get('email')?.toString() || '',
+        phone: formData.get('phone')?.toString() || '',
+        moveInTimeline: timeframeToTimeline(formData.get('timeframe')?.toString() || '') as any,
+        communityName: community.name || 'Unknown Community',
+        cityOrZip: community.location?.split(',')[0]?.trim() || '',
+        notes: `Pricing request for ${community.name}`,
+        pageType: 'location_page',
+        sourceSlug: community.id,
       });
 
-      if (response.ok) {
+      if (result.success) {
         setPricingSubmitted(true);
       }
     } catch (error) {
@@ -88,22 +94,20 @@ export default function LocationCard({ community }: LocationCardProps) {
     setIsTourSubmitting(true);
 
     const formData = new FormData(e.currentTarget);
-    // Add additional fields for tracking
-    formData.append('form_type', 'tour_request');
-    formData.append('community_name', community.name || 'Unknown Community');
-    formData.append('community_location', community.location || 'Unknown location');
-    formData.append('source_page', typeof window !== 'undefined' ? window.location.href : '');
 
     try {
-      const response = await fetch(formspreeEndpoint, {
-        method: 'POST',
-        body: formData,
-        headers: {
-          'Accept': 'application/json'
-        }
+      const result = await submitLead({
+        fullName: formData.get('name')?.toString() || '',
+        email: formData.get('email')?.toString() || '',
+        phone: formData.get('phone')?.toString() || '',
+        communityName: community.name || 'Unknown Community',
+        cityOrZip: community.location?.split(',')[0]?.trim() || '',
+        notes: `Tour request for ${community.name}`,
+        pageType: 'location_page',
+        sourceSlug: community.id,
       });
 
-      if (response.ok) {
+      if (result.success) {
         setTourSubmitted(true);
       }
     } catch (error) {

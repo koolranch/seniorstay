@@ -14,6 +14,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from '@/components/ui/carousel';
 import { Community } from '@/data/facilities';
 import MapComponent from '@/components/map/GoogleMap';
+import { submitLead } from '@/app/actions/leads';
 
 interface CommunityClientProps {
   community: Community;
@@ -24,10 +25,6 @@ export default function CommunityClient({ community }: CommunityClientProps) {
   const [isTourSubmitting, setIsTourSubmitting] = useState(false);
   const [pricingSubmitted, setPricingSubmitted] = useState(false);
   const [tourSubmitted, setTourSubmitted] = useState(false);
-
-  // Formspree configuration
-  const formspreeId = "xnnpaply";
-  const formspreeEndpoint = `https://formspree.io/f/${formspreeId}`;
 
   // Destructure community data
   const { name, location, careTypes, images, description, amenities, staff, testimonials } = community;
@@ -69,27 +66,36 @@ export default function CommunityClient({ community }: CommunityClientProps) {
     }
   ];
 
+  // Map timeframe to moveInTimeline
+  const timeframeToTimeline = (timeframe: string): string => {
+    switch (timeframe) {
+      case 'asap': return 'Immediate';
+      case '1-3months': return '1-3 months';
+      case 'future': return 'Just researching';
+      default: return '';
+    }
+  };
+
   const handlePricingSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsPricingSubmitting(true);
 
     const formData = new FormData(e.currentTarget);
-    // Add additional fields for tracking
-    formData.append('form_type', 'pricing_request');
-    formData.append('community_name', name);
-    formData.append('community_location', location);
-    formData.append('source_page', typeof window !== 'undefined' ? window.location.href : '');
 
     try {
-      const response = await fetch(formspreeEndpoint, {
-        method: 'POST',
-        body: formData,
-        headers: {
-          'Accept': 'application/json'
-        }
+      const result = await submitLead({
+        fullName: formData.get('name')?.toString() || '',
+        email: formData.get('email')?.toString() || '',
+        phone: formData.get('phone')?.toString() || '',
+        moveInTimeline: timeframeToTimeline(formData.get('timeframe')?.toString() || '') as any,
+        communityName: name,
+        cityOrZip: location?.split(',')[0]?.trim() || '',
+        notes: `Pricing request for ${name}`,
+        pageType: 'community_page',
+        sourceSlug: community.id,
       });
 
-      if (response.ok) {
+      if (result.success) {
         setPricingSubmitted(true);
       }
     } catch (error) {
@@ -104,22 +110,20 @@ export default function CommunityClient({ community }: CommunityClientProps) {
     setIsTourSubmitting(true);
 
     const formData = new FormData(e.currentTarget);
-    // Add additional fields for tracking
-    formData.append('form_type', 'tour_request');
-    formData.append('community_name', name);
-    formData.append('community_location', location);
-    formData.append('source_page', typeof window !== 'undefined' ? window.location.href : '');
 
     try {
-      const response = await fetch(formspreeEndpoint, {
-        method: 'POST',
-        body: formData,
-        headers: {
-          'Accept': 'application/json'
-        }
+      const result = await submitLead({
+        fullName: formData.get('name')?.toString() || '',
+        email: formData.get('email')?.toString() || '',
+        phone: formData.get('phone')?.toString() || '',
+        communityName: name,
+        cityOrZip: location?.split(',')[0]?.trim() || '',
+        notes: `Tour request for ${name}. Preferred time: ${formData.get('timePreference') || 'not specified'}`,
+        pageType: 'community_page',
+        sourceSlug: community.id,
       });
 
-      if (response.ok) {
+      if (result.success) {
         setTourSubmitted(true);
       }
     } catch (error) {

@@ -5,6 +5,7 @@ import Header from '@/components/header/Header';
 import Footer from '@/components/footer/Footer';
 import StickyTourButton from '@/components/tour/StickyTourButton';
 import { fetchRecentBlogPosts } from '@/lib/blog-posts';
+import SimpleContactForm from '@/components/forms/SimpleContactForm';
 
 export const revalidate = 300;
 
@@ -233,46 +234,7 @@ export default async function ResourcesPage() {
               Our Cleveland advisors can answer your specific questions, schedule tours, and help you find the perfect community—completely free.
             </p>
             <div className="bg-gray-50 p-8 rounded-xl border border-gray-200">
-              <form action="https://formspree.io/f/xnnpaply" method="POST" className="space-y-4">
-                <input type="hidden" name="form_type" value="resources_page_contact" />
-                <input type="hidden" name="source_page" value="resources" />
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <input
-                    type="text"
-                    name="name"
-                    required
-                    placeholder="Your Name *"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg"
-                  />
-                  <input
-                    type="tel"
-                    name="phone"
-                    required
-                    placeholder="Your Phone *"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg"
-                  />
-                </div>
-                <input
-                  type="email"
-                  name="email"
-                  required
-                  placeholder="Your Email *"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg"
-                />
-                <textarea
-                  name="message"
-                  placeholder="How can we help you? (Optional)"
-                  rows={3}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg"
-                />
-                <button
-                  type="submit"
-                  className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
-                >
-                  Get Free Consultation
-                </button>
-                <p className="text-xs text-gray-500">We'll contact you within 24 hours.</p>
-              </form>
+              <SimpleContactForm sourcePage="resources" buttonText="Get Free Consultation" />
             </div>
           </div>
         </div>

@@ -14,6 +14,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from '@/components/ui/carousel';
 import { Community } from '@/data/facilities';
 import MapComponent from '@/components/map/GoogleMap';
+import { submitLead } from '@/app/actions/leads';
 
 interface CommunityClientProps {
   community: Community;
@@ -73,15 +74,18 @@ export default function CommunityClient({ community }: CommunityClientProps) {
     const formData = new FormData(form);
 
     try {
-      const response = await fetch(form.action, {
-        method: 'POST',
-        body: formData,
-        headers: {
-          'Accept': 'application/json'
-        }
+      const result = await submitLead({
+        fullName: formData.get('name')?.toString() || '',
+        email: formData.get('contact')?.toString().includes('@') ? formData.get('contact')?.toString() : '',
+        phone: !formData.get('contact')?.toString().includes('@') ? formData.get('contact')?.toString() : '',
+        communityName: name,
+        cityOrZip: location?.split(',')[0]?.trim() || '',
+        notes: `Pricing request for ${name}`,
+        pageType: 'community_page',
+        sourceSlug: community.id,
       });
 
-      if (response.ok) {
+      if (result.success) {
         setPricingSubmitted(true);
       } else {
         console.error('Form submission failed');
@@ -101,15 +105,18 @@ export default function CommunityClient({ community }: CommunityClientProps) {
     const formData = new FormData(form);
 
     try {
-      const response = await fetch(form.action, {
-        method: 'POST',
-        body: formData,
-        headers: {
-          'Accept': 'application/json'
-        }
+      const result = await submitLead({
+        fullName: formData.get('name')?.toString() || '',
+        email: formData.get('contact')?.toString().includes('@') ? formData.get('contact')?.toString() : '',
+        phone: !formData.get('contact')?.toString().includes('@') ? formData.get('contact')?.toString() : '',
+        communityName: name,
+        cityOrZip: location?.split(',')[0]?.trim() || '',
+        notes: `Tour request for ${name}. Preferred date: ${formData.get('date') || 'not specified'}, Time: ${formData.get('timePreference') || 'not specified'}`,
+        pageType: 'community_page',
+        sourceSlug: community.id,
       });
 
-      if (response.ok) {
+      if (result.success) {
         setTourSubmitted(true);
       } else {
         console.error('Form submission failed');
@@ -336,7 +343,7 @@ export default function CommunityClient({ community }: CommunityClientProps) {
                       <p className="text-gray-600">Our team will contact you shortly.</p>
                     </div>
                   ) : (
-                    <form onSubmit={handlePricingSubmit} className="space-y-4" action="https://formspree.io/f/xnnpaply" method="POST">
+                    <form onSubmit={handlePricingSubmit} className="space-y-4">
                       <input type="hidden" name="form_type" value="pricing_request" />
                       <input type="hidden" name="facility_name" value={name} />
                       <div className="space-y-2">
@@ -378,7 +385,7 @@ export default function CommunityClient({ community }: CommunityClientProps) {
                       <p className="text-gray-600">Our team will contact you to confirm your tour details.</p>
                     </div>
                   ) : (
-                    <form onSubmit={handleTourSubmit} className="space-y-4" action="https://formspree.io/f/xnnpaply" method="POST">
+                    <form onSubmit={handleTourSubmit} className="space-y-4">
                       <input type="hidden" name="form_type" value="tour_request" />
                       <input type="hidden" name="facility_name" value={name} />
                       <div className="space-y-2">
