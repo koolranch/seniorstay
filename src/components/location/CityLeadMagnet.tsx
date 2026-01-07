@@ -38,7 +38,7 @@ const CityLeadMagnet: React.FC<CityLeadMagnetProps> = ({
         notes: isHospitalDischarge 
           ? `Requested ${currentYear} ${cityName} Cost Guide + Hospital Discharge Checklist`
           : `Requested ${currentYear} ${cityName} Senior Care Cost Guide`,
-        pageType: 'city_lead_magnet',
+        pageType: 'location_page',
         sourceSlug: `location-${citySlug}`,
       });
 
