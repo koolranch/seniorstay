@@ -65,7 +65,7 @@ interface UtmParams {
 
 interface SourceInfo {
   sourceSlug?: string;
-  pageType?: string;
+  pageType?: 'location_page' | 'community_page' | 'contact' | 'assessment' | 'homepage' | 'pricing_guide' | 'blog' | 'other';
 }
 
 /**
