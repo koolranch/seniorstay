@@ -266,17 +266,53 @@ function getSupabaseAdmin() {
 }
 
 // ============================================================================
-// HIGH-PRIORITY ALERT SYSTEM
+// INTERNAL REFERRAL NOTIFICATION SYSTEM
+// All leads are sent to internal email for review before forwarding to communities
 // ============================================================================
 
 /**
- * Send high-priority alert for urgent leads (score > 80)
- * Uses webhook or email service to notify team immediately
- * 
- * Includes special "[🔥 HIGH-VALUE CLEVELAND LEAD]" prefix for calculator leads
- * with homeValue > $350k OR valueGap > $500/month
+ * Hospital proximity mapping for Cleveland area
  */
-async function sendHighPriorityAlert(lead: {
+const HOSPITAL_PROXIMITY: Record<string, string> = {
+  beachwood: 'UH Ahuja Medical Center (1.8 mi)',
+  'shaker heights': 'UH Ahuja Medical Center (2.4 mi)',
+  'shaker-heights': 'UH Ahuja Medical Center (2.4 mi)',
+  westlake: 'St. John Medical Center (1.2 mi)',
+  'rocky river': 'Fairview Hospital (2.1 mi)',
+  'rocky-river': 'Fairview Hospital (2.1 mi)',
+  lakewood: 'Lakewood Hospital/Cleveland Clinic (0.8 mi)',
+  parma: 'UH Parma Medical Center (1.5 mi)',
+  strongsville: 'Southwest General Hospital (3.2 mi)',
+  mentor: 'Lake Health Mentor (2.0 mi)',
+  solon: 'UH Ahuja Medical Center (4.1 mi)',
+  cleveland: 'Cleveland Clinic Main Campus (varies)',
+};
+
+/**
+ * Get nearest hospital for a city
+ */
+function getNearestHospital(city?: string): string {
+  const normalizedCity = city?.toLowerCase().replace(/-/g, ' ') || 'cleveland';
+  return HOSPITAL_PROXIMITY[normalizedCity] || 'Cleveland Clinic Main Campus';
+}
+
+/**
+ * Format city name for display
+ */
+function formatCityName(slug?: string): string {
+  if (!slug) return 'Cleveland';
+  return slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+}
+
+/**
+ * Send internal referral draft to advisor email
+ * 
+ * HIGH-VALUE leads: 🚨 PRIORITY: [City Name] Referral - $[Comm. Fee] Potential
+ * Standard leads: Lead Inquiry: [City Name] - [Lead Name]
+ * 
+ * Body formatted as "Ready-to-Forward" referral draft
+ */
+async function sendInternalReferralDraft(lead: {
   id: string;
   fullName: string;
   phone?: string;
@@ -286,28 +322,93 @@ async function sendHighPriorityAlert(lead: {
   notes?: string;
   sourceSlug?: string;
   urgencyScore: number;
-  isHighValueCalculator?: boolean;
+  isHighValue: boolean;
   calculatorData?: CalculatorMetaData | null;
+  estimatedCommission: number;
+  communityName?: string;
 }): Promise<boolean> {
   try {
-    // Determine subject prefix based on lead type
-    const isHighValue = lead.isHighValueCalculator;
-    const subjectPrefix = isHighValue 
-      ? '🔥 HIGH-VALUE CLEVELAND LEAD' 
-      : '🚨 HIGH PRIORITY LEAD';
+    const cityName = formatCityName(lead.sourceSlug);
+    const nearestHospital = getNearestHospital(lead.sourceSlug);
     
-    // Build calculator summary if available
-    let calculatorSummary = '';
-    if (lead.calculatorData) {
-      calculatorSummary = `\n--- CALCULATOR DATA ---\n` +
-        `Home Value: $${lead.calculatorData.homeValue?.toLocaleString() || 'N/A'}\n` +
-        `Value Gap: ${lead.calculatorData.valueGap && lead.calculatorData.valueGap >= 0 ? '+' : ''}$${lead.calculatorData.valueGap?.toLocaleString() || 'N/A'}/mo\n` +
-        `Location: ${lead.calculatorData.selectedLocation || 'N/A'}\n` +
-        `Annual Savings: $${lead.calculatorData.annualSavings?.toLocaleString() || 'N/A'}`;
-    }
+    // Dynamic subject line based on high-value status
+    const subject = lead.isHighValue
+      ? `🚨 PRIORITY: ${cityName} Referral - $${lead.estimatedCommission.toLocaleString()} Potential`
+      : `Lead Inquiry: ${cityName} - ${lead.fullName}`;
     
-    // Option 1: Supabase Edge Function webhook
-    const webhookUrl = process.env.HIGH_PRIORITY_LEAD_WEBHOOK;
+    // Financial profile from calculator
+    const homeValue = lead.calculatorData?.homeValue 
+      ? `$${lead.calculatorData.homeValue.toLocaleString()}` 
+      : 'Not provided';
+    const careBudget = lead.calculatorData?.seniorLivingCost
+      ? `$${lead.calculatorData.seniorLivingCost.toLocaleString()}/mo`
+      : lead.careType === 'Memory Care' ? '$6,800+/mo (est.)' : '$5,520+/mo (est.)';
+    const valueGap = lead.calculatorData?.valueGap
+      ? `${lead.calculatorData.valueGap > 0 ? '+' : ''}$${lead.calculatorData.valueGap.toLocaleString()}/mo`
+      : 'Not calculated';
+    
+    // Build the "Ready-to-Forward" referral draft
+    const referralDraftBody = `
+═══════════════════════════════════════════════════════════════════
+${lead.isHighValue ? '🚨 HIGH-VALUE REFERRAL DRAFT - READY TO FORWARD' : '📋 REFERRAL DRAFT - READY TO FORWARD'}
+═══════════════════════════════════════════════════════════════════
+
+PROSPECT INFORMATION
+────────────────────
+Lead Name: ${lead.fullName}
+Care Type Needed: ${lead.careType || 'Assisted Living'}
+Move-in Timeline: ${lead.moveInTimeline || 'Not specified'}
+Phone: ${lead.phone || 'Not provided'}
+Email: ${lead.email || 'Not provided'}
+
+FINANCIAL PROFILE ${lead.isHighValue ? '⭐ HIGH-VALUE' : ''}
+────────────────────
+Home Value: ${homeValue}
+Care Budget: ${careBudget}
+Value Gap vs. Home: ${valueGap}
+${lead.calculatorData?.annualSavings ? `Annual Savings Potential: $${lead.calculatorData.annualSavings.toLocaleString()}` : ''}
+
+CLINICAL PROFILE
+────────────────────
+Source Location: ${cityName}, OH
+Nearest Major Hospital: ${nearestHospital}
+Urgency Score: ${lead.urgencyScore}/100 (${lead.urgencyScore > 80 ? 'HIGH' : lead.urgencyScore > 30 ? 'NORMAL' : 'LOW'})
+
+${lead.notes ? `ADDITIONAL NOTES\n────────────────────\n${lead.notes.split('---META_DATA_JSON---')[0]?.trim() || 'None'}\n` : ''}
+═══════════════════════════════════════════════════════════════════
+FORWARD THIS TO COMMUNITY - COPY BELOW LINE
+═══════════════════════════════════════════════════════════════════
+
+Hello,
+
+I have a qualified prospect seeking ${lead.careType || 'Assisted Living'} in the ${cityName} area with a ${lead.moveInTimeline?.toLowerCase() || 'flexible'} timeline.
+
+Prospect Details:
+• Name: ${lead.fullName}
+• Care Type: ${lead.careType || 'Assisted Living'}
+• Timeline: ${lead.moveInTimeline || 'Flexible'}
+• Budget: ${careBudget}
+
+Please confirm fee protection for Guide For Seniors upon move-in.
+
+I will connect you with the prospect upon acknowledgment.
+
+Best regards,
+Guide For Seniors
+Cleveland Senior Living Advisor
+(216) 677-4630
+
+═══════════════════════════════════════════════════════════════════
+INTERNAL TRACKING
+═══════════════════════════════════════════════════════════════════
+Lead ID: ${lead.id}
+Estimated Commission: $${lead.estimatedCommission.toLocaleString()}
+Dashboard: https://guideforseniors.com/dashboard/pipeline
+Profile: https://guideforseniors.com/api/lead-profile/${lead.id}
+`.trim();
+
+    // Send to internal email via webhook or Formspree
+    const webhookUrl = process.env.INTERNAL_REFERRAL_WEBHOOK || process.env.HIGH_PRIORITY_LEAD_WEBHOOK;
     
     if (webhookUrl) {
       const response = await fetch(webhookUrl, {
@@ -317,7 +418,9 @@ async function sendHighPriorityAlert(lead: {
           'Authorization': `Bearer ${process.env.WEBHOOK_SECRET || ''}`,
         },
         body: JSON.stringify({
-          type: isHighValue ? 'HIGH_VALUE_CALCULATOR_LEAD' : 'HIGH_PRIORITY_LEAD',
+          type: lead.isHighValue ? 'HIGH_VALUE_REFERRAL_DRAFT' : 'STANDARD_REFERRAL_DRAFT',
+          subject,
+          body: referralDraftBody,
           lead: {
             id: lead.id,
             name: lead.fullName,
@@ -325,29 +428,23 @@ async function sendHighPriorityAlert(lead: {
             email: lead.email,
             careType: lead.careType,
             timeline: lead.moveInTimeline,
-            notes: lead.notes?.split('---META_DATA_JSON---')[0]?.substring(0, 500), // Clean notes
             source: lead.sourceSlug,
             score: lead.urgencyScore,
-            isHighValue,
-            calculatorData: lead.calculatorData,
+            isHighValue: lead.isHighValue,
+            estimatedCommission: lead.estimatedCommission,
+            homeValue: lead.calculatorData?.homeValue,
+            careBudget: lead.calculatorData?.seniorLivingCost,
           },
-          message: `[${subjectPrefix}] (Score: ${lead.urgencyScore})\n` +
-            `Name: ${lead.fullName}\n` +
-            `Phone: ${lead.phone || 'Not provided'}\n` +
-            `Care: ${lead.careType || 'Not specified'}\n` +
-            `Timeline: ${lead.moveInTimeline || 'Not specified'}\n` +
-            `Source: ${lead.sourceSlug || 'Direct'}` +
-            calculatorSummary,
           timestamp: new Date().toISOString(),
         }),
-        signal: AbortSignal.timeout(5000), // 5 second timeout
+        signal: AbortSignal.timeout(5000),
       });
       
       return response.ok;
     }
 
-    // Option 2: Formspree fallback for email notification
-    const formspreeEndpoint = process.env.FORMSPREE_HIGH_PRIORITY_ENDPOINT;
+    // Fallback to Formspree
+    const formspreeEndpoint = process.env.FORMSPREE_REFERRAL_ENDPOINT || process.env.FORMSPREE_HIGH_PRIORITY_ENDPOINT;
     if (formspreeEndpoint) {
       const response = await fetch(formspreeEndpoint, {
         method: 'POST',
@@ -356,20 +453,22 @@ async function sendHighPriorityAlert(lead: {
           'Accept': 'application/json',
         },
         body: JSON.stringify({
-          _subject: `[${subjectPrefix}] ${lead.fullName} (Score: ${lead.urgencyScore})`,
-          name: lead.fullName,
-          phone: lead.phone || 'Not provided',
-          email: lead.email || 'Not provided',
-          care_type: lead.careType || 'Not specified',
+          _subject: subject,
+          message: referralDraftBody,
+          lead_name: lead.fullName,
+          lead_phone: lead.phone || 'Not provided',
+          lead_email: lead.email || 'Not provided',
+          care_type: lead.careType || 'Assisted Living',
           timeline: lead.moveInTimeline || 'Not specified',
-          notes: lead.notes?.split('---META_DATA_JSON---')[0] || 'None',
-          source: lead.sourceSlug || 'Direct',
+          city: cityName,
+          home_value: homeValue,
+          care_budget: careBudget,
+          nearest_hospital: nearestHospital,
+          estimated_commission: `$${lead.estimatedCommission.toLocaleString()}`,
           urgency_score: lead.urgencyScore,
+          is_high_value: lead.isHighValue,
           lead_id: lead.id,
-          is_high_value: isHighValue,
-          calculator_home_value: lead.calculatorData?.homeValue,
-          calculator_value_gap: lead.calculatorData?.valueGap,
-          calculator_location: lead.calculatorData?.selectedLocation,
+          profile_url: `https://guideforseniors.com/api/lead-profile/${lead.id}`,
         }),
         signal: AbortSignal.timeout(5000),
       });
@@ -377,15 +476,17 @@ async function sendHighPriorityAlert(lead: {
       return response.ok;
     }
 
-    // No webhook configured - log warning
-    console.warn('[Lead Alert] No HIGH_PRIORITY_LEAD_WEBHOOK or FORMSPREE_HIGH_PRIORITY_ENDPOINT configured');
+    console.warn('[Referral Draft] No webhook configured for internal referral notifications');
     return false;
     
   } catch (error) {
-    console.error('[Lead Alert] Failed to send high-priority alert:', error);
+    console.error('[Referral Draft] Failed to send internal referral draft:', error);
     return false;
   }
 }
+
+// Legacy alias for backwards compatibility
+const sendHighPriorityAlert = sendInternalReferralDraft;
 
 // ============================================================================
 // MAIN SERVER ACTION
@@ -582,64 +683,38 @@ export async function submitLead(formData: LeadInput): Promise<LeadSubmitResult>
     }
     
     // -------------------------------------------------------------------------
-    // 6. TRIGGER HIGH-PRIORITY ALERT IF SCORE > 80 OR HIGH-VALUE CALCULATOR
+    // 6. INTERNAL REFERRAL: Send draft to internal email for review
+    // All notifications now go to YOUR internal email for review before forwarding
+    // HIGH-VALUE leads get 🚨 PRIORITY subject, standard leads get normal subject
     // -------------------------------------------------------------------------
-    if (finalUrgencyScore > 80 || isHighValueCalculator) {
-      const alertSent = await sendHighPriorityAlert({
-        id: leadId,
-        fullName: data.fullName,
-        phone: data.phone,
-        email: data.email,
-        careType: data.careType,
-        moveInTimeline: data.moveInTimeline,
-        notes: cleanNotes || undefined,
-        sourceSlug,
-        urgencyScore: finalUrgencyScore,
-        isHighValueCalculator,
-        calculatorData,
-      });
-      
-      // Update alert status in database
-      if (alertSent) {
-        await supabase
-          .from('Lead')
-          .update({ alertSent: true })
-          .eq('id', leadId);
-      }
-      
-      const alertType = isHighValueCalculator ? '🔥 HIGH-VALUE' : '🚨 HIGH PRIORITY';
-      console.log(`[Lead] ${alertType} submitted: ${leadId}, score: ${finalUrgencyScore}, alert: ${alertSent}`);
-    }
+    const internalDraftSent = await sendInternalReferralDraft({
+      id: leadId,
+      fullName: data.fullName,
+      phone: data.phone,
+      email: data.email,
+      careType: data.careType,
+      moveInTimeline: data.moveInTimeline,
+      notes: cleanNotes || undefined,
+      sourceSlug,
+      urgencyScore: finalUrgencyScore,
+      isHighValue: isHighValueCalculator,
+      calculatorData,
+      estimatedCommission,
+      communityName: data.communityName,
+    });
     
-    // -------------------------------------------------------------------------
-    // 7. REFERRAL SHIELD: Send formal referral for HIGH-VALUE calculator leads
-    // -------------------------------------------------------------------------
-    if (isHighValueCalculator && calculatorData) {
-      const referralSent = await sendReferralNotification({
-        id: leadId,
-        fullName: data.fullName,
-        email: data.email,
-        phone: data.phone,
-        careType: data.careType,
-        moveInTimeline: data.moveInTimeline,
-        communityName: data.communityName,
-        sourceSlug,
-        calculatorData,
-        estimatedCommission,
-      });
-      
-      // Update referral status in database
-      if (referralSent) {
-        await supabase
-          .from('Lead')
-          .update({ 
-            referral_status: 'referral_sent',
-            referral_sent_at: new Date().toISOString(),
-          })
-          .eq('id', leadId);
-          
-        console.log(`[Referral Shield] Formal referral sent for lead: ${leadId}, commission: $${estimatedCommission}`);
-      }
+    // Update referral status to 'internal_review' in database
+    if (internalDraftSent) {
+      await supabase
+        .from('Lead')
+        .update({ 
+          referral_status: 'internal_review',
+          referral_sent_at: new Date().toISOString(),
+        })
+        .eq('id', leadId);
+        
+      const priorityLabel = isHighValueCalculator ? '🚨 PRIORITY' : '📋 Standard';
+      console.log(`[Internal Referral] ${priorityLabel} draft sent for lead: ${leadId}, commission: $${estimatedCommission}`);
     }
     
     // -------------------------------------------------------------------------
@@ -739,14 +814,15 @@ function estimateCommission(city?: string, careType?: string): number {
 }
 
 // ============================================================================
-// REFERRAL SHIELD NOTIFICATION SYSTEM
+// REFERRAL NOTIFICATION (Uses Internal Draft System)
+// All referrals now go to internal email for review before forwarding
 // ============================================================================
 
 /**
- * Send formal referral notification to community sales director
+ * Send referral notification (redirects to internal draft system)
  * Triggered for HIGH-VALUE leads (homeValue > $350k OR valueGap > $500/mo)
  * 
- * Subject: [REFERRAL] New Qualified Prospect for [Community Name] - Guide For Seniors
+ * All notifications now go to YOUR internal email, not directly to communities
  */
 async function sendReferralNotification(lead: {
   id: string;
@@ -761,120 +837,22 @@ async function sendReferralNotification(lead: {
   calculatorData?: CalculatorMetaData | null;
   estimatedCommission: number;
 }): Promise<boolean> {
-  try {
-    const webhookUrl = process.env.REFERRAL_NOTIFICATION_WEBHOOK || process.env.HIGH_PRIORITY_LEAD_WEBHOOK;
-    const formspreeEndpoint = process.env.FORMSPREE_REFERRAL_ENDPOINT || process.env.FORMSPREE_HIGH_PRIORITY_ENDPOINT;
-    
-    const communityName = lead.communityName || `Senior Living in ${lead.sourceSlug?.replace(/-/g, ' ') || 'Cleveland'}`;
-    const homeValue = lead.calculatorData?.homeValue?.toLocaleString() || 'Not specified';
-    const monthlyBudget = lead.calculatorData?.seniorLivingCost?.toLocaleString() || 'Not specified';
-    const valueGap = lead.calculatorData?.valueGap;
-    const valueGapText = valueGap ? `$${Math.abs(valueGap).toLocaleString()}/mo ${valueGap > 0 ? 'savings' : 'difference'}` : 'Not calculated';
-    
-    const emailSubject = `[REFERRAL] New Qualified Prospect for ${communityName} - Guide For Seniors`;
-    
-    const emailBody = `
-FORMAL REFERRAL NOTIFICATION
-============================
-
-This is a formal referral notification from Guide For Seniors.
-
-PROSPECT INFORMATION:
-- Name: ${lead.fullName}
-- Phone: ${lead.phone || 'Not provided'}
-- Email: ${lead.email || 'Not provided'}
-- Care Type Needed: ${lead.careType || 'Assisted Living'}
-- Move-in Timeline: ${lead.moveInTimeline || 'Not specified'}
-
-FINANCIAL READINESS:
-- Home Value: $${homeValue}
-- Calculated Monthly Budget: $${monthlyBudget}
-- Value Gap vs. Home: ${valueGapText}
-
-REFERRAL TERMS:
-- Estimated Commission: $${lead.estimatedCommission.toLocaleString()}
-- Terms: 100% of first month's rent upon admission
-- Lead ID: ${lead.id}
-
-Please acknowledge receipt of this referral to secure our placement fee agreement.
-
----
-Guide For Seniors
-Cleveland's Trusted Senior Living Advisor
-(216) 677-4630 | guideforseniors.com
-    `.trim();
-    
-    // Try webhook first
-    if (webhookUrl) {
-      const response = await fetch(webhookUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${process.env.WEBHOOK_SECRET || ''}`,
-        },
-        body: JSON.stringify({
-          type: 'REFERRAL_NOTIFICATION',
-          subject: emailSubject,
-          body: emailBody,
-          lead: {
-            id: lead.id,
-            name: lead.fullName,
-            phone: lead.phone,
-            email: lead.email,
-            careType: lead.careType,
-            timeline: lead.moveInTimeline,
-            community: communityName,
-            homeValue: lead.calculatorData?.homeValue,
-            monthlyBudget: lead.calculatorData?.seniorLivingCost,
-            valueGap: lead.calculatorData?.valueGap,
-            estimatedCommission: lead.estimatedCommission,
-          },
-          communityEmail: lead.communityEmail,
-          timestamp: new Date().toISOString(),
-        }),
-        signal: AbortSignal.timeout(5000),
-      });
-      
-      return response.ok;
-    }
-    
-    // Fallback to Formspree
-    if (formspreeEndpoint) {
-      const response = await fetch(formspreeEndpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
-        body: JSON.stringify({
-          _subject: emailSubject,
-          _replyto: lead.email || 'noreply@guideforseniors.com',
-          prospect_name: lead.fullName,
-          prospect_phone: lead.phone || 'Not provided',
-          prospect_email: lead.email || 'Not provided',
-          care_type: lead.careType || 'Assisted Living',
-          timeline: lead.moveInTimeline || 'Not specified',
-          community: communityName,
-          home_value: `$${homeValue}`,
-          monthly_budget: `$${monthlyBudget}`,
-          value_gap: valueGapText,
-          estimated_commission: `$${lead.estimatedCommission.toLocaleString()}`,
-          lead_id: lead.id,
-          message: emailBody,
-        }),
-        signal: AbortSignal.timeout(5000),
-      });
-      
-      return response.ok;
-    }
-    
-    console.warn('[Referral] No webhook configured for referral notifications');
-    return false;
-    
-  } catch (error) {
-    console.error('[Referral] Failed to send referral notification:', error);
-    return false;
-  }
+  // Redirect all referrals to internal draft system
+  return sendInternalReferralDraft({
+    id: lead.id,
+    fullName: lead.fullName,
+    phone: lead.phone,
+    email: lead.email,
+    careType: lead.careType,
+    moveInTimeline: lead.moveInTimeline,
+    notes: undefined, // Clean for referral
+    sourceSlug: lead.sourceSlug,
+    urgencyScore: 85, // High-value leads default to high urgency
+    isHighValue: true, // Referral notification only for high-value
+    calculatorData: lead.calculatorData,
+    estimatedCommission: lead.estimatedCommission,
+    communityName: lead.communityName,
+  });
 }
 
 // ============================================================================
@@ -918,7 +896,7 @@ export async function getRecentHighPriorityLeads() {
 // PIPELINE MANAGEMENT (Commission Dashboard)
 // ============================================================================
 
-export type ReferralStatus = 'new' | 'referral_sent' | 'tour_scheduled' | 'admitted' | 'paid';
+export type ReferralStatus = 'new' | 'internal_review' | 'referral_sent' | 'tour_scheduled' | 'admitted' | 'paid';
 
 /**
  * Get all leads grouped by referral status for pipeline dashboard
@@ -936,6 +914,7 @@ export async function getPipelineLeads() {
   // Group by referral status
   const pipeline = {
     new: [] as typeof data,
+    internal_review: [] as typeof data,
     referral_sent: [] as typeof data,
     tour_scheduled: [] as typeof data,
     admitted: [] as typeof data,

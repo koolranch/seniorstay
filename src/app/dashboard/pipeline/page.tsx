@@ -80,7 +80,14 @@ const STATUS_CONFIG: Record<ReferralStatus, {
     color: 'text-blue-600',
     bgColor: 'bg-blue-50 border-blue-200',
     icon: <Users className="h-5 w-5" />,
-    description: 'Ready for referral',
+    description: 'Not yet reviewed',
+  },
+  internal_review: {
+    label: 'Internal Review',
+    color: 'text-indigo-600',
+    bgColor: 'bg-indigo-50 border-indigo-200',
+    icon: <FileText className="h-5 w-5" />,
+    description: 'Draft ready to forward',
   },
   referral_sent: {
     label: 'Referral Sent',
@@ -261,10 +268,20 @@ function LeadCard({ lead, onStatusChange, onSendReferral, onMarkAdmitted }: Lead
                 {lead.referral_status === 'new' && (
                   <button
                     onClick={(e) => { e.stopPropagation(); onSendReferral(lead.id); }}
+                    className="px-3 py-1.5 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 flex items-center gap-1"
+                  >
+                    <FileText className="h-4 w-4" />
+                    Create Draft
+                  </button>
+                )}
+                
+                {lead.referral_status === 'internal_review' && (
+                  <button
+                    onClick={(e) => { e.stopPropagation(); onStatusChange(lead.id, 'referral_sent'); }}
                     className="px-3 py-1.5 bg-purple-600 text-white text-sm font-medium rounded-lg hover:bg-purple-700 flex items-center gap-1"
                   >
                     <Send className="h-4 w-4" />
-                    Send Referral
+                    Mark Forwarded
                   </button>
                 )}
                 
@@ -600,8 +617,8 @@ export default function PipelineDashboard() {
         </div>
         
         {/* Pipeline Columns */}
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-          {(['new', 'referral_sent', 'tour_scheduled', 'admitted', 'paid'] as ReferralStatus[]).map((status) => {
+        <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
+          {(['new', 'internal_review', 'referral_sent', 'tour_scheduled', 'admitted', 'paid'] as ReferralStatus[]).map((status) => {
             const config = STATUS_CONFIG[status];
             const leads = data?.pipeline[status] || [];
             const statusValue = leads.reduce((sum, l) => sum + (parseFloat(String(l.estimated_commission)) || 0), 0);
