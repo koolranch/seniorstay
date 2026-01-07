@@ -181,7 +181,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: metrics.communityCount > 0 
         ? `Compare ${metrics.communityCount} Senior Living Communities in ${cityName} Near ${nearestHospital}`
         : citySEO 
-          ? `${citySEO.titleSuffix} in ${cityName}, Ohio | Guide for Seniors`
+        ? `${citySEO.titleSuffix} in ${cityName}, Ohio | Guide for Seniors`
           : `Senior Living Options in ${cityName}, Ohio Near ${nearestHospital}`,
       description,
       url: `https://guideforseniors.com/location/${city}`,

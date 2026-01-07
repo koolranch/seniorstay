@@ -95,17 +95,23 @@ function getCityTier(city: string): number {
 
 /**
  * Fetch featured communities for homepage
- * - Filters: description NOT NULL, image NOT placeholder
+ * QUALITY-FIRST FILTERING:
+ * - Supabase filters: description NOT NULL, image NOT like '%placeholder%'
  * - Prioritizes: Tier 1 > Tier 2 > Other cities
  * - Prioritizes: Memory Care > Assisted Living
  */
 export async function fetchFeaturedCommunities(limit: number = 8): Promise<Community[]> {
   try {
-    // Fetch all Cleveland-area communities
+    // QUALITY-FIRST: Use Supabase filters directly for performance
+    // .is('description', 'not.null') - Must have description
+    // .not('image_url', 'ilike', '%placeholder%') - No placeholder images
     const { data, error } = await supabase
       .from('Community')
       .select('*')
       .not('description', 'is', null)
+      .not('image_url', 'ilike', '%placeholder%')
+      .not('image_url', 'ilike', '%no-image%')
+      .not('image_url', 'ilike', '%default-community%')
       .order('name');
 
     if (error) {
@@ -117,7 +123,7 @@ export async function fetchFeaturedCommunities(limit: number = 8): Promise<Commu
       return [];
     }
 
-    // Transform and filter
+    // Transform and apply additional filters
     const communities = data
       .map(transformDatabaseToCommunity)
       .filter((c) => {
@@ -127,10 +133,10 @@ export async function fetchFeaturedCommunities(limit: number = 8): Promise<Commu
         );
         if (!isInCleveland) return false;
 
-        // Must have description
+        // Must have meaningful description (>50 chars)
         if (!c.description || c.description.trim().length < 50) return false;
 
-        // Must have non-placeholder image
+        // Must have non-placeholder image (double-check after Supabase filter)
         const imageUrl = c.images?.[0];
         if (isPlaceholderImage(imageUrl)) return false;
 
@@ -150,9 +156,9 @@ export async function fetchFeaturedCommunities(limit: number = 8): Promise<Commu
         return true;
       });
 
-    // Sort by priority: Tier 1 first, then Memory Care, then rating
+    // TIER PRIORITY SORTING: Tier 1 cities at top of all "Featured" feeds
     const sorted = communities.sort((a, b) => {
-      // Tier priority
+      // Tier priority (Westlake, Beachwood, Rocky River first)
       const tierA = getCityTier(a.location);
       const tierB = getCityTier(b.location);
       if (tierA !== tierB) return tierA - tierB;
@@ -178,13 +184,15 @@ export async function fetchFeaturedCommunities(limit: number = 8): Promise<Commu
 
 /**
  * Get total count of quality communities for display
+ * QUALITY-FIRST: Only counts communities with descriptions and real images
  */
 export async function getQualityCommunityCount(): Promise<number> {
   try {
     const { count, error } = await supabase
       .from('Community')
       .select('*', { count: 'exact', head: true })
-      .not('description', 'is', null);
+      .not('description', 'is', null)
+      .not('image_url', 'ilike', '%placeholder%');
 
     if (error) {
       console.error('Error counting communities:', error);
@@ -196,5 +204,109 @@ export async function getQualityCommunityCount(): Promise<number> {
     console.error('Error in getQualityCommunityCount:', error);
     return 0;
   }
+}
+
+/**
+ * Fetch quality communities for a specific city
+ * QUALITY-FIRST FILTERING: Same rules as fetchFeaturedCommunities
+ * Used by location pages to ensure only complete profiles show
+ * 
+ * @param city - City name (e.g., "Westlake")
+ * @param limit - Max number of communities to return
+ * @param includeIncomplete - If true, returns all communities (for city page count display)
+ */
+export async function fetchQualityCommunitiesByCity(
+  city: string,
+  limit: number = 50,
+  includeIncomplete: boolean = false
+): Promise<Community[]> {
+  try {
+    let query = supabase
+      .from('Community')
+      .select('*')
+      .ilike('city', city);
+    
+    // Apply quality filters unless including incomplete
+    if (!includeIncomplete) {
+      query = query
+        .not('description', 'is', null)
+        .not('image_url', 'ilike', '%placeholder%')
+        .not('image_url', 'ilike', '%no-image%')
+        .not('image_url', 'ilike', '%default-community%');
+    }
+    
+    const { data, error } = await query.order('name').limit(limit);
+
+    if (error) {
+      console.error(`Error fetching communities for ${city}:`, error);
+      return [];
+    }
+
+    if (!data || data.length === 0) {
+      return [];
+    }
+
+    // Transform and apply care type filter
+    const communities = data
+      .map(transformDatabaseToCommunity)
+      .filter((c) => {
+        if (!includeIncomplete) {
+          // Must have meaningful description
+          if (!c.description || c.description.trim().length < 50) return false;
+          
+          // Must have non-placeholder image
+          const imageUrl = c.images?.[0];
+          if (isPlaceholderImage(imageUrl)) return false;
+        }
+
+        // Must offer Assisted Living or Memory Care (unless including all)
+        if (!includeIncomplete) {
+          const hasQualifyingCare = c.careTypes.some(type => 
+            type.toLowerCase().includes('assisted living') || 
+            type.toLowerCase().includes('memory care')
+          );
+          if (!hasQualifyingCare) return false;
+        }
+
+        return true;
+      });
+
+    // Sort: Memory Care first, then by rating
+    return communities.sort((a, b) => {
+      const aHasMemoryCare = a.careTypes.some(t => t.toLowerCase().includes('memory care'));
+      const bHasMemoryCare = b.careTypes.some(t => t.toLowerCase().includes('memory care'));
+      if (aHasMemoryCare && !bHasMemoryCare) return -1;
+      if (!aHasMemoryCare && bHasMemoryCare) return 1;
+
+      const ratingA = a.overallRating || a.rating || 0;
+      const ratingB = b.overallRating || b.rating || 0;
+      return ratingB - ratingA;
+    });
+  } catch (error) {
+    console.error(`Error in fetchQualityCommunitiesByCity for ${city}:`, error);
+    return [];
+  }
+}
+
+/**
+ * Check if a community is "admission-ready" (complete profile)
+ * Used to determine if a community should show in featured sections
+ */
+export function isAdmissionReady(community: Community): boolean {
+  // Must have description
+  if (!community.description || community.description.trim().length < 50) return false;
+  
+  // Must have non-placeholder image
+  const imageUrl = community.images?.[0];
+  if (isPlaceholderImage(imageUrl)) return false;
+  
+  // Must offer Assisted Living or Memory Care
+  const hasQualifyingCare = community.careTypes.some(type => 
+    type.toLowerCase().includes('assisted living') || 
+    type.toLowerCase().includes('memory care')
+  );
+  if (!hasQualifyingCare) return false;
+  
+  return true;
 }
 

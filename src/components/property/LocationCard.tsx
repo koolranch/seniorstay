@@ -138,12 +138,13 @@ export default function LocationCard({ community, compact = false }: LocationCar
   );
 
   // Compact mode: horizontal card for spotlight sections
+  // Mobile UX: 48px+ tap targets, high contrast text
   if (compact) {
     return (
-      <div className="group bg-white border border-gray-200 hover:border-primary/50 rounded-xl overflow-hidden transition-all duration-300 hover:shadow-lg flex">
-        {/* Compact Image */}
-        <div className="relative w-28 h-28 flex-shrink-0">
-          <Link href={communityUrl} className="block w-full h-full">
+      <div className="group bg-white border border-gray-200 hover:border-primary/50 rounded-xl overflow-hidden transition-all duration-300 hover:shadow-lg flex min-h-[100px]">
+        {/* Compact Image - 48px+ touch target */}
+        <div className="relative w-28 h-full flex-shrink-0 min-h-[100px]">
+          <Link href={communityUrl} className="block w-full h-full min-h-[48px] focus:outline-none focus:ring-2 focus:ring-primary focus:ring-inset">
             <CommunityImage
               src={getCommunityImage(community.images?.[0], communityId, communityName)}
               alt={`${communityName} in ${communityLocation}`}
@@ -154,22 +155,25 @@ export default function LocationCard({ community, compact = false }: LocationCar
           </Link>
         </div>
 
-        {/* Compact Content */}
-        <div className="flex-grow p-3 flex flex-col justify-center min-w-0">
-          <h4 className="font-semibold text-base mb-1 line-clamp-1">
-            <Link href={communityUrl} className="hover:text-primary transition-colors">
+        {/* Compact Content - High contrast for accessibility */}
+        <div className="flex-grow p-4 flex flex-col justify-center min-w-0">
+          <h4 className="font-bold text-base text-gray-900 mb-1 line-clamp-2 leading-snug">
+            <Link 
+              href={communityUrl} 
+              className="hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded"
+            >
               {communityName}
             </Link>
           </h4>
-          <div className="flex items-center text-sm text-gray-500 mb-2">
-            <MapPin className="h-3 w-3 mr-1 text-primary flex-shrink-0" />
-            <span className="line-clamp-1 text-xs">{communityLocation}</span>
+          <div className="flex items-center text-sm text-gray-700 mb-2">
+            <MapPin className="h-4 w-4 mr-1 text-primary flex-shrink-0" />
+            <span className="line-clamp-1 font-medium">{communityLocation}</span>
           </div>
-          <div className="flex flex-wrap gap-1">
+          <div className="flex flex-wrap gap-1.5">
             {careTypes.slice(0, 2).map((type, index) => (
               <span
                 key={`${communityId}-${type}-${index}`}
-                className="bg-primary/10 text-primary px-2 py-0.5 rounded-full text-xs font-medium"
+                className="bg-primary/15 text-primary-700 px-2.5 py-1 rounded-full text-xs font-semibold"
               >
                 {type}
               </span>
@@ -184,7 +188,7 @@ export default function LocationCard({ community, compact = false }: LocationCar
     <div className="group bg-white border border-gray-200 hover:border-primary/50 rounded-xl overflow-hidden transition-all duration-300 hover:shadow-xl hover:scale-[1.02] flex flex-col h-full">
       {/* Card Header/Image */}
       <div className="relative w-full h-56">
-        <Link href={communityUrl} className="block w-full h-full">
+        <Link href={communityUrl} className="block w-full h-full min-h-[48px]">
           <CommunityImage
             src={getCommunityImage(community.images?.[0], communityId, communityName)}
             alt={`${communityName} - ${careTypes.join(', ') || 'Senior Living'} in ${communityLocation}`}
@@ -194,68 +198,76 @@ export default function LocationCard({ community, compact = false }: LocationCar
           />
         </Link>
 
-        {/* Memory Care Badge */}
+        {/* Memory Care Badge - High contrast for accessibility */}
         {careTypes.includes('Memory Care') && (
-          <div className="absolute top-3 left-3 bg-red-500 text-white px-3 py-1 rounded-full text-xs font-semibold shadow-md">
+          <div className="absolute top-3 left-3 bg-red-600 text-white px-4 py-1.5 rounded-full text-sm font-bold shadow-lg">
             Memory Care Available
           </div>
         )}
 
-        {/* Compare Button - increased tap target size for mobile */}
+        {/* Compare Button - 48px+ tap target for mobile (WCAG 2.2) */}
         <button
           onClick={toggleComparison}
-          className={`absolute top-3 right-3 p-3 rounded-full ${
-            isCompared ? 'bg-primary text-white' : 'bg-white/90 hover:bg-white text-gray-700'
-          } transition-all duration-200 shadow-sm`}
+          className={`absolute top-3 right-3 min-w-[48px] min-h-[48px] p-3 rounded-full ${
+            isCompared ? 'bg-primary text-white' : 'bg-white/95 hover:bg-white text-gray-800'
+          } transition-all duration-200 shadow-md flex items-center justify-center`}
           aria-label={isCompared ? 'Remove from comparison' : 'Add to comparison'}
           type="button"
         >
-          <Heart className={`h-5 w-5 ${isCompared ? 'fill-white' : ''}`} />
+          <Heart className={`h-6 w-6 ${isCompared ? 'fill-white' : ''}`} />
         </button>
       </div>
 
-      {/* Card Content */}
+      {/* Card Content - High contrast text for older users */}
       <div className="flex-grow p-5">
-        <h3 className="font-semibold text-lg mb-1 line-clamp-1">
-          <Link href={communityUrl} className="hover:text-primary transition-colors">
+        {/* Community Name - Bold, high contrast, min 18px */}
+        <h3 className="font-bold text-lg md:text-xl text-gray-900 mb-2 line-clamp-2 leading-tight">
+          <Link 
+            href={communityUrl} 
+            className="hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded min-h-[48px] inline-block"
+          >
             {communityName}
           </Link>
         </h3>
 
-        <div className="flex items-center text-sm text-gray-600 mb-2">
-          <MapPin className="h-3.5 w-3.5 mr-1 text-primary flex-shrink-0" />
-          <span className="line-clamp-1">{communityLocation}</span>
+        {/* Location - High contrast gray, larger text */}
+        <div className="flex items-center text-base text-gray-700 mb-3">
+          <MapPin className="h-4 w-4 mr-1.5 text-primary flex-shrink-0" />
+          <span className="line-clamp-1 font-medium">{communityLocation}</span>
         </div>
 
-        {/* Care Types */}
-        <div className="flex flex-wrap gap-2 mb-3">
+        {/* Care Types - Larger badges for readability */}
+        <div className="flex flex-wrap gap-2 mb-4">
           {careTypes.map((type, index) => (
             <span
               key={`${communityId}-${type}-${index}`}
-              className="bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-medium"
+              className="bg-primary/15 text-primary-700 px-3 py-1.5 rounded-full text-sm font-semibold"
             >
               {type}
             </span>
           ))}
         </div>
 
-        {/* View Details Link - increased tap target size for mobile */}
+        {/* View Details Link - 48px+ tap target */}
         <Link
           href={communityUrl}
-          className="text-sm text-primary hover:underline flex items-center mt-2 w-fit py-1"
+          className="inline-flex items-center text-base font-semibold text-primary hover:text-primary-700 hover:underline min-h-[48px] py-2 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded"
         >
-          View Details
+          View Details →
         </Link>
       </div>
 
-      {/* Card Actions - Improved for mobile */}
+      {/* Card Actions - Mobile UX: 48px+ touch targets, high contrast */}
       {!isOnlySkilledNursing ? (
         <div className="p-4 pt-0 mt-auto">
           <div className="grid grid-cols-2 gap-3">
-            {/* Get Pricing Button */}
+            {/* Get Pricing Button - 48px+ height for WCAG 2.2 */}
             <Dialog>
               <DialogTrigger asChild>
-                <Button variant="outline" size="sm" className="w-full py-2 h-auto">
+                <Button 
+                  variant="outline" 
+                  className="w-full min-h-[48px] py-3 text-base font-semibold border-2 border-gray-300 hover:border-primary hover:bg-primary/5"
+                >
                   Get Pricing
                 </Button>
               </DialogTrigger>
@@ -267,18 +279,18 @@ export default function LocationCard({ community, compact = false }: LocationCar
                 {!pricingSubmitted ? (
                   <form onSubmit={handlePricingSubmit} className="space-y-4 pt-4">
                     <div className="space-y-2">
-                      <Label htmlFor={`${formId}-name`}>Your Name</Label>
-                      <Input id={`${formId}-name`} name="name" required placeholder="Enter your full name" className="h-10" />
+                      <Label htmlFor={`${formId}-name`} className="text-base font-semibold text-gray-800">Your Name</Label>
+                      <Input id={`${formId}-name`} name="name" required placeholder="Enter your full name" className="h-12 text-base" />
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor={`${formId}-email`}>Email</Label>
-                      <Input id={`${formId}-email`} name="email" type="email" required placeholder="your@email.com" className="h-10" />
+                      <Label htmlFor={`${formId}-email`} className="text-base font-semibold text-gray-800">Email</Label>
+                      <Input id={`${formId}-email`} name="email" type="email" required placeholder="your@email.com" className="h-12 text-base" />
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor={`${formId}-phone`}>Phone Number</Label>
-                      <Input id={`${formId}-phone`} name="phone" type="tel" required placeholder="(555) 555-5555" className="h-10" />
+                      <Label htmlFor={`${formId}-phone`} className="text-base font-semibold text-gray-800">Phone Number</Label>
+                      <Input id={`${formId}-phone`} name="phone" type="tel" required placeholder="(555) 555-5555" className="h-12 text-base" />
                     </div>
 
                     <div className="space-y-2">
@@ -299,7 +311,11 @@ export default function LocationCard({ community, compact = false }: LocationCar
                       </RadioGroup>
                     </div>
 
-                    <Button type="submit" className="w-full h-11" disabled={isPricingSubmitting}>
+                    <Button 
+                      type="submit" 
+                      className="w-full min-h-[48px] h-12 text-base font-bold" 
+                      disabled={isPricingSubmitting}
+                    >
                       {isPricingSubmitting ? 'Sending...' : 'Get Pricing Information'}
                     </Button>
                   </form>
@@ -320,11 +336,14 @@ export default function LocationCard({ community, compact = false }: LocationCar
               </DialogContent>
             </Dialog>
 
-            {/* Schedule Tour Button */}
+            {/* Schedule Tour Button - High contrast CTA, 48px+ height */}
             <Dialog>
               <DialogTrigger asChild>
-                <Button variant="default" size="sm" className="w-full py-2.5 h-auto text-base font-semibold bg-orange-500 hover:bg-orange-600">
-                  Tour
+                <Button 
+                  variant="default" 
+                  className="w-full min-h-[48px] py-3 text-base font-bold bg-orange-500 hover:bg-orange-600 text-white shadow-md"
+                >
+                  Schedule Tour
                 </Button>
               </DialogTrigger>
               <DialogContent className="max-w-md mx-auto">
@@ -335,21 +354,25 @@ export default function LocationCard({ community, compact = false }: LocationCar
                 {!tourSubmitted ? (
                   <form onSubmit={handleTourSubmit} className="space-y-4 pt-4">
                     <div className="space-y-2">
-                      <Label htmlFor={`${formId}-tour-name`}>Your Name</Label>
-                      <Input id={`${formId}-tour-name`} name="name" required placeholder="Enter your full name" className="h-10" />
+                      <Label htmlFor={`${formId}-tour-name`} className="text-base font-semibold text-gray-800">Your Name</Label>
+                      <Input id={`${formId}-tour-name`} name="name" required placeholder="Enter your full name" className="h-12 text-base" />
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor={`${formId}-tour-phone`}>Phone Number</Label>
-                      <Input id={`${formId}-tour-phone`} name="phone" type="tel" required placeholder="(555) 555-5555" className="h-10" />
+                      <Label htmlFor={`${formId}-tour-phone`} className="text-base font-semibold text-gray-800">Phone Number</Label>
+                      <Input id={`${formId}-tour-phone`} name="phone" type="tel" required placeholder="(555) 555-5555" className="h-12 text-base" />
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor={`${formId}-tour-email`}>Email</Label>
-                      <Input id={`${formId}-tour-email`} name="email" type="email" required placeholder="your@email.com" className="h-10" />
+                      <Label htmlFor={`${formId}-tour-email`} className="text-base font-semibold text-gray-800">Email</Label>
+                      <Input id={`${formId}-tour-email`} name="email" type="email" required placeholder="your@email.com" className="h-12 text-base" />
                     </div>
 
-                    <Button type="submit" className="w-full h-11" disabled={isTourSubmitting}>
+                    <Button 
+                      type="submit" 
+                      className="w-full min-h-[48px] h-12 text-base font-bold" 
+                      disabled={isTourSubmitting}
+                    >
                       {isTourSubmitting ? 'Sending...' : 'Request Tour'}
                     </Button>
                     <p className="text-xs text-gray-500 text-center">We'll call you within 24 hours to schedule your visit.</p>

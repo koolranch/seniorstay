@@ -373,7 +373,7 @@ export default function CityLocationClient({ cityName, stateAbbr, communities }:
 
       {/* AEO FAQ Blocks with JSON-LD Schema for AI Rich Results */}
       <CityAEOBlocks
-        cityName={cityName}
+                cityName={cityName}
         citySlug={citySlug}
         communityCount={totalCommunities}
         cityData={cityData}
