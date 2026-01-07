@@ -2,8 +2,8 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { ArrowRight, CheckCircle, Heart, Shield, Users, Brain } from 'lucide-react';
-import Header from '@/components/header/Header';
+import { ArrowRight, CheckCircle, Heart, Shield, Users, Brain, Phone, Clock, DollarSign, Hospital, AlertTriangle, HelpCircle } from 'lucide-react';
+import GlobalHeader from '@/components/home/GlobalHeader';
 import Footer from '@/components/footer/Footer';
 import LocationCard from '@/components/property/LocationCard';
 import StickyTourButton from '@/components/tour/StickyTourButton';
@@ -51,6 +51,7 @@ export default function MemoryCareClevelandPage() {
       setIsSubmitting(false);
     }
   };
+  
   // Filter for Cleveland-area memory care communities
   const clevelandCities = ['Cleveland', 'Shaker Heights', 'Beachwood', 'Parma', 'Lakewood', 'Westlake', 'Strongsville', 'Independence', 'Seven Hills', 'Rocky River'];
   const memoryCareCommunities = communityData.filter(c => 
@@ -58,178 +59,286 @@ export default function MemoryCareClevelandPage() {
     clevelandCities.some(city => c.location.toLowerCase().includes(city.toLowerCase()))
   ).slice(0, 8);
 
+  const specializedServices = [
+    {
+      icon: Shield,
+      title: "Secure Environment",
+      description: "Monitored exits, wandering prevention, and safe outdoor spaces"
+    },
+    {
+      icon: Brain,
+      title: "Cognitive Therapy",
+      description: "Memory-enhancing activities and specialized programming"
+    },
+    {
+      icon: Users,
+      title: "Specialized Staff Training",
+      description: "Staff trained in dementia care and behavior management"
+    },
+    {
+      icon: Heart,
+      title: "Personalized Care Plans",
+      description: "Individualized approach based on each resident's needs"
+    },
+    {
+      icon: Clock,
+      title: "Structured Daily Routines",
+      description: "Consistent schedules that provide comfort and reduce anxiety"
+    },
+    {
+      icon: CheckCircle,
+      title: "24/7 Supervision",
+      description: "Round-the-clock care and monitoring for safety"
+    }
+  ];
+
   return (
     <main className="flex min-h-screen flex-col bg-white">
-      <Header />
+      <GlobalHeader />
       
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-purple-50 to-pink-50 py-16 border-b">
-        <div className="container mx-auto px-4">
+      <section className="bg-gradient-to-b from-slate-50 via-white to-slate-50 py-16 md:py-24 relative overflow-hidden">
+        {/* Decorative elements */}
+        <div className="absolute top-20 left-10 w-72 h-72 bg-rose-200/20 rounded-full blur-3xl" />
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-teal-200/20 rounded-full blur-3xl" />
+        
+        <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">
+            <span className="inline-block bg-rose-100 text-rose-700 px-4 py-2 rounded-full text-sm font-semibold mb-6">
+              <Brain className="inline h-4 w-4 mr-1" />
+              Specialized Dementia Care
+            </span>
+            <h1 className="text-4xl md:text-5xl font-bold mb-6 text-slate-900 leading-tight">
               Memory Care in Cleveland, Ohio
             </h1>
-            <p className="text-xl text-gray-700 mb-8">
+            <p className="text-lg md:text-xl text-slate-600 mb-10">
               Specialized Alzheimer's and dementia care in a secure, compassionate environment. Find the best memory care communities in Cleveland with expert guidance.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
                 href="#communities"
-                className="inline-flex items-center justify-center bg-orange-500 hover:bg-orange-600 text-white font-semibold px-8 py-3 rounded-lg transition-colors"
+                className="inline-flex items-center justify-center bg-teal-600 hover:bg-teal-700 text-white font-bold px-8 py-4 rounded-xl transition-colors shadow-lg hover:shadow-xl min-h-[56px]"
               >
                 Browse Memory Care Communities
                 <ArrowRight className="ml-2 h-5 w-5" />
               </a>
               <a
                 href="#guide"
-                className="inline-flex items-center justify-center bg-white border-2 border-primary text-primary hover:bg-primary/5 font-semibold px-8 py-3 rounded-lg transition-colors"
+                className="inline-flex items-center justify-center bg-white border-2 border-slate-300 text-slate-700 hover:border-teal-500 hover:text-teal-600 font-bold px-8 py-4 rounded-xl transition-colors min-h-[56px]"
               >
                 Read Complete Guide
               </a>
             </div>
           </div>
         </div>
-      </div>
+      </section>
+
+      {/* Clinical Trust Bar */}
+      <section className="bg-slate-800 py-4 text-white">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-2 text-sm md:text-base">
+            <div className="flex items-center gap-2">
+              <Hospital className="h-5 w-5 text-teal-400" />
+              <span>Cleveland Clinic Lou Ruvo Center</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Hospital className="h-5 w-5 text-teal-400" />
+              <span>UH Memory & Cognition Center</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Shield className="h-5 w-5 text-teal-400" />
+              <span>Secure, Licensed Communities</span>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* What is Memory Care Section */}
-      <div id="guide" className="py-16">
+      <section id="guide" className="py-16 md:py-20 bg-white">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl font-bold mb-6 text-gray-900">What is Memory Care?</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-slate-900">What is Memory Care?</h2>
             
-            <div className="prose prose-lg max-w-none text-gray-700">
-              <p className="mb-6">
-                Memory care is specialized senior housing designed for individuals with Alzheimer's disease, dementia, or other forms of memory impairment. Cleveland's memory care communities provide secure environments with specially trained staff, structured routines, and therapeutic programs tailored to residents with cognitive challenges.
-              </p>
+            <p className="text-lg text-slate-600 mb-10 leading-relaxed">
+              Memory care is specialized senior housing designed for individuals with Alzheimer's disease, dementia, or other forms of memory impairment. Cleveland's memory care communities provide secure environments with specially trained staff, structured routines, and therapeutic programs tailored to residents with cognitive challenges.
+            </p>
 
-              <h3 className="text-2xl font-semibold mb-4 mt-8">Specialized Services in Cleveland Memory Care Communities</h3>
+            {/* Specialized Services Grid */}
+            <div className="mb-16">
+              <h3 className="text-2xl font-bold mb-8 text-slate-900">Specialized Services in Cleveland Memory Care Communities</h3>
               
-              <div className="grid md:grid-cols-2 gap-6 my-8 not-prose">
-                <div className="flex gap-3">
-                  <Shield className="h-6 w-6 text-purple-500 flex-shrink-0 mt-1" />
-                  <div>
-                    <h4 className="font-semibold mb-1">Secure Environment</h4>
-                    <p className="text-gray-600">Monitored exits, wandering prevention, and safe outdoor spaces</p>
-                  </div>
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {specializedServices.map((service) => {
+                  const Icon = service.icon;
+                  return (
+                    <div key={service.title} className="bg-slate-50 rounded-2xl p-6 border border-slate-200 hover:shadow-md transition-shadow">
+                      <div className="bg-rose-100 w-12 h-12 rounded-xl flex items-center justify-center mb-4">
+                        <Icon className="h-6 w-6 text-rose-600" />
+                      </div>
+                      <h4 className="font-bold text-slate-900 mb-2">{service.title}</h4>
+                      <p className="text-slate-600">{service.description}</p>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Signs It's Time */}
+            <div className="bg-amber-50 border border-amber-200 rounded-2xl p-8 mb-12">
+              <div className="flex items-start gap-4 mb-6">
+                <div className="bg-amber-100 p-3 rounded-xl">
+                  <AlertTriangle className="h-6 w-6 text-amber-600" />
                 </div>
-                <div className="flex gap-3">
-                  <Brain className="h-6 w-6 text-purple-500 flex-shrink-0 mt-1" />
-                  <div>
-                    <h4 className="font-semibold mb-1">Cognitive Therapy</h4>
-                    <p className="text-gray-600">Memory-enhancing activities and specialized programming</p>
-                  </div>
-                </div>
-                <div className="flex gap-3">
-                  <Users className="h-6 w-6 text-purple-500 flex-shrink-0 mt-1" />
-                  <div>
-                    <h4 className="font-semibold mb-1">Specialized Staff Training</h4>
-                    <p className="text-gray-600">Staff trained in dementia care and behavior management</p>
-                  </div>
-                </div>
-                <div className="flex gap-3">
-                  <Heart className="h-6 w-6 text-purple-500 flex-shrink-0 mt-1" />
-                  <div>
-                    <h4 className="font-semibold mb-1">Personalized Care Plans</h4>
-                    <p className="text-gray-600">Individualized approach based on each resident's needs</p>
-                  </div>
-                </div>
-                <div className="flex gap-3">
-                  <CheckCircle className="h-6 w-6 text-purple-500 flex-shrink-0 mt-1" />
-                  <div>
-                    <h4 className="font-semibold mb-1">Structured Daily Routines</h4>
-                    <p className="text-gray-600">Consistent schedules that provide comfort and reduce anxiety</p>
-                  </div>
-                </div>
-                <div className="flex gap-3">
-                  <CheckCircle className="h-6 w-6 text-purple-500 flex-shrink-0 mt-1" />
-                  <div>
-                    <h4 className="font-semibold mb-1">24/7 Supervision</h4>
-                    <p className="text-gray-600">Round-the-clock care and monitoring for safety</p>
-                  </div>
+                <div>
+                  <h3 className="text-2xl font-bold text-slate-900 mb-2">Signs It's Time for Memory Care</h3>
+                  <p className="text-slate-600">Consider memory care in Cleveland when your loved one experiences:</p>
                 </div>
               </div>
-
-              <h3 className="text-2xl font-semibold mb-4 mt-8">Signs It's Time for Memory Care</h3>
-              <p className="mb-4">
-                Consider memory care in Cleveland when your loved one experiences:
-              </p>
-              <ul className="list-disc pl-6 mb-6 space-y-2">
-                <li>Wandering or getting lost in familiar places</li>
-                <li>Difficulty with personal care and hygiene</li>
-                <li>Aggressive or unsafe behaviors</li>
-                <li>Inability to manage medications independently</li>
-                <li>Sundowning (increased confusion in evening hours)</li>
-                <li>Caregiver burnout or inability to provide adequate supervision</li>
-                <li>Safety concerns at home (leaving stove on, forgetting to eat)</li>
+              <ul className="grid md:grid-cols-2 gap-3">
+                {[
+                  "Wandering or getting lost in familiar places",
+                  "Difficulty with personal care and hygiene",
+                  "Aggressive or unsafe behaviors",
+                  "Inability to manage medications independently",
+                  "Sundowning (increased confusion in evening hours)",
+                  "Caregiver burnout or inability to provide adequate supervision",
+                  "Safety concerns at home (leaving stove on, forgetting to eat)"
+                ].map((sign, index) => (
+                  <li key={index} className="flex items-start gap-2 text-slate-700">
+                    <CheckCircle className="h-5 w-5 text-amber-600 flex-shrink-0 mt-0.5" />
+                    <span>{sign}</span>
+                  </li>
+                ))}
               </ul>
+            </div>
 
-              <h3 className="text-2xl font-semibold mb-4 mt-8">Memory Care vs. Assisted Living: What's the Difference?</h3>
-              <p className="mb-4">
+            {/* Memory Care vs Assisted Living */}
+            <div className="mb-12">
+              <h3 className="text-2xl font-bold mb-6 text-slate-900">Memory Care vs. Assisted Living: What's the Difference?</h3>
+              <p className="text-slate-600 mb-6">
                 While both provide personal care assistance, memory care offers additional features:
               </p>
-              <ul className="list-disc pl-6 mb-6 space-y-2">
-                <li><strong>Secure Facilities:</strong> Memory care units have controlled access to prevent wandering</li>
-                <li><strong>Staff Training:</strong> Specialized dementia care training for all caregivers</li>
-                <li><strong>Lower Staff Ratios:</strong> More staff per resident for intensive supervision</li>
-                <li><strong>Specialized Programs:</strong> Activities designed for cognitive stimulation</li>
-                <li><strong>Environmental Design:</strong> Layouts that reduce confusion and promote independence</li>
-              </ul>
+              <div className="space-y-4">
+                {[
+                  { title: "Secure Facilities", desc: "Memory care units have controlled access to prevent wandering" },
+                  { title: "Staff Training", desc: "Specialized dementia care training for all caregivers" },
+                  { title: "Lower Staff Ratios", desc: "More staff per resident for intensive supervision" },
+                  { title: "Specialized Programs", desc: "Activities designed for cognitive stimulation" },
+                  { title: "Environmental Design", desc: "Layouts that reduce confusion and promote independence" }
+                ].map((item) => (
+                  <div key={item.title} className="flex items-start gap-3 bg-slate-50 p-4 rounded-xl">
+                    <CheckCircle className="h-5 w-5 text-teal-600 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <span className="font-semibold text-slate-900">{item.title}:</span>{' '}
+                      <span className="text-slate-600">{item.desc}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
 
-              <h3 className="text-2xl font-semibold mb-4 mt-8">Cost of Memory Care in Cleveland</h3>
-              <p className="mb-4">
-                Memory care in Cleveland typically costs <strong>$4,500 to $8,500 per month</strong>, which is higher than assisted living due to the specialized care, lower staff-to-resident ratios, and secure environment. Costs vary based on:
+            {/* Cost Section */}
+            <div className="bg-gradient-to-br from-teal-50 to-cyan-50 rounded-2xl p-8 mb-12 border border-teal-200">
+              <div className="flex items-start gap-4 mb-6">
+                <div className="bg-teal-100 p-3 rounded-xl">
+                  <DollarSign className="h-6 w-6 text-teal-600" />
+                </div>
+                <div>
+                  <h3 className="text-2xl font-bold text-slate-900 mb-2">Cost of Memory Care in Cleveland</h3>
+                  <p className="text-3xl font-bold text-teal-600">$4,500 – $8,500/month</p>
+                </div>
+              </div>
+              <p className="text-slate-600 mb-4">
+                Memory care is higher than assisted living due to the specialized care, lower staff-to-resident ratios, and secure environment. Costs vary based on:
               </p>
-              <ul className="list-disc pl-6 mb-6 space-y-1">
-                <li>Level of care required</li>
-                <li>Community location and amenities</li>
-                <li>Type of apartment (private vs. shared)</li>
-                <li>Additional services needed</li>
+              <ul className="grid md:grid-cols-2 gap-2 mb-6">
+                {["Level of care required", "Community location and amenities", "Type of apartment (private vs. shared)", "Additional services needed"].map((item) => (
+                  <li key={item} className="flex items-center gap-2 text-slate-700">
+                    <div className="w-2 h-2 bg-teal-500 rounded-full" />
+                    {item}
+                  </li>
+                ))}
               </ul>
-
-              <p className="mb-6">
-                Most Cleveland memory care communities offer all-inclusive pricing that covers room, meals, personal care, activities, and medical management. Some may charge extra for specialized therapies or one-on-one care.
+              <p className="text-slate-600 text-sm">
+                Most Cleveland memory care communities offer all-inclusive pricing that covers room, meals, personal care, activities, and medical management.
               </p>
+            </div>
 
-              <h3 className="text-2xl font-semibold mb-4 mt-8">How to Pay for Memory Care in Ohio</h3>
-              <ul className="list-disc pl-6 mb-6 space-y-2">
-                <li><strong>Medicaid Waiver Programs:</strong> Ohio offers Assisted Living and PASSPORT waivers that may help cover memory care costs</li>
-                <li><strong>Veterans Benefits:</strong> VA Aid & Attendance can provide up to $2,266/month for qualifying veterans</li>
-                <li><strong>Long-Term Care Insurance:</strong> Many policies cover memory care services</li>
-                <li><strong>Life Insurance Conversion:</strong> Some policies can be converted to pay for care</li>
-                <li><strong>Reverse Mortgages:</strong> Can provide funds for memory care costs</li>
-              </ul>
+            {/* How to Pay */}
+            <div className="mb-12">
+              <h3 className="text-2xl font-bold mb-6 text-slate-900">How to Pay for Memory Care in Ohio</h3>
+              <div className="grid md:grid-cols-2 gap-4">
+                {[
+                  { title: "Medicaid Waiver Programs", desc: "Ohio offers Assisted Living and PASSPORT waivers that may help cover costs" },
+                  { title: "Veterans Benefits", desc: "VA Aid & Attendance can provide up to $2,266/month for qualifying veterans" },
+                  { title: "Long-Term Care Insurance", desc: "Many policies cover memory care services" },
+                  { title: "Life Insurance Conversion", desc: "Some policies can be converted to pay for care" },
+                  { title: "Reverse Mortgages", desc: "Can provide funds for memory care costs" }
+                ].map((item) => (
+                  <div key={item.title} className="bg-slate-50 rounded-xl p-5 border border-slate-200">
+                    <h4 className="font-bold text-slate-900 mb-1">{item.title}</h4>
+                    <p className="text-slate-600 text-sm">{item.desc}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
 
-              <h3 className="text-2xl font-semibold mb-4 mt-8">Choosing the Right Memory Care Community in Cleveland</h3>
-              <p className="mb-4">
+            {/* Choosing the Right Community */}
+            <div className="mb-12">
+              <h3 className="text-2xl font-bold mb-6 text-slate-900">Choosing the Right Memory Care Community in Cleveland</h3>
+              <p className="text-slate-600 mb-6">
                 When evaluating Cleveland memory care options, look for:
               </p>
-              <ul className="list-disc pl-6 mb-6 space-y-2">
-                <li><strong>Staff Credentials:</strong> Ask about dementia-specific training and certifications</li>
-                <li><strong>Safety Features:</strong> Secure outdoor areas, monitored entry/exit, emergency response systems</li>
-                <li><strong>Activity Programs:</strong> Music therapy, art therapy, reminiscence activities</li>
-                <li><strong>Healthcare Partnerships:</strong> On-site medical services or partnerships with Cleveland Clinic/University Hospitals</li>
-                <li><strong>Family Involvement:</strong> Policies for visits, care plan participation, and communication</li>
-                <li><strong>Progression of Care:</strong> Can they accommodate changing needs as dementia progresses?</li>
-              </ul>
+              <div className="space-y-3">
+                {[
+                  { title: "Staff Credentials", desc: "Ask about dementia-specific training and certifications" },
+                  { title: "Safety Features", desc: "Secure outdoor areas, monitored entry/exit, emergency response systems" },
+                  { title: "Activity Programs", desc: "Music therapy, art therapy, reminiscence activities" },
+                  { title: "Healthcare Partnerships", desc: "On-site medical services or partnerships with Cleveland Clinic/University Hospitals" },
+                  { title: "Family Involvement", desc: "Policies for visits, care plan participation, and communication" },
+                  { title: "Progression of Care", desc: "Can they accommodate changing needs as dementia progresses?" }
+                ].map((item) => (
+                  <div key={item.title} className="flex items-start gap-3">
+                    <CheckCircle className="h-5 w-5 text-rose-500 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <span className="font-semibold text-slate-900">{item.title}:</span>{' '}
+                      <span className="text-slate-600">{item.desc}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
 
-              <h3 className="text-2xl font-semibold mb-4 mt-8">Memory Care in Greater Cleveland</h3>
-              <p className="mb-4">
-                Cleveland offers excellent memory care options with access to world-class healthcare systems including Cleveland Clinic's Lou Ruvo Center for Brain Health and University Hospitals' Memory and Cognition Center. Many local communities partner with these institutions for specialized care protocols.
+            {/* Greater Cleveland Section */}
+            <div className="bg-slate-900 text-white rounded-2xl p-8">
+              <div className="flex items-start gap-4 mb-4">
+                <div className="bg-teal-500 p-3 rounded-xl">
+                  <Hospital className="h-6 w-6 text-white" />
+                </div>
+                <h3 className="text-2xl font-bold">Memory Care in Greater Cleveland</h3>
+              </div>
+              <p className="text-slate-300 leading-relaxed">
+                Cleveland offers excellent memory care options with access to world-class healthcare systems including <strong className="text-white">Cleveland Clinic's Lou Ruvo Center for Brain Health</strong> and <strong className="text-white">University Hospitals' Memory and Cognition Center</strong>. Many local communities partner with these institutions for specialized care protocols.
               </p>
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
       {/* Featured Communities */}
-      <div id="communities" className="bg-gray-50 py-16">
+      <section id="communities" className="bg-slate-50 py-16 md:py-20">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-4">Top Memory Care Communities in Cleveland</h2>
-          <p className="text-gray-600 text-center mb-10 max-w-2xl mx-auto">
-            These specialized memory care communities provide expert Alzheimer's and dementia care in secure, compassionate environments.
-          </p>
+          <div className="text-center mb-12">
+            <span className="inline-block bg-rose-100 text-rose-700 px-4 py-2 rounded-full text-sm font-semibold mb-4">
+              Featured Communities
+            </span>
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Top Memory Care Communities in Cleveland</h2>
+            <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+              These specialized memory care communities provide expert Alzheimer's and dementia care in secure, compassionate environments.
+            </p>
+          </div>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-12">
             {memoryCareCommunities.map((community) => (
               <LocationCard key={community.id} community={community} />
             ))}
@@ -238,84 +347,117 @@ export default function MemoryCareClevelandPage() {
           <div className="text-center">
             <Link
               href="/?filter=memory-care"
-              className="inline-flex items-center gap-2 bg-primary hover:bg-primary/90 text-white font-semibold px-8 py-3 rounded-lg transition-colors"
+              className="inline-flex items-center gap-2 bg-teal-600 hover:bg-teal-700 text-white font-bold px-8 py-4 rounded-xl transition-colors shadow-lg hover:shadow-xl min-h-[56px]"
             >
               View All Memory Care Communities
               <ArrowRight className="h-5 w-5" />
             </Link>
           </div>
         </div>
-      </div>
+      </section>
 
       {/* CTA Section */}
-      <div className="bg-purple-50 py-16">
+      <section className="bg-gradient-to-r from-rose-600 to-rose-700 py-16 md:py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-3xl font-bold mb-4">Get Expert Help Finding Memory Care in Cleveland</h2>
-            <p className="text-lg text-gray-700 mb-8">
+            <div className="flex justify-center mb-6">
+              <div className="bg-white/10 p-4 rounded-2xl">
+                <HelpCircle className="h-10 w-10 text-white" />
+              </div>
+            </div>
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Get Expert Help Finding Memory Care in Cleveland</h2>
+            <p className="text-lg text-rose-100 mb-10">
               Our Cleveland advisors specialize in memory care placement. We understand the unique challenges of dementia care and can help you find the right community—completely free.
             </p>
-            <div className="bg-white p-8 rounded-xl shadow-lg">
+            <div className="bg-white p-8 rounded-2xl shadow-2xl text-left">
               {isSuccess ? (
                 <div className="text-center py-6">
-                  <h3 className="text-xl font-bold text-green-800 mb-2">Thank You!</h3>
-                  <p className="text-green-700">A memory care specialist will contact you within 24 hours.</p>
-                  <p className="text-sm text-gray-600 mt-4">Need immediate help? Call <strong>(216) 677-4630</strong></p>
+                  <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <CheckCircle className="h-8 w-8 text-green-600" />
+                  </div>
+                  <h3 className="text-xl font-bold text-slate-900 mb-2">Thank You!</h3>
+                  <p className="text-slate-600">A memory care specialist will contact you within 24 hours.</p>
+                  <p className="text-sm text-slate-500 mt-4">Need immediate help? Call <strong className="text-teal-600">(216) 677-4630</strong></p>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} className="space-y-4">
+                <form onSubmit={handleSubmit} className="space-y-5">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label htmlFor="name" className="block text-sm font-semibold text-slate-700 mb-1">Your Name *</label>
+                      <input
+                        type="text"
+                        name="name"
+                        id="name"
+                        required
+                        placeholder="Full name"
+                        className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="phone" className="block text-sm font-semibold text-slate-700 mb-1">Phone *</label>
+                      <input
+                        type="tel"
+                        name="phone"
+                        id="phone"
+                        required
+                        placeholder="(216) 555-1234"
+                        className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label htmlFor="email" className="block text-sm font-semibold text-slate-700 mb-1">Email *</label>
                     <input
-                      type="text"
-                      name="name"
+                      type="email"
+                      name="email"
+                      id="email"
                       required
-                      placeholder="Your Name *"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg"
-                    />
-                    <input
-                      type="tel"
-                      name="phone"
-                      required
-                      placeholder="Your Phone *"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg"
+                      placeholder="your@email.com"
+                      className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors"
                     />
                   </div>
-                  <input
-                    type="email"
-                    name="email"
-                    required
-                    placeholder="Your Email *"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg"
-                  />
-                  <select
-                    name="urgency"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg"
-                  >
-                    <option value="">How soon do you need memory care?</option>
-                    <option value="immediate">Immediately</option>
-                    <option value="1-3-months">Within 1-3 months</option>
-                    <option value="3-6-months">Within 3-6 months</option>
-                    <option value="researching">Just researching options</option>
-                  </select>
+                  <div>
+                    <label htmlFor="urgency" className="block text-sm font-semibold text-slate-700 mb-1">Timeline</label>
+                    <select
+                      name="urgency"
+                      id="urgency"
+                      className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors bg-white"
+                    >
+                      <option value="">How soon do you need memory care?</option>
+                      <option value="immediate">Immediately</option>
+                      <option value="1-3-months">Within 1-3 months</option>
+                      <option value="3-6-months">Within 3-6 months</option>
+                      <option value="researching">Just researching options</option>
+                    </select>
+                  </div>
                   {error && <p className="text-red-500 text-sm">{error}</p>}
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full bg-orange-500 hover:bg-orange-600 disabled:bg-orange-300 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
+                    className="w-full bg-teal-600 hover:bg-teal-700 disabled:bg-teal-300 text-white font-bold py-4 px-6 rounded-xl transition-colors min-h-[56px] shadow-lg"
                   >
                     {isSubmitting ? 'Sending...' : 'Get Free Memory Care Consultation'}
                   </button>
-                  <p className="text-xs text-gray-500">We'll contact you within 24 hours to discuss your specific needs.</p>
+                  <p className="text-xs text-slate-500 text-center">We'll contact you within 24 hours to discuss your specific needs.</p>
                 </form>
               )}
             </div>
+            
+            <div className="mt-8">
+              <a
+                href="tel:+12166774630"
+                className="inline-flex items-center gap-2 text-white hover:text-rose-100 font-semibold transition-colors"
+              >
+                <Phone className="h-5 w-5" />
+                <span>Or call us directly: (216) 677-4630</span>
+              </a>
+            </div>
           </div>
         </div>
-      </div>
+      </section>
 
       <StickyTourButton />
       <Footer />
     </main>
   );
 }
-
