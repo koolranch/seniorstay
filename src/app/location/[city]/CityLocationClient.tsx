@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, MapPin, DollarSign, MessageSquare, Hospital, Star } from 'lucide-react';
-import Header from '@/components/header/Header';
+import GlobalHeader from '@/components/home/GlobalHeader';
 import CategoryTabs from '@/components/category/CategoryTabs';
 import Footer from '@/components/footer/Footer';
 import LocationCard from '@/components/property/LocationCard';
@@ -94,7 +94,7 @@ export default function CityLocationClient({ cityName, stateAbbr, communities }:
         cityData={cityData}
       />
 
-      <Header />
+      <GlobalHeader />
       <CategoryTabs communities={communities} />
 
       {/* Dynamic Clinical Trust Bar - Shows nearest hospital for this city */}

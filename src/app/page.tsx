@@ -1,841 +1,168 @@
-"use client";
-
-import { useState, useEffect, Suspense } from 'react';
-import { useSearchParams } from 'next/navigation';
-import Link from 'next/link';
-import Image from 'next/image';
-import { Search, MapPin, Star, ArrowRight, Info, CheckCircle, Phone } from 'lucide-react';
-import Header from '@/components/header/Header';
-import CategoryTabs from '@/components/category/CategoryTabs';
-import LocationTabs from '@/components/location/LocationTabs';
-import FilterIndicator from '@/components/filter/FilterIndicator';
-import LocationFilterIndicator from '@/components/filter/LocationFilterIndicator';
-import SearchResults from '@/components/search/SearchResults';
-import ComparisonFloatingButton from '@/components/comparison/ComparisonFloatingButton';
+import { Metadata } from 'next';
+import GlobalHeader from '@/components/home/GlobalHeader';
+import Hero from '@/components/home/Hero';
+import CareTypes from '@/components/home/CareTypes';
+import Neighborhoods from '@/components/home/Neighborhoods';
+import LeadMagnet from '@/components/home/LeadMagnet';
+import TrustSection from '@/components/home/TrustSection';
 import Footer from '@/components/footer/Footer';
-import LocationCard from '@/components/property/LocationCard';
-import HowItWorks from '@/components/landing/HowItWorks';
-import ClinicalTrustBar from '@/components/landing/ClinicalTrustBar';
-import PersonaNavigation from '@/components/landing/PersonaNavigation';
-import NeighborhoodSpotlight from '@/components/landing/NeighborhoodSpotlight';
-import ZipTourScheduler from '@/components/tour/ZipTourScheduler';
-import ZipSearchWidget from '@/components/tour/ZipSearchWidget';
-import ScheduleTourFAB from '@/components/tour/ScheduleTourFAB';
-import { Community, communityData } from '@/data/facilities';
-import { testimonials } from '@/data/testimonials';
-import { fetchAllCommunities } from '@/lib/fetch-community';
-import { fetchFeaturedCommunities } from '@/lib/fetch-featured-communities';
 
-// Create a separate component for the search functionality
-function SearchContainer() {
-  const searchParams = useSearchParams();
-  const searchQuery = searchParams.get('query') || '';
+/**
+ * Homepage - High-Authority Local Hub for Cleveland Senior Living
+ * 
+ * SEO Strategy:
+ * - Single H1 targeting "Senior Living in Cleveland"
+ * - H2s for each major section (Care Types, Neighborhoods, etc.)
+ * - H3s for individual cards within sections
+ * - Schema.org structured data for LocalBusiness + FAQPage
+ * - Cleveland-focused content and internal linking
+ */
 
-  // Filters
-  const [selectedCareFilter, setSelectedCareFilter] = useState('all');
-  const [selectedLocation, setSelectedLocation] = useState('all');
-  const [communities, setCommunities] = useState<Community[]>(communityData); // Start with static data
-  const [filteredCommunities, setFilteredCommunities] = useState<Community[]>(communityData);
-  const [featuredCommunities, setFeaturedCommunities] = useState<Community[]>([]);
-  const [loading, setLoading] = useState(true);
+export const metadata: Metadata = {
+  title: 'Find Senior Living in Cleveland, OH | Assisted Living & Memory Care | Guide for Seniors',
+  description: 'Compare costs, reviews, and amenities for top-rated assisted living and memory care communities in Cleveland and Northeast Ohio. Free expert guidance from local advisors.',
+  keywords: 'senior living cleveland, assisted living cleveland ohio, memory care cleveland, retirement communities northeast ohio, elderly care cleveland, nursing homes cleveland oh',
+  openGraph: {
+    title: 'Find Senior Living in Cleveland, OH | Guide for Seniors',
+    description: 'Compare costs, reviews, and amenities for top-rated assisted living and memory care communities in Cleveland. Free expert guidance.',
+    url: 'https://guideforseniors.com',
+    siteName: 'Guide for Seniors',
+    locale: 'en_US',
+    type: 'website',
+    images: [
+      {
+        url: 'https://guideforseniors.com/og-home.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Guide for Seniors - Cleveland Senior Living Experts',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Find Senior Living in Cleveland, OH | Guide for Seniors',
+    description: 'Compare costs, reviews, and amenities for top-rated assisted living and memory care communities in Cleveland.',
+  },
+  alternates: {
+    canonical: 'https://guideforseniors.com',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    'max-snippet': -1,
+    'max-image-preview': 'large',
+    'max-video-preview': -1,
+  },
+};
 
-  // Fetch communities from Supabase on mount
-  useEffect(() => {
-    async function loadCommunities() {
-      try {
-        // Fetch all communities for filtering
-        const data = await fetchAllCommunities();
-        // Fetch high-quality featured communities (with descriptions + real images)
-        const featured = await fetchFeaturedCommunities(8);
-        
-        if (data && data.length > 0) {
-          // Filter to only Assisted Living and Memory Care (exclude skilled nursing-only)
-          const filteredData = data.filter(c => {
-            const isAssistedOrMemoryCare = c.careTypes.some(type => 
-              type.toLowerCase().includes('assisted living') || 
-              type.toLowerCase().includes('memory care')
-            );
-            
-            const isOnlySkilledNursing = c.careTypes.every(type => 
-              type.toLowerCase().includes('skilled nursing')
-            );
-            
-            return isAssistedOrMemoryCare && !isOnlySkilledNursing;
-          });
-          
-          setCommunities(filteredData);
-          setFilteredCommunities(filteredData);
-        }
-        
-        // Set featured communities (prioritizes Tier 1 cities, has descriptions + real images)
-        if (featured && featured.length > 0) {
-          setFeaturedCommunities(featured);
-        }
-      } catch (error) {
-        console.error('Error loading communities:', error);
-        // Keep using static data as fallback
-      } finally {
-        setLoading(false);
-      }
-    }
-    loadCommunities();
-  }, []);
+// Schema.org structured data
+const organizationSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  '@id': 'https://guideforseniors.com/#organization',
+  name: 'Guide for Seniors',
+  description: 'Guide for Seniors helps Cleveland families find the right senior living communities including assisted living, memory care, and independent living options.',
+  url: 'https://guideforseniors.com',
+  telephone: '+1-216-677-4630',
+  email: 'info@guideforseniors.com',
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Cleveland',
+    addressRegion: 'OH',
+    addressCountry: 'US',
+  },
+  geo: {
+    '@type': 'GeoCoordinates',
+    latitude: 41.4993,
+    longitude: -81.6944,
+  },
+  areaServed: {
+    '@type': 'GeoCircle',
+    geoMidpoint: {
+      '@type': 'GeoCoordinates',
+      latitude: 41.4993,
+      longitude: -81.6944,
+    },
+    geoRadius: '50000',
+  },
+  priceRange: 'Free',
+  openingHoursSpecification: {
+    '@type': 'OpeningHoursSpecification',
+    dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+    opens: '09:00',
+    closes: '17:00',
+  },
+  sameAs: [
+    'https://www.facebook.com/guideforseniors',
+    'https://twitter.com/guideforseniors',
+    'https://www.linkedin.com/company/guide-for-seniors',
+  ],
+};
 
-  // Store active filter labels for display
-  const [activeCareLabel, setActiveCareLabel] = useState('');
-  const [activeLocationLabel, setActiveLocationLabel] = useState('');
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'How much does assisted living cost in Cleveland, Ohio?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Assisted living in Cleveland typically costs between $3,500 and $6,500 per month in 2026. Costs vary by location, with premium suburbs like Beachwood averaging $6,800/month and more affordable options in Parma starting around $4,900/month. Memory care costs are typically $1,500-$2,000 higher per month.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Is Guide for Seniors really free?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes, Guide for Seniors is 100% free for families. We are compensated by senior living communities when we successfully match a family with the right care—so there is never any cost to you, and our recommendations are always unbiased.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What is the difference between assisted living and memory care?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Assisted living provides help with daily activities like bathing, dressing, and medication management for seniors who are cognitively independent. Memory care is specialized 24/7 care for seniors with Alzheimer\'s disease, dementia, or other cognitive impairments, featuring secure environments and specialized programming.',
+      },
+    },
+  ],
+};
 
-  // Extract all unique cities from communities
-  const allCities = Array.from(new Set(communities.map(community =>
-    community.location.split(',')[0].trim()
-  ))).sort();
-
-  // Get all unique care types across all communities
-  const allCareTypes = Array.from(new Set(
-    communities.flatMap(community => community.careTypes)
-  )).sort();
-
-  // Apply filters
-  useEffect(() => {
-    let results = [...communities];
-
-    // Apply care type filter
-    if (selectedCareFilter !== 'all') {
-      results = results.filter(community =>
-        community.careTypes.some(type =>
-          type.toLowerCase() === selectedCareFilter.toLowerCase()
-        )
-      );
-    }
-
-    // Apply location filter
-    if (selectedLocation !== 'all') {
-      results = results.filter(community => {
-        const communityCity = community.location.split(',')[0].trim();
-        return communityCity.toLowerCase() === selectedLocation.toLowerCase();
-      });
-    }
-
-    // Apply search query if exists
-    if (searchQuery) {
-      const query = searchQuery.toLowerCase();
-      results = results.filter(community => {
-        return (
-          community.name.toLowerCase().includes(query) ||
-          community.location.toLowerCase().includes(query) ||
-          community.careTypes.some(type => type.toLowerCase().includes(query)) ||
-          (community.description && community.description.toLowerCase().includes(query))
-        );
-      });
-    }
-
-    setFilteredCommunities(results);
-  }, [selectedCareFilter, selectedLocation, searchQuery]);
-
-  // Set active filter labels for display when filters change
-  useEffect(() => {
-    // Set care type label
-    if (selectedCareFilter === 'all') {
-      setActiveCareLabel('');
-    } else {
-      const careType = allCareTypes.find(f => f.toLowerCase() === selectedCareFilter.toLowerCase());
-      setActiveCareLabel(careType ? careType : selectedCareFilter);
-    }
-
-    // Set location label
-    setActiveLocationLabel(selectedLocation === 'all' ? '' : selectedLocation);
-  }, [selectedCareFilter, selectedLocation, allCareTypes]);
-
-  // Count communities by type
-  const communityCounts = allCareTypes.reduce((acc, type) => {
-    acc[type] = communityData.filter(c => c.careTypes.includes(type)).length;
-    return acc;
-  }, {} as Record<string, number>);
-
-  // Count communities by city for display
-  const cityCounts = allCities.reduce((acc, city) => {
-    acc[city] = communityData.filter(c => c.location.split(',')[0].trim() === city).length;
-    return acc;
-  }, {} as Record<string, number>);
-
-  // Featured communities are now fetched from Supabase with quality filters:
-  // - description NOT NULL AND NOT empty string
-  // - image NOT placeholder
-  // - Prioritizes Tier 1 cities (Westlake, Beachwood, Shaker Heights)
-  // The `featuredCommunities` state is populated by `fetchFeaturedCommunities()`
-  
-  // CLIENT-SIDE SAFEGUARD: Double-check quality before rendering (Ghost Community Fix)
-  // This catches any edge cases that slip through the server-side filters
-  const isAdmissionReady = (community: Community): boolean => {
-    // Must have meaningful description (>50 chars)
-    if (!community.description || community.description.trim().length < 50) return false;
-    
-    // Must have non-placeholder image
-    const imageUrl = community.images?.[0] || '';
-    if (!imageUrl || 
-        imageUrl.toLowerCase().includes('placeholder') ||
-        imageUrl.toLowerCase().includes('no-image') ||
-        imageUrl.toLowerCase().includes('default-community') ||
-        imageUrl.toLowerCase().includes('generic') ||
-        imageUrl.toLowerCase().includes('missing')) {
-      return false;
-    }
-    
-    return true;
-  };
-
-  // Apply client-side safeguard filter
-  const qualityFeaturedCommunities = featuredCommunities.filter(isAdmissionReady);
-  
-  // Log any ghost communities that slipped through (for debugging)
-  const ghostCommunities = featuredCommunities.filter(c => !isAdmissionReady(c));
-  if (ghostCommunities.length > 0) {
-    console.warn(
-      '[GHOST COMMUNITY DETECTED] These communities passed server filter but failed client check:',
-      ghostCommunities.map(c => ({ id: c.id, name: c.name, desc: c.description?.substring(0, 50), img: c.images?.[0] }))
-    );
-  }
-
-  // Determine what to display based on filters
-  const displayCommunities = selectedCareFilter === 'all' && selectedLocation === 'all' && !searchQuery
-    ? qualityFeaturedCommunities
-    : filteredCommunities;
-  
-  const showViewAll = selectedCareFilter === 'all' && selectedLocation === 'all' && !searchQuery;
-
+export default function HomePage() {
   return (
     <>
-      {/* Cleveland Service Banner */}
-      <div className="bg-primary/10 border-b border-primary/20">
-        <div className="container mx-auto px-4 py-3">
-          <div className="text-center">
-            <span className="text-sm md:text-base font-semibold text-primary">
-              🏠 Proudly Serving Greater Cleveland & Northeast Ohio
-            </span>
-            <span className="hidden md:inline text-gray-600 mx-3">|</span>
-            <span className="block md:inline text-sm text-gray-700">Free local guidance for families</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Hero Section - Cleveland-Focused */}
-      <div className="bg-gradient-to-r from-blue-900/5 to-blue-800/10 py-12 md:py-20 border-b border-gray-200 relative overflow-hidden">
-        {/* Subtle background pattern */}
-        <div className="absolute inset-0 opacity-[0.03]">
-          <div className="absolute inset-0" style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%231E3A8A' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
-          }} />
-        </div>
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-4xl mx-auto">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6 text-center leading-tight">
-              Find Assisted Living & Memory Care in Cleveland, Ohio
-            </h1>
-            <p className="text-base md:text-lg text-gray-700 mb-6 text-center max-w-3xl mx-auto">
-              Helping Cleveland families find the right memory care and assisted living communities. Compare top-rated options, schedule tours, and get pricing—all free with personalized local guidance.
-            </p>
-
-            {/* Trust Signals */}
-            <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6 mb-10 text-sm">
-              <div className="flex items-center gap-2 bg-white px-5 py-3 rounded-full shadow-md hover:shadow-lg transition-shadow">
-                <div className="flex">
-                  {[1,2,3,4,5].map(i => (
-                    <Star key={i} className="h-5 w-5 text-yellow-400 fill-yellow-400" />
-                  ))}
-                </div>
-                <span className="font-bold text-gray-900 text-base">4.8/5</span>
-              </div>
-              <div className="bg-gradient-to-r from-blue-50 to-blue-100 px-5 py-3 rounded-full shadow-md border border-blue-200 font-bold text-gray-900">
-                <span className="text-primary">500+</span> Families Helped
-              </div>
-              <div className="bg-gradient-to-r from-green-50 to-emerald-100 px-5 py-3 rounded-full border border-green-300 font-bold text-green-800 shadow-md">
-                ✓ 100% Free Service
-              </div>
-              <div className="bg-gradient-to-r from-orange-50 to-amber-100 px-5 py-3 rounded-full border border-orange-200 font-bold text-orange-800 shadow-md">
-                📍 Local Experts
-              </div>
-            </div>
-
-            {/* Zip-Based Tour Search - MOVED TO HERO */}
-            <div className="bg-white p-6 md:p-8 rounded-xl shadow-lg border border-gray-200 mb-8">
-              <ZipSearchWidget onSearch={(zip) => {
-                // Scroll to results section
-                const resultsSection = document.getElementById('zip-search-results');
-                if (resultsSection) {
-                  resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-              }} />
-            </div>
-
-            <div className="text-center space-y-4">
-              <p className="text-base text-gray-600">or</p>
-              {/* HIGH-CONTRAST PRIMARY CTA - Coral/Teal for maximum visibility */}
-              <Link
-                href="/contact"
-                className="inline-flex items-center gap-3 bg-gradient-to-r from-coral-500 to-rose-500 hover:from-coral-600 hover:to-rose-600 text-white font-bold px-10 py-5 rounded-xl shadow-xl hover:shadow-2xl transition-all text-xl min-h-[60px] min-w-[280px] justify-center"
-                style={{ background: 'linear-gradient(135deg, #FF6B6B 0%, #EE5A5A 100%)' }}
-              >
-                <Phone className="h-6 w-6" />
-                <span>Free Care Consultation</span>
-              </Link>
-              <p className="text-base text-gray-600">or</p>
-              <Link
-                href="/assessment"
-                className="inline-flex items-center gap-2 bg-teal-600 hover:bg-teal-700 text-white font-bold px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all text-lg min-h-[56px]"
-              >
-                <span>Find Your Ideal Care Level (2 min)</span>
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Link>
-              <p className="text-base text-gray-600">or</p>
-              <Link
-                href="#communities"
-                className="inline-flex items-center text-primary hover:underline font-semibold text-lg min-h-[48px]"
-              >
-                <span>Browse all {communityData.length} Cleveland communities</span>
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Link>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Clinical Trust Bar - Medical Anchors */}
-      <ClinicalTrustBar />
-
-      {/* How It Works Section */}
-      <HowItWorks />
-
-      {/* Zip Search Results Section */}
-      <div id="zip-search-results">
-        <ZipTourScheduler />
-      </div>
-
-      {/* Persona-Based Navigation - Who Are You Helping? */}
-      <PersonaNavigation />
-
-      {/* Neighborhood Authority Hubs - Westlake & Beachwood */}
-      <NeighborhoodSpotlight communities={communities} />
-
-      {/* Assessment CTA Section */}
-      <div className="bg-gradient-to-br from-orange-50 to-blue-50 py-16 border-y border-gray-200">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-bold text-[#1e3a5f] mb-4">
-              Not Sure What Level of Care You Need?
-            </h2>
-            <p className="text-lg text-gray-700 mb-8 max-w-2xl mx-auto">
-              Take our free 2-minute assessment to get personalized recommendations 
-              for memory care or assisted living based on your loved one's specific needs.
-            </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link href="/assessment">
-                {/* HIGH-CONTRAST CTA - Coral for visibility, WCAG 2.2 compliant tap target */}
-                <button className="w-full sm:w-auto text-white font-bold px-10 py-5 rounded-xl shadow-lg hover:shadow-xl transition-all text-lg flex items-center justify-center gap-2 min-h-[56px] min-w-[240px]" style={{ background: 'linear-gradient(135deg, #FF6B6B 0%, #EE5A5A 100%)' }}>
-                  Take Free Assessment
-                  <ArrowRight className="h-5 w-5" />
-                </button>
-              </Link>
-            </div>
-            <div className="mt-6 flex flex-wrap items-center justify-center gap-6 text-base text-gray-700">
-              <div className="flex items-center gap-2 min-h-[48px]">
-                <CheckCircle className="h-5 w-5 text-green-600" />
-                <span>Takes 2 minutes</span>
-              </div>
-              <div className="flex items-center gap-2 min-h-[48px]">
-                <CheckCircle className="h-5 w-5 text-green-600" />
-                <span>100% free</span>
-              </div>
-              <div className="flex items-center gap-2 min-h-[48px]">
-                <CheckCircle className="h-5 w-5 text-green-600" />
-                <span>Instant results</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Filter Indicators */}
-      <div className="container mx-auto px-4 py-4">
-        <div className="flex flex-wrap items-center gap-2">
-          <FilterIndicator
-            label={activeCareLabel}
-            isActive={!!activeCareLabel}
-            onClear={() => setSelectedCareFilter('all')}
-          />
-          <LocationFilterIndicator
-            location={activeLocationLabel}
-            isActive={!!activeLocationLabel}
-            onClear={() => setSelectedLocation('all')}
-          />
-        </div>
-      </div>
-
-      {/* Search Results */}
-      {searchQuery && (
-        <SearchResults query={searchQuery} results={filteredCommunities} />
-      )}
-
-      {/* Testimonials Section - Show only when not filtering */}
-      {!searchQuery && selectedCareFilter === 'all' && selectedLocation === 'all' && (
-        <div className="bg-gray-50 py-16 border-t border-gray-200">
-          <div className="container mx-auto px-4">
-            <h2 className="text-3xl font-bold text-center mb-2">Trusted by Cleveland Families</h2>
-            <div className="flex items-center justify-center gap-2 mb-12">
-              <div className="flex">
-                {[1,2,3,4,5].map(i => (
-                  <Star key={i} className="h-5 w-5 text-yellow-400 fill-yellow-400" />
-                ))}
-              </div>
-              <span className="text-gray-600 font-semibold">4.8/5 from 500+ families</span>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-              {testimonials.slice(0, 3).map((testimonial) => (
-                <div key={testimonial.id} className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-                  <div className="flex items-center gap-3 mb-4">
-                    {/* Avatar with initials */}
-                    <div className="w-14 h-14 bg-gradient-to-br from-primary to-primary/60 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-md flex-shrink-0">
-                      {testimonial.author.split(' ').map(n => n[0]).join('')}
-                    </div>
-                    <div className="flex flex-col">
-                      <div className="flex mb-1">
-                        {[1,2,3,4,5].map(i => (
-                          <Star key={i} className="h-4 w-4 text-yellow-400 fill-yellow-400" />
-                        ))}
-                      </div>
-                      <p className="text-sm font-semibold text-gray-900">{testimonial.author}</p>
-                    </div>
-                  </div>
-                  <p className="text-gray-700 italic mb-4 leading-relaxed">"{testimonial.quote}"</p>
-                  <div className="border-t pt-4 flex items-center justify-between">
-                    <p className="text-sm text-gray-500">{testimonial.location}</p>
-                    {testimonial.careType && (
-                      <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full font-medium">
-                        {testimonial.careType}
-                      </span>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Community Listings */}
-      <div id="communities" className="container mx-auto px-4 py-16">
-        <h2 className="text-2xl md:text-3xl font-semibold mb-2 text-center">
-          {showViewAll ? 'Featured Assisted Living & Memory Care in Cleveland' : `${filteredCommunities.length} ${filteredCommunities.length === 1 ? 'Community' : 'Communities'} Found`}
-          {activeLocationLabel && ` in ${activeLocationLabel}`}
-          {selectedCareFilter && selectedCareFilter !== 'all' && ` for ${activeCareLabel}`}
-        </h2>
-        {showViewAll && (
-          <p className="text-lg text-gray-600 text-center mb-8">
-            Quality communities with verified descriptions and images — prioritizing Westlake, Beachwood & Shaker Heights
-          </p>
-        )}
-
-        {displayCommunities.length > 0 ? (
-          <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-              {displayCommunities.map((community, index) => (
-                <div key={community.id} className="relative">
-                  {/* Tier 1 badge for premium cities */}
-                  {showViewAll && index < 3 && (
-                    <div className="absolute -top-2 -right-2 z-10 bg-gradient-to-br from-teal-500 to-emerald-600 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg flex items-center gap-1">
-                      <Star className="h-3 w-3 fill-white" />
-                      PREMIUM
-                    </div>
-                  )}
-                  <LocationCard community={community} />
-                </div>
-              ))}
-            </div>
-            {showViewAll && featuredCommunities.length >= 6 && (
-              <div className="text-center mt-10">
-                <Link
-                  href="/greater-cleveland"
-                  className="inline-flex items-center gap-2 text-white font-bold text-lg px-10 py-5 rounded-xl transition-all shadow-lg hover:shadow-xl min-h-[56px]"
-                  style={{ background: 'linear-gradient(135deg, #FF6B6B 0%, #EE5A5A 100%)' }}
-                >
-                  <span>View All Assisted Living & Memory Care</span>
-                  <ArrowRight className="h-6 w-6" />
-                </Link>
-                <p className="text-base text-gray-500 mt-4">Browse all our featured communities across Greater Cleveland</p>
-              </div>
-            )}
-          </>
-        ) : (
-          /* ADVISOR NOTE: Professional fallback when no communities match filters */
-          <div className="bg-gradient-to-br from-amber-50 to-orange-50 border-2 border-amber-200 rounded-xl p-8 max-w-2xl mx-auto">
-            <div className="text-center">
-              <div className="bg-amber-100 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                <Info className="h-8 w-8 text-amber-600" />
-              </div>
-              <h3 className="text-xl font-bold text-slate-900 mb-2">
-                {activeLocationLabel 
-                  ? `Vetting Communities in ${activeLocationLabel}` 
-                  : 'No Results for Current Filters'}
-              </h3>
-              <p className="text-lg text-slate-700 mb-6 leading-relaxed">
-                {activeLocationLabel 
-                  ? `We are currently vetting new communities in ${activeLocationLabel} to ensure they meet our quality standards. Contact our advisors for an immediate off-market referral.`
-                  : 'No communities match your current filters. Try adjusting your search criteria or contact our advisors for personalized recommendations.'}
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <a
-                  href="tel:+12166774630"
-                  className="inline-flex items-center justify-center gap-2 text-white font-bold px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all min-h-[56px]"
-                  style={{ background: 'linear-gradient(135deg, #FF6B6B 0%, #EE5A5A 100%)' }}
-                >
-                  <Phone className="h-5 w-5" />
-                  Call for Off-Market Options
-                </a>
-                <button
-                  onClick={() => {
-                    setSelectedCareFilter('all');
-                    setSelectedLocation('all');
-                  }}
-                  className="inline-flex items-center justify-center gap-2 bg-white border-2 border-slate-300 text-slate-700 font-semibold px-8 py-4 rounded-xl hover:border-slate-400 transition-all min-h-[56px]"
-                >
-                  Clear All Filters
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* Advanced Filters - Location Tabs */}
-      {(selectedCareFilter !== 'all' || selectedLocation !== 'all' || searchQuery) && (
-        <>
-          <div className="bg-gray-100 py-4 border-t border-gray-200">
-            <div className="container mx-auto px-4">
-              <p className="text-center text-sm text-gray-600 mb-4">Filter by location:</p>
-            </div>
-          </div>
-          <LocationTabs
-            communities={filteredCommunities}
-            selectedLocation={selectedLocation}
-            onLocationChange={setSelectedLocation}
-          />
-        </>
-      )}
-
-      {/* Category Tabs - For Advanced Users */}
-      <div className="bg-white py-8 border-t border-gray-200">
-        <div className="container mx-auto px-4">
-          <p className="text-center text-gray-600 mb-6">Want to filter communities? Use the tabs below:</p>
-          <CategoryTabs
-            communities={filteredCommunities}
-            selectedFilter={selectedCareFilter}
-            onFilterChange={setSelectedCareFilter}
-          />
-        </div>
-      </div>
-    </>
-  );
-}
-
-export default function Home() {
-  // Generate structured data for SEO
-  const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    "name": "Guide for Seniors",
-    "url": "https://guideforseniors.com",
-    "logo": "https://guideforseniors.com/logo.png",
-    "description": "Guide for Seniors helps seniors and families in Cleveland and Northeast Ohio find the right senior living options including assisted living, memory care, and independent living communities.",
-    "address": {
-      "@type": "PostalAddress",
-      "addressLocality": "Cleveland",
-      "addressRegion": "OH",
-      "addressCountry": "US"
-    },
-    "sameAs": [
-      "https://www.facebook.com/guideforseniors",
-      "https://twitter.com/guideforseniors"
-    ]
-  };
-
-  // FAQ Schema
-  const faqSchema = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "How much does senior living cost?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "The cost of senior living varies based on the level of care, location, and amenities. Independent living typically ranges from $1,500 to $3,500 per month, assisted living from $3,000 to $6,000 per month, and memory care from $4,000 to $8,000 per month. Use our 'Get Pricing' button on any community to receive specific cost information."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "How do I know which type of senior living is right for my loved one?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Consider your loved one's current and potential future care needs. If they need minimal assistance, independent living might be appropriate. If they need help with daily activities but not 24-hour nursing care, assisted living is a good option. For those with Alzheimer's or dementia, memory care provides specialized support. Our community profiles detail the care types offered at each location."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "What amenities should I look for in a senior living community?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Look for amenities that match your or your loved one's lifestyle and needs, such as dining options, social activities, fitness centers, transportation services, outdoor spaces, and housekeeping. Consider security features, on-site medical support, and accessibility accommodations. Most importantly, visit communities to experience the atmosphere firsthand."
-        }
-      }
-    ]
-  };
-
-  return (
-    <main className="flex min-h-screen flex-col">
-      {/* Structured Data for SEO */}
+      {/* Structured Data */}
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify([structuredData, faqSchema]) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify([organizationSchema, faqSchema]),
+        }}
       />
 
-      <Header />
-      <Suspense fallback={<div>Loading...</div>}>
-        <SearchContainer />
-      </Suspense>
+      <main className="min-h-screen flex flex-col">
+        {/* A. Global Header - Clean logo + CTA */}
+        <GlobalHeader />
 
-      {/* Browse by City Section */}
-      <div className="bg-gray-100 py-16 border-t border-gray-200">
-        <div className="container mx-auto px-4">
-          <h2 className="text-2xl font-bold text-center mb-2">Browse Senior Living by Cleveland-Area City</h2>
-          <p className="text-lg text-gray-600 text-center mb-8">Find assisted living and memory care in your preferred neighborhood</p>
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-4 max-w-5xl mx-auto">
-            {['Cleveland', 'Shaker Heights', 'Beachwood', 'Parma', 'Lakewood', 'Westlake', 'Strongsville', 'Independence', 'Seven Hills', 'Rocky River'].map(city => (
-              <Link
-                key={city}
-                href={`/location/${city.toLowerCase().replace(/\s+/g, '-')}`}
-                className="bg-white hover:bg-teal-50 border border-gray-200 hover:border-teal-300 rounded-xl p-5 text-center transition-all group min-h-[80px] flex flex-col items-center justify-center"
-              >
-                <MapPin className="h-6 w-6 text-teal-600 mx-auto mb-2" />
-                <span className="text-base font-semibold text-gray-900 group-hover:text-teal-700">{city}</span>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </div>
+        {/* B. Hero Section - Single H1, Search Bar UI */}
+        <Hero />
 
-      {/* Testimonials Section */}
-      <div className="bg-gray-50 py-16 border-t border-gray-200">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-2">Trusted by Cleveland Families</h2>
-          <div className="flex items-center justify-center gap-2 mb-12">
-            <div className="flex">
-              {[1,2,3,4,5].map(i => (
-                <Star key={i} className="h-5 w-5 text-yellow-400 fill-yellow-400" />
-              ))}
-            </div>
-            <span className="text-gray-600 font-semibold">4.8/5 from 500+ families</span>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {testimonials.slice(0, 3).map((testimonial) => (
-              <div key={testimonial.id} className="bg-white p-6 rounded-lg shadow-sm">
-                <div className="flex mb-3">
-                  {[1,2,3,4,5].map(i => (
-                    <Star key={i} className="h-4 w-4 text-yellow-400 fill-yellow-400" />
-                  ))}
-                </div>
-                <p className="text-gray-700 italic mb-4">"{testimonial.quote}"</p>
-                <div className="border-t pt-4">
-                  <p className="font-semibold text-gray-900">{testimonial.author}</p>
-                  <p className="text-sm text-gray-500">{testimonial.location}</p>
-                  {testimonial.careType && (
-                    <p className="text-xs text-primary mt-1">{testimonial.careType}</p>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
+        {/* C. Care Type Authority Clusters (The "Silos") */}
+        <CareTypes />
 
-      {/* Why Choose Guide for Seniors - Cleveland Focus */}
-      <div className="bg-white py-20 border-t border-gray-200">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-4">Why Cleveland Families Choose Guide for Seniors</h2>
-          <p className="text-lg text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-            We make finding the perfect senior living community simple, stress-free, and completely free for families.
-          </p>
+        {/* D. Hyper-Local SEO Section - Cleveland Neighborhoods */}
+        <Neighborhoods />
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            <div className="text-center">
-              <div className="bg-teal-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
-                <MapPin className="h-10 w-10 text-teal-600" />
-              </div>
-              <h3 className="text-xl font-semibold mb-3">Local Cleveland Expertise</h3>
-              <p className="text-lg text-gray-600">
-                Our advisors personally visit every community in Cleveland, Shaker Heights, Beachwood, and beyond. We know the neighborhoods, staff, and what makes each community unique.
-              </p>
-            </div>
+        {/* E. Lead Magnet Section (The Lead Gen Engine) */}
+        <LeadMagnet />
 
-            <div className="text-center">
-              <div className="bg-amber-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Star className="h-10 w-10 text-amber-600" />
-              </div>
-              <h3 className="text-xl font-semibold mb-3">100% Free Service</h3>
-              <p className="text-lg text-gray-600">
-                Never pay a fee. We're compensated by communities, not families. Our guidance, tours, and support are completely free—no hidden costs, ever.
-              </p>
-            </div>
+        {/* F. Trust/Social Proof Section */}
+        <TrustSection />
 
-            <div className="text-center">
-              <div className="bg-rose-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Info className="h-10 w-10 text-rose-600" />
-              </div>
-              <h3 className="text-xl font-semibold mb-3">Save Time & Reduce Stress</h3>
-              <p className="text-lg text-gray-600">
-                We handle the research, schedule tours, compare pricing, and answer all your questions. Focus on your loved one while we handle the details.
-              </p>
-            </div>
-          </div>
-
-          <div className="text-center mt-12">
-            <Link
-              href="/contact"
-              className="inline-flex items-center gap-3 text-white font-bold px-10 py-5 rounded-xl shadow-lg hover:shadow-xl transition-all text-xl min-h-[60px]"
-              style={{ background: 'linear-gradient(135deg, #FF6B6B 0%, #EE5A5A 100%)' }}
-            >
-              Get Started - It's Free
-              <ArrowRight className="h-6 w-6" />
-            </Link>
-          </div>
-        </div>
-      </div>
-
-      {/* SEO Content Section */}
-      <div className="bg-gray-50 py-12 border-t border-gray-200">
-        <div className="container mx-auto px-4">
-          <h2 className="text-2xl font-semibold mb-4">Senior Living Options</h2>
-
-          <div className="prose max-w-none text-gray-700">
-            <p className="mb-4">
-              We offer a comprehensive directory of senior living options to meet the diverse needs of aging adults. Whether you're looking for assisted living, <Link href="/memory-care-cleveland" className="text-primary hover:underline">memory care in Cleveland</Link>, or independent living, our platform helps you explore and compare communities across multiple locations.
-            </p>
-
-            <p className="mb-4">
-              Choosing the right senior living community is a significant decision. Factors to consider include location, level of care provided, amenities, staff-to-resident ratio, and cost. Our platform provides detailed information on each community, allowing you to make informed comparisons and find the perfect fit for yourself or your loved one.
-            </p>
-
-            <h3 className="text-xl font-semibold my-4">Types of Senior Care Available</h3>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-              <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-                <h4 className="font-semibold mb-2">Independent Living</h4>
-                <p>
-                  For active seniors who can live on their own but want a maintenance-free lifestyle with social opportunities and amenities. Explore <Link href="/location/cleveland" className="text-primary hover:underline">independent living in Cleveland</Link>.
-                </p>
-              </div>
-
-              <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-                <h4 className="font-semibold mb-2">Assisted Living</h4>
-                <p>
-                  Provides help with daily activities like bathing, dressing, medication management, and meals while promoting independence. View <Link href="/location/rocky-river" className="text-primary hover:underline">assisted living in Rocky River</Link>.
-                </p>
-              </div>
-
-              <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-                <h4 className="font-semibold mb-2">Memory Care</h4>
-                <p>
-                  Specialized care for those with Alzheimer's, dementia, or other memory conditions in a secure environment with trained staff.
-                </p>
-              </div>
-            </div>
-
-            <p className="mb-4">
-              Our directory includes communities that offer various combinations of these care levels, allowing seniors to age in place as their needs change. Many communities also provide additional services such as skilled nursing, rehabilitation, and respite care.
-            </p>
-
-            <p>
-              Popular neighborhoods include <Link href="/location/shaker-heights" className="text-primary hover:underline">heritage retirement communities in Shaker Heights</Link>, <Link href="/location/beachwood" className="text-primary hover:underline">Beachwood senior living</Link>, and <Link href="/location/westlake" className="text-primary hover:underline">Westlake assisted living</Link>.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* FAQ Section for SEO */}
-      <div className="py-16 border-t border-gray-200">
-        <div className="container mx-auto px-4">
-          <h2 className="text-2xl font-semibold mb-8">Frequently Asked Questions</h2>
-
-          <div className="space-y-6 max-w-4xl">
-            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-              <h3 className="text-xl font-semibold mb-3">How much does senior living cost?</h3>
-              <p className="text-lg text-gray-700 leading-relaxed">
-                The cost of senior living varies based on the level of care, location, and amenities. Independent living typically ranges from $1,500 to $3,500 per month, assisted living from $3,000 to $6,000 per month, and memory care from $4,000 to $8,000 per month. Use our "Get Pricing" button on any community to receive specific cost information.
-              </p>
-            </div>
-
-            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-              <h3 className="text-xl font-semibold mb-3">How do I know which type of senior living is right for my loved one?</h3>
-              <p className="text-lg text-gray-700 leading-relaxed">
-                Consider your loved one's current and potential future care needs. If they need minimal assistance, independent living might be appropriate. If they need help with daily activities but not 24-hour nursing care, assisted living is a good option. For those with Alzheimer's or dementia, memory care provides specialized support. Our community profiles detail the care types offered at each location.
-              </p>
-            </div>
-
-            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-              <h3 className="text-xl font-semibold mb-3">What amenities should I look for in a senior living community?</h3>
-              <p className="text-lg text-gray-700 leading-relaxed">
-                Look for amenities that match your or your loved one's lifestyle and needs, such as dining options, social activities, fitness centers, transportation services, outdoor spaces, and housekeeping. Consider security features, on-site medical support, and accessibility accommodations. Most importantly, visit communities to experience the atmosphere firsthand.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Final Assessment CTA Banner - HIGH-CONTRAST */}
-      <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 py-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              Ready to Find the Right Community?
-            </h2>
-            <p className="text-xl text-gray-300 mb-10">
-              Take our 2-minute assessment or speak directly with a Cleveland advisor
-            </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-              {/* PRIMARY CTA - High-Contrast Coral */}
-              <Link href="/contact">
-                <button 
-                  className="w-full sm:w-auto text-white font-bold px-12 py-5 rounded-xl shadow-xl hover:shadow-2xl transition-all text-xl min-h-[60px] min-w-[280px] flex items-center justify-center gap-3"
-                  style={{ background: 'linear-gradient(135deg, #FF6B6B 0%, #EE5A5A 100%)' }}
-                >
-                  <Phone className="h-6 w-6" />
-                  Free Care Consultation
-                </button>
-              </Link>
-              {/* SECONDARY CTA */}
-              <a href="tel:+12166774630">
-                <button className="w-full sm:w-auto bg-white hover:bg-gray-100 text-slate-900 font-bold px-12 py-5 rounded-xl shadow-xl hover:shadow-2xl transition-all text-xl min-h-[60px] min-w-[240px] flex items-center justify-center gap-2">
-                  <Phone className="h-5 w-5" />
-                  Call: (216) 677-4630
-                </button>
-              </a>
-            </div>
-            <p className="text-gray-400 mt-8 text-base">
-              Join hundreds of Cleveland families who have found the perfect care community
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Comparison Floating Button */}
-      <ComparisonFloatingButton />
-
-      {/* Schedule Tour FAB */}
-      <ScheduleTourFAB />
-
-      <div className="mt-auto">
+        {/* Footer */}
         <Footer />
-      </div>
-    </main>
+      </main>
+    </>
   );
 }
