@@ -23,8 +23,14 @@ const formatCityName = (slug: string): string => {
     .join(' ');
 };
 
-// City-specific SEO optimizations based on keyword opportunities
-const citySpecificSEO: Record<string, { titleSuffix: string; keywords: string; descriptionExtra: string }> = {
+// City-specific SEO optimizations based on high-intent long-tail keyword opportunities
+const citySpecificSEO: Record<string, { 
+  titleSuffix: string; 
+  keywords: string; 
+  descriptionExtra: string;
+  longTailTitle?: string;
+  longTailDescription?: string;
+}> = {
   'shaker-heights': {
     titleSuffix: 'Heritage Assisted Living & Memory Care',
     keywords: 'american heritage assisted living, heritage retirement communities shaker heights, woodlands shaker heights',
@@ -41,14 +47,18 @@ const citySpecificSEO: Record<string, { titleSuffix: string; keywords: string; d
     descriptionExtra: 'Greater Cleveland\'s most comprehensive senior living directory.'
   },
   'beachwood': {
-    titleSuffix: 'Luxury Senior Living & Memory Care',
-    keywords: 'rose senior living beachwood, luxury senior living beachwood, assisted living beachwood ohio',
-    descriptionExtra: 'Premium senior communities near Legacy Village.'
+    titleSuffix: 'Memory Care Near UH Ahuja Medical Center',
+    keywords: 'memory care near UH Ahuja Medical Center, Beachwood skilled nursing for dementia, rose senior living beachwood, luxury senior living beachwood, assisted living beachwood ohio, dementia care beachwood, alzheimers care beachwood ohio',
+    descriptionExtra: 'Clinical excellence in memory care and dementia services near UH Ahuja Medical Center.',
+    longTailTitle: 'Memory Care Near UH Ahuja Medical Center | Beachwood Skilled Nursing for Dementia',
+    longTailDescription: '2026 guide: Find specialized memory care and skilled nursing for dementia near UH Ahuja Medical Center in Beachwood, OH. Expert clinical teams, secure environments, and direct hospital access. Free family consultations.'
   },
   'westlake': {
-    titleSuffix: 'Assisted Living & Memory Care Communities',
-    keywords: 'sunrise of westlake, brookdale westlake, arden courts westlake, assisted living westlake ohio',
-    descriptionExtra: 'Top-rated senior communities near Crocker Park and St. John Medical Center.'
+    titleSuffix: 'Assisted Living for Hospital Discharge',
+    keywords: 'assisted living in Westlake OH for hospital discharge, Westlake senior living costs 2026, sunrise of westlake, brookdale westlake, arden courts westlake, hospital discharge senior living westlake, st john medical center assisted living',
+    descriptionExtra: 'Specialized in hospital discharge transitions near St. John Medical Center.',
+    longTailTitle: 'Assisted Living in Westlake OH for Hospital Discharge | 2026 Costs & Options',
+    longTailDescription: '2026 guide: Find assisted living in Westlake, OH for hospital discharge from St. John Medical Center. Same-week move-ins, rehabilitation support, and verified pricing. Free discharge planning consultations.'
   }
 };
 
@@ -114,10 +124,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const hospitalNames = cityHospitals.map(h => h.shortName);
   const costRange = cityData?.averageCost?.assistedLiving || '$3,500 - $6,500';
   
-  // GEO-READY: Build conversational title optimized for AI overviews and featured snippets
-  // Format: "Compare the top X [City] assisted living communities near [Hospital]—verified 2026 pricing"
+  // HIGH-INTENT LONG-TAIL: Use city-specific optimized titles for Westlake & Beachwood
+  // These target specific high-value keywords: "hospital discharge", "UH Ahuja", "dementia", "2026 costs"
   let title: string;
-  if (metrics.communityCount > 0) {
+  if (citySEO?.longTailTitle) {
+    // Use the optimized long-tail title for high-intent pages (Westlake, Beachwood)
+    title = citySEO.longTailTitle;
+  } else if (metrics.communityCount > 0) {
     title = generateConversationalTitle(
       cityName, 
       metrics.communityCount, 
@@ -130,9 +143,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title = `Find Senior Living in ${cityName}, OH Near ${nearestHospital} | Guide for Seniors`;
   }
   
-  // GEO-READY: Build conversational description with clinical context for AEO
+  // HIGH-INTENT LONG-TAIL: Use city-specific optimized descriptions
   let description: string;
-  if (metrics.communityCount > 0) {
+  if (citySEO?.longTailDescription) {
+    // Use the optimized long-tail description for high-intent pages
+    description = citySEO.longTailDescription;
+  } else if (metrics.communityCount > 0) {
     description = generateConversationalDescription(
       cityName,
       metrics.communityCount,

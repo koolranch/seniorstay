@@ -300,11 +300,54 @@ const SchemaOrg: React.FC<SchemaOrgProps> = ({ cityName, stateAbbr, communities,
       "datePublished": `${currentYear}-01-15`
     }));
 
+  // City-specific long-tail keyword FAQ entries for Westlake and Beachwood
+  const westlakeLongTailFAQs = citySlug === 'westlake' ? [
+    {
+      "@type": "Question",
+      "name": "How do I find assisted living in Westlake OH for hospital discharge?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": `Finding assisted living in Westlake, OH for hospital discharge requires working with discharge planners at St. John Medical Center or Cleveland Clinic Avon. Guide for Seniors specializes in urgent placements—we coordinate with hospital case managers to secure same-week move-ins. Westlake communities like Arden Courts and Brookdale accept hospital discharges with complex medical needs, including post-surgical recovery and rehabilitation. Our free service includes: real-time bed availability, insurance verification, and transportation coordination. Call (216) 677-4630 for immediate assistance.`
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What are Westlake senior living costs in 2026?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": `Westlake senior living costs in ${currentYear} range from $3,800 to $6,500 per month for assisted living, depending on the level of care and room type. Memory care in Westlake averages $5,200 to $8,800 monthly. These rates typically include: private or semi-private rooms, three daily meals, medication management, housekeeping, laundry, and 24-hour staff. Short-term rehabilitation stays for post-hospital recovery start at approximately $350/day. Guide for Seniors provides free cost comparisons across all ${communityCount} Westlake communities.`
+      }
+    }
+  ] : [];
+
+  const beachwoodLongTailFAQs = citySlug === 'beachwood' ? [
+    {
+      "@type": "Question",
+      "name": "Where can I find memory care near UH Ahuja Medical Center?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": `Memory care near UH Ahuja Medical Center is available at several Beachwood communities within a 5-mile radius. Rose Senior Living Beachwood and Menorah Park offer specialized dementia care with secured memory units, trained staff, and programming designed for Alzheimer's and dementia residents. Proximity to UH Ahuja's Neurological Institute provides access to dementia specialists, neurologists, and clinical trials. ${memoryCareCount > 0 ? `Beachwood has ${memoryCareCount} memory care communities` : 'Multiple Beachwood communities'} accept direct transfers from UH Ahuja's geriatric psychiatry unit. Guide for Seniors offers free consultations: (216) 677-4630.`
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the best Beachwood skilled nursing for dementia?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": `Beachwood skilled nursing for dementia combines 24-hour nursing supervision with specialized memory care programming. Top-rated options include Menorah Park (5-star CMS rating), which offers dedicated dementia units with trained nursing staff, and Rose Senior Living Beachwood with its person-centered approach. Beachwood's location near UH Ahuja Medical Center ensures residents have rapid access to neurological specialists and emergency care. Costs for skilled nursing with dementia care start at approximately $6,800/month in ${currentYear}. Our advisors specialize in matching families with the right level of dementia care—contact us for a free assessment.`
+      }
+    }
+  ] : [];
+
   // FAQPage Schema - Dynamic PAA questions based on city data for AEO (enhanced for 2026)
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
     "mainEntity": [
+      // City-specific long-tail FAQs first (for featured snippet priority)
+      ...westlakeLongTailFAQs,
+      ...beachwoodLongTailFAQs,
+      // Standard FAQ entries
       {
         "@type": "Question",
         "name": `How much does assisted living cost in ${cityName}, Ohio in ${currentYear}?`,

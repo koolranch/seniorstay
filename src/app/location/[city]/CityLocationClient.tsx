@@ -21,6 +21,7 @@ import ExitIntentPopup from '@/components/forms/ExitIntentPopup';
 import CommunitySpotlight from '@/components/location/CommunitySpotlight';
 import CommunityComparisonTable from '@/components/location/CommunityComparisonTable';
 import QuickFacts from '@/components/location/QuickFacts';
+import CitySpecificContent from '@/components/location/CitySpecificContent';
 import AffordabilityCalculator from '@/components/AffordabilityCalculator';
 import StickyCalculatorCTA from '@/components/StickyCalculatorCTA';
 
@@ -100,6 +101,9 @@ export default function CityLocationClient({ cityName, stateAbbr, communities }:
         communities={communities}
         cityData={cityData}
       />
+
+      {/* City-Specific Long-Tail Keyword Content (Westlake: Hospital Discharge, Beachwood: Memory Care) */}
+      <CitySpecificContent citySlug={citySlug} cityName={cityName} />
 
       {/* City Header with Lead Capture */}
       <div className="bg-gray-50 py-8 border-b border-gray-200">
