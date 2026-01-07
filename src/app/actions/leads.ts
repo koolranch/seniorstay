@@ -477,6 +477,14 @@ export async function submitLead(formData: LeadInput): Promise<LeadSubmitResult>
     // Clean notes (remove JSON for readability, keep summary)
     const cleanNotes = data.notes?.split('---META_DATA_JSON---')[0]?.trim() || null;
     
+    // Estimate commission based on city and care type
+    const estimatedCommission = estimateCommission(sourceSlug, data.careType);
+    
+    // Extract financial readiness indicators from calculator
+    const homeValue = calculatorData?.homeValue || null;
+    const valueGap = calculatorData?.valueGap || null;
+    const calculatedBudget = calculatorData?.seniorLivingCost || null;
+    
     const leadData = {
       fullName: data.fullName.trim(),
       email: data.email?.trim() || null,
@@ -486,6 +494,7 @@ export async function submitLead(formData: LeadInput): Promise<LeadSubmitResult>
       moveInTimeline: data.moveInTimeline || null,
       notes: cleanNotes,
       communityName: data.communityName?.trim() || null,
+      communityId: data.communityId || null,
       pageType: pageType || null,
       sourceSlug: sourceSlug || null,
       urgencyScore: finalUrgencyScore,
@@ -500,6 +509,14 @@ export async function submitLead(formData: LeadInput): Promise<LeadSubmitResult>
       updatedAt: new Date().toISOString(),
       // Store structured calculator data as JSONB
       ...(calculatorData && { meta_data: calculatorData }),
+      // Commission & referral tracking
+      referral_status: 'new',
+      estimated_commission: estimatedCommission,
+      is_high_value: isHighValueCalculator,
+      // Financial readiness indicators
+      ...(homeValue && { home_value: homeValue }),
+      ...(valueGap && { value_gap: valueGap }),
+      ...(calculatedBudget && { calculated_budget: calculatedBudget }),
     };
     
     // -------------------------------------------------------------------------
@@ -595,6 +612,37 @@ export async function submitLead(formData: LeadInput): Promise<LeadSubmitResult>
     }
     
     // -------------------------------------------------------------------------
+    // 7. REFERRAL SHIELD: Send formal referral for HIGH-VALUE calculator leads
+    // -------------------------------------------------------------------------
+    if (isHighValueCalculator && calculatorData) {
+      const referralSent = await sendReferralNotification({
+        id: leadId,
+        fullName: data.fullName,
+        email: data.email,
+        phone: data.phone,
+        careType: data.careType,
+        moveInTimeline: data.moveInTimeline,
+        communityName: data.communityName,
+        sourceSlug,
+        calculatorData,
+        estimatedCommission,
+      });
+      
+      // Update referral status in database
+      if (referralSent) {
+        await supabase
+          .from('Lead')
+          .update({ 
+            referral_status: 'referral_sent',
+            referral_sent_at: new Date().toISOString(),
+          })
+          .eq('id', leadId);
+          
+        console.log(`[Referral Shield] Formal referral sent for lead: ${leadId}, commission: $${estimatedCommission}`);
+      }
+    }
+    
+    // -------------------------------------------------------------------------
     // 7. LOG & RETURN SUCCESS
     // -------------------------------------------------------------------------
     const duration = Date.now() - startTime;
@@ -653,6 +701,183 @@ export async function submitLead(formData: LeadInput): Promise<LeadSubmitResult>
 }
 
 // ============================================================================
+// COMMISSION ESTIMATION (2026 Cleveland Market Rates)
+// ============================================================================
+
+/**
+ * 2026 Cleveland Market Commission Rates (100% of first month's rent)
+ * Premium Tier: Beachwood, Shaker Heights, Westlake, Rocky River, Solon
+ * Volume Tier: Parma, Strongsville, Lakewood, Mentor
+ */
+const COMMISSION_RATES: Record<string, { assisted_living: number; memory_care: number }> = {
+  beachwood: { assisted_living: 6800, memory_care: 8200 },
+  'shaker heights': { assisted_living: 6200, memory_care: 7800 },
+  'shaker-heights': { assisted_living: 6200, memory_care: 7800 },
+  westlake: { assisted_living: 5800, memory_care: 7200 },
+  'rocky river': { assisted_living: 5600, memory_care: 7000 },
+  'rocky-river': { assisted_living: 5600, memory_care: 7000 },
+  solon: { assisted_living: 5900, memory_care: 7400 },
+  parma: { assisted_living: 4900, memory_care: 6200 },
+  strongsville: { assisted_living: 5400, memory_care: 6800 },
+  lakewood: { assisted_living: 5600, memory_care: 7000 },
+  mentor: { assisted_living: 5200, memory_care: 6600 },
+  cleveland: { assisted_living: 5520, memory_care: 6800 },
+};
+
+/**
+ * Estimate commission based on city and care type
+ * Returns 100% of first month's rent (industry standard referral fee)
+ */
+function estimateCommission(city?: string, careType?: string): number {
+  const normalizedCity = city?.toLowerCase().replace(/-/g, ' ') || 'cleveland';
+  const rates = COMMISSION_RATES[normalizedCity] || COMMISSION_RATES['cleveland'];
+  
+  if (careType === 'Memory Care') {
+    return rates.memory_care;
+  }
+  return rates.assisted_living;
+}
+
+// ============================================================================
+// REFERRAL SHIELD NOTIFICATION SYSTEM
+// ============================================================================
+
+/**
+ * Send formal referral notification to community sales director
+ * Triggered for HIGH-VALUE leads (homeValue > $350k OR valueGap > $500/mo)
+ * 
+ * Subject: [REFERRAL] New Qualified Prospect for [Community Name] - Guide For Seniors
+ */
+async function sendReferralNotification(lead: {
+  id: string;
+  fullName: string;
+  email?: string;
+  phone?: string;
+  careType?: string;
+  moveInTimeline?: string;
+  communityName?: string;
+  communityEmail?: string;
+  sourceSlug?: string;
+  calculatorData?: CalculatorMetaData | null;
+  estimatedCommission: number;
+}): Promise<boolean> {
+  try {
+    const webhookUrl = process.env.REFERRAL_NOTIFICATION_WEBHOOK || process.env.HIGH_PRIORITY_LEAD_WEBHOOK;
+    const formspreeEndpoint = process.env.FORMSPREE_REFERRAL_ENDPOINT || process.env.FORMSPREE_HIGH_PRIORITY_ENDPOINT;
+    
+    const communityName = lead.communityName || `Senior Living in ${lead.sourceSlug?.replace(/-/g, ' ') || 'Cleveland'}`;
+    const homeValue = lead.calculatorData?.homeValue?.toLocaleString() || 'Not specified';
+    const monthlyBudget = lead.calculatorData?.seniorLivingCost?.toLocaleString() || 'Not specified';
+    const valueGap = lead.calculatorData?.valueGap;
+    const valueGapText = valueGap ? `$${Math.abs(valueGap).toLocaleString()}/mo ${valueGap > 0 ? 'savings' : 'difference'}` : 'Not calculated';
+    
+    const emailSubject = `[REFERRAL] New Qualified Prospect for ${communityName} - Guide For Seniors`;
+    
+    const emailBody = `
+FORMAL REFERRAL NOTIFICATION
+============================
+
+This is a formal referral notification from Guide For Seniors.
+
+PROSPECT INFORMATION:
+- Name: ${lead.fullName}
+- Phone: ${lead.phone || 'Not provided'}
+- Email: ${lead.email || 'Not provided'}
+- Care Type Needed: ${lead.careType || 'Assisted Living'}
+- Move-in Timeline: ${lead.moveInTimeline || 'Not specified'}
+
+FINANCIAL READINESS:
+- Home Value: $${homeValue}
+- Calculated Monthly Budget: $${monthlyBudget}
+- Value Gap vs. Home: ${valueGapText}
+
+REFERRAL TERMS:
+- Estimated Commission: $${lead.estimatedCommission.toLocaleString()}
+- Terms: 100% of first month's rent upon admission
+- Lead ID: ${lead.id}
+
+Please acknowledge receipt of this referral to secure our placement fee agreement.
+
+---
+Guide For Seniors
+Cleveland's Trusted Senior Living Advisor
+(216) 677-4630 | guideforseniors.com
+    `.trim();
+    
+    // Try webhook first
+    if (webhookUrl) {
+      const response = await fetch(webhookUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${process.env.WEBHOOK_SECRET || ''}`,
+        },
+        body: JSON.stringify({
+          type: 'REFERRAL_NOTIFICATION',
+          subject: emailSubject,
+          body: emailBody,
+          lead: {
+            id: lead.id,
+            name: lead.fullName,
+            phone: lead.phone,
+            email: lead.email,
+            careType: lead.careType,
+            timeline: lead.moveInTimeline,
+            community: communityName,
+            homeValue: lead.calculatorData?.homeValue,
+            monthlyBudget: lead.calculatorData?.seniorLivingCost,
+            valueGap: lead.calculatorData?.valueGap,
+            estimatedCommission: lead.estimatedCommission,
+          },
+          communityEmail: lead.communityEmail,
+          timestamp: new Date().toISOString(),
+        }),
+        signal: AbortSignal.timeout(5000),
+      });
+      
+      return response.ok;
+    }
+    
+    // Fallback to Formspree
+    if (formspreeEndpoint) {
+      const response = await fetch(formspreeEndpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify({
+          _subject: emailSubject,
+          _replyto: lead.email || 'noreply@guideforseniors.com',
+          prospect_name: lead.fullName,
+          prospect_phone: lead.phone || 'Not provided',
+          prospect_email: lead.email || 'Not provided',
+          care_type: lead.careType || 'Assisted Living',
+          timeline: lead.moveInTimeline || 'Not specified',
+          community: communityName,
+          home_value: `$${homeValue}`,
+          monthly_budget: `$${monthlyBudget}`,
+          value_gap: valueGapText,
+          estimated_commission: `$${lead.estimatedCommission.toLocaleString()}`,
+          lead_id: lead.id,
+          message: emailBody,
+        }),
+        signal: AbortSignal.timeout(5000),
+      });
+      
+      return response.ok;
+    }
+    
+    console.warn('[Referral] No webhook configured for referral notifications');
+    return false;
+    
+  } catch (error) {
+    console.error('[Referral] Failed to send referral notification:', error);
+    return false;
+  }
+}
+
+// ============================================================================
 // UTILITY EXPORTS
 // ============================================================================
 
@@ -687,5 +912,205 @@ export async function getRecentHighPriorityLeads() {
     
   if (error) throw error;
   return data;
+}
+
+// ============================================================================
+// PIPELINE MANAGEMENT (Commission Dashboard)
+// ============================================================================
+
+export type ReferralStatus = 'new' | 'referral_sent' | 'tour_scheduled' | 'admitted' | 'paid';
+
+/**
+ * Get all leads grouped by referral status for pipeline dashboard
+ */
+export async function getPipelineLeads() {
+  const supabase = getSupabaseAdmin();
+  
+  const { data, error } = await supabase
+    .from('Lead')
+    .select('*')
+    .order('createdAt', { ascending: false });
+    
+  if (error) throw error;
+  
+  // Group by referral status
+  const pipeline = {
+    new: [] as typeof data,
+    referral_sent: [] as typeof data,
+    tour_scheduled: [] as typeof data,
+    admitted: [] as typeof data,
+    paid: [] as typeof data,
+  };
+  
+  data?.forEach(lead => {
+    const status = (lead.referral_status || 'new') as ReferralStatus;
+    if (pipeline[status]) {
+      pipeline[status].push(lead);
+    } else {
+      pipeline.new.push(lead);
+    }
+  });
+  
+  // Calculate totals
+  const totalPipelineValue = data?.reduce((sum, lead) => {
+    if (lead.referral_status !== 'paid') {
+      return sum + (parseFloat(lead.estimated_commission) || 0);
+    }
+    return sum;
+  }, 0) || 0;
+  
+  const totalPaidCommission = data?.reduce((sum, lead) => {
+    if (lead.referral_status === 'paid') {
+      return sum + (parseFloat(lead.actual_commission) || parseFloat(lead.estimated_commission) || 0);
+    }
+    return sum;
+  }, 0) || 0;
+  
+  return {
+    pipeline,
+    totalPipelineValue,
+    totalPaidCommission,
+    totalLeads: data?.length || 0,
+  };
+}
+
+/**
+ * Update lead referral status (for pipeline management)
+ */
+export async function updateLeadStatus(
+  leadId: string, 
+  status: ReferralStatus,
+  additionalData?: {
+    actual_commission?: number;
+    tour_scheduled_at?: string;
+    tour_completed_at?: string;
+    admitted_at?: string;
+    move_in_date?: string;
+    advisor_notes?: string;
+  }
+): Promise<{ success: boolean; message: string }> {
+  const supabase = getSupabaseAdmin();
+  
+  const updateData: Record<string, unknown> = {
+    referral_status: status,
+    updatedAt: new Date().toISOString(),
+  };
+  
+  // Set timestamps based on status
+  if (status === 'referral_sent' && !additionalData?.tour_scheduled_at) {
+    updateData.referral_sent_at = new Date().toISOString();
+  }
+  if (status === 'tour_scheduled' && additionalData?.tour_scheduled_at) {
+    updateData.tour_scheduled_at = additionalData.tour_scheduled_at;
+  }
+  if (status === 'admitted') {
+    updateData.admitted_at = additionalData?.admitted_at || new Date().toISOString();
+    if (additionalData?.move_in_date) {
+      updateData.move_in_date = additionalData.move_in_date;
+    }
+  }
+  if (status === 'paid' && additionalData?.actual_commission) {
+    updateData.actual_commission = additionalData.actual_commission;
+    updateData.commission_paid_at = new Date().toISOString();
+  }
+  if (additionalData?.advisor_notes) {
+    updateData.advisor_notes = additionalData.advisor_notes;
+  }
+  
+  const { error } = await supabase
+    .from('Lead')
+    .update(updateData)
+    .eq('id', leadId);
+    
+  if (error) {
+    console.error('[Pipeline] Status update failed:', error);
+    return { success: false, message: error.message };
+  }
+  
+  console.log(`[Pipeline] Lead ${leadId} moved to ${status}`);
+  return { success: true, message: `Lead moved to ${status}` };
+}
+
+/**
+ * Mark lead as admitted and set final commission
+ */
+export async function markLeadAdmitted(
+  leadId: string,
+  actualCommission: number,
+  moveInDate?: string
+): Promise<{ success: boolean; message: string }> {
+  return updateLeadStatus(leadId, 'admitted', {
+    actual_commission: actualCommission,
+    admitted_at: new Date().toISOString(),
+    move_in_date: moveInDate,
+  });
+}
+
+/**
+ * Get high-value leads for referral
+ */
+export async function getHighValueLeadsForReferral() {
+  const supabase = getSupabaseAdmin();
+  
+  const { data, error } = await supabase
+    .from('Lead')
+    .select('*')
+    .eq('is_high_value', true)
+    .eq('referral_status', 'new')
+    .order('estimated_commission', { ascending: false });
+    
+  if (error) throw error;
+  return data;
+}
+
+/**
+ * Send referral for a specific lead (manual trigger)
+ */
+export async function sendLeadReferral(leadId: string): Promise<{ success: boolean; message: string }> {
+  const supabase = getSupabaseAdmin();
+  
+  // Get the lead
+  const { data: lead, error } = await supabase
+    .from('Lead')
+    .select('*')
+    .eq('id', leadId)
+    .single();
+    
+  if (error || !lead) {
+    return { success: false, message: 'Lead not found' };
+  }
+  
+  // Parse calculator data
+  const calculatorData = lead.meta_data as CalculatorMetaData | null;
+  
+  // Send referral notification
+  const sent = await sendReferralNotification({
+    id: lead.id,
+    fullName: lead.fullName,
+    email: lead.email,
+    phone: lead.phone,
+    careType: lead.careType,
+    moveInTimeline: lead.moveInTimeline,
+    communityName: lead.communityName,
+    sourceSlug: lead.sourceSlug,
+    calculatorData,
+    estimatedCommission: parseFloat(lead.estimated_commission) || estimateCommission(lead.sourceSlug, lead.careType),
+  });
+  
+  if (sent) {
+    // Update lead status
+    await supabase
+      .from('Lead')
+      .update({
+        referral_status: 'referral_sent',
+        referral_sent_at: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      })
+      .eq('id', leadId);
+      
+    return { success: true, message: 'Referral notification sent successfully' };
+  }
+  
+  return { success: false, message: 'Failed to send referral notification' };
 }
 

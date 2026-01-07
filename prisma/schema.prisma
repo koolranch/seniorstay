@@ -130,6 +130,7 @@ model Lead {
   moveInTimeline  String?  
   notes           String?
   communityName   String?
+  communityId     String?       // FK to Community if matched
   pageType        String?       // "location_page", "community_page", "contact", "assessment"
   sourceSlug      String?       // e.g., "westlake", "beachwood" (Cleveland suburb)
   city            String?
@@ -152,8 +153,45 @@ model Lead {
   // Contains: homeValue, valueGap, propertyTax, totalHomeCost, seniorLivingCost, etc.
   meta_data       Json?     @db.JsonB
   
+  // =========================================================================
+  // COMMISSION & REFERRAL TRACKING
+  // =========================================================================
+  
+  // Referral pipeline status
+  referral_status           String    @default("new") // "new", "referral_sent", "tour_scheduled", "admitted", "paid"
+  referral_sent_at          DateTime? // When referral notification was sent to community
+  
+  // Commission tracking (100% of first month's rent)
+  estimated_commission      Decimal?  @db.Decimal(10, 2) // Based on city average pricing
+  actual_commission         Decimal?  @db.Decimal(10, 2) // Final paid amount
+  commission_paid_at        DateTime? // When commission was received
+  
+  // Community sales contact
+  admissions_contact_email  String?   // Community sales director email
+  admissions_contact_name   String?   // Community sales director name
+  admissions_contact_phone  String?   // Community sales director phone
+  
+  // Financial readiness indicators (from calculator)
+  is_high_value             Boolean   @default(false) // homeValue > $350k OR valueGap > $500/mo
+  calculated_budget         Decimal?  @db.Decimal(10, 2) // Monthly budget from calculator
+  home_value                Decimal?  @db.Decimal(12, 2) // Home value from calculator
+  value_gap                 Decimal?  @db.Decimal(10, 2) // Monthly savings vs staying home
+  
+  // Tour tracking
+  tour_scheduled_at         DateTime?
+  tour_completed_at         DateTime?
+  
+  // Move-in tracking  
+  admitted_at               DateTime?
+  move_in_date              DateTime?
+  
+  // Notes for sales pipeline
+  advisor_notes             String?   // Internal notes for follow-up
+  
   @@index([email])
   @@index([urgencyScore])
   @@index([sourceSlug])
   @@index([createdAt])
+  @@index([referral_status])
+  @@index([is_high_value])
 }
