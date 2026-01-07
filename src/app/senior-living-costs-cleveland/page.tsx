@@ -7,6 +7,7 @@ import Header from '@/components/header/Header';
 import Footer from '@/components/footer/Footer';
 import StickyTourButton from '@/components/tour/StickyTourButton';
 import { submitLead } from '@/app/actions/leads';
+import AffordabilityCalculator from '@/components/AffordabilityCalculator';
 
 export default function SeniorLivingCostsClevelandPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -154,6 +155,19 @@ export default function SeniorLivingCostsClevelandPage() {
               </div>
             </div>
 
+          </div>
+        </div>
+      </div>
+
+      {/* Affordability Calculator Section */}
+      <div id="affordability-calculator">
+        <AffordabilityCalculator />
+      </div>
+
+      {/* Additional Info Section */}
+      <div className="py-16">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto">
             <div className="prose prose-lg max-w-none text-gray-700">
               <h3 className="text-2xl font-semibold mb-4 mt-8">What Affects Senior Living Costs in Cleveland?</h3>
               <p className="mb-4">Several factors influence the cost of senior living in the Cleveland area:</p>

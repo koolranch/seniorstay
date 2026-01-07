@@ -21,6 +21,8 @@ import ExitIntentPopup from '@/components/forms/ExitIntentPopup';
 import CommunitySpotlight from '@/components/location/CommunitySpotlight';
 import CommunityComparisonTable from '@/components/location/CommunityComparisonTable';
 import QuickFacts from '@/components/location/QuickFacts';
+import AffordabilityCalculator from '@/components/AffordabilityCalculator';
+import StickyCalculatorCTA from '@/components/StickyCalculatorCTA';
 
 interface CityLocationClientProps {
   cityName: string;
@@ -231,6 +233,11 @@ export default function CityLocationClient({ cityName, stateAbbr, communities }:
         </div>
       )}
 
+      {/* Affordability Calculator - City-Specific Defaults */}
+      <div id="affordability-calculator">
+        <AffordabilityCalculator defaultCity={citySlug} />
+      </div>
+
       {/* Map Section */}
       <section className="bg-gray-50 py-8 border-t">
         <div className="container mx-auto px-4">
@@ -413,6 +420,9 @@ export default function CityLocationClient({ cityName, stateAbbr, communities }:
 
       {/* Exit Intent Popup */}
       <ExitIntentPopup cityName={cityName} />
+
+      {/* Sticky Calculator CTA (Mobile Only) */}
+      <StickyCalculatorCTA cityName={cityName} />
 
       <div className="mt-auto">
         <Footer />

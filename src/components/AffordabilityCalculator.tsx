@@ -348,27 +348,31 @@ function LeadCaptureModal({ isOpen, onClose, results, inputs }: LeadCaptureModal
     const utmParams = getUtmParams();
     const sourceInfo = getSourceInfo();
     
-    // Build detailed notes with calculator data
+    // Build structured meta_data for analytics
+    const calculatorMetaData: CalculatorMetaData = {
+      homeValue: inputs.homeValue,
+      mortgage: inputs.mortgage,
+      groceries: inputs.groceries,
+      utilities: inputs.utilities,
+      maintenance: inputs.maintenance,
+      homeCareHours: inputs.homeCareHours,
+      homeCareCost: Math.round(inputs.homeCareHours * 18.51),
+      propertyTax: results.propertyTax,
+      totalHomeCost: results.totalHomeCost,
+      selectedLocation: inputs.selectedLocation,
+      seniorLivingCost: results.seniorLivingCost,
+      valueGap: results.valueGap,
+      valueGapPercent: results.valueGapPercent,
+      isHighValue: results.isHighValue,
+      monthlySavings: results.monthlySavings,
+      annualSavings: results.annualSavings,
+    };
+    
+    // Build detailed notes with calculator data (for human readability)
     const calculatorNotes = `
-CLEVELAND VALUE CALCULATOR RESULTS:
------------------------------------
-Value Gap: ${results.valueGap >= 0 ? '+' : ''}$${results.valueGap.toLocaleString()}/mo (${results.isHighValue ? 'HIGH VALUE' : 'COMPARABLE'})
-Monthly Savings: $${results.monthlySavings.toLocaleString()}
-Annual Savings: $${results.annualSavings.toLocaleString()}
-
-HOME COSTS BREAKDOWN:
-- Home Value: $${inputs.homeValue.toLocaleString()}
-- Property Tax: $${results.propertyTax.toLocaleString()}/mo
-- Mortgage/Rent: $${inputs.mortgage.toLocaleString()}/mo
-- Utilities: $${inputs.utilities.toLocaleString()}/mo
-- Groceries: $${inputs.groceries.toLocaleString()}/mo
-- Maintenance: $${inputs.maintenance.toLocaleString()}/mo
-- Home Care (${inputs.homeCareHours} hrs): $${Math.round(inputs.homeCareHours * 18.51).toLocaleString()}/mo
-TOTAL HOME COST: $${results.totalHomeCost.toLocaleString()}/mo
-
-SENIOR LIVING OPTION:
-- Location: ${LOCATION_TIERS.find(l => l.value === inputs.selectedLocation)?.label}
-- Monthly Cost: $${results.seniorLivingCost.toLocaleString()}
+[CALCULATOR] Value Gap: ${results.valueGap >= 0 ? '+' : ''}$${results.valueGap.toLocaleString()}/mo | Home Value: $${inputs.homeValue.toLocaleString()} | Location: ${LOCATION_TIERS.find(l => l.value === inputs.selectedLocation)?.label}
+---META_DATA_JSON---
+${JSON.stringify(calculatorMetaData)}
     `.trim();
     
     const leadData: LeadInput = {
@@ -575,10 +579,46 @@ SENIOR LIVING OPTION:
 }
 
 // =============================================================================
+// CALCULATOR METADATA (for structured data)
+// =============================================================================
+
+export interface CalculatorMetaData {
+  homeValue: number;
+  mortgage: number;
+  groceries: number;
+  utilities: number;
+  maintenance: number;
+  homeCareHours: number;
+  homeCareCost: number;
+  propertyTax: number;
+  totalHomeCost: number;
+  selectedLocation: string;
+  seniorLivingCost: number;
+  valueGap: number;
+  valueGapPercent: number;
+  isHighValue: boolean;
+  monthlySavings: number;
+  annualSavings: number;
+}
+
+// =============================================================================
 // MAIN CALCULATOR COMPONENT
 // =============================================================================
 
-export default function AffordabilityCalculator() {
+interface AffordabilityCalculatorProps {
+  defaultCity?: string; // e.g., "beachwood", "westlake"
+  showStickyButton?: boolean;
+}
+
+export default function AffordabilityCalculator({ defaultCity, showStickyButton = false }: AffordabilityCalculatorProps) {
+  // Determine default location based on city prop
+  const getDefaultLocation = (city?: string): string => {
+    if (!city) return 'cleveland_avg';
+    const normalized = city.toLowerCase().replace(/\s+/g, '_');
+    const found = LOCATION_TIERS.find(l => l.value === normalized || l.label.toLowerCase().replace(/\s+/g, '_') === normalized);
+    return found?.value || 'cleveland_avg';
+  };
+
   // Calculator Inputs State
   const [inputs, setInputs] = useState<CalculatorInputs>({
     homeValue: 250000,
@@ -587,7 +627,7 @@ export default function AffordabilityCalculator() {
     utilities: CLEVELAND_2026_DATA.utilitiesAvg,
     maintenance: CLEVELAND_2026_DATA.maintenanceAvg,
     homeCareHours: 0,
-    selectedLocation: 'cleveland_avg',
+    selectedLocation: getDefaultLocation(defaultCity),
   });
   
   const [isModalOpen, setIsModalOpen] = useState(false);

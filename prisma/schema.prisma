@@ -148,6 +148,10 @@ model Lead {
   updatedAt       DateTime  @updatedAt
   status          String    @default("new") // "new", "contacted", "qualified", "converted", "lost"
   
+  // Structured calculator data (JSONB)
+  // Contains: homeValue, valueGap, propertyTax, totalHomeCost, seniorLivingCost, etc.
+  meta_data       Json?     @db.JsonB
+  
   @@index([email])
   @@index([urgencyScore])
   @@index([sourceSlug])

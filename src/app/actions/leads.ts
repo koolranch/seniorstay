@@ -37,7 +37,7 @@ export const LeadSchema = z.object({
     'Just researching',
     ''
   ]).optional(),
-  notes: z.string().max(2000).optional(),
+  notes: z.string().max(5000).optional(), // Increased for calculator JSON
   communityName: z.string().max(200).optional(),
   communityId: z.string().optional(),
   // Attribution fields
@@ -58,6 +58,70 @@ export const LeadSchema = z.object({
   utmMedium: z.string().max(100).optional(),
   utmCampaign: z.string().max(200).optional(),
 });
+
+// ============================================================================
+// CALCULATOR META DATA PARSING
+// ============================================================================
+
+interface CalculatorMetaData {
+  homeValue?: number;
+  mortgage?: number;
+  groceries?: number;
+  utilities?: number;
+  maintenance?: number;
+  homeCareHours?: number;
+  homeCareCost?: number;
+  propertyTax?: number;
+  totalHomeCost?: number;
+  selectedLocation?: string;
+  seniorLivingCost?: number;
+  valueGap?: number;
+  valueGapPercent?: number;
+  isHighValue?: boolean;
+  monthlySavings?: number;
+  annualSavings?: number;
+}
+
+/**
+ * Parse calculator meta_data from notes field
+ * Returns null if notes don't contain calculator data
+ */
+function parseCalculatorMetaData(notes?: string): CalculatorMetaData | null {
+  if (!notes || !notes.includes('---META_DATA_JSON---')) {
+    return null;
+  }
+  
+  try {
+    const jsonPart = notes.split('---META_DATA_JSON---')[1]?.trim();
+    if (!jsonPart) return null;
+    return JSON.parse(jsonPart) as CalculatorMetaData;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Determine if this is a HIGH-VALUE Cleveland lead based on calculator data
+ * 
+ * HIGH-VALUE criteria:
+ * - Home Value > $350,000 (affluent homeowner)
+ * - OR Value Gap > $500/month (senior living saves money)
+ */
+function isHighValueCalculatorLead(metaData: CalculatorMetaData | null): boolean {
+  if (!metaData) return false;
+  
+  // Check for affluent homeowner (home value > $350k)
+  if (metaData.homeValue && metaData.homeValue > 350000) {
+    return true;
+  }
+  
+  // Check for significant value gap (savings > $500/month)
+  if (metaData.valueGap && metaData.valueGap > 500) {
+    return true;
+  }
+  
+  return false;
+}
 
 export type LeadInput = z.infer<typeof LeadSchema>;
 
@@ -208,6 +272,9 @@ function getSupabaseAdmin() {
 /**
  * Send high-priority alert for urgent leads (score > 80)
  * Uses webhook or email service to notify team immediately
+ * 
+ * Includes special "[🔥 HIGH-VALUE CLEVELAND LEAD]" prefix for calculator leads
+ * with homeValue > $350k OR valueGap > $500/month
  */
 async function sendHighPriorityAlert(lead: {
   id: string;
@@ -219,8 +286,26 @@ async function sendHighPriorityAlert(lead: {
   notes?: string;
   sourceSlug?: string;
   urgencyScore: number;
+  isHighValueCalculator?: boolean;
+  calculatorData?: CalculatorMetaData | null;
 }): Promise<boolean> {
   try {
+    // Determine subject prefix based on lead type
+    const isHighValue = lead.isHighValueCalculator;
+    const subjectPrefix = isHighValue 
+      ? '🔥 HIGH-VALUE CLEVELAND LEAD' 
+      : '🚨 HIGH PRIORITY LEAD';
+    
+    // Build calculator summary if available
+    let calculatorSummary = '';
+    if (lead.calculatorData) {
+      calculatorSummary = `\n--- CALCULATOR DATA ---\n` +
+        `Home Value: $${lead.calculatorData.homeValue?.toLocaleString() || 'N/A'}\n` +
+        `Value Gap: ${lead.calculatorData.valueGap && lead.calculatorData.valueGap >= 0 ? '+' : ''}$${lead.calculatorData.valueGap?.toLocaleString() || 'N/A'}/mo\n` +
+        `Location: ${lead.calculatorData.selectedLocation || 'N/A'}\n` +
+        `Annual Savings: $${lead.calculatorData.annualSavings?.toLocaleString() || 'N/A'}`;
+    }
+    
     // Option 1: Supabase Edge Function webhook
     const webhookUrl = process.env.HIGH_PRIORITY_LEAD_WEBHOOK;
     
@@ -232,7 +317,7 @@ async function sendHighPriorityAlert(lead: {
           'Authorization': `Bearer ${process.env.WEBHOOK_SECRET || ''}`,
         },
         body: JSON.stringify({
-          type: 'HIGH_PRIORITY_LEAD',
+          type: isHighValue ? 'HIGH_VALUE_CALCULATOR_LEAD' : 'HIGH_PRIORITY_LEAD',
           lead: {
             id: lead.id,
             name: lead.fullName,
@@ -240,17 +325,19 @@ async function sendHighPriorityAlert(lead: {
             email: lead.email,
             careType: lead.careType,
             timeline: lead.moveInTimeline,
-            notes: lead.notes?.substring(0, 500), // Truncate for SMS
+            notes: lead.notes?.split('---META_DATA_JSON---')[0]?.substring(0, 500), // Clean notes
             source: lead.sourceSlug,
             score: lead.urgencyScore,
+            isHighValue,
+            calculatorData: lead.calculatorData,
           },
-          message: `🚨 HIGH PRIORITY LEAD (Score: ${lead.urgencyScore})\n` +
+          message: `[${subjectPrefix}] (Score: ${lead.urgencyScore})\n` +
             `Name: ${lead.fullName}\n` +
             `Phone: ${lead.phone || 'Not provided'}\n` +
             `Care: ${lead.careType || 'Not specified'}\n` +
             `Timeline: ${lead.moveInTimeline || 'Not specified'}\n` +
-            `Source: ${lead.sourceSlug || 'Direct'}\n` +
-            `Notes: ${lead.notes?.substring(0, 200) || 'None'}`,
+            `Source: ${lead.sourceSlug || 'Direct'}` +
+            calculatorSummary,
           timestamp: new Date().toISOString(),
         }),
         signal: AbortSignal.timeout(5000), // 5 second timeout
@@ -269,16 +356,20 @@ async function sendHighPriorityAlert(lead: {
           'Accept': 'application/json',
         },
         body: JSON.stringify({
-          _subject: `🚨 HIGH PRIORITY LEAD - ${lead.fullName} (Score: ${lead.urgencyScore})`,
+          _subject: `[${subjectPrefix}] ${lead.fullName} (Score: ${lead.urgencyScore})`,
           name: lead.fullName,
           phone: lead.phone || 'Not provided',
           email: lead.email || 'Not provided',
           care_type: lead.careType || 'Not specified',
           timeline: lead.moveInTimeline || 'Not specified',
-          notes: lead.notes || 'None',
+          notes: lead.notes?.split('---META_DATA_JSON---')[0] || 'None',
           source: lead.sourceSlug || 'Direct',
           urgency_score: lead.urgencyScore,
           lead_id: lead.id,
+          is_high_value: isHighValue,
+          calculator_home_value: lead.calculatorData?.homeValue,
+          calculator_value_gap: lead.calculatorData?.valueGap,
+          calculator_location: lead.calculatorData?.selectedLocation,
         }),
         signal: AbortSignal.timeout(5000),
       });
@@ -366,14 +457,26 @@ export async function submitLead(formData: LeadInput): Promise<LeadSubmitResult>
       forwardedFor.split(',')[0].trim().substring(0, 45) : undefined;
     
     // -------------------------------------------------------------------------
-    // 3. CALCULATE URGENCY SCORE
+    // 3. CALCULATE URGENCY SCORE & PARSE CALCULATOR DATA
     // -------------------------------------------------------------------------
     const urgencyScore = calculateLeadScore(data);
     const priority = getPriority(urgencyScore);
     
+    // Parse calculator meta_data if present
+    const calculatorData = parseCalculatorMetaData(data.notes);
+    const isHighValueCalculator = isHighValueCalculatorLead(calculatorData);
+    
+    // Boost score for high-value calculator leads
+    const finalUrgencyScore = isHighValueCalculator ? Math.max(urgencyScore, 85) : urgencyScore;
+    const finalPriority = getPriority(finalUrgencyScore);
+    
     // -------------------------------------------------------------------------
     // 4. PREPARE LEAD DATA FOR SUPABASE
     // -------------------------------------------------------------------------
+    
+    // Clean notes (remove JSON for readability, keep summary)
+    const cleanNotes = data.notes?.split('---META_DATA_JSON---')[0]?.trim() || null;
+    
     const leadData = {
       fullName: data.fullName.trim(),
       email: data.email?.trim() || null,
@@ -381,12 +484,12 @@ export async function submitLead(formData: LeadInput): Promise<LeadSubmitResult>
       cityOrZip: data.cityOrZip?.trim() || null,
       careType: data.careType || null,
       moveInTimeline: data.moveInTimeline || null,
-      notes: data.notes?.trim() || null,
+      notes: cleanNotes,
       communityName: data.communityName?.trim() || null,
       pageType: pageType || null,
       sourceSlug: sourceSlug || null,
-      urgencyScore,
-      priority,
+      urgencyScore: finalUrgencyScore,
+      priority: finalPriority,
       alertSent: false,
       utmSource: data.utmSource || null,
       utmMedium: data.utmMedium || null,
@@ -395,6 +498,8 @@ export async function submitLead(formData: LeadInput): Promise<LeadSubmitResult>
       ipAddress: ipAddress || null,
       status: 'new',
       updatedAt: new Date().toISOString(),
+      // Store structured calculator data as JSONB
+      ...(calculatorData && { meta_data: calculatorData }),
     };
     
     // -------------------------------------------------------------------------
@@ -460,9 +565,9 @@ export async function submitLead(formData: LeadInput): Promise<LeadSubmitResult>
     }
     
     // -------------------------------------------------------------------------
-    // 6. TRIGGER HIGH-PRIORITY ALERT IF SCORE > 80
+    // 6. TRIGGER HIGH-PRIORITY ALERT IF SCORE > 80 OR HIGH-VALUE CALCULATOR
     // -------------------------------------------------------------------------
-    if (urgencyScore > 80) {
+    if (finalUrgencyScore > 80 || isHighValueCalculator) {
       const alertSent = await sendHighPriorityAlert({
         id: leadId,
         fullName: data.fullName,
@@ -470,9 +575,11 @@ export async function submitLead(formData: LeadInput): Promise<LeadSubmitResult>
         email: data.email,
         careType: data.careType,
         moveInTimeline: data.moveInTimeline,
-        notes: data.notes,
+        notes: cleanNotes || undefined,
         sourceSlug,
-        urgencyScore,
+        urgencyScore: finalUrgencyScore,
+        isHighValueCalculator,
+        calculatorData,
       });
       
       // Update alert status in database
@@ -483,21 +590,23 @@ export async function submitLead(formData: LeadInput): Promise<LeadSubmitResult>
           .eq('id', leadId);
       }
       
-      console.log(`[Lead] HIGH PRIORITY submitted: ${leadId}, score: ${urgencyScore}, alert: ${alertSent}`);
+      const alertType = isHighValueCalculator ? '🔥 HIGH-VALUE' : '🚨 HIGH PRIORITY';
+      console.log(`[Lead] ${alertType} submitted: ${leadId}, score: ${finalUrgencyScore}, alert: ${alertSent}`);
     }
     
     // -------------------------------------------------------------------------
     // 7. LOG & RETURN SUCCESS
     // -------------------------------------------------------------------------
     const duration = Date.now() - startTime;
-    console.log(`[Lead] Submitted in ${duration}ms: ${leadId}, score: ${urgencyScore}, source: ${sourceSlug || 'direct'}`);
+    const logExtra = isHighValueCalculator ? ` [HIGH-VALUE: $${calculatorData?.homeValue?.toLocaleString()}]` : '';
+    console.log(`[Lead] Submitted in ${duration}ms: ${leadId}, score: ${finalUrgencyScore}, source: ${sourceSlug || 'direct'}${logExtra}`);
     
     return {
       success: true,
       leadId,
-      urgencyScore,
-      priority,
-      message: priority === 'high' 
+      urgencyScore: finalUrgencyScore,
+      priority: finalPriority,
+      message: finalPriority === 'high' 
         ? 'Thank you! A senior advisor will contact you very soon.'
         : 'Thank you! We\'ll be in touch within 1 business day.',
     };
