@@ -17,6 +17,7 @@ import LocationCard from '@/components/property/LocationCard';
 import HowItWorks from '@/components/landing/HowItWorks';
 import ClinicalTrustBar from '@/components/landing/ClinicalTrustBar';
 import PersonaNavigation from '@/components/landing/PersonaNavigation';
+import NeighborhoodSpotlight from '@/components/landing/NeighborhoodSpotlight';
 import ZipTourScheduler from '@/components/tour/ZipTourScheduler';
 import ZipSearchWidget from '@/components/tour/ZipSearchWidget';
 import ScheduleTourFAB from '@/components/tour/ScheduleTourFAB';
@@ -279,6 +280,9 @@ function SearchContainer() {
 
       {/* Persona-Based Navigation - Who Are You Helping? */}
       <PersonaNavigation />
+
+      {/* Neighborhood Authority Hubs - Westlake & Beachwood */}
+      <NeighborhoodSpotlight communities={communities} />
 
       {/* Assessment CTA Section */}
       <div className="bg-gradient-to-br from-orange-50 to-blue-50 py-16 border-y border-gray-200">

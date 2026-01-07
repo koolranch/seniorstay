@@ -1,10 +1,20 @@
 "use client";
 
 import React, { useState } from 'react';
-import { Search, MapPin, Loader2 } from 'lucide-react';
+import { Search, MapPin, Loader2, ChevronDown } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { formatZipCode, isValidZipCode } from '@/utils/distance';
+
+// Quick Select cities for high-value content guidance
+const QUICK_SELECT_CITIES = [
+  { name: 'Westlake', slug: 'westlake', zip: '44145', badge: 'Premium' },
+  { name: 'Beachwood', slug: 'beachwood', zip: '44122', badge: 'Medical Mile' },
+  { name: 'Parma', slug: 'parma', zip: '44134', badge: 'Popular' },
+  { name: 'Shaker Heights', slug: 'shaker-heights', zip: '44120', badge: '' },
+  { name: 'Lakewood', slug: 'lakewood', zip: '44107', badge: '' },
+];
 
 interface ZipSearchWidgetProps {
   onSearch: (zip: string) => void;
@@ -14,6 +24,8 @@ interface ZipSearchWidgetProps {
 export default function ZipSearchWidget({ onSearch, loading = false }: ZipSearchWidgetProps) {
   const [zipCode, setZipCode] = useState('');
   const [error, setError] = useState('');
+  const [showQuickSelect, setShowQuickSelect] = useState(false);
+  const router = useRouter();
 
   const handleZipChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const formatted = formatZipCode(e.target.value);
@@ -97,6 +109,39 @@ export default function ZipSearchWidget({ onSearch, loading = false }: ZipSearch
             {error}
           </p>
         )}
+
+        {/* Quick Select Dropdown */}
+        <div className="relative">
+          <button
+            type="button"
+            onClick={() => setShowQuickSelect(!showQuickSelect)}
+            className="w-full flex items-center justify-center gap-2 text-sm text-slate-600 hover:text-primary transition-colors py-2 min-h-[44px]"
+          >
+            <span>Or browse our top neighborhoods:</span>
+            <ChevronDown className={`h-4 w-4 transition-transform ${showQuickSelect ? 'rotate-180' : ''}`} />
+          </button>
+          
+          {showQuickSelect && (
+            <div className="mt-2 flex flex-wrap justify-center gap-2">
+              {QUICK_SELECT_CITIES.map((city) => (
+                <button
+                  key={city.slug}
+                  type="button"
+                  onClick={() => router.push(`/location/${city.slug}`)}
+                  className="inline-flex items-center gap-1 bg-slate-100 hover:bg-teal-100 border border-slate-200 hover:border-teal-300 text-slate-700 hover:text-teal-700 px-4 py-2 rounded-full text-sm font-medium transition-all min-h-[44px]"
+                >
+                  <MapPin className="h-3.5 w-3.5" />
+                  <span>{city.name}</span>
+                  {city.badge && (
+                    <span className="bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded text-xs font-semibold ml-1">
+                      {city.badge}
+                    </span>
+                  )}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
 
         {/* Trust Signals */}
         <div className="flex flex-wrap items-center justify-center gap-4 text-sm text-gray-600 mt-4">

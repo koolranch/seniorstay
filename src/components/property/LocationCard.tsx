@@ -17,9 +17,10 @@ import { submitLead } from '@/app/actions/leads';
 
 interface LocationCardProps {
   community: Community;
+  compact?: boolean; // Compact mode for spotlight sections
 }
 
-export default function LocationCard({ community }: LocationCardProps) {
+export default function LocationCard({ community, compact = false }: LocationCardProps) {
   // All Hooks must be called at the top level
   const formId = useId();
   const [isPricingSubmitting, setIsPricingSubmitting] = useState(false);
@@ -135,6 +136,49 @@ export default function LocationCard({ community }: LocationCardProps) {
     type.toLowerCase().includes('assisted living') ||
     type.toLowerCase().includes('memory care')
   );
+
+  // Compact mode: horizontal card for spotlight sections
+  if (compact) {
+    return (
+      <div className="group bg-white border border-gray-200 hover:border-primary/50 rounded-xl overflow-hidden transition-all duration-300 hover:shadow-lg flex">
+        {/* Compact Image */}
+        <div className="relative w-28 h-28 flex-shrink-0">
+          <Link href={communityUrl} className="block w-full h-full">
+            <CommunityImage
+              src={getCommunityImage(community.images?.[0], communityId, communityName)}
+              alt={`${communityName} in ${communityLocation}`}
+              fill
+              className="object-cover"
+              sizes="112px"
+            />
+          </Link>
+        </div>
+
+        {/* Compact Content */}
+        <div className="flex-grow p-3 flex flex-col justify-center min-w-0">
+          <h4 className="font-semibold text-base mb-1 line-clamp-1">
+            <Link href={communityUrl} className="hover:text-primary transition-colors">
+              {communityName}
+            </Link>
+          </h4>
+          <div className="flex items-center text-sm text-gray-500 mb-2">
+            <MapPin className="h-3 w-3 mr-1 text-primary flex-shrink-0" />
+            <span className="line-clamp-1 text-xs">{communityLocation}</span>
+          </div>
+          <div className="flex flex-wrap gap-1">
+            {careTypes.slice(0, 2).map((type, index) => (
+              <span
+                key={`${communityId}-${type}-${index}`}
+                className="bg-primary/10 text-primary px-2 py-0.5 rounded-full text-xs font-medium"
+              >
+                {type}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="group bg-white border border-gray-200 hover:border-primary/50 rounded-xl overflow-hidden transition-all duration-300 hover:shadow-xl hover:scale-[1.02] flex flex-col h-full">
