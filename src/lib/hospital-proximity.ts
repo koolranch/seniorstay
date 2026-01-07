@@ -105,21 +105,38 @@ export const CLEVELAND_HOSPITALS: HospitalData[] = [
 ];
 
 // City-to-hospital mapping for quick lookups (primary hospitals per city)
+// Comprehensive coverage of all Greater Cleveland suburbs
 export const CITY_HOSPITAL_MAP: Record<string, string[]> = {
-  'westlake': ['St. John Medical Center', 'Cleveland Clinic Avon Hospital', 'Fairview Hospital'],
+  'westlake': ['St. John Medical Center', 'Cleveland Clinic Avon Hospital', 'Cleveland Clinic Fairview Hospital'],
   'beachwood': ['University Hospitals Ahuja Medical Center', 'Cleveland Clinic Beachwood Family Health Center', 'Cleveland Clinic Hillcrest Hospital'],
   'shaker-heights': ['University Hospitals Cleveland Medical Center', 'Cleveland Clinic Main Campus'],
   'cleveland': ['Cleveland Clinic Main Campus', 'University Hospitals Cleveland Medical Center', 'MetroHealth Medical Center'],
-  'parma': ['Southwest General Health Center', 'MetroHealth Medical Center', 'Fairview Hospital'],
+  'parma': ['Southwest General Health Center', 'MetroHealth Medical Center', 'Cleveland Clinic Fairview Hospital'],
   'strongsville': ['Southwest General Health Center', 'Cleveland Clinic Avon Hospital'],
-  'lakewood': ['Fairview Hospital', 'MetroHealth Medical Center'],
-  'rocky-river': ['Fairview Hospital', 'St. John Medical Center'],
-  'mentor': ['Cleveland Clinic Hillcrest Hospital', 'Lake Health Mentor'],
+  'lakewood': ['Cleveland Clinic Fairview Hospital', 'MetroHealth Medical Center', 'St. John Medical Center'],
+  'rocky-river': ['Cleveland Clinic Fairview Hospital', 'St. John Medical Center'],
+  'mentor': ['Cleveland Clinic Hillcrest Hospital'],
   'solon': ['University Hospitals Ahuja Medical Center', 'Cleveland Clinic Hillcrest Hospital'],
   'independence': ['Southwest General Health Center', 'MetroHealth Medical Center'],
   'avon': ['Cleveland Clinic Avon Hospital', 'St. John Medical Center'],
-  'north-olmsted': ['Fairview Hospital', 'St. John Medical Center'],
-  'bay-village': ['St. John Medical Center', 'Fairview Hospital'],
+  'north-olmsted': ['Cleveland Clinic Fairview Hospital', 'St. John Medical Center', 'Southwest General Health Center'],
+  'bay-village': ['St. John Medical Center', 'Cleveland Clinic Fairview Hospital'],
+  'seven-hills': ['Southwest General Health Center', 'MetroHealth Medical Center'],
+  'broadview-heights': ['Southwest General Health Center', 'Cleveland Clinic Main Campus'],
+  'olmsted-falls': ['Southwest General Health Center', 'Cleveland Clinic Fairview Hospital'],
+  'middleburg-heights': ['Southwest General Health Center', 'Cleveland Clinic Fairview Hospital'],
+  'brook-park': ['Cleveland Clinic Fairview Hospital', 'MetroHealth Medical Center'],
+  'berea': ['Southwest General Health Center', 'Cleveland Clinic Fairview Hospital'],
+  'mayfield-heights': ['Cleveland Clinic Hillcrest Hospital', 'University Hospitals Ahuja Medical Center'],
+  'lyndhurst': ['Cleveland Clinic Hillcrest Hospital', 'University Hospitals Ahuja Medical Center'],
+  'south-euclid': ['Cleveland Clinic Hillcrest Hospital', 'University Hospitals Cleveland Medical Center'],
+  'euclid': ['Cleveland Clinic Main Campus', 'University Hospitals Cleveland Medical Center'],
+  'willoughby': ['Cleveland Clinic Hillcrest Hospital'],
+  'chardon': ['Cleveland Clinic Hillcrest Hospital'],
+  'chagrin-falls': ['University Hospitals Ahuja Medical Center', 'Cleveland Clinic Hillcrest Hospital'],
+  'hudson': ['Cleveland Clinic Main Campus', 'University Hospitals Ahuja Medical Center'],
+  'twinsburg': ['Cleveland Clinic Main Campus', 'University Hospitals Ahuja Medical Center'],
+  'aurora': ['University Hospitals Ahuja Medical Center', 'Cleveland Clinic Hillcrest Hospital'],
 };
 
 /**

@@ -22,6 +22,9 @@ import CommunitySpotlight from '@/components/location/CommunitySpotlight';
 import CommunityComparisonTable from '@/components/location/CommunityComparisonTable';
 import QuickFacts from '@/components/location/QuickFacts';
 import CitySpecificContent from '@/components/location/CitySpecificContent';
+import CityAEOBlocks from '@/components/location/CityAEOBlocks';
+import SoloAgerSection from '@/components/location/SoloAgerSection';
+import ClinicalTrustBarCity from '@/components/location/ClinicalTrustBarCity';
 import AffordabilityCalculator from '@/components/AffordabilityCalculator';
 import StickyCalculatorCTA from '@/components/StickyCalculatorCTA';
 
@@ -93,6 +96,9 @@ export default function CityLocationClient({ cityName, stateAbbr, communities }:
 
       <Header />
       <CategoryTabs communities={communities} />
+
+      {/* Dynamic Clinical Trust Bar - Shows nearest hospital for this city */}
+      <ClinicalTrustBarCity cityName={cityName} citySlug={citySlug} />
 
       {/* Quick Facts AEO Block - Featured Snippet Target */}
       <QuickFacts
@@ -358,66 +364,22 @@ export default function CityLocationClient({ cityName, stateAbbr, communities }:
         </div>
       </div>
 
-      {/* FAQ Section with Pricing CTA */}
-      <div className="bg-gray-50 py-12">
-        <div className="container mx-auto px-4">
-          <h2 className="text-2xl font-semibold mb-6">Frequently Asked Questions About Senior Living in {cityName}</h2>
+      {/* Solo Ager Section - Rightsizing & Autonomy for proactive planners */}
+      <SoloAgerSection
+        cityName={cityName}
+        citySlug={citySlug}
+        cityData={cityData}
+      />
 
-          <div className="space-y-6">
-            <div>
-              <h3 className="text-lg font-medium mb-2">What types of senior living are available in {cityName}?</h3>
-              <p className="text-gray-700">
-                {cityName} offers {Object.keys(careTypeCounts).join(', ').replace(/, ([^,]*)$/, ' and $1')}.
-                Each type provides different levels of care and amenities to meet various needs and preferences.
-              </p>
-            </div>
-
-            <div>
-              <h3 className="text-lg font-medium mb-2">How much does senior living cost in {cityName}?</h3>
-              <p className="text-gray-700 mb-4">
-                {cityData?.averageCost ? 
-                  `In ${cityName}, independent living typically ranges from ${cityData.averageCost.independentLiving} per month, 
-                   assisted living from ${cityData.averageCost.assistedLiving}, and memory care from ${cityData.averageCost.memoryCare}.` :
-                  `The cost of senior living in ${cityName} varies based on the level of care, amenities, and location.`
-                }
-              </p>
-              <PricingGuideForm 
-                cityName={cityName}
-                buttonText="Get Your Free Pricing Guide"
-                buttonClassName="inline-flex"
-              />
-            </div>
-
-            <div>
-              <h3 className="text-lg font-medium mb-2">How do I choose the right senior living community in {cityName}?</h3>
-              <p className="text-gray-700">
-                Consider your care needs, budget, desired location within {cityName}, and preferred amenities.
-                We recommend touring multiple communities, using our comparison tool to evaluate options side by side,
-                and asking about staff-to-resident ratios and available activities.
-              </p>
-            </div>
-
-            {cityData?.nearbyHospitals && cityData.nearbyHospitals.length > 0 && (
-              <div>
-                <h3 className="text-lg font-medium mb-2">What hospitals and medical facilities are near {cityName} senior living communities?</h3>
-                <p className="text-gray-700">
-                  {cityName} senior living residents have access to excellent healthcare including {cityData.nearbyHospitals.slice(0, 3).join(', ')}.
-                  Proximity to quality healthcare is one of the key advantages of choosing senior living in {cityName}.
-                </p>
-              </div>
-            )}
-
-            <div>
-              <h3 className="text-lg font-medium mb-2">When should I consider memory care vs. assisted living in {cityName}?</h3>
-              <p className="text-gray-700">
-                Memory care is specialized for residents with Alzheimer's, dementia, or other cognitive impairments, offering secure environments and specialized programming.
-                Assisted living is appropriate for those who need help with daily activities but don't require memory care supervision.
-                Many {cityName} communities offer both, allowing for transitions as needs change.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
+      {/* AEO FAQ Blocks with JSON-LD Schema for AI Rich Results */}
+      <CityAEOBlocks
+        cityName={cityName}
+        citySlug={citySlug}
+        communityCount={totalCommunities}
+        cityData={cityData}
+        memoryCareCount={careTypeCounts['Memory Care'] || 0}
+        assistedLivingCount={careTypeCounts['Assisted Living'] || 0}
+      />
 
       {/* Comparison Floating Button */}
       <ComparisonFloatingButton />
