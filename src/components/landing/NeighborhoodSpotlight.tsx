@@ -248,8 +248,37 @@ const NeighborhoodSpotlight: React.FC<NeighborhoodSpotlightProps> = ({ communiti
                       ))}
                     </div>
                   ) : (
-                    <div className="bg-slate-100 rounded-xl p-8 text-center">
-                      <p className="text-slate-500">Loading {neighborhood.city} communities...</p>
+                    /* ADVISOR NOTE: Professional fallback for cities with zero complete communities */
+                    <div className="bg-gradient-to-br from-amber-50 to-orange-50 border-2 border-amber-200 rounded-xl p-8">
+                      <div className="flex items-start gap-4">
+                        <div className="bg-amber-100 rounded-full p-3 flex-shrink-0">
+                          <Shield className="h-6 w-6 text-amber-600" />
+                        </div>
+                        <div>
+                          <h4 className="font-bold text-lg text-slate-900 mb-2">
+                            Advisor Note: {neighborhood.city} Vetting in Progress
+                          </h4>
+                          <p className="text-slate-700 mb-4 leading-relaxed">
+                            We are currently vetting new communities in {neighborhood.city} to ensure they meet our quality standards. 
+                            Contact our local advisors for an immediate <strong>off-market referral</strong> to pre-screened options.
+                          </p>
+                          <div className="flex flex-col sm:flex-row gap-3">
+                            <a
+                              href="tel:+12166774630"
+                              className={`inline-flex items-center justify-center gap-2 bg-gradient-to-r ${neighborhood.gradient} text-white font-bold px-6 py-3 rounded-lg shadow-md hover:shadow-lg transition-all min-h-[48px]`}
+                            >
+                              <Heart className="h-4 w-4" />
+                              Call (216) 677-4630
+                            </a>
+                            <Link
+                              href="/contact"
+                              className="inline-flex items-center justify-center gap-2 bg-white border-2 border-slate-300 text-slate-700 font-semibold px-6 py-3 rounded-lg hover:border-slate-400 transition-all min-h-[48px]"
+                            >
+                              Request Off-Market Options
+                            </Link>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   )}
 

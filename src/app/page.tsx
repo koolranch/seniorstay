@@ -159,14 +159,46 @@ function SearchContainer() {
   }, {} as Record<string, number>);
 
   // Featured communities are now fetched from Supabase with quality filters:
-  // - description NOT NULL
+  // - description NOT NULL AND NOT empty string
   // - image NOT placeholder
   // - Prioritizes Tier 1 cities (Westlake, Beachwood, Shaker Heights)
   // The `featuredCommunities` state is populated by `fetchFeaturedCommunities()`
   
+  // CLIENT-SIDE SAFEGUARD: Double-check quality before rendering (Ghost Community Fix)
+  // This catches any edge cases that slip through the server-side filters
+  const isAdmissionReady = (community: Community): boolean => {
+    // Must have meaningful description (>50 chars)
+    if (!community.description || community.description.trim().length < 50) return false;
+    
+    // Must have non-placeholder image
+    const imageUrl = community.images?.[0] || '';
+    if (!imageUrl || 
+        imageUrl.toLowerCase().includes('placeholder') ||
+        imageUrl.toLowerCase().includes('no-image') ||
+        imageUrl.toLowerCase().includes('default-community') ||
+        imageUrl.toLowerCase().includes('generic') ||
+        imageUrl.toLowerCase().includes('missing')) {
+      return false;
+    }
+    
+    return true;
+  };
+
+  // Apply client-side safeguard filter
+  const qualityFeaturedCommunities = featuredCommunities.filter(isAdmissionReady);
+  
+  // Log any ghost communities that slipped through (for debugging)
+  const ghostCommunities = featuredCommunities.filter(c => !isAdmissionReady(c));
+  if (ghostCommunities.length > 0) {
+    console.warn(
+      '[GHOST COMMUNITY DETECTED] These communities passed server filter but failed client check:',
+      ghostCommunities.map(c => ({ id: c.id, name: c.name, desc: c.description?.substring(0, 50), img: c.images?.[0] }))
+    );
+  }
+
   // Determine what to display based on filters
   const displayCommunities = selectedCareFilter === 'all' && selectedLocation === 'all' && !searchQuery
-    ? featuredCommunities
+    ? qualityFeaturedCommunities
     : filteredCommunities;
   
   const showViewAll = selectedCareFilter === 'all' && selectedLocation === 'all' && !searchQuery;
@@ -434,17 +466,42 @@ function SearchContainer() {
             )}
           </>
         ) : (
-          <div className="bg-gray-50 p-8 rounded-xl text-center">
-            <div className="text-lg text-gray-500 mb-4">No communities match your current filters.</div>
-            <button
-              onClick={() => {
-                setSelectedCareFilter('all');
-                setSelectedLocation('all');
-              }}
-              className="text-primary hover:underline text-lg min-h-[48px] px-4 py-2"
-            >
-              Clear all filters
-            </button>
+          /* ADVISOR NOTE: Professional fallback when no communities match filters */
+          <div className="bg-gradient-to-br from-amber-50 to-orange-50 border-2 border-amber-200 rounded-xl p-8 max-w-2xl mx-auto">
+            <div className="text-center">
+              <div className="bg-amber-100 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                <Info className="h-8 w-8 text-amber-600" />
+              </div>
+              <h3 className="text-xl font-bold text-slate-900 mb-2">
+                {activeLocationLabel 
+                  ? `Vetting Communities in ${activeLocationLabel}` 
+                  : 'No Results for Current Filters'}
+              </h3>
+              <p className="text-lg text-slate-700 mb-6 leading-relaxed">
+                {activeLocationLabel 
+                  ? `We are currently vetting new communities in ${activeLocationLabel} to ensure they meet our quality standards. Contact our advisors for an immediate off-market referral.`
+                  : 'No communities match your current filters. Try adjusting your search criteria or contact our advisors for personalized recommendations.'}
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <a
+                  href="tel:+12166774630"
+                  className="inline-flex items-center justify-center gap-2 text-white font-bold px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all min-h-[56px]"
+                  style={{ background: 'linear-gradient(135deg, #FF6B6B 0%, #EE5A5A 100%)' }}
+                >
+                  <Phone className="h-5 w-5" />
+                  Call for Off-Market Options
+                </a>
+                <button
+                  onClick={() => {
+                    setSelectedCareFilter('all');
+                    setSelectedLocation('all');
+                  }}
+                  className="inline-flex items-center justify-center gap-2 bg-white border-2 border-slate-300 text-slate-700 font-semibold px-8 py-4 rounded-xl hover:border-slate-400 transition-all min-h-[56px]"
+                >
+                  Clear All Filters
+                </button>
+              </div>
+            </div>
           </div>
         )}
       </div>

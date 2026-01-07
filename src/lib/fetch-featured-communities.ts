@@ -95,23 +95,28 @@ function getCityTier(city: string): number {
 
 /**
  * Fetch featured communities for homepage
- * QUALITY-FIRST FILTERING:
- * - Supabase filters: description NOT NULL, image NOT like '%placeholder%'
+ * QUALITY-FIRST FILTERING (GHOST COMMUNITY FIX):
+ * - Supabase filters: description NOT NULL AND NOT empty, image NOT placeholder
  * - Prioritizes: Tier 1 > Tier 2 > Other cities
  * - Prioritizes: Memory Care > Assisted Living
+ * - Logs filtered-out IDs for data quality audit
  */
 export async function fetchFeaturedCommunities(limit: number = 8): Promise<Community[]> {
   try {
     // QUALITY-FIRST: Use Supabase filters directly for performance
-    // .is('description', 'not.null') - Must have description
-    // .not('image_url', 'ilike', '%placeholder%') - No placeholder images
+    // Fix for Ghost Community bug: Add .neq('description', '') to catch empty strings
     const { data, error } = await supabase
       .from('Community')
       .select('*')
-      .not('description', 'is', null)
+      .not('description', 'is', null)     // Filter out NULL descriptions
+      .neq('description', '')              // Filter out empty string descriptions
+      .not('image_url', 'is', null)        // Must have image_url
+      .neq('image_url', '')                // Filter out empty image URLs
       .not('image_url', 'ilike', '%placeholder%')
       .not('image_url', 'ilike', '%no-image%')
       .not('image_url', 'ilike', '%default-community%')
+      .not('image_url', 'ilike', '%generic%')
+      .not('image_url', 'ilike', '%missing%')
       .order('name');
 
     if (error) {
@@ -123,38 +128,66 @@ export async function fetchFeaturedCommunities(limit: number = 8): Promise<Commu
       return [];
     }
 
-    // Transform and apply additional filters
-    const communities = data
-      .map(transformDatabaseToCommunity)
-      .filter((c) => {
-        // Must be in Cleveland area
-        const isInCleveland = CLEVELAND_CITIES.some(city => 
-          c.location.toLowerCase().includes(city.toLowerCase())
-        );
-        if (!isInCleveland) return false;
+    // Transform all data first for audit logging
+    const allTransformed = data.map(transformDatabaseToCommunity);
+    
+    // Track filtered-out communities for data quality audit
+    const filteredOutIds: string[] = [];
 
-        // Must have meaningful description (>50 chars)
-        if (!c.description || c.description.trim().length < 50) return false;
+    // Transform and apply additional filters with audit logging
+    const communities = allTransformed.filter((c) => {
+      // Must be in Cleveland area
+      const isInCleveland = CLEVELAND_CITIES.some(city => 
+        c.location.toLowerCase().includes(city.toLowerCase())
+      );
+      if (!isInCleveland) {
+        filteredOutIds.push(`${c.id} (not in Cleveland area: ${c.location})`);
+        return false;
+      }
 
-        // Must have non-placeholder image (double-check after Supabase filter)
-        const imageUrl = c.images?.[0];
-        if (isPlaceholderImage(imageUrl)) return false;
+      // Must have meaningful description (>50 chars) - catches edge cases
+      if (!c.description || c.description.trim().length < 50) {
+        filteredOutIds.push(`${c.id} (description too short: ${c.description?.length || 0} chars)`);
+        return false;
+      }
 
-        // Must offer Assisted Living or Memory Care
-        const hasQualifyingCare = c.careTypes.some(type => 
-          type.toLowerCase().includes('assisted living') || 
-          type.toLowerCase().includes('memory care')
-        );
-        if (!hasQualifyingCare) return false;
+      // Must have non-placeholder image (double-check after Supabase filter)
+      const imageUrl = c.images?.[0];
+      if (isPlaceholderImage(imageUrl)) {
+        filteredOutIds.push(`${c.id} (placeholder image: ${imageUrl})`);
+        return false;
+      }
 
-        // Exclude skilled-nursing-only facilities
-        const isOnlySkilledNursing = c.careTypes.every(type => 
-          type.toLowerCase().includes('skilled nursing')
-        );
-        if (isOnlySkilledNursing) return false;
+      // Must offer Assisted Living or Memory Care
+      const hasQualifyingCare = c.careTypes.some(type => 
+        type.toLowerCase().includes('assisted living') || 
+        type.toLowerCase().includes('memory care')
+      );
+      if (!hasQualifyingCare) {
+        filteredOutIds.push(`${c.id} (no AL/MC: ${c.careTypes.join(', ')})`);
+        return false;
+      }
 
-        return true;
-      });
+      // Exclude skilled-nursing-only facilities
+      const isOnlySkilledNursing = c.careTypes.every(type => 
+        type.toLowerCase().includes('skilled nursing')
+      );
+      if (isOnlySkilledNursing) {
+        filteredOutIds.push(`${c.id} (skilled-nursing-only)`);
+        return false;
+      }
+
+      return true;
+    });
+
+    // DATA QUALITY AUDIT: Log filtered-out community IDs for enrichment
+    if (filteredOutIds.length > 0) {
+      console.warn(
+        `[QUALITY AUDIT] ${filteredOutIds.length} communities filtered from featured feed:\n` +
+        filteredOutIds.slice(0, 10).join('\n') +
+        (filteredOutIds.length > 10 ? `\n...and ${filteredOutIds.length - 10} more` : '')
+      );
+    }
 
     // TIER PRIORITY SORTING: Tier 1 cities at top of all "Featured" feeds
     const sorted = communities.sort((a, b) => {
@@ -208,7 +241,7 @@ export async function getQualityCommunityCount(): Promise<number> {
 
 /**
  * Fetch quality communities for a specific city
- * QUALITY-FIRST FILTERING: Same rules as fetchFeaturedCommunities
+ * QUALITY-FIRST FILTERING (GHOST COMMUNITY FIX): Same rules as fetchFeaturedCommunities
  * Used by location pages to ensure only complete profiles show
  * 
  * @param city - City name (e.g., "Westlake")
@@ -227,12 +260,18 @@ export async function fetchQualityCommunitiesByCity(
       .ilike('city', city);
     
     // Apply quality filters unless including incomplete
+    // Fix for Ghost Community bug: Add .neq checks for empty strings
     if (!includeIncomplete) {
       query = query
         .not('description', 'is', null)
+        .neq('description', '')
+        .not('image_url', 'is', null)
+        .neq('image_url', '')
         .not('image_url', 'ilike', '%placeholder%')
         .not('image_url', 'ilike', '%no-image%')
-        .not('image_url', 'ilike', '%default-community%');
+        .not('image_url', 'ilike', '%default-community%')
+        .not('image_url', 'ilike', '%generic%')
+        .not('image_url', 'ilike', '%missing%');
     }
     
     const { data, error } = await query.order('name').limit(limit);
@@ -246,30 +285,49 @@ export async function fetchQualityCommunitiesByCity(
       return [];
     }
 
-    // Transform and apply care type filter
-    const communities = data
-      .map(transformDatabaseToCommunity)
-      .filter((c) => {
-        if (!includeIncomplete) {
-          // Must have meaningful description
-          if (!c.description || c.description.trim().length < 50) return false;
-          
-          // Must have non-placeholder image
-          const imageUrl = c.images?.[0];
-          if (isPlaceholderImage(imageUrl)) return false;
-        }
+    // Transform all for audit logging
+    const allTransformed = data.map(transformDatabaseToCommunity);
+    const filteredOutIds: string[] = [];
 
-        // Must offer Assisted Living or Memory Care (unless including all)
-        if (!includeIncomplete) {
-          const hasQualifyingCare = c.careTypes.some(type => 
-            type.toLowerCase().includes('assisted living') || 
-            type.toLowerCase().includes('memory care')
-          );
-          if (!hasQualifyingCare) return false;
+    // Transform and apply care type filter with audit logging
+    const communities = allTransformed.filter((c) => {
+      if (!includeIncomplete) {
+        // Must have meaningful description
+        if (!c.description || c.description.trim().length < 50) {
+          filteredOutIds.push(`${c.id} (${c.name}: short description)`);
+          return false;
         }
+        
+        // Must have non-placeholder image
+        const imageUrl = c.images?.[0];
+        if (isPlaceholderImage(imageUrl)) {
+          filteredOutIds.push(`${c.id} (${c.name}: placeholder image)`);
+          return false;
+        }
+      }
 
-        return true;
-      });
+      // Must offer Assisted Living or Memory Care (unless including all)
+      if (!includeIncomplete) {
+        const hasQualifyingCare = c.careTypes.some(type => 
+          type.toLowerCase().includes('assisted living') || 
+          type.toLowerCase().includes('memory care')
+        );
+        if (!hasQualifyingCare) {
+          filteredOutIds.push(`${c.id} (${c.name}: no AL/MC)`);
+          return false;
+        }
+      }
+
+      return true;
+    });
+
+    // DATA QUALITY AUDIT: Log filtered-out community IDs for city
+    if (filteredOutIds.length > 0) {
+      console.warn(
+        `[QUALITY AUDIT - ${city}] ${filteredOutIds.length} communities filtered:\n` +
+        filteredOutIds.join('\n')
+      );
+    }
 
     // Sort: Memory Care first, then by rating
     return communities.sort((a, b) => {
