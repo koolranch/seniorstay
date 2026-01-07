@@ -4,7 +4,7 @@ import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Search, MapPin, Star, ArrowRight, Info, CheckCircle } from 'lucide-react';
+import { Search, MapPin, Star, ArrowRight, Info, CheckCircle, Phone } from 'lucide-react';
 import Header from '@/components/header/Header';
 import CategoryTabs from '@/components/category/CategoryTabs';
 import LocationTabs from '@/components/location/LocationTabs';
@@ -15,12 +15,15 @@ import ComparisonFloatingButton from '@/components/comparison/ComparisonFloating
 import Footer from '@/components/footer/Footer';
 import LocationCard from '@/components/property/LocationCard';
 import HowItWorks from '@/components/landing/HowItWorks';
+import ClinicalTrustBar from '@/components/landing/ClinicalTrustBar';
+import PersonaNavigation from '@/components/landing/PersonaNavigation';
 import ZipTourScheduler from '@/components/tour/ZipTourScheduler';
 import ZipSearchWidget from '@/components/tour/ZipSearchWidget';
 import ScheduleTourFAB from '@/components/tour/ScheduleTourFAB';
 import { Community, communityData } from '@/data/facilities';
 import { testimonials } from '@/data/testimonials';
 import { fetchAllCommunities } from '@/lib/fetch-community';
+import { fetchFeaturedCommunities } from '@/lib/fetch-featured-communities';
 
 // Create a separate component for the search functionality
 function SearchContainer() {
@@ -32,13 +35,18 @@ function SearchContainer() {
   const [selectedLocation, setSelectedLocation] = useState('all');
   const [communities, setCommunities] = useState<Community[]>(communityData); // Start with static data
   const [filteredCommunities, setFilteredCommunities] = useState<Community[]>(communityData);
+  const [featuredCommunities, setFeaturedCommunities] = useState<Community[]>([]);
   const [loading, setLoading] = useState(true);
 
   // Fetch communities from Supabase on mount
   useEffect(() => {
     async function loadCommunities() {
       try {
+        // Fetch all communities for filtering
         const data = await fetchAllCommunities();
+        // Fetch high-quality featured communities (with descriptions + real images)
+        const featured = await fetchFeaturedCommunities(8);
+        
         if (data && data.length > 0) {
           // Filter to only Assisted Living and Memory Care (exclude skilled nursing-only)
           const filteredData = data.filter(c => {
@@ -56,6 +64,11 @@ function SearchContainer() {
           
           setCommunities(filteredData);
           setFilteredCommunities(filteredData);
+        }
+        
+        // Set featured communities (prioritizes Tier 1 cities, has descriptions + real images)
+        if (featured && featured.length > 0) {
+          setFeaturedCommunities(featured);
         }
       } catch (error) {
         console.error('Error loading communities:', error);
@@ -144,95 +157,15 @@ function SearchContainer() {
     return acc;
   }, {} as Record<string, number>);
 
-  // Filter Cleveland-area communities for featured section
-  // Expanded to include all Greater Cleveland and Northeast Ohio cities with communities
-  const clevelandCities = [
-    'Cleveland', 'Shaker Heights', 'Beachwood', 'Parma', 'Lakewood', 'Strongsville', 
-    'Westlake', 'North Olmsted', 'Richmond Heights', 'Seven Hills', 'Independence',
-    'Brooklyn', 'Bedford', 'Avon', 'Brunswick', 'Macedonia', 'Berea', 'Chardon',
-    'Mentor', 'North Ridgeville', 'Medina', 'Cuyahoga Falls', 'Akron'
-  ];
+  // Featured communities are now fetched from Supabase with quality filters:
+  // - description NOT NULL
+  // - image NOT placeholder
+  // - Prioritizes Tier 1 cities (Westlake, Beachwood, Shaker Heights)
+  // The `featuredCommunities` state is populated by `fetchFeaturedCommunities()`
   
-  // Curated list of community IDs with VERIFIED working images (updated 2024-12-30)
-  // Only these will show on homepage to ensure credibility - no broken images
-  // All images hosted on Supabase Storage for reliability (no hotlinking issues)
-  const verifiedImageCommunityIds = [
-    // Cleveland Core
-    '698c2427-1daa-40fd-8541-d70adfaaa79f', // Arden Courts of Parma
-    'e6d78620-bd6f-4961-a067-6f79e3d47d00', // Arden Courts of Westlake
-    'b575720a-cbd9-4d7a-bb54-f384c4d74baf', // Brookdale Westlake Village
-    'b1c7f9ca-12f8-427f-958b-96395e2f87f9', // Eliza Jennings (Cleveland)
-    '53439bfd-9ef2-4890-8496-aae88638175d', // Forest Hills Place (Cleveland)
-    '595c27ce-2d7a-4d52-8892-6bdd07d0df29', // HarborChase of Shaker Heights
-    '82b7522b-3cc5-46d0-aacc-4aa61a4da223', // Haven at Lakewood
-    'cced7602-0584-4b10-b928-fb69de53e683', // Kemper House Strongsville
-    'd37abc69-b7b1-41dc-9d83-8addb8a13af1', // Mount Alverna Village (Parma)
-    '217c0b13-e5c0-480c-9131-a171e2b707e7', // O'Neill Healthcare Lakewood
-    '067f4eb4-1a6d-4537-a17b-46374e853301', // Rose Senior Living at Beachwood
-    'bc68a68b-51c9-4490-858d-a8656427e027', // StoryPoint Strongsville
-    'd513dee6-8f01-43bf-ae4c-9da58f0e1fb2', // Sunrise at Parma
-    '46f44534-0bb5-412b-b631-d7693c957bc2', // Vista Springs Ravinia (Independence)
-    '8307a5ae-48b9-4055-97c8-970f219bf071', // Westlake Assisted Living
-    // Greater Cleveland / Suburbs
-    '85b6c366-876c-434f-bc3c-cd9546b769c3', // American House Macedonia
-    'b64c4494-2ea7-45f6-bbe3-a66a33e777a2', // Berea Alzheimer's Care Center
-    '1364b89d-5f10-4497-885e-63bc1980a81c', // Brooklyn Pointe (Brooklyn)
-    'ebf24b4b-93e3-49a2-aa29-fe17ea13478e', // Cardinal Court
-    'd58d215c-f8a1-41f1-9d51-7f3cbd26a4c5', // Danbury Senior Living Brunswick
-    'baac72b7-478e-4306-9761-398355cbd5d6', // Light of Hearts Villa (Bedford)
-    '3af95a7c-6b08-41dc-816c-59dc2fcf95fe', // Summit Point Macedonia
-    '64d20122-dceb-4715-9139-0db8adc903b', // Ganzhorn Suites of Avon
-    // Northeast Ohio (Mentor, Medina, etc.)
-    'b287add2-1b83-4c9f-b364-44e5117575e1', // Danbury Senior Living Mentor
-    'dff5aeab-df72-481b-b9f1-0a8540630d20', // Danbury Senior Living North Ridgeville
-    'ca38eb95-4ed5-441b-824e-160386034910', // Brookdale Medina South
-    '93a420ab-7890-4e8b-a08d-e31404698847', // StoryPoint Medina
-    '3c3fbde5-0117-4da8-9eb3-1b660240131f', // Maplewood at Chardon
-    // Akron / Cuyahoga Falls Area
-    '24a1d6c9-83da-4e68-a7cc-6d61f420ee55', // Danbury Cuyahoga Falls
-    '220ef84c-9916-44aa-a649-621a936642f1', // Maplewood at Cuyahoga Falls
-    'be6426df-1380-48f4-b925-332fbb4e02bb', // Brookdale Montrose (Akron)
-    '08ca2f88-da07-44b3-98af-3c47b3a8f675', // Vitalia Montrose (Akron)
-    // Other verified
-    '8dde23b1-818e-4120-be39-4303dfaaa050', // Fairmont Senior Living of Westlake
-    'fb781978-f151-4ca4-b98c-f75fd8b1a5c4', // St. Augustine Towers Assisted Living
-  ];
-  
-  // Only show Assisted Living and Memory Care on homepage (exclude skilled nursing-only)
-  // Use 'communities' state (from Supabase) not 'communityData' (static)
-  const qualityCommunities = communities.filter(c => {
-    const isInCleveland = clevelandCities.some(city => 
-      c.location.toLowerCase().includes(city.toLowerCase())
-    );
-    
-    const isAssistedOrMemoryCare = c.careTypes.some(type => 
-      type.toLowerCase().includes('assisted living') || 
-      type.toLowerCase().includes('memory care')
-    );
-    
-    // Exclude if ONLY skilled nursing (keep if it has AL/MC + SN)
-    const isOnlySkilledNursing = c.careTypes.every(type => 
-      type.toLowerCase().includes('skilled nursing')
-    );
-    
-    // For featured section: only show communities with verified working images
-    const hasVerifiedImage = verifiedImageCommunityIds.includes(c.id);
-    
-    return isInCleveland && isAssistedOrMemoryCare && !isOnlySkilledNursing && hasVerifiedImage;
-  });
-  
-  // Sort by Memory Care first, then Assisted Living
-  const sortedQualityCommunities = [...qualityCommunities].sort((a, b) => {
-    const aHasMemoryCare = a.careTypes.some(t => t.toLowerCase().includes('memory care'));
-    const bHasMemoryCare = b.careTypes.some(t => t.toLowerCase().includes('memory care'));
-    
-    if (aHasMemoryCare && !bHasMemoryCare) return -1;
-    if (!aHasMemoryCare && bHasMemoryCare) return 1;
-    return 0;
-  });
-  
-  const featuredCommunities = selectedCareFilter === 'all' && selectedLocation === 'all' && !searchQuery
-    ? sortedQualityCommunities.slice(0, 6)
+  // Determine what to display based on filters
+  const displayCommunities = selectedCareFilter === 'all' && selectedLocation === 'all' && !searchQuery
+    ? featuredCommunities
     : filteredCommunities;
   
   const showViewAll = selectedCareFilter === 'all' && selectedLocation === 'all' && !searchQuery;
@@ -301,19 +234,29 @@ function SearchContainer() {
               }} />
             </div>
 
-            <div className="text-center space-y-3">
-              <p className="text-sm text-gray-600">or</p>
+            <div className="text-center space-y-4">
+              <p className="text-base text-gray-600">or</p>
+              {/* HIGH-CONTRAST PRIMARY CTA - Coral/Teal for maximum visibility */}
+              <Link
+                href="/contact"
+                className="inline-flex items-center gap-3 bg-gradient-to-r from-coral-500 to-rose-500 hover:from-coral-600 hover:to-rose-600 text-white font-bold px-10 py-5 rounded-xl shadow-xl hover:shadow-2xl transition-all text-xl min-h-[60px] min-w-[280px] justify-center"
+                style={{ background: 'linear-gradient(135deg, #FF6B6B 0%, #EE5A5A 100%)' }}
+              >
+                <Phone className="h-6 w-6" />
+                <span>Free Care Consultation</span>
+              </Link>
+              <p className="text-base text-gray-600">or</p>
               <Link
                 href="/assessment"
-                className="inline-flex items-center gap-2 bg-[#1e3a5f] hover:bg-[#2d4a6f] text-white font-bold px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all text-lg"
+                className="inline-flex items-center gap-2 bg-teal-600 hover:bg-teal-700 text-white font-bold px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all text-lg min-h-[56px]"
               >
                 <span>Find Your Ideal Care Level (2 min)</span>
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
-              <p className="text-sm text-gray-600">or</p>
+              <p className="text-base text-gray-600">or</p>
               <Link
                 href="#communities"
-                className="inline-flex items-center text-primary hover:underline font-semibold text-lg"
+                className="inline-flex items-center text-primary hover:underline font-semibold text-lg min-h-[48px]"
               >
                 <span>Browse all {communityData.length} Cleveland communities</span>
                 <ArrowRight className="ml-2 h-5 w-5" />
@@ -323,6 +266,9 @@ function SearchContainer() {
         </div>
       </div>
 
+      {/* Clinical Trust Bar - Medical Anchors */}
+      <ClinicalTrustBar />
+
       {/* How It Works Section */}
       <HowItWorks />
 
@@ -330,6 +276,9 @@ function SearchContainer() {
       <div id="zip-search-results">
         <ZipTourScheduler />
       </div>
+
+      {/* Persona-Based Navigation - Who Are You Helping? */}
+      <PersonaNavigation />
 
       {/* Assessment CTA Section */}
       <div className="bg-gradient-to-br from-orange-50 to-blue-50 py-16 border-y border-gray-200">
@@ -344,22 +293,23 @@ function SearchContainer() {
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link href="/assessment">
-                <button className="w-full sm:w-auto bg-[#ff5a5f] hover:bg-[#ff4449] text-white font-bold px-10 py-5 rounded-xl shadow-lg hover:shadow-xl transition-all text-lg flex items-center justify-center gap-2">
+                {/* HIGH-CONTRAST CTA - Coral for visibility, WCAG 2.2 compliant tap target */}
+                <button className="w-full sm:w-auto text-white font-bold px-10 py-5 rounded-xl shadow-lg hover:shadow-xl transition-all text-lg flex items-center justify-center gap-2 min-h-[56px] min-w-[240px]" style={{ background: 'linear-gradient(135deg, #FF6B6B 0%, #EE5A5A 100%)' }}>
                   Take Free Assessment
                   <ArrowRight className="h-5 w-5" />
                 </button>
               </Link>
             </div>
-            <div className="mt-6 flex flex-wrap items-center justify-center gap-6 text-sm text-gray-600">
-              <div className="flex items-center gap-2">
+            <div className="mt-6 flex flex-wrap items-center justify-center gap-6 text-base text-gray-700">
+              <div className="flex items-center gap-2 min-h-[48px]">
                 <CheckCircle className="h-5 w-5 text-green-600" />
                 <span>Takes 2 minutes</span>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 min-h-[48px]">
                 <CheckCircle className="h-5 w-5 text-green-600" />
                 <span>100% free</span>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 min-h-[48px]">
                 <CheckCircle className="h-5 w-5 text-green-600" />
                 <span>Instant results</span>
               </div>
@@ -444,49 +394,50 @@ function SearchContainer() {
           {selectedCareFilter && selectedCareFilter !== 'all' && ` for ${activeCareLabel}`}
         </h2>
         {showViewAll && (
-          <p className="text-gray-600 text-center mb-8">
-            Hand-selected communities offering assisted living and specialized memory care services
+          <p className="text-lg text-gray-600 text-center mb-8">
+            Quality communities with verified descriptions and images — prioritizing Westlake, Beachwood & Shaker Heights
           </p>
         )}
 
-        {featuredCommunities.length > 0 ? (
+        {displayCommunities.length > 0 ? (
           <>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-              {featuredCommunities.map((community, index) => (
+              {displayCommunities.map((community, index) => (
                 <div key={community.id} className="relative">
-                  {/* Featured badge for top 3 */}
+                  {/* Tier 1 badge for premium cities */}
                   {showViewAll && index < 3 && (
-                    <div className="absolute -top-2 -right-2 z-10 bg-gradient-to-br from-yellow-400 to-orange-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg flex items-center gap-1">
+                    <div className="absolute -top-2 -right-2 z-10 bg-gradient-to-br from-teal-500 to-emerald-600 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg flex items-center gap-1">
                       <Star className="h-3 w-3 fill-white" />
-                      FEATURED
+                      PREMIUM
                     </div>
                   )}
                   <LocationCard community={community} />
                 </div>
               ))}
             </div>
-            {showViewAll && qualityCommunities.length > 6 && (
+            {showViewAll && featuredCommunities.length >= 6 && (
               <div className="text-center mt-10">
                 <Link
                   href="/greater-cleveland"
-                  className="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-bold text-lg px-10 py-4 rounded-lg transition-all shadow-md hover:shadow-lg"
+                  className="inline-flex items-center gap-2 text-white font-bold text-lg px-10 py-5 rounded-xl transition-all shadow-lg hover:shadow-xl min-h-[56px]"
+                  style={{ background: 'linear-gradient(135deg, #FF6B6B 0%, #EE5A5A 100%)' }}
                 >
                   <span>View All Assisted Living & Memory Care</span>
                   <ArrowRight className="h-6 w-6" />
                 </Link>
-                <p className="text-sm text-gray-500 mt-4">Browse all our featured communities across Greater Cleveland</p>
+                <p className="text-base text-gray-500 mt-4">Browse all our featured communities across Greater Cleveland</p>
               </div>
             )}
           </>
         ) : (
           <div className="bg-gray-50 p-8 rounded-xl text-center">
-            <div className="text-gray-500 mb-4">No communities match your current filters.</div>
+            <div className="text-lg text-gray-500 mb-4">No communities match your current filters.</div>
             <button
               onClick={() => {
                 setSelectedCareFilter('all');
                 setSelectedLocation('all');
               }}
-              className="text-primary hover:underline"
+              className="text-primary hover:underline text-lg min-h-[48px] px-4 py-2"
             >
               Clear all filters
             </button>
@@ -595,16 +546,16 @@ export default function Home() {
       <div className="bg-gray-100 py-16 border-t border-gray-200">
         <div className="container mx-auto px-4">
           <h2 className="text-2xl font-bold text-center mb-2">Browse Senior Living by Cleveland-Area City</h2>
-          <p className="text-gray-600 text-center mb-8">Find assisted living and memory care in your preferred neighborhood</p>
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-4 max-w-4xl mx-auto">
+          <p className="text-lg text-gray-600 text-center mb-8">Find assisted living and memory care in your preferred neighborhood</p>
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4 max-w-5xl mx-auto">
             {['Cleveland', 'Shaker Heights', 'Beachwood', 'Parma', 'Lakewood', 'Westlake', 'Strongsville', 'Independence', 'Seven Hills', 'Rocky River'].map(city => (
               <Link
                 key={city}
                 href={`/location/${city.toLowerCase().replace(/\s+/g, '-')}`}
-                className="bg-white hover:bg-primary/5 border border-gray-200 hover:border-primary/30 rounded-lg p-4 text-center transition-all group"
+                className="bg-white hover:bg-teal-50 border border-gray-200 hover:border-teal-300 rounded-xl p-5 text-center transition-all group min-h-[80px] flex flex-col items-center justify-center"
               >
-                <MapPin className="h-5 w-5 text-primary mx-auto mb-2" />
-                <span className="text-sm font-medium text-gray-900 group-hover:text-primary">{city}</span>
+                <MapPin className="h-6 w-6 text-teal-600 mx-auto mb-2" />
+                <span className="text-base font-semibold text-gray-900 group-hover:text-teal-700">{city}</span>
               </Link>
             ))}
           </div>
@@ -650,50 +601,51 @@ export default function Home() {
       <div className="bg-white py-20 border-t border-gray-200">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-4">Why Cleveland Families Choose Guide for Seniors</h2>
-          <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
+          <p className="text-lg text-gray-600 text-center mb-12 max-w-2xl mx-auto">
             We make finding the perfect senior living community simple, stress-free, and completely free for families.
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
             <div className="text-center">
-              <div className="bg-primary/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <MapPin className="h-8 w-8 text-primary" />
+              <div className="bg-teal-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
+                <MapPin className="h-10 w-10 text-teal-600" />
               </div>
               <h3 className="text-xl font-semibold mb-3">Local Cleveland Expertise</h3>
-              <p className="text-gray-600">
+              <p className="text-lg text-gray-600">
                 Our advisors personally visit every community in Cleveland, Shaker Heights, Beachwood, and beyond. We know the neighborhoods, staff, and what makes each community unique.
               </p>
             </div>
 
             <div className="text-center">
-              <div className="bg-primary/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Star className="h-8 w-8 text-primary" />
+              <div className="bg-amber-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Star className="h-10 w-10 text-amber-600" />
               </div>
               <h3 className="text-xl font-semibold mb-3">100% Free Service</h3>
-              <p className="text-gray-600">
+              <p className="text-lg text-gray-600">
                 Never pay a fee. We're compensated by communities, not families. Our guidance, tours, and support are completely free—no hidden costs, ever.
               </p>
             </div>
 
             <div className="text-center">
-              <div className="bg-primary/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Info className="h-8 w-8 text-primary" />
+              <div className="bg-rose-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Info className="h-10 w-10 text-rose-600" />
               </div>
               <h3 className="text-xl font-semibold mb-3">Save Time & Reduce Stress</h3>
-              <p className="text-gray-600">
+              <p className="text-lg text-gray-600">
                 We handle the research, schedule tours, compare pricing, and answer all your questions. Focus on your loved one while we handle the details.
               </p>
             </div>
           </div>
 
           <div className="text-center mt-12">
-            <a
-              href="#communities"
-              className="inline-flex items-center gap-2 bg-primary hover:bg-primary/90 text-white font-semibold px-8 py-3 rounded-lg transition-colors"
+            <Link
+              href="/contact"
+              className="inline-flex items-center gap-3 text-white font-bold px-10 py-5 rounded-xl shadow-lg hover:shadow-xl transition-all text-xl min-h-[60px]"
+              style={{ background: 'linear-gradient(135deg, #FF6B6B 0%, #EE5A5A 100%)' }}
             >
               Get Started - It's Free
-              <ArrowRight className="h-5 w-5" />
-            </a>
+              <ArrowRight className="h-6 w-6" />
+            </Link>
           </div>
         </div>
       </div>
@@ -749,28 +701,28 @@ export default function Home() {
       </div>
 
       {/* FAQ Section for SEO */}
-      <div className="py-12 border-t border-gray-200">
+      <div className="py-16 border-t border-gray-200">
         <div className="container mx-auto px-4">
-          <h2 className="text-2xl font-semibold mb-6">Frequently Asked Questions</h2>
+          <h2 className="text-2xl font-semibold mb-8">Frequently Asked Questions</h2>
 
-          <div className="space-y-6">
-            <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-              <h3 className="text-lg font-medium mb-2">How much does senior living cost?</h3>
-              <p className="text-gray-700">
+          <div className="space-y-6 max-w-4xl">
+            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+              <h3 className="text-xl font-semibold mb-3">How much does senior living cost?</h3>
+              <p className="text-lg text-gray-700 leading-relaxed">
                 The cost of senior living varies based on the level of care, location, and amenities. Independent living typically ranges from $1,500 to $3,500 per month, assisted living from $3,000 to $6,000 per month, and memory care from $4,000 to $8,000 per month. Use our "Get Pricing" button on any community to receive specific cost information.
               </p>
             </div>
 
-            <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-              <h3 className="text-lg font-medium mb-2">How do I know which type of senior living is right for my loved one?</h3>
-              <p className="text-gray-700">
+            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+              <h3 className="text-xl font-semibold mb-3">How do I know which type of senior living is right for my loved one?</h3>
+              <p className="text-lg text-gray-700 leading-relaxed">
                 Consider your loved one's current and potential future care needs. If they need minimal assistance, independent living might be appropriate. If they need help with daily activities but not 24-hour nursing care, assisted living is a good option. For those with Alzheimer's or dementia, memory care provides specialized support. Our community profiles detail the care types offered at each location.
               </p>
             </div>
 
-            <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-              <h3 className="text-lg font-medium mb-2">What amenities should I look for in a senior living community?</h3>
-              <p className="text-gray-700">
+            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+              <h3 className="text-xl font-semibold mb-3">What amenities should I look for in a senior living community?</h3>
+              <p className="text-lg text-gray-700 leading-relaxed">
                 Look for amenities that match your or your loved one's lifestyle and needs, such as dining options, social activities, fitness centers, transportation services, outdoor spaces, and housekeeping. Consider security features, on-site medical support, and accessibility accommodations. Most importantly, visit communities to experience the atmosphere firsthand.
               </p>
             </div>
@@ -778,29 +730,36 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Final Assessment CTA Banner */}
-      <div className="bg-gradient-to-r from-[#1e3a5f] to-[#2d4a6f] py-16">
+      {/* Final Assessment CTA Banner - HIGH-CONTRAST */}
+      <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
               Ready to Find the Right Community?
             </h2>
-            <p className="text-xl text-gray-200 mb-8">
-              Take our 2-minute assessment and get matched with the perfect care communities in Cleveland
+            <p className="text-xl text-gray-300 mb-10">
+              Take our 2-minute assessment or speak directly with a Cleveland advisor
             </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link href="/assessment">
-                <button className="w-full sm:w-auto bg-[#ff5a5f] hover:bg-[#ff4449] text-white font-bold px-12 py-5 rounded-xl shadow-xl hover:shadow-2xl transition-all text-lg">
-                  Start Free Assessment
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
+              {/* PRIMARY CTA - High-Contrast Coral */}
+              <Link href="/contact">
+                <button 
+                  className="w-full sm:w-auto text-white font-bold px-12 py-5 rounded-xl shadow-xl hover:shadow-2xl transition-all text-xl min-h-[60px] min-w-[280px] flex items-center justify-center gap-3"
+                  style={{ background: 'linear-gradient(135deg, #FF6B6B 0%, #EE5A5A 100%)' }}
+                >
+                  <Phone className="h-6 w-6" />
+                  Free Care Consultation
                 </button>
               </Link>
+              {/* SECONDARY CTA */}
               <a href="tel:+12166774630">
-                <button className="w-full sm:w-auto bg-white hover:bg-gray-100 text-[#1e3a5f] font-bold px-12 py-5 rounded-xl shadow-xl hover:shadow-2xl transition-all text-lg">
+                <button className="w-full sm:w-auto bg-white hover:bg-gray-100 text-slate-900 font-bold px-12 py-5 rounded-xl shadow-xl hover:shadow-2xl transition-all text-xl min-h-[60px] min-w-[240px] flex items-center justify-center gap-2">
+                  <Phone className="h-5 w-5" />
                   Call: (216) 677-4630
                 </button>
               </a>
             </div>
-            <p className="text-gray-300 mt-6 text-sm">
+            <p className="text-gray-400 mt-8 text-base">
               Join hundreds of Cleveland families who have found the perfect care community
             </p>
           </div>
