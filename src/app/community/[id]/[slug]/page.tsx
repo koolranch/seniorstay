@@ -51,6 +51,16 @@ export async function generateMetadata({ params }: CommunityPageProps): Promise<
       ? 'Assisted Living' 
       : 'Senior Living';
   
+  // SEO SAFETY: Check if profile is "incomplete" (no description or placeholder image)
+  // Incomplete profiles should NOT be indexed to protect site authority
+  const hasDescription = community.description && community.description.trim().length > 50;
+  const imageUrl = community.images?.[0] || '';
+  const hasPlaceholderImage = !imageUrl || 
+    imageUrl.toLowerCase().includes('placeholder') ||
+    imageUrl.toLowerCase().includes('no-image') ||
+    imageUrl.toLowerCase().includes('default-community');
+  const isIncompleteProfile = !hasDescription || hasPlaceholderImage;
+  
   return {
     title: `${community.name} | ${primaryCareType} in ${city}, OH | Guide for Seniors`,
     description: `Discover ${community.name} in ${city}, Ohio. ${community.description || `Quality ${primaryCareType.toLowerCase()} with compassionate care.`} Get pricing, schedule tours, and learn about amenities.`,
@@ -72,10 +82,10 @@ export async function generateMetadata({ params }: CommunityPageProps): Promise<
       title: `${community.name} | ${primaryCareType} in ${city}`,
       description: community.description || `Quality ${primaryCareType.toLowerCase()} in ${city}, Ohio.`,
     },
-    robots: {
-      index: true,
-      follow: true,
-    },
+    // SEO SAFETY: noindex incomplete profiles to protect site authority
+    robots: isIncompleteProfile 
+      ? { index: false, follow: true, noarchive: true }
+      : { index: true, follow: true, 'max-snippet': -1, 'max-image-preview': 'large' as const },
   };
 }
 

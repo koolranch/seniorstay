@@ -65,6 +65,16 @@ export async function generateMetadata({ params }: CommunityPageProps): Promise<
     }
   };
 
+  // SEO SAFETY: Check if profile is "incomplete" (no description or placeholder image)
+  // Incomplete profiles should NOT be indexed to protect site authority
+  const hasDescription = community.description && community.description.trim().length > 50;
+  const imageUrl = community.images?.[0] || '';
+  const hasPlaceholderImage = !imageUrl || 
+    imageUrl.toLowerCase().includes('placeholder') ||
+    imageUrl.toLowerCase().includes('no-image') ||
+    imageUrl.toLowerCase().includes('default-community');
+  const isIncompleteProfile = !hasDescription || hasPlaceholderImage;
+
   return {
     title,
     description,
@@ -91,6 +101,10 @@ export async function generateMetadata({ params }: CommunityPageProps): Promise<
     alternates: {
       canonical: `/facility/${community.id}/${community.name.toLowerCase().replace(/\s+/g, '-')}`,
     },
+    // SEO SAFETY: noindex incomplete profiles to protect site authority
+    robots: isIncompleteProfile 
+      ? { index: false, follow: true, noarchive: true }
+      : { index: true, follow: true, 'max-snippet': -1, 'max-image-preview': 'large' as const },
     other: {
       'application/ld+json': JSON.stringify(structuredData)
     }
