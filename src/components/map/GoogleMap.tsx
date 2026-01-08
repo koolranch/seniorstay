@@ -33,6 +33,7 @@ export default function MapComponent({
   const infoWindows = useRef<google.maps.InfoWindow[]>([]);
   const router = useRouter();
   const [googleMapsAttempts, setGoogleMapsAttempts] = useState(0);
+  const mapInitializedRef = useRef(false); // Track if map was successfully initialized
 
   // This prevents hydration mismatches
   const [isMounted, setIsMounted] = useState(false);
@@ -117,6 +118,7 @@ export default function MapComponent({
 
         setMap(mapInstance);
         setLoading(false);
+        mapInitializedRef.current = true; // Mark as initialized to prevent timeout error
 
         // Clear any existing markers and info windows
         markers.current.forEach(marker => marker.setMap(null));
@@ -258,9 +260,10 @@ export default function MapComponent({
     }, 1000);
 
     // Clear the interval after 10 seconds as a safety measure
-    setTimeout(() => {
+    const timeoutId = setTimeout(() => {
       clearInterval(checkInterval);
-      if (!map && !error) {
+      // Use ref to check if map was initialized (avoids stale closure issue)
+      if (!mapInitializedRef.current) {
         console.error('Google Maps API failed to load in time');
         setError('Google Maps API failed to load. Please refresh the page or check your internet connection.');
         setLoading(false);
@@ -271,6 +274,7 @@ export default function MapComponent({
       window.removeEventListener('google-maps-loaded', handleScriptLoad);
       document.removeEventListener('google-maps-error', handleApiError);
       clearInterval(checkInterval);
+      clearTimeout(timeoutId);
     };
   }, [isMounted, validCommunities, communityCenter, zoom, showInfoWindows, onCommunityClick, router, map, error, googleMapsAttempts]);
 
