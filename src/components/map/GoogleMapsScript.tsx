@@ -2,8 +2,8 @@
 
 import React, { useEffect, useState } from 'react';
 
-// Define a placeholder API key - in a real application, this should come from environment variables
-const GOOGLE_MAPS_API_KEY = 'AIzaSyD0tTuZfO-8AorM-lEmvq-1mfGK3F2N2e0';
+// Google Maps API key from environment variables
+const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || '';
 
 // Add global type declaration for the custom event
 declare global {
