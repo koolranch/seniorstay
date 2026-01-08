@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
 import { renderToBuffer } from '@react-pdf/renderer';
 import { CareGuidePDF } from '@/components/pdf/CareGuidePDF';
-import { createElement } from 'react';
+import React from 'react';
 
 // Initialize Resend (will be undefined if RESEND_API_KEY is not set)
 const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
@@ -61,14 +61,14 @@ export async function POST(request: NextRequest) {
 
     // Generate PDF
     console.log(`[CareGuide] Generating PDF for ${body.recipientName}`);
-    const pdfBuffer = await renderToBuffer(
-      createElement(CareGuidePDF, {
-        recipientName: body.recipientName,
-        email: body.email,
-        assessmentData: body.assessmentData,
-        matchedCommunities: body.matchedCommunities,
-      })
-    );
+    const pdfElement = React.createElement(CareGuidePDF, {
+      recipientName: body.recipientName,
+      email: body.email,
+      assessmentData: body.assessmentData,
+      matchedCommunities: body.matchedCommunities,
+    });
+    // @ts-expect-error - renderToBuffer expects Document but component returns Document
+    const pdfBuffer = await renderToBuffer(pdfElement);
 
     // If Resend is not configured, return the PDF buffer for testing
     if (!resend) {
