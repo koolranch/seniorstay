@@ -264,8 +264,8 @@ export default function MapComponent({
       clearInterval(checkInterval);
       // Use ref to check if map was initialized (avoids stale closure issue)
       if (!mapInitializedRef.current) {
-        console.error('Google Maps API failed to load in time');
-        setError('Google Maps API failed to load. Please refresh the page or check your internet connection.');
+        console.warn('Map initialization timeout - this should only appear if map truly failed');
+        setError('Map temporarily unavailable. Please refresh the page.');
         setLoading(false);
       }
     }, 10000);
