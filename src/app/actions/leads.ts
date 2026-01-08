@@ -647,6 +647,7 @@ export async function submitLead(formData: LeadInput): Promise<LeadSubmitResult>
             ...leadData,
             urgencyScore: newScore,
             priority: getPriority(newScore),
+            updatedAt: new Date().toISOString(),
           })
           .eq('id', existingLead.id)
           .select('id')
@@ -662,6 +663,7 @@ export async function submitLead(formData: LeadInput): Promise<LeadSubmitResult>
             id: randomUUID(), // Generate UUID since table doesn't auto-generate
             ...leadData,
             createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
           })
           .select('id')
           .single();
@@ -677,6 +679,7 @@ export async function submitLead(formData: LeadInput): Promise<LeadSubmitResult>
           id: randomUUID(), // Generate UUID since table doesn't auto-generate
           ...leadData,
           createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
         })
         .select('id')
         .single();
