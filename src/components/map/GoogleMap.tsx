@@ -291,14 +291,6 @@ export default function MapComponent({
     );
   }
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center bg-gray-100 rounded-lg" style={{ height, width }}>
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-      </div>
-    );
-  }
-
   if (error) {
     return (
       <MapFallback
@@ -310,5 +302,19 @@ export default function MapComponent({
     );
   }
 
-  return <div ref={ref} style={{ height, width }} className="rounded-lg" />;
+  // Always render the map div so ref.current exists when initMap runs
+  // Show loading overlay on top when loading
+  return (
+    <div style={{ height, width, position: 'relative' }} className="rounded-lg overflow-hidden">
+      <div ref={ref} style={{ height: '100%', width: '100%' }} />
+      {loading && (
+        <div 
+          className="absolute inset-0 flex items-center justify-center bg-gray-100"
+          style={{ zIndex: 10 }}
+        >
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
+      )}
+    </div>
+  );
 }
