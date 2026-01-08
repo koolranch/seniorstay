@@ -127,6 +127,57 @@ const nextConfig = {
   // Redirects for old URLs that ranked well + broken backlink recovery
   async redirects() {
     return [
+      // === CRITICAL: High-Traffic Blog Post Recovery (SEO Audit Jan 2026) ===
+      // These URLs have 100-300+ referring domains and need permanent redirects
+      
+      // 309 referring domains - "free games for seniors" keyword (vol 1000)
+      {
+        source: '/blog/senior-online-games',
+        destination: '/resources',
+        permanent: true,
+      },
+      {
+        source: '/blog/senior-online-games/',
+        destination: '/resources',
+        permanent: true,
+      },
+      
+      // 263 referring domains - "cruises for seniors" keyword
+      {
+        source: '/blog/cruises-for-seniors',
+        destination: '/resources',
+        permanent: true,
+      },
+      {
+        source: '/blog/cruises-for-seniors/',
+        destination: '/resources',
+        permanent: true,
+      },
+      
+      // 146 referring domains - "universal studios senior discount" keyword
+      {
+        source: '/blog/universal-studios-florida',
+        destination: '/resources',
+        permanent: true,
+      },
+      {
+        source: '/blog/universal-studios-florida/',
+        destination: '/resources',
+        permanent: true,
+      },
+      
+      // 100 referring domains - "apps for seniors" keyword
+      {
+        source: '/blog/apps-for-seniors',
+        destination: '/resources',
+        permanent: true,
+      },
+      {
+        source: '/blog/apps-for-seniors/',
+        destination: '/resources',
+        permanent: true,
+      },
+      
       // === CRITICAL: Broken Backlink Recovery (SEO Audit Jan 2026) ===
       // These URLs have high-authority backlinks pointing to 404s
       
@@ -136,26 +187,9 @@ const nextConfig = {
         destination: '/resources',
         permanent: true, // 301 - Preserves link equity
       },
-      // DR 28 backlink from memorycherish.com
-      {
-        source: '/senior-health/general-health/:slug*',
-        destination: '/resources',
-        permanent: true,
-      },
-      // DR 37 backlink from itraveledthere.io  
-      {
-        source: '/senior-lifestyle/technology-for-seniors/:slug*',
-        destination: '/resources',
-        permanent: true,
-      },
       // DR 23 backlinks from homecare-aid.com, thereviewstories.com
       {
         source: '/blog/adult-brain-puzzles',
-        destination: '/resources',
-        permanent: true,
-      },
-      {
-        source: '/senior-travel/destinations/:slug*',
         destination: '/resources',
         permanent: true,
       },
@@ -174,37 +208,44 @@ const nextConfig = {
       // DR 9 backlink from sanantonioseniors.com
       {
         source: '/senior-entertainment/games/games-for-seniors',
-        destination: '/blog/11-places-seniors-meet-seniors',
+        destination: '/resources',
         permanent: true,
       },
-      // Games keyword redirects (position 79 for "free games for seniors")
+      // DR 7 backlink from global-air.com
       {
-        source: '/blog/senior-games',
-        destination: '/blog/apps-for-seniors',
-        permanent: true,
-      },
-      {
-        source: '/blog/free-games-seniors',
-        destination: '/blog/apps-for-seniors',
-        permanent: true,
-      },
-      {
-        source: '/senior-games',
-        destination: '/blog/apps-for-seniors',
+        source: '/blog/uss-yorktown',
+        destination: '/resources',
         permanent: true,
       },
       
-      // === Existing redirects ===
+      // === Catch-all redirects for old URL structures ===
+      // Redirect all old /senior-lifestyle/ paths
       {
-        source: '/senior-entertainment/games/senior-online-games',
-        destination: '/blog/senior-online-games',
-        permanent: true, // 301 redirect - preserves SEO ranking
-      },
-      {
-        source: '/senior-lifestyle/family/11-places-seniors-meet-seniors',
-        destination: '/blog/11-places-seniors-meet-seniors',
+        source: '/senior-lifestyle/:path*',
+        destination: '/resources',
         permanent: true,
       },
+      // Redirect all old /senior-entertainment/ paths  
+      {
+        source: '/senior-entertainment/:path*',
+        destination: '/resources',
+        permanent: true,
+      },
+      // Redirect all old /senior-travel/ paths
+      {
+        source: '/senior-travel/:path*',
+        destination: '/resources',
+        permanent: true,
+      },
+      // Redirect all old /senior-health/ paths
+      {
+        source: '/senior-health/:path*',
+        destination: '/resources',
+        permanent: true,
+      },
+      
+      // === Legacy blog post redirects ===
+      // Note: /senior-entertainment/* and /senior-lifestyle/* are now covered by catch-all above
       // Redirect /contact-us (with or without trailing slash) to /contact
       {
         source: '/contact-us',
