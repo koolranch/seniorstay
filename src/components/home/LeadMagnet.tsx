@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { FileText, Download, CheckCircle, Loader2, ArrowRight, DollarSign, TrendingUp, Calendar } from 'lucide-react';
-import { supabase } from '@/lib/supabase-client';
+import { submitLead } from '@/app/actions/leads';
 
 /**
  * Lead Magnet Section - 2026 Cleveland Senior Care Cost Guide
@@ -32,23 +32,18 @@ const LeadMagnet: React.FC = () => {
         throw new Error('Please enter a valid email address');
       }
 
-      // Submit to Supabase 'Lead' table
-      const { error: supabaseError } = await supabase
-        .from('Lead')
-        .insert({
-          fullName: formData.firstName || 'Cost Guide Lead',
-          email: formData.email,
-          pageType: 'homepage',
-          sourceSlug: 'cost-guide-lead-magnet',
-          notes: '2026 Cleveland Senior Care Cost Guide Download',
-          status: 'new',
-          urgencyScore: 20, // Lower urgency - just researching
-          priority: 'normal',
-        });
+      // Submit using the server action (handles ID generation and all fields)
+      const result = await submitLead({
+        fullName: formData.firstName || 'Cost Guide Lead',
+        email: formData.email,
+        pageType: 'homepage',
+        sourceSlug: 'cost-guide-lead-magnet',
+        notes: '2026 Cleveland Senior Care Cost Guide Download',
+      });
 
-      if (supabaseError) {
-        console.error('Supabase error:', supabaseError);
-        throw new Error('Unable to submit. Please try again.');
+      if (!result.success) {
+        console.error('Lead submission error:', result.message);
+        throw new Error(result.message || 'Unable to submit. Please try again.');
       }
 
       setIsSuccess(true);
