@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { randomUUID } from 'crypto';
 
 interface DiagnosticResult {
   success: boolean;
@@ -91,6 +92,7 @@ export async function GET() {
   // Test 2: Try a test insert (will be deleted immediately)
   try {
     const testData = {
+      id: randomUUID(), // Generate UUID since table doesn't auto-generate
       fullName: 'TEST_DIAGNOSTIC_ENTRY',
       email: 'test@diagnostic.local',
       phone: '000-000-0000',

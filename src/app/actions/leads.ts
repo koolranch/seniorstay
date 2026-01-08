@@ -3,6 +3,7 @@
 import { z } from 'zod';
 import { headers } from 'next/headers';
 import { createClient } from '@supabase/supabase-js';
+import { randomUUID } from 'crypto';
 
 // ============================================================================
 // TYPES & SCHEMAS
@@ -658,6 +659,7 @@ export async function submitLead(formData: LeadInput): Promise<LeadSubmitResult>
         const { data: inserted, error: insertError } = await supabase
           .from('Lead')
           .insert({
+            id: randomUUID(), // Generate UUID since table doesn't auto-generate
             ...leadData,
             createdAt: new Date().toISOString(),
           })
@@ -672,6 +674,7 @@ export async function submitLead(formData: LeadInput): Promise<LeadSubmitResult>
       const { data: inserted, error: insertError } = await supabase
         .from('Lead')
         .insert({
+          id: randomUUID(), // Generate UUID since table doesn't auto-generate
           ...leadData,
           createdAt: new Date().toISOString(),
         })
