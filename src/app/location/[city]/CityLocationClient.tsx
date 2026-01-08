@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
-import { MapPin, Phone, ArrowRight, ChevronDown, Hospital, Shield, Users } from 'lucide-react';
+import { MapPin, Phone, ArrowRight, ChevronDown, Hospital, Shield, Users, Gamepad2, Brain, Coffee, BookOpen } from 'lucide-react';
 import GlobalHeader from '@/components/home/GlobalHeader';
 import Footer from '@/components/footer/Footer';
 import LocationCard from '@/components/property/LocationCard';
@@ -332,7 +332,101 @@ export default function CityLocationClient({ cityName, stateAbbr, communities }:
       )}
 
       {/* ============================================
-          SECTION 11: FINAL CTA
+          SECTION 11: HELPFUL RESOURCES
+          Internal linking to boost SEO + user value
+      ============================================ */}
+      <section className="py-16 bg-slate-50 border-t border-slate-200">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-10">
+            <span className="inline-block bg-violet-100 text-violet-700 px-4 py-2 rounded-full text-sm font-semibold mb-4">
+              Helpful Resources
+            </span>
+            <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-3">
+              Senior Living Guides & Activities
+            </h2>
+            <p className="text-slate-600 max-w-2xl mx-auto">
+              Free resources to help you and your loved one navigate senior care decisions
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
+            <Link 
+              href="/resources/games-for-seniors"
+              className="bg-white rounded-2xl border border-slate-200 p-6 hover:shadow-lg transition-all duration-300 group"
+            >
+              <div className="bg-violet-100 text-violet-600 w-12 h-12 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <Gamepad2 className="h-6 w-6" />
+              </div>
+              <h3 className="text-lg font-bold text-slate-900 mb-2 group-hover:text-teal-600 transition-colors">
+                Games for Seniors
+              </h3>
+              <p className="text-slate-600 text-sm mb-3">
+                Free brain games and puzzles to stay mentally sharp.
+              </p>
+              <span className="text-teal-600 text-sm font-semibold flex items-center gap-1">
+                Explore <ArrowRight className="h-4 w-4" />
+              </span>
+            </Link>
+
+            <Link 
+              href="/resources/social-activities"
+              className="bg-white rounded-2xl border border-slate-200 p-6 hover:shadow-lg transition-all duration-300 group"
+            >
+              <div className="bg-rose-100 text-rose-600 w-12 h-12 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <Coffee className="h-6 w-6" />
+              </div>
+              <h3 className="text-lg font-bold text-slate-900 mb-2 group-hover:text-teal-600 transition-colors">
+                Where Seniors Meet
+              </h3>
+              <p className="text-slate-600 text-sm mb-3">
+                Social activities and places to make new friends.
+              </p>
+              <span className="text-teal-600 text-sm font-semibold flex items-center gap-1">
+                Explore <ArrowRight className="h-4 w-4" />
+              </span>
+            </Link>
+
+            <Link 
+              href="/resources/brain-health"
+              className="bg-white rounded-2xl border border-slate-200 p-6 hover:shadow-lg transition-all duration-300 group"
+            >
+              <div className="bg-teal-100 text-teal-600 w-12 h-12 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <Brain className="h-6 w-6" />
+              </div>
+              <h3 className="text-lg font-bold text-slate-900 mb-2 group-hover:text-teal-600 transition-colors">
+                Brain Health Guide
+              </h3>
+              <p className="text-slate-600 text-sm mb-3">
+                Cognitive exercises and memory care tips.
+              </p>
+              <span className="text-teal-600 text-sm font-semibold flex items-center gap-1">
+                Explore <ArrowRight className="h-4 w-4" />
+              </span>
+            </Link>
+
+            <Link 
+              href="/senior-living-costs-cleveland"
+              className="bg-white rounded-2xl border border-slate-200 p-6 hover:shadow-lg transition-all duration-300 group"
+            >
+              <div className="bg-amber-100 text-amber-600 w-12 h-12 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <BookOpen className="h-6 w-6" />
+              </div>
+              <h3 className="text-lg font-bold text-slate-900 mb-2 group-hover:text-teal-600 transition-colors">
+                Cleveland Cost Guide
+              </h3>
+              <p className="text-slate-600 text-sm mb-3">
+                Understand senior living pricing in {cityName}.
+              </p>
+              <span className="text-teal-600 text-sm font-semibold flex items-center gap-1">
+                Explore <ArrowRight className="h-4 w-4" />
+              </span>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ============================================
+          SECTION 12: FINAL CTA
           Strong conversion close
       ============================================ */}
       <section className="py-16 bg-gradient-to-r from-teal-600 to-teal-700">

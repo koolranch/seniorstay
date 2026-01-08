@@ -61,10 +61,15 @@ const Hero: React.FC = () => {
       <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-4xl mx-auto text-center">
           {/* H1 - Single, SEO-optimized heading */}
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 mb-6 leading-tight tracking-tight">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 mb-4 leading-tight tracking-tight">
             Find the Right Senior Living in Cleveland—
             <span className="text-teal-600">Without the Stress</span>
           </h1>
+
+          {/* H2 - Trust-building subheading for SEO */}
+          <h2 className="text-lg md:text-xl font-semibold text-slate-700 mb-6">
+            Cleveland&apos;s Most Trusted Senior Living Resource Since 2015
+          </h2>
 
           {/* Subtext - Benefit-driven description */}
           <p className="text-lg md:text-xl text-slate-600 mb-10 max-w-3xl mx-auto leading-relaxed">

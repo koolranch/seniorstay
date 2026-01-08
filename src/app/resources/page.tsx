@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { BookOpen, DollarSign, Heart, HelpCircle, MapPin, Building2, ArrowRight, FileText, Users, Shield, CheckCircle, Phone } from 'lucide-react';
+import { BookOpen, DollarSign, Heart, HelpCircle, MapPin, Building2, ArrowRight, FileText, Users, Shield, CheckCircle, Phone, Gamepad2, Brain, Coffee } from 'lucide-react';
 import GlobalHeader from '@/components/home/GlobalHeader';
 import Footer from '@/components/footer/Footer';
 import StickyTourButton from '@/components/tour/StickyTourButton';
@@ -11,6 +11,37 @@ export const revalidate = 300;
 
 export default async function ResourcesPage() {
   const recentBlogPosts = await fetchRecentBlogPosts(3);
+  
+  // New lifestyle & wellness resources section
+  const lifestyleResources = [
+    {
+      icon: Gamepad2,
+      title: "Free Games for Seniors",
+      description: "Discover the best free online games for seniors. Brain puzzles, card games, and engaging activities for cognitive health and entertainment.",
+      href: "/resources/games-for-seniors",
+      gradient: "from-violet-500 to-purple-600",
+      iconBg: "bg-violet-100 text-violet-600",
+      badge: "Popular"
+    },
+    {
+      icon: Coffee,
+      title: "Where Seniors Meet",
+      description: "11+ places in Cleveland where seniors can meet other seniors. Senior centers, community groups, and social activities to combat isolation.",
+      href: "/resources/social-activities",
+      gradient: "from-rose-500 to-pink-600",
+      iconBg: "bg-rose-100 text-rose-600",
+      badge: null
+    },
+    {
+      icon: Brain,
+      title: "Brain Health Guide",
+      description: "Evidence-based strategies to maintain mental sharpness. Brain puzzles, cognitive exercises, and when to consider memory care.",
+      href: "/resources/brain-health",
+      gradient: "from-teal-500 to-cyan-600",
+      iconBg: "bg-teal-100 text-teal-600",
+      badge: null
+    },
+  ];
   
   const resources = [
     {
@@ -121,6 +152,58 @@ export default async function ResourcesPage() {
         </div>
       </section>
 
+      {/* Lifestyle & Wellness Resources - NEW SECTION */}
+      <section className="py-16 md:py-20 bg-slate-50">
+        <div className="container mx-auto px-4">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-12">
+              <span className="inline-block bg-violet-100 text-violet-700 px-4 py-2 rounded-full text-sm font-semibold mb-4">
+                Lifestyle & Wellness
+              </span>
+              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-slate-900">
+                Activities & Brain Health Resources
+              </h2>
+              <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+                Free games, social activities, and cognitive wellness resources for seniors and caregivers
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {lifestyleResources.map((resource, index) => {
+                const Icon = resource.icon;
+                
+                return (
+                  <Link
+                    key={index}
+                    href={resource.href}
+                    className="group bg-white border-2 border-slate-200 hover:border-teal-300 rounded-2xl p-6 transition-all hover:shadow-xl relative"
+                  >
+                    {resource.badge && (
+                      <span className="absolute top-4 right-4 bg-amber-100 text-amber-700 text-xs font-semibold px-2 py-1 rounded-full">
+                        {resource.badge}
+                      </span>
+                    )}
+                    <div className={`${resource.iconBg} w-14 h-14 rounded-xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform`}>
+                      <Icon className="h-7 w-7" />
+                    </div>
+                    <h3 className="text-xl font-bold mb-3 text-slate-900 group-hover:text-teal-700 transition-colors">
+                      {resource.title}
+                    </h3>
+                    <p className="text-slate-600 mb-5 text-sm leading-relaxed">
+                      {resource.description}
+                    </p>
+                    <div className="flex items-center text-teal-600 font-semibold group-hover:gap-2 transition-all">
+                      <span>Explore</span>
+                      <ArrowRight className="h-4 w-4 ml-1 group-hover:translate-x-1 transition-transform" />
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Resources Grid */}
       <section className="py-16 md:py-20 bg-white">
         <div className="container mx-auto px-4">
@@ -130,7 +213,7 @@ export default async function ResourcesPage() {
                 Comprehensive Guides
               </span>
               <h2 className="text-3xl md:text-4xl font-bold mb-4 text-slate-900">
-                Everything You Need to Know
+                Senior Living & Care Guides
               </h2>
               <p className="text-lg text-slate-600 max-w-2xl mx-auto">
                 From understanding different care types to finding the perfect community in Cleveland
