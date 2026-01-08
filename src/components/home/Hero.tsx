@@ -68,7 +68,7 @@ const Hero: React.FC = () => {
 
           {/* H2 - Trust-building subheading for SEO */}
           <h2 className="text-lg md:text-xl font-semibold text-slate-700 mb-6">
-            Cleveland&apos;s Most Trusted Senior Living Resource Since 2015
+            Cleveland&apos;s Most Trusted Senior Living Resource
           </h2>
 
           {/* Subtext - Benefit-driven description */}
