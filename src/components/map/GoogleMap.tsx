@@ -33,7 +33,7 @@ export default function MapComponent({
   const infoWindows = useRef<google.maps.InfoWindow[]>([]);
   const router = useRouter();
   const [googleMapsAttempts, setGoogleMapsAttempts] = useState(0);
-  const mapInitializedRef = useRef(false); // Track if map was successfully initialized
+  const mapInitializedRef = useRef(false); // Track successful init to prevent stale closure timeout
 
   // This prevents hydration mismatches
   const [isMounted, setIsMounted] = useState(false);
