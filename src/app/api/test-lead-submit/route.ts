@@ -1,12 +1,38 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
+interface DiagnosticResult {
+  success: boolean;
+  error?: string;
+  code?: string;
+  hint?: string;
+  details?: string;
+  rows_found?: number;
+  inserted_id?: string;
+  cleaned_up?: boolean;
+}
+
+interface Diagnostics {
+  timestamp: string;
+  environment: string | undefined;
+  env_check?: {
+    NEXT_PUBLIC_SUPABASE_URL: boolean;
+    NEXT_PUBLIC_SUPABASE_ANON_KEY: boolean;
+    SUPABASE_SERVICE_ROLE_KEY: boolean;
+    has_service_key: boolean;
+  };
+  error?: string;
+  table_read_test?: DiagnosticResult;
+  table_insert_test?: DiagnosticResult;
+  schema_check?: DiagnosticResult;
+}
+
 /**
  * Diagnostic endpoint to test Supabase lead submission
  * GET /api/test-lead-submit
  */
 export async function GET() {
-  const diagnostics: Record<string, unknown> = {
+  const diagnostics: Diagnostics = {
     timestamp: new Date().toISOString(),
     environment: process.env.NODE_ENV,
   };
@@ -133,15 +159,15 @@ export async function GET() {
   }
 
   const allPassed = 
-    diagnostics.table_read_test?.success && 
-    diagnostics.table_insert_test?.success;
+    diagnostics.table_read_test?.success === true && 
+    diagnostics.table_insert_test?.success === true;
 
   return NextResponse.json({
     ...diagnostics,
     overall_status: allPassed ? 'HEALTHY' : 'ISSUES_DETECTED',
     recommendation: allPassed 
       ? 'Supabase connection is working correctly'
-      : diagnostics.env_check?.has_service_key 
+      : diagnostics.env_check?.has_service_key === true
         ? 'Check RLS policies or table schema'
         : 'Add SUPABASE_SERVICE_ROLE_KEY to Vercel environment variables',
   }, { 
