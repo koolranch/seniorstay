@@ -736,12 +736,43 @@ export async function submitLead(formData: LeadInput): Promise<LeadSubmitResult>
     
   } catch (error) {
     // -------------------------------------------------------------------------
-    // ERROR HANDLING
+    // ERROR HANDLING - Enhanced with specific Supabase error detection
     // -------------------------------------------------------------------------
     console.error('[Lead] Submission error:', error);
     
+    // Extract error details for debugging
+    const errorDetails = {
+      message: error instanceof Error ? error.message : String(error),
+      name: error instanceof Error ? error.name : 'Unknown',
+      // Supabase errors have additional properties
+      code: (error as { code?: string })?.code,
+      hint: (error as { hint?: string })?.hint,
+      details: (error as { details?: string })?.details,
+    };
+    console.error('[Lead] Error details:', JSON.stringify(errorDetails, null, 2));
+    
     // Check for specific error types
     if (error instanceof Error) {
+      // Supabase RLS policy violation
+      if (error.message.includes('new row violates row-level security') || 
+          error.message.includes('RLS') ||
+          errorDetails.code === '42501') {
+        console.error('[Lead] RLS Policy Error - Check Supabase table policies');
+        return {
+          success: false,
+          message: 'Unable to save your information. Please call us at (216) 677-4630.',
+        };
+      }
+      
+      // Missing column error
+      if (error.message.includes('column') && error.message.includes('does not exist')) {
+        console.error('[Lead] Schema Error - Missing column in Lead table');
+        return {
+          success: false,
+          message: 'System configuration error. Please call us at (216) 677-4630.',
+        };
+      }
+      
       // Database timeout
       if (error.message.includes('timeout') || error.message.includes('ETIMEDOUT')) {
         return {
@@ -765,9 +796,20 @@ export async function submitLead(formData: LeadInput): Promise<LeadSubmitResult>
           message: 'Too many requests. Please wait a moment before trying again.',
         };
       }
+      
+      // Authentication/authorization error
+      if (error.message.includes('JWT') || error.message.includes('auth') || 
+          errorDetails.code === '401' || errorDetails.code === '403') {
+        console.error('[Lead] Auth Error - Check SUPABASE_SERVICE_ROLE_KEY');
+        return {
+          success: false,
+          message: 'Authentication error. Please call us at (216) 677-4630.',
+        };
+      }
     }
     
-    // Generic error
+    // Generic error with debug info in logs
+    console.error('[Lead] Unhandled error type:', errorDetails);
     return {
       success: false,
       message: 'Something went wrong. Please try again or call us at (216) 677-4630.',
