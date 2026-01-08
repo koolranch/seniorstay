@@ -3,16 +3,100 @@ import GlobalHeader from '@/components/home/GlobalHeader';
 import Footer from '@/components/footer/Footer';
 import BlogListing from '@/components/blog/BlogListing';
 import { fetchAllBlogPosts } from '@/lib/blog-posts';
-import { Phone, ArrowRight, BookOpen } from 'lucide-react';
+import { Phone, ArrowRight, BookOpen, ChevronRight } from 'lucide-react';
 
 export const revalidate = 300;
+
+// Schema markup for blog collection page
+const blogSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'Senior Living Blog & Advice',
+  description: 'Expert tips, practical advice, and helpful insights for Cleveland families navigating senior living decisions.',
+  url: 'https://www.guideforseniors.com/blog',
+  publisher: {
+    '@type': 'Organization',
+    name: 'Guide for Seniors',
+    url: 'https://www.guideforseniors.com',
+    logo: {
+      '@type': 'ImageObject',
+      url: 'https://www.guideforseniors.com/logo.png'
+    }
+  },
+  mainEntity: {
+    '@type': 'ItemList',
+    itemListElement: [] // Will be populated dynamically
+  }
+};
+
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: 'Home',
+      item: 'https://www.guideforseniors.com'
+    },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: 'Blog & Advice',
+      item: 'https://www.guideforseniors.com/blog'
+    }
+  ]
+};
 
 export default async function BlogPage() {
   const posts = await fetchAllBlogPosts();
 
+  // Build dynamic schema with blog posts
+  const dynamicBlogSchema = {
+    ...blogSchema,
+    mainEntity: {
+      '@type': 'ItemList',
+      itemListElement: posts.slice(0, 10).map((post, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        url: `https://www.guideforseniors.com/blog/${post.slug}`,
+        name: post.title
+      }))
+    }
+  };
+
   return (
     <main className="flex min-h-screen flex-col bg-white">
+      {/* Schema Markup */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(dynamicBlogSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+
       <GlobalHeader />
+
+      {/* Breadcrumbs */}
+      <nav className="bg-slate-50 border-b border-slate-200" aria-label="Breadcrumb">
+        <div className="container mx-auto px-4 py-3">
+          <ol className="flex items-center gap-1 text-sm">
+            <li>
+              <Link href="/" className="text-slate-600 hover:text-teal-600 transition-colors">
+                Home
+              </Link>
+            </li>
+            <li>
+              <ChevronRight className="h-4 w-4 text-slate-400" />
+            </li>
+            <li>
+              <span className="text-slate-900 font-medium">Blog & Advice</span>
+            </li>
+          </ol>
+        </div>
+      </nav>
       
       {/* Hero Section */}
       <section className="bg-gradient-to-b from-slate-50 via-white to-slate-50 py-12 md:py-16 relative overflow-hidden">
