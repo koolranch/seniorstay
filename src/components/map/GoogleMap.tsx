@@ -79,6 +79,8 @@ export default function MapComponent({
     document.addEventListener('google-maps-error', handleApiError);
 
     const initMap = () => {
+      // Skip if map already initialized to prevent re-initialization loops
+      if (mapInitializedRef.current) return;
       if (!ref.current) return;
 
       try {
@@ -276,7 +278,9 @@ export default function MapComponent({
       clearInterval(checkInterval);
       clearTimeout(timeoutId);
     };
-  }, [isMounted, validCommunities, communityCenter, zoom, showInfoWindows, onCommunityClick, router, map, error, googleMapsAttempts]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isMounted, validCommunities, communityCenter, zoom, showInfoWindows, onCommunityClick, router]);
+  // Note: Intentionally omitting map, error, and googleMapsAttempts from deps to prevent infinite re-initialization loops
 
   // Return loading placeholder during server-side rendering or hydration
   if (!isMounted) {
