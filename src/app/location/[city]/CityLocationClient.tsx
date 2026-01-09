@@ -14,7 +14,6 @@ import { clevelandCitiesData } from '@/data/cleveland-cities';
 import { getLocalResourcesForCity } from '@/data/local-resources';
 import LocalSeniorResources from '@/components/location/LocalSeniorResources';
 import TestimonialSection from '@/components/testimonials/TestimonialSection';
-import ExitIntentPopup from '@/components/forms/ExitIntentPopup';
 import CommunityComparisonTable from '@/components/location/CommunityComparisonTable';
 import AffordabilityCalculator from '@/components/AffordabilityCalculator';
 import StickyCalculatorCTA from '@/components/StickyCalculatorCTA';
@@ -458,7 +457,6 @@ export default function CityLocationClient({ cityName, stateAbbr, communities }:
 
       {/* Floating Components */}
       <ComparisonFloatingButton />
-      <ExitIntentPopup cityName={cityName} />
       <StickyCalculatorCTA cityName={cityName} />
 
       <Footer />

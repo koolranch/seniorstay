@@ -16,7 +16,6 @@ import NeighborhoodSection from '@/components/community/NeighborhoodSection';
 import WhyChooseSection from '@/components/community/WhyChooseSection';
 import StickyMobileCTA from '@/components/community/StickyMobileCTA';
 import StickyTourButton from '@/components/tour/StickyTourButton';
-import ExitIntentPopup from '@/components/forms/ExitIntentPopup';
 import ClinicalProximityBadge from '@/components/community/ClinicalProximityBadge';
 
 // ISR: Revalidate every hour
@@ -274,8 +273,6 @@ export default async function CommunityPage({ params }: CommunityPageProps) {
       {/* Desktop Sticky Tour Button */}
       {!isOnlySkilledNursing && <StickyTourButton />}
       
-      {/* Exit Intent Popup */}
-      {!isOnlySkilledNursing && <ExitIntentPopup cityName={cityName} />}
     </div>
   );
 }
