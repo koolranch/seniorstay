@@ -28,14 +28,17 @@ const LeadMagnet: React.FC = () => {
 
     try {
       // Validate email
-      if (!formData.email || !formData.email.includes('@')) {
+      const trimmedEmail = formData.email?.trim();
+      if (!trimmedEmail || !trimmedEmail.includes('@')) {
         throw new Error('Please enter a valid email address');
       }
 
+      console.log('[LeadMagnet] Submitting lead...', { email: trimmedEmail, firstName: formData.firstName });
+      
       // Submit using the server action (handles ID generation and all fields)
       const result = await submitLead({
-        fullName: formData.firstName || 'Cost Guide Lead',
-        email: formData.email,
+        fullName: formData.firstName?.trim() || 'Cost Guide Lead',
+        email: trimmedEmail,
         pageType: 'homepage',
         sourceSlug: 'cost-guide-lead-magnet',
         notes: '2026 Cleveland Senior Care Cost Guide Download',
@@ -43,14 +46,27 @@ const LeadMagnet: React.FC = () => {
         moveInTimeline: 'Just researching',
       });
 
+      console.log('[LeadMagnet] Submit result:', result);
+
       if (!result.success) {
-        console.error('Lead submission error:', result.message);
+        console.error('[LeadMagnet] Lead submission failed:', result.message, result.errors);
         throw new Error(result.message || 'Unable to submit. Please try again.');
       }
 
       setIsSuccess(true);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Something went wrong');
+      console.error('[LeadMagnet] Error caught:', err);
+      // Handle server action errors more gracefully
+      if (err instanceof Error) {
+        // Check for server-side error indicators
+        if (err.message.includes('500') || err.message.includes('Internal Server Error')) {
+          setError('Our system is temporarily unavailable. Please call us at (216) 677-4630.');
+        } else {
+          setError(err.message);
+        }
+      } else {
+        setError('Something went wrong. Please try again or call (216) 677-4630.');
+      }
     } finally {
       setIsSubmitting(false);
     }
