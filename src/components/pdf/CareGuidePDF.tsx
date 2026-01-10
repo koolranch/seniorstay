@@ -4,106 +4,147 @@ import {
   Text,
   View,
   StyleSheet,
-  Font,
+  Link,
+  Svg,
+  Rect,
+  Path,
 } from '@react-pdf/renderer';
 
-// Register fonts (using default sans-serif for now)
-// In production, you could register custom fonts here
+// ============================================================================
+// BOUTIQUE MEDICAL CONCIERGE - CARE GUIDE PDF
+// Premium design for Cleveland families seeking senior care guidance
+// ============================================================================
 
-// Create styles
+// Brand Colors - Boutique Medical Concierge Palette
+const COLORS = {
+  navy: '#001F3F',        // Primary - Headers, key text
+  navyLight: '#0A3055',   // Secondary navy
+  sage: '#8DA399',        // Accent - CTAs, checkboxes
+  sageLight: '#B5C9BC',   // Light sage for backgrounds
+  sageDark: '#6B8574',    // Dark sage for contrast
+  white: '#FFFFFF',
+  cream: '#FAFBFA',       // Off-white for cards
+  warmGray: '#F5F5F3',    // Warm background
+  textPrimary: '#1A1A2E', // Body text
+  textSecondary: '#4A5568', // Secondary text
+  gold: '#C9A227',        // Premium accent
+  goldLight: '#F5E6B3',   // Light gold for badges
+  red: '#C53030',         // Warning/red flags
+  redLight: '#FED7D7',    // Light red background
+};
+
+// Styles matching the boutique aesthetic
 const styles = StyleSheet.create({
-  // Page styles
+  // ===== PAGE LAYOUTS =====
   page: {
     flexDirection: 'column',
-    backgroundColor: '#ffffff',
+    backgroundColor: COLORS.white,
     padding: 40,
     fontFamily: 'Helvetica',
   },
   coverPage: {
     flexDirection: 'column',
-    backgroundColor: '#0f766e', // teal-700
+    backgroundColor: COLORS.navy,
     padding: 0,
     fontFamily: 'Helvetica',
   },
-  
-  // Cover page styles
+
+  // ===== COVER PAGE =====
   coverContent: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 40,
+    padding: 50,
+  },
+  coverBadge: {
+    backgroundColor: COLORS.sage,
+    paddingHorizontal: 20,
+    paddingVertical: 8,
+    borderRadius: 20,
+    marginBottom: 30,
+  },
+  coverBadgeText: {
+    fontSize: 10,
+    color: COLORS.white,
+    fontWeight: 'bold',
+    letterSpacing: 1,
   },
   coverLogo: {
-    fontSize: 28,
+    fontSize: 32,
     fontWeight: 'bold',
-    color: '#ffffff',
-    marginBottom: 8,
+    color: COLORS.white,
+    marginBottom: 6,
   },
   coverTagline: {
     fontSize: 12,
-    color: '#99f6e4', // teal-200
-    marginBottom: 60,
+    color: COLORS.sageLight,
+    marginBottom: 50,
+    letterSpacing: 0.5,
   },
   coverTitle: {
-    fontSize: 36,
+    fontSize: 42,
     fontWeight: 'bold',
-    color: '#ffffff',
+    color: COLORS.white,
     textAlign: 'center',
-    marginBottom: 16,
+    marginBottom: 12,
     lineHeight: 1.2,
   },
   coverSubtitle: {
-    fontSize: 16,
-    color: '#ccfbf1', // teal-100
+    fontSize: 14,
+    color: COLORS.sageLight,
     textAlign: 'center',
-    marginBottom: 40,
+    marginBottom: 50,
+    lineHeight: 1.5,
   },
   coverPreparedFor: {
-    fontSize: 12,
-    color: '#99f6e4',
+    fontSize: 11,
+    color: COLORS.sage,
     textAlign: 'center',
     marginBottom: 8,
+    letterSpacing: 1,
   },
   coverName: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: 'bold',
-    color: '#ffffff',
+    color: COLORS.white,
     textAlign: 'center',
   },
   coverFooter: {
-    backgroundColor: '#115e59', // teal-800
-    padding: 20,
+    backgroundColor: COLORS.navyLight,
+    padding: 24,
     alignItems: 'center',
+    borderTopWidth: 3,
+    borderTopColor: COLORS.sage,
   },
   coverPhone: {
-    fontSize: 14,
-    color: '#ffffff',
+    fontSize: 16,
+    color: COLORS.white,
     fontWeight: 'bold',
   },
   coverDate: {
     fontSize: 10,
-    color: '#99f6e4',
+    color: COLORS.sageLight,
     marginTop: 4,
   },
 
-  // Header/Footer
+  // ===== HEADER & FOOTER =====
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 20,
-    paddingBottom: 10,
+    marginBottom: 24,
+    paddingBottom: 12,
     borderBottomWidth: 2,
-    borderBottomColor: '#0f766e',
+    borderBottomColor: COLORS.navy,
   },
   headerLogo: {
     fontSize: 14,
     fontWeight: 'bold',
-    color: '#0f766e',
+    color: COLORS.navy,
   },
   headerPage: {
     fontSize: 10,
-    color: '#64748b',
+    color: COLORS.textSecondary,
   },
   footer: {
     position: 'absolute',
@@ -113,187 +154,307 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingTop: 10,
+    paddingTop: 12,
     borderTopWidth: 1,
-    borderTopColor: '#e2e8f0',
+    borderTopColor: COLORS.sageLight,
   },
   footerText: {
     fontSize: 9,
-    color: '#64748b',
+    color: COLORS.textSecondary,
   },
   footerPhone: {
     fontSize: 10,
-    color: '#0f766e',
+    color: COLORS.navy,
     fontWeight: 'bold',
   },
 
-  // Typography
+  // ===== TYPOGRAPHY =====
   pageTitle: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#0f172a',
-    marginBottom: 20,
+    color: COLORS.navy,
+    marginBottom: 16,
   },
   sectionTitle: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 'bold',
-    color: '#0f766e',
+    color: COLORS.navy,
     marginTop: 20,
-    marginBottom: 10,
+    marginBottom: 12,
   },
   subsectionTitle: {
     fontSize: 14,
     fontWeight: 'bold',
-    color: '#334155',
+    color: COLORS.textPrimary,
     marginTop: 12,
-    marginBottom: 6,
+    marginBottom: 8,
   },
   paragraph: {
     fontSize: 11,
-    color: '#475569',
-    lineHeight: 1.6,
-    marginBottom: 10,
-  },
-  bulletItem: {
-    fontSize: 11,
-    color: '#475569',
-    marginBottom: 4,
-    paddingLeft: 12,
-  },
-  bulletPoint: {
-    position: 'absolute',
-    left: 0,
-  },
-
-  // Summary box
-  summaryBox: {
-    backgroundColor: '#f0fdfa', // teal-50
-    borderWidth: 1,
-    borderColor: '#99f6e4', // teal-200
-    borderRadius: 8,
-    padding: 20,
-    marginBottom: 20,
-  },
-  summaryTitle: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    color: '#0f766e',
+    color: COLORS.textSecondary,
+    lineHeight: 1.7,
     marginBottom: 12,
   },
-  summaryRow: {
-    flexDirection: 'row',
-    marginBottom: 8,
-  },
-  summaryLabel: {
+  bodyText: {
     fontSize: 11,
-    color: '#64748b',
-    width: 140,
-  },
-  summaryValue: {
-    fontSize: 11,
-    color: '#0f172a',
-    fontWeight: 'bold',
-    flex: 1,
+    color: COLORS.textPrimary,
+    lineHeight: 1.6,
   },
 
-  // Care Type Card
-  careTypeCard: {
-    backgroundColor: '#fafafa',
-    borderWidth: 1,
-    borderColor: '#e2e8f0',
-    borderRadius: 8,
-    padding: 16,
+  // ===== PREMIUM CARDS =====
+  premiumCard: {
+    backgroundColor: COLORS.cream,
+    borderRadius: 12,
+    padding: 20,
     marginBottom: 16,
+    borderWidth: 1,
+    borderColor: COLORS.sageLight,
   },
-  careTypeHeader: {
+  premiumCardHighlight: {
+    backgroundColor: COLORS.warmGray,
+    borderRadius: 12,
+    padding: 20,
+    marginBottom: 16,
+    borderWidth: 2,
+    borderColor: COLORS.sage,
+  },
+  cardHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 12,
   },
-  careTypeIcon: {
-    width: 36,
-    height: 36,
-    backgroundColor: '#0f766e',
-    borderRadius: 18,
+  cardIcon: {
+    width: 40,
+    height: 40,
+    backgroundColor: COLORS.navy,
+    borderRadius: 20,
     marginRight: 12,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  careTypeIconText: {
-    color: '#ffffff',
-    fontSize: 16,
+  cardIconText: {
+    color: COLORS.white,
+    fontSize: 18,
     fontWeight: 'bold',
   },
-  careTypeName: {
+  cardTitle: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#0f172a',
+    color: COLORS.navy,
   },
-  careTypePrice: {
-    fontSize: 12,
-    color: '#0f766e',
+  cardSubtitle: {
+    fontSize: 11,
+    color: COLORS.sage,
     marginTop: 2,
   },
 
-  // Pricing table
+  // ===== ASSESSMENT NARRATIVE =====
+  narrativeBox: {
+    backgroundColor: COLORS.navy,
+    borderRadius: 12,
+    padding: 24,
+    marginBottom: 20,
+  },
+  narrativeQuote: {
+    fontSize: 13,
+    color: COLORS.white,
+    fontStyle: 'italic',
+    lineHeight: 1.6,
+    marginBottom: 12,
+  },
+  narrativeAttribution: {
+    fontSize: 10,
+    color: COLORS.sageLight,
+    textAlign: 'right',
+  },
+
+  // ===== CALLOUT BOX =====
+  calloutBox: {
+    backgroundColor: COLORS.goldLight,
+    borderRadius: 8,
+    padding: 16,
+    marginBottom: 16,
+    borderLeftWidth: 4,
+    borderLeftColor: COLORS.gold,
+  },
+  calloutTitle: {
+    fontSize: 12,
+    fontWeight: 'bold',
+    color: COLORS.navy,
+    marginBottom: 6,
+  },
+  calloutText: {
+    fontSize: 10,
+    color: COLORS.textPrimary,
+    lineHeight: 1.5,
+  },
+
+  // ===== INFO BOX =====
+  infoBox: {
+    backgroundColor: '#EBF8FF',
+    borderRadius: 8,
+    padding: 14,
+    marginBottom: 16,
+    borderLeftWidth: 4,
+    borderLeftColor: '#3182CE',
+  },
+  infoTitle: {
+    fontSize: 11,
+    fontWeight: 'bold',
+    color: '#2C5282',
+    marginBottom: 4,
+  },
+  infoText: {
+    fontSize: 10,
+    color: '#2D3748',
+    lineHeight: 1.5,
+  },
+
+  // ===== WARNING/RED FLAG BOX =====
+  redFlagBox: {
+    backgroundColor: COLORS.redLight,
+    borderRadius: 10,
+    padding: 18,
+    marginBottom: 16,
+    borderWidth: 2,
+    borderColor: COLORS.red,
+  },
+  redFlagHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  redFlagIcon: {
+    width: 28,
+    height: 28,
+    backgroundColor: COLORS.red,
+    borderRadius: 14,
+    marginRight: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  redFlagIconText: {
+    color: COLORS.white,
+    fontSize: 14,
+    fontWeight: 'bold',
+  },
+  redFlagTitle: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: COLORS.red,
+  },
+  redFlagItem: {
+    marginBottom: 10,
+    paddingLeft: 4,
+  },
+  redFlagItemTitle: {
+    fontSize: 11,
+    fontWeight: 'bold',
+    color: COLORS.textPrimary,
+    marginBottom: 2,
+  },
+  redFlagItemText: {
+    fontSize: 10,
+    color: COLORS.textSecondary,
+    lineHeight: 1.4,
+  },
+
+  // ===== PRICING TABLE =====
   pricingTable: {
-    borderWidth: 1,
-    borderColor: '#e2e8f0',
     borderRadius: 8,
     overflow: 'hidden',
-    marginBottom: 20,
+    marginBottom: 16,
+    borderWidth: 1,
+    borderColor: COLORS.sageLight,
   },
   pricingHeader: {
     flexDirection: 'row',
-    backgroundColor: '#0f766e',
-    padding: 10,
+    backgroundColor: COLORS.navy,
+    padding: 12,
   },
   pricingHeaderCell: {
     fontSize: 10,
     fontWeight: 'bold',
-    color: '#ffffff',
+    color: COLORS.white,
   },
   pricingRow: {
     flexDirection: 'row',
     padding: 10,
     borderBottomWidth: 1,
-    borderBottomColor: '#e2e8f0',
+    borderBottomColor: COLORS.sageLight,
   },
   pricingRowAlt: {
-    backgroundColor: '#f8fafc',
+    backgroundColor: COLORS.cream,
   },
   pricingCell: {
     fontSize: 10,
-    color: '#475569',
+    color: COLORS.textSecondary,
+  },
+  pricingCellBold: {
+    fontSize: 10,
+    color: COLORS.navy,
+    fontWeight: 'bold',
   },
 
-  // Community card
+  // ===== COMMUNITY CARD =====
   communityCard: {
+    backgroundColor: COLORS.cream,
+    borderRadius: 10,
+    padding: 16,
+    marginBottom: 14,
     borderWidth: 1,
-    borderColor: '#e2e8f0',
-    borderRadius: 8,
-    padding: 12,
-    marginBottom: 12,
+    borderColor: COLORS.sageLight,
+  },
+  communityHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    marginBottom: 10,
   },
   communityName: {
-    fontSize: 13,
+    fontSize: 14,
     fontWeight: 'bold',
-    color: '#0f172a',
+    color: COLORS.navy,
     marginBottom: 4,
   },
-  communityDetail: {
+  communityLocation: {
     fontSize: 10,
-    color: '#64748b',
-    marginBottom: 2,
+    color: COLORS.textSecondary,
   },
-  communityPrice: {
-    fontSize: 11,
-    color: '#0f766e',
+  communityBadge: {
+    backgroundColor: COLORS.gold,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 4,
+  },
+  communityBadgeText: {
+    fontSize: 8,
     fontWeight: 'bold',
-    marginTop: 6,
+    color: COLORS.white,
+  },
+  whyMatchedBox: {
+    backgroundColor: COLORS.white,
+    borderRadius: 6,
+    padding: 10,
+    marginTop: 8,
+    borderLeftWidth: 3,
+    borderLeftColor: COLORS.sage,
+  },
+  whyMatchedLabel: {
+    fontSize: 9,
+    fontWeight: 'bold',
+    color: COLORS.sage,
+    marginBottom: 4,
+    letterSpacing: 0.5,
+  },
+  whyMatchedText: {
+    fontSize: 10,
+    color: COLORS.textPrimary,
+    fontStyle: 'italic',
+    lineHeight: 1.4,
   },
 
-  // Checklist
+  // ===== CHECKLIST =====
   checklistItem: {
     flexDirection: 'row',
     marginBottom: 8,
@@ -302,56 +463,133 @@ const styles = StyleSheet.create({
   checklistBox: {
     width: 14,
     height: 14,
-    borderWidth: 1,
-    borderColor: '#0f766e',
-    borderRadius: 2,
+    borderWidth: 2,
+    borderColor: COLORS.sage,
+    borderRadius: 3,
     marginRight: 10,
     marginTop: 1,
   },
   checklistText: {
     fontSize: 11,
-    color: '#475569',
+    color: COLORS.textPrimary,
     flex: 1,
-    lineHeight: 1.4,
+    lineHeight: 1.5,
   },
 
-  // Call to action box
+  // ===== CTA BOX =====
   ctaBox: {
-    backgroundColor: '#0f766e',
-    borderRadius: 8,
-    padding: 20,
-    marginTop: 20,
+    backgroundColor: COLORS.navy,
+    borderRadius: 12,
+    padding: 24,
     alignItems: 'center',
   },
   ctaTitle: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 'bold',
-    color: '#ffffff',
-    marginBottom: 8,
+    color: COLORS.white,
+    marginBottom: 10,
   },
   ctaText: {
     fontSize: 11,
-    color: '#ccfbf1',
+    color: COLORS.sageLight,
     textAlign: 'center',
-    marginBottom: 12,
+    marginBottom: 14,
+    lineHeight: 1.5,
   },
   ctaPhone: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: 'bold',
-    color: '#ffffff',
+    color: COLORS.sage,
   },
 
-  // Two column layout
+  // ===== TWO COLUMN LAYOUT =====
   twoColumn: {
     flexDirection: 'row',
-    gap: 20,
+    gap: 16,
   },
   column: {
     flex: 1,
   },
+
+  // ===== STATS ROW =====
+  statsRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 20,
+  },
+  statBox: {
+    width: '31%',
+    backgroundColor: COLORS.cream,
+    borderRadius: 10,
+    padding: 14,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: COLORS.sageLight,
+  },
+  statNumber: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: COLORS.navy,
+    marginBottom: 4,
+  },
+  statLabel: {
+    fontSize: 9,
+    color: COLORS.textSecondary,
+    textAlign: 'center',
+    lineHeight: 1.3,
+  },
+
+  // ===== QR CODE PLACEHOLDER =====
+  qrContainer: {
+    width: 50,
+    height: 50,
+    backgroundColor: COLORS.white,
+    borderRadius: 4,
+    padding: 4,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: COLORS.sageLight,
+  },
+
+  // ===== HOSPITAL INTEGRATION =====
+  hospitalBox: {
+    backgroundColor: '#F0FFF4',
+    borderRadius: 10,
+    padding: 16,
+    marginBottom: 16,
+    borderWidth: 1,
+    borderColor: '#9AE6B4',
+  },
+  hospitalTitle: {
+    fontSize: 12,
+    fontWeight: 'bold',
+    color: '#276749',
+    marginBottom: 8,
+  },
+  hospitalText: {
+    fontSize: 10,
+    color: '#2F855A',
+    lineHeight: 1.5,
+  },
+
+  // ===== FOOTNOTE =====
+  footnote: {
+    fontSize: 9,
+    color: COLORS.textSecondary,
+    fontStyle: 'italic',
+    marginTop: 12,
+    paddingTop: 12,
+    borderTopWidth: 1,
+    borderTopColor: COLORS.sageLight,
+    lineHeight: 1.4,
+  },
 });
 
-// Types
+// ============================================================================
+// TYPES
+// ============================================================================
+
 interface AssessmentData {
   score: number;
   recommendation: string;
@@ -364,6 +602,8 @@ interface Community {
   city: string;
   careTypes: string[];
   priceRange?: string;
+  cmsRating?: number;
+  whyMatched?: string;
 }
 
 interface CareGuidePDFProps {
@@ -374,73 +614,147 @@ interface CareGuidePDFProps {
   generatedDate?: string;
 }
 
-// Care type information
-const CARE_TYPE_INFO: Record<string, { description: string; services: string[]; priceRange: string }> = {
-  'Memory Care': {
-    description: 'Memory Care communities provide specialized 24/7 support for individuals with Alzheimer\'s disease, dementia, or other cognitive impairments. These communities offer secure environments with trained staff who understand the unique needs of memory care residents.',
-    services: [
-      'Secure, monitored environment to prevent wandering',
-      '24/7 specialized dementia-trained staff',
-      'Cognitive therapy and memory-enhancing activities',
-      'All meals, snacks, and hydration monitoring',
-      'Medication management and health monitoring',
-      'Personal care assistance (bathing, dressing, grooming)',
-      'Housekeeping and laundry services',
-    ],
-    priceRange: '$4,500 - $8,500/month',
-  },
-  'Assisted Living': {
-    description: 'Assisted Living communities help residents maintain independence while providing support with daily activities. Staff are available around the clock to assist with personal care, medication management, and other needs while residents enjoy a vibrant social community.',
-    services: [
-      'Private or semi-private apartments',
-      'Personal care assistance as needed',
-      'Three chef-prepared meals daily plus snacks',
-      'Medication reminders and management',
-      'Housekeeping and laundry services',
-      'Social activities and outings',
-      'Transportation to appointments',
-    ],
-    priceRange: '$3,200 - $6,500/month',
-  },
-  'Independent Living': {
-    description: 'Independent Living communities are designed for active seniors who want a maintenance-free lifestyle with access to social activities, dining, and amenities. Residents live independently while enjoying the convenience of community services.',
-    services: [
-      'Private apartment or cottage',
-      'Restaurant-style dining options',
-      'Social and recreational activities',
-      'Fitness and wellness programs',
-      'Housekeeping services',
-      'Transportation to shopping and appointments',
-      '24-hour emergency response',
-    ],
-    priceRange: '$2,200 - $4,500/month',
-  },
-  'Skilled Nursing': {
-    description: 'Skilled Nursing Facilities (SNFs) provide 24-hour medical care for individuals who need intensive nursing support or rehabilitation services. These facilities are staffed with registered nurses and licensed practical nurses.',
-    services: [
-      '24/7 nursing care and medical monitoring',
-      'Physical, occupational, and speech therapy',
-      'Wound care and IV therapy',
-      'Post-surgery rehabilitation',
-      'Long-term care for chronic conditions',
-      'All meals and dietary management',
-      'Social services and discharge planning',
-    ],
-    priceRange: '$8,000 - $12,000/month',
-  },
-};
+// ============================================================================
+// HELPER FUNCTIONS
+// ============================================================================
 
-// Cleveland area pricing by suburb
+// Generate personalized assessment narrative
+function generateNarrative(assessmentData: AssessmentData, recipientName: string): string {
+  const recommendation = assessmentData.recommendation.toLowerCase();
+  const score = assessmentData.score;
+  const firstName = recipientName.split(' ')[0];
+
+  if (recommendation.includes('memory')) {
+    return `Based on your focus on 24/7 specialized support and cognitive care needs, Memory Care is the safest and most appropriate recommendation for your family's current situation. This level of care ensures round-the-clock supervision with staff trained specifically in dementia and Alzheimer's care protocols.`;
+  }
+  
+  if (recommendation.includes('assisted')) {
+    if (score > 70) {
+      return `Your assessment indicates a need for daily assistance with personal care activities while maintaining a meaningful level of independence. Assisted Living communities provide the ideal balance—professional support when needed, with the freedom to live life on your terms.`;
+    }
+    return `Based on your responses, Assisted Living offers the right blend of independence and support. You'll have access to trained staff around the clock while enjoying private living spaces and community activities.`;
+  }
+  
+  if (recommendation.includes('independent')) {
+    return `Great news! Your assessment suggests that Independent Living is well-suited to your current needs. These communities offer maintenance-free living, social engagement, and convenient services while preserving your complete autonomy.`;
+  }
+  
+  if (recommendation.includes('skilled')) {
+    return `Your assessment indicates a need for comprehensive medical care and rehabilitation services. Skilled Nursing Facilities provide 24-hour nursing care with specialized medical support for complex health needs.`;
+  }
+
+  return `Based on your unique situation and care preferences, we've identified the best options for your family. Our local Cleveland advisors are ready to provide personalized guidance at no cost to you.`;
+}
+
+// Get care type details
+function getCareTypeDetails(recommendation: string): { description: string; services: string[]; priceRange: string } {
+  const rec = recommendation.toLowerCase();
+  
+  if (rec.includes('memory')) {
+    return {
+      description: 'Memory Care communities provide specialized 24/7 support for individuals with Alzheimer\'s disease, dementia, or other cognitive impairments in a secure, purposefully designed environment.',
+      services: [
+        'Secure, monitored environment to prevent wandering',
+        '24/7 specialized dementia-trained staff',
+        'Cognitive therapy and memory-enhancing programs',
+        'Structured daily routines for comfort',
+        'All meals with nutrition monitoring',
+        'Complete personal care assistance',
+      ],
+      priceRange: '$4,500 - $8,500/month',
+    };
+  }
+  
+  if (rec.includes('assisted')) {
+    return {
+      description: 'Assisted Living communities help residents maintain independence while providing personalized support with daily activities. Professional staff are available 24/7 in a warm, social environment.',
+      services: [
+        'Private or semi-private apartments',
+        'Personal care assistance as needed',
+        'Three chef-prepared meals daily',
+        'Medication management',
+        'Engaging social activities and outings',
+        'Housekeeping and laundry services',
+      ],
+      priceRange: '$3,200 - $6,500/month',
+    };
+  }
+  
+  if (rec.includes('independent')) {
+    return {
+      description: 'Independent Living communities offer maintenance-free living for active seniors who want convenience, social connection, and peace of mind without hands-on care assistance.',
+      services: [
+        'Private apartment or cottage',
+        'Restaurant-style dining options',
+        'Fitness and wellness programs',
+        'Social and recreational activities',
+        'Housekeeping and maintenance',
+        '24-hour emergency response',
+      ],
+      priceRange: '$2,200 - $4,500/month',
+    };
+  }
+
+  return {
+    description: 'Senior living communities provide various levels of care tailored to individual needs, from independent living to comprehensive skilled nursing.',
+    services: [
+      'Personalized care plans',
+      'Professional staff support',
+      'Nutritious meals',
+      'Social activities',
+      'Safety and security',
+      'Healthcare coordination',
+    ],
+    priceRange: '$2,200 - $8,500/month',
+  };
+}
+
+// Cleveland area pricing
 const CLEVELAND_PRICING = [
-  { suburb: 'Beachwood', assistedLiving: '$5,800 - $7,200', memoryCare: '$6,500 - $8,500' },
-  { suburb: 'Westlake', assistedLiving: '$5,200 - $6,500', memoryCare: '$6,000 - $7,800' },
-  { suburb: 'Rocky River', assistedLiving: '$5,000 - $6,200', memoryCare: '$5,800 - $7,500' },
-  { suburb: 'Parma', assistedLiving: '$4,200 - $5,500', memoryCare: '$5,200 - $6,800' },
-  { suburb: 'Mentor', assistedLiving: '$4,500 - $5,800', memoryCare: '$5,500 - $7,000' },
-  { suburb: 'Lakewood', assistedLiving: '$4,800 - $6,000', memoryCare: '$5,600 - $7,200' },
+  { suburb: 'Beachwood / Pepper Pike', assistedLiving: '$5,800 - $7,200', memoryCare: '$6,500 - $8,500' },
+  { suburb: 'Westlake / Bay Village', assistedLiving: '$5,200 - $6,500', memoryCare: '$6,000 - $7,800' },
+  { suburb: 'Rocky River / Lakewood', assistedLiving: '$4,800 - $6,200', memoryCare: '$5,800 - $7,500' },
+  { suburb: 'Mentor / Willoughby', assistedLiving: '$4,500 - $5,800', memoryCare: '$5,500 - $7,000' },
+  { suburb: 'Parma / Seven Hills', assistedLiving: '$4,200 - $5,500', memoryCare: '$5,200 - $6,800' },
+  { suburb: 'Independence / Broadview Hts', assistedLiving: '$4,500 - $5,800', memoryCare: '$5,400 - $7,000' },
 ];
 
-// Main PDF Component
+// Default community "Why Matched" reasons
+const DEFAULT_WHY_MATCHED: Record<string, string> = {
+  'Mount Alverna Village': 'High-rated spiritual care and peaceful Parma campus with excellent resident satisfaction',
+  'Westlake Village': 'Top-tier memory care program with specialized dementia training for all staff',
+  'Judson Park': 'Exceptional continuing care community with outstanding CMS ratings in University Circle',
+  'Breckenridge Village': 'Award-winning Willoughby campus with strong rehabilitation program',
+  'default': 'Matches your care needs and location preferences with verified quality ratings',
+};
+
+// Simple QR code pattern (decorative representation)
+function QRCodePlaceholder() {
+  return (
+    <View style={styles.qrContainer}>
+      <Svg width="42" height="42" viewBox="0 0 42 42">
+        {/* Simple decorative QR pattern */}
+        <Rect x="0" y="0" width="14" height="14" fill={COLORS.navy} />
+        <Rect x="28" y="0" width="14" height="14" fill={COLORS.navy} />
+        <Rect x="0" y="28" width="14" height="14" fill={COLORS.navy} />
+        <Rect x="4" y="4" width="6" height="6" fill={COLORS.white} />
+        <Rect x="32" y="4" width="6" height="6" fill={COLORS.white} />
+        <Rect x="4" y="32" width="6" height="6" fill={COLORS.white} />
+        <Rect x="18" y="4" width="6" height="6" fill={COLORS.navy} />
+        <Rect x="18" y="18" width="6" height="6" fill={COLORS.navy} />
+        <Rect x="4" y="18" width="6" height="6" fill={COLORS.navy} />
+        <Rect x="32" y="18" width="6" height="6" fill={COLORS.navy} />
+        <Rect x="18" y="32" width="6" height="6" fill={COLORS.navy} />
+        <Rect x="32" y="32" width="6" height="6" fill={COLORS.navy} />
+      </Svg>
+    </View>
+  );
+}
+
+// ============================================================================
+// MAIN COMPONENT
+// ============================================================================
+
 export function CareGuidePDF({
   recipientName,
   email,
@@ -448,260 +762,315 @@ export function CareGuidePDF({
   matchedCommunities = [],
   generatedDate = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
 }: CareGuidePDFProps) {
+  const careTypeDetails = getCareTypeDetails(assessmentData.recommendation);
+  const narrative = generateNarrative(assessmentData, recipientName);
   const careTypeKey = assessmentData.recommendation.includes('Memory') 
     ? 'Memory Care' 
     : assessmentData.recommendation.includes('Assisted') 
       ? 'Assisted Living'
       : assessmentData.recommendation.includes('Independent')
         ? 'Independent Living'
-        : 'Assisted Living';
-  
-  const careTypeInfo = CARE_TYPE_INFO[careTypeKey] || CARE_TYPE_INFO['Assisted Living'];
+        : 'Senior Care';
 
   return (
     <Document>
-      {/* Page 1: Cover */}
+      {/* ================================================================== */}
+      {/* PAGE 1: PREMIUM COVER */}
+      {/* ================================================================== */}
       <Page size="LETTER" style={styles.coverPage}>
         <View style={styles.coverContent}>
+          <View style={styles.coverBadge}>
+            <Text style={styles.coverBadgeText}>PERSONALIZED CARE GUIDE</Text>
+          </View>
+          
           <Text style={styles.coverLogo}>Guide for Seniors</Text>
-          <Text style={styles.coverTagline}>Cleveland&apos;s Trusted Senior Living Resource</Text>
+          <Text style={styles.coverTagline}>Cleveland's Boutique Senior Care Concierge</Text>
           
-          <Text style={styles.coverTitle}>Your Personalized{'\n'}Senior Living{'\n'}Care Guide</Text>
-          <Text style={styles.coverSubtitle}>Expert recommendations for finding the right care in Cleveland, Ohio</Text>
+          <Text style={styles.coverTitle}>Your Personal{'\n'}Care Roadmap</Text>
+          <Text style={styles.coverSubtitle}>
+            Expert recommendations tailored to your family's{'\n'}
+            unique needs and preferences
+          </Text>
           
-          <Text style={styles.coverPreparedFor}>Prepared For</Text>
+          <Text style={styles.coverPreparedFor}>PREPARED FOR</Text>
           <Text style={styles.coverName}>{recipientName}</Text>
         </View>
         
         <View style={styles.coverFooter}>
-          <Text style={styles.coverPhone}>(216) 677-4630</Text>
+          <Link src="tel:+12166774630" style={{ textDecoration: 'none' }}>
+            <Text style={styles.coverPhone}>(216) 677-4630</Text>
+          </Link>
           <Text style={styles.coverDate}>Generated {generatedDate}</Text>
         </View>
       </Page>
 
-      {/* Page 2: Assessment Summary & Care Type */}
+      {/* ================================================================== */}
+      {/* PAGE 2: ASSESSMENT SUMMARY WITH NARRATIVE */}
+      {/* ================================================================== */}
       <Page size="LETTER" style={styles.page}>
         <View style={styles.header}>
           <Text style={styles.headerLogo}>Guide for Seniors</Text>
-          <Text style={styles.headerPage}>Page 2</Text>
+          <Text style={styles.headerPage}>Your Assessment Results</Text>
         </View>
 
-        <Text style={styles.pageTitle}>Your Assessment Summary</Text>
-        
-        <View style={styles.summaryBox}>
-          <Text style={styles.summaryTitle}>Personalized Recommendation</Text>
-          <View style={styles.summaryRow}>
-            <Text style={styles.summaryLabel}>Recommended Care Type:</Text>
-            <Text style={styles.summaryValue}>{careTypeKey}</Text>
-          </View>
-          <View style={styles.summaryRow}>
-            <Text style={styles.summaryLabel}>Assessment Score:</Text>
-            <Text style={styles.summaryValue}>{assessmentData.score}/100</Text>
-          </View>
-          <View style={styles.summaryRow}>
-            <Text style={styles.summaryLabel}>Communities Matched:</Text>
-            <Text style={styles.summaryValue}>{matchedCommunities.length > 0 ? matchedCommunities.length : assessmentData.matchedCommunities.length}</Text>
-          </View>
+        <Text style={styles.pageTitle}>Your Personalized Assessment</Text>
+
+        {/* Dynamic Narrative Box */}
+        <View style={styles.narrativeBox}>
+          <Text style={styles.narrativeQuote}>
+            "{narrative}"
+          </Text>
+          <Text style={styles.narrativeAttribution}>
+            — Guide for Seniors Care Team
+          </Text>
         </View>
 
-        <Text style={styles.sectionTitle}>Understanding {careTypeKey}</Text>
-        <Text style={styles.paragraph}>{careTypeInfo.description}</Text>
-
-        <Text style={styles.subsectionTitle}>Services Typically Included:</Text>
-        {careTypeInfo.services.map((service, index) => (
-          <View key={index} style={{ flexDirection: 'row', marginBottom: 4 }}>
-            <Text style={styles.bulletPoint}>•</Text>
-            <Text style={styles.bulletItem}>{service}</Text>
-          </View>
-        ))}
-
-        <View style={styles.careTypeCard}>
-          <View style={styles.careTypeHeader}>
-            <View style={styles.careTypeIcon}>
-              <Text style={styles.careTypeIconText}>{careTypeKey.charAt(0)}</Text>
+        {/* Premium Summary Card */}
+        <View style={styles.premiumCardHighlight}>
+          <View style={styles.cardHeader}>
+            <View style={styles.cardIcon}>
+              <Text style={styles.cardIconText}>{careTypeKey.charAt(0)}</Text>
             </View>
             <View>
-              <Text style={styles.careTypeName}>{careTypeKey}</Text>
-              <Text style={styles.careTypePrice}>{careTypeInfo.priceRange} in Cleveland</Text>
+              <Text style={styles.cardTitle}>Recommended: {careTypeKey}</Text>
+              <Text style={styles.cardSubtitle}>{careTypeDetails.priceRange} in Cleveland</Text>
             </View>
+          </View>
+          
+          <Text style={styles.paragraph}>{careTypeDetails.description}</Text>
+          
+          <Text style={styles.subsectionTitle}>What's Typically Included:</Text>
+          <View style={styles.twoColumn}>
+            <View style={styles.column}>
+              {careTypeDetails.services.slice(0, 3).map((service, i) => (
+                <View key={i} style={{ flexDirection: 'row', marginBottom: 4 }}>
+                  <Text style={{ fontSize: 10, color: COLORS.sage, marginRight: 6 }}>✓</Text>
+                  <Text style={{ fontSize: 10, color: COLORS.textSecondary }}>{service}</Text>
+                </View>
+              ))}
+            </View>
+            <View style={styles.column}>
+              {careTypeDetails.services.slice(3, 6).map((service, i) => (
+                <View key={i} style={{ flexDirection: 'row', marginBottom: 4 }}>
+                  <Text style={{ fontSize: 10, color: COLORS.sage, marginRight: 6 }}>✓</Text>
+                  <Text style={{ fontSize: 10, color: COLORS.textSecondary }}>{service}</Text>
+                </View>
+              ))}
+            </View>
+          </View>
+        </View>
+
+        {/* Stats Row */}
+        <View style={styles.statsRow}>
+          <View style={styles.statBox}>
+            <Text style={styles.statNumber}>{assessmentData.score}</Text>
+            <Text style={styles.statLabel}>CARE SCORE</Text>
+          </View>
+          <View style={styles.statBox}>
+            <Text style={styles.statNumber}>
+              {matchedCommunities.length > 0 ? matchedCommunities.length : assessmentData.matchedCommunities.length}
+            </Text>
+            <Text style={styles.statLabel}>MATCHED{'\n'}COMMUNITIES</Text>
+          </View>
+          <View style={styles.statBox}>
+            <Text style={styles.statNumber}>100%</Text>
+            <Text style={styles.statLabel}>FREE{'\n'}SERVICE</Text>
           </View>
         </View>
 
         <View style={styles.footer}>
           <Text style={styles.footerText}>© Guide for Seniors | www.guideforseniors.com</Text>
-          <Text style={styles.footerPhone}>(216) 677-4630</Text>
+          <Link src="tel:+12166774630">
+            <Text style={styles.footerPhone}>(216) 677-4630</Text>
+          </Link>
         </View>
       </Page>
 
-      {/* Page 3: Cleveland Pricing Overview */}
+      {/* ================================================================== */}
+      {/* PAGE 3: CLEVELAND PRICING GUIDE */}
+      {/* ================================================================== */}
       <Page size="LETTER" style={styles.page}>
         <View style={styles.header}>
           <Text style={styles.headerLogo}>Guide for Seniors</Text>
-          <Text style={styles.headerPage}>Page 3</Text>
+          <Text style={styles.headerPage}>2026 Pricing Guide</Text>
         </View>
 
         <Text style={styles.pageTitle}>Cleveland Area Pricing Guide</Text>
+
+        {/* Northeast Ohio Advantage Callout */}
+        <View style={styles.calloutBox}>
+          <Text style={styles.calloutTitle}>🌟 Northeast Ohio Advantage</Text>
+          <Text style={styles.calloutText}>
+            Local senior care is 5-15% more affordable than the national average. Cleveland families benefit from excellent quality care at significantly lower costs compared to coastal cities, without compromising on standards.
+          </Text>
+        </View>
+
         <Text style={styles.paragraph}>
-          Senior living costs in Greater Cleveland are typically 5-15% below the national average, 
-          making our region an excellent value for quality care. Below are current 2026 pricing ranges 
-          for popular Cleveland suburbs.
+          Below are current 2026 pricing ranges for senior living communities across Greater Cleveland. 
+          Costs vary by location, room type, and level of care needed.
         </Text>
 
         <View style={styles.pricingTable}>
           <View style={styles.pricingHeader}>
-            <Text style={[styles.pricingHeaderCell, { width: '30%' }]}>Location</Text>
-            <Text style={[styles.pricingHeaderCell, { width: '35%' }]}>Assisted Living</Text>
-            <Text style={[styles.pricingHeaderCell, { width: '35%' }]}>Memory Care</Text>
+            <Text style={[styles.pricingHeaderCell, { width: '36%' }]}>Neighborhood</Text>
+            <Text style={[styles.pricingHeaderCell, { width: '32%' }]}>Assisted Living</Text>
+            <Text style={[styles.pricingHeaderCell, { width: '32%' }]}>Memory Care</Text>
           </View>
           {CLEVELAND_PRICING.map((row, index) => (
             <View key={index} style={[styles.pricingRow, index % 2 === 1 ? styles.pricingRowAlt : {}]}>
-              <Text style={[styles.pricingCell, { width: '30%', fontWeight: 'bold' }]}>{row.suburb}</Text>
-              <Text style={[styles.pricingCell, { width: '35%' }]}>{row.assistedLiving}</Text>
-              <Text style={[styles.pricingCell, { width: '35%' }]}>{row.memoryCare}</Text>
+              <Text style={[styles.pricingCellBold, { width: '36%' }]}>{row.suburb}</Text>
+              <Text style={[styles.pricingCell, { width: '32%' }]}>{row.assistedLiving}</Text>
+              <Text style={[styles.pricingCell, { width: '32%' }]}>{row.memoryCare}</Text>
             </View>
           ))}
         </View>
 
-        <Text style={styles.sectionTitle}>What&apos;s Included in Pricing</Text>
-        <Text style={styles.paragraph}>
-          Most communities include room and board, meals, basic utilities, housekeeping, activities, 
-          and a base level of care. Additional services may include:
-        </Text>
-        <View style={styles.twoColumn}>
-          <View style={styles.column}>
-            <View style={{ flexDirection: 'row', marginBottom: 4 }}>
-              <Text style={styles.bulletPoint}>•</Text>
-              <Text style={styles.bulletItem}>Additional personal care</Text>
-            </View>
-            <View style={{ flexDirection: 'row', marginBottom: 4 }}>
-              <Text style={styles.bulletPoint}>•</Text>
-              <Text style={styles.bulletItem}>Incontinence supplies</Text>
-            </View>
-            <View style={{ flexDirection: 'row', marginBottom: 4 }}>
-              <Text style={styles.bulletPoint}>•</Text>
-              <Text style={styles.bulletItem}>Specialized therapies</Text>
-            </View>
-          </View>
-          <View style={styles.column}>
-            <View style={{ flexDirection: 'row', marginBottom: 4 }}>
-              <Text style={styles.bulletPoint}>•</Text>
-              <Text style={styles.bulletItem}>Premium room upgrades</Text>
-            </View>
-            <View style={{ flexDirection: 'row', marginBottom: 4 }}>
-              <Text style={styles.bulletPoint}>•</Text>
-              <Text style={styles.bulletItem}>Beauty/barber services</Text>
-            </View>
-            <View style={{ flexDirection: 'row', marginBottom: 4 }}>
-              <Text style={styles.bulletPoint}>•</Text>
-              <Text style={styles.bulletItem}>Private transportation</Text>
-            </View>
-          </View>
+        {/* Add-On Footnote */}
+        <View style={styles.infoBox}>
+          <Text style={styles.infoTitle}>💡 Understanding "Level of Care" Fees</Text>
+          <Text style={styles.infoText}>
+            Base rates typically exclude 'Level of Care' fees for services like medication management, 
+            incontinence care, and mobility assistance. These additional fees range from $500–$1,500/month 
+            in 2026 depending on individual needs. Always request a detailed care assessment before signing.
+          </Text>
         </View>
 
-        <Text style={styles.sectionTitle}>Paying for Senior Living</Text>
-        <Text style={styles.paragraph}>
-          Several financial options may help cover senior living costs:
+        <Text style={styles.footnote}>
+          * Pricing is based on 2026 market data and may vary by specific community, room type, and care level. 
+          Contact us for current availability and exact pricing for your preferred communities.
         </Text>
-        <View style={{ flexDirection: 'row', marginBottom: 4 }}>
-          <Text style={styles.bulletPoint}>•</Text>
-          <Text style={styles.bulletItem}><Text style={{ fontWeight: 'bold' }}>Private Pay:</Text> Personal savings, retirement accounts, home equity</Text>
-        </View>
-        <View style={{ flexDirection: 'row', marginBottom: 4 }}>
-          <Text style={styles.bulletPoint}>•</Text>
-          <Text style={styles.bulletItem}><Text style={{ fontWeight: 'bold' }}>Long-Term Care Insurance:</Text> Policies that cover assisted living/memory care</Text>
-        </View>
-        <View style={{ flexDirection: 'row', marginBottom: 4 }}>
-          <Text style={styles.bulletPoint}>•</Text>
-          <Text style={styles.bulletItem}><Text style={{ fontWeight: 'bold' }}>VA Benefits:</Text> Aid & Attendance for qualifying veterans and spouses</Text>
-        </View>
-        <View style={{ flexDirection: 'row', marginBottom: 4 }}>
-          <Text style={styles.bulletPoint}>•</Text>
-          <Text style={styles.bulletItem}><Text style={{ fontWeight: 'bold' }}>Medicaid Waiver:</Text> Ohio&apos;s PASSPORT program for eligible individuals</Text>
-        </View>
 
         <View style={styles.footer}>
           <Text style={styles.footerText}>© Guide for Seniors | www.guideforseniors.com</Text>
-          <Text style={styles.footerPhone}>(216) 677-4630</Text>
+          <Link src="tel:+12166774630">
+            <Text style={styles.footerPhone}>(216) 677-4630</Text>
+          </Link>
         </View>
       </Page>
 
-      {/* Page 4: Matched Communities */}
+      {/* ================================================================== */}
+      {/* PAGE 4: MATCHED COMMUNITIES */}
+      {/* ================================================================== */}
       <Page size="LETTER" style={styles.page}>
         <View style={styles.header}>
           <Text style={styles.headerLogo}>Guide for Seniors</Text>
-          <Text style={styles.headerPage}>Page 4</Text>
+          <Text style={styles.headerPage}>Your Matched Communities</Text>
         </View>
 
         <Text style={styles.pageTitle}>Communities Matched to You</Text>
         <Text style={styles.paragraph}>
-          Based on your assessment, we&apos;ve identified communities in the Cleveland area that may be 
-          a good fit for your care needs. Our advisors can provide detailed information about any 
-          of these communities and schedule tours.
+          Based on your assessment, these Cleveland-area communities align with your care needs, 
+          location preferences, and budget. Each includes our "Why It Matched" insight.
         </Text>
 
         {matchedCommunities.length > 0 ? (
-          matchedCommunities.slice(0, 5).map((community, index) => (
+          matchedCommunities.slice(0, 4).map((community, index) => (
             <View key={index} style={styles.communityCard}>
-              <Text style={styles.communityName}>{community.name}</Text>
-              <Text style={styles.communityDetail}>{community.city}, Ohio</Text>
-              <Text style={styles.communityDetail}>Care Types: {community.careTypes.join(', ')}</Text>
-              {community.priceRange && (
-                <Text style={styles.communityPrice}>Starting at {community.priceRange}</Text>
-              )}
+              <View style={styles.communityHeader}>
+                <View>
+                  <Text style={styles.communityName}>{community.name}</Text>
+                  <Text style={styles.communityLocation}>{community.city}, Ohio</Text>
+                </View>
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                  {community.cmsRating && community.cmsRating >= 4 && (
+                    <View style={styles.communityBadge}>
+                      <Text style={styles.communityBadgeText}>CMS {community.cmsRating}★</Text>
+                    </View>
+                  )}
+                  <QRCodePlaceholder />
+                </View>
+              </View>
+              
+              <Text style={{ fontSize: 10, color: COLORS.textSecondary, marginBottom: 8 }}>
+                Care Types: {community.careTypes.join(', ')}
+                {community.priceRange && ` • Starting at ${community.priceRange}`}
+              </Text>
+              
+              <View style={styles.whyMatchedBox}>
+                <Text style={styles.whyMatchedLabel}>WHY IT MATCHED</Text>
+                <Text style={styles.whyMatchedText}>
+                  {community.whyMatched || DEFAULT_WHY_MATCHED[community.name] || DEFAULT_WHY_MATCHED['default']}
+                </Text>
+              </View>
             </View>
           ))
         ) : (
-          <>
-            {assessmentData.matchedCommunities.slice(0, 5).map((name, index) => (
-              <View key={index} style={styles.communityCard}>
-                <Text style={styles.communityName}>{name}</Text>
-                <Text style={styles.communityDetail}>Greater Cleveland Area</Text>
-                <Text style={styles.communityDetail}>Care Types: {careTypeKey}</Text>
+          assessmentData.matchedCommunities.slice(0, 4).map((name, index) => (
+            <View key={index} style={styles.communityCard}>
+              <View style={styles.communityHeader}>
+                <View>
+                  <Text style={styles.communityName}>{name}</Text>
+                  <Text style={styles.communityLocation}>Greater Cleveland Area</Text>
+                </View>
+                <QRCodePlaceholder />
               </View>
-            ))}
-          </>
+              
+              <Text style={{ fontSize: 10, color: COLORS.textSecondary, marginBottom: 8 }}>
+                Care Types: {careTypeKey}
+              </Text>
+              
+              <View style={styles.whyMatchedBox}>
+                <Text style={styles.whyMatchedLabel}>WHY IT MATCHED</Text>
+                <Text style={styles.whyMatchedText}>
+                  {DEFAULT_WHY_MATCHED[name] || DEFAULT_WHY_MATCHED['default']}
+                </Text>
+              </View>
+            </View>
+          ))
         )}
 
         <View style={styles.ctaBox}>
           <Text style={styles.ctaTitle}>Ready to Tour?</Text>
           <Text style={styles.ctaText}>
-            Our local advisors can schedule complimentary tours{'\n'}
-            at any of these communities on your behalf.
+            Our local advisors can schedule complimentary tours at any of{'\n'}
+            these communities on your behalf—completely free.
           </Text>
-          <Text style={styles.ctaPhone}>(216) 677-4630</Text>
+          <Link src="tel:+12166774630">
+            <Text style={styles.ctaPhone}>(216) 677-4630</Text>
+          </Link>
         </View>
 
         <View style={styles.footer}>
           <Text style={styles.footerText}>© Guide for Seniors | www.guideforseniors.com</Text>
-          <Text style={styles.footerPhone}>(216) 677-4630</Text>
+          <Link src="tel:+12166774630">
+            <Text style={styles.footerPhone}>(216) 677-4630</Text>
+          </Link>
         </View>
       </Page>
 
-      {/* Page 5: Next Steps Checklist */}
+      {/* ================================================================== */}
+      {/* PAGE 5: NEXT STEPS CHECKLIST + RED FLAGS */}
+      {/* ================================================================== */}
       <Page size="LETTER" style={styles.page}>
         <View style={styles.header}>
           <Text style={styles.headerLogo}>Guide for Seniors</Text>
-          <Text style={styles.headerPage}>Page 5</Text>
+          <Text style={styles.headerPage}>Expert Guidance</Text>
         </View>
 
         <Text style={styles.pageTitle}>Your Next Steps Checklist</Text>
-        <Text style={styles.paragraph}>
-          Use this checklist to guide your senior living search. Our advisors are here to help 
-          at every step—all of our services are completely free to families.
-        </Text>
+
+        {/* Hospital Discharge Integration */}
+        <View style={styles.hospitalBox}>
+          <Text style={styles.hospitalTitle}>🏥 Hospital-to-Home Transition</Text>
+          <Text style={styles.hospitalText}>
+            If transitioning from a hospital stay, our team coordinates directly with discharge 
+            planners at Cleveland Clinic, University Hospitals, MetroHealth, and St. John Medical 
+            Center to ensure a seamless placement process. We handle the paperwork and timing.
+          </Text>
+        </View>
 
         <Text style={styles.sectionTitle}>Before Touring</Text>
         <View style={styles.checklistItem}>
           <View style={styles.checklistBox} />
-          <Text style={styles.checklistText}>Gather medical records and current medication list</Text>
+          <Text style={styles.checklistText}>Gather current medical records and medication list</Text>
         </View>
         <View style={styles.checklistItem}>
           <View style={styles.checklistBox} />
-          <Text style={styles.checklistText}>Review financial options (savings, insurance, VA benefits)</Text>
+          <Text style={styles.checklistText}>Review financial options (savings, LTC insurance, VA benefits)</Text>
         </View>
         <View style={styles.checklistItem}>
           <View style={styles.checklistBox} />
-          <Text style={styles.checklistText}>Make a list of must-have amenities and preferences</Text>
+          <Text style={styles.checklistText}>List must-have amenities and non-negotiables</Text>
         </View>
         <View style={styles.checklistItem}>
           <View style={styles.checklistBox} />
@@ -711,55 +1080,128 @@ export function CareGuidePDF({
         <Text style={styles.sectionTitle}>During Tours</Text>
         <View style={styles.checklistItem}>
           <View style={styles.checklistBox} />
-          <Text style={styles.checklistText}>Ask about staff-to-resident ratios and staff training</Text>
+          <Text style={styles.checklistText}>Ask about staff-to-resident ratios and training programs</Text>
         </View>
         <View style={styles.checklistItem}>
           <View style={styles.checklistBox} />
-          <Text style={styles.checklistText}>Sample a meal and observe dining atmosphere</Text>
+          <Text style={styles.checklistText}>Sample a meal and observe the dining atmosphere</Text>
         </View>
         <View style={styles.checklistItem}>
           <View style={styles.checklistBox} />
-          <Text style={styles.checklistText}>Review the activity calendar and attend an activity if possible</Text>
+          <Text style={styles.checklistText}>Request the activity calendar and attend an activity if possible</Text>
         </View>
         <View style={styles.checklistItem}>
           <View style={styles.checklistBox} />
           <Text style={styles.checklistText}>Talk to current residents and their families</Text>
         </View>
-        <View style={styles.checklistItem}>
-          <View style={styles.checklistBox} />
-          <Text style={styles.checklistText}>Request a copy of the resident contract and fee schedule</Text>
-        </View>
 
-        <Text style={styles.sectionTitle}>After Tours</Text>
-        <View style={styles.checklistItem}>
-          <View style={styles.checklistBox} />
-          <Text style={styles.checklistText}>Compare communities using notes from each tour</Text>
-        </View>
-        <View style={styles.checklistItem}>
-          <View style={styles.checklistBox} />
-          <Text style={styles.checklistText}>Check state inspection reports online</Text>
-        </View>
-        <View style={styles.checklistItem}>
-          <View style={styles.checklistBox} />
-          <Text style={styles.checklistText}>Schedule a second visit (unannounced if possible)</Text>
-        </View>
-        <View style={styles.checklistItem}>
-          <View style={styles.checklistBox} />
-          <Text style={styles.checklistText}>Contact Guide for Seniors with any questions</Text>
-        </View>
-
-        <View style={styles.ctaBox}>
-          <Text style={styles.ctaTitle}>We&apos;re Here to Help</Text>
-          <Text style={styles.ctaText}>
-            Our Cleveland-based advisors provide free, personalized guidance{'\n'}
-            throughout your entire senior living journey.
-          </Text>
-          <Text style={styles.ctaPhone}>(216) 677-4630</Text>
+        {/* RED FLAGS MODULE */}
+        <View style={styles.redFlagBox}>
+          <View style={styles.redFlagHeader}>
+            <View style={styles.redFlagIcon}>
+              <Text style={styles.redFlagIconText}>!</Text>
+            </View>
+            <Text style={styles.redFlagTitle}>3 Local Expert Red Flags to Watch</Text>
+          </View>
+          
+          <View style={styles.redFlagItem}>
+            <Text style={styles.redFlagItemTitle}>1. Employee Engagement</Text>
+            <Text style={styles.redFlagItemText}>
+              Are staff genuinely interacting with residents, or avoiding eye contact and rushing through hallways? 
+              Warm, engaged staff is the #1 indicator of quality care.
+            </Text>
+          </View>
+          
+          <View style={styles.redFlagItem}>
+            <Text style={styles.redFlagItemTitle}>2. Social Vitality</Text>
+            <Text style={styles.redFlagItemText}>
+              Are residents active in common areas participating in activities, or isolated in their rooms? 
+              A vibrant community prevents decline and depression.
+            </Text>
+          </View>
+          
+          <View style={styles.redFlagItem}>
+            <Text style={styles.redFlagItemTitle}>3. The "Smell Test"</Text>
+            <Text style={styles.redFlagItemText}>
+              Are transition areas, hallways, and common spaces clean and odor-free? 
+              Persistent odors indicate housekeeping or care quality issues.
+            </Text>
+          </View>
         </View>
 
         <View style={styles.footer}>
           <Text style={styles.footerText}>© Guide for Seniors | www.guideforseniors.com</Text>
-          <Text style={styles.footerPhone}>(216) 677-4630</Text>
+          <Link src="tel:+12166774630">
+            <Text style={styles.footerPhone}>(216) 677-4630</Text>
+          </Link>
+        </View>
+      </Page>
+
+      {/* ================================================================== */}
+      {/* PAGE 6: CONTACT & FINAL CTA */}
+      {/* ================================================================== */}
+      <Page size="LETTER" style={styles.page}>
+        <View style={styles.header}>
+          <Text style={styles.headerLogo}>Guide for Seniors</Text>
+          <Text style={styles.headerPage}>Your Next Steps</Text>
+        </View>
+
+        <Text style={styles.pageTitle}>We're Here for You</Text>
+
+        <View style={styles.premiumCard}>
+          <Text style={styles.paragraph}>
+            Navigating senior care decisions can feel overwhelming. That's why Guide for Seniors 
+            provides completely free, personalized guidance from local Cleveland advisors who know 
+            these communities personally.
+          </Text>
+          
+          <Text style={styles.subsectionTitle}>What We Do For You:</Text>
+          <View style={styles.checklistItem}>
+            <Text style={{ fontSize: 11, color: COLORS.sage, marginRight: 8 }}>✓</Text>
+            <Text style={styles.checklistText}>Schedule and coordinate tours at multiple communities</Text>
+          </View>
+          <View style={styles.checklistItem}>
+            <Text style={{ fontSize: 11, color: COLORS.sage, marginRight: 8 }}>✓</Text>
+            <Text style={styles.checklistText}>Negotiate pricing and secure move-in specials</Text>
+          </View>
+          <View style={styles.checklistItem}>
+            <Text style={{ fontSize: 11, color: COLORS.sage, marginRight: 8 }}>✓</Text>
+            <Text style={styles.checklistText}>Explain Medicaid waiver and VA benefit options</Text>
+          </View>
+          <View style={styles.checklistItem}>
+            <Text style={{ fontSize: 11, color: COLORS.sage, marginRight: 8 }}>✓</Text>
+            <Text style={styles.checklistText}>Support you through the entire transition process</Text>
+          </View>
+        </View>
+
+        <View style={[styles.ctaBox, { marginTop: 24 }]}>
+          <Text style={styles.ctaTitle}>Ready to Take the Next Step?</Text>
+          <Text style={styles.ctaText}>
+            Call us today for a free, no-pressure consultation.{'\n'}
+            We'll discuss your options and answer all your questions.
+          </Text>
+          <Link src="tel:+12166774630">
+            <Text style={styles.ctaPhone}>(216) 677-4630</Text>
+          </Link>
+          <Text style={{ fontSize: 10, color: COLORS.sageLight, marginTop: 10 }}>
+            www.guideforseniors.com
+          </Text>
+        </View>
+
+        <View style={[styles.premiumCard, { marginTop: 24 }]}>
+          <Text style={styles.subsectionTitle}>Your Personal Guide Team:</Text>
+          <Text style={styles.paragraph}>
+            When you call, you'll speak with a real Cleveland-based advisor—not a call center. 
+            We've toured every community we recommend and built relationships with their staff. 
+            This local expertise means you get honest, informed guidance specific to your situation.
+          </Text>
+        </View>
+
+        <View style={styles.footer}>
+          <Text style={styles.footerText}>© Guide for Seniors | www.guideforseniors.com</Text>
+          <Link src="tel:+12166774630">
+            <Text style={styles.footerPhone}>(216) 677-4630</Text>
+          </Link>
         </View>
       </Page>
     </Document>
@@ -767,5 +1209,4 @@ export function CareGuidePDF({
 }
 
 export default CareGuidePDF;
-
 
