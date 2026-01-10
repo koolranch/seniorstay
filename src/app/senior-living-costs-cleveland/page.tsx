@@ -39,6 +39,21 @@ export default function SeniorLivingCostsClevelandPage() {
       });
 
       if (result.success) {
+        // Send the pricing guide email
+        try {
+          const emailResponse = await fetch('/api/send-pricing-guide', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              recipientName: formData.get('name')?.toString() || 'Friend',
+              email: formData.get('email')?.toString() || '',
+            }),
+          });
+          const emailResult = await emailResponse.json();
+          console.log('[PricingPage] Pricing guide email result:', emailResult);
+        } catch (emailErr) {
+          console.error('[PricingPage] Pricing guide email error:', emailErr);
+        }
         setIsSuccess(true);
       } else {
         setError(result.message || 'Something went wrong. Please try again.');

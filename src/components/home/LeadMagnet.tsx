@@ -53,34 +53,28 @@ const LeadMagnet: React.FC = () => {
         throw new Error(result.message || 'Unable to submit. Please try again.');
       }
 
-      // Send the care guide email
-      console.log('[LeadMagnet] Lead submitted, sending care guide email...');
+      // Send the pricing guide email
+      console.log('[LeadMagnet] Lead submitted, sending pricing guide email...');
       try {
-        const emailResponse = await fetch('/api/send-care-guide', {
+        const emailResponse = await fetch('/api/send-pricing-guide', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             recipientName: formData.firstName?.trim() || 'Friend',
             email: trimmedEmail,
-            assessmentData: {
-              score: 0,
-              recommendation: 'General Senior Care Guide',
-              matchedCommunities: [],
-              answers: {},
-            },
           }),
         });
         
         const emailResult = await emailResponse.json();
-        console.log('[LeadMagnet] Email API result:', emailResult);
+        console.log('[LeadMagnet] Pricing guide email result:', emailResult);
         
         if (!emailResult.success) {
           // Log but don't fail - lead was captured
-          console.warn('[LeadMagnet] Email sending failed:', emailResult.error);
+          console.warn('[LeadMagnet] Pricing guide email failed:', emailResult.error);
         }
       } catch (emailErr) {
         // Log but don't fail - lead was captured
-        console.error('[LeadMagnet] Email API error:', emailErr);
+        console.error('[LeadMagnet] Pricing guide email error:', emailErr);
       }
 
       setIsSuccess(true);
