@@ -659,18 +659,28 @@ export async function submitLead(formData: LeadInput): Promise<LeadSubmitResult>
     // -------------------------------------------------------------------------
     // 5. UPSERT TO SUPABASE
     // -------------------------------------------------------------------------
+    console.log('[Lead] Step 5: Getting Supabase admin client...');
     const supabase = getSupabaseAdmin();
+    console.log('[Lead] Supabase client obtained');
     
     let leadId: string;
     
     // If email provided, try to upsert (update existing or insert new)
     if (data.email && data.email.trim()) {
+      console.log('[Lead] Checking for existing lead with email:', data.email.trim());
       // Check if lead exists
-      const { data: existingLead } = await supabase
+      const { data: existingLead, error: lookupError } = await supabase
         .from('Lead')
         .select('id, urgencyScore')
         .eq('email', data.email.trim())
         .single();
+      
+      if (lookupError && lookupError.code !== 'PGRST116') {
+        // PGRST116 = "No rows found" which is fine
+        console.error('[Lead] Lookup error:', lookupError);
+        throw lookupError;
+      }
+      console.log('[Lead] Existing lead lookup result:', existingLead ? `Found: ${existingLead.id}` : 'Not found');
       
       if (existingLead) {
         // Update existing lead - keep higher urgency score
@@ -692,10 +702,14 @@ export async function submitLead(formData: LeadInput): Promise<LeadSubmitResult>
         leadId = updated.id;
       } else {
         // Insert new lead
+        console.log('[Lead] Inserting new lead with email...');
+        const newId = randomUUID();
+        console.log('[Lead] Generated UUID:', newId);
+        
         const { data: inserted, error: insertError } = await supabase
           .from('Lead')
           .insert({
-            id: randomUUID(), // Generate UUID since table doesn't auto-generate
+            id: newId,
             ...leadData,
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
@@ -703,15 +717,23 @@ export async function submitLead(formData: LeadInput): Promise<LeadSubmitResult>
           .select('id')
           .single();
         
-        if (insertError) throw insertError;
+        if (insertError) {
+          console.error('[Lead] Insert error:', insertError);
+          throw insertError;
+        }
+        console.log('[Lead] Insert successful, ID:', inserted?.id);
         leadId = inserted.id;
       }
     } else {
       // No email - always insert as new lead
+      console.log('[Lead] No email provided, inserting new lead...');
+      const newId = randomUUID();
+      console.log('[Lead] Generated UUID:', newId);
+      
       const { data: inserted, error: insertError } = await supabase
         .from('Lead')
         .insert({
-          id: randomUUID(), // Generate UUID since table doesn't auto-generate
+          id: newId,
           ...leadData,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
@@ -719,7 +741,11 @@ export async function submitLead(formData: LeadInput): Promise<LeadSubmitResult>
         .select('id')
         .single();
       
-      if (insertError) throw insertError;
+      if (insertError) {
+        console.error('[Lead] Insert error:', insertError);
+        throw insertError;
+      }
+      console.log('[Lead] Insert successful, ID:', inserted?.id);
       leadId = inserted.id;
     }
     
