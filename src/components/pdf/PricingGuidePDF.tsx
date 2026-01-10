@@ -6,15 +6,19 @@ import {
   StyleSheet,
   Link,
   Font,
+  Svg,
+  Rect,
 } from '@react-pdf/renderer';
 
 // ============================================================================
-// TEXT SANITIZATION - Fix encoding artifacts and weird characters
+// 2026 CLEVELAND SENIOR LIVING COST REPORT
+// Enterprise-grade pricing guide with local authority positioning
 // ============================================================================
 
-/**
- * Sanitizes text to remove hidden characters, encoding artifacts, and normalize unicode.
- */
+// ============================================================================
+// TEXT SANITIZATION - Fix encoding artifacts
+// ============================================================================
+
 function sanitizeText(text: string | undefined | null): string {
   if (!text) return '';
   
@@ -31,115 +35,167 @@ function sanitizeText(text: string | undefined | null): string {
     .trim();
 }
 
-// Phone number constant - use plain ASCII
+// Constants
 const PHONE_NUMBER = '(216) 677-4630';
 const PHONE_LINK = 'tel:+12166774630';
+const WEBSITE = 'www.guideforseniors.com';
 
-// Disable hyphenation for consistent text rendering
+// Disable hyphenation for consistent rendering
 Font.registerHyphenationCallback((word) => [word]);
 
-// Standard line heights
-const LINE_HEIGHT_BODY = 1.4;
-const LINE_HEIGHT_TIGHT = 1.2;
-const LINE_HEIGHT_RELAXED = 1.6;
+// ============================================================================
+// BRAND COLORS - 2026 Modern Palette
+// ============================================================================
 
-// Create styles
+const COLORS = {
+  // Primary
+  teal: '#0f766e',
+  tealDark: '#0d6560',
+  tealLight: '#14b8a6',
+  tealPale: '#ccfbf1',
+  
+  // Neutrals
+  white: '#FFFFFF',
+  cream: '#FAFBFA',
+  grayLight: '#F8FAFC',
+  grayMid: '#E2E8F0',
+  grayText: '#64748B',
+  
+  // Text
+  textDark: '#0F172A',
+  textMid: '#334155',
+  textLight: '#475569',
+  
+  // Accents
+  navy: '#1E3A5F',
+  gold: '#B8860B',
+  goldLight: '#FEF3C7',
+  
+  // Heatmap colors for neighborhoods
+  heatHigh: '#DBEAFE',    // Beachwood - soft blue (premium)
+  heatMedHigh: '#E0E7FF', // Westlake - soft indigo
+  heatMed: '#F3E8FF',     // Rocky River - soft purple
+  heatMedLow: '#FCE7F3',  // Mentor - soft pink
+  heatLow: '#DCFCE7',     // Parma - soft green (value)
+  heatValue: '#D1FAE5',   // Best value green
+  
+  // Alerts
+  red: '#DC2626',
+  redLight: '#FEE2E2',
+  amber: '#D97706',
+  amberLight: '#FEF3C7',
+};
+
+// ============================================================================
+// STYLES - WCAG 2.1 AA Compliant
+// ============================================================================
+
+const LINE_HEIGHT = {
+  tight: 1.2,
+  normal: 1.4,
+  relaxed: 1.6,
+};
+
 const styles = StyleSheet.create({
-  // Page styles
+  // ===== PAGE =====
   page: {
     flexDirection: 'column',
-    backgroundColor: '#ffffff',
+    backgroundColor: COLORS.white,
     padding: 40,
     fontFamily: 'Helvetica',
   },
   coverPage: {
     flexDirection: 'column',
-    backgroundColor: '#0f766e', // teal-700
+    backgroundColor: COLORS.teal,
     padding: 0,
     fontFamily: 'Helvetica',
   },
-  
-  // Cover page styles
+
+  // ===== COVER =====
   coverContent: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 40,
+    padding: 50,
   },
   coverBadge: {
-    backgroundColor: '#14b8a6',
-    paddingHorizontal: 16,
-    paddingVertical: 6,
+    backgroundColor: COLORS.tealLight,
+    paddingHorizontal: 20,
+    paddingVertical: 8,
     borderRadius: 20,
-    marginBottom: 20,
+    marginBottom: 24,
   },
   coverBadgeText: {
-    fontSize: 11,
-    color: '#ffffff',
+    fontSize: 10,
+    color: COLORS.white,
     fontWeight: 'bold',
+    letterSpacing: 1,
   },
   coverLogo: {
-    fontSize: 28,
+    fontSize: 32,
     fontWeight: 'bold',
-    color: '#ffffff',
-    marginBottom: 8,
+    color: COLORS.white,
+    marginBottom: 6,
   },
   coverTagline: {
     fontSize: 12,
-    color: '#99f6e4', // teal-200
-    marginBottom: 50,
-  },
-  coverTitle: {
-    fontSize: 38,
-    fontWeight: 'bold',
-    color: '#ffffff',
-    textAlign: 'center',
-    marginBottom: 8,
-    lineHeight: 1.2,
+    color: COLORS.tealPale,
+    marginBottom: 40,
+    letterSpacing: 0.5,
   },
   coverYear: {
-    fontSize: 48,
+    fontSize: 56,
     fontWeight: 'bold',
-    color: '#5eead4', // teal-300
+    color: COLORS.tealLight,
+    marginBottom: 8,
+  },
+  coverTitle: {
+    fontSize: 36,
+    fontWeight: 'bold',
+    color: COLORS.white,
     textAlign: 'center',
     marginBottom: 16,
+    lineHeight: LINE_HEIGHT.tight,
   },
   coverSubtitle: {
-    fontSize: 14,
-    color: '#ccfbf1', // teal-100
+    fontSize: 13,
+    color: COLORS.tealPale,
     textAlign: 'center',
     marginBottom: 50,
-    lineHeight: 1.5,
+    lineHeight: LINE_HEIGHT.normal,
   },
   coverPreparedFor: {
-    fontSize: 11,
-    color: '#99f6e4',
+    fontSize: 10,
+    color: COLORS.tealLight,
     textAlign: 'center',
     marginBottom: 6,
+    letterSpacing: 1,
   },
   coverName: {
-    fontSize: 22,
+    fontSize: 26,
     fontWeight: 'bold',
-    color: '#ffffff',
+    color: COLORS.white,
     textAlign: 'center',
   },
   coverFooter: {
-    backgroundColor: '#115e59', // teal-800
-    padding: 20,
+    backgroundColor: COLORS.tealDark,
+    padding: 24,
     alignItems: 'center',
+    borderTopWidth: 3,
+    borderTopColor: COLORS.tealLight,
   },
   coverPhone: {
-    fontSize: 14,
-    color: '#ffffff',
+    fontSize: 16,
+    color: COLORS.white,
     fontWeight: 'bold',
   },
   coverDate: {
     fontSize: 10,
-    color: '#99f6e4',
+    color: COLORS.tealPale,
     marginTop: 4,
   },
 
-  // Header/Footer
+  // ===== HEADER/FOOTER =====
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -147,16 +203,16 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     paddingBottom: 10,
     borderBottomWidth: 2,
-    borderBottomColor: '#0f766e',
+    borderBottomColor: COLORS.teal,
   },
   headerLogo: {
     fontSize: 14,
     fontWeight: 'bold',
-    color: '#0f766e',
+    color: COLORS.teal,
   },
   headerPage: {
     fontSize: 10,
-    color: '#64748b',
+    color: COLORS.grayText,
   },
   footer: {
     position: 'absolute',
@@ -168,184 +224,325 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 10,
     borderTopWidth: 1,
-    borderTopColor: '#e2e8f0',
+    borderTopColor: COLORS.grayMid,
   },
   footerText: {
     fontSize: 9,
-    color: '#64748b',
+    color: COLORS.grayText,
   },
   footerPhone: {
     fontSize: 10,
-    color: '#0f766e',
+    color: COLORS.teal,
     fontWeight: 'bold',
   },
 
-  // Typography
+  // ===== TYPOGRAPHY =====
   pageTitle: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#0f172a',
+    color: COLORS.textDark,
     marginBottom: 16,
+    lineHeight: LINE_HEIGHT.tight,
   },
   sectionTitle: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 'bold',
-    color: '#0f766e',
+    color: COLORS.teal,
     marginTop: 20,
-    marginBottom: 10,
+    marginBottom: 12,
+    lineHeight: LINE_HEIGHT.tight,
   },
   subsectionTitle: {
-    fontSize: 13,
-    fontWeight: 'bold',
-    color: '#334155',
-    marginTop: 12,
-    marginBottom: 6,
-  },
-  paragraph: {
-    fontSize: 11,
-    color: '#475569',
-    lineHeight: 1.6,
-    marginBottom: 10,
-  },
-  bulletItem: {
-    fontSize: 10,
-    color: '#475569',
-    marginBottom: 4,
-    paddingLeft: 12,
-  },
-  bulletPoint: {
-    position: 'absolute',
-    left: 0,
-  },
-
-  // Executive Summary Box
-  executiveSummary: {
-    backgroundColor: '#f0fdfa',
-    borderWidth: 2,
-    borderColor: '#14b8a6',
-    borderRadius: 8,
-    padding: 20,
-    marginBottom: 20,
-  },
-  executiveTitle: {
     fontSize: 14,
     fontWeight: 'bold',
-    color: '#0f766e',
+    color: COLORS.textMid,
+    marginTop: 12,
+    marginBottom: 8,
+    lineHeight: LINE_HEIGHT.tight,
+  },
+  paragraph: {
+    fontSize: 12,
+    color: COLORS.textLight,
+    lineHeight: LINE_HEIGHT.relaxed,
     marginBottom: 12,
   },
-  keyFinding: {
+  bodyText: {
+    fontSize: 12,
+    color: COLORS.textMid,
+    lineHeight: LINE_HEIGHT.normal,
+  },
+
+  // ===== 3D STAT BOXES =====
+  statRow: {
     flexDirection: 'row',
-    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+    marginBottom: 20,
+  },
+  statBox3D: {
+    width: '31%',
+    backgroundColor: COLORS.white,
+    borderRadius: 12,
+    padding: 16,
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: COLORS.teal,
+    borderBottomWidth: 6,
+    borderRightWidth: 4,
+  },
+  statNumber3D: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: COLORS.teal,
+    marginBottom: 4,
+  },
+  statLabel: {
+    fontSize: 9,
+    color: COLORS.textLight,
+    textAlign: 'center',
+    lineHeight: LINE_HEIGHT.tight,
+    fontWeight: 'bold',
+  },
+  statSubLabel: {
+    fontSize: 8,
+    color: COLORS.grayText,
+    textAlign: 'center',
+    marginTop: 2,
+  },
+
+  // ===== CARE TYPE CARDS =====
+  careCardsRow: {
+    flexDirection: 'row',
+    gap: 12,
+    marginBottom: 16,
+  },
+  careCard: {
+    flex: 1,
+    backgroundColor: COLORS.cream,
+    borderRadius: 12,
+    padding: 14,
+    borderWidth: 1,
+    borderColor: COLORS.grayMid,
+  },
+  careCardHighlight: {
+    flex: 1,
+    backgroundColor: COLORS.tealPale,
+    borderRadius: 12,
+    padding: 14,
+    borderWidth: 2,
+    borderColor: COLORS.teal,
+  },
+  careCardTitle: {
+    fontSize: 13,
+    fontWeight: 'bold',
+    color: COLORS.textDark,
+    marginBottom: 4,
+  },
+  careCardPrice: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: COLORS.teal,
     marginBottom: 8,
   },
-  keyFindingIcon: {
-    width: 18,
-    height: 18,
-    backgroundColor: '#0f766e',
-    borderRadius: 9,
+  careCardDesc: {
+    fontSize: 9,
+    color: COLORS.textLight,
+    lineHeight: LINE_HEIGHT.normal,
+    marginBottom: 8,
+  },
+  careCardBullet: {
+    fontSize: 8,
+    color: COLORS.textLight,
+    marginBottom: 2,
+  },
+
+  // ===== HEATMAP TABLE =====
+  heatmapTable: {
+    borderRadius: 8,
+    overflow: 'hidden',
+    marginBottom: 12,
+    borderWidth: 1,
+    borderColor: COLORS.grayMid,
+  },
+  heatmapHeader: {
+    flexDirection: 'row',
+    backgroundColor: COLORS.teal,
+    padding: 10,
+  },
+  heatmapHeaderCell: {
+    fontSize: 9,
+    fontWeight: 'bold',
+    color: COLORS.white,
+  },
+  heatmapRow: {
+    flexDirection: 'row',
+    padding: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.grayMid,
+  },
+  heatmapCell: {
+    fontSize: 9,
+    color: COLORS.textMid,
+    lineHeight: LINE_HEIGHT.normal,
+  },
+  heatmapCellBold: {
+    fontSize: 9,
+    color: COLORS.textDark,
+    fontWeight: 'bold',
+  },
+  heatmapBestFor: {
+    fontSize: 8,
+    color: COLORS.grayText,
+    fontStyle: 'italic',
+    marginTop: 2,
+  },
+
+  // ===== CALLOUT BOXES =====
+  calloutBox: {
+    backgroundColor: COLORS.goldLight,
+    borderRadius: 10,
+    padding: 16,
+    marginBottom: 16,
+    borderLeftWidth: 4,
+    borderLeftColor: COLORS.gold,
+  },
+  calloutTitle: {
+    fontSize: 12,
+    fontWeight: 'bold',
+    color: COLORS.textDark,
+    marginBottom: 6,
+  },
+  calloutText: {
+    fontSize: 10,
+    color: COLORS.textMid,
+    lineHeight: LINE_HEIGHT.normal,
+  },
+
+  // ===== EXPERT TIP BOX =====
+  expertTipBox: {
+    backgroundColor: COLORS.redLight,
+    borderRadius: 10,
+    padding: 16,
+    marginBottom: 16,
+    borderWidth: 2,
+    borderColor: COLORS.red,
+  },
+  expertTipHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  expertTipIcon: {
+    width: 24,
+    height: 24,
+    backgroundColor: COLORS.red,
+    borderRadius: 12,
     marginRight: 10,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  keyFindingCheck: {
-    color: '#ffffff',
-    fontSize: 10,
+  expertTipIconText: {
+    color: COLORS.white,
+    fontSize: 12,
     fontWeight: 'bold',
   },
-  keyFindingText: {
-    fontSize: 11,
-    color: '#334155',
-    flex: 1,
-    lineHeight: 1.4,
+  expertTipTitle: {
+    fontSize: 12,
+    fontWeight: 'bold',
+    color: COLORS.red,
+  },
+  expertTipText: {
+    fontSize: 10,
+    color: COLORS.textMid,
+    lineHeight: LINE_HEIGHT.normal,
   },
 
-  // Pricing Card
-  pricingCard: {
-    borderWidth: 1,
-    borderColor: '#e2e8f0',
-    borderRadius: 8,
-    marginBottom: 12,
-    overflow: 'hidden',
-  },
-  pricingCardHeader: {
-    backgroundColor: '#f8fafc',
-    padding: 12,
+  // ===== LEAD MAGNET BOX =====
+  leadMagnetBox: {
+    backgroundColor: COLORS.teal,
+    borderRadius: 12,
+    padding: 18,
+    marginBottom: 16,
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
-    borderBottomWidth: 1,
-    borderBottomColor: '#e2e8f0',
   },
-  pricingCardTitle: {
-    fontSize: 14,
+  leadMagnetContent: {
+    flex: 1,
+  },
+  leadMagnetTitle: {
+    fontSize: 13,
     fontWeight: 'bold',
-    color: '#0f172a',
+    color: COLORS.white,
+    marginBottom: 4,
   },
-  pricingCardPrice: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    color: '#0f766e',
-  },
-  pricingCardBody: {
-    padding: 12,
-  },
-  pricingCardDesc: {
+  leadMagnetText: {
     fontSize: 10,
-    color: '#64748b',
-    marginBottom: 8,
-    lineHeight: 1.4,
+    color: COLORS.tealPale,
+    lineHeight: LINE_HEIGHT.normal,
+  },
+  leadMagnetQR: {
+    width: 50,
+    height: 50,
+    backgroundColor: COLORS.white,
+    borderRadius: 6,
+    padding: 4,
+    marginLeft: 12,
   },
 
-  // Pricing table
-  pricingTable: {
-    borderWidth: 1,
-    borderColor: '#e2e8f0',
-    borderRadius: 8,
-    overflow: 'hidden',
-    marginBottom: 16,
-  },
-  pricingHeader: {
-    flexDirection: 'row',
-    backgroundColor: '#0f766e',
-    padding: 10,
-  },
-  pricingHeaderCell: {
-    fontSize: 9,
-    fontWeight: 'bold',
-    color: '#ffffff',
-  },
-  pricingRow: {
-    flexDirection: 'row',
-    padding: 8,
-    borderBottomWidth: 1,
-    borderBottomColor: '#e2e8f0',
-  },
-  pricingRowAlt: {
-    backgroundColor: '#f8fafc',
-  },
-  pricingCell: {
-    fontSize: 9,
-    color: '#475569',
-  },
-  pricingCellBold: {
-    fontSize: 9,
-    color: '#0f172a',
-    fontWeight: 'bold',
-  },
-
-  // Comparison table
-  comparisonBox: {
-    backgroundColor: '#fffbeb', // amber-50
-    borderWidth: 1,
-    borderColor: '#fcd34d', // amber-300
-    borderRadius: 8,
+  // ===== CAREGIVER BURNOUT BOX =====
+  burnoutBox: {
+    backgroundColor: COLORS.amberLight,
+    borderRadius: 10,
     padding: 16,
-    marginBottom: 16,
+    marginTop: 16,
+    borderLeftWidth: 4,
+    borderLeftColor: COLORS.amber,
+  },
+  burnoutTitle: {
+    fontSize: 11,
+    fontWeight: 'bold',
+    color: COLORS.textDark,
+    marginBottom: 6,
+  },
+  burnoutText: {
+    fontSize: 10,
+    color: COLORS.textMid,
+    lineHeight: LINE_HEIGHT.normal,
+  },
+
+  // ===== INFO BOX =====
+  infoBox: {
+    backgroundColor: '#EFF6FF',
+    borderRadius: 8,
+    padding: 14,
+    marginBottom: 12,
+    borderLeftWidth: 4,
+    borderLeftColor: '#3B82F6',
+  },
+  infoTitle: {
+    fontSize: 11,
+    fontWeight: 'bold',
+    color: '#1E40AF',
+    marginBottom: 4,
+  },
+  infoText: {
+    fontSize: 10,
+    color: '#1E3A8A',
+    lineHeight: LINE_HEIGHT.normal,
+  },
+
+  // ===== COMPARISON TABLE =====
+  comparisonBox: {
+    backgroundColor: COLORS.grayLight,
+    borderRadius: 10,
+    padding: 16,
+    marginBottom: 12,
+    borderWidth: 1,
+    borderColor: COLORS.grayMid,
   },
   comparisonTitle: {
     fontSize: 13,
     fontWeight: 'bold',
-    color: '#92400e',
+    color: COLORS.textDark,
     marginBottom: 12,
   },
   comparisonRow: {
@@ -353,59 +550,22 @@ const styles = StyleSheet.create({
     marginBottom: 6,
     paddingBottom: 6,
     borderBottomWidth: 1,
-    borderBottomColor: '#fef3c7',
+    borderBottomColor: COLORS.grayMid,
   },
   comparisonLabel: {
     fontSize: 10,
-    color: '#78350f',
+    color: COLORS.textMid,
     width: '50%',
   },
   comparisonValue: {
     fontSize: 10,
-    color: '#78350f',
+    color: COLORS.textDark,
     fontWeight: 'bold',
     width: '25%',
     textAlign: 'center',
   },
 
-  // Info box
-  infoBox: {
-    backgroundColor: '#eff6ff', // blue-50
-    borderWidth: 1,
-    borderColor: '#93c5fd', // blue-300
-    borderRadius: 8,
-    padding: 16,
-    marginBottom: 16,
-  },
-  infoTitle: {
-    fontSize: 12,
-    fontWeight: 'bold',
-    color: '#1e40af',
-    marginBottom: 8,
-  },
-  infoText: {
-    fontSize: 10,
-    color: '#1e3a8a',
-    lineHeight: 1.5,
-  },
-
-  // Warning box
-  warningBox: {
-    backgroundColor: '#fef2f2', // red-50
-    borderWidth: 1,
-    borderColor: '#fca5a5', // red-300
-    borderRadius: 8,
-    padding: 16,
-    marginBottom: 16,
-  },
-  warningTitle: {
-    fontSize: 12,
-    fontWeight: 'bold',
-    color: '#b91c1c',
-    marginBottom: 8,
-  },
-
-  // Checklist
+  // ===== CHECKLIST =====
   checklistItem: {
     flexDirection: 'row',
     marginBottom: 6,
@@ -414,46 +574,120 @@ const styles = StyleSheet.create({
   checklistBox: {
     width: 12,
     height: 12,
-    borderWidth: 1,
-    borderColor: '#0f766e',
+    borderWidth: 2,
+    borderColor: COLORS.teal,
     borderRadius: 2,
     marginRight: 8,
-    marginTop: 1,
+    marginTop: 2,
   },
   checklistText: {
-    fontSize: 10,
-    color: '#475569',
+    fontSize: 11,
+    color: COLORS.textMid,
     flex: 1,
-    lineHeight: 1.4,
+    lineHeight: LINE_HEIGHT.normal,
   },
 
-  // CTA box
+  // ===== CTA BOX =====
   ctaBox: {
-    backgroundColor: '#0f766e',
-    borderRadius: 8,
-    padding: 20,
-    marginTop: 'auto',
+    backgroundColor: COLORS.teal,
+    borderRadius: 12,
+    padding: 24,
     alignItems: 'center',
   },
   ctaTitle: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 'bold',
-    color: '#ffffff',
-    marginBottom: 8,
+    color: COLORS.white,
+    marginBottom: 10,
   },
   ctaText: {
     fontSize: 11,
-    color: '#ccfbf1',
+    color: COLORS.tealPale,
     textAlign: 'center',
-    marginBottom: 12,
+    marginBottom: 14,
+    lineHeight: LINE_HEIGHT.normal,
   },
   ctaPhone: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: 'bold',
-    color: '#ffffff',
+    color: COLORS.tealLight,
   },
 
-  // Two column layout
+  // ===== FOOTNOTE =====
+  footnote: {
+    fontSize: 9,
+    color: COLORS.grayText,
+    fontStyle: 'italic',
+    marginTop: 8,
+    paddingTop: 8,
+    borderTopWidth: 1,
+    borderTopColor: COLORS.grayMid,
+    lineHeight: LINE_HEIGHT.normal,
+  },
+
+  // ===== BULLET LIST =====
+  bulletRow: {
+    flexDirection: 'row',
+    marginBottom: 4,
+  },
+  bulletCheck: {
+    fontSize: 10,
+    color: COLORS.teal,
+    marginRight: 6,
+    width: 12,
+  },
+  bulletText: {
+    fontSize: 10,
+    color: COLORS.textLight,
+    flex: 1,
+    lineHeight: LINE_HEIGHT.normal,
+  },
+
+  // ===== KEY FINDINGS =====
+  keyFinding: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    marginBottom: 10,
+  },
+  keyFindingIcon: {
+    width: 20,
+    height: 20,
+    backgroundColor: COLORS.teal,
+    borderRadius: 10,
+    marginRight: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 2,
+  },
+  keyFindingCheck: {
+    color: COLORS.white,
+    fontSize: 10,
+    fontWeight: 'bold',
+  },
+  keyFindingText: {
+    fontSize: 11,
+    color: COLORS.textMid,
+    flex: 1,
+    lineHeight: LINE_HEIGHT.normal,
+  },
+
+  // ===== EXECUTIVE SUMMARY =====
+  executiveSummary: {
+    backgroundColor: COLORS.tealPale,
+    borderRadius: 12,
+    padding: 20,
+    marginBottom: 20,
+    borderWidth: 2,
+    borderColor: COLORS.teal,
+  },
+  executiveTitle: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: COLORS.teal,
+    marginBottom: 14,
+  },
+
+  // ===== TWO COLUMN =====
   twoColumn: {
     flexDirection: 'row',
     gap: 16,
@@ -461,78 +695,93 @@ const styles = StyleSheet.create({
   column: {
     flex: 1,
   },
-  
-  // Stat box
-  statRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 12,
-  },
-  statBox: {
-    width: '30%',
-    backgroundColor: '#f8fafc',
-    borderRadius: 8,
-    padding: 12,
-    alignItems: 'center',
-  },
-  statNumber: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#0f766e',
-    marginBottom: 4,
-  },
-  statLabel: {
-    fontSize: 8,
-    color: '#64748b',
-    textAlign: 'center',
-  },
 });
 
-// Types
-interface PricingGuidePDFProps {
-  recipientName: string;
-  email: string;
-  generatedDate?: string;
-}
+// ============================================================================
+// DATA
+// ============================================================================
 
-// Cleveland neighborhood pricing data - 2026
+// Neighborhood pricing with heatmap colors and "Best For"
 const NEIGHBORHOOD_PRICING = [
-  { area: 'Beachwood / Pepper Pike', al: '$5,800 - $7,200', mc: '$6,500 - $8,500', il: '$3,200 - $4,500' },
-  { area: 'Westlake / Bay Village', al: '$5,200 - $6,500', mc: '$6,000 - $7,800', il: '$2,800 - $4,200' },
-  { area: 'Rocky River / Lakewood', al: '$4,800 - $6,200', mc: '$5,800 - $7,500', il: '$2,600 - $3,800' },
-  { area: 'Mentor / Willoughby', al: '$4,500 - $5,800', mc: '$5,500 - $7,000', il: '$2,400 - $3,500' },
-  { area: 'Parma / Seven Hills', al: '$4,200 - $5,500', mc: '$5,200 - $6,800', il: '$2,200 - $3,200' },
-  { area: 'Independence / Broadview Hts', al: '$4,500 - $5,800', mc: '$5,400 - $7,000', il: '$2,500 - $3,600' },
-  { area: 'Strongsville / North Royalton', al: '$4,400 - $5,600', mc: '$5,300 - $6,900', il: '$2,400 - $3,400' },
-  { area: 'Avon / Avon Lake', al: '$4,600 - $5,900', mc: '$5,600 - $7,200', il: '$2,600 - $3,800' },
+  { 
+    area: 'Beachwood / Pepper Pike', 
+    al: '$5,800 - $7,200', 
+    mc: '$6,500 - $8,500', 
+    il: '$3,200 - $4,500',
+    color: COLORS.heatHigh,
+    bestFor: 'Premium amenities & top healthcare access'
+  },
+  { 
+    area: 'Westlake / Bay Village', 
+    al: '$5,200 - $6,500', 
+    mc: '$6,000 - $7,800', 
+    il: '$2,800 - $4,200',
+    color: COLORS.heatMedHigh,
+    bestFor: 'Vibrant suburban shopping & lakefront proximity'
+  },
+  { 
+    area: 'Rocky River / Lakewood', 
+    al: '$4,800 - $6,200', 
+    mc: '$5,800 - $7,500', 
+    il: '$2,600 - $3,800',
+    color: COLORS.heatMed,
+    bestFor: 'Walkable neighborhoods & cultural attractions'
+  },
+  { 
+    area: 'Mentor / Willoughby', 
+    al: '$4,500 - $5,800', 
+    mc: '$5,500 - $7,000', 
+    il: '$2,400 - $3,500',
+    color: COLORS.heatMedLow,
+    bestFor: 'Lake County charm & family-friendly areas'
+  },
+  { 
+    area: 'Parma / Seven Hills', 
+    al: '$4,200 - $5,500', 
+    mc: '$5,200 - $6,800', 
+    il: '$2,200 - $3,200',
+    color: COLORS.heatLow,
+    bestFor: 'Exceptional value & community tradition'
+  },
+  { 
+    area: 'Independence / Broadview Hts', 
+    al: '$4,500 - $5,800', 
+    mc: '$5,400 - $7,000', 
+    il: '$2,500 - $3,600',
+    color: COLORS.heatValue,
+    bestFor: 'Central location & highway accessibility'
+  },
 ];
 
-// Care type details
+// Care types for card display
 const CARE_TYPES = [
   {
     name: 'Memory Care',
     price: '$4,500 - $8,500/mo',
     avgPrice: '$6,200',
-    description: 'Specialized 24/7 care for Alzheimer\'s and dementia with secure environments and trained staff.',
-    includes: ['Secure environment', '24/7 specialized staff', 'All meals', 'Memory activities', 'Medication management', 'Personal care'],
+    description: 'Specialized 24/7 care for Alzheimer\'s and dementia in secure environments.',
+    includes: ['Secure environment', '24/7 trained staff', 'All meals included', 'Memory programs'],
+    highlight: false,
   },
   {
     name: 'Assisted Living',
     price: '$3,200 - $6,500/mo',
     avgPrice: '$4,800',
-    description: 'Help with daily activities while maintaining independence in a supportive community.',
-    includes: ['Private apartment', 'Personal care help', 'Three meals daily', 'Medication reminders', 'Activities & outings', 'Housekeeping'],
+    description: 'Daily assistance while maintaining independence in a supportive community.',
+    includes: ['Private apartment', 'Personal care help', 'Three meals daily', 'Activities'],
+    highlight: true,
   },
   {
     name: 'Independent Living',
     price: '$2,200 - $4,500/mo',
     avgPrice: '$3,200',
-    description: 'Maintenance-free living for active seniors with dining and social amenities.',
-    includes: ['Private apartment', 'Restaurant dining', 'Social activities', 'Housekeeping', 'Transportation', 'Fitness programs'],
+    description: 'Maintenance-free living for active seniors with dining and amenities.',
+    includes: ['Private apartment', 'Restaurant dining', 'Social activities', 'Housekeeping'],
+    highlight: false,
   },
 ];
 
-// Home care vs community comparison
+// Home vs Community comparison
 const HOME_VS_COMMUNITY = [
   { item: 'Housing/Rent', home: '$1,500 - $2,500', community: 'Included' },
   { item: 'Utilities', home: '$200 - $400', community: 'Included' },
@@ -543,15 +792,56 @@ const HOME_VS_COMMUNITY = [
   { item: 'ESTIMATED TOTAL', home: '$4,500 - $7,600', community: '$3,200 - $6,500' },
 ];
 
-// Main PDF Component
+// QR Code placeholder
+function QRCodePlaceholder() {
+  return (
+    <View style={styles.leadMagnetQR}>
+      <Svg width="42" height="42" viewBox="0 0 42 42">
+        <Rect x="0" y="0" width="14" height="14" fill={COLORS.teal} />
+        <Rect x="28" y="0" width="14" height="14" fill={COLORS.teal} />
+        <Rect x="0" y="28" width="14" height="14" fill={COLORS.teal} />
+        <Rect x="4" y="4" width="6" height="6" fill={COLORS.white} />
+        <Rect x="32" y="4" width="6" height="6" fill={COLORS.white} />
+        <Rect x="4" y="32" width="6" height="6" fill={COLORS.white} />
+        <Rect x="18" y="4" width="6" height="6" fill={COLORS.teal} />
+        <Rect x="18" y="18" width="6" height="6" fill={COLORS.teal} />
+        <Rect x="4" y="18" width="6" height="6" fill={COLORS.teal} />
+        <Rect x="32" y="18" width="6" height="6" fill={COLORS.teal} />
+        <Rect x="18" y="32" width="6" height="6" fill={COLORS.teal} />
+        <Rect x="32" y="32" width="6" height="6" fill={COLORS.teal} />
+      </Svg>
+    </View>
+  );
+}
+
+// ============================================================================
+// TYPES
+// ============================================================================
+
+interface PricingGuidePDFProps {
+  recipientName: string;
+  email: string;
+  generatedDate?: string;
+}
+
+// ============================================================================
+// MAIN COMPONENT
+// ============================================================================
+
 export function PricingGuidePDF({
   recipientName,
   email,
   generatedDate = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
 }: PricingGuidePDFProps) {
+  // Sanitize inputs
+  const cleanName = sanitizeText(recipientName) || 'Valued Family';
+  const cleanDate = sanitizeText(generatedDate);
+
   return (
     <Document>
-      {/* Page 1: Cover */}
+      {/* ================================================================== */}
+      {/* PAGE 1: COVER */}
+      {/* ================================================================== */}
       <Page size="LETTER" style={styles.coverPage}>
         <View style={styles.coverContent}>
           <View style={styles.coverBadge}>
@@ -568,56 +858,73 @@ export function PricingGuidePDF({
             and Independent Living across 20+ Cleveland neighborhoods
           </Text>
           
-          <Text style={styles.coverPreparedFor}>Prepared For</Text>
-          <Text style={styles.coverName}>{recipientName}</Text>
+          <Text style={styles.coverPreparedFor}>PREPARED FOR</Text>
+          <Text style={styles.coverName}>{cleanName}</Text>
         </View>
         
         <View style={styles.coverFooter}>
           <Link src={PHONE_LINK} style={{ textDecoration: 'none' }}>
             <Text style={styles.coverPhone}>{PHONE_NUMBER}</Text>
           </Link>
-          <Text style={styles.coverDate}>Generated {generatedDate}</Text>
+          <Text style={styles.coverDate}>Generated {cleanDate}</Text>
         </View>
       </Page>
 
-      {/* Page 2: Executive Summary */}
+      {/* ================================================================== */}
+      {/* PAGE 2: EXECUTIVE SUMMARY WITH 3D STATS */}
+      {/* ================================================================== */}
       <Page size="LETTER" style={styles.page}>
         <View style={styles.header}>
           <Text style={styles.headerLogo}>Guide for Seniors</Text>
-          <Text style={styles.headerPage}>Page 2</Text>
+          <Text style={styles.headerPage}>Executive Summary</Text>
         </View>
 
-        <Text style={styles.pageTitle}>Executive Summary</Text>
-        
+        <Text style={styles.pageTitle}>2026 Cleveland Market Overview</Text>
+
+        {/* 3D Stat Boxes - High Impact Typography */}
+        <View style={styles.statRow}>
+          <View style={styles.statBox3D}>
+            <Text style={styles.statNumber3D}>$4,800</Text>
+            <Text style={styles.statLabel}>AVG. ASSISTED</Text>
+            <Text style={styles.statSubLabel}>LIVING / MONTH</Text>
+          </View>
+          <View style={styles.statBox3D}>
+            <Text style={styles.statNumber3D}>$6,200</Text>
+            <Text style={styles.statLabel}>AVG. MEMORY</Text>
+            <Text style={styles.statSubLabel}>CARE / MONTH</Text>
+          </View>
+          <View style={styles.statBox3D}>
+            <Text style={styles.statNumber3D}>$3,200</Text>
+            <Text style={styles.statLabel}>AVG. INDEPENDENT</Text>
+            <Text style={styles.statSubLabel}>LIVING / MONTH</Text>
+          </View>
+        </View>
+
+        {/* Key Findings */}
         <View style={styles.executiveSummary}>
           <Text style={styles.executiveTitle}>Key Findings for 2026</Text>
+          
           <View style={styles.keyFinding}>
             <View style={styles.keyFindingIcon}>
-              <Text style={styles.keyFindingCheck}>✓</Text>
+              <Text style={styles.keyFindingCheck}>&#10003;</Text>
             </View>
             <Text style={styles.keyFindingText}>
               Cleveland senior living costs are <Text style={{ fontWeight: 'bold' }}>5-15% below the national average</Text>, making it one of the most affordable metro areas for quality care.
             </Text>
           </View>
+          
           <View style={styles.keyFinding}>
             <View style={styles.keyFindingIcon}>
-              <Text style={styles.keyFindingCheck}>✓</Text>
+              <Text style={styles.keyFindingCheck}>&#10003;</Text>
             </View>
             <Text style={styles.keyFindingText}>
-              Average assisted living cost in Cleveland: <Text style={{ fontWeight: 'bold' }}>$4,800/month</Text> vs. national average of $5,350/month.
+              Prices vary by <Text style={{ fontWeight: 'bold' }}>up to 40%</Text> depending on neighborhood - Beachwood commands premium rates; Parma offers exceptional value.
             </Text>
           </View>
+          
           <View style={styles.keyFinding}>
             <View style={styles.keyFindingIcon}>
-              <Text style={styles.keyFindingCheck}>✓</Text>
-            </View>
-            <Text style={styles.keyFindingText}>
-              Prices vary by <Text style={{ fontWeight: 'bold' }}>up to 40%</Text> depending on neighborhood—Beachwood commands the highest rates; Parma offers the most value.
-            </Text>
-          </View>
-          <View style={styles.keyFinding}>
-            <View style={styles.keyFindingIcon}>
-              <Text style={styles.keyFindingCheck}>✓</Text>
+              <Text style={styles.keyFindingCheck}>&#10003;</Text>
             </View>
             <Text style={styles.keyFindingText}>
               All-inclusive senior living is often <Text style={{ fontWeight: 'bold' }}>more affordable than staying home</Text> when factoring in home care, meals, utilities, and maintenance.
@@ -625,63 +932,53 @@ export function PricingGuidePDF({
           </View>
         </View>
 
-        <View style={styles.statRow}>
-          <View style={styles.statBox}>
-            <Text style={styles.statNumber}>$4,800</Text>
-            <Text style={styles.statLabel}>AVG. ASSISTED{'\n'}LIVING/MONTH</Text>
-          </View>
-          <View style={styles.statBox}>
-            <Text style={styles.statNumber}>$6,200</Text>
-            <Text style={styles.statLabel}>AVG. MEMORY{'\n'}CARE/MONTH</Text>
-          </View>
-          <View style={styles.statBox}>
-            <Text style={styles.statNumber}>$3,200</Text>
-            <Text style={styles.statLabel}>AVG. INDEPENDENT{'\n'}LIVING/MONTH</Text>
-          </View>
-        </View>
-
         <Text style={styles.sectionTitle}>What's in This Report</Text>
-        <Text style={styles.paragraph}>
-          This comprehensive guide provides everything you need to understand and plan for senior living costs in Greater Cleveland:
-        </Text>
-        <View style={{ flexDirection: 'row', marginBottom: 4 }}>
-          <Text style={styles.bulletPoint}>•</Text>
-          <Text style={styles.bulletItem}>2026 pricing by care type (Memory Care, Assisted Living, Independent Living)</Text>
-        </View>
-        <View style={{ flexDirection: 'row', marginBottom: 4 }}>
-          <Text style={styles.bulletPoint}>•</Text>
-          <Text style={styles.bulletItem}>Neighborhood-by-neighborhood cost breakdown</Text>
-        </View>
-        <View style={{ flexDirection: 'row', marginBottom: 4 }}>
-          <Text style={styles.bulletPoint}>•</Text>
-          <Text style={styles.bulletItem}>Home care vs. community living comparison</Text>
-        </View>
-        <View style={{ flexDirection: 'row', marginBottom: 4 }}>
-          <Text style={styles.bulletPoint}>•</Text>
-          <Text style={styles.bulletItem}>Hidden costs checklist and what's NOT included</Text>
-        </View>
-        <View style={{ flexDirection: 'row', marginBottom: 4 }}>
-          <Text style={styles.bulletPoint}>•</Text>
-          <Text style={styles.bulletItem}>Financial assistance programs available in Ohio</Text>
-        </View>
-        <View style={{ flexDirection: 'row', marginBottom: 4 }}>
-          <Text style={styles.bulletPoint}>•</Text>
-          <Text style={styles.bulletItem}>Questions to ask communities about pricing</Text>
+        <View style={styles.twoColumn}>
+          <View style={styles.column}>
+            <View style={styles.bulletRow}>
+              <Text style={styles.bulletCheck}>&#10003;</Text>
+              <Text style={styles.bulletText}>2026 pricing by care type</Text>
+            </View>
+            <View style={styles.bulletRow}>
+              <Text style={styles.bulletCheck}>&#10003;</Text>
+              <Text style={styles.bulletText}>Neighborhood cost breakdown</Text>
+            </View>
+            <View style={styles.bulletRow}>
+              <Text style={styles.bulletCheck}>&#10003;</Text>
+              <Text style={styles.bulletText}>Home vs. community comparison</Text>
+            </View>
+          </View>
+          <View style={styles.column}>
+            <View style={styles.bulletRow}>
+              <Text style={styles.bulletCheck}>&#10003;</Text>
+              <Text style={styles.bulletText}>Hidden costs checklist</Text>
+            </View>
+            <View style={styles.bulletRow}>
+              <Text style={styles.bulletCheck}>&#10003;</Text>
+              <Text style={styles.bulletText}>Financial assistance programs</Text>
+            </View>
+            <View style={styles.bulletRow}>
+              <Text style={styles.bulletCheck}>&#10003;</Text>
+              <Text style={styles.bulletText}>Questions to ask communities</Text>
+            </View>
+          </View>
         </View>
 
         <View style={styles.footer}>
-          <Text style={styles.footerText}>© 2026 Guide for Seniors | www.guideforseniors.com</Text>
+          <Text style={styles.footerText}>{WEBSITE}</Text>
           <Link src={PHONE_LINK}>
             <Text style={styles.footerPhone}>{PHONE_NUMBER}</Text>
           </Link>
         </View>
       </Page>
 
-      {/* Page 3: Pricing by Care Type */}
+      {/* ================================================================== */}
+      {/* PAGE 3: CARE TYPE CARDS */}
+      {/* ================================================================== */}
       <Page size="LETTER" style={styles.page}>
         <View style={styles.header}>
           <Text style={styles.headerLogo}>Guide for Seniors</Text>
-          <Text style={styles.headerPage}>Page 3</Text>
+          <Text style={styles.headerPage}>Pricing by Care Type</Text>
         </View>
 
         <Text style={styles.pageTitle}>2026 Pricing by Care Type</Text>
@@ -689,304 +986,260 @@ export function PricingGuidePDF({
           Understanding the different levels of senior care helps you budget appropriately. Here's what each care type costs in Greater Cleveland:
         </Text>
 
-        {CARE_TYPES.map((care, index) => (
-          <View key={index} style={styles.pricingCard}>
-            <View style={styles.pricingCardHeader}>
-              <Text style={styles.pricingCardTitle}>{care.name}</Text>
-              <Text style={styles.pricingCardPrice}>{care.price}</Text>
+        {/* Side-by-Side Care Type Cards */}
+        <View style={styles.careCardsRow}>
+          {CARE_TYPES.map((care, index) => (
+            <View key={index} style={care.highlight ? styles.careCardHighlight : styles.careCard}>
+              <Text style={styles.careCardTitle}>{care.name}</Text>
+              <Text style={styles.careCardPrice}>{care.price}</Text>
+              <Text style={styles.careCardDesc}>{care.description}</Text>
+              {care.includes.map((item, i) => (
+                <Text key={i} style={styles.careCardBullet}>&#8226; {item}</Text>
+              ))}
             </View>
-            <View style={styles.pricingCardBody}>
-              <Text style={styles.pricingCardDesc}>{care.description}</Text>
-              <Text style={{ fontSize: 9, fontWeight: 'bold', color: '#334155', marginBottom: 4 }}>Typically Includes:</Text>
-              <View style={styles.twoColumn}>
-                <View style={styles.column}>
-                  {care.includes.slice(0, 3).map((item, i) => (
-                    <View key={i} style={{ flexDirection: 'row', marginBottom: 2 }}>
-                      <Text style={{ fontSize: 9, color: '#0f766e', marginRight: 4 }}>✓</Text>
-                      <Text style={{ fontSize: 9, color: '#475569' }}>{item}</Text>
-                    </View>
-                  ))}
-                </View>
-                <View style={styles.column}>
-                  {care.includes.slice(3, 6).map((item, i) => (
-                    <View key={i} style={{ flexDirection: 'row', marginBottom: 2 }}>
-                      <Text style={{ fontSize: 9, color: '#0f766e', marginRight: 4 }}>✓</Text>
-                      <Text style={{ fontSize: 9, color: '#475569' }}>{item}</Text>
-                    </View>
-                  ))}
-                </View>
-              </View>
-            </View>
-          </View>
-        ))}
+          ))}
+        </View>
 
+        {/* Level of Care Info */}
         <View style={styles.infoBox}>
-          <Text style={styles.infoTitle}>💡 Pro Tip: Level of Care Fees</Text>
+          <Text style={styles.infoTitle}>Understanding "Level of Care" Fees</Text>
           <Text style={styles.infoText}>
-            Most communities charge a "base rate" plus additional fees based on care needs. Someone requiring more help with bathing, dressing, or mobility may pay $500-$1,500 more per month. Always ask for a full care assessment before signing.
+            Base rates typically exclude Level of Care fees for medication management, incontinence care, and mobility assistance. These fees range from $500 to $1,500 per month depending on needs. Always request a detailed care assessment before signing.
+          </Text>
+        </View>
+
+        {/* Callout */}
+        <View style={styles.calloutBox}>
+          <Text style={styles.calloutTitle}>Northeast Ohio Advantage</Text>
+          <Text style={styles.calloutText}>
+            Local senior care is 5-15% more affordable than the national average. Cleveland families benefit from excellent quality at significantly lower costs compared to coastal cities.
           </Text>
         </View>
 
         <View style={styles.footer}>
-          <Text style={styles.footerText}>© 2026 Guide for Seniors | www.guideforseniors.com</Text>
+          <Text style={styles.footerText}>{WEBSITE}</Text>
           <Link src={PHONE_LINK}>
             <Text style={styles.footerPhone}>{PHONE_NUMBER}</Text>
           </Link>
         </View>
       </Page>
 
-      {/* Page 4: Pricing by Neighborhood */}
+      {/* ================================================================== */}
+      {/* PAGE 4: NEIGHBORHOOD HEATMAP + LEAD MAGNET */}
+      {/* ================================================================== */}
       <Page size="LETTER" style={styles.page}>
         <View style={styles.header}>
           <Text style={styles.headerLogo}>Guide for Seniors</Text>
-          <Text style={styles.headerPage}>Page 4</Text>
+          <Text style={styles.headerPage}>Neighborhood Pricing</Text>
         </View>
 
         <Text style={styles.pageTitle}>Pricing by Neighborhood</Text>
         <Text style={styles.paragraph}>
-          Location significantly impacts senior living costs. Upscale suburbs like Beachwood typically cost more than communities in Parma or Seven Hills. Here's the 2026 pricing breakdown:
+          Location significantly impacts costs. This heatmap shows 2026 pricing across Greater Cleveland, with "Best For" recommendations.
         </Text>
 
-        <View style={styles.pricingTable}>
-          <View style={styles.pricingHeader}>
-            <Text style={[styles.pricingHeaderCell, { width: '28%' }]}>Neighborhood</Text>
-            <Text style={[styles.pricingHeaderCell, { width: '24%' }]}>Assisted Living</Text>
-            <Text style={[styles.pricingHeaderCell, { width: '24%' }]}>Memory Care</Text>
-            <Text style={[styles.pricingHeaderCell, { width: '24%' }]}>Independent</Text>
+        {/* Heatmap Table */}
+        <View style={styles.heatmapTable}>
+          <View style={styles.heatmapHeader}>
+            <Text style={[styles.heatmapHeaderCell, { width: '32%' }]}>Neighborhood</Text>
+            <Text style={[styles.heatmapHeaderCell, { width: '22%' }]}>Assisted Living</Text>
+            <Text style={[styles.heatmapHeaderCell, { width: '22%' }]}>Memory Care</Text>
+            <Text style={[styles.heatmapHeaderCell, { width: '24%' }]}>Best For</Text>
           </View>
           {NEIGHBORHOOD_PRICING.map((row, index) => (
-            <View key={index} style={[styles.pricingRow, index % 2 === 1 ? styles.pricingRowAlt : {}]}>
-              <Text style={[styles.pricingCellBold, { width: '28%' }]}>{row.area}</Text>
-              <Text style={[styles.pricingCell, { width: '24%' }]}>{row.al}</Text>
-              <Text style={[styles.pricingCell, { width: '24%' }]}>{row.mc}</Text>
-              <Text style={[styles.pricingCell, { width: '24%' }]}>{row.il}</Text>
+            <View key={index} style={[styles.heatmapRow, { backgroundColor: row.color }]}>
+              <View style={{ width: '32%' }}>
+                <Text style={styles.heatmapCellBold}>{row.area}</Text>
+              </View>
+              <Text style={[styles.heatmapCell, { width: '22%' }]}>{row.al}</Text>
+              <Text style={[styles.heatmapCell, { width: '22%' }]}>{row.mc}</Text>
+              <View style={{ width: '24%' }}>
+                <Text style={styles.heatmapBestFor}>{row.bestFor}</Text>
+              </View>
             </View>
           ))}
         </View>
 
-        <Text style={styles.sectionTitle}>Why Prices Vary by Location</Text>
-        <View style={styles.twoColumn}>
-          <View style={styles.column}>
-            <Text style={styles.subsectionTitle}>Higher-Priced Areas</Text>
-            <View style={{ flexDirection: 'row', marginBottom: 3 }}>
-              <Text style={styles.bulletPoint}>•</Text>
-              <Text style={styles.bulletItem}>Newer, more upscale facilities</Text>
-            </View>
-            <View style={{ flexDirection: 'row', marginBottom: 3 }}>
-              <Text style={styles.bulletPoint}>•</Text>
-              <Text style={styles.bulletItem}>Premium amenities (pools, spas)</Text>
-            </View>
-            <View style={{ flexDirection: 'row', marginBottom: 3 }}>
-              <Text style={styles.bulletPoint}>•</Text>
-              <Text style={styles.bulletItem}>Higher real estate costs</Text>
-            </View>
-            <View style={{ flexDirection: 'row', marginBottom: 3 }}>
-              <Text style={styles.bulletPoint}>•</Text>
-              <Text style={styles.bulletItem}>More competitive wages</Text>
-            </View>
-          </View>
-          <View style={styles.column}>
-            <Text style={styles.subsectionTitle}>Value-Priced Areas</Text>
-            <View style={{ flexDirection: 'row', marginBottom: 3 }}>
-              <Text style={styles.bulletPoint}>•</Text>
-              <Text style={styles.bulletItem}>Often same quality of care</Text>
-            </View>
-            <View style={{ flexDirection: 'row', marginBottom: 3 }}>
-              <Text style={styles.bulletPoint}>•</Text>
-              <Text style={styles.bulletItem}>Established communities</Text>
-            </View>
-            <View style={{ flexDirection: 'row', marginBottom: 3 }}>
-              <Text style={styles.bulletPoint}>•</Text>
-              <Text style={styles.bulletItem}>More familiar surroundings</Text>
-            </View>
-            <View style={{ flexDirection: 'row', marginBottom: 3 }}>
-              <Text style={styles.bulletPoint}>•</Text>
-              <Text style={styles.bulletItem}>Lower cost of living</Text>
-            </View>
-          </View>
-        </View>
+        {/* Medical Anchor Footnote */}
+        <Text style={styles.footnote}>
+          Strategic Location: We prioritize communities within 5-10 miles of major medical hubs like St. John Medical Center, Cleveland Clinic, and University Hospitals for rapid response care and specialist access.
+        </Text>
 
-        <View style={styles.infoBox}>
-          <Text style={styles.infoTitle}>🎯 Our Recommendation</Text>
-          <Text style={styles.infoText}>
-            Don't choose solely based on price. The best value comes from finding a community that matches your specific care needs, preferred location, and budget. A slightly higher-priced community might include services that would cost extra elsewhere.
-          </Text>
+        {/* Lead Magnet Box */}
+        <View style={styles.leadMagnetBox}>
+          <View style={styles.leadMagnetContent}>
+            <Text style={styles.leadMagnetTitle}>Looking for a specific layout?</Text>
+            <Text style={styles.leadMagnetText}>
+              Scan to view 1-Bedroom and Studio floor plans available in Greater Cleveland communities.
+            </Text>
+          </View>
+          <QRCodePlaceholder />
         </View>
 
         <View style={styles.footer}>
-          <Text style={styles.footerText}>© 2026 Guide for Seniors | www.guideforseniors.com</Text>
+          <Text style={styles.footerText}>{WEBSITE}</Text>
           <Link src={PHONE_LINK}>
             <Text style={styles.footerPhone}>{PHONE_NUMBER}</Text>
           </Link>
         </View>
       </Page>
 
-      {/* Page 5: Home Care vs Community Comparison */}
+      {/* ================================================================== */}
+      {/* PAGE 5: HOME VS COMMUNITY + CAREGIVER BURNOUT */}
+      {/* ================================================================== */}
       <Page size="LETTER" style={styles.page}>
         <View style={styles.header}>
           <Text style={styles.headerLogo}>Guide for Seniors</Text>
-          <Text style={styles.headerPage}>Page 5</Text>
+          <Text style={styles.headerPage}>Cost Comparison</Text>
         </View>
 
         <Text style={styles.pageTitle}>Home Care vs. Community Living</Text>
         <Text style={styles.paragraph}>
-          Many families assume staying home with hired caregivers is more affordable than senior living communities. The reality often surprises them. Here's a true cost comparison:
+          Many families assume staying home is more affordable. The reality often surprises them:
         </Text>
 
+        {/* Comparison Table */}
         <View style={styles.comparisonBox}>
           <Text style={styles.comparisonTitle}>Monthly Cost Comparison</Text>
-          <View style={[styles.comparisonRow, { borderBottomWidth: 2, borderBottomColor: '#f59e0b' }]}>
+          <View style={[styles.comparisonRow, { borderBottomWidth: 2, paddingBottom: 8, marginBottom: 8 }]}>
             <Text style={[styles.comparisonLabel, { fontWeight: 'bold' }]}>EXPENSE</Text>
             <Text style={[styles.comparisonValue, { fontWeight: 'bold' }]}>AT HOME</Text>
-            <Text style={[styles.comparisonValue, { fontWeight: 'bold' }]}>COMMUNITY</Text>
+            <Text style={[styles.comparisonValue, { fontWeight: 'bold', color: COLORS.teal }]}>COMMUNITY</Text>
           </View>
           {HOME_VS_COMMUNITY.map((row, index) => (
-            <View key={index} style={[styles.comparisonRow, index === HOME_VS_COMMUNITY.length - 1 ? { borderBottomWidth: 0, backgroundColor: '#fef3c7', marginHorizontal: -16, paddingHorizontal: 16, marginBottom: -6, paddingBottom: 10, marginTop: 6, paddingTop: 10, borderRadius: 4 } : {}]}>
-              <Text style={[styles.comparisonLabel, index === HOME_VS_COMMUNITY.length - 1 ? { fontWeight: 'bold' } : {}]}>{row.item}</Text>
+            <View key={index} style={[
+              styles.comparisonRow, 
+              index === HOME_VS_COMMUNITY.length - 1 ? { 
+                backgroundColor: COLORS.tealPale, 
+                marginHorizontal: -16, 
+                paddingHorizontal: 16,
+                marginBottom: 0,
+                paddingTop: 8,
+                paddingBottom: 8,
+                borderRadius: 4,
+                borderBottomWidth: 0,
+              } : {}
+            ]}>
+              <Text style={[styles.comparisonLabel, index === HOME_VS_COMMUNITY.length - 1 ? { fontWeight: 'bold' } : {}]}>
+                {row.item}
+              </Text>
               <Text style={styles.comparisonValue}>{row.home}</Text>
-              <Text style={[styles.comparisonValue, { color: '#0f766e' }]}>{row.community}</Text>
+              <Text style={[styles.comparisonValue, { color: COLORS.teal }]}>{row.community}</Text>
             </View>
           ))}
+        </View>
+
+        {/* Caregiver Burnout Section */}
+        <View style={styles.burnoutBox}>
+          <Text style={styles.burnoutTitle}>The Unseen Cost: Family Caregiver Burnout</Text>
+          <Text style={styles.burnoutText}>
+            Unpaid family caregiving often results in $2,000+ in monthly lost productivity, missed work, and personal health impacts. Studies show 40% of family caregivers experience depression. Moving to a community can restore family relationships and improve outcomes for everyone.
+          </Text>
         </View>
 
         <Text style={styles.sectionTitle}>Hidden Costs of Staying Home</Text>
         <View style={styles.twoColumn}>
           <View style={styles.column}>
-            <View style={{ flexDirection: 'row', marginBottom: 4 }}>
-              <Text style={styles.bulletPoint}>•</Text>
-              <Text style={styles.bulletItem}>Home modifications (ramps, grab bars, stair lifts)</Text>
+            <View style={styles.bulletRow}>
+              <Text style={styles.bulletCheck}>&#8226;</Text>
+              <Text style={styles.bulletText}>Home modifications (ramps, grab bars)</Text>
             </View>
-            <View style={{ flexDirection: 'row', marginBottom: 4 }}>
-              <Text style={styles.bulletPoint}>•</Text>
-              <Text style={styles.bulletItem}>Emergency response systems</Text>
+            <View style={styles.bulletRow}>
+              <Text style={styles.bulletCheck}>&#8226;</Text>
+              <Text style={styles.bulletText}>Emergency response systems</Text>
             </View>
-            <View style={{ flexDirection: 'row', marginBottom: 4 }}>
-              <Text style={styles.bulletPoint}>•</Text>
-              <Text style={styles.bulletItem}>Backup caregivers for time off</Text>
-            </View>
-          </View>
-          <View style={styles.column}>
-            <View style={{ flexDirection: 'row', marginBottom: 4 }}>
-              <Text style={styles.bulletPoint}>•</Text>
-              <Text style={styles.bulletItem}>Social isolation and loneliness</Text>
-            </View>
-            <View style={{ flexDirection: 'row', marginBottom: 4 }}>
-              <Text style={styles.bulletPoint}>•</Text>
-              <Text style={styles.bulletItem}>Family caregiver burnout</Text>
-            </View>
-            <View style={{ flexDirection: 'row', marginBottom: 4 }}>
-              <Text style={styles.bulletPoint}>•</Text>
-              <Text style={styles.bulletItem}>Lack of 24/7 supervision</Text>
-            </View>
-          </View>
-        </View>
-
-        <Text style={styles.sectionTitle}>Benefits of Community Living</Text>
-        <View style={styles.twoColumn}>
-          <View style={styles.column}>
-            <View style={{ flexDirection: 'row', marginBottom: 4 }}>
-              <Text style={{ fontSize: 9, color: '#0f766e', marginRight: 4 }}>✓</Text>
-              <Text style={styles.bulletItem}>24/7 staff availability</Text>
-            </View>
-            <View style={{ flexDirection: 'row', marginBottom: 4 }}>
-              <Text style={{ fontSize: 9, color: '#0f766e', marginRight: 4 }}>✓</Text>
-              <Text style={styles.bulletItem}>Nutritious meals prepared daily</Text>
-            </View>
-            <View style={{ flexDirection: 'row', marginBottom: 4 }}>
-              <Text style={{ fontSize: 9, color: '#0f766e', marginRight: 4 }}>✓</Text>
-              <Text style={styles.bulletItem}>Social activities and companionship</Text>
-            </View>
-            <View style={{ flexDirection: 'row', marginBottom: 4 }}>
-              <Text style={{ fontSize: 9, color: '#0f766e', marginRight: 4 }}>✓</Text>
-              <Text style={styles.bulletItem}>Transportation included</Text>
+            <View style={styles.bulletRow}>
+              <Text style={styles.bulletCheck}>&#8226;</Text>
+              <Text style={styles.bulletText}>Backup caregivers for time off</Text>
             </View>
           </View>
           <View style={styles.column}>
-            <View style={{ flexDirection: 'row', marginBottom: 4 }}>
-              <Text style={{ fontSize: 9, color: '#0f766e', marginRight: 4 }}>✓</Text>
-              <Text style={styles.bulletItem}>No home maintenance worries</Text>
+            <View style={styles.bulletRow}>
+              <Text style={styles.bulletCheck}>&#8226;</Text>
+              <Text style={styles.bulletText}>Social isolation and loneliness</Text>
             </View>
-            <View style={{ flexDirection: 'row', marginBottom: 4 }}>
-              <Text style={{ fontSize: 9, color: '#0f766e', marginRight: 4 }}>✓</Text>
-              <Text style={styles.bulletItem}>Emergency response on-site</Text>
+            <View style={styles.bulletRow}>
+              <Text style={styles.bulletCheck}>&#8226;</Text>
+              <Text style={styles.bulletText}>Family caregiver burnout</Text>
             </View>
-            <View style={{ flexDirection: 'row', marginBottom: 4 }}>
-              <Text style={{ fontSize: 9, color: '#0f766e', marginRight: 4 }}>✓</Text>
-              <Text style={styles.bulletItem}>Peace of mind for family</Text>
-            </View>
-            <View style={{ flexDirection: 'row', marginBottom: 4 }}>
-              <Text style={{ fontSize: 9, color: '#0f766e', marginRight: 4 }}>✓</Text>
-              <Text style={styles.bulletItem}>Predictable monthly costs</Text>
+            <View style={styles.bulletRow}>
+              <Text style={styles.bulletCheck}>&#8226;</Text>
+              <Text style={styles.bulletText}>Lack of 24/7 supervision</Text>
             </View>
           </View>
         </View>
 
         <View style={styles.footer}>
-          <Text style={styles.footerText}>© 2026 Guide for Seniors | www.guideforseniors.com</Text>
+          <Text style={styles.footerText}>{WEBSITE}</Text>
           <Link src={PHONE_LINK}>
             <Text style={styles.footerPhone}>{PHONE_NUMBER}</Text>
           </Link>
         </View>
       </Page>
 
-      {/* Page 6: Hidden Costs & What's NOT Included */}
+      {/* ================================================================== */}
+      {/* PAGE 6: HIDDEN COSTS + EXPERT TIP */}
+      {/* ================================================================== */}
       <Page size="LETTER" style={styles.page}>
         <View style={styles.header}>
           <Text style={styles.headerLogo}>Guide for Seniors</Text>
-          <Text style={styles.headerPage}>Page 6</Text>
+          <Text style={styles.headerPage}>Hidden Costs</Text>
         </View>
 
         <Text style={styles.pageTitle}>Hidden Costs Checklist</Text>
         <Text style={styles.paragraph}>
-          Before signing a contract, make sure you understand ALL the costs. Here's what to ask about:
+          Before signing a contract, understand ALL the costs. Use this checklist:
         </Text>
 
-        <View style={styles.warningBox}>
-          <Text style={styles.warningTitle}>⚠️ Costs NOT Typically Included in Base Rate</Text>
-          <View style={styles.twoColumn}>
-            <View style={styles.column}>
-              <View style={styles.checklistItem}>
-                <View style={styles.checklistBox} />
-                <Text style={styles.checklistText}>Level of care increases ($500-$1,500+/mo)</Text>
-              </View>
-              <View style={styles.checklistItem}>
-                <View style={styles.checklistBox} />
-                <Text style={styles.checklistText}>Medication management fees</Text>
-              </View>
-              <View style={styles.checklistItem}>
-                <View style={styles.checklistBox} />
-                <Text style={styles.checklistText}>Incontinence supplies</Text>
-              </View>
-              <View style={styles.checklistItem}>
-                <View style={styles.checklistBox} />
-                <Text style={styles.checklistText}>Beauty/barber services</Text>
-              </View>
-              <View style={styles.checklistItem}>
-                <View style={styles.checklistBox} />
-                <Text style={styles.checklistText}>Cable TV and phone</Text>
-              </View>
+        {/* Expert Tip - Red Flag Box */}
+        <View style={styles.expertTipBox} wrap={false}>
+          <View style={styles.expertTipHeader}>
+            <View style={styles.expertTipIcon}>
+              <Text style={styles.expertTipIconText}>!</Text>
             </View>
-            <View style={styles.column}>
-              <View style={styles.checklistItem}>
-                <View style={styles.checklistBox} />
-                <Text style={styles.checklistText}>Guest meals ($8-$15 each)</Text>
-              </View>
-              <View style={styles.checklistItem}>
-                <View style={styles.checklistBox} />
-                <Text style={styles.checklistText}>Physical/occupational therapy</Text>
-              </View>
-              <View style={styles.checklistItem}>
-                <View style={styles.checklistBox} />
-                <Text style={styles.checklistText}>Private transportation</Text>
-              </View>
-              <View style={styles.checklistItem}>
-                <View style={styles.checklistBox} />
-                <Text style={styles.checklistText}>Pet deposits/fees</Text>
-              </View>
-              <View style={styles.checklistItem}>
-                <View style={styles.checklistBox} />
-                <Text style={styles.checklistText}>Second occupant fees</Text>
-              </View>
+            <Text style={styles.expertTipTitle}>Expert Tip: Contract Red Flag</Text>
+          </View>
+          <Text style={styles.expertTipText}>
+            <Text style={{ fontWeight: 'bold' }}>Wait! Before you sign</Text>, ask about the "30-day notice" policy. Some Cleveland communities require 60 days, which can cost you thousands in overlapping rent if you need to move quickly. Get the notice period in writing.
+          </Text>
+        </View>
+
+        <Text style={styles.sectionTitle}>Costs NOT in Base Rate</Text>
+        <View style={styles.twoColumn}>
+          <View style={styles.column}>
+            <View style={styles.checklistItem}>
+              <View style={styles.checklistBox} />
+              <Text style={styles.checklistText}>Level of care increases ($500-$1,500+/mo)</Text>
+            </View>
+            <View style={styles.checklistItem}>
+              <View style={styles.checklistBox} />
+              <Text style={styles.checklistText}>Medication management fees</Text>
+            </View>
+            <View style={styles.checklistItem}>
+              <View style={styles.checklistBox} />
+              <Text style={styles.checklistText}>Incontinence supplies</Text>
+            </View>
+            <View style={styles.checklistItem}>
+              <View style={styles.checklistBox} />
+              <Text style={styles.checklistText}>Beauty/barber services</Text>
+            </View>
+          </View>
+          <View style={styles.column}>
+            <View style={styles.checklistItem}>
+              <View style={styles.checklistBox} />
+              <Text style={styles.checklistText}>Guest meals ($8-$15 each)</Text>
+            </View>
+            <View style={styles.checklistItem}>
+              <View style={styles.checklistBox} />
+              <Text style={styles.checklistText}>Physical/occupational therapy</Text>
+            </View>
+            <View style={styles.checklistItem}>
+              <View style={styles.checklistBox} />
+              <Text style={styles.checklistText}>Cable TV and phone</Text>
+            </View>
+            <View style={styles.checklistItem}>
+              <View style={styles.checklistBox} />
+              <Text style={styles.checklistText}>Pet deposits/fees</Text>
             </View>
           </View>
         </View>
@@ -1015,14 +1268,10 @@ export function PricingGuidePDF({
           </View>
         </View>
 
-        <Text style={styles.sectionTitle}>Questions to Ask About Pricing</Text>
+        <Text style={styles.sectionTitle}>Questions to Ask</Text>
         <View style={styles.checklistItem}>
           <View style={styles.checklistBox} />
           <Text style={styles.checklistText}>"What is included in the base monthly rate?"</Text>
-        </View>
-        <View style={styles.checklistItem}>
-          <View style={styles.checklistBox} />
-          <Text style={styles.checklistText}>"How are care level increases determined and priced?"</Text>
         </View>
         <View style={styles.checklistItem}>
           <View style={styles.checklistBox} />
@@ -1030,125 +1279,82 @@ export function PricingGuidePDF({
         </View>
         <View style={styles.checklistItem}>
           <View style={styles.checklistBox} />
-          <Text style={styles.checklistText}>"Is there a community fee? Is any portion refundable?"</Text>
-        </View>
-        <View style={styles.checklistItem}>
-          <View style={styles.checklistBox} />
-          <Text style={styles.checklistText}>"What is your notice period and refund policy?"</Text>
-        </View>
-        <View style={styles.checklistItem}>
-          <View style={styles.checklistBox} />
           <Text style={styles.checklistText}>"Do you accept Medicaid waiver? If so, after how long?"</Text>
-        </View>
-        <View style={styles.checklistItem}>
-          <View style={styles.checklistBox} />
-          <Text style={styles.checklistText}>"Can you provide a complete fee schedule in writing?"</Text>
-        </View>
-
-        <View style={styles.infoBox}>
-          <Text style={styles.infoTitle}>💡 Request Everything in Writing</Text>
-          <Text style={styles.infoText}>
-            Before signing any contract, request a complete written breakdown of all fees, including the base rate, care level pricing, and any additional charges. Compare apples-to-apples across communities.
-          </Text>
         </View>
 
         <View style={styles.footer}>
-          <Text style={styles.footerText}>© 2026 Guide for Seniors | www.guideforseniors.com</Text>
+          <Text style={styles.footerText}>{WEBSITE}</Text>
           <Link src={PHONE_LINK}>
             <Text style={styles.footerPhone}>{PHONE_NUMBER}</Text>
           </Link>
         </View>
       </Page>
 
-      {/* Page 7: Financial Assistance */}
+      {/* ================================================================== */}
+      {/* PAGE 7: FINANCIAL ASSISTANCE */}
+      {/* ================================================================== */}
       <Page size="LETTER" style={styles.page}>
         <View style={styles.header}>
           <Text style={styles.headerLogo}>Guide for Seniors</Text>
-          <Text style={styles.headerPage}>Page 7</Text>
+          <Text style={styles.headerPage}>Financial Assistance</Text>
         </View>
 
         <Text style={styles.pageTitle}>Financial Assistance Programs</Text>
         <Text style={styles.paragraph}>
-          Several programs can help Ohio families afford senior living. Here are the most common options:
+          Several programs can help Ohio families afford senior living:
         </Text>
 
-        <Text style={styles.sectionTitle}>Veterans Benefits</Text>
-        <View style={styles.pricingCard}>
-          <View style={styles.pricingCardHeader}>
-            <Text style={styles.pricingCardTitle}>VA Aid & Attendance</Text>
-            <Text style={styles.pricingCardPrice}>Up to $2,727/mo</Text>
-          </View>
-          <View style={styles.pricingCardBody}>
-            <Text style={styles.pricingCardDesc}>
-              Tax-free benefit for veterans and surviving spouses who need help with daily activities. Can be used for assisted living, memory care, or in-home care.
+        <View style={styles.careCardsRow}>
+          <View style={styles.careCardHighlight}>
+            <Text style={styles.careCardTitle}>VA Aid & Attendance</Text>
+            <Text style={styles.careCardPrice}>Up to $2,727/mo</Text>
+            <Text style={styles.careCardDesc}>
+              Tax-free benefit for veterans and surviving spouses who need help with daily activities.
             </Text>
-            <Text style={{ fontSize: 9, fontWeight: 'bold', color: '#334155', marginTop: 4 }}>
-              2026 Maximum Monthly Benefits:
+            <Text style={styles.careCardBullet}>&#8226; Single veteran: $2,295</Text>
+            <Text style={styles.careCardBullet}>&#8226; Veteran w/ spouse: $2,727</Text>
+            <Text style={styles.careCardBullet}>&#8226; Surviving spouse: $1,478</Text>
+          </View>
+          <View style={styles.careCard}>
+            <Text style={styles.careCardTitle}>Ohio Medicaid Waivers</Text>
+            <Text style={styles.careCardPrice}>Income-Based</Text>
+            <Text style={styles.careCardDesc}>
+              PASSPORT and Assisted Living Waiver programs for qualifying Ohio seniors.
             </Text>
-            <View style={{ flexDirection: 'row', marginTop: 4 }}>
-              <Text style={{ fontSize: 9, color: '#475569', width: '50%' }}>• Veteran with spouse: $2,727</Text>
-              <Text style={{ fontSize: 9, color: '#475569', width: '50%' }}>• Single veteran: $2,295</Text>
-            </View>
-            <View style={{ flexDirection: 'row', marginTop: 2 }}>
-              <Text style={{ fontSize: 9, color: '#475569', width: '50%' }}>• Surviving spouse: $1,478</Text>
-              <Text style={{ fontSize: 9, color: '#475569', width: '50%' }}>• Veteran couple: $2,727</Text>
-            </View>
-          </View>
-        </View>
-
-        <Text style={styles.sectionTitle}>Ohio Medicaid Programs</Text>
-        <View style={styles.pricingCard}>
-          <View style={styles.pricingCardHeader}>
-            <Text style={styles.pricingCardTitle}>PASSPORT Waiver Program</Text>
-            <Text style={styles.pricingCardPrice}>Income-Based</Text>
-          </View>
-          <View style={styles.pricingCardBody}>
-            <Text style={styles.pricingCardDesc}>
-              Ohio's home and community-based waiver that helps seniors pay for assisted living, home care, and adult day services. Available to those who meet nursing home level of care requirements.
-            </Text>
-          </View>
-        </View>
-
-        <View style={styles.pricingCard}>
-          <View style={styles.pricingCardHeader}>
-            <Text style={styles.pricingCardTitle}>Assisted Living Waiver</Text>
-            <Text style={styles.pricingCardPrice}>Income-Based</Text>
-          </View>
-          <View style={styles.pricingCardBody}>
-            <Text style={styles.pricingCardDesc}>
-              Covers room, board, and personal care in participating assisted living communities. Resident pays a portion based on income; Medicaid covers the rest.
-            </Text>
+            <Text style={styles.careCardBullet}>&#8226; PASSPORT Waiver</Text>
+            <Text style={styles.careCardBullet}>&#8226; Assisted Living Waiver</Text>
+            <Text style={styles.careCardBullet}>&#8226; Must meet care criteria</Text>
           </View>
         </View>
 
         <Text style={styles.sectionTitle}>Private Pay Options</Text>
         <View style={styles.twoColumn}>
           <View style={styles.column}>
-            <View style={{ flexDirection: 'row', marginBottom: 4 }}>
-              <Text style={styles.bulletPoint}>•</Text>
-              <Text style={styles.bulletItem}>Retirement savings (401k, IRA)</Text>
+            <View style={styles.bulletRow}>
+              <Text style={styles.bulletCheck}>&#10003;</Text>
+              <Text style={styles.bulletText}>Retirement savings (401k, IRA)</Text>
             </View>
-            <View style={{ flexDirection: 'row', marginBottom: 4 }}>
-              <Text style={styles.bulletPoint}>•</Text>
-              <Text style={styles.bulletItem}>Long-term care insurance</Text>
+            <View style={styles.bulletRow}>
+              <Text style={styles.bulletCheck}>&#10003;</Text>
+              <Text style={styles.bulletText}>Long-term care insurance</Text>
             </View>
-            <View style={{ flexDirection: 'row', marginBottom: 4 }}>
-              <Text style={styles.bulletPoint}>•</Text>
-              <Text style={styles.bulletItem}>Life insurance conversion</Text>
+            <View style={styles.bulletRow}>
+              <Text style={styles.bulletCheck}>&#10003;</Text>
+              <Text style={styles.bulletText}>Life insurance conversion</Text>
             </View>
           </View>
           <View style={styles.column}>
-            <View style={{ flexDirection: 'row', marginBottom: 4 }}>
-              <Text style={styles.bulletPoint}>•</Text>
-              <Text style={styles.bulletItem}>Home equity (sale or HELOC)</Text>
+            <View style={styles.bulletRow}>
+              <Text style={styles.bulletCheck}>&#10003;</Text>
+              <Text style={styles.bulletText}>Home equity (sale or HELOC)</Text>
             </View>
-            <View style={{ flexDirection: 'row', marginBottom: 4 }}>
-              <Text style={styles.bulletPoint}>•</Text>
-              <Text style={styles.bulletItem}>Reverse mortgage</Text>
+            <View style={styles.bulletRow}>
+              <Text style={styles.bulletCheck}>&#10003;</Text>
+              <Text style={styles.bulletText}>Reverse mortgage</Text>
             </View>
-            <View style={{ flexDirection: 'row', marginBottom: 4 }}>
-              <Text style={styles.bulletPoint}>•</Text>
-              <Text style={styles.bulletItem}>Family contributions</Text>
+            <View style={styles.bulletRow}>
+              <Text style={styles.bulletCheck}>&#10003;</Text>
+              <Text style={styles.bulletText}>Family contributions</Text>
             </View>
           </View>
         </View>
@@ -1165,87 +1371,86 @@ export function PricingGuidePDF({
         </View>
 
         <View style={styles.footer}>
-          <Text style={styles.footerText}>© 2026 Guide for Seniors | www.guideforseniors.com</Text>
+          <Text style={styles.footerText}>{WEBSITE}</Text>
           <Link src={PHONE_LINK}>
             <Text style={styles.footerPhone}>{PHONE_NUMBER}</Text>
           </Link>
         </View>
       </Page>
 
-      {/* Page 8: Next Steps */}
+      {/* ================================================================== */}
+      {/* PAGE 8: NEXT STEPS + CTA */}
+      {/* ================================================================== */}
       <Page size="LETTER" style={styles.page}>
         <View style={styles.header}>
           <Text style={styles.headerLogo}>Guide for Seniors</Text>
-          <Text style={styles.headerPage}>Page 8</Text>
+          <Text style={styles.headerPage}>Next Steps</Text>
         </View>
 
         <Text style={styles.pageTitle}>Your Next Steps</Text>
-        <Text style={styles.paragraph}>
-          Now that you understand Cleveland senior living costs, here's how to move forward with confidence:
-        </Text>
 
         <View style={styles.executiveSummary}>
           <Text style={styles.executiveTitle}>Recommended Action Plan</Text>
           <View style={styles.checklistItem}>
-            <Text style={{ fontSize: 14, fontWeight: 'bold', color: '#0f766e', marginRight: 10 }}>1</Text>
+            <Text style={{ fontSize: 14, fontWeight: 'bold', color: COLORS.teal, marginRight: 10 }}>1</Text>
             <Text style={[styles.checklistText, { fontSize: 11 }]}>
-              <Text style={{ fontWeight: 'bold' }}>Assess your budget</Text> - Review this guide's pricing data against your financial resources
+              <Text style={{ fontWeight: 'bold' }}>Assess your budget</Text> - Review this guide's pricing against your financial resources
             </Text>
           </View>
           <View style={styles.checklistItem}>
-            <Text style={{ fontSize: 14, fontWeight: 'bold', color: '#0f766e', marginRight: 10 }}>2</Text>
+            <Text style={{ fontSize: 14, fontWeight: 'bold', color: COLORS.teal, marginRight: 10 }}>2</Text>
             <Text style={[styles.checklistText, { fontSize: 11 }]}>
-              <Text style={{ fontWeight: 'bold' }}>Identify care needs</Text> - Consider taking our free online assessment at guideforseniors.com/assessment
+              <Text style={{ fontWeight: 'bold' }}>Identify care needs</Text> - Take our free assessment at guideforseniors.com/assessment
             </Text>
           </View>
           <View style={styles.checklistItem}>
-            <Text style={{ fontSize: 14, fontWeight: 'bold', color: '#0f766e', marginRight: 10 }}>3</Text>
+            <Text style={{ fontSize: 14, fontWeight: 'bold', color: COLORS.teal, marginRight: 10 }}>3</Text>
             <Text style={[styles.checklistText, { fontSize: 11 }]}>
-              <Text style={{ fontWeight: 'bold' }}>Explore financial options</Text> - Check eligibility for VA benefits or Ohio Medicaid programs
+              <Text style={{ fontWeight: 'bold' }}>Explore financial options</Text> - Check VA benefits and Ohio Medicaid eligibility
             </Text>
           </View>
           <View style={styles.checklistItem}>
-            <Text style={{ fontSize: 14, fontWeight: 'bold', color: '#0f766e', marginRight: 10 }}>4</Text>
+            <Text style={{ fontSize: 14, fontWeight: 'bold', color: COLORS.teal, marginRight: 10 }}>4</Text>
             <Text style={[styles.checklistText, { fontSize: 11 }]}>
-              <Text style={{ fontWeight: 'bold' }}>Schedule tours</Text> - Visit 3-5 communities that fit your budget and location preferences
+              <Text style={{ fontWeight: 'bold' }}>Schedule tours</Text> - Visit 3-5 communities that fit your needs
             </Text>
           </View>
           <View style={styles.checklistItem}>
-            <Text style={{ fontSize: 14, fontWeight: 'bold', color: '#0f766e', marginRight: 10 }}>5</Text>
+            <Text style={{ fontSize: 14, fontWeight: 'bold', color: COLORS.teal, marginRight: 10 }}>5</Text>
             <Text style={[styles.checklistText, { fontSize: 11 }]}>
-              <Text style={{ fontWeight: 'bold' }}>Call Guide for Seniors</Text> - Get free, personalized recommendations from a local expert
+              <Text style={{ fontWeight: 'bold' }}>Call Guide for Seniors</Text> - Get free, personalized recommendations
             </Text>
           </View>
         </View>
 
-        <Text style={styles.sectionTitle}>Why Work with Guide for Seniors?</Text>
+        <Text style={styles.sectionTitle}>Why Work with Us?</Text>
         <View style={styles.twoColumn}>
           <View style={styles.column}>
-            <View style={{ flexDirection: 'row', marginBottom: 6 }}>
-              <Text style={{ fontSize: 10, color: '#0f766e', marginRight: 6 }}>✓</Text>
-              <Text style={styles.bulletItem}><Text style={{ fontWeight: 'bold' }}>100% Free</Text> - Our services cost you nothing</Text>
+            <View style={styles.bulletRow}>
+              <Text style={styles.bulletCheck}>&#10003;</Text>
+              <Text style={styles.bulletText}><Text style={{ fontWeight: 'bold' }}>100% Free</Text> - No cost to you</Text>
             </View>
-            <View style={{ flexDirection: 'row', marginBottom: 6 }}>
-              <Text style={{ fontSize: 10, color: '#0f766e', marginRight: 6 }}>✓</Text>
-              <Text style={styles.bulletItem}><Text style={{ fontWeight: 'bold' }}>Local Experts</Text> - We know Cleveland communities personally</Text>
+            <View style={styles.bulletRow}>
+              <Text style={styles.bulletCheck}>&#10003;</Text>
+              <Text style={styles.bulletText}><Text style={{ fontWeight: 'bold' }}>Local Experts</Text> - We know Cleveland</Text>
             </View>
-            <View style={{ flexDirection: 'row', marginBottom: 6 }}>
-              <Text style={{ fontSize: 10, color: '#0f766e', marginRight: 6 }}>✓</Text>
-              <Text style={styles.bulletItem}><Text style={{ fontWeight: 'bold' }}>Unbiased</Text> - We recommend what's best for you</Text>
+            <View style={styles.bulletRow}>
+              <Text style={styles.bulletCheck}>&#10003;</Text>
+              <Text style={styles.bulletText}><Text style={{ fontWeight: 'bold' }}>Unbiased</Text> - Your best interest first</Text>
             </View>
           </View>
           <View style={styles.column}>
-            <View style={{ flexDirection: 'row', marginBottom: 6 }}>
-              <Text style={{ fontSize: 10, color: '#0f766e', marginRight: 6 }}>✓</Text>
-              <Text style={styles.bulletItem}><Text style={{ fontWeight: 'bold' }}>Tour Scheduling</Text> - We handle all the logistics</Text>
+            <View style={styles.bulletRow}>
+              <Text style={styles.bulletCheck}>&#10003;</Text>
+              <Text style={styles.bulletText}><Text style={{ fontWeight: 'bold' }}>Tour Scheduling</Text> - We handle logistics</Text>
             </View>
-            <View style={{ flexDirection: 'row', marginBottom: 6 }}>
-              <Text style={{ fontSize: 10, color: '#0f766e', marginRight: 6 }}>✓</Text>
-              <Text style={styles.bulletItem}><Text style={{ fontWeight: 'bold' }}>Price Negotiation</Text> - We know what communities can offer</Text>
+            <View style={styles.bulletRow}>
+              <Text style={styles.bulletCheck}>&#10003;</Text>
+              <Text style={styles.bulletText}><Text style={{ fontWeight: 'bold' }}>Negotiation</Text> - We know what to ask</Text>
             </View>
-            <View style={{ flexDirection: 'row', marginBottom: 6 }}>
-              <Text style={{ fontSize: 10, color: '#0f766e', marginRight: 6 }}>✓</Text>
-              <Text style={styles.bulletItem}><Text style={{ fontWeight: 'bold' }}>Ongoing Support</Text> - We're here through the entire journey</Text>
+            <View style={styles.bulletRow}>
+              <Text style={styles.bulletCheck}>&#10003;</Text>
+              <Text style={styles.bulletText}><Text style={{ fontWeight: 'bold' }}>Support</Text> - Through the whole journey</Text>
             </View>
           </View>
         </View>
@@ -1253,17 +1458,19 @@ export function PricingGuidePDF({
         <View style={[styles.ctaBox, { marginTop: 30 }]}>
           <Text style={styles.ctaTitle}>Ready to Get Started?</Text>
           <Text style={styles.ctaText}>
-            Call us today for a free consultation. We'll discuss your needs,{'\n'}
-            budget, and recommend communities that are the right fit.
+            Call us today for a free consultation. We will discuss your{'\n'}
+            needs and recommend communities that are the right fit.
           </Text>
           <Link src={PHONE_LINK}>
             <Text style={styles.ctaPhone}>{PHONE_NUMBER}</Text>
           </Link>
-          <Text style={{ fontSize: 10, color: '#99f6e4', marginTop: 8 }}>www.guideforseniors.com</Text>
+          <Text style={{ fontSize: 10, color: COLORS.tealPale, marginTop: 8 }}>
+            {WEBSITE}
+          </Text>
         </View>
 
         <View style={styles.footer}>
-          <Text style={styles.footerText}>© 2026 Guide for Seniors | www.guideforseniors.com</Text>
+          <Text style={styles.footerText}>{WEBSITE}</Text>
           <Link src={PHONE_LINK}>
             <Text style={styles.footerPhone}>{PHONE_NUMBER}</Text>
           </Link>
