@@ -633,10 +633,16 @@ export async function submitLead(formData: LeadInput): Promise<LeadSubmitResult>
     currentStep = 'prepare_lead_data_normalize';
     console.log('[Lead] Step:', currentStep);
     // Normalize enum values to ensure valid data
+    console.log('[Lead] Normalizing careType:', data.careType);
     const normalizedCareType = normalizeCareType(data.careType);
+    console.log('[Lead] Normalizing moveInTimeline:', data.moveInTimeline);
     const normalizedTimeline = normalizeMoveInTimeline(data.moveInTimeline);
+    console.log('[Lead] Normalizing pageType:', pageType);
     const normalizedPageType = normalizePageType(pageType);
+    console.log('[Lead] Normalized values:', { normalizedCareType, normalizedTimeline, normalizedPageType });
     
+    currentStep = 'prepare_lead_data_create_object';
+    console.log('[Lead] Step:', currentStep);
     const leadData = {
       fullName: data.fullName.trim(),
       email: data.email?.trim() || null,
