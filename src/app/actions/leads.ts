@@ -652,7 +652,9 @@ export async function submitLead(formData: LeadInput): Promise<LeadSubmitResult>
       isHighValueCalculator,
     });
     
-    const leadData = {
+    // Build leadData step by step to identify the failing line
+    currentStep = 'prepare_lead_data_create_object_basic';
+    const leadData: Record<string, unknown> = {
       fullName: data.fullName?.trim() || '',
       email: data.email?.trim() || null,
       phone: data.phone?.trim() || null,
@@ -674,17 +676,18 @@ export async function submitLead(formData: LeadInput): Promise<LeadSubmitResult>
       ipAddress: ipAddress || null,
       status: 'new',
       updatedAt: new Date().toISOString(),
-      // Store structured calculator data as JSONB
-      ...(calculatorData && { meta_data: calculatorData }),
-      // Commission & referral tracking
       referral_status: 'new',
       estimated_commission: estimatedCommission,
       is_high_value: isHighValueCalculator,
-      // Financial readiness indicators
-      ...(homeValue && { home_value: homeValue }),
-      ...(valueGap && { value_gap: valueGap }),
-      ...(calculatedBudget && { calculated_budget: calculatedBudget }),
     };
+    
+    currentStep = 'prepare_lead_data_add_optional';
+    // Add optional fields
+    if (calculatorData) leadData.meta_data = calculatorData;
+    if (homeValue) leadData.home_value = homeValue;
+    if (valueGap) leadData.value_gap = valueGap;
+    if (calculatedBudget) leadData.calculated_budget = calculatedBudget;
+    
     console.log('[Lead] leadData created successfully');
     
     // -------------------------------------------------------------------------
