@@ -612,20 +612,26 @@ export async function submitLead(formData: LeadInput): Promise<LeadSubmitResult>
     // -------------------------------------------------------------------------
     // 4. PREPARE LEAD DATA FOR SUPABASE
     // -------------------------------------------------------------------------
-    currentStep = 'prepare_lead_data';
+    currentStep = 'prepare_lead_data_clean_notes';
     console.log('[Lead] Step:', currentStep);
     
     // Clean notes (remove JSON for readability, keep summary)
     const cleanNotes = data.notes?.split('---META_DATA_JSON---')[0]?.trim() || null;
     
+    currentStep = 'prepare_lead_data_estimate_commission';
+    console.log('[Lead] Step:', currentStep);
     // Estimate commission based on city and care type
     const estimatedCommission = estimateCommission(sourceSlug, data.careType ?? undefined);
     
+    currentStep = 'prepare_lead_data_extract_calculator';
+    console.log('[Lead] Step:', currentStep);
     // Extract financial readiness indicators from calculator
     const homeValue = calculatorData?.homeValue || null;
     const valueGap = calculatorData?.valueGap || null;
     const calculatedBudget = calculatorData?.seniorLivingCost || null;
     
+    currentStep = 'prepare_lead_data_normalize';
+    console.log('[Lead] Step:', currentStep);
     // Normalize enum values to ensure valid data
     const normalizedCareType = normalizeCareType(data.careType);
     const normalizedTimeline = normalizeMoveInTimeline(data.moveInTimeline);
