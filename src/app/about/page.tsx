@@ -65,6 +65,8 @@ const founderSchema = {
     "Life Enrichment Programs",
     "Resident Experience",
     "Senior Living Operations",
+    "Hospital Discharge Planning",
+    "Medical Transitions",
     "Hospice Care",
     "Memory Care",
     "Assisted Living",
@@ -89,11 +91,11 @@ const careerJourney = [
     years: "Operations"
   },
   {
-    role: "Hospice Liaison",
+    role: "Hospital & Hospice Liaison",
     icon: HeartHandshake,
-    description: "Expertly navigated the emotional and medical complexities of end-of-life care and terminal diagnoses.",
+    description: "Embedded alongside social workers and discharge planners at Cleveland Clinic, UH, and St. John Medical Center. I speak the language of hospital staff and navigate 48-hour discharge crises so you can focus on being a family member.",
     highlight: false,
-    years: "Clinical"
+    years: "Clinical / Transitions"
   },
   {
     role: "Activity Director",
