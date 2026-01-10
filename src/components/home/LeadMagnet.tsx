@@ -39,6 +39,8 @@ const LeadMagnet: React.FC = () => {
         pageType: 'homepage',
         sourceSlug: 'cost-guide-lead-magnet',
         notes: '2026 Cleveland Senior Care Cost Guide Download',
+        careType: 'Other',
+        moveInTimeline: 'Just researching',
       });
 
       if (!result.success) {
