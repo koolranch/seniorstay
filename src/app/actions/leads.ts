@@ -4,6 +4,13 @@ import { headers } from 'next/headers';
 import { createClient } from '@supabase/supabase-js';
 import { randomUUID } from 'crypto';
 import { LeadSchema, LeadInput, LeadSubmitResult, ReferralStatus } from './lead-types';
+import { Resend } from 'resend';
+
+// Initialize Resend for email notifications
+const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
+
+// Internal notification email
+const NOTIFICATION_EMAIL = 'jocelynn@guideforseniors.com';
 
 // Re-export types for consumers (these are just type re-exports, not values)
 export type { LeadInput, LeadSubmitResult, ReferralStatus };
@@ -519,6 +526,123 @@ Profile: https://guideforseniors.com/api/lead-profile/${lead.id}
 // Legacy alias for backwards compatibility
 const sendHighPriorityAlert = sendInternalReferralDraft;
 
+/**
+ * Send instant notification email to internal team when a new lead is submitted
+ */
+async function sendLeadNotificationEmail(lead: {
+  id: string;
+  fullName: string;
+  phone?: string;
+  email?: string;
+  careType?: string;
+  moveInTimeline?: string;
+  notes?: string;
+  sourceSlug?: string;
+  urgencyScore: number;
+  pageType?: string;
+}): Promise<boolean> {
+  if (!resend) {
+    console.warn('[LeadNotification] Resend not configured, skipping notification email');
+    return false;
+  }
+
+  try {
+    const cityName = formatCityName(lead.sourceSlug);
+    const priorityLabel = lead.urgencyScore > 80 ? '🚨 HIGH PRIORITY' : lead.urgencyScore > 30 ? '⚡ Normal' : '📝 Low';
+    
+    const subject = `New Lead: ${lead.fullName} - ${lead.careType || 'Senior Living'} (${cityName})`;
+    
+    const htmlContent = `
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+    .header { background: #0f766e; color: white; padding: 20px; text-align: center; }
+    .content { padding: 20px; }
+    .field { margin-bottom: 15px; }
+    .label { font-weight: bold; color: #666; }
+    .value { font-size: 16px; }
+    .priority-high { color: #dc2626; font-weight: bold; }
+    .priority-normal { color: #f59e0b; }
+    .priority-low { color: #6b7280; }
+    .cta { background: #0f766e; color: white; padding: 12px 24px; text-decoration: none; display: inline-block; margin-top: 20px; border-radius: 6px; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1 style="margin:0;">New Lead Submitted</h1>
+    <p style="margin:5px 0 0;">${priorityLabel}</p>
+  </div>
+  <div class="content">
+    <div class="field">
+      <div class="label">Name</div>
+      <div class="value">${lead.fullName}</div>
+    </div>
+    <div class="field">
+      <div class="label">Email</div>
+      <div class="value">${lead.email || 'Not provided'}</div>
+    </div>
+    <div class="field">
+      <div class="label">Phone</div>
+      <div class="value">${lead.phone || 'Not provided'}</div>
+    </div>
+    <div class="field">
+      <div class="label">Care Type</div>
+      <div class="value">${lead.careType || 'Not specified'}</div>
+    </div>
+    <div class="field">
+      <div class="label">Move-in Timeline</div>
+      <div class="value">${lead.moveInTimeline || 'Not specified'}</div>
+    </div>
+    <div class="field">
+      <div class="label">Location</div>
+      <div class="value">${cityName}, OH</div>
+    </div>
+    <div class="field">
+      <div class="label">Source</div>
+      <div class="value">${lead.pageType || 'Website'}</div>
+    </div>
+    <div class="field">
+      <div class="label">Urgency Score</div>
+      <div class="value ${lead.urgencyScore > 80 ? 'priority-high' : lead.urgencyScore > 30 ? 'priority-normal' : 'priority-low'}">${lead.urgencyScore}/100</div>
+    </div>
+    ${lead.notes ? `
+    <div class="field">
+      <div class="label">Notes</div>
+      <div class="value">${lead.notes.split('---META_DATA_JSON---')[0]?.trim() || 'None'}</div>
+    </div>
+    ` : ''}
+    <a href="https://guideforseniors.com/dashboard/pipeline" class="cta">View in Dashboard →</a>
+  </div>
+  <div style="padding: 20px; background: #f3f4f6; font-size: 12px; color: #666;">
+    <p>Lead ID: ${lead.id}</p>
+    <p>Submitted: ${new Date().toLocaleString('en-US', { timeZone: 'America/New_York' })} ET</p>
+  </div>
+</body>
+</html>
+    `.trim();
+
+    const { data, error } = await resend.emails.send({
+      from: 'Guide for Seniors <notifications@guideforseniors.com>',
+      to: NOTIFICATION_EMAIL,
+      subject,
+      html: htmlContent,
+    });
+
+    if (error) {
+      console.error('[LeadNotification] Failed to send:', error);
+      return false;
+    }
+
+    console.log('[LeadNotification] Email sent successfully:', data?.id);
+    return true;
+  } catch (err) {
+    console.error('[LeadNotification] Error:', err);
+    return false;
+  }
+}
+
 // ============================================================================
 // MAIN SERVER ACTION
 // ============================================================================
@@ -827,6 +951,23 @@ export async function submitLead(formData: LeadInput): Promise<LeadSubmitResult>
       calculatorData,
       estimatedCommission,
       communityName: data.communityName,
+    });
+    
+    // -------------------------------------------------------------------------
+    // 7. SEND INSTANT NOTIFICATION EMAIL
+    // Send email notification to jocelynn@guideforseniors.com for every new lead
+    // -------------------------------------------------------------------------
+    await sendLeadNotificationEmail({
+      id: leadId,
+      fullName: data.fullName,
+      phone: data.phone,
+      email: data.email,
+      careType: normalizedCareType || undefined,
+      moveInTimeline: normalizedTimeline || undefined,
+      notes: cleanNotes || undefined,
+      sourceSlug,
+      urgencyScore: finalUrgencyScore,
+      pageType: normalizedPageType || undefined,
     });
     
     // Update referral status to 'internal_review' in database
