@@ -643,8 +643,17 @@ export async function submitLead(formData: LeadInput): Promise<LeadSubmitResult>
     
     currentStep = 'prepare_lead_data_create_object';
     console.log('[Lead] Step:', currentStep);
+    console.log('[Lead] Building leadData with:', {
+      fullName: data.fullName,
+      email: data.email,
+      finalUrgencyScore,
+      finalPriority,
+      estimatedCommission,
+      isHighValueCalculator,
+    });
+    
     const leadData = {
-      fullName: data.fullName.trim(),
+      fullName: data.fullName?.trim() || '',
       email: data.email?.trim() || null,
       phone: data.phone?.trim() || null,
       cityOrZip: data.cityOrZip?.trim() || null,
@@ -676,6 +685,7 @@ export async function submitLead(formData: LeadInput): Promise<LeadSubmitResult>
       ...(valueGap && { value_gap: valueGap }),
       ...(calculatedBudget && { calculated_budget: calculatedBudget }),
     };
+    console.log('[Lead] leadData created successfully');
     
     // -------------------------------------------------------------------------
     // 5. UPSERT TO SUPABASE
