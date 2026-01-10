@@ -4,7 +4,44 @@ import {
   Text,
   View,
   StyleSheet,
+  Link,
+  Font,
 } from '@react-pdf/renderer';
+
+// ============================================================================
+// TEXT SANITIZATION - Fix encoding artifacts and weird characters
+// ============================================================================
+
+/**
+ * Sanitizes text to remove hidden characters, encoding artifacts, and normalize unicode.
+ */
+function sanitizeText(text: string | undefined | null): string {
+  if (!text) return '';
+  
+  return text
+    .normalize('NFKD')
+    .replace(/[\u2018\u2019]/g, "'")
+    .replace(/[\u201C\u201D]/g, '"')
+    .replace(/[\u2013\u2014\u2015]/g, '-')
+    .replace(/\u00A0/g, ' ')
+    .replace(/\u2026/g, '...')
+    .replace(/[\u200B\u200C\u200D\uFEFF]/g, '')
+    .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '')
+    .replace(/  +/g, ' ')
+    .trim();
+}
+
+// Phone number constant - use plain ASCII
+const PHONE_NUMBER = '(216) 677-4630';
+const PHONE_LINK = 'tel:+12166774630';
+
+// Disable hyphenation for consistent text rendering
+Font.registerHyphenationCallback((word) => [word]);
+
+// Standard line heights
+const LINE_HEIGHT_BODY = 1.4;
+const LINE_HEIGHT_TIGHT = 1.2;
+const LINE_HEIGHT_RELAXED = 1.6;
 
 // Create styles
 const styles = StyleSheet.create({
@@ -536,7 +573,9 @@ export function PricingGuidePDF({
         </View>
         
         <View style={styles.coverFooter}>
-          <Text style={styles.coverPhone}>(216) 677-4630</Text>
+          <Link src={PHONE_LINK} style={{ textDecoration: 'none' }}>
+            <Text style={styles.coverPhone}>{PHONE_NUMBER}</Text>
+          </Link>
           <Text style={styles.coverDate}>Generated {generatedDate}</Text>
         </View>
       </Page>
@@ -632,7 +671,9 @@ export function PricingGuidePDF({
 
         <View style={styles.footer}>
           <Text style={styles.footerText}>© 2026 Guide for Seniors | www.guideforseniors.com</Text>
-          <Text style={styles.footerPhone}>(216) 677-4630</Text>
+          <Link src={PHONE_LINK}>
+            <Text style={styles.footerPhone}>{PHONE_NUMBER}</Text>
+          </Link>
         </View>
       </Page>
 
@@ -688,7 +729,9 @@ export function PricingGuidePDF({
 
         <View style={styles.footer}>
           <Text style={styles.footerText}>© 2026 Guide for Seniors | www.guideforseniors.com</Text>
-          <Text style={styles.footerPhone}>(216) 677-4630</Text>
+          <Link src={PHONE_LINK}>
+            <Text style={styles.footerPhone}>{PHONE_NUMBER}</Text>
+          </Link>
         </View>
       </Page>
 
@@ -772,7 +815,9 @@ export function PricingGuidePDF({
 
         <View style={styles.footer}>
           <Text style={styles.footerText}>© 2026 Guide for Seniors | www.guideforseniors.com</Text>
-          <Text style={styles.footerPhone}>(216) 677-4630</Text>
+          <Link src={PHONE_LINK}>
+            <Text style={styles.footerPhone}>{PHONE_NUMBER}</Text>
+          </Link>
         </View>
       </Page>
 
@@ -878,7 +923,9 @@ export function PricingGuidePDF({
 
         <View style={styles.footer}>
           <Text style={styles.footerText}>© 2026 Guide for Seniors | www.guideforseniors.com</Text>
-          <Text style={styles.footerPhone}>(216) 677-4630</Text>
+          <Link src={PHONE_LINK}>
+            <Text style={styles.footerPhone}>{PHONE_NUMBER}</Text>
+          </Link>
         </View>
       </Page>
 
@@ -1007,7 +1054,9 @@ export function PricingGuidePDF({
 
         <View style={styles.footer}>
           <Text style={styles.footerText}>© 2026 Guide for Seniors | www.guideforseniors.com</Text>
-          <Text style={styles.footerPhone}>(216) 677-4630</Text>
+          <Link src={PHONE_LINK}>
+            <Text style={styles.footerPhone}>{PHONE_NUMBER}</Text>
+          </Link>
         </View>
       </Page>
 
@@ -1110,12 +1159,16 @@ export function PricingGuidePDF({
             Our advisors can help you understand your options and{'\n'}
             connect you with financial planning resources.
           </Text>
-          <Text style={styles.ctaPhone}>(216) 677-4630</Text>
+          <Link src={PHONE_LINK}>
+            <Text style={styles.ctaPhone}>{PHONE_NUMBER}</Text>
+          </Link>
         </View>
 
         <View style={styles.footer}>
           <Text style={styles.footerText}>© 2026 Guide for Seniors | www.guideforseniors.com</Text>
-          <Text style={styles.footerPhone}>(216) 677-4630</Text>
+          <Link src={PHONE_LINK}>
+            <Text style={styles.footerPhone}>{PHONE_NUMBER}</Text>
+          </Link>
         </View>
       </Page>
 
@@ -1203,13 +1256,17 @@ export function PricingGuidePDF({
             Call us today for a free consultation. We'll discuss your needs,{'\n'}
             budget, and recommend communities that are the right fit.
           </Text>
-          <Text style={styles.ctaPhone}>(216) 677-4630</Text>
+          <Link src={PHONE_LINK}>
+            <Text style={styles.ctaPhone}>{PHONE_NUMBER}</Text>
+          </Link>
           <Text style={{ fontSize: 10, color: '#99f6e4', marginTop: 8 }}>www.guideforseniors.com</Text>
         </View>
 
         <View style={styles.footer}>
           <Text style={styles.footerText}>© 2026 Guide for Seniors | www.guideforseniors.com</Text>
-          <Text style={styles.footerPhone}>(216) 677-4630</Text>
+          <Link src={PHONE_LINK}>
+            <Text style={styles.footerPhone}>{PHONE_NUMBER}</Text>
+          </Link>
         </View>
       </Page>
     </Document>
