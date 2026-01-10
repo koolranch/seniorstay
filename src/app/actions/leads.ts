@@ -534,11 +534,14 @@ const sendHighPriorityAlert = sendInternalReferralDraft;
  */
 export async function submitLead(formData: LeadInput): Promise<LeadSubmitResult> {
   const startTime = Date.now();
+  let currentStep = 'init';
   
   try {
     // -------------------------------------------------------------------------
     // 1. VALIDATE INPUT
     // -------------------------------------------------------------------------
+    currentStep = 'validate_input';
+    console.log('[Lead] Step:', currentStep);
     const validationResult = LeadSchema.safeParse(formData);
     
     if (!validationResult.success) {
@@ -561,6 +564,8 @@ export async function submitLead(formData: LeadInput): Promise<LeadSubmitResult>
     // -------------------------------------------------------------------------
     // 2. EXTRACT ATTRIBUTION FROM HEADERS
     // -------------------------------------------------------------------------
+    currentStep = 'extract_headers';
+    console.log('[Lead] Step:', currentStep);
     const headersList = await headers();
     const userAgent = headersList.get('user-agent') || undefined;
     const referer = headersList.get('referer') || '';
@@ -591,6 +596,8 @@ export async function submitLead(formData: LeadInput): Promise<LeadSubmitResult>
     // -------------------------------------------------------------------------
     // 3. CALCULATE URGENCY SCORE & PARSE CALCULATOR DATA
     // -------------------------------------------------------------------------
+    currentStep = 'calculate_urgency';
+    console.log('[Lead] Step:', currentStep);
     const urgencyScore = calculateLeadScore(data);
     const priority = getPriority(urgencyScore);
     
@@ -605,6 +612,8 @@ export async function submitLead(formData: LeadInput): Promise<LeadSubmitResult>
     // -------------------------------------------------------------------------
     // 4. PREPARE LEAD DATA FOR SUPABASE
     // -------------------------------------------------------------------------
+    currentStep = 'prepare_lead_data';
+    console.log('[Lead] Step:', currentStep);
     
     // Clean notes (remove JSON for readability, keep summary)
     const cleanNotes = data.notes?.split('---META_DATA_JSON---')[0]?.trim() || null;
@@ -805,7 +814,8 @@ export async function submitLead(formData: LeadInput): Promise<LeadSubmitResult>
     // -------------------------------------------------------------------------
     // ERROR HANDLING - Enhanced with specific Supabase error detection
     // -------------------------------------------------------------------------
-    console.error('[Lead] Submission error:', error);
+    console.error('[Lead] Submission error at step:', currentStep);
+    console.error('[Lead] Error:', error);
     
     // Extract error details for debugging
     const errorDetails = {
@@ -879,7 +889,7 @@ export async function submitLead(formData: LeadInput): Promise<LeadSubmitResult>
     console.error('[Lead] Unhandled error type:', errorDetails);
     return {
       success: false,
-      message: 'Something went wrong. Please try again or call us at (216) 677-4630.',
+      message: `Something went wrong at step: ${currentStep}. Please try again or call us at (216) 677-4630.`,
     };
   }
 }
