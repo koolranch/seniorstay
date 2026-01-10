@@ -1,20 +1,19 @@
 'use server';
 
-import { z } from 'zod';
 import { headers } from 'next/headers';
 import { createClient } from '@supabase/supabase-js';
 import { randomUUID } from 'crypto';
+import { LeadSchema, LeadInput, LeadSubmitResult, ReferralStatus } from './lead-types';
+
+// Re-export types for consumers (these are just type re-exports, not values)
+export type { LeadInput, LeadSubmitResult, ReferralStatus };
 
 // ============================================================================
-// TYPES & SCHEMAS
+// INTERNAL CONSTANTS (not exported)
 // ============================================================================
 
-/**
- * Zod validation schema for lead submissions
- * Validates all incoming lead data with strict type checking
- */
-// Valid care types for the enum
-const VALID_CARE_TYPES = [
+// Valid care types (internal, not exported)
+const VALID_CARE_TYPES: readonly string[] = [
   'Independent Living',
   'Assisted Living', 
   'Memory Care',
@@ -22,20 +21,20 @@ const VALID_CARE_TYPES = [
   'Respite Care',
   'Other',
   ''
-] as const;
+];
 
-// Valid move-in timelines for the enum
-const VALID_TIMELINES = [
+// Valid move-in timelines (internal, not exported)
+const VALID_TIMELINES: readonly string[] = [
   'Immediate',
   '1-3 months',
   '3-6 months', 
   '6+ months',
   'Just researching',
   ''
-] as const;
+];
 
-// Valid page types for the enum
-const VALID_PAGE_TYPES = [
+// Valid page types (internal, not exported)
+const VALID_PAGE_TYPES: readonly string[] = [
   'location_page',
   'community_page', 
   'contact',
@@ -45,35 +44,7 @@ const VALID_PAGE_TYPES = [
   'blog',
   'other',
   ''
-] as const;
-
-/**
- * Zod validation schema for lead submissions
- * Made lenient to accept any string for enums, then normalize server-side
- */
-export const LeadSchema = z.object({
-  fullName: z.string().min(2, 'Name must be at least 2 characters').max(100),
-  email: z.string().email('Invalid email address').optional().or(z.literal('')),
-  phone: z.string()
-    .regex(/^[\d\s\-\(\)\+]*$/, 'Invalid phone number format')
-    .optional()
-    .or(z.literal('')),
-  cityOrZip: z.string().max(100).optional(),
-  // Accept any string for careType - we'll normalize it server-side
-  careType: z.string().max(100).optional().nullable(),
-  // Accept any string for moveInTimeline - we'll normalize it server-side  
-  moveInTimeline: z.string().max(100).optional().nullable(),
-  notes: z.string().max(5000).optional(), // Increased for calculator JSON
-  communityName: z.string().max(200).optional(),
-  communityId: z.string().optional(),
-  // Accept any string for pageType - we'll normalize it server-side
-  pageType: z.string().max(100).optional().nullable(),
-  sourceSlug: z.string().max(100).optional(), // Cleveland suburb slug
-  // UTM tracking
-  utmSource: z.string().max(100).optional(),
-  utmMedium: z.string().max(100).optional(),
-  utmCampaign: z.string().max(200).optional(),
-});
+];
 
 /**
  * Normalize careType to a valid enum value
@@ -82,7 +53,7 @@ function normalizeCareType(value: string | undefined | null): string | null {
   if (!value) return null;
   const normalized = value.trim();
   // Check if it's already a valid value
-  if (VALID_CARE_TYPES.includes(normalized as typeof VALID_CARE_TYPES[number])) {
+  if (VALID_CARE_TYPES.includes(normalized)) {
     return normalized;
   }
   // Try to map common variations
@@ -103,7 +74,7 @@ function normalizeMoveInTimeline(value: string | undefined | null): string | nul
   if (!value) return null;
   const normalized = value.trim();
   // Check if it's already a valid value
-  if (VALID_TIMELINES.includes(normalized as typeof VALID_TIMELINES[number])) {
+  if (VALID_TIMELINES.includes(normalized)) {
     return normalized;
   }
   // Try to map common variations
@@ -124,7 +95,7 @@ function normalizePageType(value: string | undefined | null): string | null {
   if (!value) return 'other';
   const normalized = value.trim();
   // Check if it's already a valid value
-  if (VALID_PAGE_TYPES.includes(normalized as typeof VALID_PAGE_TYPES[number])) {
+  if (VALID_PAGE_TYPES.includes(normalized)) {
     return normalized;
   }
   return 'other';
@@ -194,19 +165,7 @@ function isHighValueCalculatorLead(metaData: CalculatorMetaData | null): boolean
   return false;
 }
 
-export type LeadInput = z.infer<typeof LeadSchema>;
-
-/**
- * Structured response for frontend toast notifications
- */
-export interface LeadSubmitResult {
-  success: boolean;
-  leadId?: string;
-  urgencyScore?: number;
-  priority?: 'high' | 'normal' | 'low';
-  message: string;
-  errors?: Record<string, string[]>;
-}
+// LeadInput and LeadSubmitResult are imported from ./lead-types
 
 // ============================================================================
 // LEAD SCORING LOGIC
@@ -651,7 +610,7 @@ export async function submitLead(formData: LeadInput): Promise<LeadSubmitResult>
     const cleanNotes = data.notes?.split('---META_DATA_JSON---')[0]?.trim() || null;
     
     // Estimate commission based on city and care type
-    const estimatedCommission = estimateCommission(sourceSlug, data.careType);
+    const estimatedCommission = estimateCommission(sourceSlug, data.careType ?? undefined);
     
     // Extract financial readiness indicators from calculator
     const homeValue = calculatorData?.homeValue || null;
@@ -1020,7 +979,7 @@ export async function getRecentHighPriorityLeads() {
 // PIPELINE MANAGEMENT (Commission Dashboard)
 // ============================================================================
 
-export type ReferralStatus = 'new' | 'internal_review' | 'referral_sent' | 'tour_scheduled' | 'admitted' | 'paid';
+// ReferralStatus is imported from ./lead-types
 
 /**
  * Get all leads grouped by referral status for pipeline dashboard

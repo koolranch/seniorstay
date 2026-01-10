@@ -520,7 +520,7 @@ ${JSON.stringify(calculatorMetaData)}
                     Move-in Timeline
                   </label>
                   <select
-                    value={formData.moveInTimeline}
+                    value={formData.moveInTimeline ?? ''}
                     onChange={(e) => setFormData(prev => ({ 
                       ...prev, 
                       moveInTimeline: e.target.value as LeadInput['moveInTimeline']
