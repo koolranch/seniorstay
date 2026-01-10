@@ -13,6 +13,44 @@ import { randomUUID } from 'crypto';
  * Zod validation schema for lead submissions
  * Validates all incoming lead data with strict type checking
  */
+// Valid care types for the enum
+const VALID_CARE_TYPES = [
+  'Independent Living',
+  'Assisted Living', 
+  'Memory Care',
+  'Skilled Nursing',
+  'Respite Care',
+  'Other',
+  ''
+] as const;
+
+// Valid move-in timelines for the enum
+const VALID_TIMELINES = [
+  'Immediate',
+  '1-3 months',
+  '3-6 months', 
+  '6+ months',
+  'Just researching',
+  ''
+] as const;
+
+// Valid page types for the enum
+const VALID_PAGE_TYPES = [
+  'location_page',
+  'community_page', 
+  'contact',
+  'assessment',
+  'homepage',
+  'pricing_guide',
+  'blog',
+  'other',
+  ''
+] as const;
+
+/**
+ * Zod validation schema for lead submissions
+ * Made lenient to accept any string for enums, then normalize server-side
+ */
 export const LeadSchema = z.object({
   fullName: z.string().min(2, 'Name must be at least 2 characters').max(100),
   email: z.string().email('Invalid email address').optional().or(z.literal('')),
@@ -21,44 +59,76 @@ export const LeadSchema = z.object({
     .optional()
     .or(z.literal('')),
   cityOrZip: z.string().max(100).optional(),
-  careType: z.enum([
-    'Independent Living',
-    'Assisted Living', 
-    'Memory Care',
-    'Skilled Nursing',
-    'Respite Care',
-    'Other',
-    ''
-  ]).optional(),
-  moveInTimeline: z.enum([
-    'Immediate',
-    '1-3 months',
-    '3-6 months', 
-    '6+ months',
-    'Just researching',
-    ''
-  ]).optional(),
+  // Accept any string for careType - we'll normalize it server-side
+  careType: z.string().max(100).optional().nullable(),
+  // Accept any string for moveInTimeline - we'll normalize it server-side  
+  moveInTimeline: z.string().max(100).optional().nullable(),
   notes: z.string().max(5000).optional(), // Increased for calculator JSON
   communityName: z.string().max(200).optional(),
   communityId: z.string().optional(),
-  // Attribution fields
-  pageType: z.enum([
-    'location_page',
-    'community_page', 
-    'contact',
-    'assessment',
-    'homepage',
-    'pricing_guide',
-    'blog',
-    'other',
-    ''
-  ]).optional(),
+  // Accept any string for pageType - we'll normalize it server-side
+  pageType: z.string().max(100).optional().nullable(),
   sourceSlug: z.string().max(100).optional(), // Cleveland suburb slug
   // UTM tracking
   utmSource: z.string().max(100).optional(),
   utmMedium: z.string().max(100).optional(),
   utmCampaign: z.string().max(200).optional(),
 });
+
+/**
+ * Normalize careType to a valid enum value
+ */
+function normalizeCareType(value: string | undefined | null): string | null {
+  if (!value) return null;
+  const normalized = value.trim();
+  // Check if it's already a valid value
+  if (VALID_CARE_TYPES.includes(normalized as typeof VALID_CARE_TYPES[number])) {
+    return normalized;
+  }
+  // Try to map common variations
+  const lower = normalized.toLowerCase();
+  if (lower.includes('memory') || lower.includes('dementia') || lower.includes('alzheimer')) return 'Memory Care';
+  if (lower.includes('assisted')) return 'Assisted Living';
+  if (lower.includes('independent')) return 'Independent Living';
+  if (lower.includes('skilled') || lower.includes('nursing')) return 'Skilled Nursing';
+  if (lower.includes('respite')) return 'Respite Care';
+  // Default to 'Other' for any unrecognized value
+  return 'Other';
+}
+
+/**
+ * Normalize moveInTimeline to a valid enum value
+ */
+function normalizeMoveInTimeline(value: string | undefined | null): string | null {
+  if (!value) return null;
+  const normalized = value.trim();
+  // Check if it's already a valid value
+  if (VALID_TIMELINES.includes(normalized as typeof VALID_TIMELINES[number])) {
+    return normalized;
+  }
+  // Try to map common variations
+  const lower = normalized.toLowerCase();
+  if (lower.includes('immediate') || lower.includes('asap') || lower.includes('urgent')) return 'Immediate';
+  if (lower.includes('1') || lower.includes('one') || lower.includes('few weeks')) return '1-3 months';
+  if (lower.includes('3') || lower.includes('three') || lower.includes('few months')) return '3-6 months';
+  if (lower.includes('6') || lower.includes('six') || lower.includes('later')) return '6+ months';
+  if (lower.includes('research') || lower.includes('exploring') || lower.includes('not sure')) return 'Just researching';
+  // Default for unrecognized
+  return 'Just researching';
+}
+
+/**
+ * Normalize pageType to a valid enum value
+ */
+function normalizePageType(value: string | undefined | null): string | null {
+  if (!value) return 'other';
+  const normalized = value.trim();
+  // Check if it's already a valid value
+  if (VALID_PAGE_TYPES.includes(normalized as typeof VALID_PAGE_TYPES[number])) {
+    return normalized;
+  }
+  return 'other';
+}
 
 // ============================================================================
 // CALCULATOR META DATA PARSING
@@ -195,12 +265,13 @@ function calculateLeadScore(data: LeadInput): number {
     score += 15;
   }
 
-  // Care type scoring
-  if (data.careType === 'Memory Care' || data.careType === 'Respite Care') {
+  // Care type scoring (normalize first for flexible matching)
+  const careTypeLower = (data.careType || '').toLowerCase();
+  if (careTypeLower.includes('memory') || careTypeLower.includes('respite') || careTypeLower.includes('dementia')) {
     score += 30;
-  } else if (data.careType === 'Assisted Living') {
+  } else if (careTypeLower.includes('assisted')) {
     score += 10;
-  } else if (data.careType === 'Skilled Nursing') {
+  } else if (careTypeLower.includes('skilled') || careTypeLower.includes('nursing')) {
     score += 20;
   }
 
@@ -587,17 +658,22 @@ export async function submitLead(formData: LeadInput): Promise<LeadSubmitResult>
     const valueGap = calculatorData?.valueGap || null;
     const calculatedBudget = calculatorData?.seniorLivingCost || null;
     
+    // Normalize enum values to ensure valid data
+    const normalizedCareType = normalizeCareType(data.careType);
+    const normalizedTimeline = normalizeMoveInTimeline(data.moveInTimeline);
+    const normalizedPageType = normalizePageType(pageType);
+    
     const leadData = {
       fullName: data.fullName.trim(),
       email: data.email?.trim() || null,
       phone: data.phone?.trim() || null,
       cityOrZip: data.cityOrZip?.trim() || null,
-      careType: data.careType || null,
-      moveInTimeline: data.moveInTimeline || null,
+      careType: normalizedCareType,
+      moveInTimeline: normalizedTimeline,
       notes: cleanNotes,
       communityName: data.communityName?.trim() || null,
       communityId: data.communityId || null,
-      pageType: pageType || null,
+      pageType: normalizedPageType,
       sourceSlug: sourceSlug || null,
       urgencyScore: finalUrgencyScore,
       priority: finalPriority,
@@ -698,8 +774,8 @@ export async function submitLead(formData: LeadInput): Promise<LeadSubmitResult>
       fullName: data.fullName,
       phone: data.phone,
       email: data.email,
-      careType: data.careType,
-      moveInTimeline: data.moveInTimeline,
+      careType: normalizedCareType || undefined,
+      moveInTimeline: normalizedTimeline || undefined,
       notes: cleanNotes || undefined,
       sourceSlug,
       urgencyScore: finalUrgencyScore,
