@@ -53,8 +53,13 @@ export default async function LocationPage({ params }: { params: { city: string 
   }
 
   // Get the proper display name from the first match (e.g. "North Olmsted" instead of "north-olmsted")
-  // Or construct it from slug if needed
-  const displayCityName = communities[0].location.split(',')[0].trim();
+  // Convert to title case to handle ALL CAPS entries in database
+  const rawCityName = communities[0].location.split(',')[0].trim();
+  const displayCityName = rawCityName
+    .toLowerCase()
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
 
   return (
     <CityLocationClient
