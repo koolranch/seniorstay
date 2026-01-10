@@ -707,8 +707,10 @@ export async function submitLead(formData: LeadInput): Promise<LeadSubmitResult>
     // -------------------------------------------------------------------------
     // 5. UPSERT TO SUPABASE
     // -------------------------------------------------------------------------
+    currentStep = 'get_supabase_client';
     console.log('[Lead] Step 5: Getting Supabase admin client...');
     const supabase = getSupabaseAdmin();
+    currentStep = 'supabase_client_obtained';
     console.log('[Lead] Supabase client obtained');
     
     let leadId: string;
