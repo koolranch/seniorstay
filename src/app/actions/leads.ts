@@ -682,12 +682,26 @@ export async function submitLead(formData: LeadInput): Promise<LeadSubmitResult>
     };
     
     currentStep = 'prepare_lead_data_add_optional';
+    console.log('[Lead] Adding optional fields, calculatorData:', !!calculatorData);
     // Add optional fields
-    if (calculatorData) leadData.meta_data = calculatorData;
-    if (homeValue) leadData.home_value = homeValue;
-    if (valueGap) leadData.value_gap = valueGap;
-    if (calculatedBudget) leadData.calculated_budget = calculatedBudget;
+    if (calculatorData) {
+      console.log('[Lead] Adding meta_data');
+      leadData.meta_data = calculatorData;
+    }
+    if (homeValue) {
+      console.log('[Lead] Adding home_value');
+      leadData.home_value = homeValue;
+    }
+    if (valueGap) {
+      console.log('[Lead] Adding value_gap');
+      leadData.value_gap = valueGap;
+    }
+    if (calculatedBudget) {
+      console.log('[Lead] Adding calculated_budget');
+      leadData.calculated_budget = calculatedBudget;
+    }
     
+    currentStep = 'prepare_lead_data_complete';
     console.log('[Lead] leadData created successfully');
     
     // -------------------------------------------------------------------------
