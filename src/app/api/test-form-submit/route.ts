@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { submitLead } from '@/app/actions/leads';
+import { LeadSchema } from '@/app/actions/lead-types';
 
 /**
  * Test endpoint to debug form submission
@@ -7,13 +8,22 @@ import { submitLead } from '@/app/actions/leads';
  */
 export async function POST(request: NextRequest) {
   const startTime = Date.now();
+  const diagnostics: Record<string, unknown> = {
+    step: 'init',
+    timestamp: new Date().toISOString(),
+  };
   
   try {
     const body = await request.json();
-    console.log('[TestFormSubmit] Received body:', JSON.stringify(body, null, 2));
+    diagnostics.step = 'body_parsed';
+    diagnostics.body = body;
     
-    // Call the server action directly
-    const result = await submitLead({
+    // Test if LeadSchema is available
+    diagnostics.schema_available = typeof LeadSchema !== 'undefined';
+    diagnostics.schema_type = typeof LeadSchema;
+    
+    // Test validation
+    const testData = {
       fullName: body.fullName || 'Test User',
       email: body.email || 'test@example.com',
       pageType: 'homepage',
@@ -21,28 +31,41 @@ export async function POST(request: NextRequest) {
       notes: 'Test submission from API route',
       careType: 'Other',
       moveInTimeline: 'Just researching',
-    });
+    };
+    
+    diagnostics.step = 'validating';
+    const validationResult = LeadSchema.safeParse(testData);
+    diagnostics.validation_success = validationResult.success;
+    if (!validationResult.success) {
+      diagnostics.validation_errors = validationResult.error.issues;
+    }
+    
+    // Call the server action
+    diagnostics.step = 'calling_submitLead';
+    const result = await submitLead(testData);
+    diagnostics.step = 'submitLead_complete';
     
     const duration = Date.now() - startTime;
-    console.log('[TestFormSubmit] Result:', JSON.stringify(result, null, 2), `(${duration}ms)`);
     
     return NextResponse.json({
       test_timestamp: new Date().toISOString(),
       duration_ms: duration,
+      diagnostics,
       result,
     });
   } catch (error) {
     const duration = Date.now() - startTime;
-    console.error('[TestFormSubmit] Error:', error);
+    diagnostics.step = 'error_caught';
+    diagnostics.error = error instanceof Error ? {
+      name: error.name,
+      message: error.message,
+      stack: error.stack?.split('\n').slice(0, 10),
+    } : String(error);
     
     return NextResponse.json({
       test_timestamp: new Date().toISOString(),
       duration_ms: duration,
-      error: error instanceof Error ? {
-        name: error.name,
-        message: error.message,
-        stack: error.stack?.split('\n').slice(0, 5),
-      } : String(error),
+      diagnostics,
     }, { status: 500 });
   }
 }
