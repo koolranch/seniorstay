@@ -717,6 +717,7 @@ export async function submitLead(formData: LeadInput): Promise<LeadSubmitResult>
     
     // If email provided, try to upsert (update existing or insert new)
     if (data.email && data.email.trim()) {
+      currentStep = 'check_existing_lead';
       console.log('[Lead] Checking for existing lead with email:', data.email.trim());
       // Check if lead exists
       const { data: existingLead, error: lookupError } = await supabase
@@ -731,8 +732,10 @@ export async function submitLead(formData: LeadInput): Promise<LeadSubmitResult>
         throw lookupError;
       }
       console.log('[Lead] Existing lead lookup result:', existingLead ? `Found: ${existingLead.id}` : 'Not found');
+      currentStep = 'email_lookup_complete';
       
       if (existingLead) {
+        currentStep = 'update_existing_lead';
         // Update existing lead - keep higher urgency score
         const newScore = Math.max(existingLead.urgencyScore || 0, urgencyScore);
         
@@ -752,6 +755,7 @@ export async function submitLead(formData: LeadInput): Promise<LeadSubmitResult>
         leadId = updated.id;
       } else {
         // Insert new lead
+        currentStep = 'insert_new_lead_with_email';
         console.log('[Lead] Inserting new lead with email...');
         const newId = randomUUID();
         console.log('[Lead] Generated UUID:', newId);
