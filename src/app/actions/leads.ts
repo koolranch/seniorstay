@@ -939,7 +939,7 @@ export async function submitLead(formData: LeadInput): Promise<LeadSubmitResult>
     console.error('[Lead] Unhandled error type:', errorDetails);
     return {
       success: false,
-      message: `Something went wrong at step: ${currentStep}. Please try again or call us at (216) 677-4630.`,
+      message: `Something went wrong at step: ${currentStep}. Error: ${errorDetails.message}. Please try again or call us at (216) 677-4630.`,
     };
   }
 }
