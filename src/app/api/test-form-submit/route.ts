@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { submitLead } from '@/app/actions/leads';
 import { LeadSchema } from '@/app/actions/lead-types';
+import { createClient } from '@supabase/supabase-js';
+import { randomUUID } from 'crypto';
 
 /**
  * Test endpoint to debug form submission
@@ -40,10 +42,53 @@ export async function POST(request: NextRequest) {
       diagnostics.validation_errors = validationResult.error.issues;
     }
     
+    // Test direct Supabase insert (bypass server action)
+    diagnostics.step = 'direct_supabase_test';
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://hncgnxbooghjhpncujzx.supabase.co';
+    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    
+    if (supabaseKey) {
+      const supabase = createClient(supabaseUrl, supabaseKey, {
+        auth: { autoRefreshToken: false, persistSession: false }
+      });
+      
+      const testLeadId = randomUUID();
+      const { data: directInsert, error: directError } = await supabase
+        .from('Lead')
+        .insert({
+          id: testLeadId,
+          fullName: 'DIRECT_API_TEST',
+          email: 'direct-test@example.com',
+          pageType: 'other',
+          urgencyScore: 0,
+          priority: 'low',
+          status: 'new',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        })
+        .select('id')
+        .single();
+      
+      diagnostics.direct_insert_success = !directError;
+      diagnostics.direct_insert_error = directError ? {
+        message: directError.message,
+        code: directError.code,
+        hint: directError.hint,
+        details: directError.details,
+      } : null;
+      
+      // Clean up
+      if (directInsert?.id) {
+        await supabase.from('Lead').delete().eq('id', directInsert.id);
+        diagnostics.direct_insert_cleaned = true;
+      }
+    }
+    
     // Call the server action
     diagnostics.step = 'calling_submitLead';
     const result = await submitLead(testData);
     diagnostics.step = 'submitLead_complete';
+    diagnostics.submitLead_result = result;
     
     const duration = Date.now() - startTime;
     
