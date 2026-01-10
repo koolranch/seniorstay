@@ -760,14 +760,19 @@ export async function submitLead(formData: LeadInput): Promise<LeadSubmitResult>
         const newId = randomUUID();
         console.log('[Lead] Generated UUID:', newId);
         
+        const insertPayload = {
+          id: newId,
+          ...leadData,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        };
+        console.log('[Lead] Insert payload keys:', Object.keys(insertPayload));
+        console.log('[Lead] Insert payload:', JSON.stringify(insertPayload, null, 2));
+        
+        currentStep = 'executing_insert';
         const { data: inserted, error: insertError } = await supabase
           .from('Lead')
-          .insert({
-            id: newId,
-            ...leadData,
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-          })
+          .insert(insertPayload)
           .select('id')
           .single();
         
