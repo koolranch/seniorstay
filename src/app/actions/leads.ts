@@ -663,7 +663,7 @@ export async function submitLead(formData: LeadInput): Promise<LeadSubmitResult>
       moveInTimeline: normalizedTimeline,
       notes: cleanNotes,
       communityName: data.communityName?.trim() || null,
-      communityId: data.communityId || null,
+      communityid: data.communityId || null,  // Note: column name is lowercase in database
       pageType: normalizedPageType,
       sourceSlug: sourceSlug || null,
       urgencyScore: finalUrgencyScore,
@@ -937,9 +937,10 @@ export async function submitLead(formData: LeadInput): Promise<LeadSubmitResult>
     
     // Generic error with debug info in logs
     console.error('[Lead] Unhandled error type:', errorDetails);
+    console.error('[Lead] Failed at step:', currentStep);
     return {
       success: false,
-      message: `Something went wrong at step: ${currentStep}. Error: ${JSON.stringify(errorDetails)}. Please try again or call us at (216) 677-4630.`,
+      message: 'Something went wrong. Please try again or call us at (216) 677-4630.',
     };
   }
 }
