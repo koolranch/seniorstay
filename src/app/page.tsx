@@ -6,6 +6,7 @@ import Neighborhoods from '@/components/home/Neighborhoods';
 import LeadMagnet from '@/components/home/LeadMagnet';
 import TrustSection from '@/components/home/TrustSection';
 import Footer from '@/components/footer/Footer';
+import { fetchAllCommunities } from '@/lib/fetch-community';
 
 /**
  * Homepage - High-Authority Local Hub for Cleveland Senior Living
@@ -162,7 +163,10 @@ const faqSchema = {
   ],
 };
 
-export default function HomePage() {
+export default async function HomePage() {
+  // Fetch all communities for the interactive map
+  const allCommunities = await fetchAllCommunities();
+  
   return (
     <>
       {/* Structured Data */}
@@ -183,8 +187,8 @@ export default function HomePage() {
         {/* C. Care Type Authority Clusters (The "Silos") */}
         <CareTypes />
 
-        {/* D. Hyper-Local SEO Section - Cleveland Neighborhoods */}
-        <Neighborhoods />
+        {/* D. Hyper-Local SEO Section - Cleveland Neighborhoods with Interactive Map */}
+        <Neighborhoods communities={allCommunities} />
 
         {/* E. Lead Magnet Section (The Lead Gen Engine) */}
         <LeadMagnet />

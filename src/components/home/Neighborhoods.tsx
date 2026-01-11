@@ -4,10 +4,13 @@ import React from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { MapPin, ArrowRight, Building2, Hospital } from 'lucide-react';
+import MapComponent from '@/components/map/GoogleMap';
+import { Community } from '@/data/facilities';
 
 /**
  * Hyper-Local SEO Section - Cleveland Neighborhoods
  * Links to neighborhood-specific pages for local SEO authority
+ * Now includes interactive Google Map with all communities
  */
 
 interface Neighborhood {
@@ -16,6 +19,10 @@ interface Neighborhood {
   communityCount: number;
   highlight?: string;
   clinicalAnchor?: string;
+}
+
+interface NeighborhoodsProps {
+  communities?: Community[];
 }
 
 const NEIGHBORHOODS: Neighborhood[] = [
@@ -110,7 +117,10 @@ const itemVariants = {
   },
 };
 
-const Neighborhoods: React.FC = () => {
+const Neighborhoods: React.FC<NeighborhoodsProps> = ({ communities = [] }) => {
+  // Filter communities that have valid coordinates for the map
+  const communitiesWithCoords = communities.filter(c => c.coordinates);
+  const communityCount = communities.length;
   return (
     <section className="py-20 md:py-28 bg-slate-50">
       <div className="container mx-auto px-4">
@@ -192,38 +202,33 @@ const Neighborhoods: React.FC = () => {
                 Cleveland Area Coverage
               </h3>
               
-              {/* Map Placeholder - Replace with actual map component */}
+              {/* Interactive Google Map */}
               <div 
-                className="aspect-square bg-gradient-to-br from-slate-100 to-slate-200 rounded-xl flex items-center justify-center relative overflow-hidden"
+                className="aspect-square rounded-xl overflow-hidden"
                 role="img"
-                aria-label="Interactive map of Cleveland senior living communities - placeholder"
+                aria-label="Interactive map of Cleveland senior living communities"
               >
-                {/* Decorative map-like pattern */}
-                <div className="absolute inset-0 opacity-20">
-                  <svg className="w-full h-full" viewBox="0 0 200 200" fill="none">
-                    <circle cx="100" cy="100" r="60" stroke="#0D9488" strokeWidth="1" strokeDasharray="4 4" />
-                    <circle cx="100" cy="100" r="40" stroke="#0D9488" strokeWidth="1" strokeDasharray="4 4" />
-                    <circle cx="100" cy="100" r="20" stroke="#0D9488" strokeWidth="1" strokeDasharray="4 4" />
-                    {/* Simulated location markers */}
-                    <circle cx="80" cy="70" r="4" fill="#0D9488" />
-                    <circle cx="120" cy="80" r="4" fill="#0D9488" />
-                    <circle cx="90" cy="120" r="4" fill="#0D9488" />
-                    <circle cx="130" cy="110" r="4" fill="#0D9488" />
-                    <circle cx="70" cy="100" r="4" fill="#0D9488" />
-                    <circle cx="100" cy="100" r="6" fill="#F59E0B" />
-                  </svg>
-                </div>
-                <div className="text-center z-10">
-                  <MapPin className="h-12 w-12 text-teal-500 mx-auto mb-2" />
-                  <p className="text-slate-600 font-medium">Interactive Map</p>
-                  <p className="text-sm text-slate-500">Coming Soon</p>
-                </div>
+                {communitiesWithCoords.length > 0 ? (
+                  <MapComponent
+                    communities={communitiesWithCoords}
+                    height="100%"
+                    zoom={10}
+                    center={{ lat: 41.4993, lng: -81.6944 }}
+                  />
+                ) : (
+                  <div className="h-full bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center">
+                    <div className="text-center">
+                      <MapPin className="h-12 w-12 text-teal-500 mx-auto mb-2" />
+                      <p className="text-slate-600 font-medium">Loading Map...</p>
+                    </div>
+                  </div>
+                )}
               </div>
 
-              {/* Quick stats */}
+              {/* Quick stats - dynamic from data */}
               <div className="mt-6 grid grid-cols-2 gap-4">
                 <div className="bg-slate-50 rounded-lg p-3 text-center">
-                  <p className="text-2xl font-bold text-teal-600">150+</p>
+                  <p className="text-2xl font-bold text-teal-600">{communityCount || '150'}+</p>
                   <p className="text-xs text-slate-600">Communities</p>
                 </div>
                 <div className="bg-slate-50 rounded-lg p-3 text-center">
