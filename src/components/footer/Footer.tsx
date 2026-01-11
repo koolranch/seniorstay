@@ -14,7 +14,7 @@ const footerLinks = {
   seniorCare: [
     { label: 'Assisted Living', href: '/assisted-living-cleveland' },
     { label: 'Memory Care', href: '/memory-care-cleveland' },
-    { label: 'Senior Events Hub', href: '/events' },
+    { label: 'Local Events', href: '/events' },
     { label: 'Pricing Guide', href: '/senior-living-costs-cleveland' },
     { label: 'Choosing Guide', href: '/choosing-senior-living' },
     { label: 'Resources', href: '/resources' },
