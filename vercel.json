@@ -16,11 +16,5 @@
       "path": "/api/etl/import-inspection-pdfs",
       "schedule": "0 5 * * 0"
     }
-    // DISABLED Jan 2026: Switching to manual boutique curation for higher lead quality
-    // {
-    //   "path": "/api/cron/scrape-events",
-    //   "schedule": "0 0 * * 0"
-    // }
   ]
 }
-
