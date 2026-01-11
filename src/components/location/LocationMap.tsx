@@ -1,15 +1,16 @@
 "use client";
 
 import * as React from 'react';
-import { communityData } from '@/data/facilities';
+import { Community } from '@/data/facilities';
 
 interface LocationMapProps {
   city: string;
+  communities: Community[]; // Pass communities from server component
 }
 
-export default function LocationMap({ city }: LocationMapProps) {
+export default function LocationMap({ city, communities }: LocationMapProps) {
   const decodedCity = decodeURIComponent(city);
-  const cityCommunities = communityData.filter(
+  const cityCommunities = communities.filter(
     community => community.location.toLowerCase().includes(decodedCity.toLowerCase())
   );
 

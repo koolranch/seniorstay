@@ -1,21 +1,22 @@
 "use client";
 
 import * as React from 'react';
-import { Community, communityData } from '@/data/facilities';
+import { Community } from '@/data/facilities';
 import LocationCard from '@/components/property/LocationCard';
 
 interface SimilarCommunitiesProps {
   community: Community;
+  allCommunities?: Community[]; // Optional: pass from server component
 }
 
-export default function SimilarCommunities({ community }: SimilarCommunitiesProps) {
+export default function SimilarCommunities({ community, allCommunities = [] }: SimilarCommunitiesProps) {
   // Find similar communities in the same city with same care types
   const city = community.location.split(',')[0].trim();
   
-  const similarCommunities = communityData
+  const similarCommunities = allCommunities
     .filter(c => 
       c.id !== community.id && // Not the same community
-      c.location.includes(city) && // Same city
+      c.location.toLowerCase().includes(city.toLowerCase()) && // Same city
       c.careTypes.some(type => community.careTypes.includes(type)) // At least one matching care type
     )
     .slice(0, 4); // Limit to 4 communities

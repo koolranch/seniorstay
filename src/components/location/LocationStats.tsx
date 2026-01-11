@@ -1,27 +1,22 @@
 "use client";
 
 import * as React from 'react';
-import { communityData } from '@/data/facilities';
+import { Community } from '@/data/facilities';
 
 interface LocationStatsProps {
   city: string;
+  communities: Community[]; // Pass communities from server component
 }
 
-interface Community {
-  location: string;
-  rating?: number;
-  careTypes: string[];
-}
-
-export default function LocationStats({ city }: LocationStatsProps) {
+export default function LocationStats({ city, communities }: LocationStatsProps) {
   const decodedCity = decodeURIComponent(city);
-  const cityCommunities = communityData.filter(
-    (community: Community) => community.location.toLowerCase().includes(decodedCity.toLowerCase())
+  const cityCommunities = communities.filter(
+    (community) => community.location.toLowerCase().includes(decodedCity.toLowerCase())
   );
 
   const totalCommunities = cityCommunities.length;
   const averageRating = totalCommunities > 0
-    ? (cityCommunities.reduce((sum: number, community: Community) => sum + (community.rating || 0), 0) / totalCommunities).toFixed(1)
+    ? (cityCommunities.reduce((sum, community) => sum + (community.rating || 0), 0) / totalCommunities).toFixed(1)
     : '0.0';
 
   return (
@@ -38,7 +33,7 @@ export default function LocationStats({ city }: LocationStatsProps) {
           </div>
           <div className="bg-white p-6 rounded-lg shadow-sm">
             <h3 className="text-2xl font-bold text-gray-900 mb-2">
-              {cityCommunities.filter((c: Community) => c.careTypes.includes('Memory Care')).length}
+              {cityCommunities.filter((c) => c.careTypes.includes('Memory Care')).length}
             </h3>
             <p className="text-gray-600">Memory Care Options</p>
           </div>

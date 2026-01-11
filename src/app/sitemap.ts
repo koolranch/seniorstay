@@ -1,6 +1,7 @@
 import { MetadataRoute } from 'next';
-import { communityData } from '@/data/facilities';
 import { fetchAllBlogPosts } from '@/lib/blog-posts';
+import { fetchAllCommunities } from '@/lib/fetch-community';
+import { Community } from '@/data/facilities';
 
 type SitemapEntry = {
   url: string;
@@ -10,8 +11,8 @@ type SitemapEntry = {
 };
 
 // Extract unique cities from communities data
-const getUniqueCities = (): string[] => {
-  const cities = communityData.map(community => {
+const getUniqueCities = (communities: Community[]): string[] => {
+  const cities = communities.map(community => {
     return community.location.split(',')[0].trim();
   });
 
@@ -19,8 +20,8 @@ const getUniqueCities = (): string[] => {
 };
 
 // Create slugs for all cities
-const createCitySlugs = (): string[] => {
-  const cities = getUniqueCities();
+const createCitySlugs = (communities: Community[]): string[] => {
+  const cities = getUniqueCities(communities);
   return cities.map(city => city.toLowerCase().replace(/\s+/g, '-'));
 };
 
@@ -44,7 +45,12 @@ const createCommunitySlug = (name: string): string => {
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://www.guideforseniors.com';
   const currentDate = new Date().toISOString();
-  const blogPosts = await fetchAllBlogPosts();
+  
+  // Fetch live data from Supabase
+  const [blogPosts, communityData] = await Promise.all([
+    fetchAllBlogPosts(),
+    fetchAllCommunities()
+  ]);
 
   // Generate blog post entries
   const blogEntries: MetadataRoute.Sitemap = blogPosts.map(post => ({
@@ -141,8 +147,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'weekly' as const,
       priority: 0.8,
     })),
-    // Location/city pages
-    ...createCitySlugs().map(citySlug => ({
+    // Location/city pages (generated from live Supabase data)
+    ...createCitySlugs(communityData).map(citySlug => ({
       url: `${baseUrl}/location/${citySlug}`,
       lastModified: currentDate,
       changeFrequency: 'weekly' as const,

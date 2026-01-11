@@ -7,7 +7,7 @@ import {
   Phone, Calendar, Users, Award, ArrowRight, 
   Building2, Heart, Stethoscope, Home
 } from 'lucide-react';
-import { fetchCommunityById, fetchCommunityBySlug } from '@/lib/fetch-community';
+import { fetchCommunityById, fetchCommunityBySlug, fetchAllCommunities } from '@/lib/fetch-community';
 import { findNearestHospital, getNearestHospitalForCity } from '@/lib/hospital-proximity';
 import { getNeighborhoodHubData } from '@/data/neighborhood-hub-data';
 import { Button } from '@/components/ui/button';
@@ -120,13 +120,15 @@ export async function generateMetadata({ params }: CommunityPageProps): Promise<
 export default async function CommunityPage({ params }: CommunityPageProps) {
   const { id, slug } = params;
   
-  // Fetch community data (server-side)
-  let community = await fetchCommunityById(id);
+  // Fetch community data and all communities for similar section (server-side)
+  const [communityById, communityBySlug, allCommunities] = await Promise.all([
+    fetchCommunityById(id),
+    fetchCommunityBySlug(slug),
+    fetchAllCommunities()
+  ]);
   
-  // Fallback to slug if ID not found
-  if (!community) {
-    community = await fetchCommunityBySlug(slug);
-  }
+  // Use whichever fetch succeeded
+  const community = communityById || communityBySlug;
   
   if (!community) {
     notFound();
@@ -704,7 +706,7 @@ export default async function CommunityPage({ params }: CommunityPageProps) {
       )}
 
       {/* Similar Communities */}
-      <SimilarCommunities community={community} />
+      <SimilarCommunities community={community} allCommunities={allCommunities} />
 
       {/* Sticky Lead Capture Bar */}
       {!isOnlySkilledNursing && (

@@ -1,5 +1,3 @@
-"use client";
-
 import React from 'react';
 import Link from 'next/link';
 import { ArrowRight, CheckCircle, DollarSign, Heart, MapPin, Users, Shield, Phone, Utensils, Clock, Home, Hospital } from 'lucide-react';
@@ -7,10 +5,16 @@ import GlobalHeader from '@/components/home/GlobalHeader';
 import Footer from '@/components/footer/Footer';
 import LocationCard from '@/components/property/LocationCard';
 import StickyTourButton from '@/components/tour/StickyTourButton';
-import { communityData } from '@/data/facilities';
+import { fetchAllCommunities } from '@/lib/fetch-community';
 import SimpleContactForm from '@/components/forms/SimpleContactForm';
 
-export default function AssistedLivingClevelandPage() {
+// ISR: Revalidate every hour
+export const revalidate = 3600;
+
+export default async function AssistedLivingClevelandPage() {
+  // Fetch live community data from Supabase
+  const communityData = await fetchAllCommunities();
+  
   // Filter for Cleveland-area assisted living communities
   const clevelandCities = ['Cleveland', 'Shaker Heights', 'Beachwood', 'Parma', 'Lakewood', 'Westlake', 'Strongsville', 'Independence', 'Seven Hills', 'Rocky River'];
   const assistedLivingCommunities = communityData.filter(c => 

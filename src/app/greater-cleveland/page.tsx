@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { MapPin, Home, Users, ArrowRight, Hospital, Phone, Star } from 'lucide-react';
 import GlobalHeader from '@/components/home/GlobalHeader';
 import Footer from '@/components/footer/Footer';
-import { communityData } from '@/data/facilities';
+import { fetchAllCommunities } from '@/lib/fetch-community';
 
 export const metadata: Metadata = {
   title: 'Senior Living in Greater Cleveland | Browse All Communities | Guide for Seniors',
@@ -33,11 +33,17 @@ const greaterClevelandCities = [
   { name: 'Lakewood', description: 'Walkable city with community-focused living', clinicalAnchor: 'Fairview Hospital' },
 ];
 
-export default function GreaterClevelandPage() {
+// ISR: Revalidate every hour
+export const revalidate = 3600;
+
+export default async function GreaterClevelandPage() {
+  // Fetch live community data from Supabase
+  const communityData = await fetchAllCommunities();
+  
   // Count communities by city
   const cityCounts = greaterClevelandCities.map(city => {
     const count = communityData.filter(
-      c => c.location.split(',')[0].trim() === city.name
+      c => c.location.split(',')[0].trim().toLowerCase() === city.name.toLowerCase()
     ).length;
     return { ...city, count };
   });
@@ -49,9 +55,7 @@ export default function GreaterClevelandPage() {
     return b.count - a.count;
   });
 
-  const totalCommunities = communityData.filter(c => 
-    greaterClevelandCities.some(city => c.location.includes(city.name))
-  ).length;
+  const totalCommunities = communityData.length;
 
   return (
     <div className="min-h-screen flex flex-col bg-white">
