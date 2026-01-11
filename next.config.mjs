@@ -252,6 +252,14 @@ const nextConfig = {
         destination: '/contact',
         permanent: true,
       },
+      
+      // === Neighborhood Hub Consolidation (Jan 2026) ===
+      // Redirect /neighborhoods/* to /location/* to prevent SEO cannibalization
+      {
+        source: '/neighborhoods/:slug',
+        destination: '/location/:slug',
+        permanent: true,
+      },
     ];
   },
 };
