@@ -16,14 +16,16 @@ const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 // Event type mapping
 type EventTypeEnum = 'community_hub' | 'medical_wellness' | 'luxury_showcase';
 
-// All 12 high-intensity scrape targets
+// All 12 high-intensity scrape targets with enhanced config
 const SCRAPE_TARGETS: {
   url: string;
   sourceName: string;
   neighborhood: string;
   eventType: EventTypeEnum;
   isPdf?: boolean;
-  selectors?: string[]; // CSS selectors to target
+  extendedWait?: boolean; // For sites needing 8000ms wait
+  clickSelectors?: string[]; // Session handling: buttons to click
+  selectors?: string[];
 }[] = [
   // Community Hubs (Senior Centers)
   {
@@ -31,6 +33,8 @@ const SCRAPE_TARGETS: {
     sourceName: 'Westlake Senior Services',
     neighborhood: 'Westlake',
     eventType: 'community_hub',
+    extendedWait: true, // 8000ms for this portal
+    clickSelectors: ['[data-tab="calendar"]', 'button:contains("Calendar")', 'a:contains("Activities")'],
     selectors: ['.rec1-event', '.event-item', '.program-item'],
   },
   {
@@ -38,6 +42,8 @@ const SCRAPE_TARGETS: {
     sourceName: 'Beachwood Senior Programs',
     neighborhood: 'Beachwood',
     eventType: 'community_hub',
+    extendedWait: true, // 8000ms for this portal
+    clickSelectors: ['button:contains("Calendar")', 'a:contains("Events")', '.calendar-tab'],
     selectors: ['.event-listing', '.program-card'],
   },
   {
@@ -69,7 +75,7 @@ const SCRAPE_TARGETS: {
     selectors: ['.event-card', '.events-list-item', '[data-event]'],
   },
   
-  // Rocky River PDF (Quill Newsletter)
+  // Rocky River PDF (Quill Newsletter) - Enhanced PDF extraction
   {
     url: 'https://www.rockyriverohio.gov/s/January-Quill_Final.pdf',
     sourceName: 'Rocky River (The Quill)',
@@ -84,6 +90,7 @@ const SCRAPE_TARGETS: {
     sourceName: 'UH Age Well Events',
     neighborhood: 'Regional',
     eventType: 'medical_wellness',
+    clickSelectors: ['button:contains("Senior")', 'a:contains("Wellness")'],
     selectors: ['.event-item', '.events-container', '[data-event-id]'],
   },
   {
@@ -117,6 +124,17 @@ const SCRAPE_TARGETS: {
     selectors: ['.activity-item', '.event-listing', '.lifestyle-event'],
   },
 ];
+
+// Extraction prompt for LLM-assisted parsing
+const EXTRACTION_PROMPT = `Identify any event mentions in this content. For each event found, extract:
+- title: The name of the event
+- date: The date in YYYY-MM-DD format (assume 2026 if year not specified)
+- time: The time if available (HH:MM AM/PM format)
+- description: A brief summary of the event
+- neighborhood: The location/area if mentioned
+
+Focus on senior-related events: fitness classes, social gatherings, health screenings, trips, workshops, etc.
+Return events as a JSON array.`;
 
 // Generate JSON-LD schema for an event (per Google/Schema.org spec)
 function generateEventSchema(event: {
@@ -161,7 +179,7 @@ function generateEventSchema(event: {
   };
 }
 
-// High-intensity scrape with browser actions
+// High-intensity scrape with browser actions and session handling
 async function scrapeEventsFromUrl(target: typeof SCRAPE_TARGETS[0]): Promise<any[]> {
   if (!FIRECRAWL_API_KEY) {
     console.log(`[SKIP] No Firecrawl API key, skipping ${target.sourceName}`);
@@ -171,28 +189,73 @@ async function scrapeEventsFromUrl(target: typeof SCRAPE_TARGETS[0]): Promise<an
   try {
     console.log(`[SCRAPE] Starting high-intensity: ${target.sourceName} - ${target.url}`);
 
+    // Determine wait time based on target config
+    const waitTime = target.extendedWait ? 8000 : 7000;
+
+    // Build browser actions with session handling
+    const actions: any[] = [
+      { type: 'wait', milliseconds: 5000 },
+    ];
+
+    // Add click actions for session handling (try to click Calendar/Activities buttons)
+    if (target.clickSelectors && target.clickSelectors.length > 0) {
+      // Try each selector - Firecrawl will skip if not found
+      for (const selector of target.clickSelectors) {
+        actions.push({ type: 'click', selector });
+        actions.push({ type: 'wait', milliseconds: 2000 });
+      }
+    }
+
+    // Standard scroll and scrape
+    actions.push(
+      { type: 'scroll', direction: 'down' },
+      { type: 'wait', milliseconds: 2000 },
+      { type: 'scroll', direction: 'down' },
+      { type: 'scrape' }
+    );
+
     // Build request body based on source type
     const requestBody: any = {
       url: target.url,
-      formats: ['markdown', 'html'], // Include HTML for hidden elements
-      onlyMainContent: false, // Get all content including iframes
-      waitFor: 7000, // Extended wait for dynamic content
-      mobile: true, // Mobile view often has cleaner layouts
-      actions: [
-        { type: 'wait', milliseconds: 5000 },
-        { type: 'scroll', direction: 'down' },
-        { type: 'wait', milliseconds: 2000 },
-        { type: 'scroll', direction: 'down' },
-        { type: 'scrape' },
-      ],
+      formats: ['markdown', 'html'],
+      onlyMainContent: false,
+      waitFor: waitTime,
+      mobile: true,
+      actions,
     };
 
-    // PDF parsing for Rocky River Quill
+    // PDF parsing for Rocky River Quill - Enhanced with LLM extraction
     if (target.isPdf) {
-      requestBody.formats = ['markdown'];
-      requestBody.parsers = [{ type: 'pdf', maxPages: 10 }];
-      delete requestBody.actions; // PDFs don't need browser actions
+      requestBody.formats = [
+        'markdown',
+        {
+          type: 'json',
+          prompt: EXTRACTION_PROMPT,
+          schema: {
+            type: 'object',
+            properties: {
+              events: {
+                type: 'array',
+                items: {
+                  type: 'object',
+                  properties: {
+                    title: { type: 'string' },
+                    date: { type: 'string' },
+                    time: { type: 'string' },
+                    description: { type: 'string' },
+                    neighborhood: { type: 'string' },
+                  },
+                  required: ['title', 'date'],
+                },
+              },
+            },
+          },
+        },
+      ];
+      requestBody.parsers = [{ type: 'pdf', maxPages: 15 }];
+      delete requestBody.actions;
       delete requestBody.mobile;
+      delete requestBody.waitFor;
     }
 
     const response = await fetch(`${FIRECRAWL_BASE_URL}/scrape`, {
@@ -213,19 +276,75 @@ async function scrapeEventsFromUrl(target: typeof SCRAPE_TARGETS[0]): Promise<an
     const data = await response.json();
     const markdown = data.data?.markdown || '';
     const html = data.data?.html || '';
+    const extractedJson = data.data?.json; // LLM-extracted JSON for PDFs
     
-    // Log content length for debugging
     console.log(`[CONTENT] ${target.sourceName}: ${markdown.length} chars markdown, ${html.length} chars html`);
 
-    // Extract events from both markdown and HTML
-    const events = extractEventsFromContent(markdown, html, target);
-    console.log(`[SUCCESS] ${target.sourceName}: Found ${events.length} events`);
+    // For PDFs, use LLM-extracted events if available
+    if (target.isPdf && extractedJson?.events && Array.isArray(extractedJson.events)) {
+      console.log(`[PDF] ${target.sourceName}: LLM extracted ${extractedJson.events.length} events`);
+      return extractedJson.events.map((e: any) => formatExtractedEvent(e, target));
+    }
 
+    // For web pages, extract events from markdown and HTML
+    const events = extractEventsFromContent(markdown, html, target);
+    
+    // If initial scrape yields 0, log for debugging
+    if (events.length === 0) {
+      console.log(`[ZERO] ${target.sourceName}: No events found. Content preview: ${markdown.slice(0, 500)}`);
+    }
+    
+    console.log(`[SUCCESS] ${target.sourceName}: Found ${events.length} events`);
     return events;
   } catch (error) {
     console.error(`[ERROR] Scraping ${target.sourceName}:`, error);
     return [];
   }
+}
+
+// Format LLM-extracted events (from PDF)
+function formatExtractedEvent(extracted: any, target: typeof SCRAPE_TARGETS[0]): any {
+  // Parse date - assume 2026 if not specified
+  let startDate: Date;
+  try {
+    const dateStr = extracted.date || '';
+    if (dateStr.includes('2026') || dateStr.includes('2025')) {
+      startDate = new Date(dateStr);
+    } else {
+      startDate = new Date(`${dateStr} 2026`);
+    }
+    
+    // Add time if provided
+    if (extracted.time) {
+      const timeMatch = extracted.time.match(/(\d{1,2}):?(\d{2})?\s*(AM|PM|am|pm)?/);
+      if (timeMatch) {
+        let hours = parseInt(timeMatch[1]);
+        const minutes = parseInt(timeMatch[2] || '0');
+        const period = timeMatch[3]?.toLowerCase();
+        
+        if (period === 'pm' && hours < 12) hours += 12;
+        if (period === 'am' && hours === 12) hours = 0;
+        
+        startDate.setHours(hours, minutes);
+      }
+    }
+  } catch {
+    startDate = new Date(); // Fallback to now
+    startDate.setMonth(startDate.getMonth() + 1); // Default to next month
+  }
+
+  return {
+    title: extracted.title?.slice(0, 200) || 'Senior Event',
+    description: extracted.description?.slice(0, 500) || `Senior event at ${target.sourceName} in ${target.neighborhood}.`,
+    start_date: startDate.toISOString(),
+    neighborhood: extracted.neighborhood || target.neighborhood,
+    event_type: target.eventType,
+    location_name: target.sourceName,
+    registration_url: target.url,
+    source_url: target.url,
+    source_name: target.sourceName,
+    is_virtual: false,
+  };
 }
 
 // Enhanced event extraction with HTML parsing for hidden elements
@@ -240,54 +359,37 @@ function extractEventsFromContent(
 
   // Common date patterns (2025-2026 focused)
   const datePatterns = [
-    // Full month names
     /(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2},?\s+(?:2025|2026)/gi,
-    // Abbreviated months
     /(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\.?\s+\d{1,2},?\s+(?:2025|2026)/gi,
-    // MM/DD/YYYY or MM/DD/YY
     /(?:0?[1-9]|1[0-2])\/(?:0?[1-9]|[12]\d|3[01])\/(?:2025|2026|25|26)/g,
-    // YYYY-MM-DD (ISO)
     /(?:2025|2026)-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12]\d|3[01])/g,
-    // Day of week + Month Date
     /(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),?\s+(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2}/gi,
   ];
 
-  // Time patterns
   const timePattern = /\d{1,2}:\d{2}\s*(?:AM|PM|am|pm|a\.m\.|p\.m\.)?/gi;
 
-  // Combine content sources, prioritizing markdown
   const content = markdown + '\n\n' + cleanHtml(html);
-  
-  // Look for rec1-event and iframe content specifically
   const iframeContent = extractIframeContent(html);
   const rec1Events = extractRec1Events(html);
   
-  // Split content into potential event blocks
   const blocks = content.split(/\n\n+|\r\n\r\n+|(?=#{1,3}\s)|(?=\*\*[A-Z])/);
-  
-  // Add iframe and rec1 blocks
   blocks.push(...iframeContent, ...rec1Events);
 
   for (const block of blocks) {
     if (block.length < 15 || block.length > 3000) continue;
 
-    // Look for dates in the block
     let foundDate: Date | null = null;
     for (const pattern of datePatterns) {
       const matches = block.match(pattern);
       if (matches && matches.length > 0) {
         for (const match of matches) {
-          let parsed: Date;
-          
-          // Handle 2-digit years
           let dateStr = match;
           if (/\/2[56]$/.test(dateStr)) {
             dateStr = dateStr.replace(/\/(\d{2})$/, '/20$1');
           }
           
-          parsed = new Date(dateStr);
+          let parsed = new Date(dateStr);
           
-          // Try alternative parsing for day-of-week format
           if (isNaN(parsed.getTime())) {
             const monthDayMatch = match.match(/(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2}/i);
             if (monthDayMatch) {
@@ -306,7 +408,6 @@ function extractEventsFromContent(
 
     if (!foundDate) continue;
 
-    // Extract time if available
     const timeMatches = block.match(timePattern);
     if (timeMatches && timeMatches.length > 0) {
       const timeStr = timeMatches[0].replace(/\./g, '');
@@ -320,26 +421,18 @@ function extractEventsFromContent(
       foundDate.setHours(hour, minutes);
     }
 
-    // Extract title with multiple strategies
     let title = '';
-    
-    // Strategy 1: Headers
     const headerMatch = block.match(/^#+\s*(.+?)(?:\n|$)/m);
-    if (headerMatch) {
-      title = headerMatch[1];
-    }
+    if (headerMatch) title = headerMatch[1];
     
-    // Strategy 2: Bold text
     if (!title || title.length < 5) {
       const boldMatch = block.match(/\*\*(.{5,100}?)\*\*/);
       if (boldMatch) title = boldMatch[1];
     }
     
-    // Strategy 3: First substantial line
     if (!title || title.length < 5) {
       const lines = block.split('\n').filter(l => l.trim().length > 5);
       for (const line of lines) {
-        // Skip date-only lines
         if (!/^\d{1,2}[\/\-]/.test(line.trim()) && !/^(?:January|Feb|Mar)/i.test(line.trim())) {
           title = line.trim();
           break;
@@ -347,17 +440,15 @@ function extractEventsFromContent(
       }
     }
 
-    // Clean title
     title = title
       .replace(/[#*_\[\]]/g, '')
       .replace(/\s+/g, ' ')
-      .replace(/^\d+[.\)]\s*/, '') // Remove list numbering
+      .replace(/^\d+[.\)]\s*/, '')
       .trim()
       .slice(0, 200);
 
     if (!title || title.length < 5) continue;
 
-    // Skip non-event content
     const skipKeywords = [
       'copyright', 'privacy', 'terms', 'login', 'sign up', 'subscribe', 
       'cookie', 'footer', 'header', 'navigation', 'menu', 'search',
@@ -365,21 +456,17 @@ function extractEventsFromContent(
     ];
     if (skipKeywords.some(kw => title.toLowerCase().includes(kw))) continue;
 
-    // Senior-related keyword boost (helps filter relevant events)
     const seniorKeywords = [
       'senior', 'elder', 'aging', 'retirement', 'medicare', 'social security',
       'wellness', 'fitness', 'health', 'lunch', 'bingo', 'cards', 'crafts',
       'trip', 'tour', 'class', 'workshop', 'seminar', 'support', 'group',
       'exercise', 'yoga', 'tai chi', 'dance', 'music', 'art', 'movie'
     ];
-    const hasSeniorKeyword = seniorKeywords.some(kw => 
-      block.toLowerCase().includes(kw)
-    );
+    const hasSeniorKeyword = seniorKeywords.some(kw => block.toLowerCase().includes(kw));
 
-    // Extract description
     let description = block
-      .replace(/^#+\s*.+?\n/m, '') // Remove header
-      .replace(/\*\*(.+?)\*\*/g, '$1') // Clean bold
+      .replace(/^#+\s*.+?\n/m, '')
+      .replace(/\*\*(.+?)\*\*/g, '$1')
       .replace(/[#*_\[\]]/g, '')
       .replace(/\s+/g, ' ')
       .trim()
@@ -393,7 +480,6 @@ function extractEventsFromContent(
           : 'Senior community event'} at ${target.sourceName} in ${target.neighborhood}.`;
     }
 
-    // Extract registration URL if present
     const urlMatch = block.match(/https?:\/\/[^\s\])"'<>]+/);
     const registrationUrl = urlMatch ? urlMatch[0] : target.url;
 
@@ -408,11 +494,10 @@ function extractEventsFromContent(
       source_url: target.url,
       source_name: target.sourceName,
       is_virtual: false,
-      _relevanceScore: hasSeniorKeyword ? 2 : 1, // Internal scoring
+      _relevanceScore: hasSeniorKeyword ? 2 : 1,
     });
   }
 
-  // Sort by relevance and deduplicate
   events.sort((a, b) => (b._relevanceScore || 0) - (a._relevanceScore || 0));
   
   const uniqueEvents: any[] = [];
@@ -423,15 +508,12 @@ function extractEventsFromContent(
       const titleLower = e.title.toLowerCase();
       const eventTitleLower = event.title.toLowerCase();
       
-      // Exact match
       if (titleLower === eventTitleLower) return true;
       
-      // Significant overlap (first 20 chars)
       if (titleLower.length > 20 && eventTitleLower.length > 20) {
         if (titleLower.slice(0, 20) === eventTitleLower.slice(0, 20)) return true;
       }
       
-      // Same date and similar title start
       if (e.start_date === event.start_date && 
           titleLower.slice(0, 10) === eventTitleLower.slice(0, 10)) {
         return true;
@@ -445,14 +527,12 @@ function extractEventsFromContent(
     }
   }
 
-  return uniqueEvents.slice(0, 25); // Max 25 events per source
+  return uniqueEvents.slice(0, 25);
 }
 
-// Extract content from rec1-event containers (common in city websites)
 function extractRec1Events(html: string): string[] {
   const blocks: string[] = [];
   
-  // Look for rec1 event containers
   const rec1Pattern = /<div[^>]*class="[^"]*rec1-event[^"]*"[^>]*>([\s\S]*?)<\/div>/gi;
   let match;
   
@@ -466,7 +546,6 @@ function extractRec1Events(html: string): string[] {
     }
   }
   
-  // Also look for event-item, event-card patterns
   const eventPatterns = [
     /<div[^>]*class="[^"]*event-item[^"]*"[^>]*>([\s\S]*?)<\/div>/gi,
     /<div[^>]*class="[^"]*event-card[^"]*"[^>]*>([\s\S]*?)<\/div>/gi,
@@ -489,35 +568,27 @@ function extractRec1Events(html: string): string[] {
   return blocks;
 }
 
-// Extract content from iframes (embedded calendars)
 function extractIframeContent(html: string): string[] {
   const blocks: string[] = [];
-  
-  // Look for iframe src URLs we might want to follow
   const iframePattern = /<iframe[^>]*src="([^"]+)"[^>]*>/gi;
   let match;
   
   while ((match = iframePattern.exec(html)) !== null) {
-    // Log iframe URLs for debugging
     console.log(`[IFRAME] Found embedded content: ${match[1]}`);
   }
   
   return blocks;
 }
 
-// Clean HTML to extract text content
 function cleanHtml(html: string): string {
   return html
-    // Remove scripts and styles
     .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '')
     .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')
-    // Remove HTML tags but keep content
     .replace(/<br\s*\/?>/gi, '\n')
     .replace(/<\/p>/gi, '\n\n')
     .replace(/<\/div>/gi, '\n')
     .replace(/<\/li>/gi, '\n')
     .replace(/<[^>]+>/g, ' ')
-    // Clean up whitespace
     .replace(/&nbsp;/g, ' ')
     .replace(/&amp;/g, '&')
     .replace(/&lt;/g, '<')
@@ -530,18 +601,15 @@ function cleanHtml(html: string): string {
 export async function GET(request: Request) {
   const url = new URL(request.url);
   
-  // Check for manual trigger: ?manual=true&key=YOUR_KEY
   const isManual = url.searchParams.get('manual') === 'true';
   const manualKey = url.searchParams.get('key');
   const expectedKey = process.env.MANUAL_TRIGGER_KEY;
   
-  // Force fresh pull for manual triggers (bypass any edge caching)
   const headers: HeadersInit = {};
   if (isManual) {
     headers['Cache-Control'] = 'no-cache, no-store, must-revalidate';
   }
   
-  // Verify authentication
   const authHeader = request.headers.get('authorization');
   const cronSecret = process.env.CRON_SECRET;
 
@@ -565,7 +633,6 @@ export async function GET(request: Request) {
   console.log(`[START] High-intensity scraping ${SCRAPE_TARGETS.length} sources...`);
   console.log(`[MODE] ${isManual ? 'Manual trigger (fresh pull)' : 'Cron job'}`);
 
-  // Process all targets sequentially
   for (const target of SCRAPE_TARGETS) {
     const sourceResult = { source: target.sourceName, found: 0, inserted: 0, errors: [] as string[] };
 
@@ -574,10 +641,9 @@ export async function GET(request: Request) {
       sourceResult.found = events.length;
 
       for (const event of events) {
-        // Generate JSON-LD schema
         const schemaJson = generateEventSchema(event);
 
-        // Upsert using title + start_date for deduplication
+        // Upsert using composite key [title, start_date] for deduplication
         const { error } = await supabase
           .from('senior_events')
           .upsert(
@@ -605,11 +671,9 @@ export async function GET(request: Request) {
     results.push(sourceResult);
     console.log(`[PROGRESS] ${target.sourceName}: ${sourceResult.found} found, ${sourceResult.inserted} inserted`);
 
-    // Delay between sources to avoid rate limits (longer for high-intensity)
     await new Promise(resolve => setTimeout(resolve, 2000));
   }
 
-  // Summary
   const totalFound = results.reduce((sum, r) => sum + r.found, 0);
   const totalInserted = results.reduce((sum, r) => sum + r.inserted, 0);
   const sourcesWithEvents = results.filter(r => r.found > 0);
@@ -633,7 +697,6 @@ export async function GET(request: Request) {
   }, { headers });
 }
 
-// Support POST for Vercel Cron compatibility
 export async function POST(request: Request) {
   return GET(request);
 }
