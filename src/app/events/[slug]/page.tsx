@@ -16,7 +16,10 @@ import {
   Heart,
   Home as HomeIcon,
   DollarSign,
-  ChevronRight
+  ChevronRight,
+  AlertCircle,
+  CalendarCheck,
+  MessageCircle
 } from 'lucide-react';
 import { createClient } from '@supabase/supabase-js';
 import GlobalHeader from '@/components/home/GlobalHeader';
@@ -83,7 +86,7 @@ async function getEventBySlug(slug: string): Promise<SeniorEvent | null> {
   }
 }
 
-// Fetch related events in the same neighborhood
+// Fetch related events in the same neighborhood (upcoming only)
 async function getRelatedEvents(neighborhood: string, excludeId: string): Promise<SeniorEvent[]> {
   try {
     const supabase = createClient(supabaseUrl, supabaseAnonKey);
@@ -107,6 +110,36 @@ async function getRelatedEvents(neighborhood: string, excludeId: string): Promis
     console.error('Error in getRelatedEvents:', error);
     return [];
   }
+}
+
+// Fetch upcoming active events (for past event pages)
+async function getUpcomingActiveEvents(excludeId: string): Promise<SeniorEvent[]> {
+  try {
+    const supabase = createClient(supabaseUrl, supabaseAnonKey);
+    
+    const { data: events, error } = await supabase
+      .from('senior_events')
+      .select('*')
+      .neq('id', excludeId)
+      .gte('start_date', new Date().toISOString())
+      .order('start_date', { ascending: true })
+      .limit(6);
+    
+    if (error) {
+      console.error('Error fetching upcoming events:', error);
+      return [];
+    }
+    
+    return events || [];
+  } catch (error) {
+    console.error('Error in getUpcomingActiveEvents:', error);
+    return [];
+  }
+}
+
+// Check if event is in the past
+function isEventPast(startDate: string): boolean {
+  return new Date(startDate) < new Date();
 }
 
 // Generate static params for all events
@@ -149,6 +182,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   
   const location = event.neighborhood || 'Cleveland';
   const eventSlug = generateSlug(event.title);
+  const isPast = isEventPast(event.start_date);
   
   // Event type specific keywords
   let eventTypeKeyword = 'senior community event cleveland';
@@ -158,15 +192,24 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     eventTypeKeyword = 'luxury senior living showcase cleveland';
   }
   
-  return {
-    title: `Senior Event: ${event.title} in ${location} | Guide for Seniors`,
-    description: event.description 
+  // Override description for past events
+  const description = isPast
+    ? `Looking for information on ${event.title}? This event has passed, but Guide for Seniors provides year-round placement advocacy in ${location}.`
+    : event.description 
       ? `${event.description.slice(0, 150)}...` 
-      : `Join us for ${event.title} on ${eventDate} in ${location}, Ohio. Free senior event for Cleveland area residents.`,
+      : `Join us for ${event.title} on ${eventDate} in ${location}, Ohio. Free senior event for Cleveland area residents.`;
+  
+  const title = isPast 
+    ? `${event.title} (Past Event) | ${location} | Guide for Seniors`
+    : `Senior Event: ${event.title} in ${location} | Guide for Seniors`;
+  
+  return {
+    title,
+    description,
     keywords: `${event.title}, senior event ${location} ohio, ${eventTypeKeyword}, free senior events cleveland 2026`,
     openGraph: {
-      title: `${event.title} | ${location} Senior Event`,
-      description: event.description || `Senior event in ${location}, Ohio on ${eventDate}. Free for Cleveland area seniors.`,
+      title: isPast ? `${event.title} (Past Event)` : `${event.title} | ${location} Senior Event`,
+      description,
       url: `https://guideforseniors.com/events/${eventSlug}`,
       siteName: 'Guide for Seniors',
       locale: 'en_US',
@@ -177,8 +220,8 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${event.title} | Senior Event in ${location}`,
-      description: event.description || `Free senior event on ${eventDate}`,
+      title: isPast ? `${event.title} (Past Event)` : `${event.title} | Senior Event in ${location}`,
+      description,
     },
     alternates: {
       canonical: `https://guideforseniors.com/events/${eventSlug}`,
@@ -292,8 +335,17 @@ export default async function EventSlugPage({ params }: { params: { slug: string
     notFound();
   }
   
+  // Check if event is in the past
+  const isPastEvent = isEventPast(event.start_date);
+  
+  // Fetch related events based on whether event is past or upcoming
   const relatedEvents = event.neighborhood 
     ? await getRelatedEvents(event.neighborhood, event.id) 
+    : [];
+  
+  // For past events, also fetch upcoming active events to show at bottom
+  const upcomingActiveEvents = isPastEvent 
+    ? await getUpcomingActiveEvents(event.id) 
     : [];
   
   const isMedicalWellness = event.event_type === 'medical_wellness';
@@ -319,8 +371,16 @@ export default async function EventSlugPage({ params }: { params: { slug: string
     badgeStyle = 'bg-amber-100 text-amber-700';
   }
   
-  // Generate JSON-LD schema
+  // Override styling for past events
+  if (isPastEvent) {
+    eventTypeColor = 'bg-slate-500';
+  }
+  
+  // Generate JSON-LD schema (with past event status if applicable)
   const eventSchema = generateEventSchema(event);
+  if (isPastEvent) {
+    eventSchema.eventStatus = 'https://schema.org/EventCancelled'; // Or EventPostponed for accuracy
+  }
 
   return (
     <>
@@ -334,6 +394,28 @@ export default async function EventSlugPage({ params }: { params: { slug: string
 
       <main className="min-h-screen flex flex-col bg-slate-50">
         <GlobalHeader />
+
+        {/* Past Event Banner */}
+        {isPastEvent && (
+          <div className="bg-slate-700 text-white">
+            <div className="container mx-auto px-4 py-4">
+              <div className="flex items-center gap-3 justify-center">
+                <AlertCircle className="h-5 w-5 text-amber-300 shrink-0" />
+                <p className="text-center text-sm md:text-base">
+                  <span className="font-semibold">This community event has passed</span>
+                  <span className="hidden sm:inline">, but we can still help you find the right resources.</span>
+                </p>
+                <Link 
+                  href="/contact" 
+                  className="ml-2 inline-flex items-center gap-1 bg-white text-slate-700 px-3 py-1 rounded-full text-sm font-semibold hover:bg-slate-100 transition-colors shrink-0"
+                >
+                  Get Help
+                  <ChevronRight className="h-4 w-4" />
+                </Link>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Breadcrumb Navigation */}
         <div className="bg-white border-b border-slate-200">
@@ -403,10 +485,17 @@ export default async function EventSlugPage({ params }: { params: { slug: string
 
                   {/* Event Meta Badges */}
                   <div className="flex flex-wrap gap-3 mb-6">
-                    <Badge variant="secondary" className={`text-sm py-1.5 px-3 ${badgeStyle}`}>
+                    {/* Past Event Badge */}
+                    {isPastEvent && (
+                      <Badge variant="secondary" className="text-sm py-1.5 px-3 bg-slate-200 text-slate-600">
+                        <CalendarCheck className="h-4 w-4 mr-1.5" />
+                        Past Event
+                      </Badge>
+                    )}
+                    <Badge variant="secondary" className={`text-sm py-1.5 px-3 ${isPastEvent ? 'bg-slate-100 text-slate-500' : badgeStyle}`}>
                       {eventTypeText}
                     </Badge>
-                    <Badge variant="outline" className="text-sm py-1.5 px-3">
+                    <Badge variant="outline" className={`text-sm py-1.5 px-3 ${isPastEvent ? 'opacity-60' : ''}`}>
                       {event.is_virtual ? (
                         <>
                           <Video className="h-4 w-4 mr-1.5" />
@@ -419,9 +508,11 @@ export default async function EventSlugPage({ params }: { params: { slug: string
                         </>
                       )}
                     </Badge>
-                    <Badge variant="outline" className="text-sm py-1.5 px-3 bg-green-50 text-green-700 border-green-200">
-                      Free Admission
-                    </Badge>
+                    {!isPastEvent && (
+                      <Badge variant="outline" className="text-sm py-1.5 px-3 bg-green-50 text-green-700 border-green-200">
+                        Free Admission
+                      </Badge>
+                    )}
                   </div>
 
                   {/* Date & Time - Navy/Sage Accent */}
@@ -493,22 +584,46 @@ export default async function EventSlugPage({ params }: { params: { slug: string
 
                   {/* CTA Buttons */}
                   <div className="flex flex-wrap gap-4 pt-6 border-t border-slate-200">
-                    {event.registration_url && (
-                      <a href={event.registration_url} target="_blank" rel="noopener noreferrer">
-                        <Button 
-                          size="lg"
-                          className="gap-2 font-bold"
-                          style={{ backgroundColor: NAVY }}
-                        >
-                          Register / Learn More
-                          <ExternalLink className="h-4 w-4" />
+                    {isPastEvent ? (
+                      <>
+                        {/* Past Event - Speak with Specialist CTA */}
+                        <Link href="/contact">
+                          <Button 
+                            size="lg"
+                            className="gap-2 font-bold bg-teal-600 hover:bg-teal-700"
+                          >
+                            <MessageCircle className="h-4 w-4" />
+                            Speak with a Placement Specialist
+                          </Button>
+                        </Link>
+                        <a href="tel:+12166774630">
+                          <Button variant="outline" size="lg" className="gap-2">
+                            <Phone className="h-4 w-4" />
+                            Call (216) 677-4630
+                          </Button>
+                        </a>
+                      </>
+                    ) : (
+                      <>
+                        {/* Upcoming Event - Registration CTA */}
+                        {event.registration_url && (
+                          <a href={event.registration_url} target="_blank" rel="noopener noreferrer">
+                            <Button 
+                              size="lg"
+                              className="gap-2 font-bold"
+                              style={{ backgroundColor: NAVY }}
+                            >
+                              Register / Learn More
+                              <ExternalLink className="h-4 w-4" />
+                            </Button>
+                          </a>
+                        )}
+                        <Button variant="outline" size="lg" className="gap-2">
+                          <Share2 className="h-4 w-4" />
+                          Share Event
                         </Button>
-                      </a>
+                      </>
                     )}
-                    <Button variant="outline" size="lg" className="gap-2">
-                      <Share2 className="h-4 w-4" />
-                      Share Event
-                    </Button>
                   </div>
                 </CardContent>
               </Card>
@@ -600,35 +715,68 @@ export default async function EventSlugPage({ params }: { params: { slug: string
 
             {/* Right Sidebar */}
             <aside className="space-y-6">
-              {/* Lead-Gen CTA - Cost Report Download */}
-              {event.neighborhood && (
+              {/* Lead-Gen CTA - Different for Past vs Upcoming Events */}
+              {isPastEvent ? (
+                /* Past Event - Placement Specialist CTA */
                 <Card 
                   className="overflow-hidden border-0 shadow-lg"
-                  style={{ background: `linear-gradient(135deg, ${NAVY} 0%, #2d4a6f 100%)` }}
+                  style={{ background: `linear-gradient(135deg, #0d9488 0%, #0f766e 100%)` }}
                 >
                   <CardContent className="pt-6 text-white">
                     <div className="flex items-center gap-2 mb-3">
-                      <Download className="h-5 w-5" />
-                      <span className="text-sm font-medium uppercase tracking-wide opacity-90">Free Download</span>
+                      <MessageCircle className="h-5 w-5" />
+                      <span className="text-sm font-medium uppercase tracking-wide opacity-90">Free Consultation</span>
                     </div>
                     <h3 className="text-xl font-bold mb-3">
-                      Attending this event?
+                      Missed This Event?
                     </h3>
-                    <p className="text-white/80 text-sm mb-4 leading-relaxed">
-                      Get our comprehensive <strong>{event.neighborhood} Senior Cost Report</strong> — 
-                      pricing, amenities, and insider tips for choosing the right community.
+                    <p className="text-white/90 text-sm mb-4 leading-relaxed">
+                      Our Cleveland placement specialists can help you find senior living options 
+                      {event.neighborhood ? ` in ${event.neighborhood}` : ''} — no event attendance required.
                     </p>
-                    <Link href={`/senior-living-costs-cleveland?neighborhood=${neighborhoodSlug}`}>
+                    <Link href="/contact">
                       <Button 
                         variant="secondary" 
                         className="w-full font-bold text-slate-900 bg-white hover:bg-slate-100"
                         size="lg"
                       >
-                        Download {event.neighborhood} Cost Report
+                        <MessageCircle className="h-4 w-4 mr-2" />
+                        Speak with a Specialist
                       </Button>
                     </Link>
                   </CardContent>
                 </Card>
+              ) : (
+                /* Upcoming Event - Cost Report Download */
+                event.neighborhood && (
+                  <Card 
+                    className="overflow-hidden border-0 shadow-lg"
+                    style={{ background: `linear-gradient(135deg, ${NAVY} 0%, #2d4a6f 100%)` }}
+                  >
+                    <CardContent className="pt-6 text-white">
+                      <div className="flex items-center gap-2 mb-3">
+                        <Download className="h-5 w-5" />
+                        <span className="text-sm font-medium uppercase tracking-wide opacity-90">Free Download</span>
+                      </div>
+                      <h3 className="text-xl font-bold mb-3">
+                        Attending this event?
+                      </h3>
+                      <p className="text-white/80 text-sm mb-4 leading-relaxed">
+                        Get our comprehensive <strong>{event.neighborhood} Senior Cost Report</strong> — 
+                        pricing, amenities, and insider tips for choosing the right community.
+                      </p>
+                      <Link href={`/senior-living-costs-cleveland?neighborhood=${neighborhoodSlug}`}>
+                        <Button 
+                          variant="secondary" 
+                          className="w-full font-bold text-slate-900 bg-white hover:bg-slate-100"
+                          size="lg"
+                        >
+                          Download {event.neighborhood} Cost Report
+                        </Button>
+                      </Link>
+                    </CardContent>
+                  </Card>
+                )
               )}
 
               {/* Expert Help CTA */}
@@ -727,6 +875,85 @@ export default async function EventSlugPage({ params }: { params: { slug: string
             </aside>
           </div>
         </div>
+
+        {/* Related Active Events Section - For Past Events */}
+        {isPastEvent && upcomingActiveEvents.length > 0 && (
+          <section className="border-t border-slate-200 bg-white py-12">
+            <div className="container mx-auto px-4">
+              <div className="text-center mb-8">
+                <Badge variant="secondary" className="mb-3 bg-teal-100 text-teal-700">
+                  <Calendar className="h-3 w-3 mr-1" />
+                  Upcoming Events
+                </Badge>
+                <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-2">
+                  Discover Active Events Near You
+                </h2>
+                <p className="text-slate-600 max-w-2xl mx-auto">
+                  This event has passed, but there are many more opportunities to connect with 
+                  the senior community in Greater Cleveland.
+                </p>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {upcomingActiveEvents.map((activeEvent) => {
+                  const activeEventSlug = generateSlug(activeEvent.title);
+                  let activeBadgeStyle = 'bg-teal-100 text-teal-700';
+                  let activeTypeText = 'Community';
+                  
+                  if (activeEvent.event_type === 'medical_wellness') {
+                    activeBadgeStyle = 'bg-blue-100 text-blue-700';
+                    activeTypeText = 'Medical';
+                  } else if (activeEvent.event_type === 'luxury_showcase') {
+                    activeBadgeStyle = 'bg-amber-100 text-amber-700';
+                    activeTypeText = 'Luxury';
+                  }
+                  
+                  return (
+                    <Link 
+                      key={activeEvent.id}
+                      href={`/events/${activeEventSlug}`}
+                      className="group"
+                    >
+                      <Card className="h-full hover:shadow-lg transition-all duration-300 border-l-4 border-l-teal-500 group-hover:border-l-teal-600">
+                        <CardContent className="p-5">
+                          <div className="flex items-start gap-4">
+                            <div 
+                              className="flex flex-col items-center justify-center w-14 h-14 rounded-lg text-white font-bold shrink-0"
+                              style={{ backgroundColor: SAGE_GREEN }}
+                            >
+                              <span className="text-xs uppercase">{formatShortDate(activeEvent.start_date).split(' ')[0]}</span>
+                              <span className="text-lg">{formatShortDate(activeEvent.start_date).split(' ')[1]}</span>
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <Badge variant="secondary" className={`text-xs mb-2 ${activeBadgeStyle}`}>
+                                {activeTypeText}
+                              </Badge>
+                              <h3 className="font-semibold text-slate-900 group-hover:text-teal-600 transition-colors line-clamp-2 mb-1">
+                                {activeEvent.title}
+                              </h3>
+                              <p className="text-sm text-slate-500">
+                                {activeEvent.neighborhood || 'Cleveland Area'}
+                              </p>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </Link>
+                  );
+                })}
+              </div>
+              
+              <div className="text-center mt-8">
+                <Link href="/events">
+                  <Button size="lg" className="gap-2 font-bold" style={{ backgroundColor: NAVY }}>
+                    View All Upcoming Events
+                    <ChevronRight className="h-4 w-4" />
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </section>
+        )}
 
         <Footer />
       </main>
