@@ -1,8 +1,9 @@
 /**
  * Senior Events Type Definitions
+ * Updated for Lead-Gen Events Hub
  */
 
-export type EventType = 'expert_webinar' | 'community_event';
+export type EventType = 'community_hub' | 'medical_wellness' | 'luxury_showcase';
 
 export interface SeniorEvent {
   id: string;

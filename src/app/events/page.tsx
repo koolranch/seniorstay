@@ -128,27 +128,27 @@ export default async function EventsPage() {
               
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 mb-4 leading-tight tracking-tight">
                 Cleveland Senior Events—
-                <span className="text-teal-600">Community & Expert Sessions</span>
+                <span className="text-teal-600">Your Local Hub</span>
               </h1>
               
               <p className="text-lg md:text-xl text-slate-600 mb-8 max-w-3xl mx-auto leading-relaxed">
-                Free community events, expert-led webinars, and activities for seniors 
-                across Greater Cleveland. Find events in Westlake, Beachwood, Parma, and beyond.
+                Community centers, luxury showcases, and Cleveland Clinic wellness events 
+                across Greater Cleveland. Find events in Westlake, Beachwood, Solon, and beyond.
               </p>
 
-              {/* Trust indicators */}
+              {/* Trust indicators - matching new event types */}
               <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-slate-500">
                 <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                  <span>100% Free Events</span>
+                  <div className="w-2 h-2 bg-teal-500 rounded-full" />
+                  <span>Community Hubs</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-teal-500 rounded-full" />
-                  <span>Expert-Led Webinars</span>
+                  <div className="w-2 h-2 bg-blue-500 rounded-full" />
+                  <span>Medical & Wellness</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-amber-500 rounded-full" />
-                  <span>Local Community Focus</span>
+                  <span>Luxury Showcases</span>
                 </div>
               </div>
             </div>

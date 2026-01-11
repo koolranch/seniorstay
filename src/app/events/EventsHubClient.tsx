@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo } from 'react';
 import Link from 'next/link';
-import { Calendar, List, MapPin, Clock, Video, Users, ChevronLeft, ChevronRight, ExternalLink, Award, Phone } from 'lucide-react';
+import { Calendar, List, MapPin, Clock, Video, Users, ChevronLeft, ChevronRight, ExternalLink, Award, Phone, FileText, Building2, Heart } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -18,6 +18,33 @@ interface EventsHubClientProps {
 const SAGE_GREEN = '#8DA399';
 const TEAL_600 = '#0d9488';
 const TEAL_700 = '#0f766e';
+const MEDICAL_BLUE = '#3b82f6';
+const LUXURY_GOLD = '#d97706';
+
+// Event type display config
+const EVENT_TYPE_CONFIG = {
+  community_hub: {
+    label: 'Community Hub',
+    color: TEAL_600,
+    bgClass: 'bg-teal-100 text-teal-700',
+    borderClass: 'border-l-teal-500',
+    icon: Users,
+  },
+  medical_wellness: {
+    label: 'Medical & Wellness',
+    color: MEDICAL_BLUE,
+    bgClass: 'bg-blue-100 text-blue-700',
+    borderClass: 'border-l-blue-500',
+    icon: Award,
+  },
+  luxury_showcase: {
+    label: 'Luxury Showcase',
+    color: LUXURY_GOLD,
+    bgClass: 'bg-amber-100 text-amber-700',
+    borderClass: 'border-l-amber-500',
+    icon: ExternalLink,
+  },
+};
 
 // Format date for display
 function formatEventDate(dateString: string): string {
@@ -53,10 +80,12 @@ function getFirstDayOfMonth(year: number, month: number): number {
   return new Date(year, month, 1).getDay();
 }
 
-// Event Card Component
+// Event Card Component with Lead Hook CTA
 function EventCard({ event, compact = false }: { event: SeniorEvent; compact?: boolean }) {
-  const isExpertWebinar = event.event_type === 'expert_webinar';
+  const typeConfig = EVENT_TYPE_CONFIG[event.event_type] || EVENT_TYPE_CONFIG.community_hub;
   const neighborhoodSlug = event.neighborhood?.toLowerCase().replace(/\s+/g, '-');
+  const isMedical = event.event_type === 'medical_wellness';
+  const isLuxury = event.event_type === 'luxury_showcase';
   
   return (
     <motion.div
@@ -65,22 +94,19 @@ function EventCard({ event, compact = false }: { event: SeniorEvent; compact?: b
       exit={{ opacity: 0, y: -10 }}
       transition={{ duration: 0.2 }}
     >
-      <Card className={`group hover:shadow-lg transition-all duration-300 border-l-4 ${
-        isExpertWebinar ? 'border-l-[#8DA399]' : 'border-l-teal-500'
-      } ${compact ? 'p-3' : ''}`}>
+      <Card className={`group hover:shadow-lg transition-all duration-300 border-l-4 ${typeConfig.borderClass} ${compact ? 'p-3' : ''}`}>
         <CardHeader className={compact ? 'p-0 pb-2' : ''}>
           <div className="flex items-start justify-between gap-3">
             <div className="flex-1">
-              {/* Expert Webinar Badge */}
-              {isExpertWebinar && (
-                <div 
-                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold mb-2"
-                  style={{ backgroundColor: SAGE_GREEN, color: 'white' }}
-                >
-                  <Award className="h-3.5 w-3.5" />
-                  Led by a 20-Year Regional Director & Hospice Liaison
-                </div>
-              )}
+              {/* Event Type Badge */}
+              <div 
+                className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold mb-2 ${typeConfig.bgClass}`}
+              >
+                {isMedical && <Heart className="h-3.5 w-3.5" />}
+                {isLuxury && <Building2 className="h-3.5 w-3.5" />}
+                {!isMedical && !isLuxury && <Users className="h-3.5 w-3.5" />}
+                {typeConfig.label}
+              </div>
               
               <CardTitle className={`${compact ? 'text-base' : 'text-lg'} group-hover:text-teal-600 transition-colors line-clamp-2`}>
                 {event.title}
@@ -99,7 +125,7 @@ function EventCard({ event, compact = false }: { event: SeniorEvent; compact?: b
                 </>
               ) : (
                 <>
-                  <Users className="h-3 w-3 mr-1" />
+                  <MapPin className="h-3 w-3 mr-1" />
                   In-Person
                 </>
               )}
@@ -128,7 +154,7 @@ function EventCard({ event, compact = false }: { event: SeniorEvent; compact?: b
           )}
           
           {/* Location & Neighborhood Link */}
-          <div className="flex items-center justify-between gap-3 flex-wrap">
+          <div className="flex items-center justify-between gap-3 flex-wrap mb-3">
             <div className="flex items-center gap-1.5 text-sm">
               <MapPin className="h-4 w-4 text-slate-400" />
               {event.neighborhood ? (
@@ -149,9 +175,9 @@ function EventCard({ event, compact = false }: { event: SeniorEvent; compact?: b
             </div>
             
             {/* Event Link */}
-            {event.location_url && (
+            {(event.location_url || event.registration_url) && (
               <a 
-                href={event.location_url}
+                href={event.registration_url || event.location_url || '#'}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-sm text-teal-600 hover:underline inline-flex items-center gap-1"
@@ -161,6 +187,24 @@ function EventCard({ event, compact = false }: { event: SeniorEvent; compact?: b
               </a>
             )}
           </div>
+          
+          {/* Lead Hook CTA - Links to 2026 Cost Report */}
+          {!compact && event.neighborhood && (
+            <div className="mt-3 pt-3 border-t border-slate-100">
+              <Link 
+                href={`/senior-living-costs-cleveland?neighborhood=${encodeURIComponent(event.neighborhood)}`}
+                className="flex items-center gap-2 text-sm bg-gradient-to-r from-teal-50 to-blue-50 hover:from-teal-100 hover:to-blue-100 p-2 rounded-lg transition-colors group/cta"
+              >
+                <FileText className="h-4 w-4 text-teal-600 group-hover/cta:text-teal-700" />
+                <span className="text-slate-700 group-hover/cta:text-slate-900">
+                  Need help finding care in <strong className="text-teal-600">{event.neighborhood}</strong>?
+                </span>
+                <span className="ml-auto text-xs text-teal-600 font-semibold">
+                  Free 2026 Cost Report →
+                </span>
+              </Link>
+            </div>
+          )}
         </CardContent>
       </Card>
     </motion.div>
@@ -217,19 +261,18 @@ function CalendarView({ events, currentDate, onDateChange }: {
           {day}
         </div>
         <div className="space-y-0.5">
-          {dayEvents.slice(0, 2).map(event => (
-            <div
-              key={event.id}
-              className={`text-xs px-1.5 py-0.5 rounded truncate cursor-pointer hover:opacity-80 ${
-                event.event_type === 'expert_webinar' 
-                  ? 'bg-[#8DA399] text-white' 
-                  : 'bg-teal-100 text-teal-700'
-              }`}
-              title={event.title}
-            >
-              {event.title}
-            </div>
-          ))}
+          {dayEvents.slice(0, 2).map(event => {
+            const config = EVENT_TYPE_CONFIG[event.event_type] || EVENT_TYPE_CONFIG.community_hub;
+            return (
+              <div
+                key={event.id}
+                className={`text-xs px-1.5 py-0.5 rounded truncate cursor-pointer hover:opacity-80 ${config.bgClass}`}
+                title={event.title}
+              >
+                {event.title}
+              </div>
+            );
+          })}
           {dayEvents.length > 2 && (
             <div className="text-xs text-slate-500 px-1.5">
               +{dayEvents.length - 2} more
@@ -276,14 +319,18 @@ function CalendarView({ events, currentDate, onDateChange }: {
       </div>
       
       {/* Legend */}
-      <div className="flex items-center gap-4 px-4 py-3 border-t bg-slate-50/50 text-sm">
+      <div className="flex items-center gap-4 px-4 py-3 border-t bg-slate-50/50 text-sm flex-wrap">
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 rounded bg-teal-100" />
-          <span className="text-slate-600">Community Event</span>
+          <span className="text-slate-600">Community Hub</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded" style={{ backgroundColor: SAGE_GREEN }} />
-          <span className="text-slate-600">Expert Webinar</span>
+          <div className="w-3 h-3 rounded bg-blue-100" />
+          <span className="text-slate-600">Medical & Wellness</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="w-3 h-3 rounded bg-amber-100" />
+          <span className="text-slate-600">Luxury Showcase</span>
         </div>
       </div>
     </div>
@@ -422,20 +469,20 @@ export default function EventsHubClient({ initialEvents }: EventsHubClientProps)
           </div>
           
           {/* Event Type Filter */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
             <Button
               variant="ghost"
               size="sm"
               onClick={() => setSelectedType(null)}
               className={`rounded-lg border ${selectedType === null ? 'bg-gradient-to-r from-teal-600 to-teal-700 text-white border-teal-600' : 'border-slate-200 text-slate-600 hover:text-teal-600 hover:border-teal-200'}`}
             >
-              All Events
+              All
             </Button>
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => setSelectedType('community_event')}
-              className={`rounded-lg border ${selectedType === 'community_event' ? 'bg-gradient-to-r from-teal-600 to-teal-700 text-white border-teal-600' : 'border-slate-200 text-slate-600 hover:text-teal-600 hover:border-teal-200'}`}
+              onClick={() => setSelectedType('community_hub')}
+              className={`rounded-lg border ${selectedType === 'community_hub' ? 'bg-teal-100 text-teal-700 border-teal-300' : 'border-slate-200 text-slate-600 hover:text-teal-600 hover:border-teal-200'}`}
             >
               <Users className="h-4 w-4 mr-1" />
               Community
@@ -443,12 +490,20 @@ export default function EventsHubClient({ initialEvents }: EventsHubClientProps)
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => setSelectedType('expert_webinar')}
-              className={`rounded-lg border ${selectedType === 'expert_webinar' ? 'text-white border-[#8DA399]' : 'border-slate-200 text-slate-600 hover:text-[#8DA399] hover:border-[#8DA399]'}`}
-              style={selectedType === 'expert_webinar' ? { backgroundColor: SAGE_GREEN } : {}}
+              onClick={() => setSelectedType('medical_wellness')}
+              className={`rounded-lg border ${selectedType === 'medical_wellness' ? 'bg-blue-100 text-blue-700 border-blue-300' : 'border-slate-200 text-slate-600 hover:text-blue-600 hover:border-blue-200'}`}
             >
-              <Award className="h-4 w-4 mr-1" />
-              Expert
+              <Heart className="h-4 w-4 mr-1" />
+              Medical
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setSelectedType('luxury_showcase')}
+              className={`rounded-lg border ${selectedType === 'luxury_showcase' ? 'bg-amber-100 text-amber-700 border-amber-300' : 'border-slate-200 text-slate-600 hover:text-amber-600 hover:border-amber-200'}`}
+            >
+              <Building2 className="h-4 w-4 mr-1" />
+              Luxury
             </Button>
           </div>
         </div>
@@ -480,42 +535,63 @@ export default function EventsHubClient({ initialEvents }: EventsHubClientProps)
           
           {/* Sidebar */}
           <aside className="space-y-6">
-            {/* Expert Webinar Promo */}
-            <Card className="border-2 shadow-md" style={{ borderColor: SAGE_GREEN }}>
+            {/* 2026 Cost Report CTA - Lead Magnet */}
+            <Card className="border-2 border-teal-200 shadow-md bg-gradient-to-br from-teal-50 to-white">
               <CardHeader>
-                <div 
-                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold mb-2 w-fit"
-                  style={{ backgroundColor: SAGE_GREEN, color: 'white' }}
-                >
-                  <Award className="h-3.5 w-3.5" />
-                  Expert-Led Events
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold mb-2 w-fit bg-teal-600 text-white">
+                  <FileText className="h-3.5 w-3.5" />
+                  Free Download
                 </div>
-                <CardTitle className="text-lg text-slate-900">Free Webinars with Cleveland Healthcare Experts</CardTitle>
+                <CardTitle className="text-lg text-slate-900">2026 Cleveland Senior Living Cost Report</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-slate-600 mb-4">
-                  Join our monthly webinars led by a 20-year Regional Director & Hospice Liaison. 
-                  Get expert guidance on senior care options in Cleveland.
+                  Neighborhood-by-neighborhood pricing breakdown for assisted living, memory care, 
+                  and independent living in Greater Cleveland.
                 </p>
                 <ul className="text-sm space-y-2 mb-4 text-slate-700">
                   <li className="flex items-start gap-2">
-                    <span className="text-[#8DA399] mt-0.5">✓</span>
-                    <span>Medicare & Medicaid guidance</span>
+                    <span className="text-teal-600 mt-0.5">✓</span>
+                    <span>Average costs by neighborhood</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-[#8DA399] mt-0.5">✓</span>
-                    <span>Cleveland Clinic & St. John partnerships</span>
+                    <span className="text-teal-600 mt-0.5">✓</span>
+                    <span>VA & Medicaid eligibility info</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-[#8DA399] mt-0.5">✓</span>
-                    <span>Assisted living vs memory care</span>
+                    <span className="text-teal-600 mt-0.5">✓</span>
+                    <span>Hidden fees checklist</span>
                   </li>
                 </ul>
-                <Link href="/contact">
-                  <Button className="w-full text-white hover:opacity-90" style={{ backgroundColor: SAGE_GREEN }}>
-                    Get Notified of Next Webinar
+                <Link href="/senior-living-costs-cleveland">
+                  <Button className="w-full bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800 text-white">
+                    Get Your Free Report
                   </Button>
                 </Link>
+              </CardContent>
+            </Card>
+            
+            {/* Medical & Wellness Events */}
+            <Card className="border-2 border-blue-200 shadow-md">
+              <CardHeader>
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold mb-2 w-fit bg-blue-100 text-blue-700">
+                  <Heart className="h-3.5 w-3.5" />
+                  Medical & Wellness
+                </div>
+                <CardTitle className="text-lg text-slate-900">Cleveland Clinic & UH Events</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-slate-600 mb-4">
+                  Health screenings, wellness workshops, and educational seminars from 
+                  Cleveland&apos;s top healthcare systems.
+                </p>
+                <Button 
+                  variant="outline" 
+                  className="w-full border-blue-200 text-blue-700 hover:bg-blue-50"
+                  onClick={() => setSelectedType('medical_wellness')}
+                >
+                  View Medical Events
+                </Button>
               </CardContent>
             </Card>
             

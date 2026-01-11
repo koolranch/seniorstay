@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
-// Extended runtime for scraping all 10 targets
+// Extended runtime for scraping all targets
 export const maxDuration = 60;
 export const dynamic = 'force-dynamic';
 
@@ -13,80 +13,97 @@ const FIRECRAWL_BASE_URL = 'https://api.firecrawl.dev/v1';
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://hncgnxbooghjhpncujzx.supabase.co';
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-// All 10 scrape targets with neighborhood mapping
-const SCRAPE_TARGETS = [
+// Event type mapping
+type EventTypeEnum = 'community_hub' | 'medical_wellness' | 'luxury_showcase';
+
+// All 11 scrape targets with neighborhood and event type mapping
+const SCRAPE_TARGETS: {
+  url: string;
+  sourceName: string;
+  neighborhood: string;
+  eventType: EventTypeEnum;
+}[] = [
+  // Community Hubs (Senior Centers)
+  {
+    url: 'https://www.cityofwestlake.org/o/cs/page/programs',
+    sourceName: 'Westlake Senior Center',
+    neighborhood: 'Westlake',
+    eventType: 'community_hub',
+  },
+  {
+    url: 'https://www.beachwoodohio.com/151/Senior-Programs',
+    sourceName: 'Beachwood Senior Programs',
+    neighborhood: 'Beachwood',
+    eventType: 'community_hub',
+  },
+  {
+    url: 'https://www.solonohio.gov/1156/SSC-Programming',
+    sourceName: 'Solon Senior Center',
+    neighborhood: 'Solon',
+    eventType: 'community_hub',
+  },
+  {
+    url: 'https://www.orangerec.com/page/orange-senior-center',
+    sourceName: 'Orange Senior Center',
+    neighborhood: 'Orange',
+    eventType: 'community_hub',
+  },
+  {
+    url: 'https://the-senior-center.org/calendar',
+    sourceName: 'The Senior Center',
+    neighborhood: 'Cleveland',
+    eventType: 'community_hub',
+  },
   {
     url: 'https://attend.cuyahogalibrary.org/events?a=adults',
     sourceName: 'Cuyahoga County Library',
-    neighborhood: 'Cleveland', // Regional, default to Cleveland
-    eventType: 'community_event' as const,
-  },
-  {
-    url: 'https://www.cityofwestlake.org/calendar',
-    sourceName: 'City of Westlake',
-    neighborhood: 'Westlake',
-    eventType: 'community_event' as const,
-  },
-  {
-    url: 'https://www.beachwoodohio.com/calendar',
-    sourceName: 'City of Beachwood',
-    neighborhood: 'Beachwood',
-    eventType: 'community_event' as const,
-  },
-  {
-    url: 'https://cityofparma-oh.gov/calendar.aspx',
-    sourceName: 'City of Parma',
-    neighborhood: 'Parma',
-    eventType: 'community_event' as const,
-  },
-  {
-    url: 'https://www.solonohio.gov/1348/Senior-Center-Calendar',
-    sourceName: 'Solon Senior Center',
-    neighborhood: 'Solon',
-    eventType: 'community_event' as const,
-  },
-  {
-    url: 'https://mentorseniorcenter.com/programs-activities/',
-    sourceName: 'Mentor Senior Center',
-    neighborhood: 'Mentor',
-    eventType: 'community_event' as const,
-  },
-  {
-    url: 'https://www.lakewoodoh.gov/senior-services/',
-    sourceName: 'Lakewood Senior Services',
-    neighborhood: 'Lakewood',
-    eventType: 'community_event' as const,
-  },
-  {
-    url: 'https://www.rriver.com/senior-center',
-    sourceName: 'Rocky River Senior Center',
-    neighborhood: 'Rocky River',
-    eventType: 'community_event' as const,
-  },
-  {
-    url: 'https://www.benrose.org/events/',
-    sourceName: 'Benjamin Rose Institute',
     neighborhood: 'Cleveland',
-    eventType: 'expert_webinar' as const, // Often educational/expert content
+    eventType: 'community_hub',
+  },
+
+  // Luxury Showcases (Senior Living Communities)
+  {
+    url: 'https://vitaliawestlake.com/event-entertainment/',
+    sourceName: 'Vitalia Westlake',
+    neighborhood: 'Westlake',
+    eventType: 'luxury_showcase',
   },
   {
-    url: 'https://www.north-olmsted.com/senior-center/',
-    sourceName: 'North Olmsted Senior Center',
-    neighborhood: 'North Olmsted',
-    eventType: 'community_event' as const,
+    url: 'https://beachwood.roseseniorliving.com/about/news-events/',
+    sourceName: 'Rose Senior Living Beachwood',
+    neighborhood: 'Beachwood',
+    eventType: 'luxury_showcase',
+  },
+  {
+    url: 'https://thenormandy.com/lifestyle/activities/',
+    sourceName: 'The Normandy',
+    neighborhood: 'Rocky River',
+    eventType: 'luxury_showcase',
+  },
+
+  // Medical & Wellness (Hospital Systems)
+  {
+    url: 'https://my.clevelandclinic.org/departments/wellness/patient-resources/events',
+    sourceName: 'Cleveland Clinic Wellness',
+    neighborhood: 'Cleveland',
+    eventType: 'medical_wellness',
+  },
+  {
+    url: 'https://www.uhhospitals.org/events',
+    sourceName: 'University Hospitals',
+    neighborhood: 'Cleveland',
+    eventType: 'medical_wellness',
   },
 ];
 
-// Generate JSON-LD schema for an event
+// Generate JSON-LD schema for an event (per Google/Schema.org spec)
 function generateEventSchema(event: {
   title: string;
   description: string;
   start_date: string;
-  end_date?: string;
   neighborhood: string;
   location_name?: string;
   registration_url?: string;
-  is_virtual?: boolean;
 }) {
   return {
     '@context': 'https://schema.org',
@@ -94,29 +111,29 @@ function generateEventSchema(event: {
     name: event.title,
     description: event.description,
     startDate: event.start_date,
-    endDate: event.end_date || event.start_date,
-    eventAttendanceMode: event.is_virtual
-      ? 'https://schema.org/OnlineEventAttendanceMode'
-      : 'https://schema.org/OfflineEventAttendanceMode',
-    location: event.is_virtual
-      ? {
-          '@type': 'VirtualLocation',
-          url: event.registration_url || '',
-        }
-      : {
-          '@type': 'Place',
-          name: event.location_name || `${event.neighborhood} Senior Center`,
-          address: {
-            '@type': 'PostalAddress',
-            addressLocality: event.neighborhood,
-            addressRegion: 'OH',
-            addressCountry: 'US',
-          },
-        },
+    eventAttendanceMode: 'https://schema.org/MixedEventAttendanceMode',
+    eventStatus: 'https://schema.org/EventScheduled',
+    location: {
+      '@type': 'Place',
+      name: event.location_name || `${event.neighborhood} Community`,
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: event.neighborhood,
+        addressRegion: 'OH',
+        addressCountry: 'US',
+      },
+    },
     organizer: {
       '@type': 'Organization',
       name: 'Guide for Seniors',
       url: 'https://guideforseniors.com',
+    },
+    offers: {
+      '@type': 'Offer',
+      price: '0',
+      priceCurrency: 'USD',
+      availability: 'https://schema.org/InStock',
+      url: event.registration_url || 'https://guideforseniors.com/events',
     },
     isAccessibleForFree: true,
   };
@@ -140,9 +157,9 @@ async function scrapeEventsFromUrl(target: typeof SCRAPE_TARGETS[0]): Promise<an
       },
       body: JSON.stringify({
         url: target.url,
-        formats: ['markdown', 'html'],
+        formats: ['markdown'],
         onlyMainContent: true,
-        waitFor: 3000, // Wait for dynamic content
+        waitFor: 5000, // Wait 5s for dynamic content
       }),
     });
 
@@ -152,7 +169,7 @@ async function scrapeEventsFromUrl(target: typeof SCRAPE_TARGETS[0]): Promise<an
     }
 
     const data = await response.json();
-    const content = data.data?.markdown || data.data?.html || '';
+    const content = data.data?.markdown || '';
 
     // Extract events using pattern matching
     const events = extractEventsFromContent(content, target);
@@ -173,18 +190,15 @@ function extractEventsFromContent(content: string, target: typeof SCRAPE_TARGETS
 
   // Common date patterns
   const datePatterns = [
-    // "January 15, 2026" or "Jan 15, 2026"
     /(?:January|February|March|April|May|June|July|August|September|October|November|December|Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+\d{1,2},?\s+\d{4}/gi,
-    // "01/15/2026" or "1/15/26"
     /\d{1,2}\/\d{1,2}\/\d{2,4}/g,
-    // "2026-01-15"
     /\d{4}-\d{2}-\d{2}/g,
   ];
 
   // Time patterns
   const timePattern = /\d{1,2}:\d{2}\s*(?:AM|PM|am|pm)?/gi;
 
-  // Split content into potential event blocks (paragraphs, list items)
+  // Split content into potential event blocks
   const blocks = content.split(/\n\n+|\r\n\r\n+|(?=#{1,3}\s)/);
 
   for (const block of blocks) {
@@ -216,7 +230,7 @@ function extractEventsFromContent(content: string, target: typeof SCRAPE_TARGETS
       foundDate.setHours(hour, parseInt(minutes) || 0);
     }
 
-    // Extract title (first line or bold text)
+    // Extract title
     let title = '';
     const titleMatch = block.match(/^#+\s*(.+?)(?:\n|$)/m) || 
                        block.match(/\*\*(.+?)\*\*/m) ||
@@ -232,7 +246,7 @@ function extractEventsFromContent(content: string, target: typeof SCRAPE_TARGETS
     if (!title || title.length < 5) continue;
 
     // Skip non-event content
-    const skipKeywords = ['copyright', 'privacy', 'terms', 'login', 'sign up', 'subscribe'];
+    const skipKeywords = ['copyright', 'privacy', 'terms', 'login', 'sign up', 'subscribe', 'cookie'];
     if (skipKeywords.some(kw => title.toLowerCase().includes(kw))) continue;
 
     // Extract description
@@ -241,10 +255,7 @@ function extractEventsFromContent(content: string, target: typeof SCRAPE_TARGETS
       .replace(/[#*_]/g, '')
       .replace(/\s+/g, ' ')
       .trim()
-      .slice(0, 500);
-
-    // Check if virtual
-    const isVirtual = /virtual|online|zoom|webinar|teams|meet/i.test(block);
+      .slice(0, 500) || `${target.eventType === 'medical_wellness' ? 'Health and wellness event' : target.eventType === 'luxury_showcase' ? 'Community showcase event' : 'Senior community event'} at ${target.sourceName}`;
 
     // Extract registration URL if present
     const urlMatch = block.match(/https?:\/\/[^\s\])"']+/);
@@ -252,13 +263,12 @@ function extractEventsFromContent(content: string, target: typeof SCRAPE_TARGETS
 
     events.push({
       title,
-      description: description || `${target.eventType === 'expert_webinar' ? 'Expert webinar' : 'Community event'} at ${target.sourceName}`,
+      description,
       start_date: foundDate.toISOString(),
       neighborhood: target.neighborhood,
       event_type: target.eventType,
       location_name: target.sourceName,
       registration_url: registrationUrl,
-      is_virtual: isVirtual,
       source_url: target.url,
       source_name: target.sourceName,
     });
@@ -281,13 +291,19 @@ function extractEventsFromContent(content: string, target: typeof SCRAPE_TARGETS
 
 // Main handler
 export async function GET(request: Request) {
+  const url = new URL(request.url);
+  
+  // Check for manual trigger: ?manual=true&key=YOUR_KEY
+  const isManual = url.searchParams.get('manual') === 'true';
+  const manualKey = url.searchParams.get('key');
+  const expectedKey = process.env.MANUAL_TRIGGER_KEY;
+  
   // Verify authentication
   const authHeader = request.headers.get('authorization');
   const cronSecret = process.env.CRON_SECRET;
-  const manualKey = process.env.MANUAL_TRIGGER_KEY;
 
   const isValidCron = authHeader === `Bearer ${cronSecret}`;
-  const isValidManual = new URL(request.url).searchParams.get('key') === manualKey;
+  const isValidManual = isManual && manualKey === expectedKey;
 
   if (!isValidCron && !isValidManual && process.env.NODE_ENV === 'production') {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -305,7 +321,7 @@ export async function GET(request: Request) {
 
   console.log(`[START] Scraping ${SCRAPE_TARGETS.length} sources...`);
 
-  // Process all targets (sequentially to avoid rate limits)
+  // Process all targets sequentially
   for (const target of SCRAPE_TARGETS) {
     const sourceResult = { source: target.sourceName, found: 0, inserted: 0, errors: [] as string[] };
 
@@ -317,7 +333,7 @@ export async function GET(request: Request) {
         // Generate JSON-LD schema
         const schemaJson = generateEventSchema(event);
 
-        // Upsert to prevent duplicates (using title + start_date)
+        // Upsert using title + start_date for deduplication
         const { error } = await supabase
           .from('senior_events')
           .upsert(
@@ -344,8 +360,8 @@ export async function GET(request: Request) {
 
     results.push(sourceResult);
 
-    // Small delay between sources
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    // Small delay between sources to avoid rate limits
+    await new Promise(resolve => setTimeout(resolve, 1500));
   }
 
   // Summary
@@ -368,7 +384,7 @@ export async function GET(request: Request) {
   });
 }
 
-// Also support POST for Vercel Cron compatibility
+// Support POST for Vercel Cron compatibility
 export async function POST(request: Request) {
   return GET(request);
 }
