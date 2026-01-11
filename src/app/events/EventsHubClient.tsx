@@ -46,6 +46,17 @@ const EVENT_TYPE_CONFIG = {
   },
 };
 
+// Generate URL-friendly slug from title
+function generateSlug(title: string): string {
+  return title
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '')
+    .slice(0, 80);
+}
+
 // Format date for display
 function formatEventDate(dateString: string): string {
   const date = new Date(dateString);
@@ -84,6 +95,7 @@ function getFirstDayOfMonth(year: number, month: number): number {
 function EventCard({ event, compact = false }: { event: SeniorEvent; compact?: boolean }) {
   const typeConfig = EVENT_TYPE_CONFIG[event.event_type] || EVENT_TYPE_CONFIG.community_hub;
   const neighborhoodSlug = event.neighborhood?.toLowerCase().replace(/\s+/g, '-');
+  const eventSlug = generateSlug(event.title);
   const isMedical = event.event_type === 'medical_wellness';
   const isLuxury = event.event_type === 'luxury_showcase';
   
@@ -109,7 +121,9 @@ function EventCard({ event, compact = false }: { event: SeniorEvent; compact?: b
               </div>
               
               <CardTitle className={`${compact ? 'text-base' : 'text-lg'} group-hover:text-teal-600 transition-colors line-clamp-2`}>
-                {event.title}
+                <Link href={`/events/${eventSlug}`} className="hover:underline">
+                  {event.title}
+                </Link>
               </CardTitle>
             </div>
             
@@ -175,17 +189,12 @@ function EventCard({ event, compact = false }: { event: SeniorEvent; compact?: b
             </div>
             
             {/* Event Link */}
-            {(event.location_url || event.registration_url) && (
-              <a 
-                href={event.registration_url || event.location_url || '#'}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-sm text-teal-600 hover:underline inline-flex items-center gap-1"
-              >
-                Details
-                <ExternalLink className="h-3 w-3" />
-              </a>
-            )}
+            <Link 
+              href={`/events/${eventSlug}`}
+              className="text-sm text-teal-600 hover:underline inline-flex items-center gap-1 font-medium"
+            >
+              View Details →
+            </Link>
           </div>
           
           {/* Lead Hook CTA - Links to 2026 Cost Report */}

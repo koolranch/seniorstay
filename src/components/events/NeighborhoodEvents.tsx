@@ -19,6 +19,17 @@ interface NeighborhoodEventsProps {
 // Expert badge color (Sage Green)
 const SAGE_GREEN = '#8DA399';
 
+// Generate URL-friendly slug from title
+function generateSlug(title: string): string {
+  return title
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '')
+    .slice(0, 80);
+}
+
 // Format date for display
 function formatEventDate(dateString: string): string {
   const date = new Date(dateString);
@@ -141,70 +152,76 @@ export default function NeighborhoodEvents({
         {events.map((event, index) => {
           const isMedicalWellness = event.event_type === 'medical_wellness';
           const isLuxuryShowcase = event.event_type === 'luxury_showcase';
+          const eventSlug = generateSlug(event.title);
           
           return (
-            <motion.div
+            <Link
               key={event.id}
-              initial={{ opacity: 0, x: -10 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: index * 0.1 }}
-              className="p-4 hover:bg-slate-50/50 transition-colors"
+              href={`/events/${eventSlug}`}
+              className="block"
             >
-              {/* Event Type Badge */}
-              {isMedicalWellness && (
-                <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold mb-2 bg-blue-100 text-blue-700">
-                  <Award className="h-3 w-3" />
-                  Medical & Wellness
+              <motion.div
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: index * 0.1 }}
+                className="p-4 hover:bg-slate-50/50 transition-colors cursor-pointer"
+              >
+                {/* Event Type Badge */}
+                {isMedicalWellness && (
+                  <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold mb-2 bg-blue-100 text-blue-700">
+                    <Award className="h-3 w-3" />
+                    Medical & Wellness
+                  </div>
+                )}
+                {isLuxuryShowcase && (
+                  <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold mb-2 bg-amber-100 text-amber-700">
+                    <Award className="h-3 w-3" />
+                    Luxury Showcase
+                  </div>
+                )}
+                
+                {/* Event Title */}
+                <h4 className="font-medium text-foreground mb-2 line-clamp-1 group-hover:text-primary">
+                  {event.title}
+                </h4>
+                
+                {/* Event Details */}
+                <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
+                  <span className="flex items-center gap-1">
+                    <Calendar className="h-3.5 w-3.5" />
+                    {formatEventDate(event.start_date)}
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <Clock className="h-3.5 w-3.5" />
+                    {formatEventTime(event.start_date)}
+                  </span>
+                  <Badge 
+                    variant="secondary" 
+                    className="text-xs py-0"
+                  >
+                    {event.is_virtual ? (
+                      <>
+                        <Video className="h-3 w-3 mr-1" />
+                        Virtual
+                      </>
+                    ) : (
+                      <>
+                        <Users className="h-3 w-3 mr-1" />
+                        In-Person
+                      </>
+                    )}
+                  </Badge>
                 </div>
-              )}
-              {isLuxuryShowcase && (
-                <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold mb-2 bg-amber-100 text-amber-700">
-                  <Award className="h-3 w-3" />
-                  Luxury Showcase
-                </div>
-              )}
-              
-              {/* Event Title */}
-              <h4 className="font-medium text-foreground mb-2 line-clamp-1">
-                {event.title}
-              </h4>
-              
-              {/* Event Details */}
-              <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
-                <span className="flex items-center gap-1">
-                  <Calendar className="h-3.5 w-3.5" />
-                  {formatEventDate(event.start_date)}
-                </span>
-                <span className="flex items-center gap-1">
-                  <Clock className="h-3.5 w-3.5" />
-                  {formatEventTime(event.start_date)}
-                </span>
-                <Badge 
-                  variant="secondary" 
-                  className="text-xs py-0"
-                >
-                  {event.is_virtual ? (
-                    <>
-                      <Video className="h-3 w-3 mr-1" />
-                      Virtual
-                    </>
-                  ) : (
-                    <>
-                      <Users className="h-3 w-3 mr-1" />
-                      In-Person
-                    </>
-                  )}
-                </Badge>
-              </div>
-              
-              {/* Location */}
-              {event.location_name && (
-                <p className="text-xs text-muted-foreground mt-1.5 flex items-center gap-1">
-                  <MapPin className="h-3 w-3" />
-                  {event.location_name}
-                </p>
-              )}
-            </motion.div>
+                
+                {/* Location */}
+                {event.location_name && (
+                  <p className="text-xs text-muted-foreground mt-1.5 flex items-center gap-1">
+                    <MapPin className="h-3 w-3" />
+                    {event.location_name}
+                  </p>
+                )}
+              </motion.div>
+            </Link>
           );
         })}
       </div>
