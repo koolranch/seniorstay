@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useEffect, useRef, useState, useMemo } from 'react';
 import { Community } from '@/data/facilities';
 import { useRouter } from 'next/navigation';
