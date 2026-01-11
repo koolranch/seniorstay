@@ -1,6 +1,7 @@
 import { MetadataRoute } from 'next';
 import { communityData } from '@/data/facilities';
 import { fetchAllBlogPosts } from '@/lib/blog-posts';
+import { getAllNeighborhoodSlugs } from '@/data/neighborhood-hub-data';
 
 type SitemapEntry = {
   url: string;
@@ -147,6 +148,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: currentDate,
       changeFrequency: 'weekly' as const,
       priority: 0.8,
+    })),
+    // Neighborhood hub pages (high-value SEO pages)
+    ...getAllNeighborhoodSlugs().map(slug => ({
+      url: `${baseUrl}/neighborhoods/${slug}`,
+      lastModified: currentDate,
+      changeFrequency: 'weekly' as const,
+      priority: 0.9,
     })),
   ];
 }
