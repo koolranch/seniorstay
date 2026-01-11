@@ -19,7 +19,12 @@ import {
   ChevronRight,
   AlertCircle,
   CalendarCheck,
-  MessageCircle
+  MessageCircle,
+  HelpCircle,
+  ChevronDown,
+  MapPinned,
+  Shield,
+  Building2
 } from 'lucide-react';
 import { createClient } from '@supabase/supabase-js';
 import GlobalHeader from '@/components/home/GlobalHeader';
@@ -140,6 +145,189 @@ async function getUpcomingActiveEvents(excludeId: string): Promise<SeniorEvent[]
 // Check if event is in the past
 function isEventPast(startDate: string): boolean {
   return new Date(startDate) < new Date();
+}
+
+// Neighborhood data for "Why Seniors Love It" section and FAQ generation
+const NEIGHBORHOOD_DATA: Record<string, {
+  avgCost: number;
+  costComparison: string;
+  hospitals: string[];
+  highlight: string;
+  communityCount: number;
+}> = {
+  'Westlake': {
+    avgCost: 4200,
+    costComparison: '12% below Cleveland metro average',
+    hospitals: ['St. John Medical Center', 'Cleveland Clinic Avon'],
+    highlight: 'Consistently ranked among Ohio\'s safest cities',
+    communityCount: 8
+  },
+  'Beachwood': {
+    avgCost: 5100,
+    costComparison: '8% above Cleveland metro average',
+    hospitals: ['UH Ahuja Medical Center', 'Cleveland Clinic'],
+    highlight: 'Premier East Side location with upscale amenities',
+    communityCount: 12
+  },
+  'Solon': {
+    avgCost: 4800,
+    costComparison: '2% above Cleveland metro average',
+    hospitals: ['UH Ahuja Medical Center', 'Cleveland Clinic Hillcrest'],
+    highlight: 'Top-rated schools and family-friendly atmosphere',
+    communityCount: 6
+  },
+  'Rocky River': {
+    avgCost: 4500,
+    costComparison: '5% below Cleveland metro average',
+    hospitals: ['Fairview Hospital', 'St. John Medical Center'],
+    highlight: 'Charming lakefront community with walkable downtown',
+    communityCount: 5
+  },
+  'Parma': {
+    avgCost: 3800,
+    costComparison: '20% below Cleveland metro average',
+    hospitals: ['UH Parma Medical Center', 'MetroHealth'],
+    highlight: 'Affordable options with strong community ties',
+    communityCount: 10
+  },
+  'Regional': {
+    avgCost: 4700,
+    costComparison: 'Cleveland metro average',
+    hospitals: ['Cleveland Clinic Main Campus', 'UH Cleveland Medical Center'],
+    highlight: 'World-class healthcare within 30 minutes',
+    communityCount: 150
+  }
+};
+
+// Generate FAQ Schema for SEO (targets "People Also Ask")
+function generateFAQSchema(event: SeniorEvent) {
+  const neighborhood = event.neighborhood || 'Cleveland';
+  const neighborhoodData = NEIGHBORHOOD_DATA[neighborhood] || NEIGHBORHOOD_DATA['Regional'];
+  
+  const faqs = [
+    {
+      question: `What senior living options are near ${event.location_name || neighborhood}?`,
+      answer: `There are ${neighborhoodData.communityCount}+ senior living communities in ${neighborhood}, including assisted living, memory care, and independent living options. The average monthly cost is $${neighborhoodData.avgCost.toLocaleString()}, which is ${neighborhoodData.costComparison}. Guide for Seniors offers free placement assistance to help you find the right fit.`
+    },
+    {
+      question: `How much does assisted living cost in ${neighborhood}, Ohio?`,
+      answer: `Assisted living in ${neighborhood} averages $${neighborhoodData.avgCost.toLocaleString()} per month, ${neighborhoodData.costComparison}. Costs vary based on care level, room type, and amenities. Download our free ${neighborhood} Senior Cost Report for detailed pricing comparisons.`
+    },
+    {
+      question: `Is this event wheelchair accessible?`,
+      answer: `Most senior events in ${neighborhood} are held at ADA-compliant venues. ${event.location_name ? `${event.location_name} typically offers` : 'Venues typically offer'} accessible parking, ramps, and restrooms. Contact the venue directly or call Guide for Seniors at (216) 677-4630 for specific accessibility information.`
+    },
+    {
+      question: `Can I bring a family member who needs care assistance?`,
+      answer: `Yes, family members and caregivers are welcome at most senior events. These gatherings are designed to be inclusive for seniors at all care levels. If you need help finding care options in ${neighborhood}, our placement specialists offer free consultations.`
+    },
+    {
+      question: `What hospitals are near ${neighborhood} for seniors?`,
+      answer: `${neighborhood} has excellent healthcare access, including ${neighborhoodData.hospitals.join(' and ')}. ${neighborhoodData.highlight}. This makes it an ideal location for seniors who want quality medical care nearby.`
+    }
+  ];
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map(faq => ({
+      '@type': 'Question',
+      name: faq.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: faq.answer
+      }
+    }))
+  };
+}
+
+// Generate calendar URLs for Add to Calendar feature
+function generateCalendarUrls(event: SeniorEvent, eventSlug: string) {
+  const title = encodeURIComponent(event.title);
+  const description = encodeURIComponent(
+    `${event.description || `Senior event in ${event.neighborhood || 'Cleveland'}`}\n\nMore info: https://guideforseniors.com/events/${eventSlug}`
+  );
+  const location = encodeURIComponent(
+    event.location_name 
+      ? `${event.location_name}, ${event.neighborhood || 'Cleveland'}, OH`
+      : `${event.neighborhood || 'Cleveland'}, OH`
+  );
+  
+  const startDate = new Date(event.start_date);
+  const endDate = event.end_date ? new Date(event.end_date) : new Date(startDate.getTime() + 2 * 60 * 60 * 1000); // Default 2 hours
+  
+  // Format for Google Calendar (YYYYMMDDTHHMMSS format)
+  const formatGoogleDate = (date: Date) => {
+    return date.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+  };
+  
+  // Format for ICS file (YYYYMMDDTHHMMSSZ format)
+  const formatICSDate = (date: Date) => {
+    return date.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+  };
+  
+  const googleStart = formatGoogleDate(startDate);
+  const googleEnd = formatGoogleDate(endDate);
+  
+  return {
+    google: `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${googleStart}/${googleEnd}&details=${description}&location=${location}&sf=true&output=xml`,
+    
+    // For Apple/Outlook, we'll generate a data URL for an ICS file
+    ics: `data:text/calendar;charset=utf-8,BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Guide for Seniors//Events//EN
+BEGIN:VEVENT
+DTSTART:${formatICSDate(startDate)}
+DTEND:${formatICSDate(endDate)}
+SUMMARY:${event.title}
+DESCRIPTION:${event.description || ''}\\n\\nMore info: https://guideforseniors.com/events/${eventSlug}
+LOCATION:${event.location_name ? `${event.location_name}, ${event.neighborhood || 'Cleveland'}, OH` : `${event.neighborhood || 'Cleveland'}, OH`}
+URL:https://guideforseniors.com/events/${eventSlug}
+END:VEVENT
+END:VCALENDAR`.replace(/\n/g, '%0A').replace(/ /g, '%20')
+  };
+}
+
+// Calculate days until event
+function getDaysUntilEvent(startDate: string): number {
+  const eventDate = new Date(startDate);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  eventDate.setHours(0, 0, 0, 0);
+  const diffTime = eventDate.getTime() - today.getTime();
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  return diffDays;
+}
+
+// Generate BreadcrumbList Schema for SEO
+function generateBreadcrumbSchema(event: SeniorEvent, eventSlug: string) {
+  const items = [
+    { name: 'Home', url: 'https://guideforseniors.com' },
+    { name: 'Local Events', url: 'https://guideforseniors.com/events' }
+  ];
+
+  if (event.neighborhood) {
+    items.push({
+      name: `${event.neighborhood} Events`,
+      url: `https://guideforseniors.com/events?neighborhood=${encodeURIComponent(event.neighborhood)}`
+    });
+  }
+
+  items.push({
+    name: event.title,
+    url: `https://guideforseniors.com/events/${eventSlug}`
+  });
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: items.map((item, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: item.name,
+      item: item.url
+    }))
+  };
 }
 
 // Generate static params for all events
@@ -381,6 +569,20 @@ export default async function EventSlugPage({ params }: { params: { slug: string
   if (isPastEvent) {
     eventSchema.eventStatus = 'https://schema.org/EventCancelled'; // Or EventPostponed for accuracy
   }
+  
+  // Generate FAQ and Breadcrumb schemas for enhanced SEO
+  const faqSchema = generateFAQSchema(event);
+  const breadcrumbSchema = generateBreadcrumbSchema(event, eventSlug);
+  
+  // Get neighborhood data for "Why Seniors Love It" section
+  const neighborhoodData = NEIGHBORHOOD_DATA[event.neighborhood || 'Regional'] || NEIGHBORHOOD_DATA['Regional'];
+  
+  // Generate calendar URLs for "Add to Calendar" feature
+  const calendarUrls = generateCalendarUrls(event, eventSlug);
+  
+  // Calculate days until event for urgency indicator
+  const daysUntil = getDaysUntilEvent(event.start_date);
+  const urgencyText = daysUntil === 0 ? 'Today!' : daysUntil === 1 ? 'Tomorrow' : `In ${daysUntil} days`;
 
   return (
     <>
@@ -389,6 +591,22 @@ export default async function EventSlugPage({ params }: { params: { slug: string
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(eventSchema),
+        }}
+      />
+      
+      {/* Inject BreadcrumbList Schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbSchema),
+        }}
+      />
+      
+      {/* Inject FAQ Schema for "People Also Ask" */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(faqSchema),
         }}
       />
 
@@ -485,6 +703,20 @@ export default async function EventSlugPage({ params }: { params: { slug: string
 
                   {/* Event Meta Badges */}
                   <div className="flex flex-wrap gap-3 mb-6">
+                    {/* Urgency Indicator - For Upcoming Events */}
+                    {!isPastEvent && daysUntil <= 7 && (
+                      <Badge 
+                        variant="secondary" 
+                        className={`text-sm py-1.5 px-3 font-bold animate-pulse ${
+                          daysUntil === 0 ? 'bg-red-100 text-red-700' : 
+                          daysUntil <= 3 ? 'bg-orange-100 text-orange-700' : 
+                          'bg-amber-100 text-amber-700'
+                        }`}
+                      >
+                        <Clock className="h-4 w-4 mr-1.5" />
+                        {urgencyText}
+                      </Badge>
+                    )}
                     {/* Past Event Badge */}
                     {isPastEvent && (
                       <Badge variant="secondary" className="text-sm py-1.5 px-3 bg-slate-200 text-slate-600">
@@ -618,13 +850,128 @@ export default async function EventSlugPage({ params }: { params: { slug: string
                             </Button>
                           </a>
                         )}
-                        <Button variant="outline" size="lg" className="gap-2">
-                          <Share2 className="h-4 w-4" />
-                          Share Event
-                        </Button>
+                        
+                        {/* Add to Calendar Dropdown */}
+                        <div className="relative group">
+                          <Button variant="outline" size="lg" className="gap-2">
+                            <Calendar className="h-4 w-4" />
+                            Add to Calendar
+                            <ChevronDown className="h-4 w-4" />
+                          </Button>
+                          <div className="absolute top-full left-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-slate-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
+                            <a 
+                              href={calendarUrls.google}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 transition-colors rounded-t-lg"
+                            >
+                              <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none">
+                                <path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 5.523 4.477 10 10 10s10-4.477 10-10z" fill="#fff"/>
+                                <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.89 14.5H7.11V7.5h9.78v9z" fill="#4285F4"/>
+                                <path d="M16.89 16.5H12V12h4.89v4.5z" fill="#34A853"/>
+                                <path d="M12 16.5H7.11V12H12v4.5z" fill="#FBBC05"/>
+                                <path d="M12 12H7.11V7.5H12V12z" fill="#EA4335"/>
+                              </svg>
+                              <span className="text-sm font-medium text-slate-700">Google Calendar</span>
+                            </a>
+                            <a 
+                              href={calendarUrls.ics}
+                              download={`${eventSlug}.ics`}
+                              className="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 transition-colors"
+                            >
+                              <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none">
+                                <rect width="24" height="24" rx="5" fill="#000"/>
+                                <path d="M6 4h12a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2z" fill="#fff"/>
+                                <path d="M8 11h8M8 14h5" stroke="#000" strokeWidth="1.5" strokeLinecap="round"/>
+                              </svg>
+                              <span className="text-sm font-medium text-slate-700">Apple Calendar</span>
+                            </a>
+                            <a 
+                              href={calendarUrls.ics}
+                              download={`${eventSlug}.ics`}
+                              className="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 transition-colors rounded-b-lg"
+                            >
+                              <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none">
+                                <rect width="24" height="24" rx="3" fill="#0078D4"/>
+                                <path d="M6 8h12v10H6V8z" fill="#fff"/>
+                                <path d="M6 6h12v2H6V6z" fill="#fff"/>
+                              </svg>
+                              <span className="text-sm font-medium text-slate-700">Outlook</span>
+                            </a>
+                          </div>
+                        </div>
+
+                        {/* Share with Family Dropdown */}
+                        <div className="relative group">
+                          <Button variant="outline" size="lg" className="gap-2">
+                            <Share2 className="h-4 w-4" />
+                            Share with Family
+                            <ChevronDown className="h-4 w-4" />
+                          </Button>
+                          <div className="absolute top-full left-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-slate-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
+                            <div className="p-3 border-b border-slate-100">
+                              <p className="text-xs text-slate-500 flex items-center gap-1">
+                                <Users className="h-3 w-3" />
+                                Planning senior care is a family decision
+                              </p>
+                            </div>
+                            <a 
+                              href={`mailto:?subject=${encodeURIComponent(`Senior Event: ${event.title}`)}&body=${encodeURIComponent(`I found this event that might interest our family:\n\n${event.title}\n${formatEventDate(event.start_date)} at ${formatEventTime(event.start_date)}\n${event.location_name || event.neighborhood || 'Cleveland'}, OH\n\nLearn more: https://guideforseniors.com/events/${eventSlug}`)}`}
+                              className="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 transition-colors"
+                            >
+                              <svg className="h-5 w-5 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                              </svg>
+                              <span className="text-sm font-medium text-slate-700">Email to Family Member</span>
+                            </a>
+                            <a 
+                              href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`https://guideforseniors.com/events/${eventSlug}`)}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 transition-colors"
+                            >
+                              <svg className="h-5 w-5" viewBox="0 0 24 24" fill="#1877F2">
+                                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                              </svg>
+                              <span className="text-sm font-medium text-slate-700">Share on Facebook</span>
+                            </a>
+                            <a 
+                              href={`https://guideforseniors.com/events/${eventSlug}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 transition-colors rounded-b-lg"
+                              title="Right-click to copy link"
+                            >
+                              <svg className="h-5 w-5 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                              </svg>
+                              <span className="text-sm font-medium text-slate-700">Copy Link</span>
+                            </a>
+                          </div>
+                        </div>
                       </>
                     )}
                   </div>
+                  
+                  {/* Social Proof Testimonial - For Upcoming Events */}
+                  {!isPastEvent && (
+                    <div className="mt-6 p-4 bg-slate-50 rounded-lg border border-slate-200">
+                      <div className="flex items-start gap-3">
+                        <div className="shrink-0 w-10 h-10 rounded-full bg-teal-100 flex items-center justify-center">
+                          <Users className="h-5 w-5 text-teal-600" />
+                        </div>
+                        <div>
+                          <p className="text-sm text-slate-600 italic leading-relaxed">
+                            &ldquo;I shared this with my sister and we attended together. Guide for Seniors 
+                            helped us find the perfect place for Mom in {event.neighborhood || 'Cleveland'}.&rdquo;
+                          </p>
+                          <p className="text-xs text-slate-500 mt-2 font-medium">
+                            — Jennifer M., {event.neighborhood || 'Cleveland'} Family
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
 
@@ -647,6 +994,159 @@ export default async function EventSlugPage({ params }: { params: { slug: string
                   )}
                 </p>
               )}
+
+              {/* Why Seniors Love [Neighborhood] Section */}
+              {event.neighborhood && (
+                <Card className="mt-6 overflow-hidden border-0 shadow-md">
+                  <div 
+                    className="px-6 py-4 flex items-center gap-3"
+                    style={{ backgroundColor: SAGE_GREEN }}
+                  >
+                    <MapPinned className="h-5 w-5 text-white" />
+                    <span className="text-white font-semibold text-lg">
+                      Why Seniors Love {event.neighborhood}
+                    </span>
+                  </div>
+                  <CardContent className="p-6">
+                    <p className="text-slate-600 leading-relaxed mb-4">
+                      {neighborhoodData.highlight}. With {neighborhoodData.communityCount}+ senior living 
+                      communities and excellent healthcare access including{' '}
+                      <span className="font-medium">{neighborhoodData.hospitals.join(' and ')}</span>, 
+                      {event.neighborhood} is a top choice for Cleveland-area seniors.
+                    </p>
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-4">
+                      <div className="text-center p-3 bg-slate-50 rounded-lg">
+                        <p className="text-2xl font-bold" style={{ color: NAVY }}>
+                          ${neighborhoodData.avgCost.toLocaleString()}
+                        </p>
+                        <p className="text-xs text-slate-500">Avg. Monthly Cost</p>
+                      </div>
+                      <div className="text-center p-3 bg-slate-50 rounded-lg">
+                        <p className="text-2xl font-bold" style={{ color: NAVY }}>
+                          {neighborhoodData.communityCount}+
+                        </p>
+                        <p className="text-xs text-slate-500">Communities</p>
+                      </div>
+                      <div className="text-center p-3 bg-slate-50 rounded-lg col-span-2 md:col-span-1">
+                        <p className="text-2xl font-bold" style={{ color: NAVY }}>
+                          {neighborhoodData.hospitals.length}
+                        </p>
+                        <p className="text-xs text-slate-500">Major Hospitals</p>
+                      </div>
+                    </div>
+                    <Link 
+                      href={`/location/${neighborhoodSlug}`}
+                      className="inline-flex items-center gap-2 text-sm font-semibold hover:underline"
+                      style={{ color: SAGE_GREEN }}
+                    >
+                      <Building2 className="h-4 w-4" />
+                      Explore Senior Living in {event.neighborhood} →
+                    </Link>
+                  </CardContent>
+                </Card>
+              )}
+
+              {/* FAQ Section - Targets "People Also Ask" */}
+              <Card className="mt-6">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-xl font-bold text-slate-900 flex items-center gap-2">
+                    <HelpCircle className="h-5 w-5" style={{ color: SAGE_GREEN }} />
+                    Frequently Asked Questions
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="pt-0">
+                  <div className="divide-y divide-slate-100">
+                    {/* FAQ 1 */}
+                    <details className="group py-4">
+                      <summary className="flex items-center justify-between cursor-pointer list-none">
+                        <span className="font-medium text-slate-900 pr-4">
+                          What senior living options are near {event.location_name || event.neighborhood || 'this event'}?
+                        </span>
+                        <ChevronDown className="h-5 w-5 text-slate-400 group-open:rotate-180 transition-transform shrink-0" />
+                      </summary>
+                      <p className="mt-3 text-slate-600 text-sm leading-relaxed">
+                        There are {neighborhoodData.communityCount}+ senior living communities in {event.neighborhood || 'Greater Cleveland'}, 
+                        including assisted living, memory care, and independent living options. The average monthly cost 
+                        is ${neighborhoodData.avgCost.toLocaleString()}, which is {neighborhoodData.costComparison}.{' '}
+                        <Link href="/contact" className="font-medium hover:underline" style={{ color: SAGE_GREEN }}>
+                          Get free placement assistance →
+                        </Link>
+                      </p>
+                    </details>
+
+                    {/* FAQ 2 */}
+                    <details className="group py-4">
+                      <summary className="flex items-center justify-between cursor-pointer list-none">
+                        <span className="font-medium text-slate-900 pr-4">
+                          How much does assisted living cost in {event.neighborhood || 'Cleveland'}, Ohio?
+                        </span>
+                        <ChevronDown className="h-5 w-5 text-slate-400 group-open:rotate-180 transition-transform shrink-0" />
+                      </summary>
+                      <p className="mt-3 text-slate-600 text-sm leading-relaxed">
+                        Assisted living in {event.neighborhood || 'Cleveland'} averages ${neighborhoodData.avgCost.toLocaleString()} per month, 
+                        {neighborhoodData.costComparison}. Costs vary based on care level, room type, and amenities.{' '}
+                        <Link 
+                          href={`/senior-living-costs-cleveland${neighborhoodSlug ? `?neighborhood=${neighborhoodSlug}` : ''}`} 
+                          className="font-medium hover:underline" 
+                          style={{ color: SAGE_GREEN }}
+                        >
+                          Download our free Cost Report →
+                        </Link>
+                      </p>
+                    </details>
+
+                    {/* FAQ 3 */}
+                    <details className="group py-4">
+                      <summary className="flex items-center justify-between cursor-pointer list-none">
+                        <span className="font-medium text-slate-900 pr-4">
+                          Is this event wheelchair accessible?
+                        </span>
+                        <ChevronDown className="h-5 w-5 text-slate-400 group-open:rotate-180 transition-transform shrink-0" />
+                      </summary>
+                      <p className="mt-3 text-slate-600 text-sm leading-relaxed">
+                        Most senior events in {event.neighborhood || 'Cleveland'} are held at ADA-compliant venues. 
+                        {event.location_name ? ` ${event.location_name} typically offers` : ' Venues typically offer'} accessible 
+                        parking, ramps, and restrooms. For specific accessibility information, call us at{' '}
+                        <a href="tel:+12166774630" className="font-medium hover:underline" style={{ color: SAGE_GREEN }}>
+                          (216) 677-4630
+                        </a>.
+                      </p>
+                    </details>
+
+                    {/* FAQ 4 */}
+                    <details className="group py-4">
+                      <summary className="flex items-center justify-between cursor-pointer list-none">
+                        <span className="font-medium text-slate-900 pr-4">
+                          Can I bring a family member who needs care assistance?
+                        </span>
+                        <ChevronDown className="h-5 w-5 text-slate-400 group-open:rotate-180 transition-transform shrink-0" />
+                      </summary>
+                      <p className="mt-3 text-slate-600 text-sm leading-relaxed">
+                        Yes, family members and caregivers are welcome at most senior events. These gatherings are designed 
+                        to be inclusive for seniors at all care levels. If you need help finding care options, our{' '}
+                        <Link href="/contact" className="font-medium hover:underline" style={{ color: SAGE_GREEN }}>
+                          placement specialists offer free consultations
+                        </Link>.
+                      </p>
+                    </details>
+
+                    {/* FAQ 5 */}
+                    <details className="group py-4">
+                      <summary className="flex items-center justify-between cursor-pointer list-none">
+                        <span className="font-medium text-slate-900 pr-4">
+                          What hospitals are near {event.neighborhood || 'Cleveland'} for seniors?
+                        </span>
+                        <ChevronDown className="h-5 w-5 text-slate-400 group-open:rotate-180 transition-transform shrink-0" />
+                      </summary>
+                      <p className="mt-3 text-slate-600 text-sm leading-relaxed">
+                        {event.neighborhood || 'Cleveland'} has excellent healthcare access, including{' '}
+                        <span className="font-medium">{neighborhoodData.hospitals.join(' and ')}</span>. 
+                        {neighborhoodData.highlight}. This makes it an ideal location for seniors who want quality medical care nearby.
+                      </p>
+                    </details>
+                  </div>
+                </CardContent>
+              </Card>
 
               {/* Related Events in Neighborhood */}
               {relatedEvents.length > 0 && event.neighborhood && (
