@@ -55,6 +55,12 @@ const GlobalHeader: React.FC = () => {
               Browse Communities
             </Link>
             <Link 
+              href="/events" 
+              className="text-slate-600 hover:text-teal-600 font-medium transition-colors"
+            >
+              Local Events
+            </Link>
+            <Link 
               href="/assessment" 
               className="text-slate-600 hover:text-teal-600 font-medium transition-colors"
             >
@@ -119,6 +125,13 @@ const GlobalHeader: React.FC = () => {
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Browse Communities
+              </Link>
+              <Link 
+                href="/events" 
+                className="px-4 py-3 text-slate-700 hover:bg-slate-50 rounded-lg font-medium transition-colors"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Local Events
               </Link>
               <Link 
                 href="/assessment" 
