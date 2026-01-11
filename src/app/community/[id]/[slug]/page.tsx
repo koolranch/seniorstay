@@ -89,6 +89,20 @@ export async function generateMetadata({ params }: CommunityPageProps): Promise<
   const geoKeywords = `${community.name} reviews, ${primaryCareType.toLowerCase()} near ${nearestHospitalName}, ${city} ${primaryCareType.toLowerCase()} costs ${currentYear}`;
   const keywords = `${community.name}, ${primaryCareType.toLowerCase()} ${city} ohio, senior living ${city}, ${community.careTypes.join(', ').toLowerCase()}, ${geoKeywords}`;
   
+  // Generate detailed image alt for accessibility and SEO
+  const imageUrl = community.images?.[0] || `${baseUrl}/images/default-community.jpg`;
+  const imageAltText = community.images?.[0]
+    ? `Exterior of ${community.name} ${primaryCareType.toLowerCase().replace('facility', '')} in ${city}, Ohio`
+    : `${primaryCareType} community placeholder - ${community.name}`;
+  
+  // OG Title: Under 60 chars, focused format
+  const ogTitle = `${city} Senior Care | ${community.name.slice(0, 30)}`;
+  
+  // OG Description: 110-160 chars, benefit-driven hook
+  const ogDescription = community.description 
+    ? `${primaryCareType} ${hospitalDistance}${nearestHospitalName}. ${community.description.substring(0, 80)}... Free tour & pricing.`
+    : `Discover ${community.name}, offering ${primaryCareType.toLowerCase()} in ${city}, OH near ${nearestHospitalName}. Schedule a free tour today.`;
+  
   return {
     title,
     description,
@@ -97,18 +111,26 @@ export async function generateMetadata({ params }: CommunityPageProps): Promise<
       canonical: canonicalUrl,
     },
     openGraph: {
-      title: `${community.name} | ${primaryCareType} Near ${nearestHospitalName} in ${city}`,
-      description,
-      images: community.images?.[0] ? [community.images[0]] : [],
+      title: ogTitle.slice(0, 60),
+      description: ogDescription.slice(0, 160),
       url: canonicalUrl,
       siteName: 'Guide for Seniors',
       locale: 'en_US',
-      type: 'website',
+      type: 'article', // Community profiles are article/content type
+      images: [
+        {
+          url: imageUrl,
+          width: 1200,
+          height: 630,
+          alt: imageAltText,
+        },
+      ],
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${community.name} | ${primaryCareType} in ${city}`,
-      description,
+      title: ogTitle.slice(0, 60),
+      description: ogDescription.slice(0, 160),
+      images: [imageUrl],
     },
     // SEO SAFETY: noindex incomplete profiles
     robots: isIncompleteProfile 

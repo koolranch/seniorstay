@@ -405,51 +405,86 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   const eventSlug = generateSlug(event.title);
   const isPast = isEventPast(event.start_date);
   
-  // Event type specific keywords
+  // Event type specific keywords and hooks
   let eventTypeKeyword = 'senior community event cleveland';
+  let benefitHook = 'Connect with local seniors and caregivers';
+  let eventTypeImageAlt = 'Cleveland senior community event';
+  
   if (event.event_type === 'medical_wellness') {
     eventTypeKeyword = 'senior health wellness event cleveland';
+    benefitHook = 'Free health screenings and expert wellness guidance';
+    eventTypeImageAlt = 'Senior health and wellness event in Cleveland';
   } else if (event.event_type === 'luxury_showcase') {
     eventTypeKeyword = 'luxury senior living showcase cleveland';
+    benefitHook = 'Tour premium assisted living communities';
+    eventTypeImageAlt = 'Luxury senior living showcase event';
   }
   
-  // Override description for past events
-  const description = isPast
-    ? `Looking for information on ${event.title}? This event has passed, but Guide for Seniors provides year-round placement advocacy in ${location}.`
+  // Base URL for canonical and OG
+  const baseUrl = 'https://www.guideforseniors.com';
+  const canonicalUrl = `${baseUrl}/events/${eventSlug}`;
+  
+  // Generate benefit-driven OG description (110-160 chars)
+  const ogDescription = isPast
+    ? `This ${location} event has passed. Explore upcoming senior events and get free placement help from Guide for Seniors.`
+    : `${benefitHook} at ${event.title} in ${location}. ${eventDate}. Free admission • Get your ${location} Senior Cost Report.`;
+  
+  // SEO description can be longer
+  const seoDescription = isPast
+    ? `Looking for information on ${event.title}? This event has passed, but Guide for Seniors provides year-round placement advocacy in ${location}, Ohio.`
     : event.description 
       ? `${event.description.slice(0, 150)}...` 
       : `Join us for ${event.title} on ${eventDate} in ${location}, Ohio. Free senior event for Cleveland area residents.`;
   
-  const title = isPast 
+  // OG title: Under 60 chars, benefit-focused
+  const ogTitle = isPast 
+    ? `${event.title.slice(0, 35)} (Past) | ${location}`
+    : `${event.title.slice(0, 40)} | ${location} Senior Event`;
+  
+  // SEO title can be longer
+  const seoTitle = isPast 
     ? `${event.title} (Past Event) | ${location} | Guide for Seniors`
     : `Senior Event: ${event.title} in ${location} | Guide for Seniors`;
   
+  // Generate detailed image alt text for accessibility and SEO
+  const imageAltText = event.image_url 
+    ? `${event.title} - ${eventTypeImageAlt} at ${event.location_name || location}`
+    : `${eventTypeImageAlt} hosted by Guide for Seniors`;
+  
   return {
-    title,
-    description,
+    title: seoTitle,
+    description: seoDescription,
     keywords: `${event.title}, senior event ${location} ohio, ${eventTypeKeyword}, free senior events cleveland 2026`,
     openGraph: {
-      title: isPast ? `${event.title} (Past Event)` : `${event.title} | ${location} Senior Event`,
-      description,
-      url: `https://guideforseniors.com/events/${eventSlug}`,
+      title: ogTitle.slice(0, 60),
+      description: ogDescription.slice(0, 160),
+      url: canonicalUrl,
       siteName: 'Guide for Seniors',
       locale: 'en_US',
-      type: 'website',
-      images: event.image_url 
-        ? [{ url: event.image_url, width: 1200, height: 630, alt: event.title }] 
-        : [{ url: 'https://guideforseniors.com/og-events.jpg', width: 1200, height: 630, alt: 'Cleveland Senior Events' }],
+      type: 'article', // Events are articles/content
+      images: [
+        {
+          url: event.image_url || `${baseUrl}/og-events.jpg`,
+          width: 1200,
+          height: 630,
+          alt: imageAltText,
+        },
+      ],
     },
     twitter: {
       card: 'summary_large_image',
-      title: isPast ? `${event.title} (Past Event)` : `${event.title} | Senior Event in ${location}`,
-      description,
+      title: ogTitle.slice(0, 60),
+      description: ogDescription.slice(0, 160),
+      images: [event.image_url || `${baseUrl}/og-events.jpg`],
     },
     alternates: {
-      canonical: `https://guideforseniors.com/events/${eventSlug}`,
+      canonical: canonicalUrl,
     },
     robots: {
       index: true,
       follow: true,
+      'max-snippet': -1,
+      'max-image-preview': 'large' as const,
     },
   };
 }
