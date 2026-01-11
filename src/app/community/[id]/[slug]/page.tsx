@@ -17,6 +17,7 @@ import NeighborhoodEvents from '@/components/events/NeighborhoodEvents';
 import StickyLeadCapture from '@/components/community/StickyLeadCapture';
 import SimilarCommunities from '@/components/community/SimilarCommunities';
 import CommunityContact from '@/components/community/CommunityContact';
+import CareNeedsQuiz from '@/components/community/CareNeedsQuiz';
 
 // ISR: Revalidate every hour
 export const revalidate = 3600;
@@ -416,39 +417,11 @@ export default async function CommunityPage({ params }: CommunityPageProps) {
             </div>
           )}
 
-          {/* Card 2: Quick Contact */}
-          <div 
-            className="rounded-2xl p-6 border"
-            style={{
-              background: 'linear-gradient(135deg, rgba(141, 163, 153, 0.15) 0%, rgba(141, 163, 153, 0.05) 100%)',
-              borderColor: 'rgba(141, 163, 153, 0.3)',
-            }}
-          >
-            <h3 className="text-lg font-semibold mb-4 flex items-center gap-2" style={{ color: '#0f172a' }}>
-              <Phone className="h-5 w-5" style={{ color: '#8DA399' }} />
-              Schedule a Tour
-            </h3>
-            
-            <p className="text-slate-600 text-sm mb-4">
-              Speak with a local {cityName} senior living specialist
-            </p>
-            
-            <a href="tel:+12166774630">
-              <Button 
-                className="w-full mb-3 text-white font-semibold"
-                style={{ backgroundColor: '#0f172a' }}
-              >
-                <Phone className="h-4 w-4 mr-2" />
-                (216) 677-4630
-              </Button>
-            </a>
-            
-            <Link href={`/contact?community=${encodeURIComponent(community.name)}&city=${encodeURIComponent(cityName)}`}>
-              <Button variant="outline" className="w-full border-slate-300">
-                Request Information
-              </Button>
-            </Link>
-          </div>
+          {/* Card 2: Care Needs Quiz - High-Intent Lead Capture */}
+          <CareNeedsQuiz 
+            communityName={community.name}
+            cityName={cityName}
+          />
 
           {/* Card 3: Expert Take / About */}
           <div 
