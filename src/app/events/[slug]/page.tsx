@@ -27,7 +27,9 @@ import {
   Building2
 } from 'lucide-react';
 import { createClient } from '@supabase/supabase-js';
+import { fetchQualityCommunitiesByCity } from '@/lib/fetch-featured-communities';
 import GlobalHeader from '@/components/home/GlobalHeader';
+import EventReminderForm from '@/components/events/EventReminderForm';
 import Footer from '@/components/footer/Footer';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -145,6 +147,37 @@ async function getUpcomingActiveEvents(excludeId: string): Promise<SeniorEvent[]
 // Check if event is in the past
 function isEventPast(startDate: string): boolean {
   return new Date(startDate) < new Date();
+}
+
+// Fetch nearby communities for "Communities Near This Event" section
+async function getNearbyCommunities(neighborhood: string | null) {
+  if (!neighborhood) return [];
+  
+  try {
+    // Map event neighborhood names to city names used in Community table
+    const cityMapping: Record<string, string> = {
+      'Westlake': 'Westlake',
+      'Beachwood': 'Beachwood',
+      'Solon': 'Solon',
+      'Rocky River': 'Rocky River',
+      'Parma': 'Parma',
+      'Regional': 'Cleveland', // For regional events, show Cleveland communities
+      'Orange/Pepper Pike': 'Pepper Pike',
+    };
+    
+    const city = cityMapping[neighborhood] || neighborhood;
+    const communities = await fetchQualityCommunitiesByCity(city, 4, false);
+    
+    // If no communities found in exact city, try broader Cleveland area
+    if (communities.length === 0 && neighborhood !== 'Regional') {
+      return await fetchQualityCommunitiesByCity('Cleveland', 4, false);
+    }
+    
+    return communities;
+  } catch (error) {
+    console.error('Error fetching nearby communities:', error);
+    return [];
+  }
 }
 
 // Neighborhood data for "Why Seniors Love It" section and FAQ generation
@@ -535,6 +568,9 @@ export default async function EventSlugPage({ params }: { params: { slug: string
   const upcomingActiveEvents = isPastEvent 
     ? await getUpcomingActiveEvents(event.id) 
     : [];
+  
+  // Fetch nearby senior living communities for lead generation
+  const nearbyCommunities = await getNearbyCommunities(event.neighborhood);
   
   const isMedicalWellness = event.event_type === 'medical_wellness';
   const isLuxuryShowcase = event.event_type === 'luxury_showcase';
@@ -1307,6 +1343,116 @@ export default async function EventSlugPage({ params }: { params: { slug: string
                   </a>
                 </CardContent>
               </Card>
+
+              {/* Event Reminder Signup - For Upcoming Events Only */}
+              {!isPastEvent && (
+                <Card className="border border-slate-200">
+                  <CardContent className="pt-6">
+                    <EventReminderForm 
+                      eventId={event.id}
+                      eventTitle={event.title}
+                      eventDate={event.start_date}
+                      neighborhood={event.neighborhood}
+                    />
+                  </CardContent>
+                </Card>
+              )}
+
+              {/* Communities Near This Event - High Conversion Section */}
+              {nearbyCommunities.length > 0 && (
+                <Card className="border border-slate-200 overflow-hidden">
+                  <div 
+                    className="px-4 py-3 flex items-center gap-2"
+                    style={{ backgroundColor: NAVY }}
+                  >
+                    <Building2 className="h-4 w-4 text-white" />
+                    <span className="text-white font-semibold text-sm">
+                      Senior Living Near This Event
+                    </span>
+                  </div>
+                  <CardContent className="p-0">
+                    <div className="divide-y divide-slate-100">
+                      {nearbyCommunities.slice(0, 4).map((community) => {
+                        const communitySlug = community.name
+                          .toLowerCase()
+                          .replace(/[^a-z0-9\s-]/g, '')
+                          .replace(/\s+/g, '-');
+                        
+                        return (
+                          <Link 
+                            key={community.id}
+                            href={`/community/${community.id}/${communitySlug}`}
+                            className="flex items-start gap-3 p-3 hover:bg-slate-50 transition-colors"
+                          >
+                            {/* Community Image */}
+                            <div className="w-16 h-16 rounded-lg overflow-hidden shrink-0 bg-slate-100">
+                              {community.images && community.images.length > 0 ? (
+                                <img 
+                                  src={community.images[0]} 
+                                  alt={community.name}
+                                  className="w-full h-full object-cover"
+                                />
+                              ) : (
+                                <div className="w-full h-full flex items-center justify-center">
+                                  <Building2 className="h-6 w-6 text-slate-300" />
+                                </div>
+                              )}
+                            </div>
+                            
+                            {/* Community Info */}
+                            <div className="flex-1 min-w-0">
+                              <h4 className="font-semibold text-slate-900 text-sm truncate">
+                                {community.name}
+                              </h4>
+                              <p className="text-xs text-slate-500 mb-1">
+                                {community.location}
+                              </p>
+                              {community.rating && parseFloat(String(community.rating)) > 0 && (
+                                <div className="flex items-center gap-1">
+                                  <div className="flex">
+                                    {[...Array(5)].map((_, i) => (
+                                      <svg
+                                        key={i}
+                                        className={`h-3 w-3 ${
+                                          i < Math.round(parseFloat(String(community.rating)))
+                                            ? 'text-amber-400'
+                                            : 'text-slate-200'
+                                        }`}
+                                        fill="currentColor"
+                                        viewBox="0 0 20 20"
+                                      >
+                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                      </svg>
+                                    ))}
+                                  </div>
+                                  <span className="text-xs text-slate-500">
+                                    {parseFloat(String(community.rating)).toFixed(1)}
+                                  </span>
+                                </div>
+                              )}
+                              {community.careTypes && community.careTypes.length > 0 && (
+                                <p className="text-xs text-teal-600 mt-1 truncate">
+                                  {community.careTypes.slice(0, 2).join(' • ')}
+                                </p>
+                              )}
+                            </div>
+                          </Link>
+                        );
+                      })}
+                    </div>
+                    <div className="p-3 border-t border-slate-100 bg-slate-50">
+                      <Link 
+                        href={`/location/${neighborhoodSlug}`}
+                        className="text-sm font-semibold hover:underline flex items-center justify-center gap-1"
+                        style={{ color: NAVY }}
+                      >
+                        View All {event.neighborhood} Communities
+                        <ChevronRight className="h-4 w-4" />
+                      </Link>
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
 
               {/* Internal Links - Neighborhood Exploration */}
               {event.neighborhood && (
