@@ -20,6 +20,7 @@ import StickyCalculatorCTA from '@/components/StickyCalculatorCTA';
 import CityLeadMagnet from '@/components/location/CityLeadMagnet';
 import CareTypeNav from '@/components/location/CareTypeNav';
 import LocalAuthorityProse from '@/components/location/LocalAuthorityProse';
+import NeighborhoodEvents from '@/components/events/NeighborhoodEvents';
 
 interface CityLocationClientProps {
   cityName: string;
@@ -329,6 +330,22 @@ export default function CityLocationClient({ cityName, stateAbbr, communities }:
       {localResources && (
         <LocalSeniorResources cityName={cityName} resources={localResources} />
       )}
+
+      {/* ============================================
+          SECTION 10.5: NEIGHBORHOOD EVENTS
+          Upcoming events from the Senior Events Hub
+      ============================================ */}
+      <section className="py-12 bg-white border-t border-slate-200">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto">
+            <NeighborhoodEvents 
+              neighborhood={cityName}
+              limit={3}
+              showHeader={true}
+            />
+          </div>
+        </div>
+      </section>
 
       {/* ============================================
           SECTION 11: HELPFUL RESOURCES
