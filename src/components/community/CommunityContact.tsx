@@ -125,7 +125,7 @@ export default function CommunityContact({ community }: CommunityContactProps) {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full bg-orange-500 hover:bg-orange-600 disabled:bg-orange-300 text-white py-3 px-4 rounded-lg font-semibold transition-colors"
+                  className="w-full bg-teal-600 hover:bg-teal-700 disabled:bg-teal-300 text-white py-3 px-4 rounded-lg font-semibold transition-colors"
                 >
                   {isSubmitting ? 'Sending...' : 'Request Information & Tour'}
                 </button>

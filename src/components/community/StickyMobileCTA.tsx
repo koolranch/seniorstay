@@ -42,7 +42,7 @@ export default function StickyMobileCTA({ communityName, cityName }: StickyMobil
         {/* Speak to Advisor Button */}
         <Link
           href={`/contact?community=${communityParam}&city=${encodeURIComponent(cityName)}`}
-          className="flex-1 flex items-center justify-center gap-2 bg-orange-500 text-white font-semibold py-3 px-4 rounded-lg hover:bg-orange-600 transition-colors"
+          className="flex-1 flex items-center justify-center gap-2 bg-teal-600 text-white font-semibold py-3 px-4 rounded-lg hover:bg-teal-700 transition-colors"
         >
           <MessageCircle className="h-4 w-4" />
           <span className="text-sm">Speak to {cityName} Advisor</span>
