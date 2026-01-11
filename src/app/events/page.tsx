@@ -40,7 +40,7 @@ async function getEvents(): Promise<SeniorEvent[]> {
       : process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
     
     const res = await fetch(`${baseUrl}/api/events?limit=50&upcoming=true`, {
-      next: { revalidate: 3600 }, // Cache for 1 hour
+      cache: 'no-store', // Always fetch fresh data
     });
     
     if (!res.ok) {
