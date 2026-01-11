@@ -17,8 +17,8 @@
       "schedule": "0 5 * * 0"
     },
     {
-      "path": "/api/events/scrape",
-      "schedule": "0 6 * * 1"
+      "path": "/api/cron/scrape-events",
+      "schedule": "0 0 * * 0"
     }
   ]
 }

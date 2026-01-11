@@ -14,6 +14,7 @@ export interface SeniorEvent {
   event_type: EventType;
   location_name: string | null;
   location_url: string | null;
+  registration_url: string | null; // Primary URL for event details/registration
   is_virtual: boolean;
   image_url: string | null;
   schema_json: object | null;
