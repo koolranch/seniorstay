@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo } from 'react';
 import Link from 'next/link';
-import { Calendar, List, MapPin, Clock, Video, Users, ChevronLeft, ChevronRight, ExternalLink, Award } from 'lucide-react';
+import { Calendar, List, MapPin, Clock, Video, Users, ChevronLeft, ChevronRight, ExternalLink, Award, Phone } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -14,8 +14,10 @@ interface EventsHubClientProps {
   initialEvents: SeniorEvent[];
 }
 
-// Expert badge color (Sage Green)
+// Brand colors (matching homepage)
 const SAGE_GREEN = '#8DA399';
+const TEAL_600 = '#0d9488';
+const TEAL_700 = '#0f766e';
 
 // Format date for display
 function formatEventDate(dateString: string): string {
@@ -64,7 +66,7 @@ function EventCard({ event, compact = false }: { event: SeniorEvent; compact?: b
       transition={{ duration: 0.2 }}
     >
       <Card className={`group hover:shadow-lg transition-all duration-300 border-l-4 ${
-        isExpertWebinar ? 'border-l-[#8DA399]' : 'border-l-primary'
+        isExpertWebinar ? 'border-l-[#8DA399]' : 'border-l-teal-500'
       } ${compact ? 'p-3' : ''}`}>
         <CardHeader className={compact ? 'p-0 pb-2' : ''}>
           <div className="flex items-start justify-between gap-3">
@@ -80,7 +82,7 @@ function EventCard({ event, compact = false }: { event: SeniorEvent; compact?: b
                 </div>
               )}
               
-              <CardTitle className={`${compact ? 'text-base' : 'text-lg'} group-hover:text-primary transition-colors line-clamp-2`}>
+              <CardTitle className={`${compact ? 'text-base' : 'text-lg'} group-hover:text-teal-600 transition-colors line-clamp-2`}>
                 {event.title}
               </CardTitle>
             </div>
@@ -107,20 +109,20 @@ function EventCard({ event, compact = false }: { event: SeniorEvent; compact?: b
         
         <CardContent className={compact ? 'p-0' : ''}>
           {/* Date & Time */}
-          <div className="flex items-center gap-4 text-sm text-muted-foreground mb-3">
+          <div className="flex items-center gap-4 text-sm text-slate-600 mb-3">
             <div className="flex items-center gap-1.5">
-              <Calendar className="h-4 w-4" />
+              <Calendar className="h-4 w-4 text-teal-600" />
               <span className="font-medium">{formatEventDate(event.start_date)}</span>
             </div>
             <div className="flex items-center gap-1.5">
-              <Clock className="h-4 w-4" />
+              <Clock className="h-4 w-4 text-teal-600" />
               <span>{formatEventTime(event.start_date)}</span>
             </div>
           </div>
           
           {/* Description */}
           {!compact && event.description && (
-            <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
+            <p className="text-sm text-slate-600 mb-3 line-clamp-2">
               {event.description}
             </p>
           )}
@@ -128,19 +130,19 @@ function EventCard({ event, compact = false }: { event: SeniorEvent; compact?: b
           {/* Location & Neighborhood Link */}
           <div className="flex items-center justify-between gap-3 flex-wrap">
             <div className="flex items-center gap-1.5 text-sm">
-              <MapPin className="h-4 w-4 text-muted-foreground" />
+              <MapPin className="h-4 w-4 text-slate-400" />
               {event.neighborhood ? (
                 <Link 
                   href={`/location/${neighborhoodSlug}`}
-                  className="text-primary hover:underline font-medium"
+                  className="text-teal-600 hover:underline font-medium"
                 >
                   {event.neighborhood}
                 </Link>
               ) : (
-                <span className="text-muted-foreground">Cleveland Area</span>
+                <span className="text-slate-500">Cleveland Area</span>
               )}
               {event.location_name && (
-                <span className="text-muted-foreground">
+                <span className="text-slate-500">
                   · {event.location_name}
                 </span>
               )}
@@ -152,7 +154,7 @@ function EventCard({ event, compact = false }: { event: SeniorEvent; compact?: b
                 href={event.location_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-sm text-primary hover:underline inline-flex items-center gap-1"
+                className="text-sm text-teal-600 hover:underline inline-flex items-center gap-1"
               >
                 Details
                 <ExternalLink className="h-3 w-3" />
@@ -208,10 +210,10 @@ function CalendarView({ events, currentDate, onDateChange }: {
       <div 
         key={day} 
         className={`h-24 border border-slate-100 p-1 overflow-hidden hover:bg-slate-50 transition-colors ${
-          isToday ? 'bg-primary/5 border-primary/20' : ''
+          isToday ? 'bg-teal-50 border-teal-200' : ''
         }`}
       >
-        <div className={`text-sm font-medium mb-1 ${isToday ? 'text-primary' : 'text-slate-600'}`}>
+        <div className={`text-sm font-medium mb-1 ${isToday ? 'text-teal-600' : 'text-slate-600'}`}>
           {day}
         </div>
         <div className="space-y-0.5">
@@ -221,7 +223,7 @@ function CalendarView({ events, currentDate, onDateChange }: {
               className={`text-xs px-1.5 py-0.5 rounded truncate cursor-pointer hover:opacity-80 ${
                 event.event_type === 'expert_webinar' 
                   ? 'bg-[#8DA399] text-white' 
-                  : 'bg-primary/10 text-primary'
+                  : 'bg-teal-100 text-teal-700'
               }`}
               title={event.title}
             >
@@ -229,7 +231,7 @@ function CalendarView({ events, currentDate, onDateChange }: {
             </div>
           ))}
           {dayEvents.length > 2 && (
-            <div className="text-xs text-muted-foreground px-1.5">
+            <div className="text-xs text-slate-500 px-1.5">
               +{dayEvents.length - 2} more
             </div>
           )}
@@ -276,12 +278,12 @@ function CalendarView({ events, currentDate, onDateChange }: {
       {/* Legend */}
       <div className="flex items-center gap-4 px-4 py-3 border-t bg-slate-50/50 text-sm">
         <div className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded bg-primary/10" />
-          <span className="text-muted-foreground">Community Event</span>
+          <div className="w-3 h-3 rounded bg-teal-100" />
+          <span className="text-slate-600">Community Event</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 rounded" style={{ backgroundColor: SAGE_GREEN }} />
-          <span className="text-muted-foreground">Expert Webinar</span>
+          <span className="text-slate-600">Expert Webinar</span>
         </div>
       </div>
     </div>
@@ -309,10 +311,10 @@ function ListView({ events }: { events: SeniorEvent[] }) {
   
   if (events.length === 0) {
     return (
-      <div className="text-center py-12">
-        <Calendar className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-        <h3 className="text-lg font-semibold mb-2">No upcoming events</h3>
-        <p className="text-muted-foreground">Check back soon for new events in your area.</p>
+      <div className="text-center py-12 bg-white rounded-xl border border-slate-200 shadow-sm">
+        <Calendar className="h-12 w-12 mx-auto text-slate-400 mb-4" />
+        <h3 className="text-lg font-semibold text-slate-900 mb-2">No upcoming events</h3>
+        <p className="text-slate-600">Check back soon for new events in your area.</p>
       </div>
     );
   }
@@ -327,7 +329,7 @@ function ListView({ events }: { events: SeniorEvent[] }) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
-            <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3 sticky top-0 bg-slate-50/95 backdrop-blur-sm py-2 z-10">
+            <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wide mb-3 sticky top-0 bg-gradient-to-r from-slate-50/95 to-white/95 backdrop-blur-sm py-2 z-10">
               {group.date}
             </h3>
             <div className="space-y-3">
@@ -373,26 +375,26 @@ export default function EventsHubClient({ initialEvents }: EventsHubClientProps)
   }, [initialEvents]);
   
   return (
-    <section className="py-8 md:py-12">
+    <section className="py-8 md:py-12 bg-gradient-to-b from-slate-50 to-white">
       <div className="container mx-auto px-4">
         {/* Filters Bar */}
         <div className="flex flex-col md:flex-row gap-4 mb-8">
           {/* View Toggle */}
-          <div className="flex items-center gap-2 bg-white rounded-lg border p-1">
+          <div className="flex items-center gap-2 bg-white rounded-xl border border-slate-200 p-1 shadow-sm">
             <Button
-              variant={view === 'list' ? 'default' : 'ghost'}
+              variant="ghost"
               size="sm"
               onClick={() => setView('list')}
-              className="gap-2"
+              className={`gap-2 rounded-lg ${view === 'list' ? 'bg-gradient-to-r from-teal-600 to-teal-700 text-white hover:from-teal-700 hover:to-teal-800' : 'text-slate-600 hover:text-teal-600'}`}
             >
               <List className="h-4 w-4" />
               List
             </Button>
             <Button
-              variant={view === 'calendar' ? 'default' : 'ghost'}
+              variant="ghost"
               size="sm"
               onClick={() => setView('calendar')}
-              className="gap-2"
+              className={`gap-2 rounded-lg ${view === 'calendar' ? 'bg-gradient-to-r from-teal-600 to-teal-700 text-white hover:from-teal-700 hover:to-teal-800' : 'text-slate-600 hover:text-teal-600'}`}
             >
               <Calendar className="h-4 w-4" />
               Calendar
@@ -406,12 +408,12 @@ export default function EventsHubClient({ initialEvents }: EventsHubClientProps)
               onValueChange={(v) => setSelectedNeighborhood(v === 'all' ? null : v)}
               className="w-full"
             >
-              <TabsList className="w-full justify-start overflow-x-auto flex-nowrap bg-white border h-auto p-1">
-                <TabsTrigger value="all" className="shrink-0">
+              <TabsList className="w-full justify-start overflow-x-auto flex-nowrap bg-white border border-slate-200 h-auto p-1 rounded-xl shadow-sm">
+                <TabsTrigger value="all" className="shrink-0 data-[state=active]:bg-teal-600 data-[state=active]:text-white rounded-lg">
                   All Areas
                 </TabsTrigger>
                 {eventNeighborhoods.map(hood => (
-                  <TabsTrigger key={hood} value={hood} className="shrink-0">
+                  <TabsTrigger key={hood} value={hood} className="shrink-0 data-[state=active]:bg-teal-600 data-[state=active]:text-white rounded-lg">
                     {hood}
                   </TabsTrigger>
                 ))}
@@ -422,24 +424,27 @@ export default function EventsHubClient({ initialEvents }: EventsHubClientProps)
           {/* Event Type Filter */}
           <div className="flex items-center gap-2">
             <Button
-              variant={selectedType === null ? 'default' : 'outline'}
+              variant="ghost"
               size="sm"
               onClick={() => setSelectedType(null)}
+              className={`rounded-lg border ${selectedType === null ? 'bg-gradient-to-r from-teal-600 to-teal-700 text-white border-teal-600' : 'border-slate-200 text-slate-600 hover:text-teal-600 hover:border-teal-200'}`}
             >
               All Events
             </Button>
             <Button
-              variant={selectedType === 'community_event' ? 'default' : 'outline'}
+              variant="ghost"
               size="sm"
               onClick={() => setSelectedType('community_event')}
+              className={`rounded-lg border ${selectedType === 'community_event' ? 'bg-gradient-to-r from-teal-600 to-teal-700 text-white border-teal-600' : 'border-slate-200 text-slate-600 hover:text-teal-600 hover:border-teal-200'}`}
             >
               <Users className="h-4 w-4 mr-1" />
               Community
             </Button>
             <Button
-              variant={selectedType === 'expert_webinar' ? 'default' : 'outline'}
+              variant="ghost"
               size="sm"
               onClick={() => setSelectedType('expert_webinar')}
+              className={`rounded-lg border ${selectedType === 'expert_webinar' ? 'text-white border-[#8DA399]' : 'border-slate-200 text-slate-600 hover:text-[#8DA399] hover:border-[#8DA399]'}`}
               style={selectedType === 'expert_webinar' ? { backgroundColor: SAGE_GREEN } : {}}
             >
               <Award className="h-4 w-4 mr-1" />
@@ -450,10 +455,10 @@ export default function EventsHubClient({ initialEvents }: EventsHubClientProps)
         
         {/* Results Count */}
         <div className="flex items-center justify-between mb-6">
-          <p className="text-sm text-muted-foreground">
-            Showing <span className="font-semibold text-foreground">{filteredEvents.length}</span> upcoming events
+          <p className="text-sm text-slate-600">
+            Showing <span className="font-semibold text-slate-900">{filteredEvents.length}</span> upcoming events
             {selectedNeighborhood && (
-              <> in <span className="font-semibold text-foreground">{selectedNeighborhood}</span></>
+              <> in <span className="font-semibold text-slate-900">{selectedNeighborhood}</span></>
             )}
           </p>
         </div>
@@ -476,7 +481,7 @@ export default function EventsHubClient({ initialEvents }: EventsHubClientProps)
           {/* Sidebar */}
           <aside className="space-y-6">
             {/* Expert Webinar Promo */}
-            <Card className="border-2" style={{ borderColor: SAGE_GREEN }}>
+            <Card className="border-2 shadow-md" style={{ borderColor: SAGE_GREEN }}>
               <CardHeader>
                 <div 
                   className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold mb-2 w-fit"
@@ -485,14 +490,14 @@ export default function EventsHubClient({ initialEvents }: EventsHubClientProps)
                   <Award className="h-3.5 w-3.5" />
                   Expert-Led Events
                 </div>
-                <CardTitle className="text-lg">Free Webinars with Cleveland Healthcare Experts</CardTitle>
+                <CardTitle className="text-lg text-slate-900">Free Webinars with Cleveland Healthcare Experts</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-sm text-muted-foreground mb-4">
+                <p className="text-sm text-slate-600 mb-4">
                   Join our monthly webinars led by a 20-year Regional Director & Hospice Liaison. 
                   Get expert guidance on senior care options in Cleveland.
                 </p>
-                <ul className="text-sm space-y-2 mb-4">
+                <ul className="text-sm space-y-2 mb-4 text-slate-700">
                   <li className="flex items-start gap-2">
                     <span className="text-[#8DA399] mt-0.5">✓</span>
                     <span>Medicare & Medicaid guidance</span>
@@ -507,7 +512,7 @@ export default function EventsHubClient({ initialEvents }: EventsHubClientProps)
                   </li>
                 </ul>
                 <Link href="/contact">
-                  <Button className="w-full" style={{ backgroundColor: SAGE_GREEN }}>
+                  <Button className="w-full text-white hover:opacity-90" style={{ backgroundColor: SAGE_GREEN }}>
                     Get Notified of Next Webinar
                   </Button>
                 </Link>
@@ -515,15 +520,15 @@ export default function EventsHubClient({ initialEvents }: EventsHubClientProps)
             </Card>
             
             {/* Quick Links to Neighborhood Pages */}
-            <Card>
+            <Card className="shadow-md border-slate-200">
               <CardHeader>
-                <CardTitle className="text-lg flex items-center gap-2">
-                  <MapPin className="h-5 w-5 text-primary" />
+                <CardTitle className="text-lg flex items-center gap-2 text-slate-900">
+                  <MapPin className="h-5 w-5 text-teal-600" />
                   Explore Neighborhoods
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-sm text-muted-foreground mb-4">
+                <p className="text-sm text-slate-600 mb-4">
                   Find senior living communities and resources in your area.
                 </p>
                 <div className="flex flex-wrap gap-2">
@@ -532,27 +537,27 @@ export default function EventsHubClient({ initialEvents }: EventsHubClientProps)
                       key={hood}
                       href={`/location/${hood.toLowerCase().replace(/\s+/g, '-')}`}
                     >
-                      <Badge variant="outline" className="hover:bg-primary/10 cursor-pointer">
+                      <Badge variant="outline" className="hover:bg-teal-50 hover:text-teal-700 hover:border-teal-200 cursor-pointer transition-colors">
                         {hood}
                       </Badge>
                     </Link>
                   ))}
                 </div>
-                <Link href="/greater-cleveland" className="text-sm text-primary hover:underline mt-3 inline-block">
+                <Link href="/greater-cleveland" className="text-sm text-teal-600 hover:underline mt-3 inline-block font-medium">
                   View all neighborhoods →
                 </Link>
               </CardContent>
             </Card>
             
             {/* CTA Card */}
-            <Card className="bg-primary text-white">
+            <Card className="bg-gradient-to-br from-teal-600 to-teal-700 text-white shadow-lg">
               <CardContent className="pt-6">
                 <h3 className="text-lg font-semibold mb-2">Need Help Finding Care?</h3>
-                <p className="text-white/80 text-sm mb-4">
+                <p className="text-white/90 text-sm mb-4">
                   Our local Cleveland advisors provide free, personalized guidance for families.
                 </p>
                 <Link href="/contact">
-                  <Button variant="secondary" className="w-full">
+                  <Button variant="secondary" className="w-full bg-white text-teal-700 hover:bg-slate-100 font-bold">
                     Get Free Guidance
                   </Button>
                 </Link>
