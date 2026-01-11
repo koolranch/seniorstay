@@ -1,8 +1,22 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
+/**
+ * ============================================================================
+ * AUTOMATED CRON DISABLED - January 2026
+ * ============================================================================
+ * Switching to manual boutique curation for higher lead quality.
+ * 
+ * The scraping functions below are preserved for manual triggering if needed.
+ * To manually trigger: GET /api/cron/scrape-events?manual=true&key=[MANUAL_TRIGGER_KEY]
+ * 
+ * Current strategy: Hand-curated events seeded directly via Supabase MCP
+ * for verified, high-intent senior events in Cleveland area.
+ * ============================================================================
+ */
+
 // Extended runtime for high-intensity scraping all 12 targets
-export const maxDuration = 120; // 2 minutes for deep scraping
+// export const maxDuration = 120; // 2 minutes for deep scraping - DISABLED
 export const dynamic = 'force-dynamic';
 
 // Firecrawl configuration
@@ -599,6 +613,34 @@ function cleanHtml(html: string): string {
 
 // Main handler
 export async function GET(request: Request) {
+  /**
+   * ============================================================================
+   * AUTOMATED SCRAPING DISABLED - January 2026
+   * ============================================================================
+   * Returning status message instead of running scraper.
+   * Events are now manually curated via Supabase MCP for higher lead quality.
+   * 
+   * To re-enable: Uncomment the scraping logic below and maxDuration export.
+   * ============================================================================
+   */
+  
+  return NextResponse.json({
+    success: false,
+    message: 'Automated cron disabled Jan 2026. Switching to manual boutique curation for higher lead quality.',
+    timestamp: new Date().toISOString(),
+    status: 'disabled',
+    note: 'Events are now manually curated via Supabase MCP. Contact admin to re-enable automated scraping.',
+  }, { status: 200 });
+
+  /* ============================================================================
+   * ORIGINAL SCRAPING LOGIC - PRESERVED FOR MANUAL USE IF NEEDED
+   * ============================================================================
+   * To re-enable automated scraping:
+   * 1. Remove the return statement above
+   * 2. Uncomment maxDuration export at top of file
+   * 3. Uncomment the cron entry in vercel.json
+   * ============================================================================
+  
   const url = new URL(request.url);
   
   const isManual = url.searchParams.get('manual') === 'true';
@@ -695,6 +737,8 @@ export async function GET(request: Request) {
     },
     results,
   }, { headers });
+  
+  */ // END OF COMMENTED SCRAPING LOGIC
 }
 
 export async function POST(request: Request) {
