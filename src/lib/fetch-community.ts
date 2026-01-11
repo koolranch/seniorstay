@@ -110,7 +110,11 @@ function transformDatabaseToCommunity(data: any): Community {
     name: data.name,
     location: `${data.city}, ${data.state}`,
     address: data.address || undefined,
-    coordinates: undefined, // TODO: Add lat/lng from location field if needed
+    zip: data.zip || undefined,
+    // Map database lat/lng to coordinates object for Google Maps
+    coordinates: (data.latitude && data.longitude) 
+      ? { lat: parseFloat(data.latitude), lng: parseFloat(data.longitude) }
+      : undefined,
     // Support photo galleries: prefer image_urls array, fallback to single image_url
     images: data.image_urls && data.image_urls.length > 0 
       ? data.image_urls 

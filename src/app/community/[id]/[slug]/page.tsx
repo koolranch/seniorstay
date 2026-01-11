@@ -18,6 +18,7 @@ import StickyLeadCapture from '@/components/community/StickyLeadCapture';
 import SimilarCommunities from '@/components/community/SimilarCommunities';
 import CommunityContact from '@/components/community/CommunityContact';
 import CareNeedsQuiz from '@/components/community/CareNeedsQuiz';
+import MapComponent from '@/components/map/GoogleMap';
 
 // ISR: Revalidate every hour
 export const revalidate = 3600;
@@ -624,20 +625,36 @@ export default async function CommunityPage({ params }: CommunityPageProps) {
                 </div>
               </div>
               
-              {/* Placeholder for map - could integrate actual map component */}
-              <div 
-                className="h-48 md:h-auto rounded-xl flex items-center justify-center"
-                style={{ backgroundColor: 'rgba(141, 163, 153, 0.1)' }}
-              >
-                <div className="text-center text-slate-500">
-                  <MapPin className="h-8 w-8 mx-auto mb-2 opacity-50" />
-                  <p className="text-sm">
-                    {community.coordinates 
-                      ? `${community.coordinates.lat.toFixed(4)}, ${community.coordinates.lng.toFixed(4)}`
-                      : 'Map coordinates not available'
-                    }
-                  </p>
-                </div>
+              {/* Google Map */}
+              <div className="h-48 md:h-64 rounded-xl overflow-hidden">
+                {community.coordinates ? (
+                  <MapComponent
+                    communities={[community]}
+                    height="100%"
+                    zoom={15}
+                    center={community.coordinates}
+                    showInfoWindows={false}
+                  />
+                ) : (
+                  <div 
+                    className="h-full w-full flex items-center justify-center"
+                    style={{ backgroundColor: 'rgba(141, 163, 153, 0.1)' }}
+                  >
+                    <div className="text-center text-slate-500">
+                      <MapPin className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                      <p className="text-sm">Map loading...</p>
+                      <a 
+                        href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(community.address + ' ' + community.location)}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-xs underline mt-2 inline-block"
+                        style={{ color: '#8DA399' }}
+                      >
+                        Open in Google Maps
+                      </a>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
