@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { createClient } from '@supabase/supabase-js';
 import EventsHubClient from './EventsHubClient';
 import GlobalHeader from '@/components/home/GlobalHeader';
 import Footer from '@/components/footer/Footer';
@@ -29,27 +30,30 @@ export const metadata: Metadata = {
   },
 };
 
-// Edge caching configuration
-export const revalidate = 3600; // Revalidate every hour
+// Direct Supabase client for server-side fetching
+const supabaseUrl = 'https://hncgnxbooghjhpncujzx.supabase.co';
+const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhuY2dueGJvb2doamhwbmN1anp4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQyMTI0ODIsImV4cCI6MjA1OTc4ODQ4Mn0.mdAL87W0h4PN7Xu8ESjjDxzjW_H3YH55i-FqAE5SXcs';
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+// Dynamic rendering for fresh data
+export const dynamic = 'force-dynamic';
 
 async function getEvents(): Promise<SeniorEvent[]> {
   try {
-    // Server-side fetch with absolute URL for production
-    const baseUrl = process.env.VERCEL_URL 
-      ? `https://${process.env.VERCEL_URL}` 
-      : process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+    // Fetch directly from Supabase for reliability
+    const { data: events, error } = await supabase
+      .from('senior_events')
+      .select('*')
+      .gte('start_date', new Date().toISOString())
+      .order('start_date', { ascending: true })
+      .limit(50);
     
-    const res = await fetch(`${baseUrl}/api/events?limit=50&upcoming=true`, {
-      cache: 'no-store', // Always fetch fresh data
-    });
-    
-    if (!res.ok) {
-      console.error('Failed to fetch events:', res.statusText);
+    if (error) {
+      console.error('Failed to fetch events:', error.message);
       return [];
     }
     
-    const data = await res.json();
-    return data.events || [];
+    return (events as SeniorEvent[]) || [];
   } catch (error) {
     console.error('Error fetching events:', error);
     return [];
