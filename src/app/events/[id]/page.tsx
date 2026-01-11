@@ -61,7 +61,7 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
   return {
     title: `${event.title} | ${location} Senior Event | Guide for Seniors`,
     description: event.description || `Join us for ${event.title} on ${eventDate} in ${location}, Ohio. Free senior event for Cleveland area residents.`,
-    keywords: `${event.title}, senior event ${location} ohio, ${event.event_type === 'expert_webinar' ? 'senior webinar cleveland' : 'senior community event cleveland'}`,
+    keywords: `${event.title}, senior event ${location} ohio, ${event.event_type === 'medical_wellness' ? 'senior wellness cleveland' : event.event_type === 'luxury_showcase' ? 'luxury senior living cleveland' : 'senior community event cleveland'}`,
     openGraph: {
       title: event.title,
       description: event.description || `Senior event in ${location}, Ohio on ${eventDate}`,
@@ -102,7 +102,8 @@ export default async function EventPage({ params }: { params: { id: string } }) 
     notFound();
   }
   
-  const isExpertWebinar = event.event_type === 'expert_webinar';
+  const isMedicalWellness = event.event_type === 'medical_wellness';
+  const isLuxuryShowcase = event.event_type === 'luxury_showcase';
   const neighborhoodSlug = event.neighborhood?.toLowerCase().replace(/\s+/g, '-');
 
   return (
@@ -152,15 +153,20 @@ export default async function EventPage({ params }: { params: { id: string } }) 
 
               {/* Event Card */}
               <Card className="overflow-hidden">
-                {/* Expert Webinar Banner */}
-                {isExpertWebinar && (
-                  <div 
-                    className="px-6 py-3 flex items-center gap-2"
-                    style={{ backgroundColor: SAGE_GREEN }}
-                  >
+                {/* Event Type Banner */}
+                {isMedicalWellness && (
+                  <div className="px-6 py-3 flex items-center gap-2 bg-blue-600">
                     <Award className="h-5 w-5 text-white" />
                     <span className="text-white font-semibold">
-                      Led by a 20-Year Regional Director & Hospice Liaison
+                      Medical & Wellness Event
+                    </span>
+                  </div>
+                )}
+                {isLuxuryShowcase && (
+                  <div className="px-6 py-3 flex items-center gap-2 bg-amber-600">
+                    <Award className="h-5 w-5 text-white" />
+                    <span className="text-white font-semibold">
+                      Luxury Community Showcase
                     </span>
                   </div>
                 )}
@@ -190,7 +196,7 @@ export default async function EventPage({ params }: { params: { id: string } }) 
                       )}
                     </Badge>
                     <Badge variant="outline" className="text-sm py-1 px-3">
-                      {isExpertWebinar ? 'Expert Webinar' : 'Community Event'}
+                      {isMedicalWellness ? 'Medical & Wellness' : isLuxuryShowcase ? 'Luxury Showcase' : 'Community Hub'}
                     </Badge>
                   </div>
 

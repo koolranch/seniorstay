@@ -24,9 +24,10 @@ export interface SeniorEvent {
   start_date: string;
   end_date: string | null;
   neighborhood: string | null;
-  event_type: 'expert_webinar' | 'community_event';
+  event_type: 'community_hub' | 'medical_wellness' | 'luxury_showcase';
   location_name: string | null;
   location_url: string | null;
+  registration_url: string | null;
   is_virtual: boolean;
   image_url: string | null;
   schema_json: object | null;
@@ -63,7 +64,7 @@ export async function GET(request: NextRequest) {
   }
   
   // Filter by event type
-  if (eventType && (eventType === 'expert_webinar' || eventType === 'community_event')) {
+  if (eventType && (eventType === 'community_hub' || eventType === 'medical_wellness' || eventType === 'luxury_showcase')) {
     query = query.eq('event_type', eventType);
   }
   

@@ -139,7 +139,8 @@ export default function NeighborhoodEvents({
 
       <div className="divide-y">
         {events.map((event, index) => {
-          const isExpertWebinar = event.event_type === 'expert_webinar';
+          const isMedicalWellness = event.event_type === 'medical_wellness';
+          const isLuxuryShowcase = event.event_type === 'luxury_showcase';
           
           return (
             <motion.div
@@ -149,14 +150,17 @@ export default function NeighborhoodEvents({
               transition={{ delay: index * 0.1 }}
               className="p-4 hover:bg-slate-50/50 transition-colors"
             >
-              {/* Expert Badge */}
-              {isExpertWebinar && (
-                <div 
-                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold mb-2"
-                  style={{ backgroundColor: SAGE_GREEN, color: 'white' }}
-                >
+              {/* Event Type Badge */}
+              {isMedicalWellness && (
+                <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold mb-2 bg-blue-100 text-blue-700">
                   <Award className="h-3 w-3" />
-                  Led by a 20-Year Regional Director & Hospice Liaison
+                  Medical & Wellness
+                </div>
+              )}
+              {isLuxuryShowcase && (
+                <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold mb-2 bg-amber-100 text-amber-700">
+                  <Award className="h-3 w-3" />
+                  Luxury Showcase
                 </div>
               )}
               
