@@ -70,11 +70,11 @@ export async function generateMetadata({ params }: CommunityPageProps): Promise<
   
   // SEO SAFETY: Check if profile is "incomplete"
   const hasDescription = community.description && community.description.trim().length > 50;
-  const imageUrl = community.images?.[0] || '';
-  const hasPlaceholderImage = !imageUrl || 
-    imageUrl.toLowerCase().includes('placeholder') ||
-    imageUrl.toLowerCase().includes('no-image') ||
-    imageUrl.toLowerCase().includes('default-community');
+  const communityImage = community.images?.[0] || '';
+  const hasPlaceholderImage = !communityImage || 
+    communityImage.toLowerCase().includes('placeholder') ||
+    communityImage.toLowerCase().includes('no-image') ||
+    communityImage.toLowerCase().includes('default-community');
   const isIncompleteProfile = !hasDescription || hasPlaceholderImage;
   
   // GEO-READY: Conversational title optimized for AI overviews
@@ -89,9 +89,9 @@ export async function generateMetadata({ params }: CommunityPageProps): Promise<
   const geoKeywords = `${community.name} reviews, ${primaryCareType.toLowerCase()} near ${nearestHospitalName}, ${city} ${primaryCareType.toLowerCase()} costs ${currentYear}`;
   const keywords = `${community.name}, ${primaryCareType.toLowerCase()} ${city} ohio, senior living ${city}, ${community.careTypes.join(', ').toLowerCase()}, ${geoKeywords}`;
   
-  // Generate detailed image alt for accessibility and SEO
-  const imageUrl = community.images?.[0] || `${baseUrl}/images/default-community.jpg`;
-  const imageAltText = community.images?.[0]
+  // Generate OG image URL with fallback for social sharing
+  const ogImageUrl = communityImage || `${baseUrl}/images/default-community.jpg`;
+  const imageAltText = communityImage
     ? `Exterior of ${community.name} ${primaryCareType.toLowerCase().replace('facility', '')} in ${city}, Ohio`
     : `${primaryCareType} community placeholder - ${community.name}`;
   
@@ -119,7 +119,7 @@ export async function generateMetadata({ params }: CommunityPageProps): Promise<
       type: 'article', // Community profiles are article/content type
       images: [
         {
-          url: imageUrl,
+          url: ogImageUrl,
           width: 1200,
           height: 630,
           alt: imageAltText,
@@ -130,7 +130,7 @@ export async function generateMetadata({ params }: CommunityPageProps): Promise<
       card: 'summary_large_image',
       title: ogTitle.slice(0, 60),
       description: ogDescription.slice(0, 160),
-      images: [imageUrl],
+      images: [ogImageUrl],
     },
     // SEO SAFETY: noindex incomplete profiles
     robots: isIncompleteProfile 
