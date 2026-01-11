@@ -989,20 +989,20 @@ export default async function EventSlugPage({ params }: { params: { slug: string
                     )}
                   </div>
                   
-                  {/* Social Proof Testimonial - For Upcoming Events */}
+                  {/* Social Proof - Authentic benefit statement (no fabricated testimonial) */}
                   {!isPastEvent && (
                     <div className="mt-6 p-4 bg-slate-50 rounded-lg border border-slate-200">
                       <div className="flex items-start gap-3">
                         <div className="shrink-0 w-10 h-10 rounded-full bg-teal-100 flex items-center justify-center">
-                          <Users className="h-5 w-5 text-teal-600" />
+                          <Heart className="h-5 w-5 text-teal-600" />
                         </div>
                         <div>
-                          <p className="text-sm text-slate-600 italic leading-relaxed">
-                            &ldquo;I shared this with my sister and we attended together. Guide for Seniors 
-                            helped us find the perfect place for Mom in {event.neighborhood || 'Cleveland'}.&rdquo;
+                          <p className="text-sm text-slate-700 leading-relaxed font-medium">
+                            Attending community events together is one of the best ways families 
+                            explore senior care options.
                           </p>
-                          <p className="text-xs text-slate-500 mt-2 font-medium">
-                            — Jennifer M., {event.neighborhood || 'Cleveland'} Family
+                          <p className="text-xs text-slate-500 mt-2">
+                            Our placement specialists are here to help when you&apos;re ready.
                           </p>
                         </div>
                       </div>
