@@ -11,7 +11,7 @@ export interface BlogPost {
   readTime: string;
   image?: string | null;
   content: string;
-  regionSlug?: string | null;
+  regionSlug?: string | null; // null = global, 'cleveland' = Cleveland-specific
 }
 
 type BlogPostRow = {
@@ -38,6 +38,7 @@ type BlogPostRow = {
  * ============================================================================
  */
 
+// Hardcode Supabase configuration for blog posts
 const supabaseUrl = 'https://hncgnxbooghjhpncujzx.supabase.co';
 const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhuY2dueGJvb2doamhwbmN1anp4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQyMTI0ODIsImV4cCI6MjA1OTc4ODQ4Mn0.mdAL87W0h4PN7Xu8ESjjDxzjW_H3YH55i-FqAE5SXcs';
 
@@ -66,7 +67,7 @@ function mapRowToBlogPost(row: BlogPostRow): BlogPost {
     category: row.category,
     author: row.author,
     date: row.published_at,
-    readTime: `\${row.read_time_minutes} min read`,
+    readTime: `${row.read_time_minutes} min read`,
     image: row.image_url,
     content: row.content_markdown,
     regionSlug: row.region_slug,
@@ -105,7 +106,7 @@ export const fetchBlogPostBySlug = cache(async (slug: string): Promise<BlogPost 
     .maybeSingle();
 
   if (error) {
-    console.error(`Failed to load blog post (\${slug}) from Supabase:`, error);
+    console.error(`Failed to load blog post (${slug}) from Supabase:`, error);
     return null;
   }
 
@@ -130,20 +131,28 @@ export const fetchBlogCategories = cache(async (): Promise<string[]> => {
   return Array.from(categories).sort();
 });
 
+/**
+ * Fetch posts for a specific region + all global posts
+ * Returns: Regional posts (matching region_slug) + Global posts (region_slug = NULL)
+ * 
+ * Use case: Regional hub pages like /cleveland that want to show
+ * both local content AND universally relevant articles.
+ */
 export const fetchPostsByRegion = cache(async (regionSlug: string, limit?: number): Promise<BlogPost[]> => {
   const client = getSupabaseClient();
   if (!client) {
     return [];
   }
 
+  // Fetch posts where region matches OR region is NULL (global)
   const { data, error } = await client
     .from('blog_posts')
     .select('*')
-    .or(`region_slug.eq.\${regionSlug},region_slug.is.null`)
+    .or(`region_slug.eq.${regionSlug},region_slug.is.null`)
     .order('published_at', { ascending: false });
 
   if (error) {
-    console.error(`Failed to load blog posts for region \${regionSlug}:`, error);
+    console.error(`Failed to load blog posts for region ${regionSlug}:`, error);
     return [];
   }
 
@@ -151,6 +160,13 @@ export const fetchPostsByRegion = cache(async (regionSlug: string, limit?: numbe
   return limit ? posts.slice(0, limit) : posts;
 });
 
+/**
+ * Fetch ONLY region-specific posts (excludes global posts)
+ * Returns: Posts where region_slug matches exactly
+ * 
+ * Use case: "Local Expert Advice" sections that should ONLY show
+ * hyper-local Cleveland content, not generic senior living articles.
+ */
 export const fetchRegionalOnlyPosts = cache(async (regionSlug: string, limit?: number): Promise<BlogPost[]> => {
   const client = getSupabaseClient();
   if (!client) {
@@ -170,13 +186,17 @@ export const fetchRegionalOnlyPosts = cache(async (regionSlug: string, limit?: n
   const { data, error } = await query;
 
   if (error) {
-    console.error(`Failed to load regional posts for \${regionSlug}:`, error);
+    console.error(`Failed to load regional posts for ${regionSlug}:`, error);
     return [];
   }
 
   return ((data ?? []) as BlogPostRow[]).map(mapRowToBlogPost);
 });
 
+/**
+ * Fetch ONLY global posts (region_slug = NULL)
+ * Returns: Posts that are universally relevant across all regions
+ */
 export const fetchGlobalPosts = cache(async (limit?: number): Promise<BlogPost[]> => {
   const client = getSupabaseClient();
   if (!client) {
@@ -203,14 +223,23 @@ export const fetchGlobalPosts = cache(async (limit?: number): Promise<BlogPost[]
   return ((data ?? []) as BlogPostRow[]).map(mapRowToBlogPost);
 });
 
+/**
+ * Check if a blog post is regional (has a specific region_slug)
+ */
 export function isRegionalPost(post: BlogPost): boolean {
   return post.regionSlug !== null && post.regionSlug !== undefined;
 }
 
+/**
+ * Check if a blog post belongs to a specific region
+ */
 export function postBelongsToRegion(post: BlogPost, regionSlug: string): boolean {
   return post.regionSlug === regionSlug;
 }
 
+/**
+ * Get the display region name for a post
+ */
 export function getPostRegionDisplayName(post: BlogPost): string | null {
   if (!post.regionSlug) return null;
   
