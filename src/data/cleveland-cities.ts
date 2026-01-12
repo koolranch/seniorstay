@@ -455,42 +455,6 @@ export const clevelandCitiesData: Record<string, CityInfo> = {
     ]
   },
   
-  'seven-hills': {
-    name: 'Seven Hills',
-    slug: 'seven-hills',
-    description: 'Seven Hills is a quiet residential suburb offering peaceful senior living communities with easy highway access to all of Cleveland. The city provides a safe, family-friendly environment with quality assisted living options.',
-    highlights: [
-      'Quiet residential neighborhoods',
-      'Easy I-77 and I-480 access',
-      'Low crime rates and safe streets',
-      'Close to shopping and dining',
-      'Proximity to Cuyahoga Valley National Park'
-    ],
-    nearbyHospitals: [
-      'Parma Hospital',
-      'Cleveland Clinic Independence',
-      'Southwest General Health Center',
-      'MetroHealth Brecksville Health Center'
-    ],
-    averageCost: {
-      independentLiving: '$2,500 - $4,300',
-      assistedLiving: '$3,500 - $6,000',
-      memoryCare: '$4,900 - $8,300'
-    },
-    testimonials: [
-      {
-        text: "Seven Hills offers the perfect balance - quiet and safe, but close to everything we need.",
-        author: "Richard S.",
-        community: "Vitalia Rockside"
-      },
-      {
-        text: "StoryPoint Rockside has been wonderful. The memory care team truly understands Mom's needs.",
-        author: "Lisa K.",
-        community: "StoryPoint Rockside"
-      }
-    ]
-  },
-  
   'richmond-heights': {
     name: 'Richmond Heights',
     slug: 'richmond-heights',
