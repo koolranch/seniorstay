@@ -320,7 +320,7 @@ export default async function CommunityPage({ params }: CommunityPageProps) {
           
           {/* Back button */}
           <Link 
-            href={`/location/${citySlug}`}
+            href={`/cleveland/${citySlug}`}
             className="absolute top-4 left-4 z-10 flex items-center gap-2 px-4 py-2 rounded-full text-white text-sm font-medium backdrop-blur-md bg-black/30 hover:bg-black/50 transition-colors"
           >
             <ArrowRight className="h-4 w-4 rotate-180" />

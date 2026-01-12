@@ -250,7 +250,7 @@ const LeadMagnet: React.FC = () => {
                       Your 2026 Cleveland Senior Care Cost Guide is on its way to <strong>{formData.email}</strong>
                     </p>
                     <a
-                      href="/greater-cleveland"
+                      href="/cleveland"
                       className="inline-flex items-center gap-2 text-teal-600 hover:text-teal-700 font-semibold transition-colors"
                     >
                       <span>Browse Communities While You Wait</span>

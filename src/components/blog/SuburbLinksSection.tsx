@@ -71,7 +71,7 @@ export default function SuburbLinksSection({
         {medicaidApprovedSuburbs.map((suburb) => (
           <Link
             key={suburb.slug}
-            href={`/location/${suburb.slug}`}
+            href={`/cleveland/${suburb.slug}`}
             className="group flex items-center justify-between bg-white rounded-lg p-4 border border-gray-200 hover:border-emerald-300 hover:shadow-md transition-all"
           >
             <div>

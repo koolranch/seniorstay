@@ -140,7 +140,7 @@ export default async function BlogPage() {
                 <ArrowRight className="h-5 w-5" />
               </Link>
               <Link
-                href="/greater-cleveland"
+                href="/cleveland"
                 className="inline-flex items-center justify-center gap-2 bg-teal-800 text-white font-bold px-8 py-4 rounded-xl hover:bg-teal-900 transition-all min-h-[56px]"
               >
                 Browse Communities

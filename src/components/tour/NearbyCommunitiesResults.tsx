@@ -184,7 +184,7 @@ export default function NearbyCommunitiesResults({
       {communities.length >= 5 && (
         <div className="text-center pt-6">
           <a
-            href="/greater-cleveland"
+            href="/cleveland"
             className="inline-flex items-center gap-2 text-primary hover:underline font-semibold text-lg"
           >
             View All Communities in Greater Cleveland

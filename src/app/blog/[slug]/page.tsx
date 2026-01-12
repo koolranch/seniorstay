@@ -232,7 +232,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
                   Get Free Consultation
                 </Link>
                 <Link
-                  href="/greater-cleveland"
+                  href="/cleveland"
                   className="bg-white hover:bg-gray-50 text-gray-900 font-semibold py-3 px-6 rounded-lg border-2 border-gray-300 transition-colors text-center"
                 >
                   Browse Communities

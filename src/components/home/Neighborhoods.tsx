@@ -150,7 +150,7 @@ const Neighborhoods: React.FC<NeighborhoodsProps> = ({ communities = [] }) => {
               {NEIGHBORHOODS.map((neighborhood) => (
                 <motion.div key={neighborhood.slug} variants={itemVariants}>
                   <Link
-                    href={`/location/${neighborhood.slug}`}
+                    href={`/cleveland/${neighborhood.slug}`}
                     className="group block bg-white border border-slate-200 hover:border-teal-300 rounded-xl p-4 hover:shadow-lg transition-all duration-300"
                   >
                     <div className="flex items-start gap-3">
@@ -185,7 +185,7 @@ const Neighborhoods: React.FC<NeighborhoodsProps> = ({ communities = [] }) => {
             {/* View All Link */}
             <div className="mt-8 text-center lg:text-left">
               <Link
-                href="/greater-cleveland"
+                href="/cleveland"
                 className="inline-flex items-center gap-2 text-teal-600 hover:text-teal-700 font-semibold transition-colors"
               >
                 <span>View All Cleveland-Area Communities</span>

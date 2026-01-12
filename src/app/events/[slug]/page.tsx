@@ -865,7 +865,7 @@ export default async function EventSlugPage({ params }: { params: { slug: string
                       <p className="font-bold text-slate-900">{event.location_name || 'TBD'}</p>
                       {event.neighborhood && (
                         <Link 
-                          href={`/location/${neighborhoodSlug}`}
+                          href={`/cleveland/${neighborhoodSlug}`}
                           className="text-sm hover:underline transition-colors"
                           style={{ color: SAGE_GREEN }}
                         >
@@ -1106,7 +1106,7 @@ export default async function EventSlugPage({ params }: { params: { slug: string
                       </div>
                     </div>
                     <Link 
-                      href={`/location/${neighborhoodSlug}`}
+                      href={`/cleveland/${neighborhoodSlug}`}
                       className="inline-flex items-center gap-2 text-sm font-semibold hover:underline"
                       style={{ color: SAGE_GREEN }}
                     >
@@ -1477,7 +1477,7 @@ export default async function EventSlugPage({ params }: { params: { slug: string
                     </div>
                     <div className="p-3 border-t border-slate-100 bg-slate-50">
                       <Link 
-                        href={`/location/${neighborhoodSlug}`}
+                        href={`/cleveland/${neighborhoodSlug}`}
                         className="text-sm font-semibold hover:underline flex items-center justify-center gap-1"
                         style={{ color: NAVY }}
                       >
@@ -1499,7 +1499,7 @@ export default async function EventSlugPage({ params }: { params: { slug: string
                     <ul className="space-y-3">
                       <li>
                         <Link 
-                          href={`/location/${neighborhoodSlug}`}
+                          href={`/cleveland/${neighborhoodSlug}`}
                           className="flex items-center gap-2 text-sm font-medium hover:underline"
                           style={{ color: NAVY }}
                         >

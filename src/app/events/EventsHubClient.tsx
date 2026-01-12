@@ -173,7 +173,7 @@ function EventCard({ event, compact = false }: { event: SeniorEvent; compact?: b
               <MapPin className="h-4 w-4 text-slate-400" />
               {event.neighborhood ? (
                 <Link 
-                  href={`/location/${neighborhoodSlug}`}
+                  href={`/cleveland/${neighborhoodSlug}`}
                   className="text-teal-600 hover:underline font-medium"
                 >
                   {event.neighborhood}
@@ -620,7 +620,7 @@ export default function EventsHubClient({ initialEvents }: EventsHubClientProps)
                   {CLEVELAND_NEIGHBORHOODS.slice(0, 8).map(hood => (
                     <Link 
                       key={hood}
-                      href={`/location/${hood.toLowerCase().replace(/\s+/g, '-')}`}
+                      href={`/cleveland/${hood.toLowerCase().replace(/\s+/g, '-')}`}
                     >
                       <Badge variant="outline" className="hover:bg-teal-50 hover:text-teal-700 hover:border-teal-200 cursor-pointer transition-colors">
                         {hood}
@@ -628,7 +628,7 @@ export default function EventsHubClient({ initialEvents }: EventsHubClientProps)
                     </Link>
                   ))}
                 </div>
-                <Link href="/greater-cleveland" className="text-sm text-teal-600 hover:underline mt-3 inline-block font-medium">
+                <Link href="/cleveland" className="text-sm text-teal-600 hover:underline mt-3 inline-block font-medium">
                   View all neighborhoods →
                 </Link>
               </CardContent>

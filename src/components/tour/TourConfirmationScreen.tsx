@@ -110,7 +110,7 @@ export default function TourConfirmationScreen({
                 </Button>
               )}
 
-              <Link href="/greater-cleveland" onClick={onClose}>
+              <Link href="/cleveland" onClick={onClose}>
                 <Button
                   variant="ghost"
                   className="w-full text-gray-700 hover:text-primary hover:bg-gray-50 py-6"
