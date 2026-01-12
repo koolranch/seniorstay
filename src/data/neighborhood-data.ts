@@ -213,21 +213,6 @@ export const neighborhoodData: Record<string, NeighborhoodData> = {
     ],
     localDescription: 'Avon is an affluent western suburb in Lorain County known for its excellent schools and the Avon Commons shopping area. The city offers upscale memory care options with outstanding medical access.'
   },
-  'brunswick': {
-    nearestHospital: {
-      name: 'Cleveland Clinic Medina Hospital',
-      distance: '8 miles',
-      address: '1000 E Washington St, Medina, OH 44256',
-      phone: '(330) 725-1000'
-    },
-    nearbyPlaces: [
-      { name: 'Brunswick Town Center', type: 'grocery', distance: '1 mile', address: 'Center Rd' },
-      { name: 'Giant Eagle', type: 'grocery', distance: '0.5 miles', address: '1575 Town Center Blvd' },
-      { name: 'CVS Pharmacy', type: 'pharmacy', distance: '1 mile', address: 'Pearl Rd' },
-      { name: 'Brunswick Lake', type: 'park', distance: '2 miles', address: 'Lake Rd' }
-    ],
-    localDescription: 'Brunswick is a thriving Medina County city offering affordable senior living with convenient access to Cleveland and Akron. The city features excellent parks and a strong community feel.'
-  },
   'mentor': {
     nearestHospital: {
       name: 'Lake Health TriPoint Medical Center',
