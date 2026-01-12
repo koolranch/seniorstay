@@ -85,6 +85,9 @@ model Community {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   
+  // Multi-region support
+  region_slug  String   @default("cleveland")
+  
   // Photo enrichment tracking
   photos_source        String?   // "facility_website", "caring.com", etc.
   photos_last_updated  DateTime?
@@ -118,6 +121,10 @@ model Community {
   vbp_participates         Boolean?  @default(false)
   vbp_payment_adjustment   Decimal?
   vbp_program_year         String?
+  
+  // Indexes for region-based queries
+  @@index([region_slug])
+  @@index([region_slug, city])
 }
 
 model Lead {

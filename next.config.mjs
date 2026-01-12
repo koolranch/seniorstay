@@ -257,7 +257,46 @@ const nextConfig = {
       // Redirect /neighborhoods/* to /location/* to prevent SEO cannibalization
       {
         source: '/neighborhoods/:slug',
-        destination: '/location/:slug',
+        destination: '/cleveland/:slug',
+        permanent: true,
+      },
+      
+      // === Multi-Region Architecture (Jan 2026) ===
+      // Legacy Cleveland paths redirect to new region-aware URLs
+      // This preserves SEO equity while enabling multi-city expansion
+      
+      // Region hub: /greater-cleveland -> /cleveland
+      {
+        source: '/greater-cleveland',
+        destination: '/cleveland',
+        permanent: true,
+      },
+      
+      // City/location pages: /location/:slug -> /cleveland/:slug
+      {
+        source: '/location/:slug',
+        destination: '/cleveland/:slug',
+        permanent: true,
+      },
+      
+      // Community detail pages: /community/:id/:slug -> /cleveland/community/:id/:slug
+      {
+        source: '/community/:id/:slug',
+        destination: '/cleveland/community/:id/:slug',
+        permanent: true,
+      },
+      
+      // Event pages: /events/:slug -> /cleveland/events/:slug
+      {
+        source: '/events/:slug',
+        destination: '/cleveland/events/:slug',
+        permanent: true,
+      },
+      
+      // Events hub: /events -> /cleveland/events (if accessed directly)
+      {
+        source: '/events',
+        destination: '/cleveland/events',
         permanent: true,
       },
     ];

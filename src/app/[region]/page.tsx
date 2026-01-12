@@ -1,56 +1,85 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
+import { notFound } from 'next/navigation';
 import { MapPin, Home, Users, ArrowRight, Hospital, Phone, Star } from 'lucide-react';
 import GlobalHeader from '@/components/home/GlobalHeader';
 import Footer from '@/components/footer/Footer';
-import { fetchAllCommunities } from '@/lib/fetch-community';
+import { fetchCommunitiesByRegion } from '@/lib/fetch-community';
+import { 
+  getRegionConfig, 
+  getAllRegionSlugs, 
+  isValidRegion,
+  getRegionPhoneNumber,
+  getHubCities,
+  type RegionConfig 
+} from '@/data/regions';
 
-export const metadata: Metadata = {
-  title: 'Senior Living in Greater Cleveland | Browse All Communities | Guide for Seniors',
-  description: 'Find senior living communities across Greater Cleveland including Cleveland, Beachwood, Shaker Heights, Westlake, and more. Compare assisted living, memory care, and independent living options.',
-  keywords: 'Greater Cleveland senior living, Cleveland metro senior care, Cuyahoga County assisted living, Northeast Ohio senior communities',
-  openGraph: {
-    title: 'Senior Living in Greater Cleveland | Guide for Seniors',
-    description: 'Explore 150+ senior living communities across Greater Cleveland. Find assisted living, memory care, and independent living in your preferred neighborhood.',
-    url: 'https://guideforseniors.com/greater-cleveland',
-    siteName: 'Guide for Seniors',
-  },
-};
+interface RegionPageProps {
+  params: { region: string };
+}
 
-// Define Greater Cleveland cities with additional info
-const greaterClevelandCities = [
-  { name: 'Cleveland', description: 'Ohio\'s second-largest city with diverse senior living options', clinicalAnchor: 'Cleveland Clinic Main Campus' },
-  { name: 'Beachwood', description: 'Upscale community with premium senior care facilities', clinicalAnchor: 'UH Ahuja Medical Center', tier: 1 },
-  { name: 'Shaker Heights', description: 'Historic suburb with elegant senior communities', tier: 1 },
-  { name: 'Westlake', description: 'West side community with modern senior living', clinicalAnchor: 'St. John Medical Center', tier: 1 },
-  { name: 'Chagrin Falls', description: 'Charming village with luxury senior care options', clinicalAnchor: 'Hillcrest Hospital', tier: 1 },
-  { name: 'Hudson', description: 'Affluent community with upscale memory care', clinicalAnchor: 'Western Reserve Hospital', tier: 1 },
-  { name: 'Independence', description: 'Convenient location with quality care options' },
-  { name: 'Strongsville', description: 'Family-friendly area with senior care facilities', clinicalAnchor: 'Southwest General' },
-  { name: 'Seven Hills', description: 'Safe suburb with dedicated assisted living', clinicalAnchor: 'Parma Hospital' },
-  { name: 'Richmond Heights', description: 'East side community with quality memory care', clinicalAnchor: 'Hillcrest Hospital' },
-  { name: 'Bedford', description: 'Established suburb with specialized AL/MC care' },
-  { name: 'Mayfield Heights', description: 'East side location with various care levels' },
-  { name: 'North Olmsted', description: 'Shopping and healthcare access for seniors' },
-  { name: 'Rocky River', description: 'Lakefront community with senior living', tier: 1 },
-  { name: 'Solon', description: 'Growing community with modern facilities', tier: 1 },
-  { name: 'Parma', description: 'Affordable options with good healthcare access' },
-  { name: 'Lakewood', description: 'Walkable city with community-focused living', clinicalAnchor: 'Fairview Hospital' },
-  { name: 'Macedonia', description: 'Growing Summit County suburb with quality AL options', clinicalAnchor: 'Cleveland Clinic Macedonia' },
-  { name: 'Avon', description: 'Western Lorain County with upscale memory care', clinicalAnchor: 'UH Avon Rehabilitation Hospital' },
-  { name: 'Brunswick', description: 'Medina County suburb with Danbury senior living', clinicalAnchor: 'Southwest General' },
-  { name: 'Mentor', description: 'Lake County hub with diverse care options', clinicalAnchor: 'Lake Health TriPoint Medical' },
-];
+// Generate static params for all regions
+export async function generateStaticParams() {
+  return getAllRegionSlugs().map((region) => ({
+    region,
+  }));
+}
+
+// Generate dynamic metadata based on region
+export async function generateMetadata({ params }: RegionPageProps): Promise<Metadata> {
+  const { region } = params;
+  const regionConfig = getRegionConfig(region);
+  
+  if (!regionConfig) {
+    return {
+      title: 'Region Not Found | Guide for Seniors',
+      description: 'The requested region could not be found.',
+    };
+  }
+
+  const baseUrl = 'https://www.guideforseniors.com';
+  const canonicalUrl = `${baseUrl}/${region}`;
+  
+  return {
+    title: `Senior Living in ${regionConfig.displayName} | Browse All Communities | Guide for Seniors`,
+    description: regionConfig.seo.defaultDescription,
+    keywords: regionConfig.seo.keywords.join(', '),
+    alternates: {
+      canonical: canonicalUrl,
+    },
+    openGraph: {
+      title: `Senior Living in ${regionConfig.displayName} | Guide for Seniors`,
+      description: regionConfig.seo.defaultDescription,
+      url: canonicalUrl,
+      siteName: 'Guide for Seniors',
+    },
+  };
+}
 
 // ISR: Revalidate every hour
 export const revalidate = 3600;
 
-export default async function GreaterClevelandPage() {
-  // Fetch live community data from Supabase
-  const communityData = await fetchAllCommunities();
+export default async function RegionHubPage({ params }: RegionPageProps) {
+  const { region } = params;
+  
+  // Validate region
+  if (!isValidRegion(region)) {
+    notFound();
+  }
+  
+  const regionConfig = getRegionConfig(region);
+  if (!regionConfig) {
+    notFound();
+  }
+  
+  // Fetch live community data from Supabase for this region
+  const communityData = await fetchCommunitiesByRegion(region);
+  
+  // Get hub cities from config
+  const hubCities = getHubCities(region);
   
   // Count communities by city
-  const cityCounts = greaterClevelandCities.map(city => {
+  const cityCounts = hubCities.map(city => {
     const count = communityData.filter(
       c => c.location.split(',')[0].trim().toLowerCase() === city.name.toLowerCase()
     ).length;
@@ -65,6 +94,7 @@ export default async function GreaterClevelandPage() {
   });
 
   const totalCommunities = communityData.length;
+  const phoneNumber = getRegionPhoneNumber(region);
 
   return (
     <div className="min-h-screen flex flex-col bg-white">
@@ -80,15 +110,14 @@ export default async function GreaterClevelandPage() {
           <div className="container mx-auto px-4 relative z-10">
             <div className="max-w-4xl mx-auto text-center">
               <span className="inline-block bg-teal-100 text-teal-700 px-4 py-2 rounded-full text-sm font-semibold mb-6">
-                Greater Cleveland Metro
+                {regionConfig.metroName}
               </span>
               
               <h1 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6 leading-tight">
-                Senior Living in Greater Cleveland
+                Senior Living in {regionConfig.displayName}
               </h1>
               <p className="text-lg md:text-xl text-slate-600 max-w-3xl mx-auto mb-10">
-                Explore {totalCommunities}+ senior living communities across Cuyahoga County and the Greater Cleveland metropolitan area. 
-                Find the perfect assisted living, memory care, or independent living community in your preferred neighborhood.
+                {regionConfig.description}
               </p>
               
               <div className="flex flex-wrap justify-center gap-4">
@@ -98,7 +127,7 @@ export default async function GreaterClevelandPage() {
                 </div>
                 <div className="bg-white px-6 py-3 rounded-xl shadow-md border border-slate-200 flex items-center gap-2">
                   <MapPin className="h-5 w-5 text-teal-600" />
-                  <span className="font-bold text-slate-900">{greaterClevelandCities.length} Cities</span>
+                  <span className="font-bold text-slate-900">{hubCities.length} Cities</span>
                 </div>
                 <div className="bg-white px-6 py-3 rounded-xl shadow-md border border-slate-200 flex items-center gap-2">
                   <Users className="h-5 w-5 text-teal-600" />
@@ -125,7 +154,7 @@ export default async function GreaterClevelandPage() {
               {sortedCities.map((city) => (
                 <Link
                   key={city.name}
-                  href={city.count > 0 ? `/location/${city.name.toLowerCase().replace(/\s+/g, '-')}` : '#'}
+                  href={city.count > 0 ? `/${region}/${city.name.toLowerCase().replace(/\s+/g, '-')}` : '#'}
                   className={`group block p-6 bg-white rounded-2xl border-2 transition-all duration-300
                     ${city.count > 0 
                       ? 'border-slate-200 hover:border-teal-300 hover:shadow-xl' 
@@ -180,20 +209,14 @@ export default async function GreaterClevelandPage() {
           <div className="container mx-auto px-4">
             <div className="max-w-6xl mx-auto">
               <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-12 text-center">
-                About Senior Living in Greater Cleveland
+                About Senior Living in {regionConfig.displayName}
               </h2>
               
               <div className="grid md:grid-cols-2 gap-12">
                 <div className="bg-white rounded-2xl p-8 shadow-sm border border-slate-200">
-                  <h3 className="text-xl font-bold text-slate-900 mb-6">Why Choose Greater Cleveland?</h3>
+                  <h3 className="text-xl font-bold text-slate-900 mb-6">Why Choose {regionConfig.displayName}?</h3>
                   <ul className="space-y-4">
-                    {[
-                      'World-class healthcare with Cleveland Clinic and University Hospitals',
-                      'Affordable cost of living compared to national averages',
-                      'Rich cultural amenities including museums, theaters, and parks',
-                      'Four seasons with beautiful fall foliage and mild summers',
-                      'Strong senior services and community support programs',
-                    ].map((item, i) => (
+                    {getRegionHighlights(region).map((item, i) => (
                       <li key={i} className="flex items-start gap-3">
                         <div className="bg-teal-100 rounded-full p-1 mt-0.5">
                           <svg className="h-3 w-3 text-teal-600" fill="currentColor" viewBox="0 0 20 20">
@@ -234,7 +257,7 @@ export default async function GreaterClevelandPage() {
               Need Help Finding the Right Community?
             </h2>
             <p className="text-slate-300 mb-10 max-w-2xl mx-auto text-lg">
-              Our senior living advisors are familiar with Greater Cleveland communities and can help 
+              Our senior living advisors are familiar with {regionConfig.displayName} communities and can help 
               you find the perfect match based on your needs, preferences, and budget.
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
@@ -246,11 +269,11 @@ export default async function GreaterClevelandPage() {
                 <span>Get Free Assistance</span>
               </Link>
               <a
-                href="tel:+12166774630"
+                href={`tel:${phoneNumber.replace(/[^0-9+]/g, '')}`}
                 className="inline-flex items-center justify-center gap-2 bg-white hover:bg-slate-100 text-slate-900 font-bold px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all"
               >
                 <Phone className="h-5 w-5" />
-                <span>Call (216) 677-4630</span>
+                <span>Call {phoneNumber}</span>
               </a>
             </div>
           </div>
@@ -260,4 +283,26 @@ export default async function GreaterClevelandPage() {
       <Footer />
     </div>
   );
+}
+
+// Helper function to get region-specific highlights
+function getRegionHighlights(regionSlug: string): string[] {
+  const highlights: Record<string, string[]> = {
+    'cleveland': [
+      'World-class healthcare with Cleveland Clinic and University Hospitals',
+      'Affordable cost of living compared to national averages',
+      'Rich cultural amenities including museums, theaters, and parks',
+      'Four seasons with beautiful fall foliage and mild summers',
+      'Strong senior services and community support programs',
+    ],
+    'columbus': [
+      'Home to Ohio State University Wexner Medical Center',
+      'Vibrant arts and cultural scene',
+      'Growing economy with diverse job opportunities for family members',
+      'Extensive park system and outdoor recreation',
+      'Strong community support programs for seniors',
+    ],
+  };
+  
+  return highlights[regionSlug] || highlights['cleveland'];
 }

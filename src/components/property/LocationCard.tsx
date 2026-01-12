@@ -18,9 +18,10 @@ import { submitLead } from '@/app/actions/leads';
 interface LocationCardProps {
   community: Community;
   compact?: boolean; // Compact mode for spotlight sections
+  regionSlug?: string; // Optional region slug for multi-region URLs
 }
 
-export default function LocationCard({ community, compact = false }: LocationCardProps) {
+export default function LocationCard({ community, compact = false, regionSlug }: LocationCardProps) {
   // All Hooks must be called at the top level
   const formId = useId();
   const [isPricingSubmitting, setIsPricingSubmitting] = useState(false);
@@ -123,8 +124,10 @@ export default function LocationCard({ community, compact = false }: LocationCar
   const communityLocation = community.location || 'Unknown location';
   const communitySlug = communityName.toLowerCase().replace(/\s+/g, '-');
 
-  // Prepare community URL
-  const communityUrl = `/community/${communityId}/${communitySlug}`;
+  // Prepare community URL - region-aware if regionSlug provided
+  const communityUrl = regionSlug 
+    ? `/${regionSlug}/community/${communityId}/${communitySlug}`
+    : `/community/${communityId}/${communitySlug}`;
 
   // Use actual care types or fallback to empty array only if undefined
   const careTypes = community.careTypes || [];

@@ -1,24 +1,34 @@
 /**
  * Fetch Community Data from Supabase
  * Server-side and client-side utilities for fetching community information
+ * Supports multi-region architecture with region_slug filtering
  */
 
 import { supabase } from './supabase-client';
 import { Community } from '@/data/facilities';
+import { DEFAULT_REGION } from '@/data/regions';
 
 /**
  * Fetch a single community by slug
+ * @param slug - Community slug
+ * @param regionSlug - Optional region filter (defaults to all regions)
  */
-export async function fetchCommunityBySlug(slug: string): Promise<Community | null> {
+export async function fetchCommunityBySlug(slug: string, regionSlug?: string): Promise<Community | null> {
   try {
-    const { data, error } = await supabase
+    let query = supabase
       .from('Community')
       .select('*')
-      .eq('slug', slug)
-      .single();
+      .eq('slug', slug);
+    
+    // Filter by region if specified
+    if (regionSlug) {
+      query = query.eq('region_slug', regionSlug);
+    }
+    
+    const { data, error } = await query.single();
 
     if (error || !data) {
-      console.warn(`No community found with slug: ${slug}`);
+      console.warn(`No community found with slug: ${slug}${regionSlug ? ` in region: ${regionSlug}` : ''}`);
       return null;
     }
 
@@ -31,20 +41,28 @@ export async function fetchCommunityBySlug(slug: string): Promise<Community | nu
 
 /**
  * Fetch a single community by ID
+ * @param id - Community UUID
+ * @param regionSlug - Optional region filter for validation
  */
-export async function fetchCommunityById(id: string): Promise<Community | null> {
+export async function fetchCommunityById(id: string, regionSlug?: string): Promise<Community | null> {
   try {
     // Try to fetch by ID first
-    let { data, error } = await supabase
+    let query = supabase
       .from('Community')
       .select('*')
-      .eq('id', id)
-      .single();
+      .eq('id', id);
+    
+    // Filter by region if specified
+    if (regionSlug) {
+      query = query.eq('region_slug', regionSlug);
+    }
+    
+    const { data, error } = await query.single();
 
     // If not found by ID, try by old-style ID pattern (facility-1, facility-2, etc.)
     // This handles legacy URLs
     if (error && error.code === 'PGRST116') {
-      console.warn(`No community found with id: ${id}, trying alternate lookups...`);
+      console.warn(`No community found with id: ${id}${regionSlug ? ` in region: ${regionSlug}` : ''}, trying alternate lookups...`);
       
       // Try finding by combining name search (for old static data)
       // This is a graceful fallback for old URLs
@@ -83,7 +101,7 @@ export async function fetchCommunityById(id: string): Promise<Community | null> 
 }
 
 /**
- * Fetch all communities
+ * Fetch all communities (across all regions)
  */
 export async function fetchAllCommunities(): Promise<Community[]> {
   const { data, error } = await supabase
@@ -100,6 +118,71 @@ export async function fetchAllCommunities(): Promise<Community[]> {
 }
 
 /**
+ * Fetch communities by region
+ * @param regionSlug - Region slug to filter by (e.g., 'cleveland', 'columbus')
+ */
+export async function fetchCommunitiesByRegion(regionSlug: string): Promise<Community[]> {
+  const { data, error } = await supabase
+    .from('Community')
+    .select('*')
+    .eq('region_slug', regionSlug)
+    .order('name');
+
+  if (error) {
+    console.error(`Error fetching communities for region ${regionSlug}:`, error);
+    return [];
+  }
+
+  return data.map(transformDatabaseToCommunity);
+}
+
+/**
+ * Fetch communities by region and city
+ * @param regionSlug - Region slug
+ * @param cityName - City name to filter by
+ */
+export async function fetchCommunitiesByRegionAndCity(regionSlug: string, cityName: string): Promise<Community[]> {
+  const { data, error } = await supabase
+    .from('Community')
+    .select('*')
+    .eq('region_slug', regionSlug)
+    .ilike('city', cityName)
+    .order('name');
+
+  if (error) {
+    console.error(`Error fetching communities for ${cityName} in ${regionSlug}:`, error);
+    return [];
+  }
+
+  return data.map(transformDatabaseToCommunity);
+}
+
+/**
+ * Get unique cities for a region
+ * @param regionSlug - Region slug
+ */
+export async function getUniqueCitiesForRegion(regionSlug: string): Promise<string[]> {
+  const { data, error } = await supabase
+    .from('Community')
+    .select('city')
+    .eq('region_slug', regionSlug);
+
+  if (error) {
+    console.error(`Error fetching cities for region ${regionSlug}:`, error);
+    return [];
+  }
+
+  // Get unique cities
+  const uniqueCities = Array.from(new Set(
+    data
+      .filter(item => item.city)
+      .map(item => item.city.trim())
+  ));
+
+  return uniqueCities;
+}
+
+/**
  * Transform database record to Community interface
  */
 function transformDatabaseToCommunity(data: any): Community {
@@ -111,6 +194,8 @@ function transformDatabaseToCommunity(data: any): Community {
     location: `${data.city}, ${data.state}`,
     address: data.address || undefined,
     zip: data.zip || undefined,
+    // Multi-region support
+    regionSlug: data.region_slug || data.regionSlug || DEFAULT_REGION,
     // Map database lat/lng to coordinates object for Google Maps
     coordinates: (data.latitude && data.longitude) 
       ? { lat: parseFloat(data.latitude), lng: parseFloat(data.longitude) }

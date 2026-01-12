@@ -16,6 +16,7 @@ export interface Community {
   location: string;
   address?: string; // Full street address
   zip?: string; // 5-digit zip code
+  regionSlug?: string; // Multi-region support (e.g., 'cleveland', 'columbus')
   coordinates?: {
     lat: number;
     lng: number;
