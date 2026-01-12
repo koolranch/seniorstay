@@ -1,10 +1,10 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { Calendar, Clock, Tag, ArrowLeft, User } from 'lucide-react';
+import { Calendar, Clock, Tag, ArrowLeft, User, MapPin } from 'lucide-react';
 import Header from '@/components/header/Header';
 import Footer from '@/components/footer/Footer';
 import ReactMarkdown from 'react-markdown';
-import { fetchBlogPostBySlug, fetchRecentBlogPosts } from '@/lib/blog-posts';
+import { fetchBlogPostBySlug, fetchRecentBlogPosts, isRegionalPost, getPostRegionDisplayName } from '@/lib/blog-posts';
 import SuburbLinksSection from '@/components/blog/SuburbLinksSection';
 import Script from 'next/script';
 
@@ -82,11 +82,42 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
     "inLanguage": "en-US"
   };
 
-  // Breadcrumb schema
+  // Check if regional post for enhanced breadcrumbs
+  const isRegional = isRegionalPost(post);
+  const regionDisplayName = getPostRegionDisplayName(post);
+  const regionSlug = post.regionSlug;
+
+  // Breadcrumb schema - Enhanced for regional posts
+  // Cleveland-specific posts link back to /cleveland hub for SEO silo integrity
   const breadcrumbSchema = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
-    "itemListElement": [
+    "itemListElement": isRegional && regionSlug ? [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://guideforseniors.com"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": regionDisplayName,
+        "item": `https://guideforseniors.com/${regionSlug}`
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "Expert Advice",
+        "item": "https://guideforseniors.com/blog"
+      },
+      {
+        "@type": "ListItem",
+        "position": 4,
+        "name": post.title,
+        "item": `https://guideforseniors.com/blog/${params.slug}`
+      }
+    ] : [
       {
         "@type": "ListItem",
         "position": 1,
@@ -137,10 +168,18 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
               Back to Blog
             </Link>
 
-            {/* Category Badge */}
-            <div className="flex items-center gap-2 mb-4">
-              <Tag className="h-4 w-4 text-primary" />
-              <span className="text-sm font-medium text-primary">{post.category}</span>
+            {/* Category & Regional Badges */}
+            <div className="flex flex-wrap items-center gap-3 mb-4">
+              <div className="flex items-center gap-2">
+                <Tag className="h-4 w-4 text-primary" />
+                <span className="text-sm font-medium text-primary">{post.category}</span>
+              </div>
+              {isRegional && regionDisplayName && (
+                <div className="flex items-center gap-1.5 bg-teal-100 text-teal-700 px-3 py-1 rounded-full text-sm font-medium">
+                  <MapPin className="h-3.5 w-3.5" />
+                  <span>{regionDisplayName}</span>
+                </div>
+              )}
             </div>
 
             {/* Title */}
@@ -218,11 +257,13 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
               />
             )}
 
-            {/* CTA Box */}
+            {/* CTA Box - Region-aware */}
             <div className="bg-primary/5 border border-primary/20 rounded-xl p-8 mt-12">
-              <h3 className="text-2xl font-bold mb-4">Need Help Finding Senior Living in Cleveland?</h3>
+              <h3 className="text-2xl font-bold mb-4">
+                Need Help Finding Senior Living{isRegional && regionDisplayName ? ` in ${regionDisplayName}` : ''}?
+              </h3>
               <p className="text-gray-700 mb-6">
-                Our local advisors can provide personalized recommendations, schedule tours, and answer all your questions—completely free.
+                Our {isRegional && regionDisplayName ? `${regionDisplayName} ` : ''}local advisors can provide personalized recommendations, schedule tours, and answer all your questions—completely free.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link
@@ -232,10 +273,10 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
                   Get Free Consultation
                 </Link>
                 <Link
-                  href="/cleveland"
+                  href={isRegional && regionSlug ? `/${regionSlug}` : '/cleveland'}
                   className="bg-white hover:bg-gray-50 text-gray-900 font-semibold py-3 px-6 rounded-lg border-2 border-gray-300 transition-colors text-center"
                 >
-                  Browse Communities
+                  Browse {regionDisplayName || 'Cleveland'} Communities
                 </Link>
               </div>
             </div>

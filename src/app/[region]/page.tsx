@@ -1,10 +1,12 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
+import Image from 'next/image';
 import { notFound } from 'next/navigation';
-import { MapPin, Home, Users, ArrowRight, Hospital, Phone, Star } from 'lucide-react';
+import { MapPin, Home, Users, ArrowRight, Hospital, Phone, Star, BookOpen, Calendar } from 'lucide-react';
 import GlobalHeader from '@/components/home/GlobalHeader';
 import Footer from '@/components/footer/Footer';
 import { fetchCommunitiesByRegion } from '@/lib/fetch-community';
+import { fetchRegionalOnlyPosts } from '@/lib/blog-posts';
 import { 
   getRegionConfig, 
   getAllRegionSlugs, 
@@ -73,7 +75,10 @@ export default async function RegionHubPage({ params }: RegionPageProps) {
   }
   
   // Fetch live community data from Supabase for this region
-  const communityData = await fetchCommunitiesByRegion(region);
+  const [communityData, regionalPosts] = await Promise.all([
+    fetchCommunitiesByRegion(region),
+    fetchRegionalOnlyPosts(region, 3), // Get 3 most recent Cleveland-specific posts
+  ]);
   
   // Get hub cities from config
   const hubCities = getHubCities(region);
@@ -203,6 +208,82 @@ export default async function RegionHubPage({ params }: RegionPageProps) {
             </div>
           </div>
         </section>
+
+        {/* Local Expert Advice Section */}
+        {regionalPosts.length > 0 && (
+          <section className="py-16 md:py-20 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+            <div className="container mx-auto px-4">
+              <div className="max-w-6xl mx-auto">
+                <div className="text-center mb-12">
+                  <span className="inline-flex items-center gap-2 bg-teal-500/20 text-teal-300 px-4 py-2 rounded-full text-sm font-semibold mb-4">
+                    <BookOpen className="h-4 w-4" />
+                    Local Expert Advice
+                  </span>
+                  <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+                    {regionConfig.displayName} Senior Care Insights
+                  </h2>
+                  <p className="text-lg text-slate-300 max-w-2xl mx-auto">
+                    Expert guidance from our local advisors who know {regionConfig.displayName} communities inside and out.
+                  </p>
+                </div>
+                
+                <div className="grid md:grid-cols-3 gap-6">
+                  {regionalPosts.map((post) => (
+                    <Link
+                      key={post.slug}
+                      href={`/blog/${post.slug}`}
+                      className="group block bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 overflow-hidden hover:bg-white/10 hover:border-teal-500/50 transition-all duration-300"
+                    >
+                      {post.image && (
+                        <div className="relative h-40 overflow-hidden">
+                          <Image
+                            src={post.image}
+                            alt={post.title}
+                            fill
+                            className="object-cover group-hover:scale-105 transition-transform duration-500"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent" />
+                          <span className="absolute bottom-3 left-3 bg-teal-600/90 text-white text-xs px-2 py-1 rounded-full font-medium">
+                            {post.category}
+                          </span>
+                        </div>
+                      )}
+                      <div className="p-5">
+                        <h3 className="text-lg font-bold text-white mb-2 line-clamp-2 group-hover:text-teal-300 transition-colors">
+                          {post.title}
+                        </h3>
+                        <p className="text-slate-400 text-sm mb-4 line-clamp-2">
+                          {post.description}
+                        </p>
+                        <div className="flex items-center justify-between text-xs text-slate-500">
+                          <span className="flex items-center gap-1">
+                            <Calendar className="h-3.5 w-3.5" />
+                            {new Date(post.date).toLocaleDateString('en-US', { 
+                              month: 'short', 
+                              day: 'numeric', 
+                              year: 'numeric' 
+                            })}
+                          </span>
+                          <span>{post.readTime}</span>
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+                
+                <div className="text-center mt-10">
+                  <Link
+                    href="/blog"
+                    className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold px-6 py-3 rounded-xl border border-white/20 transition-all"
+                  >
+                    <span>View All {regionConfig.displayName} Articles</span>
+                    <ArrowRight className="h-4 w-4" />
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* Regional Information */}
         <section className="py-16 md:py-20 bg-slate-50">
