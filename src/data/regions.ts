@@ -10,7 +10,7 @@
 
 import { CityInfo, clevelandCitiesData } from './cleveland-cities';
 
-export { CityInfo };
+export type { CityInfo };
 
 /**
  * Region configuration interface

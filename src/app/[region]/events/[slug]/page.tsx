@@ -117,7 +117,7 @@ export async function generateMetadata({ params }: EventPageProps): Promise<Meta
     return { title: 'Event Not Found | Guide for Seniors' };
   }
   
-  const location = event.neighborhood || event.city || regionConfig?.displayName || 'Cleveland';
+  const location = event.neighborhood || event.location_name || regionConfig?.displayName || 'Cleveland';
   const eventDate = new Date(event.start_date);
   const isPast = eventDate < new Date();
   const baseUrl = 'https://www.guideforseniors.com';
@@ -170,13 +170,13 @@ export default async function EventSlugPage({ params }: EventPageProps) {
   const phoneNumber = getRegionPhoneNumber(region);
   const eventDate = new Date(event.start_date);
   const isPast = eventDate < new Date();
-  const location = event.neighborhood || event.city || regionConfig.displayName;
-  const citySlug = (event.city || event.neighborhood || '').toLowerCase().replace(/\s+/g, '-');
+  const location = event.neighborhood || event.location_name || regionConfig.displayName;
+  const citySlug = (event.neighborhood || '').toLowerCase().replace(/\s+/g, '-');
   
   // Fetch related content
   const [relatedEvents, nearbyCommunities] = await Promise.all([
-    getRelatedEvents(event.neighborhood || event.city || '', event.id || '', region),
-    event.city ? fetchQualityCommunitiesByCity(event.city) : Promise.resolve([])
+    getRelatedEvents(event.neighborhood || '', event.id || '', region),
+    event.neighborhood ? fetchQualityCommunitiesByCity(event.neighborhood) : Promise.resolve([])
   ]);
   
   // JSON-LD Event Schema
@@ -193,11 +193,9 @@ export default async function EventSlugPage({ params }: EventPageProps) {
       : "https://schema.org/OfflineEventAttendanceMode",
     "location": event.is_virtual 
       ? { "@type": "VirtualLocation", "url": event.registration_url }
-      : { "@type": "Place", "name": event.venue, "address": { "@type": "PostalAddress", "addressLocality": event.city, "addressRegion": regionConfig.stateAbbr } },
-    "organizer": { "@type": "Organization", "name": event.organizer || "Guide for Seniors" },
-    "offers": event.is_free 
-      ? { "@type": "Offer", "price": "0", "priceCurrency": "USD", "availability": "https://schema.org/InStock" }
-      : undefined
+      : { "@type": "Place", "name": event.location_name || location, "address": { "@type": "PostalAddress", "addressLocality": event.neighborhood || location, "addressRegion": regionConfig.stateAbbr } },
+    "organizer": { "@type": "Organization", "name": event.source_name || "Guide for Seniors" },
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD", "availability": "https://schema.org/InStock" }
   };
   
   const breadcrumbSchema = {
@@ -243,19 +241,14 @@ export default async function EventSlugPage({ params }: EventPageProps) {
               )}
               
               <div className="flex flex-wrap gap-2 mb-4">
-                {event.category && (
+                {event.event_type && (
                   <Badge className="text-white" style={{ backgroundColor: SAGE_GREEN }}>
-                    {event.category}
+                    {event.event_type.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}
                   </Badge>
                 )}
                 {event.is_virtual && (
                   <Badge variant="secondary" className="bg-white/10 text-white border-white/20">
                     <Video className="h-3 w-3 mr-1" /> Virtual Event
-                  </Badge>
-                )}
-                {event.is_free && (
-                  <Badge variant="secondary" className="bg-white/10 text-white border-white/20">
-                    <DollarSign className="h-3 w-3 mr-1" /> Free
                   </Badge>
                 )}
               </div>
@@ -269,16 +262,14 @@ export default async function EventSlugPage({ params }: EventPageProps) {
                   <Calendar className="h-5 w-5" style={{ color: SAGE_GREEN }} />
                   <span>{eventDate.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}</span>
                 </div>
-                {event.start_time && (
-                  <div className="flex items-center gap-2">
-                    <Clock className="h-5 w-5" style={{ color: SAGE_GREEN }} />
-                    <span>{event.start_time}{event.end_time ? ` - ${event.end_time}` : ''}</span>
-                  </div>
-                )}
-                {!event.is_virtual && event.venue && (
+                <div className="flex items-center gap-2">
+                  <Clock className="h-5 w-5" style={{ color: SAGE_GREEN }} />
+                  <span>{eventDate.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}</span>
+                </div>
+                {!event.is_virtual && event.location_name && (
                   <div className="flex items-center gap-2">
                     <MapPin className="h-5 w-5" style={{ color: SAGE_GREEN }} />
-                    <span>{event.venue}{event.city ? `, ${event.city}` : ''}</span>
+                    <span>{event.location_name}{event.neighborhood ? `, ${event.neighborhood}` : ''}</span>
                   </div>
                 )}
               </div>
@@ -303,7 +294,12 @@ export default async function EventSlugPage({ params }: EventPageProps) {
                     <CalendarCheck className="h-5 w-5" style={{ color: SAGE_GREEN }} />
                     Get Event Reminder
                   </h3>
-                  <EventReminderForm eventTitle={event.title} />
+                  <EventReminderForm 
+                    eventId={event.id}
+                    eventTitle={event.title}
+                    eventDate={event.start_date}
+                    neighborhood={event.neighborhood}
+                  />
                   
                   {event.registration_url && (
                     <a href={event.registration_url} target="_blank" rel="noopener noreferrer" className="mt-4 block">
@@ -342,10 +338,10 @@ export default async function EventSlugPage({ params }: EventPageProps) {
                     </p>
                   )}
                   
-                  {event.organizer && (
+                  {event.source_name && (
                     <div className="mt-6 p-4 bg-slate-50 rounded-lg">
                       <p className="text-sm text-slate-600">
-                        <strong>Organized by:</strong> {event.organizer}
+                        <strong>Organized by:</strong> {event.source_name}
                       </p>
                     </div>
                   )}
@@ -358,7 +354,7 @@ export default async function EventSlugPage({ params }: EventPageProps) {
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <Building2 className="h-5 w-5" style={{ color: SAGE_GREEN }} />
-                      Senior Living in {event.city || location}
+                      Senior Living in {event.neighborhood || location}
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
@@ -382,7 +378,7 @@ export default async function EventSlugPage({ params }: EventPageProps) {
                     </div>
                     <Link href={`/${region}/${citySlug}`} className="mt-4 inline-block">
                       <Button variant="outline" size="sm">
-                        View All Communities in {event.city || location}
+                        View All Communities in {event.neighborhood || location}
                       </Button>
                     </Link>
                   </CardContent>
