@@ -12,6 +12,7 @@ import { SeniorEvent, CLEVELAND_NEIGHBORHOODS } from '@/types/events';
 
 interface EventsHubClientProps {
   initialEvents: SeniorEvent[];
+  regionSlug?: string;
 }
 
 // Brand colors (matching homepage)
@@ -92,7 +93,7 @@ function getFirstDayOfMonth(year: number, month: number): number {
 }
 
 // Event Card Component with Lead Hook CTA
-function EventCard({ event, compact = false }: { event: SeniorEvent; compact?: boolean }) {
+function EventCard({ event, compact = false, regionSlug = 'cleveland' }: { event: SeniorEvent; compact?: boolean; regionSlug?: string }) {
   const typeConfig = EVENT_TYPE_CONFIG[event.event_type] || EVENT_TYPE_CONFIG.community_hub;
   const neighborhoodSlug = event.neighborhood?.toLowerCase().replace(/\s+/g, '-');
   const eventSlug = generateSlug(event.title);
@@ -121,7 +122,7 @@ function EventCard({ event, compact = false }: { event: SeniorEvent; compact?: b
               </div>
               
               <CardTitle className={`${compact ? 'text-base' : 'text-lg'} group-hover:text-teal-600 transition-colors line-clamp-2`}>
-                <Link href={`/events/${eventSlug}`} className="hover:underline">
+                <Link href={`/${regionSlug}/events/${eventSlug}`} className="hover:underline">
                   {event.title}
                 </Link>
               </CardTitle>
@@ -173,13 +174,13 @@ function EventCard({ event, compact = false }: { event: SeniorEvent; compact?: b
               <MapPin className="h-4 w-4 text-slate-400" />
               {event.neighborhood ? (
                 <Link 
-                  href={`/cleveland/${neighborhoodSlug}`}
+                  href={`/${regionSlug}/${neighborhoodSlug}`}
                   className="text-teal-600 hover:underline font-medium"
                 >
                   {event.neighborhood}
                 </Link>
               ) : (
-                <span className="text-slate-500">Cleveland Area</span>
+                <span className="text-slate-500">{regionSlug === 'cleveland' ? 'Cleveland' : 'Columbus'} Area</span>
               )}
               {event.location_name && (
                 <span className="text-slate-500">
@@ -190,7 +191,7 @@ function EventCard({ event, compact = false }: { event: SeniorEvent; compact?: b
             
             {/* Event Link */}
             <Link 
-              href={`/events/${eventSlug}`}
+              href={`/${regionSlug}/events/${eventSlug}`}
               className="text-sm text-teal-600 hover:underline inline-flex items-center gap-1 font-medium"
             >
               View Details →
@@ -347,7 +348,7 @@ function CalendarView({ events, currentDate, onDateChange }: {
 }
 
 // List View Component
-function ListView({ events }: { events: SeniorEvent[] }) {
+function ListView({ events, regionSlug = 'cleveland' }: { events: SeniorEvent[]; regionSlug?: string }) {
   // Group events by date
   const groupedEvents = useMemo(() => {
     const groups: { date: string; events: SeniorEvent[] }[] = [];
@@ -390,7 +391,7 @@ function ListView({ events }: { events: SeniorEvent[] }) {
             </h3>
             <div className="space-y-3">
               {group.events.map(event => (
-                <EventCard key={event.id} event={event} />
+                <EventCard key={event.id} event={event} regionSlug={regionSlug} />
               ))}
             </div>
           </motion.div>
@@ -400,7 +401,7 @@ function ListView({ events }: { events: SeniorEvent[] }) {
   );
 }
 
-export default function EventsHubClient({ initialEvents }: EventsHubClientProps) {
+export default function EventsHubClient({ initialEvents, regionSlug = 'cleveland' }: EventsHubClientProps) {
   const [view, setView] = useState<'list' | 'calendar'>('list');
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedNeighborhood, setSelectedNeighborhood] = useState<string | null>(null);
@@ -532,7 +533,7 @@ export default function EventsHubClient({ initialEvents }: EventsHubClientProps)
           {/* Main Content */}
           <div className="lg:col-span-2">
             {view === 'list' ? (
-              <ListView events={filteredEvents} />
+              <ListView events={filteredEvents} regionSlug={regionSlug} />
             ) : (
               <CalendarView 
                 events={filteredEvents}
@@ -620,7 +621,7 @@ export default function EventsHubClient({ initialEvents }: EventsHubClientProps)
                   {CLEVELAND_NEIGHBORHOODS.slice(0, 8).map(hood => (
                     <Link 
                       key={hood}
-                      href={`/cleveland/${hood.toLowerCase().replace(/\s+/g, '-')}`}
+                      href={`/${regionSlug}/${hood.toLowerCase().replace(/\s+/g, '-')}`}
                     >
                       <Badge variant="outline" className="hover:bg-teal-50 hover:text-teal-700 hover:border-teal-200 cursor-pointer transition-colors">
                         {hood}
@@ -628,7 +629,7 @@ export default function EventsHubClient({ initialEvents }: EventsHubClientProps)
                     </Link>
                   ))}
                 </div>
-                <Link href="/cleveland" className="text-sm text-teal-600 hover:underline mt-3 inline-block font-medium">
+                <Link href={`/${regionSlug}`} className="text-sm text-teal-600 hover:underline mt-3 inline-block font-medium">
                   View all neighborhoods →
                 </Link>
               </CardContent>
