@@ -518,5 +518,139 @@ export const clevelandCitiesData: Record<string, CityInfo> = {
         community: "Woodside Senior Living"
       }
     ]
+  },
+  
+  'macedonia': {
+    name: 'Macedonia',
+    slug: 'macedonia',
+    description: 'Macedonia is a growing Summit County suburb offering quality assisted living options in a convenient location between Cleveland and Akron. The city provides easy highway access and a suburban atmosphere.',
+    highlights: [
+      'Convenient I-271 and I-480 access',
+      'Growing retail and dining options',
+      'Close to Cuyahoga Valley National Park',
+      'Summit and Cuyahoga County border',
+      'Family-oriented community'
+    ],
+    nearbyHospitals: [
+      'Cleveland Clinic Macedonia Family Health Center',
+      'Summa Health System',
+      'University Hospitals Bedford Medical Center',
+      'Cleveland Clinic Hillcrest'
+    ],
+    averageCost: {
+      independentLiving: '$2,500 - $4,200',
+      assistedLiving: '$3,400 - $5,800',
+      memoryCare: '$4,800 - $8,000'
+    },
+    testimonials: [
+      {
+        text: "Summit Point has been wonderful for Mom. The location between Cleveland and Akron makes it easy for family to visit.",
+        author: "David L.",
+        community: "Summit Point Macedonia"
+      },
+      {
+        text: "American House Macedonia offers great value with caring staff. Dad loves the activities.",
+        author: "Susan M.",
+        community: "American House Macedonia"
+      }
+    ]
+  },
+  
+  'avon': {
+    name: 'Avon',
+    slug: 'avon',
+    description: 'Avon is an affluent western suburb in Lorain County known for its excellent schools, safe neighborhoods, and the Avon Commons shopping area. The city offers upscale memory care options for families seeking quality dementia care.',
+    highlights: [
+      'Avon Commons premier shopping',
+      'Excellent city services and safety',
+      'Close to I-90 for easy access',
+      'Growing medical corridor',
+      'Family-friendly atmosphere'
+    ],
+    nearbyHospitals: [
+      'UH Avon Rehabilitation Hospital',
+      'Cleveland Clinic Avon Hospital',
+      'UH St. John Medical Center',
+      'Mercy Regional Medical Center'
+    ],
+    averageCost: {
+      independentLiving: '$2,800 - $4,500',
+      assistedLiving: '$3,800 - $6,200',
+      memoryCare: '$5,500 - $9,000'
+    },
+    testimonials: [
+      {
+        text: "Ganzhorn Suites provides exceptional memory care. The specialized dementia programming gives us peace of mind.",
+        author: "Jennifer W.",
+        community: "Ganzhorn Suites of Avon"
+      }
+    ]
+  },
+  
+  'brunswick': {
+    name: 'Brunswick',
+    slug: 'brunswick',
+    description: 'Brunswick is a thriving Medina County city offering affordable senior living options with convenient access to both Cleveland and Akron. The city features excellent parks and a strong sense of community.',
+    highlights: [
+      'Affordable housing options',
+      'Brunswick Lake and parks',
+      'Close to I-71 and Route 303',
+      'Strong community programming',
+      'Medina County seat access'
+    ],
+    nearbyHospitals: [
+      'Southwest General Health Center',
+      'Cleveland Clinic Medina Hospital',
+      'UH Parma Medical Center',
+      'Akron General Medical Center'
+    ],
+    averageCost: {
+      independentLiving: '$2,200 - $3,800',
+      assistedLiving: '$3,200 - $5,400',
+      memoryCare: '$4,400 - $7,200'
+    },
+    testimonials: [
+      {
+        text: "Danbury Brunswick offers everything we needed - IL, AL, and memory care all in one place as Dad's needs changed.",
+        author: "Mark T.",
+        community: "Danbury Senior Living Brunswick"
+      }
+    ]
+  },
+  
+  'mentor': {
+    name: 'Mentor',
+    slug: 'mentor',
+    description: 'Mentor is the largest city in Lake County, offering diverse senior living options from assisted living to memory care. The city features the Great Lakes Mall, numerous parks, and excellent healthcare access.',
+    highlights: [
+      'Great Lakes Mall shopping',
+      'Headlands Beach State Park',
+      'Strong Lake County hospital system',
+      'Diverse senior care options',
+      'Growing medical corridor'
+    ],
+    nearbyHospitals: [
+      'Lake Health TriPoint Medical Center',
+      'Lake Health West Medical Center',
+      'UH Mentor Health Center',
+      'Cleveland Clinic Mentor'
+    ],
+    averageCost: {
+      independentLiving: '$2,400 - $4,000',
+      assistedLiving: '$3,400 - $5,600',
+      memoryCare: '$4,600 - $7,800'
+    },
+    testimonials: [
+      {
+        text: "Danbury Mentor has been excellent. The memory care staff truly understands dementia and treats Mom with dignity.",
+        author: "Carol B.",
+        community: "Danbury Senior Living Mentor"
+      },
+      {
+        text: "Vitalia Mentor offers a beautiful facility with compassionate care. The rehabilitation services were top-notch.",
+        author: "James R.",
+        community: "Vitalia Mentor"
+      }
+    ]
   }
 }; 

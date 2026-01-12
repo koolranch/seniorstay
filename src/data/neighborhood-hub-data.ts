@@ -843,6 +843,246 @@ export const neighborhoodHubData: Record<string, NeighborhoodHubData> = {
       areaServed: 'Bedford, OH 44146',
       description: 'Guide for Seniors provides free senior living placement services in Bedford, Ohio, helping families find intimate, specialized assisted living and memory care communities.'
     }
+  },
+  
+  'macedonia': {
+    slug: 'macedonia',
+    name: 'Macedonia',
+    county: 'Summit',
+    zipCodes: ['44056'],
+    
+    aioHeader: {
+      headline: 'Quality Assisted Living in Macedonia, OH',
+      answerSentence: 'Macedonia offers quality assisted living options at the Summit-Cuyahoga County border, with convenient access to both Cleveland and Akron medical systems.',
+      semanticKeywords: ['Macedonia assisted living', 'Summit Point Macedonia', 'American House Macedonia', 'summit county senior care']
+    },
+    
+    proximity: {
+      hospital: {
+        name: 'Cleveland Clinic Macedonia',
+        distance: '2 miles',
+        driveTime: '5 minutes'
+      },
+      landmarks: [
+        { name: 'Cleveland Clinic Macedonia', type: 'hospital', distance: '2 miles' },
+        { name: 'Cuyahoga Valley National Park', type: 'park', distance: '5 miles' },
+        { name: 'Macedonia Commons', type: 'shopping', distance: '1 mile' }
+      ],
+      localInsight: 'Macedonia sits at the crossroads of I-271 and I-480, making it equally accessible from Cleveland\'s east side and Akron. This central location benefits families visiting from both directions.'
+    },
+    
+    expertTake: {
+      differentiator: 'Macedonia offers value-oriented assisted living with Summit Point and American House providing quality care at competitive prices.',
+      bestFor: ['Families with connections to both Cleveland and Akron', 'Budget-conscious families seeking quality', 'Those wanting proximity to Cuyahoga Valley parks'],
+      consultantPerspective: 'Macedonia is an underrated option for families in the I-271 corridor. Both Summit Point and American House have solid reputations, and the location makes it easy for family members from both Cleveland and Akron to visit regularly.'
+    },
+    
+    faq: [
+      {
+        question: 'What assisted living options are available in Macedonia?',
+        answer: 'Macedonia offers Summit Point (full continuum from IL to MC) and American House (IL and AL). Both provide quality care in a suburban setting.',
+        linkText: 'View Macedonia Communities',
+        linkUrl: '/location/macedonia'
+      }
+    ],
+    
+    marketData: {
+      averageAssistedLiving: '$3,400 - $5,800/month',
+      averageMemoryCare: '$4,800 - $8,000/month',
+      averageIndependentLiving: '$2,500 - $4,200/month',
+      marketTrend: 'moderate'
+    },
+    
+    relatedAreas: [
+      { slug: 'bedford', name: 'Bedford', relationship: 'Adjacent suburb' },
+      { slug: 'solon', name: 'Solon', relationship: 'Nearby east side option' },
+      { slug: 'hudson', name: 'Hudson', relationship: 'Upscale Summit County' }
+    ],
+    
+    localBusinessSchema: {
+      areaServed: 'Macedonia, OH 44056',
+      description: 'Guide for Seniors provides free senior living placement services in Macedonia, Ohio, helping families find quality assisted living between Cleveland and Akron.'
+    }
+  },
+  
+  'avon': {
+    slug: 'avon',
+    name: 'Avon',
+    county: 'Lorain',
+    zipCodes: ['44011'],
+    
+    aioHeader: {
+      headline: 'Premium Memory Care in Avon, Ohio',
+      answerSentence: 'Avon offers upscale memory care through Ganzhorn Suites, providing specialized dementia care in an affluent western suburb with excellent amenities.',
+      semanticKeywords: ['Avon memory care', 'Ganzhorn Suites Avon', 'Lorain County senior care', 'Avon OH assisted living']
+    },
+    
+    proximity: {
+      hospital: {
+        name: 'Cleveland Clinic Avon Hospital',
+        distance: '3 miles',
+        driveTime: '8 minutes'
+      },
+      landmarks: [
+        { name: 'Cleveland Clinic Avon Hospital', type: 'hospital', distance: '3 miles' },
+        { name: 'Avon Commons', type: 'shopping', distance: '1 mile' },
+        { name: 'UH Avon Rehabilitation', type: 'hospital', distance: '2 miles' }
+      ],
+      localInsight: 'Avon has invested heavily in healthcare infrastructure, with both Cleveland Clinic and UH establishing major facilities. This creates exceptional medical access for seniors.'
+    },
+    
+    expertTake: {
+      differentiator: 'Avon\'s Ganzhorn Suites specializes in memory care with a boutique approach, offering smaller household-style living rather than traditional institutional settings.',
+      bestFor: ['Families seeking specialized memory care', 'Those wanting a west side location', 'Families preferring smaller, boutique settings'],
+      consultantPerspective: 'If memory care is your primary need and you want a west side location, Ganzhorn Suites in Avon is worth considering. Their household model creates a more intimate environment that many families prefer over larger facilities.'
+    },
+    
+    faq: [
+      {
+        question: 'What memory care options are in Avon?',
+        answer: 'Ganzhorn Suites of Avon provides specialized memory care using a household model. The facility focuses exclusively on dementia care with trained staff and evidence-based programming.',
+        linkText: 'View Avon Communities',
+        linkUrl: '/location/avon'
+      }
+    ],
+    
+    marketData: {
+      averageAssistedLiving: '$3,800 - $6,200/month',
+      averageMemoryCare: '$5,500 - $9,000/month',
+      averageIndependentLiving: '$2,800 - $4,500/month',
+      marketTrend: 'moderate'
+    },
+    
+    relatedAreas: [
+      { slug: 'westlake', name: 'Westlake', relationship: 'Adjacent premium suburb' },
+      { slug: 'north-olmsted', name: 'North Olmsted', relationship: 'Eastern neighbor' },
+      { slug: 'rocky-river', name: 'Rocky River', relationship: 'Lakefront alternative' }
+    ],
+    
+    localBusinessSchema: {
+      areaServed: 'Avon, OH 44011',
+      description: 'Guide for Seniors provides free senior living placement services in Avon, Ohio, helping families find specialized memory care in this upscale Lorain County suburb.'
+    }
+  },
+  
+  'brunswick': {
+    slug: 'brunswick',
+    name: 'Brunswick',
+    county: 'Medina',
+    zipCodes: ['44212'],
+    
+    aioHeader: {
+      headline: 'Affordable Senior Living in Brunswick, OH',
+      answerSentence: 'Brunswick offers affordable assisted living and memory care through Danbury Senior Living, providing a full continuum of care in a value-oriented Medina County setting.',
+      semanticKeywords: ['Brunswick assisted living', 'Danbury Brunswick', 'Medina County senior care', 'Brunswick OH memory care']
+    },
+    
+    proximity: {
+      hospital: {
+        name: 'Cleveland Clinic Medina Hospital',
+        distance: '8 miles',
+        driveTime: '15 minutes'
+      },
+      landmarks: [
+        { name: 'Cleveland Clinic Medina Hospital', type: 'hospital', distance: '8 miles' },
+        { name: 'Brunswick Lake', type: 'park', distance: '2 miles' },
+        { name: 'Southwest General', type: 'hospital', distance: '10 miles' }
+      ],
+      localInsight: 'Brunswick offers some of the most affordable senior living in the Greater Cleveland area while maintaining quality care standards. The I-71 corridor provides good access to Cleveland medical facilities.'
+    },
+    
+    expertTake: {
+      differentiator: 'Brunswick\'s Danbury community offers a full continuum from independent living through memory care, allowing aging in place without moving as needs change.',
+      bestFor: ['Budget-conscious families', 'Those wanting a continuum of care', 'Families in the I-71 south corridor'],
+      consultantPerspective: 'Danbury Brunswick is my go-to recommendation for families who need value without sacrificing quality. The ability to start in independent living and transition through AL to memory care in the same community is invaluable.'
+    },
+    
+    faq: [
+      {
+        question: 'What senior living options does Brunswick offer?',
+        answer: 'Danbury Senior Living Brunswick provides independent living, assisted living, and memory care all in one community. This allows residents to age in place as their care needs evolve.',
+        linkText: 'View Brunswick Communities',
+        linkUrl: '/location/brunswick'
+      }
+    ],
+    
+    marketData: {
+      averageAssistedLiving: '$3,200 - $5,400/month',
+      averageMemoryCare: '$4,400 - $7,200/month',
+      averageIndependentLiving: '$2,200 - $3,800/month',
+      marketTrend: 'moderate'
+    },
+    
+    relatedAreas: [
+      { slug: 'strongsville', name: 'Strongsville', relationship: 'Northern neighbor' },
+      { slug: 'parma', name: 'Parma', relationship: 'Cleveland suburb nearby' },
+      { slug: 'independence', name: 'Independence', relationship: 'East side alternative' }
+    ],
+    
+    localBusinessSchema: {
+      areaServed: 'Brunswick, OH 44212',
+      description: 'Guide for Seniors provides free senior living placement services in Brunswick, Ohio, helping families find affordable assisted living and memory care in Medina County.'
+    }
+  },
+  
+  'mentor': {
+    slug: 'mentor',
+    name: 'Mentor',
+    county: 'Lake',
+    zipCodes: ['44060', '44061'],
+    
+    aioHeader: {
+      headline: 'Diverse Senior Care Options in Mentor, Ohio',
+      answerSentence: 'Mentor is Lake County\'s largest city, offering diverse senior living from Danbury\'s memory care to Vitalia\'s rehabilitation services, all with excellent Lake Health medical access.',
+      semanticKeywords: ['Mentor assisted living', 'Danbury Mentor', 'Vitalia Mentor', 'Lake County senior care', 'Mentor OH memory care']
+    },
+    
+    proximity: {
+      hospital: {
+        name: 'Lake Health TriPoint Medical Center',
+        distance: '3 miles',
+        driveTime: '8 minutes'
+      },
+      landmarks: [
+        { name: 'Lake Health TriPoint Medical Center', type: 'hospital', distance: '3 miles' },
+        { name: 'Great Lakes Mall', type: 'shopping', distance: '2 miles' },
+        { name: 'Headlands Beach State Park', type: 'park', distance: '5 miles' }
+      ],
+      localInsight: 'Mentor benefits from Lake Health\'s strong regional hospital system and diverse senior care options. The city\'s mix of Danbury, Vitalia, and skilled nursing facilities means families can find the right level of care.'
+    },
+    
+    expertTake: {
+      differentiator: 'Mentor offers the most diverse senior care options in Lake County, from Danbury\'s AL/MC to Vitalia\'s rehabilitation focus. Families have real choices here.',
+      bestFor: ['Lake County families', 'Those seeking diverse care options', 'Families needing rehabilitation services'],
+      consultantPerspective: 'Mentor is the hub for senior care in Lake County. Danbury Mentor excels in memory care, while Vitalia offers strong rehabilitation services. The Lake Health system provides excellent medical backup. I often recommend Mentor for east side families who don\'t want to travel into Cleveland.'
+    },
+    
+    faq: [
+      {
+        question: 'What senior living options are available in Mentor?',
+        answer: 'Mentor offers Danbury Senior Living (assisted living and memory care), Vitalia Mentor (skilled nursing, rehabilitation, memory care), plus several other skilled nursing options. Lake Health provides excellent hospital support.',
+        linkText: 'View Mentor Communities',
+        linkUrl: '/location/mentor'
+      }
+    ],
+    
+    marketData: {
+      averageAssistedLiving: '$3,400 - $5,600/month',
+      averageMemoryCare: '$4,600 - $7,800/month',
+      averageIndependentLiving: '$2,400 - $4,000/month',
+      marketTrend: 'moderate'
+    },
+    
+    relatedAreas: [
+      { slug: 'beachwood', name: 'Beachwood', relationship: 'Premium east side option' },
+      { slug: 'mayfield-heights', name: 'Mayfield Heights', relationship: 'Inner-ring alternative' },
+      { slug: 'solon', name: 'Solon', relationship: 'Cuyahoga County neighbor' }
+    ],
+    
+    localBusinessSchema: {
+      areaServed: 'Mentor, OH 44060',
+      description: 'Guide for Seniors provides free senior living placement services in Mentor, Ohio, helping families navigate Lake County\'s diverse assisted living and memory care options.'
+    }
   }
 };
 

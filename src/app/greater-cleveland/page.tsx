@@ -36,6 +36,10 @@ const greaterClevelandCities = [
   { name: 'Solon', description: 'Growing community with modern facilities', tier: 1 },
   { name: 'Parma', description: 'Affordable options with good healthcare access' },
   { name: 'Lakewood', description: 'Walkable city with community-focused living', clinicalAnchor: 'Fairview Hospital' },
+  { name: 'Macedonia', description: 'Growing Summit County suburb with quality AL options', clinicalAnchor: 'Cleveland Clinic Macedonia' },
+  { name: 'Avon', description: 'Western Lorain County with upscale memory care', clinicalAnchor: 'UH Avon Rehabilitation Hospital' },
+  { name: 'Brunswick', description: 'Medina County suburb with Danbury senior living', clinicalAnchor: 'Southwest General' },
+  { name: 'Mentor', description: 'Lake County hub with diverse care options', clinicalAnchor: 'Lake Health TriPoint Medical' },
 ];
 
 // ISR: Revalidate every hour

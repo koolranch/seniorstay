@@ -182,6 +182,66 @@ export const neighborhoodData: Record<string, NeighborhoodData> = {
       { name: 'CVS Pharmacy', type: 'pharmacy', distance: '1 mile', address: 'Broadway Ave' }
     ],
     localDescription: 'Bedford is a historic community offering intimate, specialized senior care near the beautiful Bedford Reservation Metroparks. The city focuses on assisted living and memory care without skilled nursing facilities.'
+  },
+  'macedonia': {
+    nearestHospital: {
+      name: 'Cleveland Clinic Macedonia Family Health',
+      distance: '2 miles',
+      address: '8001 Macedonia Commons Blvd, Macedonia, OH 44056',
+      phone: '(330) 468-6500'
+    },
+    nearbyPlaces: [
+      { name: 'Macedonia Commons', type: 'grocery', distance: '1 mile', address: 'Macedonia Commons Blvd' },
+      { name: 'Giant Eagle', type: 'grocery', distance: '0.5 miles', address: '499 E Aurora Rd' },
+      { name: 'CVS Pharmacy', type: 'pharmacy', distance: '1 mile', address: 'E Aurora Rd' },
+      { name: 'Cuyahoga Valley National Park', type: 'park', distance: '5 miles', address: 'Canal Rd' }
+    ],
+    localDescription: 'Macedonia is a growing Summit County suburb offering convenient access to both Cleveland and Akron. The city provides quality assisted living options with excellent shopping and dining nearby.'
+  },
+  'avon': {
+    nearestHospital: {
+      name: 'Cleveland Clinic Avon Hospital',
+      distance: '3 miles',
+      address: '33300 Cleveland Clinic Blvd, Avon, OH 44011',
+      phone: '(440) 695-5000'
+    },
+    nearbyPlaces: [
+      { name: 'Avon Commons', type: 'grocery', distance: '1 mile', address: 'Chester Rd' },
+      { name: 'Giant Eagle', type: 'grocery', distance: '1.5 miles', address: '35925 Detroit Rd' },
+      { name: 'CVS Pharmacy', type: 'pharmacy', distance: '0.5 miles', address: 'Detroit Rd' },
+      { name: 'Cashelmara Park', type: 'park', distance: '2 miles', address: 'Detroit Rd' }
+    ],
+    localDescription: 'Avon is an affluent western suburb in Lorain County known for its excellent schools and the Avon Commons shopping area. The city offers upscale memory care options with outstanding medical access.'
+  },
+  'brunswick': {
+    nearestHospital: {
+      name: 'Cleveland Clinic Medina Hospital',
+      distance: '8 miles',
+      address: '1000 E Washington St, Medina, OH 44256',
+      phone: '(330) 725-1000'
+    },
+    nearbyPlaces: [
+      { name: 'Brunswick Town Center', type: 'grocery', distance: '1 mile', address: 'Center Rd' },
+      { name: 'Giant Eagle', type: 'grocery', distance: '0.5 miles', address: '1575 Town Center Blvd' },
+      { name: 'CVS Pharmacy', type: 'pharmacy', distance: '1 mile', address: 'Pearl Rd' },
+      { name: 'Brunswick Lake', type: 'park', distance: '2 miles', address: 'Lake Rd' }
+    ],
+    localDescription: 'Brunswick is a thriving Medina County city offering affordable senior living with convenient access to Cleveland and Akron. The city features excellent parks and a strong community feel.'
+  },
+  'mentor': {
+    nearestHospital: {
+      name: 'Lake Health TriPoint Medical Center',
+      distance: '3 miles',
+      address: '7590 Auburn Rd, Concord Township, OH 44077',
+      phone: '(440) 354-2400'
+    },
+    nearbyPlaces: [
+      { name: 'Great Lakes Mall', type: 'grocery', distance: '2 miles', address: '7850 Mentor Ave' },
+      { name: 'Giant Eagle', type: 'grocery', distance: '1 mile', address: '9350 Mentor Ave' },
+      { name: 'CVS Pharmacy', type: 'pharmacy', distance: '0.5 miles', address: 'Mentor Ave' },
+      { name: 'Headlands Beach State Park', type: 'park', distance: '5 miles', address: '9601 Headlands Rd' }
+    ],
+    localDescription: 'Mentor is Lake County\'s largest city, offering diverse senior living options from assisted living to memory care. The city features excellent shopping, parks, and strong Lake Health medical access.'
   }
 };
 
