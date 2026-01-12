@@ -388,5 +388,171 @@ export const clevelandCitiesData: Record<string, CityInfo> = {
         community: "North Olmsted community"
       }
     ]
+  },
+  
+  'chagrin-falls': {
+    name: 'Chagrin Falls',
+    slug: 'chagrin-falls',
+    description: 'Chagrin Falls is a picturesque village known for its historic downtown, stunning waterfall, and charming New England atmosphere. The area offers premium senior living options in a serene, upscale setting with easy access to Cleveland\'s east side amenities.',
+    highlights: [
+      'Historic downtown with waterfall centerpiece',
+      'Luxury senior communities including Hamlet at Chagrin Falls',
+      'Close to Chagrin Valley trails and parks',
+      'Upscale dining and boutique shopping',
+      'Strong sense of community and safety'
+    ],
+    nearbyHospitals: [
+      'Hillcrest Hospital',
+      'UH Ahuja Medical Center',
+      'Cleveland Clinic Beachwood'
+    ],
+    averageCost: {
+      independentLiving: '$3,500 - $6,000',
+      assistedLiving: '$5,000 - $8,000',
+      memoryCare: '$6,500 - $10,000'
+    },
+    testimonials: [
+      {
+        text: "The Hamlet at Chagrin Falls offers a resort-like experience. Mom loves the activities and the beautiful surroundings.",
+        author: "Karen D.",
+        community: "Hamlet at Chagrin Falls"
+      },
+      {
+        text: "The village atmosphere makes visits feel special. We grab coffee downtown after seeing Dad.",
+        author: "Tom R.",
+        community: "Chagrin Falls area"
+      }
+    ]
+  },
+  
+  'hudson': {
+    name: 'Hudson',
+    slug: 'hudson',
+    description: 'Hudson is an affluent community known for its excellent schools, historic Western Reserve architecture, and high quality of life. The city offers upscale assisted living and memory care options in a safe, family-oriented environment.',
+    highlights: [
+      'Historic Western Reserve architecture',
+      'Walkable downtown with shops and restaurants',
+      'Near Cuyahoga Valley National Park',
+      'Top-rated city services and safety',
+      'Strong community programming for seniors'
+    ],
+    nearbyHospitals: [
+      'Western Reserve Hospital',
+      'Summa Health Akron Campus',
+      'Cleveland Clinic Akron General'
+    ],
+    averageCost: {
+      independentLiving: '$3,200 - $5,500',
+      assistedLiving: '$4,500 - $7,500',
+      memoryCare: '$6,000 - $9,500'
+    },
+    testimonials: [
+      {
+        text: "Hudson's walkable downtown means Dad can still enjoy independence while having care nearby.",
+        author: "Michelle S.",
+        community: "Hudson area"
+      }
+    ]
+  },
+  
+  'seven-hills': {
+    name: 'Seven Hills',
+    slug: 'seven-hills',
+    description: 'Seven Hills is a quiet residential suburb offering peaceful senior living communities with easy highway access to all of Cleveland. The city provides a safe, family-friendly environment with quality assisted living options.',
+    highlights: [
+      'Quiet residential neighborhoods',
+      'Easy I-77 and I-480 access',
+      'Low crime rates and safe streets',
+      'Close to shopping and dining',
+      'Proximity to Cuyahoga Valley National Park'
+    ],
+    nearbyHospitals: [
+      'Parma Hospital',
+      'Cleveland Clinic Independence',
+      'Southwest General Health Center',
+      'MetroHealth Brecksville Health Center'
+    ],
+    averageCost: {
+      independentLiving: '$2,500 - $4,300',
+      assistedLiving: '$3,500 - $6,000',
+      memoryCare: '$4,900 - $8,300'
+    },
+    testimonials: [
+      {
+        text: "Seven Hills offers the perfect balance - quiet and safe, but close to everything we need.",
+        author: "Richard S.",
+        community: "Vitalia Rockside"
+      },
+      {
+        text: "StoryPoint Rockside has been wonderful. The memory care team truly understands Mom's needs.",
+        author: "Lisa K.",
+        community: "StoryPoint Rockside"
+      }
+    ]
+  },
+  
+  'richmond-heights': {
+    name: 'Richmond Heights',
+    slug: 'richmond-heights',
+    description: 'Richmond Heights is a diverse east side community offering quality assisted living and memory care near major shopping and healthcare corridors. The city provides affordable options with excellent highway access.',
+    highlights: [
+      'Near Richmond Town Square shopping',
+      'Easy I-271 and I-480 access',
+      'Close to Hillcrest Hospital',
+      'Diverse and welcoming community',
+      'Affordable senior care options'
+    ],
+    nearbyHospitals: [
+      'Hillcrest Hospital',
+      'UH Ahuja Medical Center',
+      'Cleveland Clinic Beachwood'
+    ],
+    averageCost: {
+      independentLiving: '$2,400 - $4,000',
+      assistedLiving: '$3,200 - $5,500',
+      memoryCare: '$4,500 - $7,500'
+    },
+    testimonials: [
+      {
+        text: "The Winfield at Richmond Heights exceeded our expectations. The staff treats residents like family.",
+        author: "Angela M.",
+        community: "Winfield at Richmond Heights"
+      }
+    ]
+  },
+  
+  'bedford': {
+    name: 'Bedford',
+    slug: 'bedford',
+    description: 'Bedford is a historic community with deep roots in Cleveland\'s history. The city offers specialized assisted living and memory care options in a close-knit community setting, with no skilled nursing facilities - pure residential senior care.',
+    highlights: [
+      'Historic downtown with character',
+      'Bedford Reservation Metroparks',
+      'Specialized AL/MC communities',
+      'Close-knit community atmosphere',
+      'Convenient to I-271 and I-480'
+    ],
+    nearbyHospitals: [
+      'Marymount Hospital',
+      'Cleveland Clinic Hillcrest',
+      'UH Bedford Medical Center'
+    ],
+    averageCost: {
+      independentLiving: '$2,200 - $3,800',
+      assistedLiving: '$3,000 - $5,200',
+      memoryCare: '$4,200 - $7,000'
+    },
+    testimonials: [
+      {
+        text: "Light of Hearts Villa has been a blessing. The sisters and staff provide care with genuine compassion.",
+        author: "Patricia N.",
+        community: "Light of Hearts Villa"
+      },
+      {
+        text: "Woodside Senior Living feels like home. The smaller size means personalized attention.",
+        author: "Robert G.",
+        community: "Woodside Senior Living"
+      }
+    ]
   }
 }; 

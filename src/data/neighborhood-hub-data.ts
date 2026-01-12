@@ -642,6 +642,207 @@ export const neighborhoodHubData: Record<string, NeighborhoodHubData> = {
       areaServed: 'Hudson, OH 44236',
       description: 'Guide for Seniors provides free senior living placement services in Hudson, Ohio, helping families find culturally-rich communities in this historic Western Reserve village.'
     }
+  },
+  
+  'seven-hills': {
+    slug: 'seven-hills',
+    name: 'Seven Hills',
+    county: 'Cuyahoga',
+    zipCodes: ['44131'],
+    
+    aioHeader: {
+      headline: 'Trusted Assisted Living & Memory Care in Seven Hills',
+      answerSentence: 'Seven Hills offers quality assisted living and memory care communities in a safe, residential setting with easy access to Cleveland hospitals and I-77.',
+      semanticKeywords: ['Seven Hills assisted living', 'Rockside senior care', 'Cuyahoga Valley senior living', 'StoryPoint Rockside', 'Vitalia Seven Hills']
+    },
+    
+    proximity: {
+      hospital: {
+        name: 'UH Parma Medical Center',
+        distance: '4 miles',
+        driveTime: '10 minutes'
+      },
+      landmarks: [
+        { name: 'UH Parma Medical Center', type: 'hospital', distance: '4 miles' },
+        { name: 'Cuyahoga Valley National Park', type: 'park', distance: '5 miles' },
+        { name: 'Rockside Road Corridor', type: 'shopping', distance: '1 mile' },
+        { name: 'Cleveland Clinic Independence', type: 'hospital', distance: '3 miles' }
+      ],
+      localInsight: 'Seven Hills communities benefit from the Rockside Road business corridor while maintaining a quiet residential feel. Quick access to I-77 and I-480 makes family visits convenient.'
+    },
+    
+    expertTake: {
+      differentiator: 'Seven Hills is ideal for families wanting a safe, quiet suburb with excellent highway access. Communities like StoryPoint Rockside and Vitalia offer modern amenities in a suburban setting.',
+      bestFor: ['Families seeking safe, quiet neighborhoods', 'Seniors wanting easy highway access for visitors', 'Those preferring newer, modern facilities'],
+      consultantPerspective: 'Seven Hills hits the sweet spot between suburban tranquility and urban accessibility. The Rockside corridor means great restaurants and shopping nearby, while the residential neighborhoods provide peace and quiet. Both StoryPoint and Vitalia are well-managed communities with strong reputations.'
+    },
+    
+    faq: [
+      {
+        question: 'What senior living options are available in Seven Hills?',
+        answer: 'Seven Hills offers quality assisted living and memory care through StoryPoint Rockside and Vitalia Rockside. Both communities provide modern amenities, engaging activities, and compassionate care in a residential setting.',
+        linkText: 'View Seven Hills Communities',
+        linkUrl: '/location/seven-hills'
+      },
+      {
+        question: 'How safe is Seven Hills for seniors?',
+        answer: 'Seven Hills consistently ranks as one of the safest cities in Cuyahoga County with low crime rates and excellent emergency services. The quiet residential neighborhoods provide a secure environment for senior living.',
+        linkText: 'Start Your Assessment',
+        linkUrl: '/assessment'
+      }
+    ],
+    
+    marketData: {
+      averageAssistedLiving: '$3,500 - $6,000/month',
+      averageMemoryCare: '$4,900 - $8,300/month',
+      averageIndependentLiving: '$2,500 - $4,300/month',
+      marketTrend: 'moderate'
+    },
+    
+    relatedAreas: [
+      { slug: 'independence', name: 'Independence', relationship: 'Adjacent community' },
+      { slug: 'parma', name: 'Parma', relationship: 'Nearby affordable options' },
+      { slug: 'broadview-heights', name: 'Broadview Heights', relationship: 'Southern neighbor' }
+    ],
+    
+    localBusinessSchema: {
+      areaServed: 'Seven Hills, OH 44131',
+      description: 'Guide for Seniors provides free senior living placement services in Seven Hills, Ohio, helping families find safe, modern communities near the Rockside corridor.'
+    }
+  },
+  
+  'richmond-heights': {
+    slug: 'richmond-heights',
+    name: 'Richmond Heights',
+    county: 'Cuyahoga',
+    zipCodes: ['44143'],
+    
+    aioHeader: {
+      headline: 'Quality Memory Care & Assisted Living in Richmond Heights',
+      answerSentence: 'Richmond Heights offers diverse assisted living and memory care options on Cleveland\'s east side, with convenient access to Hillcrest Hospital and I-271.',
+      semanticKeywords: ['Richmond Heights memory care', 'Winfield assisted living', 'east side Cleveland senior care', 'Richmond Heights OH senior living']
+    },
+    
+    proximity: {
+      hospital: {
+        name: 'Hillcrest Hospital',
+        distance: '2 miles',
+        driveTime: '5 minutes'
+      },
+      landmarks: [
+        { name: 'Hillcrest Hospital', type: 'hospital', distance: '2 miles' },
+        { name: 'Richmond Town Square', type: 'shopping', distance: '1 mile' },
+        { name: 'UH Ahuja Medical Center', type: 'hospital', distance: '4 miles' },
+        { name: 'Legacy Village', type: 'shopping', distance: '3 miles' }
+      ],
+      localInsight: 'Richmond Heights offers excellent healthcare access with Hillcrest Hospital just minutes away. The city provides a welcoming, diverse community atmosphere with shopping and dining options nearby.'
+    },
+    
+    expertTake: {
+      differentiator: 'Richmond Heights is an accessible east side option for families seeking quality care without Beachwood pricing. The Winfield community provides excellent memory care services.',
+      bestFor: ['Families seeking east side location', 'Those wanting proximity to Hillcrest Hospital', 'Budget-conscious families needing quality care'],
+      consultantPerspective: 'Richmond Heights offers solid value for east side families. The Winfield at Richmond Heights has a strong reputation for memory care, and the location provides easy access to major hospitals and shopping. It\'s a great alternative to pricier Beachwood options while maintaining quality care.'
+    },
+    
+    faq: [
+      {
+        question: 'What memory care options are available in Richmond Heights?',
+        answer: 'The Winfield at Richmond Heights is the premier memory care provider in the area, offering specialized dementia care with secure units and evidence-based programming. Richmond Place also provides assisted living services.',
+        linkText: 'View Richmond Heights Communities',
+        linkUrl: '/location/richmond-heights'
+      },
+      {
+        question: 'How close is Richmond Heights to major hospitals?',
+        answer: 'Hillcrest Hospital is just 2 miles away (5-minute drive). UH Ahuja Medical Center is about 4 miles, and Cleveland Clinic Beachwood is nearby for specialty care.',
+        linkText: 'Start Your Assessment',
+        linkUrl: '/assessment'
+      }
+    ],
+    
+    marketData: {
+      averageAssistedLiving: '$3,200 - $5,500/month',
+      averageMemoryCare: '$4,500 - $7,500/month',
+      averageIndependentLiving: '$2,400 - $4,000/month',
+      marketTrend: 'moderate'
+    },
+    
+    relatedAreas: [
+      { slug: 'beachwood', name: 'Beachwood', relationship: 'Premium neighbor' },
+      { slug: 'mayfield-heights', name: 'Mayfield Heights', relationship: 'Adjacent community' },
+      { slug: 'lyndhurst', name: 'Lyndhurst', relationship: 'Nearby option' }
+    ],
+    
+    localBusinessSchema: {
+      areaServed: 'Richmond Heights, OH 44143',
+      description: 'Guide for Seniors provides free senior living placement services in Richmond Heights, Ohio, helping families find quality memory care and assisted living near Hillcrest Hospital.'
+    }
+  },
+  
+  'bedford': {
+    slug: 'bedford',
+    name: 'Bedford',
+    county: 'Cuyahoga',
+    zipCodes: ['44146'],
+    
+    aioHeader: {
+      headline: 'Specialized Assisted Living & Memory Care in Bedford',
+      answerSentence: 'Bedford offers dedicated assisted living and memory care communities in a historic setting, with no skilled nursing facilities - pure residential senior care focused on comfort and compassion.',
+      semanticKeywords: ['Bedford assisted living', 'Light of Hearts Villa', 'Woodside Senior Living', 'Bedford OH memory care', 'south Cleveland senior care']
+    },
+    
+    proximity: {
+      hospital: {
+        name: 'Marymount Hospital',
+        distance: '3 miles',
+        driveTime: '8 minutes'
+      },
+      landmarks: [
+        { name: 'Marymount Hospital', type: 'hospital', distance: '3 miles' },
+        { name: 'Bedford Reservation Metroparks', type: 'park', distance: '1 mile' },
+        { name: 'Tinkers Creek Gorge', type: 'park', distance: '2 miles' },
+        { name: 'Cleveland Clinic Hillcrest', type: 'hospital', distance: '6 miles' }
+      ],
+      localInsight: 'Bedford is unique in offering pure AL/MC care without skilled nursing facilities. This creates intimate, home-like environments focused on daily living assistance rather than medical institutionalization.'
+    },
+    
+    expertTake: {
+      differentiator: 'Bedford stands out for its specialized focus on assisted living and memory care. Light of Hearts Villa, run by the Vincentian Sisters of Charity, provides faith-based care with exceptional compassion.',
+      bestFor: ['Families seeking intimate, home-like environments', 'Those preferring faith-based care options', 'Seniors who don\'t need skilled nursing but want quality AL/MC'],
+      consultantPerspective: 'Bedford\'s senior care communities feel genuinely home-like. Light of Hearts Villa has served the community for decades with a reputation for compassionate, faith-based care. Woodside Senior Living offers a smaller, more intimate setting. Both excel at creating comfortable environments where residents thrive.'
+    },
+    
+    faq: [
+      {
+        question: 'What makes Bedford different for senior living?',
+        answer: 'Bedford focuses exclusively on assisted living and memory care without skilled nursing facilities. This creates more intimate, home-like communities where care is personalized and residents maintain dignity and independence.',
+        linkText: 'View Bedford Communities',
+        linkUrl: '/location/bedford'
+      },
+      {
+        question: 'What is Light of Hearts Villa?',
+        answer: 'Light of Hearts Villa is a faith-based assisted living and memory care community operated by the Vincentian Sisters of Charity. It offers compassionate care in a beautiful setting near Bedford Reservation Metroparks.',
+        linkText: 'Learn About Bedford Options',
+        linkUrl: '/location/bedford'
+      }
+    ],
+    
+    marketData: {
+      averageAssistedLiving: '$3,000 - $5,200/month',
+      averageMemoryCare: '$4,200 - $7,000/month',
+      averageIndependentLiving: '$2,200 - $3,800/month',
+      marketTrend: 'moderate'
+    },
+    
+    relatedAreas: [
+      { slug: 'independence', name: 'Independence', relationship: 'Adjacent suburb' },
+      { slug: 'seven-hills', name: 'Seven Hills', relationship: 'Nearby option' },
+      { slug: 'macedonia', name: 'Macedonia', relationship: 'Southeast alternative' }
+    ],
+    
+    localBusinessSchema: {
+      areaServed: 'Bedford, OH 44146',
+      description: 'Guide for Seniors provides free senior living placement services in Bedford, Ohio, helping families find intimate, specialized assisted living and memory care communities.'
+    }
   }
 };
 

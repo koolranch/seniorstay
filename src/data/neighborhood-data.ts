@@ -107,6 +107,81 @@ export const neighborhoodData: Record<string, NeighborhoodData> = {
       { name: 'Giant Eagle', type: 'grocery', distance: '0.8 miles', address: '18400 Royalton Rd' }
     ],
     localDescription: 'Strongsville offers excellent schools, beautiful parks, and convenient shopping with a strong community feel for active seniors.'
+  },
+  'chagrin-falls': {
+    nearestHospital: {
+      name: 'Hillcrest Hospital',
+      distance: '5 miles',
+      address: '6780 Mayfield Rd, Mayfield Heights, OH 44124',
+      phone: '(440) 312-4500'
+    },
+    nearbyPlaces: [
+      { name: 'Chagrin Falls Village', type: 'restaurant', distance: '0.5 miles', address: 'Main St' },
+      { name: 'Heinen\'s Chagrin Falls', type: 'grocery', distance: '0.3 miles', address: '17 N Main St' },
+      { name: 'CVS Pharmacy', type: 'pharmacy', distance: '0.4 miles', address: '99 N Main St' },
+      { name: 'Riverside Park', type: 'park', distance: '0.2 miles', address: 'E Washington St' }
+    ],
+    localDescription: 'Chagrin Falls is a charming village with a historic waterfall, boutique shops, and a tight-knit community atmosphere perfect for seniors who appreciate small-town living with upscale amenities.'
+  },
+  'hudson': {
+    nearestHospital: {
+      name: 'Western Reserve Hospital',
+      distance: '4 miles',
+      address: '1900 23rd St, Cuyahoga Falls, OH 44223',
+      phone: '(330) 971-7000'
+    },
+    nearbyPlaces: [
+      { name: 'Hudson Village', type: 'restaurant', distance: '0.5 miles', address: 'Main St' },
+      { name: 'Acme Fresh Market', type: 'grocery', distance: '0.8 miles', address: '95 E Streetsboro St' },
+      { name: 'Hudson Springs Park', type: 'park', distance: '1 mile', address: '7095 Stow Rd' },
+      { name: 'CVS Pharmacy', type: 'pharmacy', distance: '0.5 miles', address: '5307 Darrow Rd' }
+    ],
+    localDescription: 'Hudson is an affluent Western Reserve community with a walkable downtown, historic architecture, and a strong sense of community that appeals to seniors seeking an upscale, culturally-rich environment.'
+  },
+  'seven-hills': {
+    nearestHospital: {
+      name: 'UH Parma Medical Center',
+      distance: '4 miles',
+      address: '7007 Powers Blvd, Parma, OH 44129',
+      phone: '(440) 743-3000'
+    },
+    nearbyPlaces: [
+      { name: 'Rockside Road Shopping', type: 'grocery', distance: '1 mile', address: 'Rockside Rd' },
+      { name: 'Cuyahoga Valley National Park', type: 'park', distance: '5 miles', address: 'Canal Rd' },
+      { name: 'Giant Eagle', type: 'grocery', distance: '2 miles', address: '6939 W 130th St' },
+      { name: 'CVS Pharmacy', type: 'pharmacy', distance: '1.5 miles', address: 'Rockside Rd' }
+    ],
+    localDescription: 'Seven Hills is a quiet, safe suburb with excellent highway access and proximity to the Rockside business corridor. Residents enjoy low crime rates and a family-oriented community.'
+  },
+  'richmond-heights': {
+    nearestHospital: {
+      name: 'Hillcrest Hospital',
+      distance: '2 miles',
+      address: '6780 Mayfield Rd, Mayfield Heights, OH 44124',
+      phone: '(440) 312-4500'
+    },
+    nearbyPlaces: [
+      { name: 'Richmond Town Square', type: 'grocery', distance: '1 mile', address: 'Richmond Rd' },
+      { name: 'Heinen\'s', type: 'grocery', distance: '2 miles', address: '1929 S Green Rd' },
+      { name: 'Legacy Village', type: 'restaurant', distance: '3 miles', address: '25001 Cedar Rd' },
+      { name: 'CVS Pharmacy', type: 'pharmacy', distance: '1 mile', address: 'Richmond Rd' }
+    ],
+    localDescription: 'Richmond Heights offers easy access to Hillcrest Hospital and east side amenities. The diverse, welcoming community provides affordable options close to shopping and healthcare.'
+  },
+  'bedford': {
+    nearestHospital: {
+      name: 'Marymount Hospital',
+      distance: '3 miles',
+      address: '12300 McCracken Rd, Garfield Heights, OH 44125',
+      phone: '(216) 581-0500'
+    },
+    nearbyPlaces: [
+      { name: 'Bedford Reservation Metroparks', type: 'park', distance: '1 mile', address: 'Gorge Pkwy' },
+      { name: 'Giant Eagle', type: 'grocery', distance: '1.5 miles', address: '685 Broadway Ave' },
+      { name: 'Tinkers Creek Gorge', type: 'park', distance: '2 miles', address: 'Gorge Pkwy' },
+      { name: 'CVS Pharmacy', type: 'pharmacy', distance: '1 mile', address: 'Broadway Ave' }
+    ],
+    localDescription: 'Bedford is a historic community offering intimate, specialized senior care near the beautiful Bedford Reservation Metroparks. The city focuses on assisted living and memory care without skilled nursing facilities.'
   }
 };
 
