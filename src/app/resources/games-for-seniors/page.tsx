@@ -39,13 +39,13 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Free Online Games for Seniors | Brain Games & Puzzles',
     description: 'Discover the best free online games for seniors. Brain puzzles, card games, and engaging activities for cognitive health.',
-    url: 'https://guideforseniors.com/resources/games-for-seniors',
+    url: 'https://www.guideforseniors.com/resources/games-for-seniors',
     siteName: 'Guide for Seniors',
     locale: 'en_US',
     type: 'article',
   },
   alternates: {
-    canonical: 'https://guideforseniors.com/resources/games-for-seniors',
+    canonical: 'https://www.guideforseniors.com/resources/games-for-seniors',
   },
   robots: {
     index: true,

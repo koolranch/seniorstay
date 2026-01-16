@@ -38,13 +38,13 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Where Seniors Meet Other Seniors in Cleveland',
     description: 'Discover places where seniors can meet other seniors in Cleveland. Senior centers, community groups, and social activities.',
-    url: 'https://guideforseniors.com/resources/social-activities',
+    url: 'https://www.guideforseniors.com/resources/social-activities',
     siteName: 'Guide for Seniors',
     locale: 'en_US',
     type: 'article',
   },
   alternates: {
-    canonical: 'https://guideforseniors.com/resources/social-activities',
+    canonical: 'https://www.guideforseniors.com/resources/social-activities',
   },
   robots: {
     index: true,

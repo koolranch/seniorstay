@@ -39,13 +39,13 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Brain Health for Seniors | Cognitive Exercises & Memory Tips',
     description: 'Brain puzzles, cognitive exercises, and expert guidance on maintaining mental sharpness for seniors.',
-    url: 'https://guideforseniors.com/resources/brain-health',
+    url: 'https://www.guideforseniors.com/resources/brain-health',
     siteName: 'Guide for Seniors',
     locale: 'en_US',
     type: 'article',
   },
   alternates: {
-    canonical: 'https://guideforseniors.com/resources/brain-health',
+    canonical: 'https://www.guideforseniors.com/resources/brain-health',
   },
   robots: {
     index: true,
