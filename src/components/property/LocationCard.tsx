@@ -150,7 +150,7 @@ export default function LocationCard({ community, compact = false, regionSlug }:
           <Link href={communityUrl} className="block w-full h-full min-h-[48px] focus:outline-none focus:ring-2 focus:ring-primary focus:ring-inset">
             <CommunityImage
               src={getCommunityImage(community.images?.[0], communityId, communityName)}
-              alt={`${communityName} in ${communityLocation}`}
+              alt={community.imageAlt || `${communityName} senior living in ${communityLocation}`}
               fill
               className="object-cover"
               sizes="112px"
@@ -194,7 +194,7 @@ export default function LocationCard({ community, compact = false, regionSlug }:
         <Link href={communityUrl} className="block w-full h-full min-h-[48px]">
           <CommunityImage
             src={getCommunityImage(community.images?.[0], communityId, communityName)}
-            alt={`${communityName} - ${careTypes.join(', ') || 'Senior Living'} in ${communityLocation}`}
+            alt={community.imageAlt || `${communityName} - ${careTypes.join(', ') || 'Senior Living'} in ${communityLocation}`}
             fill
             className="object-cover transition-transform duration-300 group-hover:scale-105"
             sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"

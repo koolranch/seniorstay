@@ -41,8 +41,9 @@ export default function CommunityMapFallback({
                   </span>
                 ))}
               </div>
+              {/* SEO Fix: Use canonical region-based URL */}
               <Link
-                href={`/community/${community.id}/${community.name.toLowerCase().replace(/\s+/g, '-')}`}
+                href={`/cleveland/community/${community.id}/${community.name.toLowerCase().replace(/\s+/g, '-')}`}
                 className="block mt-2 text-xs text-primary hover:underline"
               >
                 View Details

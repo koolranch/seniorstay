@@ -145,7 +145,8 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ community }) => {
         <p className="mt-2 text-sm text-gray-600">{community.description || 'No description available.'}</p>
       </CardContent>
       <CardFooter className="border-t p-4">
-        <Link href={`/community/${id}/${facilitySlug}`}>
+        {/* SEO Fix: Use canonical region-based URL to avoid 301 redirects */}
+        <Link href={`/cleveland/community/${id}/${facilitySlug}`}>
           <Button className="w-full">View Details</Button>
         </Link>
       </CardFooter>

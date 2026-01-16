@@ -105,7 +105,7 @@ const Header = () => {
                     <Link href="/cleveland" className="cursor-pointer">Browse Communities</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link href="/events" className="cursor-pointer">Local Events</Link>
+                    <Link href="/cleveland/events" className="cursor-pointer">Local Events</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
                     <Link href="/resources" className="cursor-pointer">Resources & Guides</Link>
@@ -161,7 +161,7 @@ const Header = () => {
                     <Link href="/cleveland" className="py-3 px-2 hover:bg-gray-50 rounded-md">
                       Browse Communities
                     </Link>
-                    <Link href="/events" className="py-3 px-2 hover:bg-gray-50 rounded-md">
+                    <Link href="/cleveland/events" className="py-3 px-2 hover:bg-gray-50 rounded-md">
                       Local Events
                     </Link>
                     <Link href="/resources" className="py-3 px-2 hover:bg-gray-50 rounded-md">

@@ -184,6 +184,7 @@ export async function getUniqueCitiesForRegion(regionSlug: string): Promise<stri
 
 /**
  * Transform database record to Community interface
+ * SEO Phase 2: Added imageAlt field for accessibility
  */
 function transformDatabaseToCommunity(data: any): Community {
   // Handle both snake_case (from Supabase) and camelCase fields
@@ -206,6 +207,8 @@ function transformDatabaseToCommunity(data: any): Community {
       : (data.image_url || data.imageUrl) 
         ? [data.image_url || data.imageUrl] 
         : [],
+    // SEO Phase 2: Image alt text from database
+    imageAlt: data.image_alt || `${data.name} senior living facility in ${data.city}, Ohio`,
     careTypes: data.services?.split(',').map((s: string) => s.trim()) || [],
     description: data.description || undefined,
     amenities: undefined,

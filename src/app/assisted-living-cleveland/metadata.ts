@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   description: 'Find the best assisted living communities in Cleveland, Ohio. Compare costs, services, and amenities. Get free personalized help from local advisors. Tour request assistance available.',
   keywords: 'assisted living cleveland, assisted living cleveland ohio, senior living cleveland, cleveland assisted living facilities, assisted living costs cleveland',
   alternates: {
-    canonical: '/assisted-living-cleveland',
+    canonical: 'https://www.guideforseniors.com/assisted-living-cleveland',
   },
   openGraph: {
     title: 'Assisted Living in Cleveland, OH | Complete Guide',

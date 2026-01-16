@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   description: 'Find specialized memory care for Alzheimer\'s and dementia in Cleveland, Ohio. Secure communities with expert staff. Compare options, costs, and schedule tours with free local guidance.',
   keywords: 'memory care cleveland, alzheimers care cleveland, dementia care cleveland ohio, memory care facilities cleveland, cleveland memory care costs',
   alternates: {
-    canonical: '/memory-care-cleveland',
+    canonical: 'https://www.guideforseniors.com/memory-care-cleveland',
   },
   openGraph: {
     title: 'Memory Care in Cleveland, OH | Expert Alzheimer\'s & Dementia Care',

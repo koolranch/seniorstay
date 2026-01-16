@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   description: 'Complete guide to choosing between memory care and assisted living. Learn when it\'s time, what to look for during tours, red flags to avoid, and how to involve your loved one in the decision.',
   keywords: 'how to choose senior living, when to move to assisted living, memory care vs assisted living, senior living decision guide, choosing memory care',
   alternates: {
-    canonical: '/choosing-senior-living',
+    canonical: 'https://www.guideforseniors.com/choosing-senior-living',
   },
   openGraph: {
     title: 'How to Choose Senior Living | Expert Decision Guide',

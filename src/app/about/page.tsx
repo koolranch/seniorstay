@@ -13,6 +13,9 @@ import Image from 'next/image';
 export const metadata = {
   title: 'About Us | 20-Year Senior Living Insider | Guide for Seniors Cleveland',
   description: 'Meet the Guide for Seniors founder - a former Regional Director with 20 years of experience auditing and elevating senior living communities across the Midwest. Boutique, insider guidance for Cleveland families.',
+  alternates: {
+    canonical: 'https://www.guideforseniors.com/about',
+  },
 };
 
 // Organization and founder schema for E-E-A-T signals

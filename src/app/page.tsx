@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Find Senior Living in Cleveland, OH | Guide for Seniors',
     description: 'Compare costs, reviews, and amenities for top-rated assisted living and memory care communities in Cleveland. Free expert guidance.',
-    url: 'https://guideforseniors.com',
+    url: 'https://www.guideforseniors.com',
     siteName: 'Guide for Seniors',
     locale: 'en_US',
     type: 'website',
@@ -45,7 +45,7 @@ export const metadata: Metadata = {
     description: 'Compare costs, reviews, and amenities for top-rated assisted living and memory care communities in Cleveland.',
   },
   alternates: {
-    canonical: 'https://guideforseniors.com',
+    canonical: 'https://www.guideforseniors.com',
   },
   robots: {
     index: true,

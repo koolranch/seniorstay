@@ -161,7 +161,7 @@ export default function MapComponent({
                     `<span style="background-color: rgba(255, 56, 92, 0.1); color: #FF385C; border-radius: 20px; padding: 2px 6px; font-size: 10px;">${type}</span>`
                   ).join('')}
                 </div>
-                <a href="/community/${community.id}/${(community.name || 'community').toLowerCase().replace(/\\s+/g, '-')}"
+                <a href="/cleveland/community/${community.id}/${(community.name || 'community').toLowerCase().replace(/\\s+/g, '-')}"
                    style="display: block; text-align: center; margin-top: 8px; color: #FF385C; font-size: 12px; text-decoration: none;">
                    View Details
                 </a>

@@ -100,8 +100,8 @@ export default function CommunityMatch({
           </p>
         </div>
 
-        {/* View Details Button */}
-        <Link href={`/community/${community.id}/${slug}`} onClick={handleClick}>
+        {/* View Details Button - SEO Fix: Use canonical region-based URL */}
+        <Link href={`/cleveland/community/${community.id}/${slug}`} onClick={handleClick}>
           <Button
             className="w-full bg-[#1e3a5f] hover:bg-[#2d4a6f] text-white"
           >

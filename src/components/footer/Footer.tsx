@@ -4,29 +4,31 @@ import React from 'react';
 import Link from 'next/link';
 import { Home, Phone, Mail, MapPin } from 'lucide-react';
 
+// SEO Fix: All internal links now point to canonical URLs (no redirects)
+// Phase 2 - Fixed 320 "Links to Redirect" errors
 const footerLinks = {
   support: [
     { label: 'Contact Us', href: '/contact' },
     { label: 'About Us', href: '/about' },
-    { label: 'Greater Cleveland', href: '/greater-cleveland' },
+    { label: 'Browse Cleveland', href: '/cleveland' }, // Fixed: was /greater-cleveland (301 redirect)
     { label: 'Care Assessment', href: '/assessment' },
   ],
   seniorCare: [
     { label: 'Assisted Living', href: '/assisted-living-cleveland' },
     { label: 'Memory Care', href: '/memory-care-cleveland' },
-    { label: 'Local Events', href: '/events' },
+    { label: 'Local Events', href: '/cleveland/events' }, // Fixed: was /events (301 redirect)
     { label: 'Pricing Guide', href: '/senior-living-costs-cleveland' },
     { label: 'Choosing Guide', href: '/choosing-senior-living' },
     { label: 'Resources', href: '/resources' },
     { label: 'Blog & Advice', href: '/blog' },
   ],
   neighborhoods: [
-    { label: 'Westlake', href: '/location/westlake' },
-    { label: 'Beachwood', href: '/location/beachwood' },
-    { label: 'Shaker Heights', href: '/location/shaker-heights' },
-    { label: 'Rocky River', href: '/location/rocky-river' },
-    { label: 'Parma', href: '/location/parma' },
-    { label: 'Lakewood', href: '/location/lakewood' },
+    { label: 'Westlake', href: '/cleveland/westlake' }, // Fixed: was /location/westlake (301 redirect)
+    { label: 'Beachwood', href: '/cleveland/beachwood' },
+    { label: 'Shaker Heights', href: '/cleveland/shaker-heights' },
+    { label: 'Rocky River', href: '/cleveland/rocky-river' },
+    { label: 'Parma', href: '/cleveland/parma' },
+    { label: 'Lakewood', href: '/cleveland/lakewood' },
   ],
   company: [
     { label: 'Privacy Policy', href: '/privacy-policy' },

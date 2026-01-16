@@ -22,6 +22,7 @@ export interface Community {
     lng: number;
   };
   images: string[];
+  imageAlt?: string; // SEO Phase 2: Accessible alt text for images
   careTypes: string[];
   description?: string;
   amenities?: string[];

@@ -1416,7 +1416,7 @@ export default async function EventSlugPage({ params }: { params: { slug: string
                         return (
                           <Link 
                             key={community.id}
-                            href={`/community/${community.id}/${communitySlug}`}
+                            href={`/cleveland/community/${community.id}/${communitySlug}`}
                             className="flex items-start gap-3 p-3 hover:bg-slate-50 transition-colors"
                           >
                             {/* Community Image */}

@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   description: 'Free expert guides for Cleveland senior living. Learn about memory care, assisted living, costs, and how to choose the right community. Helpful resources for families.',
   keywords: 'senior living resources, cleveland senior living guide, memory care information, assisted living guide, senior care resources cleveland',
   alternates: {
-    canonical: '/resources',
+    canonical: 'https://www.guideforseniors.com/resources',
   },
   openGraph: {
     title: 'Senior Living Resources for Cleveland Families',
