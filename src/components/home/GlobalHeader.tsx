@@ -105,16 +105,7 @@ const GlobalHeader: React.FC = () => {
 
           {/* CTA Button */}
           <div className="flex items-center gap-3">
-            {/* Phone - Desktop */}
-            <a
-              href={`tel:${phoneNumber.replace(/[^0-9+]/g, '')}`}
-              className="hidden md:flex items-center gap-2 text-slate-700 hover:text-teal-600 font-medium transition-colors"
-            >
-              <Phone className="h-4 w-4" />
-              <span>{phoneNumber}</span>
-            </a>
-
-            {/* Talk to Expert Button */}
+            {/* Talk to Expert Button - Phone icon indicates it's a call */}
             <a
               href={`tel:${phoneNumber.replace(/[^0-9+]/g, '')}`}
               className="hidden sm:inline-flex items-center gap-2 bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800 text-white font-bold px-5 py-2.5 rounded-lg shadow-md hover:shadow-lg transition-all"
