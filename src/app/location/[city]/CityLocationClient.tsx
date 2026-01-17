@@ -26,9 +26,10 @@ interface CityLocationClientProps {
   cityName: string;
   stateAbbr: string;
   communities: Community[];
+  regionSlug?: string; // Default to 'cleveland' for legacy pages - ensures sitemap URL consistency
 }
 
-export default function CityLocationClient({ cityName, stateAbbr, communities }: CityLocationClientProps) {
+export default function CityLocationClient({ cityName, stateAbbr, communities, regionSlug = 'cleveland' }: CityLocationClientProps) {
   const [totalCommunities, setTotalCommunities] = useState(0);
   const [careTypeCounts, setCareTypeCounts] = useState<Record<string, number>>({});
   const [mapCenter, setMapCenter] = useState<{ lat: number; lng: number } | null>(null);
@@ -267,7 +268,7 @@ export default function CityLocationClient({ cityName, stateAbbr, communities }:
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
                 {featuredCommunities.map((community) => (
-                  <LocationCard key={community.id} community={community} />
+                  <LocationCard key={community.id} community={community} regionSlug={regionSlug} />
                 ))}
               </div>
             </div>
@@ -290,7 +291,7 @@ export default function CityLocationClient({ cityName, stateAbbr, communities }:
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                   {remainingCommunities.map((community) => (
-                    <LocationCard key={community.id} community={community} />
+                    <LocationCard key={community.id} community={community} regionSlug={regionSlug} />
                   ))}
                 </div>
               </div>

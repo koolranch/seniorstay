@@ -118,6 +118,69 @@ export const fetchRecentBlogPosts = cache(async (limit = 3): Promise<BlogPost[]>
   return posts.slice(0, limit);
 });
 
+/**
+ * Fetch related blog posts based on category matching
+ * Prioritizes posts from the same category, then fills with recent posts
+ * Excludes the current post from results
+ */
+export const fetchRelatedBlogPosts = cache(async (
+  currentSlug: string,
+  currentCategory: string,
+  limit = 3
+): Promise<BlogPost[]> => {
+  const allPosts = await fetchAllBlogPosts();
+  
+  // Exclude the current post
+  const otherPosts = allPosts.filter(p => p.slug !== currentSlug);
+  
+  // Normalize category for matching (handle inconsistent casing/naming)
+  const normalizeCategory = (cat: string) => cat.toLowerCase().trim();
+  const normalizedCurrentCategory = normalizeCategory(currentCategory);
+  
+  // Find posts in the same category
+  const sameCategoryPosts = otherPosts.filter(
+    p => normalizeCategory(p.category) === normalizedCurrentCategory
+  );
+  
+  // If we have enough category matches, return them
+  if (sameCategoryPosts.length >= limit) {
+    return sameCategoryPosts.slice(0, limit);
+  }
+  
+  // Otherwise, supplement with related topic posts
+  // Group related categories for better matching
+  const categoryGroups: Record<string, string[]> = {
+    'cost': ['cost', 'price', 'affordable', 'budget', 'expense', 'payment'],
+    'memory-care': ['memory', 'alzheimer', 'dementia', 'cognitive'],
+    'assisted-living': ['assisted living', 'senior living', 'retirement'],
+    'health': ['health', 'wellness', 'medical', 'care'],
+    'lifestyle': ['lifestyle', 'relationships', 'dating', 'social'],
+    'location': ['cleveland', 'ohio', 'parma', 'lakewood', 'westlake'],
+  };
+  
+  // Find which group the current category belongs to
+  let relatedPosts: BlogPost[] = [];
+  for (const [group, keywords] of Object.entries(categoryGroups)) {
+    if (keywords.some(kw => normalizedCurrentCategory.includes(kw))) {
+      relatedPosts = otherPosts.filter(p => 
+        p.slug !== currentSlug && 
+        !sameCategoryPosts.includes(p) &&
+        keywords.some(kw => normalizeCategory(p.category).includes(kw) || p.title.toLowerCase().includes(kw))
+      );
+      break;
+    }
+  }
+  
+  // Combine: same category first, then related, then fill with recent
+  const combined = [
+    ...sameCategoryPosts,
+    ...relatedPosts.filter(p => !sameCategoryPosts.includes(p)),
+    ...otherPosts.filter(p => !sameCategoryPosts.includes(p) && !relatedPosts.includes(p))
+  ];
+  
+  return combined.slice(0, limit);
+});
+
 export const fetchBlogCategories = cache(async (): Promise<string[]> => {
   const posts = await fetchAllBlogPosts();
   const categories = new Set<string>();

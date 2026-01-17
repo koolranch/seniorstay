@@ -4,7 +4,7 @@ import { Calendar, Clock, Tag, ArrowLeft, User, MapPin } from 'lucide-react';
 import Header from '@/components/header/Header';
 import Footer from '@/components/footer/Footer';
 import ReactMarkdown from 'react-markdown';
-import { fetchBlogPostBySlug, fetchRecentBlogPosts, isRegionalPost, getPostRegionDisplayName } from '@/lib/blog-posts';
+import { fetchBlogPostBySlug, fetchRelatedBlogPosts, isRegionalPost, getPostRegionDisplayName } from '@/lib/blog-posts';
 import SuburbLinksSection from '@/components/blog/SuburbLinksSection';
 import Script from 'next/script';
 
@@ -28,7 +28,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
     notFound();
   }
 
-  const recentPosts = (await fetchRecentBlogPosts(3)).filter((p) => p.slug !== params.slug);
+  const relatedPosts = await fetchRelatedBlogPosts(params.slug, post.category, 3);
 
   // Check if this is a Medicaid-related article to show suburb links
   const isMedicaidRelated = post.slug.includes('medicaid') || 
@@ -284,14 +284,14 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
         </div>
       </article>
 
-      {/* Related Posts */}
-      {recentPosts.length > 0 && (
+      {/* Related Posts - Category-based recommendations for better internal linking */}
+      {relatedPosts.length > 0 && (
         <div className="bg-gray-50 py-16 border-t">
           <div className="container mx-auto px-4">
             <div className="max-w-6xl mx-auto">
-              <h2 className="text-3xl font-bold mb-8 text-center">More Helpful Articles</h2>
+              <h2 className="text-3xl font-bold mb-8 text-center">Related Articles You May Find Helpful</h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                {recentPosts.map((relatedPost) => (
+                {relatedPosts.map((relatedPost) => (
                   <Link
                     key={relatedPost.slug}
                     href={`/blog/${relatedPost.slug}`}
