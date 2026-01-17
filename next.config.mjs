@@ -299,6 +299,62 @@ const nextConfig = {
         destination: '/cleveland/events',
         permanent: true,
       },
+      
+      // === 404 Recovery (Jan 2026 Ahrefs Audit) ===
+      
+      // Columbus region catch-all - No Columbus data exists yet
+      // Redirect all /columbus/* paths to Cleveland equivalent or homepage
+      {
+        source: '/columbus',
+        destination: '/cleveland',
+        permanent: true,
+      },
+      {
+        source: '/columbus/events',
+        destination: '/cleveland/events',
+        permanent: true,
+      },
+      {
+        source: '/columbus/events/:slug',
+        destination: '/cleveland/events/:slug',
+        permanent: true,
+      },
+      {
+        source: '/columbus/:city',
+        destination: '/cleveland',
+        permanent: true,
+      },
+      {
+        source: '/columbus/community/:path*',
+        destination: '/cleveland',
+        permanent: true,
+      },
+      
+      // /connect - Old URL from blog post (non-existent page)
+      {
+        source: '/connect',
+        destination: '/contact',
+        permanent: true,
+      },
+      
+      // Old /assisted-living/ohio/* URL structure
+      {
+        source: '/assisted-living/ohio/:city',
+        destination: '/cleveland/:city',
+        permanent: true,
+      },
+      {
+        source: '/assisted-living/:state/:city',
+        destination: '/cleveland',
+        permanent: true,
+      },
+      
+      // /cleveland/regional - "Regional" is not a valid city
+      {
+        source: '/cleveland/regional',
+        destination: '/cleveland/events',
+        permanent: true,
+      },
     ];
   },
 };

@@ -11,9 +11,14 @@ interface RegionEventsPageProps {
   params: { region: string };
 }
 
-// Generate static params for all regions
+// Generate static params for regions that have events data
+// SEO Fix: Only generate pages for regions with actual content to prevent 404s
 export async function generateStaticParams() {
-  return getAllRegionSlugs().map((region) => ({
+  // For now, only Cleveland has events data in Supabase
+  // When Columbus events are added, include it here
+  const regionsWithEvents = ['cleveland'];
+  
+  return regionsWithEvents.map((region) => ({
     region,
   }));
 }

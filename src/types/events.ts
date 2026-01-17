@@ -21,6 +21,7 @@ export interface SeniorEvent {
   schema_json: object | null;
   source_url: string | null;
   source_name: string | null;
+  region_slug: string | null; // SEO: Region for proper link generation
   created_at: string;
   updated_at: string;
 }

@@ -93,8 +93,12 @@ function getFirstDayOfMonth(year: number, month: number): number {
 }
 
 // Event Card Component with Lead Hook CTA
+// SEO Fix: Always use event's actual region_slug to prevent cross-region 404s
 function EventCard({ event, compact = false, regionSlug = 'cleveland' }: { event: SeniorEvent; compact?: boolean; regionSlug?: string }) {
   const typeConfig = EVENT_TYPE_CONFIG[event.event_type] || EVENT_TYPE_CONFIG.community_hub;
+  // CRITICAL: Use event's region_slug, not the page's regionSlug prop
+  // This prevents 404s when Columbus events page shows Cleveland events
+  const eventRegion = event.region_slug || 'cleveland';
   const neighborhoodSlug = event.neighborhood?.toLowerCase().replace(/\s+/g, '-');
   const eventSlug = generateSlug(event.title);
   const isMedical = event.event_type === 'medical_wellness';
@@ -122,7 +126,7 @@ function EventCard({ event, compact = false, regionSlug = 'cleveland' }: { event
               </div>
               
               <CardTitle className={`${compact ? 'text-base' : 'text-lg'} group-hover:text-teal-600 transition-colors line-clamp-2`}>
-                <Link href={`/${regionSlug}/events/${eventSlug}`} className="hover:underline">
+                <Link href={`/${eventRegion}/events/${eventSlug}`} className="hover:underline">
                   {event.title}
                 </Link>
               </CardTitle>
@@ -174,7 +178,7 @@ function EventCard({ event, compact = false, regionSlug = 'cleveland' }: { event
               <MapPin className="h-4 w-4 text-slate-400" />
               {event.neighborhood ? (
                 <Link 
-                  href={`/${regionSlug}/${neighborhoodSlug}`}
+                  href={`/${eventRegion}/${neighborhoodSlug}`}
                   className="text-teal-600 hover:underline font-medium"
                 >
                   {event.neighborhood}
