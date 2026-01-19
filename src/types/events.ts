@@ -8,6 +8,7 @@ export type EventType = 'community_hub' | 'medical_wellness' | 'luxury_showcase'
 export interface SeniorEvent {
   id: string;
   title: string;
+  slug: string | null; // URL-friendly slug for routing
   description: string | null;
   start_date: string;
   end_date: string | null;

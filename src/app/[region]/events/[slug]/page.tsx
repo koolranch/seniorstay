@@ -41,47 +41,30 @@ function generateSlug(title: string): string {
     .slice(0, 80);
 }
 
-// Fetch event by slug with optional region filter
+// Fetch event by slug with optional region filter - direct database query
 async function getEventBySlug(slug: string, regionSlug?: string): Promise<SeniorEvent | null> {
   try {
     const supabase = createClient(supabaseUrl, supabaseAnonKey);
     
-    // Debug: Log the search parameters
-    console.log('[Event Page] Searching for event:', { slug, regionSlug });
-    
-    let query = supabase.from('senior_events').select('*').order('start_date', { ascending: true });
+    // Query directly by slug column (more efficient and reliable)
+    let query = supabase
+      .from('senior_events')
+      .select('*')
+      .eq('slug', slug);
     
     // Filter by region if provided
     if (regionSlug) {
       query = query.eq('region_slug', regionSlug);
     }
     
-    const { data: events, error } = await query;
+    const { data: events, error } = await query.limit(1);
     
-    // Debug: Log the query result
-    console.log('[Event Page] Query result:', { 
-      eventCount: events?.length || 0, 
-      error: error?.message,
-      firstFewTitles: events?.slice(0, 3).map((e: SeniorEvent) => e.title)
-    });
-    
-    if (error || !events) {
-      console.error('[Event Page] Error fetching events:', error);
+    if (error) {
+      console.error('[Event Page] Error fetching event:', error);
       return null;
     }
     
-    // Debug: Log all generated slugs for comparison
-    const slugMap = events.map((e: SeniorEvent) => ({
-      title: e.title,
-      generatedSlug: generateSlug(e.title),
-      matches: generateSlug(e.title) === slug
-    }));
-    console.log('[Event Page] Slug comparison:', slugMap.filter(s => s.generatedSlug.includes('roadmap')));
-    
-    const event = events.find((e: SeniorEvent) => generateSlug(e.title) === slug);
-    console.log('[Event Page] Found event:', event ? event.title : 'null');
-    
-    return event || null;
+    return events && events.length > 0 ? (events[0] as SeniorEvent) : null;
   } catch (error) {
     console.error('[Event Page] Error in getEventBySlug:', error);
     return null;
