@@ -99,8 +99,8 @@ interface EventPageProps {
   params: { region: string; slug: string };
 }
 
-// ISR: Revalidate every 24 hours
-export const revalidate = 86400;
+// Dynamic rendering to ensure fresh event data
+export const dynamic = 'force-dynamic';
 
 // Generate metadata
 export async function generateMetadata({ params }: EventPageProps): Promise<Metadata> {
