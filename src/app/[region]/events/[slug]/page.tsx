@@ -46,6 +46,9 @@ async function getEventBySlug(slug: string, regionSlug?: string): Promise<Senior
   try {
     const supabase = createClient(supabaseUrl, supabaseAnonKey);
     
+    // Debug: Log the search parameters
+    console.log('[Event Page] Searching for event:', { slug, regionSlug });
+    
     let query = supabase.from('senior_events').select('*').order('start_date', { ascending: true });
     
     // Filter by region if provided
@@ -55,15 +58,32 @@ async function getEventBySlug(slug: string, regionSlug?: string): Promise<Senior
     
     const { data: events, error } = await query;
     
+    // Debug: Log the query result
+    console.log('[Event Page] Query result:', { 
+      eventCount: events?.length || 0, 
+      error: error?.message,
+      firstFewTitles: events?.slice(0, 3).map((e: SeniorEvent) => e.title)
+    });
+    
     if (error || !events) {
-      console.error('Error fetching events:', error);
+      console.error('[Event Page] Error fetching events:', error);
       return null;
     }
     
+    // Debug: Log all generated slugs for comparison
+    const slugMap = events.map((e: SeniorEvent) => ({
+      title: e.title,
+      generatedSlug: generateSlug(e.title),
+      matches: generateSlug(e.title) === slug
+    }));
+    console.log('[Event Page] Slug comparison:', slugMap.filter(s => s.generatedSlug.includes('roadmap')));
+    
     const event = events.find((e: SeniorEvent) => generateSlug(e.title) === slug);
+    console.log('[Event Page] Found event:', event ? event.title : 'null');
+    
     return event || null;
   } catch (error) {
-    console.error('Error in getEventBySlug:', error);
+    console.error('[Event Page] Error in getEventBySlug:', error);
     return null;
   }
 }
