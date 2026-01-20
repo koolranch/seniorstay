@@ -130,118 +130,238 @@ const nextConfig = {
       // === CRITICAL: High-Traffic Blog Post Recovery (SEO Audit Jan 2026) ===
       // These URLs have 100-300+ referring domains and need permanent redirects
       
-      // 309 referring domains - "free games for seniors" keyword (vol 1000)
-      {
-        source: '/blog/senior-online-games',
-        destination: '/resources',
-        permanent: true,
-      },
-      {
-        source: '/blog/senior-online-games/',
-        destination: '/resources',
-        permanent: true,
-      },
+      // ============================================================
+      // REMOVED: These blog posts EXIST in database - no redirect needed!
+      // Jan 2026 SEO Audit: Found that these redirects were destroying
+      // link equity from 700+ referring domains
+      // ============================================================
+      // Kept: /blog/senior-online-games - 309 referring domains, EXISTS
+      // Kept: /blog/cruises-for-seniors - 263 referring domains, EXISTS
+      // Kept: /blog/apps-for-seniors - 100 referring domains, EXISTS
+      // Kept: /blog/entertainment-ideas - DR 75 backlink, may exist
+      // ============================================================
       
-      // 263 referring domains - "cruises for seniors" keyword
-      {
-        source: '/blog/cruises-for-seniors',
-        destination: '/resources',
-        permanent: true,
-      },
-      {
-        source: '/blog/cruises-for-seniors/',
-        destination: '/resources',
-        permanent: true,
-      },
+      // === Redirects for blog posts that DON'T exist (Jan 2026 Backlink Recovery) ===
       
-      // 146 referring domains - "universal studios senior discount" keyword
-      {
-        source: '/blog/universal-studios-florida',
-        destination: '/resources',
-        permanent: true,
-      },
-      {
-        source: '/blog/universal-studios-florida/',
-        destination: '/resources',
-        permanent: true,
-      },
-      
-      // 100 referring domains - "apps for seniors" keyword
-      {
-        source: '/blog/apps-for-seniors',
-        destination: '/resources',
-        permanent: true,
-      },
-      {
-        source: '/blog/apps-for-seniors/',
-        destination: '/resources',
-        permanent: true,
-      },
-      
-      // === CRITICAL: Broken Backlink Recovery (SEO Audit Jan 2026) ===
-      // These URLs have high-authority backlinks pointing to 404s
-      
-      // DR 75 backlink from rate.com - HIGHEST PRIORITY
+      // DR 75 backlink from rate.com - HIGH PRIORITY
       {
         source: '/blog/entertainment-ideas',
         destination: '/resources',
-        permanent: true, // 301 - Preserves link equity
-      },
-      // DR 23 backlinks from homecare-aid.com, thereviewstories.com
-      {
-        source: '/blog/adult-brain-puzzles',
-        destination: '/resources',
         permanent: true,
       },
-      // DR 21 backlink from edenwald.org
+      // DR 21 backlink from edenwald.org - spring gardening
+      {
+        source: '/blog/spring-seeds',
+        destination: '/blog',
+        permanent: true,
+      },
+      // DR 13 backlink from trustontap.com - word games
+      {
+        source: '/blog/wordle',
+        destination: '/blog/senior-online-games',
+        permanent: true,
+      },
+      // Multiple links - superfoods content
+      {
+        source: '/blog/what-are-superfoods',
+        destination: '/blog/magnesium-for-health',
+        permanent: true,
+      },
+      // Link from ritebook.in - travel content
+      {
+        source: '/blog/prismatic-spring',
+        destination: '/blog/cruises-for-seniors',
+        permanent: true,
+      },
+      // Link from papasearch.net - finance
+      {
+        source: '/blog/how-to-save-money-52-great-tips',
+        destination: '/blog/long-term-care-insurance-options',
+        permanent: true,
+      },
+      // DR 21 backlink - no matching content
       {
         source: '/blog/fiction-novel',
         destination: '/blog',
         permanent: true,
       },
-      // DR 12 backlink from hometostayhc.com
+      // Brain health redirect
+      {
+        source: '/blog/adult-brain-puzzles',
+        destination: '/resources/brain-health',
+        permanent: true,
+      },
+      // Travel packing -> cruises
       {
         source: '/blog/packing-for-a-trip',
-        destination: '/resources',
+        destination: '/blog/cruises-for-seniors',
         permanent: true,
       },
-      // DR 9 backlink from sanantonioseniors.com
-      {
-        source: '/senior-entertainment/games/games-for-seniors',
-        destination: '/resources',
-        permanent: true,
-      },
-      // DR 7 backlink from global-air.com
+      // Historical content
       {
         source: '/blog/uss-yorktown',
-        destination: '/resources',
+        destination: '/blog',
+        permanent: true,
+      },
+      // Travel content
+      {
+        source: '/blog/universal-studios-florida',
+        destination: '/blog/cruises-for-seniors',
+        permanent: true,
+      },
+      // Face lift content (DR 67 link from csa.us)
+      {
+        source: '/blog/mini-face-lift',
+        destination: '/blog',
+        permanent: true,
+      },
+      {
+        source: '/senior-health/aesthetics/mini-face-lift',
+        destination: '/blog',
+        permanent: true,
+      },
+      // Games redirect to actual games page
+      {
+        source: '/senior-entertainment/games/games-for-seniors',
+        destination: '/blog/games-for-seniors',
+        permanent: true,
+      },
+      // Old blog category paths
+      {
+        source: '/blog/category/:path*',
+        destination: '/blog',
         permanent: true,
       },
       
-      // === Catch-all redirects for old URL structures ===
-      // Redirect all old /senior-lifestyle/ paths
+      // === SPECIFIC Legacy URL Redirects (High-Value Backlinks) ===
+      // These have external backlinks - redirect to relevant content
+      
+      // Games-related legacy URLs -> actual games content
+      {
+        source: '/senior-entertainment/games/senior-online-games',
+        destination: '/blog/senior-online-games',
+        permanent: true,
+      },
+      {
+        source: '/senior-entertainment/games/senior-online-games/',
+        destination: '/blog/senior-online-games',
+        permanent: true,
+      },
+      
+      // Travel clubs -> cruises content (closest match)
+      {
+        source: '/senior-lifestyle/family/senior-travel-clubs',
+        destination: '/blog/cruises-for-seniors',
+        permanent: true,
+      },
+      {
+        source: '/senior-lifestyle/family/senior-travel-clubs/',
+        destination: '/blog/cruises-for-seniors',
+        permanent: true,
+      },
+      
+      // Travel destinations -> cruises (closest match)
+      {
+        source: '/senior-travel/destinations/universal-studios-florida',
+        destination: '/blog/cruises-for-seniors',
+        permanent: true,
+      },
+      {
+        source: '/senior-travel/destinations/universal-studios-florida/',
+        destination: '/blog/cruises-for-seniors',
+        permanent: true,
+      },
+      {
+        source: '/senior-travel/destinations/the-villages',
+        destination: '/blog/cruises-for-seniors',
+        permanent: true,
+      },
+      {
+        source: '/senior-travel/destinations/the-villages/',
+        destination: '/blog/cruises-for-seniors',
+        permanent: true,
+      },
+      {
+        source: '/senior-travel/destinations/activities-in-tampa',
+        destination: '/blog/cruises-for-seniors',
+        permanent: true,
+      },
+      {
+        source: '/senior-travel/destinations/travel-thailand',
+        destination: '/blog/cruises-for-seniors',
+        permanent: true,
+      },
+      {
+        source: '/senior-travel/destinations/uss-yorktown',
+        destination: '/blog',
+        permanent: true,
+      },
+      
+      // Health-related legacy URLs -> specific content
+      {
+        source: '/senior-health/general-health/ginkgo-biloba-it-will-work-for-you',
+        destination: '/blog/magnesium-for-health',
+        permanent: true,
+      },
+      
+      // Technology legacy URLs
+      {
+        source: '/senior-lifestyle/technology-for-seniors/how-to-use-selfie-stick',
+        destination: '/blog/keep-up-with-tech',
+        permanent: true,
+      },
+      {
+        source: '/senior-lifestyle/technology-for-seniors/how-to-use-selfie-stick/',
+        destination: '/blog/keep-up-with-tech',
+        permanent: true,
+      },
+      
+      // Meeting places legacy URL
+      {
+        source: '/senior-lifestyle/family/11-places-seniors-meet-seniors',
+        destination: '/resources/social-activities',
+        permanent: true,
+      },
+      {
+        source: '/senior-lifestyle/family/11-places-seniors-meet-seniors/',
+        destination: '/resources/social-activities',
+        permanent: true,
+      },
+      
+      // === Catch-all redirects for remaining old URL structures ===
+      // These catch any remaining paths not specifically handled above
       {
         source: '/senior-lifestyle/:path*',
         destination: '/resources',
         permanent: true,
       },
-      // Redirect all old /senior-entertainment/ paths  
       {
         source: '/senior-entertainment/:path*',
-        destination: '/resources',
+        destination: '/resources/games-for-seniors',
         permanent: true,
       },
-      // Redirect all old /senior-travel/ paths
       {
         source: '/senior-travel/:path*',
-        destination: '/resources',
+        destination: '/blog/cruises-for-seniors',
         permanent: true,
       },
-      // Redirect all old /senior-health/ paths
       {
         source: '/senior-health/:path*',
-        destination: '/resources',
+        destination: '/resources/brain-health',
         permanent: true,
+      },
+      
+      // === Legacy WordPress Image Hotlinks ===
+      // These return 403 - redirect to homepage with image fallback
+      {
+        source: '/wp-content/uploads/:path*',
+        destination: '/images/default-community.jpg',
+        permanent: false, // 302 - May change later
+      },
+      {
+        source: '/blog/wp-content/uploads/:path*',
+        destination: '/images/default-community.jpg',
+        permanent: false,
       },
       
       // === Legacy blog post redirects ===
