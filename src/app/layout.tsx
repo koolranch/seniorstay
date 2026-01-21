@@ -5,6 +5,8 @@ import { ComparisonProvider } from '@/context/ComparisonContext';
 import GoogleMapsScript from '@/components/map/GoogleMapsScript';
 import GoogleAnalytics from '@/components/analytics/GoogleAnalytics';
 import MetaPixel from '@/components/analytics/MetaPixel';
+import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 export const metadata: Metadata = {
   title: 'Assisted Living & Memory Care in Cleveland, OH | Guide for Seniors',
@@ -82,6 +84,8 @@ export default function RootLayout({
       <body className="min-h-screen bg-white antialiased">
         <GoogleAnalytics />
         <MetaPixel />
+        <Analytics />
+        <SpeedInsights />
         <ComparisonProvider>
           {children}
         </ComparisonProvider>
