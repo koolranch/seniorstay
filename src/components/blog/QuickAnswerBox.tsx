@@ -3,6 +3,7 @@
 import { Zap, ChevronDown, ChevronUp } from 'lucide-react';
 import { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 interface QuickAnswerBoxProps {
   content: string;
@@ -37,6 +38,7 @@ export default function QuickAnswerBox({ content }: QuickAnswerBoxProps) {
         <div className="mt-4 pt-4 border-t border-teal-200">
           <div className="prose prose-sm max-w-none prose-td:py-2 prose-th:py-2">
             <ReactMarkdown
+              remarkPlugins={[remarkGfm]}
               components={{
                 table: ({ children }) => (
                   <div className="overflow-x-auto -mx-2">

@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { ChevronDown, HelpCircle } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 interface FAQItem {
   question: string;
@@ -55,6 +56,7 @@ export default function FAQAccordion({ items }: FAQAccordionProps) {
               <div className="p-4 pt-0 bg-gray-50 border-t border-gray-100">
                 <div className="prose prose-sm max-w-none">
                   <ReactMarkdown
+                    remarkPlugins={[remarkGfm]}
                     components={{
                       p: ({ children }) => (
                         <p className="text-gray-700 mb-2 last:mb-0">{children}</p>

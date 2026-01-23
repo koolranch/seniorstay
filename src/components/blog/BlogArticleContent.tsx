@@ -1,6 +1,7 @@
 'use client';
 
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import TableOfContents from './TableOfContents';
 import BackToTop from './BackToTop';
 import QuickAnswerBox from './QuickAnswerBox';
@@ -51,6 +52,7 @@ export default function BlogArticleContent({ content }: BlogArticleContentProps)
       {/* Main Article Content */}
       <div className="prose prose-lg max-w-none">
         <ReactMarkdown
+          remarkPlugins={[remarkGfm]}
           components={{
             h2: ({ children }) => {
               const text = children?.toString() || '';
