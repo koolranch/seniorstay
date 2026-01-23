@@ -3,9 +3,9 @@ import Link from 'next/link';
 import { Calendar, Clock, Tag, ArrowLeft, User, MapPin } from 'lucide-react';
 import Header from '@/components/header/Header';
 import Footer from '@/components/footer/Footer';
-import ReactMarkdown from 'react-markdown';
 import { fetchBlogPostBySlug, fetchRelatedBlogPosts, isRegionalPost, getPostRegionDisplayName } from '@/lib/blog-posts';
 import SuburbLinksSection from '@/components/blog/SuburbLinksSection';
+import BlogArticleContent from '@/components/blog/BlogArticleContent';
 import Script from 'next/script';
 
 export const revalidate = 300;
@@ -203,105 +203,8 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
               </div>
             </div>
 
-            {/* Article Content */}
-            <div className="prose prose-lg max-w-none">
-              <ReactMarkdown
-                components={{
-                  h2: ({ children }) => {
-                    const id = children?.toString().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-                    return (
-                      <h2 id={id} className="text-3xl font-bold mt-12 mb-6 text-gray-900 scroll-mt-24 group">
-                        {children}
-                        <a href={`#${id}`} className="ml-2 opacity-0 group-hover:opacity-50 transition-opacity text-gray-400">#</a>
-                      </h2>
-                    );
-                  },
-                  h3: ({ children }) => {
-                    const id = children?.toString().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-                    return (
-                      <h3 id={id} className="text-2xl font-bold mt-8 mb-4 text-gray-900 scroll-mt-24">{children}</h3>
-                    );
-                  },
-                  h4: ({ children }) => (
-                    <h4 className="text-xl font-bold mt-6 mb-3 text-gray-900">{children}</h4>
-                  ),
-                  p: ({ children }) => {
-                    // Check if this is a special callout box
-                    const text = children?.toString() || '';
-                    if (text.startsWith('KEY TAKEAWAY:')) {
-                      return (
-                        <div className="bg-amber-50 border-l-4 border-amber-400 p-4 my-6 rounded-r-lg">
-                          <p className="font-semibold text-amber-800 mb-1">Key Takeaway</p>
-                          <p className="text-amber-900">{text.replace('KEY TAKEAWAY:', '').trim()}</p>
-                        </div>
-                      );
-                    }
-                    if (text.startsWith('PRO TIP:')) {
-                      return (
-                        <div className="bg-blue-50 border-l-4 border-blue-400 p-4 my-6 rounded-r-lg">
-                          <p className="font-semibold text-blue-800 mb-1">Pro Tip</p>
-                          <p className="text-blue-900">{text.replace('PRO TIP:', '').trim()}</p>
-                        </div>
-                      );
-                    }
-                    if (text.startsWith('WARNING:')) {
-                      return (
-                        <div className="bg-red-50 border-l-4 border-red-400 p-4 my-6 rounded-r-lg">
-                          <p className="font-semibold text-red-800 mb-1">Important</p>
-                          <p className="text-red-900">{text.replace('WARNING:', '').trim()}</p>
-                        </div>
-                      );
-                    }
-                    return <p className="mb-6 text-gray-700 leading-relaxed">{children}</p>;
-                  },
-                  ul: ({ children }) => (
-                    <ul className="mb-6 space-y-2 list-disc list-inside">{children}</ul>
-                  ),
-                  ol: ({ children }) => (
-                    <ol className="mb-6 space-y-2 list-decimal list-inside">{children}</ol>
-                  ),
-                  li: ({ children }) => (
-                    <li className="text-gray-700 ml-4">{children}</li>
-                  ),
-                  strong: ({ children }) => (
-                    <strong className="font-bold text-gray-900">{children}</strong>
-                  ),
-                  a: ({ href, children }) => (
-                    <a href={href} className="text-primary hover:underline font-medium">
-                      {children}
-                    </a>
-                  ),
-                  hr: () => <hr className="my-8 border-gray-300" />,
-                  em: ({ children }) => <em className="italic">{children}</em>,
-                  blockquote: ({ children }) => (
-                    <blockquote className="border-l-4 border-primary bg-gray-50 pl-6 pr-4 py-4 italic my-6 text-gray-700 rounded-r-lg">
-                      {children}
-                    </blockquote>
-                  ),
-                  table: ({ children }) => (
-                    <div className="overflow-x-auto my-8">
-                      <table className="min-w-full border border-gray-200 rounded-lg overflow-hidden">
-                        {children}
-                      </table>
-                    </div>
-                  ),
-                  thead: ({ children }) => (
-                    <thead className="bg-gray-100">{children}</thead>
-                  ),
-                  th: ({ children }) => (
-                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-900 border-b">{children}</th>
-                  ),
-                  td: ({ children }) => (
-                    <td className="px-4 py-3 text-sm text-gray-700 border-b border-gray-100">{children}</td>
-                  ),
-                  tr: ({ children }) => (
-                    <tr className="hover:bg-gray-50">{children}</tr>
-                  ),
-                }}
-              >
-                {post.content}
-              </ReactMarkdown>
-            </div>
+            {/* Article Content with Enhanced UI */}
+            <BlogArticleContent content={post.content} />
 
             {/* Suburb Links for Medicaid Articles - Internal Siloing */}
             {isMedicaidRelated && (
