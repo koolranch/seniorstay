@@ -399,32 +399,6 @@ export const communityData: Community[] = [
     description: "Sunrise of Westlake provides compassionate assisted living and specialized memory care services in a supportive environment. Our dedicated care team offers 24-hour assistance, medication management, and innovative memory care programming to enhance quality of life for all residents."
   },
   {
-    id: "facility-26",
-    name: "The Grande at Middleburg Heights",
-    location: "Middleburg Heights, OH",
-    address: "7510 Pearl Rd, Middleburg Heights, OH 44130",
-    coordinates: {
-      lat: 41.3758,
-      lng: -81.8143
-    },
-    images: [],  // Will use varied placeholders
-    careTypes: ["Assisted Living"],
-    description: "The Grande at Middleburg Heights provides personalized assisted living services in a comfortable environment. Our dedicated staff delivers 24-hour assistance with daily activities, medication management, and health monitoring while promoting dignity and independence."
-  },
-  {
-    id: "facility-27",
-    name: "The Grande at Westlake",
-    location: "Westlake, OH",
-    address: "28777 Detroit Rd, Westlake, OH 44145",
-    coordinates: {
-      lat: 41.4553,
-      lng: -81.9179
-    },
-    images: [],  // Will use varied placeholders
-    careTypes: ["Assisted Living"],
-    description: "The Grande at Westlake provides personalized assisted living services in a comfortable environment. Our dedicated staff delivers 24-hour assistance with daily activities, medication management, and health monitoring while promoting dignity and independence."
-  },
-  {
     id: "facility-28",
     name: "Sunrise At Parma",
     location: "Parma, OH",
