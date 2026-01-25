@@ -134,7 +134,7 @@ export const communityData: Community[] = [
       lat: 41.3979,
       lng: -81.6756
     },
-    images: [],  // Will use varied placeholders
+    images: ["https://vitaliaseniorliving.com/wp-content/uploads/sites/43/2022/09/rockside.png"],
     careTypes: ["Independent Living", "Assisted Living", "Memory Care"],
     description: "Vitalia Rockside offers a full continuum of care with independent living, assisted living, and memory care options. Our beautiful community features spacious apartments, chef-prepared dining, engaging activities, and personalized care services tailored to each resident's unique needs and preferences."
   },
@@ -199,7 +199,7 @@ export const communityData: Community[] = [
       lat: 41.4821,
       lng: -81.6697
     },
-    images: [],  // Will use varied placeholders
+    images: ["https://elizajennings.org/wp-content/uploads/bb-plugin/cache/319850-square-bfafe45378f44fa03471b077970e8791-0r2hdy4q3wso.jpg"],
     careTypes: ["Independent Living", "Assisted Living", "Skilled Nursing", "Rehabilitation"],
     description: "Eliza Jennings offers both independent and assisted living options in a vibrant community setting. Residents enjoy spacious apartments, restaurant-style dining, engaging activities, and access to personalized care services as their needs evolve."
   },
@@ -875,7 +875,7 @@ export const communityData: Community[] = [
       lat: 41.0814,
       lng: -81.519
     },
-    images: [],  // Will use varied placeholders
+    images: ["https://vitaliaseniorliving.com/wp-content/uploads/sites/43/2022/09/montrose.png"],
     careTypes: ["Independent Living", "Assisted Living", "Memory Care"],
     description: "Vitalia Montrose offers a full continuum of care with independent living, assisted living, and memory care options. Our beautiful community features spacious apartments, chef-prepared dining, engaging activities, and personalized care services tailored to each resident's unique needs and preferences."
   },
@@ -888,7 +888,7 @@ export const communityData: Community[] = [
       lat: 41.3897,
       lng: -81.441
     },
-    images: [],  // Will use varied placeholders
+    images: ["https://vitaliaseniorliving.com/wp-content/uploads/sites/43/2022/09/solon.png"],
     careTypes: ["Independent Living", "Assisted Living", "Memory Care"],
     description: "Vitalia Solon offers a full continuum of care with independent living, assisted living, and memory care options. Our beautiful community features spacious apartments, chef-prepared dining, engaging activities, and personalized care services tailored to each resident's unique needs and preferences."
   },
@@ -901,7 +901,7 @@ export const communityData: Community[] = [
       lat: 41.1595,
       lng: -81.4401
     },
-    images: [],  // Will use varied placeholders
+    images: ["https://vitaliaseniorliving.com/wp-content/uploads/sites/43/2022/09/stow.png"],
     careTypes: ["Independent Living", "Assisted Living", "Memory Care"],
     description: "Vitalia Stow offers a full continuum of care with independent living, assisted living, and memory care options. Our beautiful community features spacious apartments, chef-prepared dining, engaging activities, and personalized care services tailored to each resident's unique needs and preferences."
   },
