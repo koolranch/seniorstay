@@ -139,19 +139,6 @@ export const communityData: Community[] = [
     description: "Vitalia Rockside offers a full continuum of care with independent living, assisted living, and memory care options. Our beautiful community features spacious apartments, chef-prepared dining, engaging activities, and personalized care services tailored to each resident's unique needs and preferences."
   },
   {
-    id: "facility-6",
-    name: "StoryPoint Shaker Heights",
-    location: "Shaker Heights, OH",
-    address: "16300 Chagrin Blvd, Shaker Heights, OH 44120",
-    coordinates: {
-      lat: 41.4739,
-      lng: -81.537
-    },
-    images: [],  // Will use varied placeholders
-    careTypes: ["Independent Living", "Assisted Living", "Memory Care"],
-    description: "StoryPoint Shaker Heights offers a full continuum of care with independent living, assisted living, and memory care options. Our beautiful community features spacious apartments, chef-prepared dining, engaging activities, and personalized care services tailored to each resident's unique needs and preferences."
-  },
-  {
     id: "facility-7",
     name: "The Woodlands by Heritage Retirement Communities",
     location: "Shaker Heights, OH",
@@ -205,16 +192,18 @@ export const communityData: Community[] = [
   },
   {
     id: "facility-12",
-    name: "HarborChase of Shaker Heights",
+    name: "StoryPoint Shaker Heights",
     location: "Shaker Heights, OH",
-    address: "17050 Van Aken Blvd, Shaker Heights, OH 44120",
+    address: "17000 Van Aken Boulevard, Shaker Heights, OH 44120",
     coordinates: {
       lat: 41.474,
       lng: -81.537
     },
-    images: [],  // Will use varied placeholders
-    careTypes: ["Assisted Living", "Memory Care"],
-    description: "HarborChase of Shaker Heights provides compassionate assisted living and specialized memory care services in a supportive environment. Our dedicated care team offers 24-hour assistance, medication management, and innovative memory care programming to enhance quality of life for all residents."
+    images: [],
+    careTypes: ["Independent Living", "Assisted Living", "Memory Care"],
+    amenities: ["24-Hour Staff", "Memory Care Program", "Licensed Nurse On-Site", "Restaurant-Style Dining", "Fitness Center", "Social Activities", "Housekeeping Services", "Transportation Services"],
+    description: "StoryPoint Shaker Heights offers premier independent living, assisted living, and memory care in the prestigious Shaker Heights community. Families searching for senior living in Shaker Heights, OH will find a luxurious community with 24-hour nursing support, specialized dementia care, and award-winning lifestyle programming. Our residents enjoy elegant accommodations and personalized attention.",
+    rating: 4.8
   },
   {
     id: "facility-13",
@@ -943,5 +932,216 @@ export const communityData: Community[] = [
     images: [],  // Will use varied placeholders
     careTypes: ["Assisted Living", "Memory Care"],
     description: "Sunrise of Poland provides compassionate assisted living and specialized memory care services in a supportive environment. Our dedicated care team offers 24-hour assistance, medication management, and innovative memory care programming to enhance quality of life for all residents."
+  },
+  // === HIGH-VALUE COMMUNITIES ADDED 2026-01-25 ===
+  {
+    id: "facility-71",
+    name: "Independence Village of Aurora",
+    location: "Aurora, OH",
+    address: "505 South Chillicothe Road, Aurora, OH 44202",
+    coordinates: {
+      lat: 41.3175,
+      lng: -81.3456
+    },
+    images: [],
+    careTypes: ["Independent Living", "Assisted Living"],
+    amenities: ["24-Hour Staff", "Restaurant-Style Dining", "Fitness Center", "Transportation Services", "Social Activities", "Housekeeping Services", "Emergency Response System", "Beauty Salon"],
+    description: "Independence Village of Aurora offers premier independent and assisted living in the charming Aurora community. Families searching for senior living in Aurora, OH will find personalized care plans, 12-16 hour nursing support, and engaging lifestyle programming. Our residents enjoy chef-prepared dining, wellness activities, and a vibrant social calendar in a beautifully maintained community.",
+    rating: 4.8
+  },
+  {
+    id: "facility-72",
+    name: "Hudson Grande Senior Living",
+    location: "Hudson, OH",
+    address: "5400 Darrow Road, Hudson, OH 44236",
+    coordinates: {
+      lat: 41.2401,
+      lng: -81.4409
+    },
+    images: [],
+    careTypes: ["Independent Living", "Assisted Living", "Memory Care"],
+    amenities: ["24-Hour Staff", "Memory Care Program", "Restaurant-Style Dining", "Fitness Center", "Transportation Services", "Social Activities", "Housekeeping Services", "Emergency Response System"],
+    description: "Hudson Grande Senior Living provides exceptional assisted living and memory care in prestigious Hudson, Ohio. Families seeking senior care in Hudson will discover a welcoming community with 24-hour nursing support, specialized dementia care, and engaging daily activities. Our modern facility offers spacious apartments, fine dining, and personalized care tailored to each resident's needs.",
+    rating: 4.4
+  },
+  {
+    id: "facility-73",
+    name: "Hamlet at Chagrin Falls",
+    location: "Chagrin Falls, OH",
+    address: "200 Hamlet Hills Drive, Chagrin Falls, OH 44022",
+    coordinates: {
+      lat: 41.4311,
+      lng: -81.3928
+    },
+    images: [],
+    careTypes: ["Independent Living", "Assisted Living"],
+    amenities: ["24-Hour Staff", "Restaurant-Style Dining", "Fitness Center", "Swimming Pool", "Transportation Services", "Social Activities", "Housekeeping Services", "Beauty Salon", "Library"],
+    description: "The Hamlet at Chagrin Falls offers luxury senior living on 47 acres of rolling landscapes in the prestigious Chagrin Falls community. Families researching assisted living in Chagrin Falls, OH will find a continuum of care that evolves with residents' needs. Our community features elegant apartments, farm-to-table dining, and an active lifestyle with cultural outings and wellness programs.",
+    rating: 4.0
+  },
+  {
+    id: "facility-74",
+    name: "Lantern of Chagrin Valley",
+    location: "Chagrin Falls, OH",
+    address: "5277 Chillicothe Road, Chagrin Falls, OH 44022",
+    coordinates: {
+      lat: 41.4089,
+      lng: -81.3789
+    },
+    images: [],
+    careTypes: ["Assisted Living", "Memory Care"],
+    amenities: ["24-Hour Staff", "Memory Care Program", "Medication Management", "Restaurant-Style Dining", "Social Activities", "Housekeeping Services", "Emergency Response System", "Personal Care Assistance"],
+    description: "Lantern of Chagrin Valley provides intimate, personalized assisted living and memory care in beautiful Chagrin Falls. Rated 9.7 out of 10, our community is a top choice for families seeking quality senior care in the Chagrin Valley area. We offer specialized dementia care, 24-hour support, and a warm, home-like environment where residents receive individualized attention.",
+    rating: 4.9
+  },
+  {
+    id: "facility-75",
+    name: "Eden Vista Stow",
+    location: "Stow, OH",
+    address: "5511 Fishcreek Road, Stow, OH 44224",
+    coordinates: {
+      lat: 41.1595,
+      lng: -81.4406
+    },
+    images: [],
+    careTypes: ["Assisted Living", "Memory Care"],
+    amenities: ["24-Hour Staff", "Memory Care Program", "Medication Management", "Restaurant-Style Dining", "Social Activities", "Housekeeping Services", "Emergency Response System", "Transportation Services"],
+    description: "Eden Vista Stow delivers compassionate assisted living and memory care in a beautiful, home-like setting. Families searching for senior living in Stow, OH will appreciate our personalized care approach, specialized dementia programming, and around-the-clock support. Our intimate community ensures residents receive attentive care while maintaining independence and dignity.",
+    rating: 5.0
+  },
+  {
+    id: "facility-76",
+    name: "Summit Corners",
+    location: "Macedonia, OH",
+    address: "8400 South Bedford Road, Macedonia, OH 44056",
+    coordinates: {
+      lat: 41.3089,
+      lng: -81.5012
+    },
+    images: [],
+    careTypes: ["Assisted Living", "Memory Care"],
+    amenities: ["24-Hour Staff", "Memory Care Program", "Medication Management", "Restaurant-Style Dining", "Social Activities", "Housekeeping Services", "Emergency Response System", "Fitness Center"],
+    description: "Summit Corners, managed by American House, offers quality assisted living and memory care in Macedonia, Ohio. Families researching senior care options in the Macedonia area will find a welcoming community with 24-hour support, engaging activities, and specialized memory care services. Our dedicated staff provides personalized attention in a comfortable, secure environment.",
+    rating: 5.0
+  },
+  {
+    id: "facility-77",
+    name: "The Atrium at Anna Maria",
+    location: "Aurora, OH",
+    address: "800 North Aurora Road, Aurora, OH 44202",
+    coordinates: {
+      lat: 41.3267,
+      lng: -81.3567
+    },
+    images: [],
+    careTypes: ["Independent Living", "Assisted Living", "Memory Care"],
+    amenities: ["24-Hour Staff", "Memory Care Program", "Restaurant-Style Dining", "Fitness Center", "Swimming Pool", "Transportation Services", "Social Activities", "Beauty Salon", "Chapel"],
+    description: "The Atrium at Anna Maria provides exceptional senior living with a full continuum of care in Aurora, Ohio. Our beautiful campus offers independent living, assisted living, and memory care services. Families seeking premium senior housing in Aurora will discover elegant accommodations, fine dining, comprehensive wellness programs, and compassionate, personalized care.",
+    rating: 4.0
+  },
+  {
+    id: "facility-78",
+    name: "Governor's Village by StoryPoint",
+    location: "Mayfield Village, OH",
+    address: "280 North Commons Boulevard, Mayfield Village, OH 44143",
+    coordinates: {
+      lat: 41.5456,
+      lng: -81.4389
+    },
+    images: [],
+    careTypes: ["Assisted Living", "Memory Care"],
+    amenities: ["24-Hour Staff", "Memory Care Program", "Licensed Nurse On-Site", "Restaurant-Style Dining", "Social Activities", "Housekeeping Services", "Emergency Response System", "Transportation Services"],
+    description: "Governor's Village by StoryPoint Group offers award-winning assisted living and memory care in Mayfield Village. Families searching for senior care on Cleveland's East Side will find a community dedicated to exceptional service with licensed nursing staff, specialized memory care, and engaging lifestyle programming. Our residents enjoy personalized attention in a vibrant, supportive environment.",
+    rating: 4.8
+  },
+  {
+    id: "facility-79",
+    name: "Ashton at Mayfield Heights",
+    location: "Mayfield Heights, OH",
+    address: "6200 Landerhaven Drive, Mayfield Heights, OH 44124",
+    coordinates: {
+      lat: 41.5189,
+      lng: -81.4456
+    },
+    images: [],
+    careTypes: ["Independent Living", "Assisted Living", "Memory Care"],
+    amenities: ["24-Hour Staff", "Memory Care Program", "Restaurant-Style Dining", "Fitness Center", "Transportation Services", "Social Activities", "Housekeeping Services", "Beauty Salon"],
+    description: "The Ashton at Mayfield Heights is a top-rated senior living community offering independent living, assisted living, and memory care. Rated 9.9 out of 10, families searching for quality senior housing in Mayfield Heights will find exceptional value with comprehensive care services, modern amenities, and a vibrant social atmosphere. Our dedicated team provides 24-hour support and personalized care plans.",
+    rating: 5.0
+  },
+  {
+    id: "facility-80",
+    name: "Deer Creek Lodge",
+    location: "Beachwood, OH",
+    address: "27070 Cedar Road, Beachwood, OH 44122",
+    coordinates: {
+      lat: 41.4645,
+      lng: -81.4934
+    },
+    images: [],
+    careTypes: ["Assisted Living"],
+    amenities: ["24-Hour Staff", "Medication Management", "Restaurant-Style Dining", "Social Activities", "Housekeeping Services", "Emergency Response System", "Transportation Services", "Personal Care Assistance"],
+    description: "Deer Creek Lodge provides quality assisted living in the heart of Beachwood, Ohio. Conveniently located near shopping and medical facilities, our community offers personalized care, comfortable accommodations, and engaging activities. Families seeking assisted living in Beachwood will appreciate our dedicated staff, home-like atmosphere, and commitment to resident well-being.",
+    rating: 4.5
+  },
+  {
+    id: "facility-81",
+    name: "Tapestry Senior Living Wickliffe",
+    location: "Wickliffe, OH",
+    address: "28500 Euclid Avenue, Wickliffe, OH 44092",
+    coordinates: {
+      lat: 41.6089,
+      lng: -81.4534
+    },
+    images: [],
+    careTypes: ["Assisted Living", "Memory Care"],
+    amenities: ["24-Hour Staff", "Memory Care Program", "Medication Management", "Restaurant-Style Dining", "Social Activities", "Housekeeping Services", "Emergency Response System", "Transportation Services"],
+    description: "Tapestry Senior Living Wickliffe offers personalized assisted living and memory care with a focus on holistic wellness. Families researching senior living in Wickliffe, OH will find dedicated nursing staff available 12-16 hours daily, specialized dementia care programming, and a warm community atmosphere. Our approach combines quality care with engaging activities to enhance residents' quality of life.",
+    rating: 4.7
+  },
+  {
+    id: "facility-82",
+    name: "Aberdeen Crossings",
+    location: "Highland Heights, OH",
+    address: "399 Bishop Road, Highland Heights, OH 44143",
+    coordinates: {
+      lat: 41.5512,
+      lng: -81.4645
+    },
+    images: [],
+    careTypes: ["Independent Living", "Assisted Living"],
+    amenities: ["24-Hour Staff", "Restaurant-Style Dining", "Fitness Center", "Transportation Services", "Social Activities", "Housekeeping Services", "Emergency Response System", "Beauty Salon"],
+    description: "Aberdeen Crossings offers exceptional independent and assisted living in Highland Heights, Ohio. Families seeking senior care on Cleveland's East Side will discover a welcoming community with comprehensive care services, modern amenities, and an active social calendar. Our dedicated staff provides personalized support while encouraging independence and engagement.",
+    rating: 4.5
+  },
+  {
+    id: "facility-83",
+    name: "The Gardens at Liberty Park",
+    location: "Streetsboro, OH",
+    address: "9975 Greentree Parkway, Streetsboro, OH 44241",
+    coordinates: {
+      lat: 41.2389,
+      lng: -81.3456
+    },
+    images: [],
+    careTypes: ["Assisted Living", "Memory Care"],
+    amenities: ["24-Hour Staff", "Memory Care Program", "Medication Management", "Restaurant-Style Dining", "Social Activities", "Housekeeping Services", "Emergency Response System", "Outdoor Spaces"],
+    description: "The Gardens at Liberty Park, managed by Inspirit Senior Living, provides compassionate assisted living and memory care in Streetsboro, Ohio. Families searching for senior care in the Portage County area will find a dedicated team available 24 hours daily, tailored care plans, and specialized memory support. Our beautiful community offers a peaceful setting with engaging programming.",
+    rating: 4.5
+  },
+  {
+    id: "facility-84",
+    name: "Beachwood Commons",
+    location: "Beachwood, OH",
+    address: "3995 South Green Road, Beachwood, OH 44122",
+    coordinates: {
+      lat: 41.4534,
+      lng: -81.4889
+    },
+    images: [],
+    careTypes: ["Independent Living", "Assisted Living"],
+    amenities: ["24-Hour Staff", "Restaurant-Style Dining", "Transportation Services", "Social Activities", "Housekeeping Services", "Emergency Response System", "Beauty Salon", "Library"],
+    description: "Beachwood Commons provides quality independent and assisted living in the desirable Beachwood community. Families researching senior living options near Cleveland will appreciate our convenient location, personalized care services, and vibrant social programming. Our community offers comfortable accommodations, nutritious dining, and a dedicated staff committed to resident satisfaction.",
+    rating: 4.3
   }
 ];
