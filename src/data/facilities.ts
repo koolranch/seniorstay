@@ -186,7 +186,7 @@ export const communityData: Community[] = [
       lat: 41.3931,
       lng: -81.5368
     },
-    images: [],  // Will use varied placeholders
+    images: ["https://www.woodsideseniorliving.com/wp-content/uploads/2024/09/19455Rockside-15.jpg"],
     careTypes: ["Assisted Living"],
     description: "Woodside Senior Living provides personalized assisted living services in a comfortable environment. Our dedicated staff delivers 24-hour assistance with daily activities, medication management, and health monitoring while promoting dignity and independence."
   },
@@ -680,7 +680,7 @@ export const communityData: Community[] = [
       lat: 41.562,
       lng: -81.5015
     },
-    images: [],  // Will use varied placeholders
+    images: ["https://winfieldseniorliving.com/wp-content/uploads/2022/07/AssistedLivingHomeImage-scaled.jpeg"],
     careTypes: ["Assisted Living", "Memory Care"],
     description: "The Winfield at Richmond Heights provides compassionate assisted living and specialized memory care services in a supportive environment. Our dedicated care team offers 24-hour assistance, medication management, and innovative memory care programming to enhance quality of life for all residents."
   },
@@ -745,7 +745,7 @@ export const communityData: Community[] = [
       lat: 41.4824,
       lng: -81.7982
     },
-    images: [],  // Will use varied placeholders
+    images: ["https://oneillhc.com/wp-content/uploads/2020/05/lakewood-thumb.png"],
     careTypes: ["Assisted Living", "Memory Care"],
     description: "O'Neill Healthcare Lakewood provides compassionate assisted living and specialized memory care services in a supportive environment. Our dedicated care team offers 24-hour assistance, medication management, and innovative memory care programming to enhance quality of life for all residents."
   },
