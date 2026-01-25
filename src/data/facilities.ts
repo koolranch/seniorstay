@@ -204,19 +204,6 @@ export const communityData: Community[] = [
     description: "Eliza Jennings offers both independent and assisted living options in a vibrant community setting. Residents enjoy spacious apartments, restaurant-style dining, engaging activities, and access to personalized care services as their needs evolve."
   },
   {
-    id: "facility-11",
-    name: "Brooklyn Pointe Assisted Living and Memory Care",
-    location: "Brooklyn, OH",
-    address: "4800 Idlewood Dr, Brooklyn, OH 44144",
-    coordinates: {
-      lat: 41.4303,
-      lng: -81.7468
-    },
-    images: [],  // Will use varied placeholders
-    careTypes: ["Assisted Living", "Memory Care"],
-    description: "Brooklyn Pointe Assisted Living and Memory Care provides compassionate assisted living and specialized memory care services in a supportive environment. Our dedicated care team offers 24-hour assistance, medication management, and innovative memory care programming to enhance quality of life for all residents."
-  },
-  {
     id: "facility-12",
     name: "HarborChase of Shaker Heights",
     location: "Shaker Heights, OH",
