@@ -121,7 +121,7 @@ export const communityData: Community[] = [
       lat: 41.4639,
       lng: -81.5087
     },
-    images: [],  // Will use varied placeholders
+    images: ["https://beachwood.roseseniorliving.com/wp-content/uploads/sites/8/2023/08/residential-building-roundabout-clear-sky-1024x684.jpg.webp"],
     careTypes: ["Independent Living", "Assisted Living", "Memory Care"],
     description: "Rose Senior Living at Beachwood offers a full continuum of care with independent living, assisted living, and memory care options. Our beautiful community features spacious apartments, chef-prepared dining, engaging activities, and personalized care services tailored to each resident's unique needs and preferences."
   },
