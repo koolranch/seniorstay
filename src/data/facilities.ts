@@ -108,7 +108,7 @@ export const communityData: Community[] = [
       lat: 41.4048,
       lng: -81.7229
     },
-    images: [],  // Will use varied placeholders
+    images: ["https://franciscanministries.org/wp-content/uploads/2018/09/mount-alverna-village-min-1.jpg"],
     careTypes: ["Independent Living", "Assisted Living", "Memory Care", "Skilled Nursing", "Rehabilitation"],
     description: "Mount Alverna Village offers a full continuum of care with independent living, assisted living, and memory care options. Our beautiful community features spacious apartments, chef-prepared dining, engaging activities, and personalized care services tailored to each resident's unique needs and preferences."
   },
@@ -485,7 +485,7 @@ export const communityData: Community[] = [
       lat: 41.4553,
       lng: -81.9179
     },
-    images: [],  // Will use varied placeholders
+    images: ["https://images.brookdale.com/is/image/brookdaleprod/2-westlake-village-entrance"],
     careTypes: ["Assisted Living", "Memory Care"],
     description: "Brookdale Westlake Village provides compassionate assisted living and specialized memory care services in a supportive environment. Our dedicated care team offers 24-hour assistance, medication management, and innovative memory care programming to enhance quality of life for all residents."
   },
@@ -511,7 +511,7 @@ export const communityData: Community[] = [
       lat: 41.4553,
       lng: -81.918
     },
-    images: [],  // Will use varied placeholders
+    images: ["https://www.fairmontseniorliving.com/wp-content/uploads/2024/11/Overhead-group-of-seniors-playing-chess.jpg"],
     careTypes: ["Assisted Living", "Memory Care"],
     description: "Fairmont of Westlake provides compassionate assisted living and specialized memory care services in a supportive environment. Our dedicated care team offers 24-hour assistance, medication management, and innovative memory care programming to enhance quality of life for all residents."
   },
