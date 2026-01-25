@@ -368,7 +368,7 @@ export const communityData: Community[] = [
       lat: 41.3139,
       lng: -81.8365
     },
-    images: [],  // Will use varied placeholders
+    images: ["https://kemperhouse.com/wp-content/uploads/2021/11/kemper-house-Strongsville.jpeg"],
     careTypes: ["Assisted Living", "Memory Care"],
     description: "Kemper House Strongsville provides compassionate assisted living and specialized memory care services in a supportive environment. Our dedicated care team offers 24-hour assistance, medication management, and innovative memory care programming to enhance quality of life for all residents."
   },
@@ -524,7 +524,7 @@ export const communityData: Community[] = [
       lat: 41.3931,
       lng: -81.5368
     },
-    images: [],  // Will use varied placeholders
+    images: ["https://lightofheartsvilla.org/wp-content/uploads/2024/06/facebookogi.jpg"],
     careTypes: ["Assisted Living", "Memory Care"],
     description: "Light of Hearts Villa provides compassionate assisted living and specialized memory care services in a supportive environment. Our dedicated care team offers 24-hour assistance, medication management, and innovative memory care programming to enhance quality of life for all residents."
   },
@@ -576,7 +576,7 @@ export const communityData: Community[] = [
       lat: 41.4517,
       lng: -82.0354
     },
-    images: [],  // Will use varied placeholders
+    images: ["https://www.ganzhorn.com/wp-content/uploads/yoast-ganzhorn-avon.jpg"],
     careTypes: ["Assisted Living", "Memory Care"],
     description: "The Ganzhorn Suites of Avon provides compassionate assisted living and specialized memory care services in a supportive environment. Our dedicated care team offers 24-hour assistance, medication management, and innovative memory care programming to enhance quality of life for all residents."
   },
@@ -654,7 +654,7 @@ export const communityData: Community[] = [
       lat: 41.4821,
       lng: -81.6697
     },
-    images: [],  // Will use varied placeholders
+    images: ["https://judsonsmartliving.org/wp-content/uploads/2025/01/south-franklin-circle-community.jpg"],
     careTypes: ["Independent Living", "Assisted Living", "Memory Care", "Skilled Nursing"],
     description: "South Franklin Circle offers a full continuum of care with independent living, assisted living, and memory care options. Our beautiful community features spacious apartments, chef-prepared dining, engaging activities, and personalized care services tailored to each resident's unique needs and preferences."
   },
@@ -706,7 +706,7 @@ export const communityData: Community[] = [
       lat: 41.4822,
       lng: -81.6697
     },
-    images: [],  // Will use varied placeholders
+    images: ["https://judsonsmartliving.org/wp-content/uploads/2025/01/judson-manor-community.jpg"],
     careTypes: ["Independent Living", "Assisted Living"],
     description: "Judson Manor offers both independent and assisted living options in a vibrant community setting. Residents enjoy spacious apartments, restaurant-style dining, engaging activities, and access to personalized care services as their needs evolve."
   },
