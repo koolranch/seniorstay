@@ -498,7 +498,7 @@ export const communityData: Community[] = [
       lat: 41.4553,
       lng: -81.9179
     },
-    images: [],  // Will use varied placeholders
+    images: ["https://images.brookdale.com/is/image/brookdaleprod/2-gardens-at-westlake-entrance"],
     careTypes: ["Independent Living"],
     description: "Brookdale Gardens at Westlake offers premium independent living for active seniors in a beautiful setting. Our community features spacious apartments, restaurant-style dining, engaging activities, and a wide range of amenities designed to support an active, maintenance-free lifestyle."
   },
@@ -810,7 +810,7 @@ export const communityData: Community[] = [
       lat: 41.0814,
       lng: -81.5191
     },
-    images: [],  // Will use varied placeholders
+    images: ["https://images.brookdale.com/is/image/brookdaleprod/2-bath-entrance"],
     careTypes: ["Assisted Living", "Memory Care"],
     description: "Brookdale Bath provides compassionate assisted living and specialized memory care services in a supportive environment. Our dedicated care team offers 24-hour assistance, medication management, and innovative memory care programming to enhance quality of life for all residents."
   },
@@ -823,7 +823,7 @@ export const communityData: Community[] = [
       lat: 41.0814,
       lng: -81.519
     },
-    images: [],  // Will use varied placeholders
+    images: ["https://images.brookdale.com/is/image/brookdaleprod/2-montrose-entrance"],
     careTypes: ["Assisted Living", "Memory Care"],
     description: "Brookdale Montrose provides compassionate assisted living and specialized memory care services in a supportive environment. Our dedicated care team offers 24-hour assistance, medication management, and innovative memory care programming to enhance quality of life for all residents."
   },
@@ -836,7 +836,7 @@ export const communityData: Community[] = [
       lat: 41.1434,
       lng: -81.8632
     },
-    images: [],  // Will use varied placeholders
+    images: ["https://images.brookdale.com/is/image/brookdaleprod/2-medina-south-entrance"],
     careTypes: ["Assisted Living", "Memory Care"],
     description: "Brookdale Medina South provides compassionate assisted living and specialized memory care services in a supportive environment. Our dedicated care team offers 24-hour assistance, medication management, and innovative memory care programming to enhance quality of life for all residents."
   },
@@ -849,7 +849,7 @@ export const communityData: Community[] = [
       lat: 41.6042,
       lng: -81.4715
     },
-    images: [],  // Will use varied placeholders
+    images: ["https://images.brookdale.com/is/image/brookdaleprod/2-wickliffe-entrance"],
     careTypes: ["Assisted Living", "Memory Care"],
     description: "Brookdale Wickliffe provides compassionate assisted living and specialized memory care services in a supportive environment. Our dedicated care team offers 24-hour assistance, medication management, and innovative memory care programming to enhance quality of life for all residents."
   },
