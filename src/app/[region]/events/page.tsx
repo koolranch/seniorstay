@@ -12,11 +12,9 @@ interface RegionEventsPageProps {
 }
 
 // Generate static params for regions that have events data
-// SEO Fix: Only generate pages for regions with actual content to prevent 404s
 export async function generateStaticParams() {
-  // For now, only Cleveland has events data in Supabase
-  // When Columbus events are added, include it here
-  const regionsWithEvents = ['cleveland'];
+  // Both Cleveland and Columbus have events
+  const regionsWithEvents = ['cleveland', 'columbus'];
   
   return regionsWithEvents.map((region) => ({
     region,
@@ -72,20 +70,19 @@ const supabase = createClient(supabaseUrl, supabaseAnonKey);
 // Dynamic rendering for fresh data
 export const dynamic = 'force-dynamic';
 
-async function getEvents(): Promise<SeniorEvent[]> {
+async function getEvents(regionSlug: string): Promise<SeniorEvent[]> {
   try {
-    // Fetch directly from Supabase for reliability
-    // Note: For now, all events are Cleveland-region events
-    // When we add more regions, we'll filter by region_slug
+    // Fetch events filtered by region
     const { data: events, error } = await supabase
       .from('senior_events')
       .select('*')
+      .eq('region_slug', regionSlug)
       .gte('start_date', new Date().toISOString())
       .order('start_date', { ascending: true })
       .limit(50);
     
     if (error) {
-      console.error('Failed to fetch events:', error.message);
+      console.error(`Failed to fetch events for ${regionSlug}:`, error.message);
       return [];
     }
     
@@ -138,7 +135,7 @@ export default async function RegionEventsPage({ params }: RegionEventsPageProps
     notFound();
   }
 
-  const events = await getEvents();
+  const events = await getEvents(region);
   const eventsListSchema = generateEventsListSchema(events, regionConfig);
 
   return (
