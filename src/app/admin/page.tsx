@@ -22,15 +22,15 @@ interface Agent {
 export default function MissionControlDashboard() {
   const [tasks, setTasks] = useState<Task[]>([
     { id: '1', title: 'Research Cleveland facilities', agent: 'Scout', priority: 'high', status: 'inprogress', business: 'GFS' },
-    { id: '2', title: 'Write memory care guide', agent: 'Writer', priority: 'medium', status: 'todo', business: 'FEE' },
-    { id: '3', title: 'Optimize forklift content', agent: 'Optimizer', priority: 'high', status: 'review', business: 'CLS' },
-    { id: '4', title: 'Update facility database', agent: 'Scout', priority: 'low', status: 'completed', business: 'GFS' },
+    { id: '2', title: 'Write senior care guide content', agent: 'Writer', priority: 'medium', status: 'todo', business: 'GFS' },
+    { id: '3', title: 'Optimize GFS facility pages for SEO', agent: 'Optimizer', priority: 'high', status: 'review', business: 'GFS' },
+    { id: '4', title: 'Update Cleveland facility database', agent: 'Scout', priority: 'low', status: 'completed', business: 'GFS' },
   ]);
   
   const [agents, setAgents] = useState<Agent[]>([
     { name: 'Scout', business: 'GFS', status: 'online', tasks: 198, efficiency: 96.1 },
-    { name: 'Writer', business: 'FEE', status: 'online', tasks: 143, efficiency: 89.7 },
-    { name: 'Optimizer', business: 'CLS', status: 'online', tasks: 156, efficiency: 94.2 },
+    { name: 'Writer', business: 'GFS', status: 'online', tasks: 143, efficiency: 89.7 },
+    { name: 'Optimizer', business: 'GFS', status: 'online', tasks: 156, efficiency: 94.2 },
   ]);
   
   const [newTaskTitle, setNewTaskTitle] = useState('');
@@ -94,9 +94,7 @@ export default function MissionControlDashboard() {
   const getBusinessColor = (business: string) => {
     switch (business) {
       case 'GFS': return '#10b981';
-      case 'CLS': return '#3b82f6';
-      case 'FEE': return '#f59e0b';
-      default: return '#6b7280';
+      default: return '#10b981'; // All current operations are GFS
     }
   };
 
@@ -518,9 +516,9 @@ export default function MissionControlDashboard() {
                       fontSize: '14px'
                     }}
                   >
-                    <option value="Scout">Scout</option>
-                    <option value="Writer">Writer</option>
-                    <option value="Optimizer">Optimizer</option>
+                    <option value="Scout">Scout (GFS)</option>
+                    <option value="Writer">Writer (GFS)</option>
+                    <option value="Optimizer">Optimizer (GFS)</option>
                   </select>
                 </div>
                 
@@ -541,9 +539,7 @@ export default function MissionControlDashboard() {
                       fontSize: '14px'
                     }}
                   >
-                    <option value="GFS">GFS</option>
-                    <option value="CLS">CLS</option>
-                    <option value="FEE">FEE</option>
+                    <option value="GFS">GFS (Guide for Seniors)</option>
                   </select>
                 </div>
                 
