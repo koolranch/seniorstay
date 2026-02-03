@@ -17,6 +17,18 @@
       "schedule": "0 5 * * 0"
     }
   ],
+  "redirects": [
+    {
+      "source": "/blog/:path*/",
+      "destination": "/blog/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/resources/",
+      "destination": "/resources",
+      "permanent": true
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",

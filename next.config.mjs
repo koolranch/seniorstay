@@ -141,6 +141,34 @@ const nextConfig = {
       // Kept: /blog/entertainment-ideas - DR 75 backlink, may exist
       // ============================================================
       
+      // === Feb 2026 Lost Backlink Recovery (Ahrefs CSV Analysis) ===
+      // High-value backlinks lost due to redirect chains - restore with direct redirects
+      
+      // DR 72 backlink - Cleveland winter safety (MeloQ Devices)
+      {
+        source: '/blog/cleveland-winter-safety-tips-for-seniors',
+        destination: '/blog',
+        permanent: true,
+      },
+      // DR 70 backlink - Person-centered dementia care (Atlanta Hyperbaric)
+      {
+        source: '/blog/person-centered-dementia-care-assisted-living',
+        destination: '/resources',
+        permanent: true,
+      },
+      // DR 29 backlink - Questions to ask facilities (TX Family Adoption)
+      {
+        source: '/blog/questions-to-ask-assisted-living-facilities',
+        destination: '/resources',
+        permanent: true,
+      },
+      // DR 29, DR 25 backlinks - Medicare vs Medicaid Ohio
+      {
+        source: '/blog/medicare-vs-medicaid-ohio-senior-care',
+        destination: '/resources',
+        permanent: true,
+      },
+      
       // === Redirects for blog posts that DON'T exist (Jan 2026 Backlink Recovery) ===
       
       // DR 75 backlink from rate.com - HIGH PRIORITY
@@ -191,7 +219,7 @@ const nextConfig = {
         destination: '/resources/brain-health',
         permanent: true,
       },
-      // Travel packing -> cruises
+      // Travel packing -> cruises (DR 7 backlink from Nurses and Company)
       {
         source: '/blog/packing-for-a-trip',
         destination: '/blog/cruises-for-seniors',
@@ -236,7 +264,7 @@ const nextConfig = {
       // === SPECIFIC Legacy URL Redirects (High-Value Backlinks) ===
       // These have external backlinks - redirect to relevant content
       
-      // Games-related legacy URLs -> actual games content
+      // Games-related legacy URLs -> actual games content (DR 51+ backlinks)
       {
         source: '/senior-entertainment/games/senior-online-games',
         destination: '/blog/senior-online-games',
@@ -245,6 +273,12 @@ const nextConfig = {
       {
         source: '/senior-entertainment/games/senior-online-games/',
         destination: '/blog/senior-online-games',
+        permanent: true,
+      },
+      // Additional games paths found in lost backlinks
+      {
+        source: '/senior-entertainment/games/games-for-seniors/',
+        destination: '/blog/games-for-seniors',
         permanent: true,
       },
       
@@ -422,33 +456,8 @@ const nextConfig = {
       
       // === 404 Recovery (Jan 2026 Ahrefs Audit) ===
       
-      // Columbus region catch-all - No Columbus data exists yet
-      // Redirect all /columbus/* paths to Cleveland equivalent or homepage
-      {
-        source: '/columbus',
-        destination: '/cleveland',
-        permanent: true,
-      },
-      {
-        source: '/columbus/events',
-        destination: '/cleveland/events',
-        permanent: true,
-      },
-      {
-        source: '/columbus/events/:slug',
-        destination: '/cleveland/events/:slug',
-        permanent: true,
-      },
-      {
-        source: '/columbus/:city',
-        destination: '/cleveland',
-        permanent: true,
-      },
-      {
-        source: '/columbus/community/:path*',
-        destination: '/cleveland',
-        permanent: true,
-      },
+      // Columbus region is now LIVE - redirects removed Feb 2026
+      // 20 Columbus-area communities now available
       
       // /connect - Old URL from blog post (non-existent page)
       {
