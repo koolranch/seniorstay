@@ -9,6 +9,7 @@
  */
 
 import { CityInfo, clevelandCitiesData } from './cleveland-cities';
+import { columbusCitiesData } from './columbus-cities';
 
 export type { CityInfo };
 
@@ -72,80 +73,11 @@ const columbusRegion: RegionConfig = {
   state: 'Ohio',
   stateAbbr: 'OH',
   primaryCity: 'Columbus',
-  phoneNumber: '(614) 555-0000', // Placeholder
+  phoneNumber: '(614) 972-1684',
   tagline: 'Columbus Senior Living Experts',
   description: 'Find senior living communities across Greater Columbus including Columbus, Dublin, Westerville, and more.',
   counties: ['Franklin', 'Delaware', 'Licking', 'Fairfield', 'Pickaway'],
-  cities: {
-    // Placeholder cities - to be populated with actual data
-    'columbus': {
-      name: 'Columbus',
-      slug: 'columbus',
-      description: 'Ohio\'s capital and largest city offers diverse senior living options with excellent healthcare facilities and cultural amenities.',
-      highlights: [
-        'Ohio State University Wexner Medical Center',
-        'Short North Arts District',
-        'German Village and historic neighborhoods',
-        'Columbus Zoo and Aquarium',
-        'Diverse dining and entertainment options',
-      ],
-      nearbyHospitals: [
-        'Ohio State University Wexner Medical Center',
-        'OhioHealth Riverside Methodist Hospital',
-        'Mount Carmel Health System',
-        'Nationwide Children\'s Hospital',
-      ],
-      averageCost: {
-        independentLiving: '$2,500 - $4,500',
-        assistedLiving: '$3,500 - $6,000',
-        memoryCare: '$5,000 - $8,000',
-      },
-    },
-    'dublin': {
-      name: 'Dublin',
-      slug: 'dublin',
-      description: 'Dublin is an affluent northwestern suburb known for its Irish heritage, excellent schools, and high quality of life.',
-      highlights: [
-        'Historic downtown with Irish heritage',
-        'Dublin Arts Council',
-        'Excellent city services',
-        'Top-rated schools',
-        'Close to major healthcare',
-      ],
-      nearbyHospitals: [
-        'OhioHealth Dublin Methodist Hospital',
-        'Ohio State University Wexner Medical Center',
-        'Mount Carmel St. Ann\'s',
-      ],
-      averageCost: {
-        independentLiving: '$3,000 - $5,500',
-        assistedLiving: '$4,500 - $7,500',
-        memoryCare: '$6,000 - $9,500',
-      },
-    },
-    'westerville': {
-      name: 'Westerville',
-      slug: 'westerville',
-      description: 'Westerville is a vibrant community in northeastern Columbus known for Otterbein University and its charming uptown area.',
-      highlights: [
-        'Otterbein University campus',
-        'Charming Uptown Westerville',
-        'Alum Creek State Park nearby',
-        'Strong community programming',
-        'Family-friendly atmosphere',
-      ],
-      nearbyHospitals: [
-        'Mount Carmel St. Ann\'s',
-        'OhioHealth Westerville Medical Campus',
-        'Ohio State University Wexner Medical Center',
-      ],
-      averageCost: {
-        independentLiving: '$2,600 - $4,500',
-        assistedLiving: '$3,800 - $6,500',
-        memoryCare: '$5,200 - $8,500',
-      },
-    },
-  },
+  cities: columbusCitiesData,
   seo: {
     titleSuffix: 'Greater Columbus',
     defaultDescription: 'Explore senior living communities across Greater Columbus. Find assisted living, memory care, and independent living in Central Ohio.',

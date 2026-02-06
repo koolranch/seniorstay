@@ -649,6 +649,307 @@ export const clevelandCitiesData: Record<string, CityInfo> = {
     ]
   },
   
+  'akron': {
+    name: 'Akron',
+    slug: 'akron',
+    description: 'Akron, the Rubber City, is Summit County\'s largest city with 15+ senior living communities. Home to Summa Health and Akron General, Akron offers diverse and affordable care options from urban facilities to quiet suburban settings.',
+    highlights: [
+      'Home to Summa Health System and Akron General',
+      'Affordable cost of living compared to Cleveland proper',
+      'Cuyahoga Valley National Park nearby',
+      'University of Akron and cultural amenities',
+      'Strong public transportation via METRO RTA'
+    ],
+    nearbyHospitals: [
+      'Summa Health Akron Campus',
+      'Cleveland Clinic Akron General',
+      'Akron Children\'s Hospital',
+      'Western Reserve Hospital'
+    ],
+    averageCost: {
+      independentLiving: '$2,000 - $3,500',
+      assistedLiving: '$3,000 - $5,200',
+      memoryCare: '$4,200 - $7,000'
+    },
+    testimonials: [
+      {
+        text: "Akron offers great value for senior care. The proximity to Cuyahoga Valley National Park is a wonderful bonus for family outings.",
+        author: "Carol T.",
+        community: "Akron senior community"
+      }
+    ]
+  },
+  
+  'medina': {
+    name: 'Medina',
+    slug: 'medina',
+    description: 'Medina is a charming county seat known for its historic town square and strong community values. With 9 senior living communities, it offers a small-town atmosphere with easy access to Cleveland and Akron healthcare systems.',
+    highlights: [
+      'Historic Medina Square with shops and dining',
+      'Medina County seat with excellent services',
+      'Cleveland Clinic Medina Hospital',
+      'Beautiful parks and recreational areas',
+      'Easy I-71 access to Cleveland and Akron'
+    ],
+    nearbyHospitals: [
+      'Cleveland Clinic Medina Hospital',
+      'Summa Health Wadsworth-Rittman',
+      'Southwest General Health Center'
+    ],
+    averageCost: {
+      independentLiving: '$2,100 - $3,600',
+      assistedLiving: '$3,100 - $5,300',
+      memoryCare: '$4,400 - $7,200'
+    },
+    testimonials: [
+      {
+        text: "The small-town charm of Medina combined with modern healthcare makes it ideal for our parents.",
+        author: "Steven R.",
+        community: "Medina senior community"
+      }
+    ]
+  },
+  
+  'cuyahoga-falls': {
+    name: 'Cuyahoga Falls',
+    slug: 'cuyahoga-falls',
+    description: 'Cuyahoga Falls is a vibrant Summit County city bordering Akron with 8 senior living communities. Known for its beautiful falls on the Cuyahoga River and proximity to Cuyahoga Valley National Park, it offers nature-rich senior living.',
+    highlights: [
+      'Cuyahoga River gorge and waterfall',
+      'Adjacent to Cuyahoga Valley National Park',
+      'Blossom Music Center nearby',
+      'Strong community recreation programs',
+      'Convenient to Akron healthcare'
+    ],
+    nearbyHospitals: [
+      'Western Reserve Hospital',
+      'Summa Health Akron Campus',
+      'Cleveland Clinic Akron General'
+    ],
+    averageCost: {
+      independentLiving: '$2,100 - $3,600',
+      assistedLiving: '$3,200 - $5,400',
+      memoryCare: '$4,500 - $7,500'
+    },
+    testimonials: [
+      {
+        text: "The natural beauty around Cuyahoga Falls makes every day feel like a retreat. Mom loves the park views.",
+        author: "Janet P.",
+        community: "Cuyahoga Falls senior community"
+      }
+    ]
+  },
+  
+  'middleburg-heights': {
+    name: 'Middleburg Heights',
+    slug: 'middleburg-heights',
+    description: 'Middleburg Heights is a centrally located southwest suburb with 6 senior living communities. Its convenient position near I-71 and I-480 provides easy access to hospitals, shopping, and family throughout Greater Cleveland.',
+    highlights: [
+      'Central location at I-71 and I-480 interchange',
+      'Southwest General Health Center nearby',
+      'Southland Shopping Center',
+      'Strong community services',
+      'Safe residential neighborhoods'
+    ],
+    nearbyHospitals: [
+      'Southwest General Health Center',
+      'Cleveland Clinic Fairview Hospital',
+      'UH Parma Medical Center'
+    ],
+    averageCost: {
+      independentLiving: '$2,300 - $4,000',
+      assistedLiving: '$3,300 - $5,700',
+      memoryCare: '$4,700 - $7,800'
+    },
+    testimonials: [
+      {
+        text: "The central location means all of our family can visit easily, no matter which side of Cleveland they live on.",
+        author: "Frank M.",
+        community: "Middleburg Heights senior community"
+      }
+    ]
+  },
+  
+  'stow': {
+    name: 'Stow',
+    slug: 'stow',
+    description: 'Stow is a family-friendly Summit County city with 5 senior living communities. Known for its excellent parks system and proximity to both Cuyahoga Valley National Park and Akron healthcare, it offers a peaceful suburban setting.',
+    highlights: [
+      'Adjacent to Cuyahoga Valley National Park',
+      'Excellent Stow-Munroe Falls school district',
+      'Silver Springs Park and recreation',
+      'Close to Akron healthcare corridor',
+      'Growing retail and dining options'
+    ],
+    nearbyHospitals: [
+      'Western Reserve Hospital',
+      'Summa Health Akron Campus',
+      'Cleveland Clinic Akron General'
+    ],
+    averageCost: {
+      independentLiving: '$2,200 - $3,800',
+      assistedLiving: '$3,200 - $5,500',
+      memoryCare: '$4,500 - $7,500'
+    },
+    testimonials: [
+      {
+        text: "Stow's peaceful atmosphere and beautiful parks make it a wonderful place for senior living.",
+        author: "Barbara K.",
+        community: "Stow senior community"
+      }
+    ]
+  },
+  
+  'chardon': {
+    name: 'Chardon',
+    slug: 'chardon',
+    description: 'Chardon is the Geauga County seat, known for its charming town square and rural character. With 4 senior living communities, it offers a quieter pace of life while maintaining access to Cleveland\'s healthcare systems.',
+    highlights: [
+      'Charming historic town square',
+      'Geauga County seat with excellent services',
+      'Maple syrup capital of Ohio',
+      'Beautiful rural and wooded landscapes',
+      'Close to Lake County healthcare'
+    ],
+    nearbyHospitals: [
+      'UH Geauga Medical Center',
+      'Lake Health TriPoint Medical Center',
+      'Cleveland Clinic Hillcrest Hospital'
+    ],
+    averageCost: {
+      independentLiving: '$2,000 - $3,500',
+      assistedLiving: '$3,000 - $5,200',
+      memoryCare: '$4,200 - $7,000'
+    },
+    testimonials: [
+      {
+        text: "The peaceful, rural setting of Chardon is exactly what Dad wanted. He loves the slower pace and friendly community.",
+        author: "Mary W.",
+        community: "Chardon senior community"
+      }
+    ]
+  },
+  
+  'north-ridgeville': {
+    name: 'North Ridgeville',
+    slug: 'north-ridgeville',
+    description: 'North Ridgeville is one of the fastest-growing cities in Lorain County with 4 senior living communities. Its location along I-480 and Route 83 provides convenient access to both Cleveland and Elyria healthcare.',
+    highlights: [
+      'One of Ohio\'s fastest-growing cities',
+      'Convenient I-480 and Route 83 access',
+      'Growing retail and dining corridor',
+      'Safe residential neighborhoods',
+      'Strong community programs'
+    ],
+    nearbyHospitals: [
+      'UH St. John Medical Center',
+      'Cleveland Clinic Avon Hospital',
+      'UH Elyria Medical Center'
+    ],
+    averageCost: {
+      independentLiving: '$2,300 - $4,000',
+      assistedLiving: '$3,200 - $5,500',
+      memoryCare: '$4,500 - $7,500'
+    },
+    testimonials: [
+      {
+        text: "North Ridgeville gives us the best of both worlds — suburban quiet with easy access to Cleveland hospitals.",
+        author: "Dennis H.",
+        community: "North Ridgeville senior community"
+      }
+    ]
+  },
+  
+  'lorain': {
+    name: 'Lorain',
+    slug: 'lorain',
+    description: 'Lorain is a diverse Lake Erie port city and Lorain County seat with 4 senior living communities. It offers affordable senior care options with waterfront living and a rich multicultural heritage.',
+    highlights: [
+      'Lake Erie waterfront and Lakeview Park',
+      'Lorain County seat with full services',
+      'Diverse multicultural community',
+      'Affordable cost of living',
+      'Rich industrial and maritime heritage'
+    ],
+    nearbyHospitals: [
+      'UH Elyria Medical Center',
+      'Mercy Regional Medical Center',
+      'Cleveland Clinic Avon Hospital'
+    ],
+    averageCost: {
+      independentLiving: '$1,800 - $3,200',
+      assistedLiving: '$2,800 - $4,800',
+      memoryCare: '$4,000 - $6,500'
+    },
+    testimonials: [
+      {
+        text: "The waterfront setting and affordable pricing made Lorain a great choice for our family.",
+        author: "Rosa M.",
+        community: "Lorain senior community"
+      }
+    ]
+  },
+  
+  'euclid': {
+    name: 'Euclid',
+    slug: 'euclid',
+    description: 'Euclid is a diverse east-side suburb with 4 senior living communities along the Lake Erie shore. Its location provides convenient access to Cleveland Clinic and University Hospitals east-side campuses.',
+    highlights: [
+      'Lake Erie shoreline and Sims Park',
+      'Euclid Avenue historic corridor',
+      'Convenient to Cleveland Clinic east-side',
+      'Shore Cultural Centre activities',
+      'Affordable east-side option'
+    ],
+    nearbyHospitals: [
+      'Cleveland Clinic Euclid Hospital',
+      'UH Richmond Medical Center',
+      'Cleveland Clinic Hillcrest Hospital'
+    ],
+    averageCost: {
+      independentLiving: '$2,000 - $3,500',
+      assistedLiving: '$3,000 - $5,000',
+      memoryCare: '$4,200 - $7,000'
+    },
+    testimonials: [
+      {
+        text: "Having Euclid Hospital right here in the neighborhood gives us peace of mind for Mom's care.",
+        author: "James L.",
+        community: "Euclid senior community"
+      }
+    ]
+  },
+  
+  'tallmadge': {
+    name: 'Tallmadge',
+    slug: 'tallmadge',
+    description: 'Tallmadge is a historic Summit County city with 4 senior living communities, known for its New England-style town green. It offers a charming small-town setting with convenient access to Akron healthcare.',
+    highlights: [
+      'Historic New England-style town circle',
+      'Close to Akron healthcare systems',
+      'Strong community programming',
+      'Safe residential neighborhoods',
+      'Convenient to I-76 and Route 91'
+    ],
+    nearbyHospitals: [
+      'Summa Health Akron Campus',
+      'Cleveland Clinic Akron General',
+      'Western Reserve Hospital'
+    ],
+    averageCost: {
+      independentLiving: '$2,100 - $3,600',
+      assistedLiving: '$3,100 - $5,300',
+      memoryCare: '$4,400 - $7,200'
+    },
+    testimonials: [
+      {
+        text: "Tallmadge's small-town atmosphere and historic charm make it a wonderful place for Dad to enjoy his retirement.",
+        author: "Lisa G.",
+        community: "Tallmadge senior community"
+      }
+    ]
+  },
+  
   'mentor': {
     name: 'Mentor',
     slug: 'mentor',

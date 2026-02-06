@@ -96,16 +96,20 @@ type SitemapEntry = {
   priority?: number;
 };
 
-// Extract unique cities from communities data
+// Extract unique cities from communities data (case-insensitive dedup)
 const getUniqueCities = (communities: Community[]): string[] => {
-  const cities = communities.map(community => {
-    return community.location.split(',')[0].trim();
-  });
-
-  return Array.from(new Set(cities));
+  const seen = new Set<string>();
+  return communities
+    .map(c => c.location.split(',')[0].trim())
+    .filter(city => {
+      const lower = city.toLowerCase();
+      if (seen.has(lower)) return false;
+      seen.add(lower);
+      return true;
+    });
 };
 
-// Create slugs for all cities
+// Create slugs for all cities (case-insensitive dedup)
 const createCitySlugs = (communities: Community[]): string[] => {
   const cities = getUniqueCities(communities);
   return cities.map(city => city.toLowerCase().replace(/\s+/g, '-'));
@@ -195,7 +199,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   regionSlugs.forEach((regionSlug, index) => {
     const communities = regionCommunitiesArrays[index];
     const events = regionEventsArrays[index] || [];
-    const citySlugs = createCitySlugs(communities);
+    
+    // SEO FIX: Use city slugs from CONFIG (not from DB data) to prevent
+    // ghost city URLs from appearing in sitemap when DB has bad data
+    const configCitySlugs = getRegionCitySlugs(regionSlug);
     
     // Region hub page
     regionEntries.push({
@@ -224,8 +231,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       });
     });
     
-    // City pages for region
-    citySlugs.forEach(citySlug => {
+    // City pages for region (from config, not DB — prevents ghost URLs)
+    configCitySlugs.forEach(citySlug => {
       regionEntries.push({
         url: `${baseUrl}/${regionSlug}/${citySlug}`,
         lastModified: currentDate,
