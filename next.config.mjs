@@ -466,6 +466,13 @@ const nextConfig = {
         permanent: true,
       },
       
+      // /ohio/:city -> /cleveland/:city (state-based URLs redirect to metro region)
+      {
+        source: '/ohio/:city',
+        destination: '/cleveland/:city',
+        permanent: true,
+      },
+      
       // Old /assisted-living/ohio/* URL structure
       {
         source: '/assisted-living/ohio/:city',

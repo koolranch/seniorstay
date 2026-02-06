@@ -618,6 +618,37 @@ export const clevelandCitiesData: Record<string, CityInfo> = {
     ]
   },
   
+  'berea': {
+    name: 'Berea',
+    slug: 'berea',
+    description: 'Berea is a charming southwest suburb known as the home of Baldwin Wallace University. This tight-knit community offers affordable senior living options with easy access to Cleveland Metroparks and quality healthcare.',
+    highlights: [
+      'Home to Baldwin Wallace University',
+      'Cleveland Metroparks Rocky River Reservation nearby',
+      'Affordable cost of living',
+      'Historic downtown with local shops and dining',
+      'Easy I-71 access to Cleveland and Akron'
+    ],
+    nearbyHospitals: [
+      'Southwest General Health Center',
+      'UH St. John Medical Center',
+      'Cleveland Clinic Fairview Hospital',
+      'MetroHealth Medical Center'
+    ],
+    averageCost: {
+      independentLiving: '$2,200 - $3,800',
+      assistedLiving: '$3,200 - $5,500',
+      memoryCare: '$4,500 - $7,500'
+    },
+    testimonials: [
+      {
+        text: "The smaller-town feel of Berea combined with proximity to Cleveland's hospitals made it the right choice for our family.",
+        author: "Nancy D.",
+        community: "Berea senior community"
+      }
+    ]
+  },
+  
   'mentor': {
     name: 'Mentor',
     slug: 'mentor',
