@@ -7,6 +7,7 @@ import LocationCard from '@/components/property/LocationCard';
 import StickyTourButton from '@/components/tour/StickyTourButton';
 import { fetchAllCommunities } from '@/lib/fetch-community';
 import SimpleContactForm from '@/components/forms/SimpleContactForm';
+import CostComparisonTable from '@/components/widgets/CostComparisonTable';
 
 // ISR: Revalidate every hour
 export const revalidate = 3600;
@@ -90,6 +91,14 @@ export default async function AssistedLivingClevelandPage() {
           </div>
         </div>
       </section>
+
+      {/* Cost Comparison Table -- immediate value for search visitors */}
+      <CostComparisonTable
+        communities={assistedLivingCommunities}
+        careType="Assisted Living"
+        regionSlug="cleveland"
+        maxRows={12}
+      />
 
       {/* What is Assisted Living Section */}
       <section id="guide" className="py-16 md:py-20 bg-white">

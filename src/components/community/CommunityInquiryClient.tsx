@@ -108,6 +108,7 @@ export default function CommunityInquiryClient({
         communityName={communityName}
         communityId={communityId}
         sourceSlug={sourceSlug}
+        citySlug={citySlug}
         disabled={inquiryOpen || advisorOpen}
       />
     </>

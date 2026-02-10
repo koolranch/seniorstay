@@ -21,6 +21,7 @@ import CityLeadMagnet from '@/components/location/CityLeadMagnet';
 import CareTypeNav from '@/components/location/CareTypeNav';
 import LocalAuthorityProse from '@/components/location/LocalAuthorityProse';
 import NeighborhoodEvents from '@/components/events/NeighborhoodEvents';
+import SavedCommunitiesBar from '@/components/community/SavedCommunitiesBar';
 
 interface CityLocationClientProps {
   cityName: string;
@@ -53,7 +54,7 @@ export default function CityLocationClient({
   const isHospitalDischarge = citySlug === 'westlake';
   const isMemoryCareHub = citySlug === 'beachwood';
 
-  // Get featured communities (top 3)
+  // Get featured communities (top 9 -- show more above the fold to reduce bounce)
   const featuredCommunities = useMemo(() => {
     return communities
       .filter(c => 
@@ -62,7 +63,7 @@ export default function CityLocationClient({
           t.toLowerCase().includes('memory care')
         ) && c.description && !c.images[0]?.includes('placeholder')
       )
-      .slice(0, 3);
+      .slice(0, 9);
   }, [communities]);
 
   // All remaining communities
@@ -182,62 +183,7 @@ export default function CityLocationClient({
         </div>
       </section>
 
-      {/* SECTION 2: LEAD MAGNET */}
-      <CityLeadMagnet 
-        cityName={cityName} 
-        citySlug={citySlug} 
-        isHospitalDischarge={isHospitalDischarge}
-      />
-
-      {/* SECTION 3: LOCAL AUTHORITY CONTEXT */}
-      <LocalAuthorityProse
-        cityName={cityName}
-        citySlug={citySlug}
-        cityData={cityData || undefined}
-        communityCount={totalCommunities}
-        isHospitalDischarge={isHospitalDischarge}
-      />
-
-      {/* SECTION 4: CARE TYPE NAVIGATION */}
-      <CareTypeNav
-        cityName={cityName}
-        citySlug={citySlug}
-        careTypeCounts={careTypeCounts}
-      />
-
-      {/* SECTION 5: AFFORDABILITY CALCULATOR */}
-      <section id="affordability-calculator" className="bg-slate-50 py-12 border-y border-slate-200">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-8">
-            <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-3">
-              Is Senior Living Affordable in {cityName}?
-            </h2>
-            <p className="text-slate-600 max-w-2xl mx-auto">
-              Compare the true cost of staying home vs. all-inclusive senior living. Many families are surprised.
-            </p>
-          </div>
-          <AffordabilityCalculator defaultCity={citySlug} />
-        </div>
-      </section>
-
-      {/* SECTION 6: MAP SECTION */}
-      <section className="bg-white py-12 border-b border-slate-200">
-        <div className="container mx-auto px-4">
-          <h2 className="text-2xl font-bold text-slate-900 mb-6">
-            {cityName} Senior Living Locations
-          </h2>
-          <div className="rounded-2xl overflow-hidden border border-slate-200 shadow-lg">
-            <MapComponent
-              communities={communities}
-              height="400px"
-              center={mapCenter || undefined}
-              zoom={12}
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* SECTION 7: COMMUNITY LISTINGS */}
+      {/* SECTION 2: COMMUNITY LISTINGS (moved up -- value first, forms second) */}
       <section id="communities" className="py-12 bg-slate-50">
         <div className="container mx-auto px-4">
           {/* Featured Communities */}
@@ -288,6 +234,61 @@ export default function CityLocationClient({
           </div>
         </div>
       </section>
+
+      {/* SECTION 3: CARE TYPE NAVIGATION */}
+      <CareTypeNav
+        cityName={cityName}
+        citySlug={citySlug}
+        careTypeCounts={careTypeCounts}
+      />
+
+      {/* SECTION 4: MAP */}
+      <section className="bg-white py-12 border-b border-slate-200">
+        <div className="container mx-auto px-4">
+          <h2 className="text-2xl font-bold text-slate-900 mb-6">
+            {cityName} Senior Living Locations
+          </h2>
+          <div className="rounded-2xl overflow-hidden border border-slate-200 shadow-lg">
+            <MapComponent
+              communities={communities}
+              height="400px"
+              center={mapCenter || undefined}
+              zoom={12}
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION 5: AFFORDABILITY CALCULATOR */}
+      <section id="affordability-calculator" className="bg-slate-50 py-12 border-y border-slate-200">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-3">
+              Is Senior Living Affordable in {cityName}?
+            </h2>
+            <p className="text-slate-600 max-w-2xl mx-auto">
+              Compare the true cost of staying home vs. all-inclusive senior living. Many families are surprised.
+            </p>
+          </div>
+          <AffordabilityCalculator defaultCity={citySlug} />
+        </div>
+      </section>
+
+      {/* SECTION 6: LEAD MAGNET (moved down -- value before forms) */}
+      <CityLeadMagnet 
+        cityName={cityName} 
+        citySlug={citySlug} 
+        isHospitalDischarge={isHospitalDischarge}
+      />
+
+      {/* SECTION 7: LOCAL AUTHORITY CONTEXT */}
+      <LocalAuthorityProse
+        cityName={cityName}
+        citySlug={citySlug}
+        cityData={cityData || undefined}
+        communityCount={totalCommunities}
+        isHospitalDischarge={isHospitalDischarge}
+      />
 
       {/* SECTION 8: COMMUNITY COMPARISON TABLE */}
       {communities.length > 1 && (
@@ -447,6 +448,7 @@ export default function CityLocationClient({
       {/* Floating Components */}
       <ComparisonFloatingButton />
       <StickyCalculatorCTA cityName={cityName} />
+      <SavedCommunitiesBar />
 
       <Footer />
     </main>

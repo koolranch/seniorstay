@@ -23,6 +23,9 @@ import SimilarCommunities from '@/components/community/SimilarCommunities';
 import CareNeedsQuiz from '@/components/community/CareNeedsQuiz';
 import MapComponent from '@/components/map/GoogleMap';
 import CommunityInquiryClient from '@/components/community/CommunityInquiryClient';
+import WhatToExpectCard from '@/components/community/WhatToExpectCard';
+import SaveHeartButton from '@/components/community/SaveHeartButton';
+import SavedCommunitiesBar from '@/components/community/SavedCommunitiesBar';
 
 // ISR: Revalidate every hour
 export const revalidate = 3600;
@@ -321,9 +324,16 @@ export default async function CommunityPage({ params }: CommunityPageProps) {
             Back to {cityName}
           </Link>
           
-          <button className="absolute top-4 right-4 z-10 p-3 rounded-full backdrop-blur-md bg-black/30 hover:bg-black/50 transition-colors">
-            <Heart className="h-5 w-5 text-white" />
-          </button>
+          <div className="absolute top-4 right-4 z-10">
+            <SaveHeartButton
+              communityId={community.id}
+              communityName={cleanDisplayName}
+              location={community.location}
+              careTypes={community.careTypes}
+              image={community.images?.[0]}
+              className="backdrop-blur-md bg-black/30 hover:bg-black/50 text-white"
+            />
+          </div>
           
           <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 z-10">
             <div className="container mx-auto">
@@ -536,7 +546,12 @@ export default async function CommunityPage({ params }: CommunityPageProps) {
             </div>
           </div>
 
-          {/* Card 6: Location & Map */}
+          {/* Card 6: What to Expect */}
+          {!isOnlySkilledNursing && (
+            <WhatToExpectCard careTypes={community.careTypes} />
+          )}
+
+          {/* Card 7: Location & Map */}
           <div className="lg:col-span-3 rounded-2xl p-6 border bg-white" style={{ borderColor: 'rgba(0,0,0,0.08)' }}>
             <h2 className="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
               <MapPin className="h-5 w-5" style={{ color: '#8DA399' }} />
@@ -596,6 +611,9 @@ export default async function CommunityPage({ params }: CommunityPageProps) {
           communityName={community.name}
         />
       )}
+
+      {/* Saved Communities Floating Bar */}
+      <SavedCommunitiesBar />
     </div>
   );
 }
