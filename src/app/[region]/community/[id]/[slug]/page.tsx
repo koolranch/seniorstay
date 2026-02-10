@@ -4,8 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { 
   Hospital, MapPin, Shield, Clock, Star, Check, 
-  Phone, Calendar, Users, Award, ArrowRight, 
-  Building2, Heart, Stethoscope, Home
+  Award, ArrowRight, Building2, Heart, Stethoscope, Home
 } from 'lucide-react';
 import { fetchCommunityById, fetchCommunityBySlug, fetchCommunitiesByRegion } from '@/lib/fetch-community';
 import { findNearestHospital, getNearestHospitalForCity } from '@/lib/hospital-proximity';
@@ -13,16 +12,14 @@ import { getNeighborhoodHubData } from '@/data/neighborhood-hub-data';
 import { 
   isValidRegion, 
   getRegionConfig, 
-  getAllRegionSlugs,
   getRegionPhoneNumber 
 } from '@/data/regions';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from '@/components/ui/carousel';
-import NeighborhoodEvents from '@/components/events/NeighborhoodEvents';
+import ConditionalNeighborhoodEvents from '@/components/events/ConditionalNeighborhoodEvents';
 import StickyLeadCapture from '@/components/community/StickyLeadCapture';
 import SimilarCommunities from '@/components/community/SimilarCommunities';
-import CommunityContact from '@/components/community/CommunityContact';
 import CareNeedsQuiz from '@/components/community/CareNeedsQuiz';
 import MapComponent from '@/components/map/GoogleMap';
 import CommunityInquiryClient from '@/components/community/CommunityInquiryClient';
@@ -222,6 +219,40 @@ export default async function CommunityPage({ params }: CommunityPageProps) {
     ]
   };
 
+  // Clean display name: strip redundant city/state/care-type suffixes
+  // e.g. "Arden Courts of Westlake, Westlake, OH - Memory Care (Assisted Living)" → "Arden Courts of Westlake"
+  const cleanDisplayName = (() => {
+    let name = community.name;
+    // Remove trailing location like ", Westlake, OH" or ", Cleveland, OH"
+    name = name.replace(/,\s*[A-Za-z\s]+,\s*[A-Z]{2}\s*[-–].*$/, '');
+    // Remove trailing " - Care Type (Care Type)" patterns
+    name = name.replace(/\s*[-–]\s*(Memory Care|Assisted Living|Independent Living|Skilled Nursing).*$/i, '');
+    // Remove trailing ", City, ST" without the dash
+    name = name.replace(/,\s*[A-Za-z\s]+,\s*[A-Z]{2}\s*$/, '');
+    return name.trim() || community.name;
+  })();
+
+  // Estimated pricing ranges by city and care type
+  const PRICING_RANGES: Record<string, { assisted_living: [number, number]; memory_care: [number, number] }> = {
+    beachwood: { assisted_living: [5500, 8200], memory_care: [6500, 9500] },
+    westlake: { assisted_living: [4800, 7200], memory_care: [6000, 8800] },
+    'shaker heights': { assisted_living: [5200, 7800], memory_care: [6200, 9000] },
+    'rocky river': { assisted_living: [4600, 7000], memory_care: [5800, 8500] },
+    parma: { assisted_living: [3800, 5800], memory_care: [5000, 7500] },
+    lakewood: { assisted_living: [4200, 6500], memory_care: [5500, 8000] },
+    strongsville: { assisted_living: [4400, 6800], memory_care: [5600, 8200] },
+    mentor: { assisted_living: [4000, 6200], memory_care: [5200, 7800] },
+    solon: { assisted_living: [4800, 7200], memory_care: [6000, 8600] },
+    cleveland: { assisted_living: [3500, 6500], memory_care: [4800, 8000] },
+  };
+
+  const cityKey = citySlug.replace(/-/g, ' ');
+  const pricingData = PRICING_RANGES[cityKey] || PRICING_RANGES['cleveland'];
+  const hasMemoryCare = community.careTypes.some(t => t.toLowerCase().includes('memory'));
+  const hasAssistedLiving = community.careTypes.some(t => t.toLowerCase().includes('assisted'));
+  const primaryPricing = hasMemoryCare ? pricingData.memory_care : pricingData.assisted_living;
+  const primaryPricingLabel = hasMemoryCare ? 'Memory Care' : hasAssistedLiving ? 'Assisted Living' : 'Senior Living';
+
   // Medical system colors for badges
   const getSystemColor = (system: string) => {
     const colors: Record<string, string> = {
@@ -262,8 +293,11 @@ export default async function CommunityPage({ params }: CommunityPageProps) {
                 ))
               ) : (
                 <CarouselItem className="h-full">
-                  <div className="relative w-full h-[40vh] md:h-[50vh] bg-gradient-to-br from-slate-800 to-slate-900 flex items-center justify-center">
-                    <Building2 className="h-24 w-24 text-slate-600" />
+                  <div className="relative w-full h-[40vh] md:h-[50vh] bg-gradient-to-br from-slate-700 via-teal-900/60 to-slate-800 flex items-center justify-center">
+                    <div className="text-center">
+                      <Building2 className="h-16 w-16 text-white/20 mx-auto mb-3" />
+                      <p className="text-white/30 text-sm font-medium">Photos coming soon</p>
+                    </div>
                   </div>
                 </CarouselItem>
               )}
@@ -301,7 +335,7 @@ export default async function CommunityPage({ params }: CommunityPageProps) {
                 ))}
               </div>
               <h1 className="text-2xl md:text-4xl font-bold text-white mb-2">
-                {community.name}
+                {cleanDisplayName}
               </h1>
               <div className="flex flex-wrap items-center gap-4 text-white/90">
                 <span className="flex items-center gap-1.5">
@@ -382,12 +416,46 @@ export default async function CommunityPage({ params }: CommunityPageProps) {
             </div>
           )}
 
-          {/* Card 2: Care Needs Quiz */}
-          <CareNeedsQuiz communityName={community.name} cityName={cityName} />
+          {/* Card 2: Estimated Pricing */}
+          {!isOnlySkilledNursing && (
+            <div className="rounded-2xl p-6 border bg-white" style={{ borderColor: 'rgba(0,0,0,0.08)' }}>
+              <div className="flex items-start gap-3 mb-4">
+                <div className="p-2.5 rounded-xl shrink-0 bg-amber-50">
+                  <svg className="h-5 w-5 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-slate-900 mb-0.5">Estimated Pricing</h3>
+                  <p className="text-xs text-slate-500">{primaryPricingLabel} in {cityName}, {regionConfig.stateAbbr}</p>
+                </div>
+              </div>
+              <div className="text-center py-3">
+                <p className="text-3xl font-bold text-slate-900">
+                  ${primaryPricing[0].toLocaleString()} <span className="text-slate-400 font-normal text-lg">–</span> ${primaryPricing[1].toLocaleString()}
+                </p>
+                <p className="text-sm text-slate-500 mt-1">per month</p>
+              </div>
+              {hasMemoryCare && hasAssistedLiving && (
+                <div className="mt-3 pt-3 border-t border-slate-100">
+                  <div className="flex justify-between text-sm">
+                    <span className="text-slate-500">Assisted Living</span>
+                    <span className="font-medium text-slate-700">${pricingData.assisted_living[0].toLocaleString()} – ${pricingData.assisted_living[1].toLocaleString()}/mo</span>
+                  </div>
+                </div>
+              )}
+              <p className="text-xs text-slate-400 mt-3 text-center">
+                Actual costs vary. Contact us for personalized pricing.
+              </p>
+            </div>
+          )}
 
-          {/* Card 2.5: Inquiry / Ask a Question */}
+          {/* Card 3: Care Needs Quiz */}
+          <CareNeedsQuiz communityName={cleanDisplayName} cityName={cityName} />
+
+          {/* Card 4: Inquiry / Ask a Question */}
           <CommunityInquiryClient
-            communityName={community.name}
+            communityName={cleanDisplayName}
             communityId={community.id}
             communityImage={community.images?.[0]}
             careTypes={community.careTypes}
@@ -430,22 +498,8 @@ export default async function CommunityPage({ params }: CommunityPageProps) {
             )}
           </div>
 
-          {/* Card 4: Neighborhood Events */}
-          <div className="rounded-2xl overflow-hidden border bg-white" style={{ borderColor: 'rgba(0,0,0,0.08)' }}>
-            <div className="px-5 py-4 border-b" style={{ backgroundColor: 'rgba(141, 163, 153, 0.08)' }}>
-              <h3 className="font-semibold flex items-center gap-2 text-slate-900">
-                <Calendar className="h-5 w-5" style={{ color: '#8DA399' }} />
-                Neighborhood Pulse
-              </h3>
-              <p className="text-xs text-slate-500 mt-0.5">Upcoming events in {cityName}</p>
-            </div>
-            <NeighborhoodEvents 
-              neighborhood={cityName} 
-              limit={2}
-              showHeader={false}
-              className="border-0 shadow-none rounded-none"
-            />
-          </div>
+          {/* Card: Neighborhood Events (hidden if none) */}
+          <ConditionalNeighborhoodEvents neighborhood={cityName} limit={2} />
 
           {/* Card 5: Care Types & Amenities */}
           <div className="lg:col-span-2 rounded-2xl p-6 border bg-white" style={{ borderColor: 'rgba(0,0,0,0.08)' }}>
@@ -531,13 +585,6 @@ export default async function CommunityPage({ params }: CommunityPageProps) {
 
         </div>
       </section>
-
-      {/* Contact Section */}
-      {!isOnlySkilledNursing && (
-        <section className="container mx-auto px-4 py-8">
-          <CommunityContact community={community} />
-        </section>
-      )}
 
       {/* Similar Communities */}
       <SimilarCommunities community={community} allCommunities={allCommunities} />

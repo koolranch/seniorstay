@@ -34,7 +34,7 @@ export default function FloatingInquiryButton({ onClick, hidden = false }: Float
     <AnimatePresence>
       {isVisible && (
         <motion.div
-          className="fixed bottom-24 right-5 z-40 md:bottom-6 md:right-6"
+          className="fixed bottom-32 right-5 z-40 md:bottom-8 md:right-6"
           initial={{ opacity: 0, scale: 0.8, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.8, y: 20 }}
