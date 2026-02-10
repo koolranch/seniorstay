@@ -49,6 +49,9 @@ const VALID_PAGE_TYPES: readonly string[] = [
   'homepage',
   'pricing_guide',
   'blog',
+  'advisor_request',
+  'community_inquiry',
+  'exit_intent_inquiry',
   'other',
   ''
 ];
@@ -550,7 +553,14 @@ async function sendLeadNotificationEmail(lead: {
     const cityName = formatCityName(lead.sourceSlug);
     const priorityLabel = lead.urgencyScore > 80 ? '🚨 HIGH PRIORITY' : lead.urgencyScore > 30 ? '⚡ Normal' : '📝 Low';
     
-    const subject = `New Lead: ${lead.fullName} - ${lead.careType || 'Senior Living'} (${cityName})`;
+    // Determine type-specific subject line
+    const pageTypeLabels: Record<string, string> = {
+      advisor_request: 'Advisor Request',
+      community_inquiry: 'Community Inquiry',
+      exit_intent_inquiry: 'Quick Inquiry',
+    };
+    const typeLabel = (lead.pageType && pageTypeLabels[lead.pageType]) || 'New Lead';
+    const subject = `${typeLabel}: ${lead.fullName} - ${lead.careType || 'Senior Living'} (${cityName})`;
     
     const htmlContent = `
 <!DOCTYPE html>
@@ -567,11 +577,13 @@ async function sendLeadNotificationEmail(lead: {
     .priority-normal { color: #f59e0b; }
     .priority-low { color: #6b7280; }
     .cta { background: #0f766e; color: white; padding: 12px 24px; text-decoration: none; display: inline-block; margin-top: 20px; border-radius: 6px; }
+    .inquiry-box { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 16px; margin-bottom: 15px; }
+    .inquiry-label { font-weight: bold; color: #15803d; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; }
   </style>
 </head>
 <body>
   <div class="header">
-    <h1 style="margin:0;">New Lead Submitted</h1>
+    <h1 style="margin:0;">${typeLabel}</h1>
     <p style="margin:5px 0 0;">${priorityLabel}</p>
   </div>
   <div class="content">

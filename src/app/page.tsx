@@ -1,10 +1,14 @@
 import { Metadata } from 'next';
 import GlobalHeader from '@/components/home/GlobalHeader';
-import Hero from '@/components/home/Hero';
+import HeroRefresh from '@/components/home/HeroRefresh';
+import ValueProps from '@/components/home/ValueProps';
 import CareTypes from '@/components/home/CareTypes';
 import Neighborhoods from '@/components/home/Neighborhoods';
+import PersonalizedPlanCTA from '@/components/home/PersonalizedPlanCTA';
+import AdvisorSection from '@/components/home/AdvisorSection';
 import LeadMagnet from '@/components/home/LeadMagnet';
 import TrustSection from '@/components/home/TrustSection';
+import HomeFAQ from '@/components/home/HomeFAQ';
 import Footer from '@/components/footer/Footer';
 import { fetchAllCommunities } from '@/lib/fetch-community';
 
@@ -178,23 +182,35 @@ export default async function HomePage() {
       />
 
       <main className="min-h-screen flex flex-col">
-        {/* A. Global Header - Clean logo + CTA */}
+        {/* A. Global Header */}
         <GlobalHeader />
 
-        {/* B. Hero Section - Single H1, Search Bar UI */}
-        <Hero />
+        {/* B. Hero Section - Refreshed with animated text rotation */}
+        <HeroRefresh />
 
-        {/* C. Care Type Authority Clusters (The "Silos") */}
+        {/* C. Value Propositions - 3 key benefits */}
+        <ValueProps />
+
+        {/* D. Care Type Authority Clusters */}
         <CareTypes />
 
-        {/* D. Hyper-Local SEO Section - Cleveland Neighborhoods with Interactive Map */}
+        {/* E. Hyper-Local SEO Section - Cleveland Neighborhoods */}
         <Neighborhoods communities={allCommunities} />
 
-        {/* E. Lead Magnet Section (The Lead Gen Engine) */}
+        {/* F. Personalized Care Plan CTA */}
+        <PersonalizedPlanCTA />
+
+        {/* G. Talk to an Advisor Section */}
+        <AdvisorSection />
+
+        {/* H. Lead Magnet Section */}
         <LeadMagnet />
 
-        {/* F. Trust/Social Proof Section */}
+        {/* I. Trust/Social Proof Section */}
         <TrustSection />
+
+        {/* J. FAQ Section */}
+        <HomeFAQ />
 
         {/* Footer */}
         <Footer />

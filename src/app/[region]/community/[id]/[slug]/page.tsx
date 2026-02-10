@@ -25,6 +25,7 @@ import SimilarCommunities from '@/components/community/SimilarCommunities';
 import CommunityContact from '@/components/community/CommunityContact';
 import CareNeedsQuiz from '@/components/community/CareNeedsQuiz';
 import MapComponent from '@/components/map/GoogleMap';
+import CommunityInquiryClient from '@/components/community/CommunityInquiryClient';
 
 // ISR: Revalidate every hour
 export const revalidate = 3600;
@@ -383,6 +384,17 @@ export default async function CommunityPage({ params }: CommunityPageProps) {
 
           {/* Card 2: Care Needs Quiz */}
           <CareNeedsQuiz communityName={community.name} cityName={cityName} />
+
+          {/* Card 2.5: Inquiry / Ask a Question */}
+          <CommunityInquiryClient
+            communityName={community.name}
+            communityId={community.id}
+            communityImage={community.images?.[0]}
+            careTypes={community.careTypes}
+            overallRating={community.overallRating}
+            sourceSlug={`${region}/${citySlug}`}
+            citySlug={citySlug}
+          />
 
           {/* Card 3: Expert Take / About */}
           <div className="lg:col-span-2 rounded-2xl p-6 border bg-white" style={{ borderColor: 'rgba(0,0,0,0.08)' }}>
