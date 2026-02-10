@@ -14,6 +14,7 @@ import { Community } from '@/data/facilities';
 import { getCommunityImage } from '@/lib/communityImages';
 import CommunityImage from '@/components/ui/CommunityImage';
 import { submitLead } from '@/app/actions/leads';
+import TourSchedulerForm from '@/components/tour/TourSchedulerForm';
 
 interface LocationCardProps {
   community: Community;
@@ -339,7 +340,7 @@ export default function LocationCard({ community, compact = false, regionSlug }:
               </DialogContent>
             </Dialog>
 
-            {/* Schedule Tour Button - High contrast CTA, 48px+ height */}
+            {/* Schedule Tour Button - Opens date/time picker */}
             <Dialog>
               <DialogTrigger asChild>
                 <Button 
@@ -349,51 +350,16 @@ export default function LocationCard({ community, compact = false, regionSlug }:
                   Schedule Tour
                 </Button>
               </DialogTrigger>
-              <DialogContent className="max-w-md mx-auto">
+              <DialogContent className="max-w-md mx-auto max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
-                  <DialogTitle>Schedule a Tour</DialogTitle>
+                  <DialogTitle>Schedule a Tour at {communityName}</DialogTitle>
                 </DialogHeader>
-
-                {!tourSubmitted ? (
-                  <form onSubmit={handleTourSubmit} className="space-y-4 pt-4">
-                    <div className="space-y-2">
-                      <Label htmlFor={`${formId}-tour-name`} className="text-base font-semibold text-gray-800">Your Name</Label>
-                      <Input id={`${formId}-tour-name`} name="name" required placeholder="Enter your full name" className="h-12 text-base" />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor={`${formId}-tour-phone`} className="text-base font-semibold text-gray-800">Phone Number</Label>
-                      <Input id={`${formId}-tour-phone`} name="phone" type="tel" required placeholder="(555) 555-5555" className="h-12 text-base" />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor={`${formId}-tour-email`} className="text-base font-semibold text-gray-800">Email</Label>
-                      <Input id={`${formId}-tour-email`} name="email" type="email" required placeholder="your@email.com" className="h-12 text-base" />
-                    </div>
-
-                    <Button 
-                      type="submit" 
-                      className="w-full min-h-[48px] h-12 text-base font-bold" 
-                      disabled={isTourSubmitting}
-                    >
-                      {isTourSubmitting ? 'Sending...' : 'Request Tour'}
-                    </Button>
-                    <p className="text-xs text-gray-500 text-center">We'll call you within 24 hours to schedule your visit.</p>
-                  </form>
-                ) : (
-                  <div className="pt-4 text-center space-y-4">
-                    <div className="rounded-full bg-green-100 w-16 h-16 mx-auto flex items-center justify-center">
-                      <Clock className="h-8 w-8 text-green-600" />
-                    </div>
-                    <h3 className="font-medium text-lg">Tour Request Sent!</h3>
-                    <p className="text-gray-600">
-                      Thank you for scheduling a tour at {communityName}. A representative will contact you shortly to confirm your tour date and time.
-                    </p>
-                    <Button variant="outline" onClick={() => setTourSubmitted(false)}>
-                      Request Another Tour
-                    </Button>
-                  </div>
-                )}
+                <TourSchedulerForm
+                  communityName={communityName}
+                  communityId={communityId}
+                  communityLocation={communityLocation}
+                  sourceSlug={community.id}
+                />
               </DialogContent>
             </Dialog>
           </div>
