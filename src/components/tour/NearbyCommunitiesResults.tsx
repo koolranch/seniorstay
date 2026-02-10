@@ -161,7 +161,7 @@ export default function NearbyCommunitiesResults({
                     </Button>
                     <Button
                       onClick={() => onScheduleTour(community)}
-                      className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold"
+                      className="w-full bg-teal-600 hover:bg-teal-700 text-white font-semibold"
                     >
                       Schedule Tour
                     </Button>

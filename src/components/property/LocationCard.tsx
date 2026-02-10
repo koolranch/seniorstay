@@ -344,7 +344,7 @@ export default function LocationCard({ community, compact = false, regionSlug }:
               <DialogTrigger asChild>
                 <Button 
                   variant="default" 
-                  className="w-full min-h-[48px] py-3 text-base font-bold bg-orange-500 hover:bg-orange-600 text-white shadow-md"
+                  className="w-full min-h-[48px] py-3 text-base font-bold bg-teal-600 hover:bg-teal-700 text-white shadow-md"
                 >
                   Schedule Tour
                 </Button>

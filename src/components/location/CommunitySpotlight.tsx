@@ -162,7 +162,7 @@ export default function CommunitySpotlight({
               </Button>
             </Link>
             <Link href={`${communityUrl}#contact`}>
-              <Button variant="outline" size="sm" className="border-orange-500 text-orange-600 hover:bg-orange-50">
+              <Button variant="outline" size="sm" className="border-teal-600 text-teal-600 hover:bg-teal-50">
                 <Heart className="h-4 w-4 mr-1" />
                 Schedule Tour
               </Button>

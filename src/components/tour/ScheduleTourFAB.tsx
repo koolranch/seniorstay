@@ -30,7 +30,7 @@ export default function ScheduleTourFAB() {
         <div className="fixed bottom-6 right-6 z-40 animate-in fade-in slide-in-from-bottom-4 duration-300">
           <Button
             onClick={() => setIsOpen(true)}
-            className="bg-orange-500 hover:bg-orange-600 text-white font-bold shadow-2xl hover:shadow-orange-500/50 transition-all duration-300 hover:scale-105 group"
+            className="bg-teal-600 hover:bg-teal-700 text-white font-bold shadow-2xl hover:shadow-teal-500/50 transition-all duration-300 hover:scale-105 group"
             size="lg"
           >
             <Calendar className="h-5 w-5 mr-2 group-hover:scale-110 transition-transform" />
