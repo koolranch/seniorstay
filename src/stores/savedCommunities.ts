@@ -10,9 +10,11 @@ interface SavedCommunity {
   savedAt: number;
 }
 
+type SavedCommunityInput = Omit<SavedCommunity, 'savedAt'>;
+
 interface SavedCommunitiesState {
   saved: SavedCommunity[];
-  add: (community: SavedCommunity) => void;
+  add: (community: SavedCommunityInput) => void;
   remove: (id: string) => void;
   isSaved: (id: string) => boolean;
   clear: () => void;
