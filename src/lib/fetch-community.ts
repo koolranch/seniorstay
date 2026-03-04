@@ -158,6 +158,49 @@ export async function fetchCommunitiesByRegionAndCity(regionSlug: string, cityNa
 }
 
 /**
+ * Create a URL slug from community name (matches sitemap logic)
+ */
+function createSlugFromName(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+    .trim();
+}
+
+/**
+ * Find community by legacy /ohio/:city/:slug URL format.
+ * Handles slugs from external sources that may include city/state/care-type suffixes.
+ * Ohio cities in our system are under the "cleveland" region.
+ */
+export async function findCommunityByLegacySlug(
+  urlSlug: string,
+  citySlug: string,
+  regionSlug: string = 'cleveland'
+): Promise<Community | null> {
+  // 1. Try exact slug match first
+  const exact = await fetchCommunityBySlug(urlSlug, regionSlug);
+  if (exact) return exact;
+
+  // 2. Fetch communities in region filtered by city
+  const cityName = citySlug.replace(/-/g, ' ');
+  const communities = await fetchCommunitiesByRegionAndCity(regionSlug, cityName);
+  if (communities.length === 0) return null;
+
+  // 3. Find best match: URL slug often has format "community-name-city-state-care-types"
+  // Our slug/name is typically at the start
+  for (const c of communities) {
+    const dbSlug = c.slug || createSlugFromName(c.name);
+    if (urlSlug === dbSlug) return c;
+    if (urlSlug.startsWith(dbSlug + '-') || urlSlug.startsWith(dbSlug)) return c;
+    if (dbSlug.startsWith(urlSlug)) return c;
+  }
+
+  return null;
+}
+
+/**
  * Get unique cities for a region
  * @param regionSlug - Region slug
  */
