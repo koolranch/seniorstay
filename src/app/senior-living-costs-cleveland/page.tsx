@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import Link from 'next/link';
 import { ArrowRight, DollarSign, TrendingUp, Shield, HelpCircle, Phone, Brain, Heart, Home, CheckCircle, Hospital } from 'lucide-react';
 import GlobalHeader from '@/components/home/GlobalHeader';
@@ -13,6 +13,7 @@ export default function SeniorLivingCostsClevelandPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState('');
+  const formStartedAtRef = useRef(Date.now());
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -36,17 +37,24 @@ export default function SeniorLivingCostsClevelandPage() {
         notes: 'Pricing guide request from Cleveland costs page',
         pageType: 'pricing_guide',
         sourceSlug: 'senior-living-costs-cleveland',
+        website: '',
+        submissionStartedAt: formStartedAtRef.current,
       });
 
       if (result.success) {
         // Send the pricing guide email
         try {
+          if (!result.pricingGuideToken) {
+            throw new Error('Missing guide authorization token');
+          }
+
           const emailResponse = await fetch('/api/send-pricing-guide', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               recipientName: formData.get('name')?.toString() || 'Friend',
               email: formData.get('email')?.toString() || '',
+              accessToken: result.pricingGuideToken,
             }),
           });
           const emailResult = await emailResponse.json();
@@ -55,6 +63,7 @@ export default function SeniorLivingCostsClevelandPage() {
           console.error('[PricingPage] Pricing guide email error:', emailErr);
         }
         setIsSuccess(true);
+        formStartedAtRef.current = Date.now();
       } else {
         setError(result.message || 'Something went wrong. Please try again.');
       }

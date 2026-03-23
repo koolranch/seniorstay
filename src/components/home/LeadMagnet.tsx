@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { FileText, Download, CheckCircle, Loader2, ArrowRight, DollarSign, TrendingUp, Calendar } from 'lucide-react';
 import { submitLead } from '@/app/actions/leads';
@@ -20,6 +20,7 @@ const LeadMagnet: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const formStartedAtRef = useRef(Date.now());
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -44,6 +45,8 @@ const LeadMagnet: React.FC = () => {
         notes: '2026 Cleveland Senior Care Cost Guide Download',
         careType: 'Other',
         moveInTimeline: 'Just researching',
+        website: '',
+        submissionStartedAt: formStartedAtRef.current,
       });
 
       console.log('[LeadMagnet] Submit result:', result);
@@ -56,12 +59,17 @@ const LeadMagnet: React.FC = () => {
       // Send the pricing guide email
       console.log('[LeadMagnet] Lead submitted, sending pricing guide email...');
       try {
+        if (!result.pricingGuideToken) {
+          throw new Error('Missing guide authorization token');
+        }
+
         const emailResponse = await fetch('/api/send-pricing-guide', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             recipientName: formData.firstName?.trim() || 'Friend',
             email: trimmedEmail,
+            accessToken: result.pricingGuideToken,
           }),
         });
         
@@ -78,6 +86,7 @@ const LeadMagnet: React.FC = () => {
       }
 
       setIsSuccess(true);
+      formStartedAtRef.current = Date.now();
     } catch (err) {
       console.error('[LeadMagnet] Error caught:', err);
       // Handle server action errors more gracefully

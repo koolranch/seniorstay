@@ -2,9 +2,10 @@
 
 import { headers } from 'next/headers';
 import { createClient } from '@supabase/supabase-js';
-import { randomUUID } from 'crypto';
+import { createHash, randomUUID } from 'crypto';
 import { LeadSchema, LeadInput, LeadSubmitResult, ReferralStatus } from './lead-types';
 import { Resend } from 'resend';
+import { createGuideAccessToken } from '@/lib/lead-security';
 
 // Initialize Resend for email notifications
 const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
@@ -132,6 +133,174 @@ interface CalculatorMetaData {
   isHighValue?: boolean;
   monthlySavings?: number;
   annualSavings?: number;
+}
+
+interface SecurityDecision {
+  action: 'allow' | 'reject' | 'silent_drop';
+  message?: string;
+  reason?: string;
+}
+
+type RecentLeadRecord = {
+  id: string;
+  fullName: string | null;
+  pageType: string | null;
+  sourceSlug: string | null;
+  notes: string | null;
+};
+
+const MIN_FORM_COMPLETION_MS = 1500;
+const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
+const MAX_SUBMISSIONS_PER_IP_WINDOW = 5;
+const MAX_SUBMISSIONS_PER_EMAIL_WINDOW = 4;
+const DUPLICATE_WINDOW_MS = 30 * 60 * 1000;
+
+const DISPOSABLE_EMAIL_DOMAINS = new Set([
+  '10minutemail.com',
+  'dispostable.com',
+  'fakeinbox.com',
+  'guerrillamail.com',
+  'maildrop.cc',
+  'mailinator.com',
+  'sharklasers.com',
+  'tempmail.com',
+  'temp-mail.org',
+  'throwawaymail.com',
+  'yopmail.com',
+]);
+
+function normalizeEmail(value: string | undefined | null): string | null {
+  const email = value?.trim().toLowerCase();
+  return email || null;
+}
+
+function normalizePhone(value: string | undefined | null): string | null {
+  const digits = value?.replace(/\D/g, '');
+  return digits || null;
+}
+
+function getEmailDomain(email: string | undefined | null): string | null {
+  const normalizedEmail = normalizeEmail(email);
+  if (!normalizedEmail || !normalizedEmail.includes('@')) {
+    return null;
+  }
+
+  return normalizedEmail.split('@')[1] || null;
+}
+
+function isDisposableEmail(email: string | undefined | null): boolean {
+  const domain = getEmailDomain(email);
+  return domain ? DISPOSABLE_EMAIL_DOMAINS.has(domain) : false;
+}
+
+function createDuplicateFingerprint(data: {
+  fullName?: string | null;
+  email?: string | null;
+  phone?: string | null;
+  notes?: string | null;
+  pageType?: string | null;
+  sourceSlug?: string | null;
+}): string {
+  const payload = [
+    data.fullName?.trim().toLowerCase() || '',
+    normalizeEmail(data.email) || '',
+    normalizePhone(data.phone) || '',
+    data.notes?.trim().toLowerCase().slice(0, 500) || '',
+    data.pageType?.trim().toLowerCase() || '',
+    data.sourceSlug?.trim().toLowerCase() || '',
+  ].join('|');
+
+  return createHash('sha256').update(payload).digest('hex');
+}
+
+async function evaluateSubmissionSecurity(params: {
+  supabase: ReturnType<typeof getSupabaseAdmin>;
+  data: LeadInput;
+  ipAddress?: string;
+}): Promise<SecurityDecision> {
+  const { supabase, data, ipAddress } = params;
+
+  if (data.website?.trim()) {
+    return { action: 'silent_drop', reason: 'honeypot_filled' };
+  }
+
+  if (typeof data.submissionStartedAt === 'number') {
+    const elapsed = Date.now() - data.submissionStartedAt;
+    if (elapsed >= 0 && elapsed < MIN_FORM_COMPLETION_MS) {
+      return { action: 'silent_drop', reason: 'submitted_too_quickly' };
+    }
+  }
+
+  if (isDisposableEmail(data.email)) {
+    return {
+      action: 'reject',
+      message: 'Please use a personal or work email address.',
+      reason: 'disposable_email_domain',
+    };
+  }
+
+  const rateWindowStart = new Date(Date.now() - RATE_LIMIT_WINDOW_MS).toISOString();
+
+  if (ipAddress) {
+    const { count, error } = await supabase
+      .from('Lead')
+      .select('id', { count: 'exact', head: true })
+      .eq('ipAddress', ipAddress)
+      .gte('createdAt', rateWindowStart);
+
+    if (!error && (count || 0) >= MAX_SUBMISSIONS_PER_IP_WINDOW) {
+      return {
+        action: 'reject',
+        message: 'Too many requests. Please wait a few minutes before trying again.',
+        reason: 'ip_rate_limited',
+      };
+    }
+  }
+
+  const normalizedEmail = normalizeEmail(data.email);
+  if (normalizedEmail) {
+    const { count, error } = await supabase
+      .from('Lead')
+      .select('id', { count: 'exact', head: true })
+      .eq('email', normalizedEmail)
+      .gte('createdAt', rateWindowStart);
+
+    if (!error && (count || 0) >= MAX_SUBMISSIONS_PER_EMAIL_WINDOW) {
+      return {
+        action: 'reject',
+        message: 'Too many requests. Please wait a few minutes before trying again.',
+        reason: 'email_rate_limited',
+      };
+    }
+
+    const duplicateWindowStart = new Date(Date.now() - DUPLICATE_WINDOW_MS).toISOString();
+    const { data: recentLeads, error: recentLeadsError } = await supabase
+      .from('Lead')
+      .select('id, fullName, pageType, sourceSlug, notes')
+      .eq('email', normalizedEmail)
+      .gte('createdAt', duplicateWindowStart)
+      .order('createdAt', { ascending: false })
+      .limit(5);
+
+    if (!recentLeadsError && recentLeads?.length) {
+      const incomingFingerprint = createDuplicateFingerprint(data);
+      const duplicateLead = (recentLeads as RecentLeadRecord[]).some((lead) => (
+        createDuplicateFingerprint({
+          fullName: lead.fullName,
+          email: normalizedEmail,
+          notes: lead.notes,
+          pageType: lead.pageType,
+          sourceSlug: lead.sourceSlug,
+        }) === incomingFingerprint
+      ));
+
+      if (duplicateLead) {
+        return { action: 'silent_drop', reason: 'duplicate_submission' };
+      }
+    }
+  }
+
+  return { action: 'allow' };
 }
 
 /**
@@ -728,6 +897,29 @@ export async function submitLead(formData: LeadInput): Promise<LeadSubmitResult>
     const forwardedFor = headersList.get('x-forwarded-for');
     const ipAddress = forwardedFor ? 
       forwardedFor.split(',')[0].trim().substring(0, 45) : undefined;
+
+    const supabase = getSupabaseAdmin();
+    const securityDecision = await evaluateSubmissionSecurity({
+      supabase,
+      data,
+      ipAddress,
+    });
+
+    if (securityDecision.action === 'silent_drop') {
+      console.warn('[Lead] Silently dropped suspicious submission:', securityDecision.reason);
+      return {
+        success: true,
+        message: 'Thank you! We\'ll be in touch within 1 business day.',
+      };
+    }
+
+    if (securityDecision.action === 'reject') {
+      console.warn('[Lead] Rejected suspicious submission:', securityDecision.reason);
+      return {
+        success: false,
+        message: securityDecision.message || 'Please wait a moment before trying again.',
+      };
+    }
     
     // -------------------------------------------------------------------------
     // 3. CALCULATE URGENCY SCORE & PARSE CALCULATOR DATA
@@ -792,7 +984,7 @@ export async function submitLead(formData: LeadInput): Promise<LeadSubmitResult>
     currentStep = 'prepare_lead_data_create_object_basic';
     const leadData: Record<string, unknown> = {
       fullName: data.fullName?.trim() || '',
-      email: data.email?.trim() || null,
+      email: normalizeEmail(data.email),
       phone: data.phone?.trim() || null,
       cityOrZip: data.cityOrZip?.trim() || null,
       careType: normalizedCareType,
@@ -844,22 +1036,21 @@ export async function submitLead(formData: LeadInput): Promise<LeadSubmitResult>
     // 5. UPSERT TO SUPABASE
     // -------------------------------------------------------------------------
     currentStep = 'get_supabase_client';
-    console.log('[Lead] Step 5: Getting Supabase admin client...');
-    const supabase = getSupabaseAdmin();
+    console.log('[Lead] Step 5: Using Supabase admin client...');
     currentStep = 'supabase_client_obtained';
-    console.log('[Lead] Supabase client obtained');
     
     let leadId: string;
     
     // If email provided, try to upsert (update existing or insert new)
     if (data.email && data.email.trim()) {
+      const normalizedEmail = normalizeEmail(data.email);
       currentStep = 'check_existing_lead';
-      console.log('[Lead] Checking for existing lead with email:', data.email.trim());
+      console.log('[Lead] Checking for existing lead with email:', normalizedEmail);
       // Check if lead exists
       const { data: existingLead, error: lookupError } = await supabase
         .from('Lead')
         .select('id, urgencyScore')
-        .eq('email', data.email.trim())
+        .eq('email', normalizedEmail)
         .single();
       
       if (lookupError && lookupError.code !== 'PGRST116') {
@@ -1002,12 +1193,17 @@ export async function submitLead(formData: LeadInput): Promise<LeadSubmitResult>
     const duration = Date.now() - startTime;
     const logExtra = isHighValueCalculator ? ` [HIGH-VALUE: $${calculatorData?.homeValue?.toLocaleString()}]` : '';
     console.log(`[Lead] Submitted in ${duration}ms: ${leadId}, score: ${finalUrgencyScore}, source: ${sourceSlug || 'direct'}${logExtra}`);
+
+    const pricingGuideToken = data.email ? createGuideAccessToken(data.email, 'pricing-guide') : undefined;
+    const careGuideToken = data.email ? createGuideAccessToken(data.email, 'care-guide') : undefined;
     
     return {
       success: true,
       leadId,
       urgencyScore: finalUrgencyScore,
       priority: finalPriority,
+      pricingGuideToken,
+      careGuideToken,
       message: finalPriority === 'high' 
         ? 'Thank you! A senior advisor will contact you very soon.'
         : 'Thank you! We\'ll be in touch within 1 business day.',

@@ -3,6 +3,7 @@ import { Resend } from 'resend';
 import { renderToBuffer } from '@react-pdf/renderer';
 import React from 'react';
 import { PricingGuidePDF } from '@/components/pdf/PricingGuidePDF';
+import { consumeRateLimit, getClientIp, verifyGuideAccessToken } from '@/lib/lead-security';
 
 // Initialize Resend (will be undefined if RESEND_API_KEY is not set)
 const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
@@ -10,12 +11,34 @@ const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KE
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { recipientName, email } = body;
+    const { recipientName, email, accessToken } = body;
+    const clientIp = getClientIp(request) || 'unknown';
 
-    if (!recipientName || !email) {
+    if (!recipientName || !email || !accessToken) {
       return NextResponse.json(
-        { error: 'Missing required fields: recipientName and email' },
+        { error: 'Missing required fields: recipientName, email, and accessToken' },
         { status: 400 }
+      );
+    }
+
+    if (!verifyGuideAccessToken(accessToken, email, 'pricing-guide')) {
+      return NextResponse.json(
+        { error: 'Unauthorized guide request' },
+        { status: 403 }
+      );
+    }
+
+    if (!consumeRateLimit(`pricing-guide:${clientIp}`, 5, 10 * 60 * 1000)) {
+      return NextResponse.json(
+        { error: 'Too many guide requests. Please try again shortly.' },
+        { status: 429 }
+      );
+    }
+
+    if (!consumeRateLimit(`pricing-guide-email:${email.trim().toLowerCase()}`, 3, 30 * 60 * 1000)) {
+      return NextResponse.json(
+        { error: 'Guide already requested recently. Please check your inbox.' },
+        { status: 429 }
       );
     }
 

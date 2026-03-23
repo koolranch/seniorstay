@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { submitLead } from '@/app/actions/leads';
 
 interface SimpleContactFormProps {
@@ -21,6 +21,7 @@ export default function SimpleContactForm({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState('');
+  const formStartedAtRef = useRef(Date.now());
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -37,10 +38,13 @@ export default function SimpleContactForm({
         notes: formData.get('message')?.toString() || `Contact from ${sourcePage} page`,
         pageType: 'other',
         sourceSlug: sourcePage,
+        website: '',
+        submissionStartedAt: formStartedAtRef.current,
       });
 
       if (result.success) {
         setIsSuccess(true);
+        formStartedAtRef.current = Date.now();
       } else {
         setError(result.message || 'Something went wrong. Please try again.');
       }

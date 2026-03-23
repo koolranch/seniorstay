@@ -30,6 +30,8 @@ export const LeadSchema = z.object({
   utmSource: z.string().max(100).optional(),
   utmMedium: z.string().max(100).optional(),
   utmCampaign: z.string().max(200).optional(),
+  website: z.string().max(200).optional().or(z.literal('')),
+  submissionStartedAt: z.number().int().positive().optional().nullable(),
 });
 
 /**
@@ -45,6 +47,8 @@ export interface LeadSubmitResult {
   leadId?: string;
   urgencyScore?: number;
   priority?: 'high' | 'normal' | 'low';
+  pricingGuideToken?: string;
+  careGuideToken?: string;
   message: string;
   errors?: Record<string, string[]>;
 }

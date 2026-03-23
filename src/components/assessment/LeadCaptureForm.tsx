@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { CheckCircle, Loader2, Mail, FileText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -30,6 +30,7 @@ export default function LeadCaptureForm({ assessmentData }: LeadCaptureFormProps
   const [isSuccess, setIsSuccess] = useState(false);
   const [submittedEmail, setSubmittedEmail] = useState('');
   const [error, setError] = useState('');
+  const formStartedAtRef = useRef(Date.now());
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
@@ -63,17 +64,24 @@ export default function LeadCaptureForm({ assessmentData }: LeadCaptureFormProps
         communityName: assessmentData.matchedCommunities[0] || '',
         pageType: 'assessment',
         sourceSlug: 'care-assessment',
+        website: '',
+        submissionStartedAt: formStartedAtRef.current,
       });
 
       if (result.success) {
         // Step 2: Send personalized PDF care guide via email
         try {
+          if (!result.careGuideToken) {
+            throw new Error('Missing guide authorization token');
+          }
+
           const pdfResponse = await fetch('/api/send-care-guide', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               recipientName: formData.name,
               email: formData.email,
+              accessToken: result.careGuideToken,
               assessmentData: assessmentData,
             }),
           });
@@ -92,6 +100,7 @@ export default function LeadCaptureForm({ assessmentData }: LeadCaptureFormProps
         setSubmittedEmail(formData.email);
         setIsSuccess(true);
         setFormData({ name: '', email: '', phone: '', message: '' });
+        formStartedAtRef.current = Date.now();
         
         // Track successful form submission
         trackLeadFormSubmitted(assessmentData.recommendation, assessmentData.matchedCommunities);

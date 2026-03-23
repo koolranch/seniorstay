@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback, useTransition } from 'react';
+import { useState, useCallback, useRef, useTransition } from 'react';
 import { submitLead, LeadInput, LeadSubmitResult } from '@/app/actions/leads';
 
 interface UseLeadSubmitOptions {
@@ -15,6 +15,7 @@ export function useLeadSubmit(options?: UseLeadSubmitOptions) {
   const [isPending, startTransition] = useTransition();
   const [result, setResult] = useState<LeadSubmitResult | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const formStartedAtRef = useRef(Date.now());
 
   const submit = useCallback(async (data: LeadInput) => {
     setIsSubmitting(true);
@@ -22,11 +23,16 @@ export function useLeadSubmit(options?: UseLeadSubmitOptions) {
     
     startTransition(async () => {
       try {
-        const response = await submitLead(data);
+        const response = await submitLead({
+          website: '',
+          submissionStartedAt: formStartedAtRef.current,
+          ...data,
+        });
         setResult(response);
         
         if (response.success) {
           options?.onSuccess?.(response);
+          formStartedAtRef.current = Date.now();
         } else {
           options?.onError?.(response);
         }

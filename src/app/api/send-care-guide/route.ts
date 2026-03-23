@@ -3,6 +3,7 @@ import { Resend } from 'resend';
 import { renderToBuffer } from '@react-pdf/renderer';
 import { CareGuidePDF } from '@/components/pdf/CareGuidePDF';
 import React from 'react';
+import { consumeRateLimit, getClientIp, verifyGuideAccessToken } from '@/lib/lead-security';
 
 // Initialize Resend (will be undefined if RESEND_API_KEY is not set)
 const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
@@ -18,6 +19,7 @@ interface AssessmentData {
 interface SendCareGuideRequest {
   recipientName: string;
   email: string;
+  accessToken: string;
   assessmentData: AssessmentData;
   matchedCommunities?: Array<{
     name: string;
@@ -41,11 +43,12 @@ interface SendCareGuideRequest {
 export async function POST(request: NextRequest) {
   try {
     const body: SendCareGuideRequest = await request.json();
+    const clientIp = getClientIp(request) || 'unknown';
     
     // Validate required fields
-    if (!body.recipientName || !body.email || !body.assessmentData) {
+    if (!body.recipientName || !body.email || !body.assessmentData || !body.accessToken) {
       return NextResponse.json(
-        { success: false, error: 'Missing required fields: recipientName, email, assessmentData' },
+        { success: false, error: 'Missing required fields: recipientName, email, assessmentData, accessToken' },
         { status: 400 }
       );
     }
@@ -56,6 +59,27 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { success: false, error: 'Invalid email format' },
         { status: 400 }
+      );
+    }
+
+    if (!verifyGuideAccessToken(body.accessToken, body.email, 'care-guide')) {
+      return NextResponse.json(
+        { success: false, error: 'Unauthorized guide request' },
+        { status: 403 }
+      );
+    }
+
+    if (!consumeRateLimit(`care-guide:${clientIp}`, 5, 10 * 60 * 1000)) {
+      return NextResponse.json(
+        { success: false, error: 'Too many guide requests. Please try again shortly.' },
+        { status: 429 }
+      );
+    }
+
+    if (!consumeRateLimit(`care-guide-email:${body.email.trim().toLowerCase()}`, 3, 30 * 60 * 1000)) {
+      return NextResponse.json(
+        { success: false, error: 'Guide already requested recently. Please check your inbox.' },
+        { status: 429 }
       );
     }
 

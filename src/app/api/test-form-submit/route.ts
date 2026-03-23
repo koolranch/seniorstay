@@ -9,6 +9,10 @@ import { randomUUID } from 'crypto';
  * POST /api/test-form-submit
  */
 export async function POST(request: NextRequest) {
+  if (process.env.NODE_ENV === 'production') {
+    return NextResponse.json({ error: 'Not found' }, { status: 404 });
+  }
+
   const startTime = Date.now();
   const diagnostics: Record<string, unknown> = {
     step: 'init',
@@ -117,6 +121,10 @@ export async function POST(request: NextRequest) {
 
 // GET endpoint for simple testing
 export async function GET() {
+  if (process.env.NODE_ENV === 'production') {
+    return NextResponse.json({ error: 'Not found' }, { status: 404 });
+  }
+
   return NextResponse.json({
     message: 'Use POST to test form submission',
     example: {
