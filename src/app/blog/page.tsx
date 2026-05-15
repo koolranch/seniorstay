@@ -122,6 +122,37 @@ export default async function BlogPage() {
       {/* Blog Listing */}
       <BlogListing posts={posts} />
 
+      {/* All Articles archive — server-rendered so every post is crawlable.
+          BlogListing only paginates 12 posts at a time client-side, which
+          hides the rest from search engines. This flat list restores the
+          internal link graph from the hub to all posts. */}
+      <section aria-labelledby="all-articles" className="bg-slate-50 border-t border-slate-200 py-12">
+        <div className="container mx-auto px-4">
+          <div className="max-w-6xl mx-auto">
+            <h2 id="all-articles" className="text-2xl md:text-3xl font-bold text-slate-900 mb-2">
+              All Articles
+            </h2>
+            <p className="text-slate-600 mb-6">
+              Browse every article in our Cleveland senior living library ({posts.length} total).
+            </p>
+            <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-2 text-sm">
+              {[...posts]
+                .sort((a, b) => a.title.localeCompare(b.title))
+                .map((post) => (
+                  <li key={post.slug} className="border-b border-slate-200/60 py-1.5">
+                    <Link
+                      href={`/blog/${post.slug}`}
+                      className="text-teal-700 hover:text-teal-900 hover:underline"
+                    >
+                      {post.title}
+                    </Link>
+                  </li>
+                ))}
+            </ul>
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className="bg-gradient-to-r from-teal-600 to-teal-700 py-16">
         <div className="container mx-auto px-4">
