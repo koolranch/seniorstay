@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { MapPin, Phone, ArrowRight, ChevronDown, Hospital, Shield, Users, Gamepad2, Brain, Coffee, BookOpen } from 'lucide-react';
 import GlobalHeader from '@/components/home/GlobalHeader';
@@ -30,9 +30,23 @@ interface CityLocationClientProps {
 }
 
 export default function CityLocationClient({ cityName, stateAbbr, communities, regionSlug = 'cleveland' }: CityLocationClientProps) {
-  const [totalCommunities, setTotalCommunities] = useState(0);
-  const [careTypeCounts, setCareTypeCounts] = useState<Record<string, number>>({});
-  const [mapCenter, setMapCenter] = useState<{ lat: number; lng: number } | null>(null);
+  // Derive these from `communities` directly so they render correctly during SSR.
+  // Previously these were useState(empty) + useEffect, which left Google indexing
+  // "Compare 0 senior living communities" because effects don't run server-side.
+  const totalCommunities = communities.length;
+  const careTypeCounts = useMemo(() => {
+    const counts: Record<string, number> = {};
+    for (const community of communities) {
+      for (const type of community.careTypes) {
+        counts[type] = (counts[type] || 0) + 1;
+      }
+    }
+    return counts;
+  }, [communities]);
+  const mapCenter = useMemo(() => {
+    const first = communities.find(c => c.coordinates);
+    return first?.coordinates ? { lat: first.coordinates.lat, lng: first.coordinates.lng } : null;
+  }, [communities]);
   const [showAllCommunities, setShowAllCommunities] = useState(false);
 
   // Get city-specific data
@@ -63,27 +77,6 @@ export default function CityLocationClient({ cityName, stateAbbr, communities, r
     return communities.filter(c => !featuredIds.has(c.id));
   }, [communities, featuredCommunities]);
 
-  useEffect(() => {
-    setTotalCommunities(communities.length);
-
-    if (communities.length > 0) {
-      const communitiesWithCoords = communities.filter(c => c.coordinates);
-      if (communitiesWithCoords.length > 0) {
-        setMapCenter({
-          lat: communitiesWithCoords[0].coordinates!.lat,
-          lng: communitiesWithCoords[0].coordinates!.lng
-        });
-      }
-    }
-
-    const counts: Record<string, number> = {};
-    communities.forEach(community => {
-      community.careTypes.forEach(type => {
-        counts[type] = (counts[type] || 0) + 1;
-      });
-    });
-    setCareTypeCounts(counts);
-  }, [communities]);
 
   // Generate dynamic hero subtitle based on city context
   const getHeroSubtitle = () => {
