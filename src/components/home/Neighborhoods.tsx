@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import { MapPin, ArrowRight, Building2, Hospital } from 'lucide-react';
 import MapComponent from '@/components/map/GoogleMap';
 import { Community } from '@/data/facilities';
+import { clevelandCitiesData } from '@/data/cleveland-cities';
 
 /**
  * Hyper-Local SEO Section - Cleveland Neighborhoods
@@ -100,6 +101,14 @@ const NEIGHBORHOODS: Neighborhood[] = [
   },
 ];
 
+// Additional Cleveland-area cities that have landing pages but aren't featured
+// in the rich card grid above. Rendered as a compact link list so search
+// engines (and users) can reach every city page from the homepage.
+const FEATURED_SLUGS = new Set(NEIGHBORHOODS.map(n => n.slug));
+const MORE_CITIES = Object.values(clevelandCitiesData)
+  .filter(city => !FEATURED_SLUGS.has(city.slug))
+  .sort((a, b) => a.name.localeCompare(b.name));
+
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
@@ -182,6 +191,28 @@ const Neighborhoods: React.FC<NeighborhoodsProps> = ({ communities = [] }) => {
               ))}
             </motion.div>
 
+            {/* More Cleveland-area cities — compact list so every city
+                landing page is reachable from the homepage. */}
+            {MORE_CITIES.length > 0 && (
+              <div className="mt-8 pt-6 border-t border-slate-200">
+                <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-500 mb-3">
+                  More Cleveland-area cities
+                </h3>
+                <ul className="flex flex-wrap gap-x-4 gap-y-2 text-sm">
+                  {MORE_CITIES.map((city) => (
+                    <li key={city.slug}>
+                      <Link
+                        href={`/cleveland/${city.slug}`}
+                        className="text-teal-700 hover:text-teal-900 hover:underline"
+                      >
+                        {city.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
             {/* View All Link */}
             <div className="mt-8 text-center lg:text-left">
               <Link
@@ -232,7 +263,7 @@ const Neighborhoods: React.FC<NeighborhoodsProps> = ({ communities = [] }) => {
                   <p className="text-xs text-slate-600">Communities</p>
                 </div>
                 <div className="bg-slate-50 rounded-lg p-3 text-center">
-                  <p className="text-2xl font-bold text-amber-600">12</p>
+                  <p className="text-2xl font-bold text-amber-600">{NEIGHBORHOODS.length + MORE_CITIES.length}</p>
                   <p className="text-xs text-slate-600">Neighborhoods</p>
                 </div>
               </div>
