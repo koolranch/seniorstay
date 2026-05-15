@@ -3,11 +3,11 @@
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import { Calendar, Clock, Search, Tag, ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react';
-import type { BlogPost } from '@/lib/blog-posts';
+import type { BlogPostSummary } from '@/lib/blog-posts';
 import { getCategoryCounts, getParentCategoryName } from '@/data/blog-categories';
 
 interface BlogListingProps {
-  posts: BlogPost[];
+  posts: BlogPostSummary[];
 }
 
 const POSTS_PER_PAGE = 12;

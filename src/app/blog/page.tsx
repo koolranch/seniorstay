@@ -2,7 +2,7 @@ import Link from 'next/link';
 import GlobalHeader from '@/components/home/GlobalHeader';
 import Footer from '@/components/footer/Footer';
 import BlogListing from '@/components/blog/BlogListing';
-import { fetchAllBlogPosts } from '@/lib/blog-posts';
+import { fetchBlogPostSummaries } from '@/lib/blog-posts';
 import { Phone, ArrowRight, BookOpen, ChevronRight } from 'lucide-react';
 
 export const revalidate = 300;
@@ -49,7 +49,7 @@ const breadcrumbSchema = {
 };
 
 export default async function BlogPage() {
-  const posts = await fetchAllBlogPosts();
+  const posts = await fetchBlogPostSummaries();
 
   // Build dynamic schema with blog posts
   const dynamicBlogSchema = {

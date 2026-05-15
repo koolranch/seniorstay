@@ -14,6 +14,13 @@ export interface BlogPost {
   regionSlug?: string | null; // null = global, 'cleveland' = Cleveland-specific
 }
 
+/**
+ * Lightweight blog post shape for listing pages — same as `BlogPost` minus the
+ * full markdown body. Use this everywhere a page renders post cards or links
+ * but does not need the article body. Cuts ~1.8 MB off the /blog payload.
+ */
+export type BlogPostSummary = Omit<BlogPost, 'content'>;
+
 type BlogPostRow = {
   slug: string;
   title: string;
@@ -91,6 +98,41 @@ export const fetchAllBlogPosts = cache(async (): Promise<BlogPost[]> => {
   }
 
   return ((data ?? []) as BlogPostRow[]).map(mapRowToBlogPost);
+});
+
+/**
+ * Fetch all blog posts WITHOUT their markdown body. Use for /blog listings,
+ * recent-post sidebars, and anywhere only metadata is needed. The blog
+ * listing page was previously shipping ~2 MB of HTML because the full
+ * `content_markdown` of every post was inlined into the SSR'd page.
+ */
+export const fetchBlogPostSummaries = cache(async (): Promise<BlogPostSummary[]> => {
+  const client = getSupabaseClient();
+  if (!client) {
+    return [];
+  }
+
+  const { data, error } = await client
+    .from('blog_posts')
+    .select('slug, title, description, category, author, published_at, read_time_minutes, image_url, region_slug')
+    .order('published_at', { ascending: false });
+
+  if (error) {
+    console.error('Failed to load blog post summaries from Supabase:', error);
+    return [];
+  }
+
+  return ((data ?? []) as Omit<BlogPostRow, 'content_markdown'>[]).map((row) => ({
+    slug: row.slug,
+    title: row.title,
+    description: row.description,
+    category: row.category,
+    author: row.author,
+    date: row.published_at,
+    readTime: `${row.read_time_minutes} min read`,
+    image: row.image_url,
+    regionSlug: row.region_slug,
+  }));
 });
 
 export const fetchBlogPostBySlug = cache(async (slug: string): Promise<BlogPost | null> => {
