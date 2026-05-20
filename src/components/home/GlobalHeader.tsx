@@ -6,6 +6,8 @@ import { usePathname } from 'next/navigation';
 import { Phone, Menu, X, Home, ChevronDown } from 'lucide-react';
 import LocationSwitcher from '@/components/header/LocationSwitcher';
 import { getAllRegionSlugs, getRegionConfig, getRegionPhoneNumber, getRegionTagline, DEFAULT_REGION } from '@/data/regions';
+import PhoneLink from '@/components/conversion/PhoneLink';
+import { PLACEMENT_PHONE_TEL } from '@/lib/placement-contact';
 
 /**
  * Global Header - Clean, Minimal Design
@@ -104,15 +106,23 @@ const GlobalHeader: React.FC = () => {
           </nav>
 
           {/* CTA Button */}
-          <div className="flex items-center gap-3">
-            {/* Talk to Expert Button - Phone icon indicates it's a call */}
-            <a
-              href={`tel:${phoneNumber.replace(/[^0-9+]/g, '')}`}
+          <div className="flex items-center gap-2 sm:gap-3">
+            <PhoneLink
+              placement="header_mobile"
+              phoneTel={PLACEMENT_PHONE_TEL}
+              className="sm:hidden inline-flex items-center gap-1.5 bg-gradient-to-r from-teal-600 to-teal-700 text-white font-bold px-3 py-2 rounded-lg shadow-md min-h-[44px]"
+            >
+              <Phone className="h-4 w-4" />
+              <span>Call</span>
+            </PhoneLink>
+            <PhoneLink
+              placement="header_desktop"
+              phoneTel={`tel:${phoneNumber.replace(/[^0-9+]/g, '')}`}
               className="hidden sm:inline-flex items-center gap-2 bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800 text-white font-bold px-5 py-2.5 rounded-lg shadow-md hover:shadow-lg transition-all"
             >
               <Phone className="h-4 w-4" />
               <span>Talk to a Local Expert</span>
-            </a>
+            </PhoneLink>
 
             {/* Mobile Menu Toggle */}
             <button
@@ -181,14 +191,15 @@ const GlobalHeader: React.FC = () => {
                 Contact
               </Link>
               <hr className="my-2" />
-              <a
-                href={`tel:${phoneNumber.replace(/[^0-9+]/g, '')}`}
+              <PhoneLink
+                placement="header_mobile_menu"
+                phoneTel={`tel:${phoneNumber.replace(/[^0-9+]/g, '')}`}
                 className="mx-4 flex items-center justify-center gap-2 bg-gradient-to-r from-teal-600 to-teal-700 text-white font-bold px-6 py-3 rounded-lg shadow-md"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 <Phone className="h-5 w-5" />
                 <span>Call {phoneNumber}</span>
-              </a>
+              </PhoneLink>
             </nav>
           </div>
         )}

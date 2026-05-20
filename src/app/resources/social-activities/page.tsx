@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import GlobalHeader from '@/components/home/GlobalHeader';
 import Footer from '@/components/footer/Footer';
+import PlacementConversionBand from '@/components/conversion/PlacementConversionBand';
 
 /**
  * Social Activities for Seniors Page
@@ -437,6 +438,15 @@ export default function SocialActivitiesPage() {
             </div>
           </div>
         </section>
+
+        <PlacementConversionBand
+          title="Social life at home vs. in a community?"
+          description="Many Cleveland families start with senior centers—then explore assisted living for built-in activities and care. We're here to help compare."
+          phonePlacement="resources_social"
+          contactHref="/contact?intent=placement&source=social-activities"
+          secondaryHref="/assisted-living-cleveland"
+          secondaryLabel="Explore assisted living communities"
+        />
 
         <Footer />
       </main>

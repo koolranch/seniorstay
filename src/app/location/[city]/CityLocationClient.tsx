@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo } from 'react';
 import Link from 'next/link';
-import { MapPin, Phone, ArrowRight, ChevronDown, Hospital, Shield, Users, Gamepad2, Brain, Coffee, BookOpen } from 'lucide-react';
+import { MapPin, Phone, ArrowRight, Hospital, Shield, Users, Gamepad2, Brain, Coffee, BookOpen } from 'lucide-react';
 import GlobalHeader from '@/components/home/GlobalHeader';
 import Footer from '@/components/footer/Footer';
 import LocationCard from '@/components/property/LocationCard';
@@ -21,6 +21,14 @@ import CityLeadMagnet from '@/components/location/CityLeadMagnet';
 import CareTypeNav from '@/components/location/CareTypeNav';
 import LocalAuthorityProse from '@/components/location/LocalAuthorityProse';
 import NeighborhoodEvents from '@/components/events/NeighborhoodEvents';
+import CommunityListingFilters from '@/components/location/CommunityListingFilters';
+import EditorialPlacementLinks from '@/components/conversion/EditorialPlacementLinks';
+import {
+  DEFAULT_LISTING_FILTERS,
+  filterCommunities,
+  getFeaturedCommunities,
+  ListingFilters,
+} from '@/lib/community-listing-utils';
 
 interface CityLocationClientProps {
   cityName: string;
@@ -47,7 +55,22 @@ export default function CityLocationClient({ cityName, stateAbbr, communities, r
     const first = communities.find(c => c.coordinates);
     return first?.coordinates ? { lat: first.coordinates.lat, lng: first.coordinates.lng } : null;
   }, [communities]);
-  const [showAllCommunities, setShowAllCommunities] = useState(false);
+  const [listingFilters, setListingFilters] = useState<ListingFilters>(DEFAULT_LISTING_FILTERS);
+
+  const filteredCommunities = useMemo(
+    () => filterCommunities(communities, listingFilters),
+    [communities, listingFilters]
+  );
+
+  const featuredCommunities = useMemo(
+    () => getFeaturedCommunities(filteredCommunities, 3),
+    [filteredCommunities]
+  );
+
+  const remainingCommunities = useMemo(() => {
+    const featuredIds = new Set(featuredCommunities.map((c) => c.id));
+    return filteredCommunities.filter((c) => !featuredIds.has(c.id));
+  }, [filteredCommunities, featuredCommunities]);
 
   // Get city-specific data
   const citySlug = cityName.toLowerCase().replace(/\s+/g, '-');
@@ -55,30 +78,9 @@ export default function CityLocationClient({ cityName, stateAbbr, communities, r
   const localResources = getLocalResourcesForCity(citySlug);
   const currentYear = new Date().getFullYear();
 
-  // Determine if this is a hospital discharge context
   const isHospitalDischarge = citySlug === 'westlake';
   const isMemoryCareHub = citySlug === 'beachwood';
 
-  // Get featured communities (top 3)
-  const featuredCommunities = useMemo(() => {
-    return communities
-      .filter(c => 
-        c.careTypes.some(t => 
-          t.toLowerCase().includes('assisted living') || 
-          t.toLowerCase().includes('memory care')
-        ) && c.description && !c.images[0]?.includes('placeholder')
-      )
-      .slice(0, 3);
-  }, [communities]);
-
-  // All remaining communities
-  const remainingCommunities = useMemo(() => {
-    const featuredIds = new Set(featuredCommunities.map(c => c.id));
-    return communities.filter(c => !featuredIds.has(c.id));
-  }, [communities, featuredCommunities]);
-
-
-  // Generate dynamic hero subtitle based on city context
   const getHeroSubtitle = () => {
     if (isHospitalDischarge) {
       return `Moving from a hospital to senior care? Get our 48-hour ${cityName} discharge checklist and ${currentYear} local cost guide—free.`;
@@ -132,7 +134,7 @@ export default function CityLocationClient({ cityName, stateAbbr, communities, r
             </p>
 
             {/* Quick CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-10">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-6">
               <a
                 href="tel:+12166774630"
                 className="inline-flex items-center justify-center gap-2 bg-teal-600 hover:bg-teal-700 text-white font-bold px-8 py-4 rounded-xl transition-colors shadow-lg hover:shadow-xl min-h-[56px]"
@@ -141,13 +143,21 @@ export default function CityLocationClient({ cityName, stateAbbr, communities, r
                 Talk to a {cityName} Expert
               </a>
               <a
-                href="#communities"
+                href={`/contact?city=${encodeURIComponent(cityName)}`}
                 className="inline-flex items-center justify-center gap-2 bg-white border-2 border-slate-300 text-slate-700 hover:border-teal-500 hover:text-teal-600 font-bold px-8 py-4 rounded-xl transition-colors min-h-[56px]"
               >
-                Browse Communities
+                Request Callback
                 <ArrowRight className="h-5 w-5" />
               </a>
             </div>
+            <p className="text-center mb-8">
+              <a
+                href="/senior-living-costs-cleveland"
+                className="text-teal-600 hover:text-teal-700 font-semibold text-sm underline-offset-2 hover:underline"
+              >
+                2026 Cleveland senior living cost guide →
+              </a>
+            </p>
 
             {/* Trust Signals */}
             <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-slate-600 text-sm">
@@ -169,17 +179,7 @@ export default function CityLocationClient({ cityName, stateAbbr, communities, r
       </section>
 
       {/* ============================================
-          SECTION 2: LEAD MAGNET (Above the fold)
-          Immediately visible without scrolling
-      ============================================ */}
-      <CityLeadMagnet 
-        cityName={cityName} 
-        citySlug={citySlug} 
-        isHospitalDischarge={isHospitalDischarge}
-      />
-
-      {/* ============================================
-          SECTION 3: LOCAL AUTHORITY CONTEXT
+          SECTION 2: LOCAL AUTHORITY CONTEXT
           1-2 paragraphs about senior care in this neighborhood
       ============================================ */}
       <LocalAuthorityProse
@@ -244,7 +244,22 @@ export default function CityLocationClient({ cityName, stateAbbr, communities, r
       ============================================ */}
       <section id="communities" className="py-12 bg-slate-50">
         <div className="container mx-auto px-4">
-          {/* Featured Communities */}
+          <CommunityListingFilters
+            filters={listingFilters}
+            onChange={setListingFilters}
+            resultCount={filteredCommunities.length}
+            totalCount={totalCommunities}
+          />
+
+          {filteredCommunities.length === 0 ? (
+            <p className="text-center text-slate-600 py-8">
+              No communities match these filters.{' '}
+              <button type="button" className="text-teal-600 font-semibold underline" onClick={() => setListingFilters(DEFAULT_LISTING_FILTERS)}>
+                Clear filters
+              </button>
+            </p>
+          ) : (
+            <>
           {featuredCommunities.length > 0 && (
             <div className="mb-12">
               <div className="text-center mb-8">
@@ -267,41 +282,41 @@ export default function CityLocationClient({ cityName, stateAbbr, communities, r
             </div>
           )}
 
-          {/* All Communities - Hidden by default */}
-          <div className="text-center">
-            {!showAllCommunities ? (
-              <button
-                onClick={() => setShowAllCommunities(true)}
-                className="inline-flex items-center justify-center gap-2 bg-teal-600 hover:bg-teal-700 text-white font-bold px-8 py-4 rounded-xl transition-colors shadow-lg hover:shadow-xl min-h-[56px]"
-              >
-                View All {totalCommunities} Communities in {cityName}
-                <ChevronDown className="h-5 w-5" />
-              </button>
-            ) : (
-              <div className="mt-12">
-                <h3 className="text-2xl font-bold text-slate-900 mb-6">
-                  All Senior Living Communities in {cityName}
-                </h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                  {remainingCommunities.map((community) => (
-                    <LocationCard key={community.id} community={community} regionSlug={regionSlug} />
-                  ))}
-                </div>
+          {remainingCommunities.length > 0 && (
+            <div className="mt-12">
+              <h3 className="text-2xl font-bold text-slate-900 mb-6 text-center">
+                More Communities in {cityName}
+              </h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                {remainingCommunities.map((community) => (
+                  <LocationCard key={community.id} community={community} regionSlug={regionSlug} />
+                ))}
               </div>
-            )}
-          </div>
+            </div>
+          )}
+            </>
+          )}
         </div>
       </section>
+
+      <EditorialPlacementLinks cityName={cityName} />
+
+      <CityLeadMagnet
+        cityName={cityName}
+        citySlug={citySlug}
+        isHospitalDischarge={isHospitalDischarge}
+      />
 
       {/* ============================================
           SECTION 8: COMMUNITY COMPARISON TABLE
           Side-by-side comparison for decision making
       ============================================ */}
-      {communities.length > 1 && (
+      {filteredCommunities.length > 1 && (
         <CommunityComparisonTable
-          communities={communities}
+          communities={filteredCommunities}
           cityName={cityName}
           maxCommunities={6}
+          regionSlug={regionSlug}
         />
       )}
 

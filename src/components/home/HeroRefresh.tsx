@@ -2,7 +2,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Search, MapPin, ChevronDown } from 'lucide-react';
+import { Search, MapPin, ChevronDown, Phone } from 'lucide-react';
+import PhoneLink from '@/components/conversion/PhoneLink';
+import { PLACEMENT_PHONE_DISPLAY } from '@/lib/placement-contact';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const CARE_TYPES = [
@@ -110,6 +112,24 @@ const HeroRefresh: React.FC = () => {
             Compare costs, reviews, and amenities for top-rated senior living communities in Northeast Ohio.{' '}
             <span className="text-white/80 font-medium">Free guidance from local experts.</span>
           </motion.p>
+
+          <motion.div
+            className="flex flex-col items-center gap-3 mb-8"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.55 }}
+          >
+            <PhoneLink
+              placement="hero_home"
+              className="inline-flex items-center justify-center gap-2 bg-teal-600 hover:bg-teal-700 text-white font-bold px-8 py-4 rounded-xl shadow-lg hover:shadow-xl min-h-[56px] w-full max-w-md"
+            >
+              <Phone className="h-5 w-5 shrink-0" />
+              Get a Free Placement Call
+            </PhoneLink>
+            <p className="text-sm text-white/50">
+              {PLACEMENT_PHONE_DISPLAY} · or search communities below
+            </p>
+          </motion.div>
 
           {/* Search Bar */}
           <motion.form

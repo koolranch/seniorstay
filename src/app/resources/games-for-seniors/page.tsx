@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import GlobalHeader from '@/components/home/GlobalHeader';
 import Footer from '@/components/footer/Footer';
+import PlacementConversionBand from '@/components/conversion/PlacementConversionBand';
 
 /**
  * Games for Seniors Resource Page
@@ -448,6 +449,14 @@ export default function GamesForSeniorsPage() {
             </div>
           </div>
         </section>
+
+        <PlacementConversionBand
+          title="Beyond games — planning for the future?"
+          description="When it's time to explore assisted living or memory care in Cleveland, our advisors compare communities at no cost."
+          phonePlacement="resources_games"
+          contactHref="/contact?intent=placement&source=games"
+          secondaryHref="/assessment"
+        />
 
         <Footer />
       </main>

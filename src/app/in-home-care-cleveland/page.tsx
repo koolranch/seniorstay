@@ -6,6 +6,8 @@ import { ArrowRight, CheckCircle, UserCheck, Users, MapPin, Heart, Clock, Phone,
 import GlobalHeader from '@/components/home/GlobalHeader';
 import Footer from '@/components/footer/Footer';
 import StickyTourButton from '@/components/tour/StickyTourButton';
+import PopularSuburbsGrid from '@/components/conversion/PopularSuburbsGrid';
+import PlacementConversionBand from '@/components/conversion/PlacementConversionBand';
 import { submitLead } from '@/app/actions/leads';
 
 export default function InHomeCareClevelandPage() {
@@ -411,6 +413,17 @@ export default function InHomeCareClevelandPage() {
           </Link>
         </div>
       </section>
+
+      <PopularSuburbsGrid title="When home care isn't enough — explore these suburbs" />
+
+      <PlacementConversionBand
+        title="Need more support than home care?"
+        description="Many families transition to assisted living when 24/7 help and social connection become priorities. Call to compare Cleveland communities."
+        phonePlacement="in_home_care_hub"
+        contactHref="/contact?intent=placement&source=in-home-care"
+        secondaryHref="/assisted-living-cleveland"
+        secondaryLabel="Compare assisted living options"
+      />
 
       <StickyTourButton />
       <Footer />

@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowLeft, Building, MapPin, Phone, Calendar, Star, Check, Heart } from 'lucide-react';
+import { ArrowLeft, Building, MapPin, Phone, Calendar, Star, Check, Heart, DollarSign } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -15,6 +15,12 @@ import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext
 import { Community } from '@/data/facilities';
 import MapComponent from '@/components/map/GoogleMap';
 import { submitLead } from '@/app/actions/leads';
+import CommunityTrustBadge from '@/components/community/CommunityTrustBadge';
+import OhioLicensePanel from '@/components/community/OhioLicensePanel';
+import PhoneLink from '@/components/conversion/PhoneLink';
+import { PLACEMENT_PHONE_TEL } from '@/lib/placement-contact';
+import { formatPriceEstimate, getPricingForCommunity } from '@/lib/community-pricing';
+import { hasRealCommunityImage } from '@/lib/community-listing-utils';
 
 interface CommunityClientProps {
   community: Community;
@@ -26,45 +32,22 @@ export default function CommunityClient({ community }: CommunityClientProps) {
   const [pricingSubmitted, setPricingSubmitted] = useState(false);
   const [tourSubmitted, setTourSubmitted] = useState(false);
 
-  // Destructure community data
-  const { name, location, careTypes, images, description, amenities, staff, testimonials } = community;
+  const { name, location, careTypes, images, description, amenities, staff, testimonials, amenityTags } = community;
 
-  // Use placeholder content for missing data
-  const communityDescription = description ||
-    `${name} is a beautiful senior living community located in ${location}. We provide compassionate care in a welcoming environment designed to meet the needs of our residents.`;
+  const pricing = getPricingForCommunity(community);
+  const hasRealPhoto = hasRealCommunityImage(community);
+  const displayAmenities = amenityTags?.length ? amenityTags : amenities;
+  const hasAmenities = Boolean(displayAmenities?.length);
+  const hasStaff = Boolean(
+    staff?.administrators?.length || staff?.caregivers?.length
+  );
+  const hasTestimonials = Boolean(testimonials?.length);
 
-  const communityAmenities = amenities || [
-    "24/7 Care Staff",
-    "Restaurant-Style Dining",
-    "Activity Programs",
-    "Housekeeping & Laundry",
-    "Transportation Services",
-    "Secured Environment",
-    "Fitness Center",
-    "Community Garden"
-  ];
+  const communityDescription =
+    description ||
+    `${name} is a senior living community in ${location}. Contact our placement advisors for verified pricing, availability, and tour scheduling.`;
 
-  const communityStaff = staff || {
-    administrators: [
-      { name: "Jane Smith", position: "Executive Director" },
-      { name: "John Johnson", position: "Care Manager" }
-    ],
-    caregivers: [
-      { name: "Maria Rodriguez", position: "Lead Caregiver" },
-      { name: "David Williams", position: "Wellness Coordinator" }
-    ]
-  };
-
-  const communityTestimonials = testimonials || [
-    {
-      quote: "The staff at this community has been so wonderful to my mother. She feels safe, happy, and well cared for.",
-      author: "Sarah D., Family Member"
-    },
-    {
-      quote: "Moving to this senior living community was the best decision I made. I have made many friends and feel at home here.",
-      author: "Robert T., Resident"
-    }
-  ];
+  const galleryImages = images.length > 0 ? images : ['/images/community-placeholder.jpg'];
 
   // Map timeframe to moveInTimeline
   const timeframeToTimeline = (timeframe: string): string => {
@@ -147,18 +130,35 @@ export default function CommunityClient({ community }: CommunityClientProps) {
       {/* Header with Community Name and Location */}
       <header className="container mx-auto px-4 py-6">
         <h1 className="text-2xl md:text-3xl font-bold">{name}</h1>
-        <div className="flex items-center mt-2 text-gray-600">
-          <MapPin className="h-4 w-4 mr-1" />
-          <span>{location}</span>
+        <div className="flex flex-wrap items-center gap-3 mt-2 text-gray-600">
+          <div className="flex items-center">
+            <MapPin className="h-4 w-4 mr-1" />
+            <span>{location}</span>
+          </div>
+          <CommunityTrustBadge community={community} />
+        </div>
+        <div className="mt-3 flex items-center gap-2 text-lg font-semibold text-slate-800">
+          <DollarSign className="h-5 w-5 text-teal-600" />
+          {formatPriceEstimate(community)}
+          <span className="text-sm font-normal text-slate-500">
+            {pricing.confirmedStarting ? '(advisor-confirmed)' : '(2026 area estimate)'}
+          </span>
         </div>
       </header>
 
       {/* Image Gallery */}
       <section className="container mx-auto px-4 mb-8">
         <div className="relative rounded-xl overflow-hidden">
+          {!hasRealPhoto && (
+            <div className="absolute inset-0 z-10 flex items-center justify-center bg-slate-900/40 pointer-events-none">
+              <span className="bg-white/90 text-slate-700 text-sm font-medium px-4 py-2 rounded-full">
+                Photo coming soon — call for a virtual tour
+              </span>
+            </div>
+          )}
           <Carousel className="w-full">
             <CarouselContent>
-              {images.map((image, index) => (
+              {galleryImages.map((image, index) => (
                 <CarouselItem key={`gallery-${index}`}>
                   <div className="relative w-full h-[300px] md:h-[450px]">
                     <Image
@@ -206,28 +206,22 @@ export default function CommunityClient({ community }: CommunityClientProps) {
           <Tabs defaultValue="overview" className="mb-8">
             <TabsList className="mb-4">
               <TabsTrigger value="overview">Overview</TabsTrigger>
-              <TabsTrigger value="amenities">Amenities</TabsTrigger>
-              <TabsTrigger value="staff">Staff</TabsTrigger>
-              <TabsTrigger value="testimonials">Testimonials</TabsTrigger>
+              {hasAmenities && <TabsTrigger value="amenities">Amenities</TabsTrigger>}
+              {hasStaff && <TabsTrigger value="staff">Staff</TabsTrigger>}
+              {hasTestimonials && <TabsTrigger value="testimonials">Testimonials</TabsTrigger>}
             </TabsList>
 
-            {/* Overview Tab */}
             <TabsContent value="overview" className="space-y-4">
               <h2 className="text-xl font-semibold">About {name}</h2>
               <p className="text-gray-700 leading-relaxed">{communityDescription}</p>
-              {/* Example: Adding an additional paragraph */}
-              <p className="text-gray-700 leading-relaxed">
-                Our community is designed to provide comfort, security, and engagement for our seniors.
-                We believe in creating an environment where residents can thrive and maintain their independence
-                while receiving the support they need.
-              </p>
+              <OhioLicensePanel community={community} />
             </TabsContent>
 
-            {/* Amenities Tab */}
+            {hasAmenities && (
             <TabsContent value="amenities" className="space-y-4">
               <h2 className="text-xl font-semibold">Amenities & Services</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                {communityAmenities.map((amenity, index) => (
+                {displayAmenities!.map((amenity, index) => (
                   <div key={`amenity-${index}`} className="flex items-start">
                     <Check className="h-5 w-5 text-primary mr-2 mt-0.5" />
                     <span className="text-gray-700">{amenity}</span>
@@ -235,53 +229,60 @@ export default function CommunityClient({ community }: CommunityClientProps) {
                 ))}
               </div>
             </TabsContent>
+            )}
 
-            {/* Staff Tab */}
+            {hasStaff && staff && (
             <TabsContent value="staff" className="space-y-4">
               <h2 className="text-xl font-semibold">Our Team</h2>
               <div className="space-y-6">
+                {staff.administrators?.length ? (
                 <div>
                   <h3 className="font-medium text-lg mb-3">Administration</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {communityStaff.administrators.map((staff, index) => (
+                    {staff.administrators.map((staffMember, index) => (
                       <div key={`admin-${index}`} className="border border-gray-200 rounded-lg p-4">
-                        <h4 className="font-medium">{staff.name}</h4>
-                        <p className="text-gray-600 text-sm">{staff.position}</p>
+                        <h4 className="font-medium">{staffMember.name}</h4>
+                        <p className="text-gray-600 text-sm">{staffMember.position}</p>
                       </div>
                     ))}
                   </div>
                 </div>
+                ) : null}
+                {staff.caregivers?.length ? (
                 <div>
                   <h3 className="font-medium text-lg mb-3">Care Team</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {communityStaff.caregivers.map((staff, index) => (
+                    {staff.caregivers.map((staffMember, index) => (
                       <div key={`caregiver-${index}`} className="border border-gray-200 rounded-lg p-4">
-                        <h4 className="font-medium">{staff.name}</h4>
-                        <p className="text-gray-600 text-sm">{staff.position}</p>
+                        <h4 className="font-medium">{staffMember.name}</h4>
+                        <p className="text-gray-600 text-sm">{staffMember.position}</p>
                       </div>
                     ))}
                   </div>
                 </div>
+                ) : null}
               </div>
             </TabsContent>
+            )}
 
-            {/* Testimonials Tab */}
+            {hasTestimonials && testimonials && (
             <TabsContent value="testimonials" className="space-y-4">
               <h2 className="text-xl font-semibold">What People Say</h2>
               <div className="space-y-6">
-                {communityTestimonials.map((testimonial, index) => (
+                {testimonials.map((testimonial, index) => (
                   <div key={`testimonial-${index}`} className="border-l-4 border-primary/30 pl-4 py-2">
                     <div className="flex mb-1">
                       {[1, 2, 3, 4, 5].map((star) => (
                         <Star key={star} className="h-4 w-4 text-yellow-400 fill-yellow-400" />
                       ))}
                     </div>
-                    <p className="text-gray-700 italic mb-2">"{testimonial.quote}"</p>
+                    <p className="text-gray-700 italic mb-2">&ldquo;{testimonial.quote}&rdquo;</p>
                     <p className="text-sm text-gray-600">— {testimonial.author}</p>
                   </div>
                 ))}
               </div>
             </TabsContent>
+            )}
           </Tabs>
         </div>
 
@@ -293,7 +294,9 @@ export default function CommunityClient({ community }: CommunityClientProps) {
             {/* Phone Contact */}
             <div className="flex items-center mb-6 text-gray-700">
               <Phone className="h-5 w-5 mr-3 text-primary" />
-              <span>(216) 677-4630</span>
+              <PhoneLink placement="community_detail" phoneTel={PLACEMENT_PHONE_TEL} className="font-semibold text-teal-600 hover:text-teal-700">
+                Call for pricing & availability
+              </PhoneLink>
             </div>
 
             {/* Location and Contact Section */}
@@ -313,7 +316,9 @@ export default function CommunityClient({ community }: CommunityClientProps) {
                 )}
                 <div className="mb-6">
                   <h3 className="text-sm font-medium text-gray-600">Contact:</h3>
-                  <p className="text-gray-800">(216) 677-4630</p>
+                  <PhoneLink placement="community_detail_sidebar" phoneTel={PLACEMENT_PHONE_TEL} className="text-teal-600 font-semibold hover:text-teal-700">
+                    Speak with a placement advisor
+                  </PhoneLink>
                 </div>
 
                 {community.coordinates && (

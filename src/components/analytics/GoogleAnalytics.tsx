@@ -53,7 +53,41 @@ export function trackFormSubmission(formType: string, communityName?: string) {
   trackEvent('form_submission', {
     event_category: 'conversion',
     event_label: formType,
-    community: communityName || 'general'
+    community: communityName || 'general',
+  });
+}
+
+export function trackPhoneClick(placement: string, page?: string) {
+  trackEvent('phone_click', {
+    event_category: 'conversion',
+    placement,
+    page_path: page || (typeof window !== 'undefined' ? window.location.pathname : ''),
+    page_location: typeof window !== 'undefined' ? window.location.href : '',
+  });
+}
+
+/** Fired once per session when user views a high-intent placement page (baseline KPI). */
+export function trackPlacementPageView(pageType: string) {
+  trackEvent('placement_page_view', {
+    event_category: 'engagement',
+    page_type: pageType,
+    page_path: typeof window !== 'undefined' ? window.location.pathname : '',
+  });
+}
+
+export function trackFormStart(formType: string) {
+  trackEvent('form_start', {
+    event_category: 'conversion',
+    event_label: formType,
+    page_path: typeof window !== 'undefined' ? window.location.pathname : '',
+  });
+}
+
+export function trackFormError(formType: string, message?: string) {
+  trackEvent('form_error', {
+    event_category: 'conversion',
+    event_label: formType,
+    error_message: message || 'unknown',
   });
 }
 

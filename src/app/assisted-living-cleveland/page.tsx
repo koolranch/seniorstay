@@ -7,6 +7,9 @@ import LocationCard from '@/components/property/LocationCard';
 import StickyTourButton from '@/components/tour/StickyTourButton';
 import { fetchAllCommunities } from '@/lib/fetch-community';
 import SimpleContactForm from '@/components/forms/SimpleContactForm';
+import PopularSuburbsGrid from '@/components/conversion/PopularSuburbsGrid';
+import PlacementConversionBand from '@/components/conversion/PlacementConversionBand';
+import PlacementHeroCTAs from '@/components/conversion/PlacementHeroCTAs';
 import CostComparisonTable from '@/components/widgets/CostComparisonTable';
 
 // ISR: Revalidate every hour
@@ -53,21 +56,11 @@ export default async function AssistedLivingClevelandPage() {
             <p className="text-lg md:text-xl text-slate-600 mb-10">
               Find the perfect assisted living community for your loved one. Compare top-rated Cleveland-area options, schedule tours, and get personalized guidance—completely free.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a
-                href="#communities"
-                className="inline-flex items-center justify-center bg-teal-600 hover:bg-teal-700 text-white font-bold px-8 py-4 rounded-xl transition-colors shadow-lg hover:shadow-xl min-h-[56px]"
-              >
-                Browse Communities
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </a>
-              <a
-                href="#guide"
-                className="inline-flex items-center justify-center bg-white border-2 border-slate-300 text-slate-700 hover:border-teal-500 hover:text-teal-600 font-bold px-8 py-4 rounded-xl transition-colors min-h-[56px]"
-              >
-                Read Complete Guide
-              </a>
-            </div>
+            <PlacementHeroCTAs
+              browseHref="#communities"
+              guideHref="#guide"
+              guideLabel="Read Complete Guide"
+            />
           </div>
         </div>
       </section>
@@ -91,6 +84,8 @@ export default async function AssistedLivingClevelandPage() {
           </div>
         </div>
       </section>
+
+      <PopularSuburbsGrid title="Assisted Living by Suburb" />
 
       {/* Cost Comparison Table -- immediate value for search visitors */}
       <CostComparisonTable
@@ -278,6 +273,14 @@ export default async function AssistedLivingClevelandPage() {
           </div>
         </div>
       </section>
+
+      <PlacementConversionBand
+        title="Not sure assisted living is the right fit?"
+        description="Take our 2-minute assessment or call for a free personalized recommendation."
+        phonePlacement="assisted_living_hub"
+        contactHref="/contact?intent=placement&source=assisted-living"
+        secondaryHref="/assessment"
+      />
 
       <StickyTourButton />
       <Footer />

@@ -15,6 +15,9 @@ import {
   getHubCities,
   type RegionConfig 
 } from '@/data/regions';
+import PlacementHeroCTAs from '@/components/conversion/PlacementHeroCTAs';
+import PopularSuburbsGrid from '@/components/conversion/PopularSuburbsGrid';
+import CareHubShortcuts from '@/components/conversion/CareHubShortcuts';
 
 interface RegionPageProps {
   params: { region: string };
@@ -125,7 +128,7 @@ export default async function RegionHubPage({ params }: RegionPageProps) {
                 {regionConfig.description}
               </p>
               
-              <div className="flex flex-wrap justify-center gap-4">
+              <div className="flex flex-wrap justify-center gap-4 mb-10">
                 <div className="bg-white px-6 py-3 rounded-xl shadow-md border border-slate-200 flex items-center gap-2">
                   <Home className="h-5 w-5 text-teal-600" />
                   <span className="font-bold text-slate-900">{totalCommunities}+ Communities</span>
@@ -139,9 +142,31 @@ export default async function RegionHubPage({ params }: RegionPageProps) {
                   <span className="font-bold text-slate-900">All Care Levels</span>
                 </div>
               </div>
+
+              <PlacementHeroCTAs
+                browseHref="#top-cities"
+                browseLabel="Browse Top Suburbs"
+                guideHref="/senior-living-costs-cleveland"
+                guideLabel="2026 Cost Guide"
+              />
+              <p className="mt-6">
+                <Link
+                  href="/assessment"
+                  className="text-teal-600 hover:text-teal-700 font-semibold text-sm underline-offset-2 hover:underline"
+                >
+                  Not sure what level of care? Take the 2-min assessment →
+                </Link>
+              </p>
+              <div className="mt-8">
+                <CareHubShortcuts />
+              </div>
             </div>
           </div>
         </section>
+
+        <div id="top-cities">
+          <PopularSuburbsGrid regionSlug={region} title={`Top ${regionConfig.displayName} Suburbs`} />
+        </div>
 
         {/* Cities Grid */}
         <section className="py-16 md:py-20 bg-white">
@@ -343,7 +368,7 @@ export default async function RegionHubPage({ params }: RegionPageProps) {
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
               <Link
-                href="/contact"
+                href="/contact?intent=placement"
                 className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 text-white font-bold px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all"
               >
                 <Users className="h-5 w-5" />

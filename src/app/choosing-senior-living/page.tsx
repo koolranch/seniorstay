@@ -6,6 +6,8 @@ import { ArrowRight, AlertTriangle, CheckCircle, HelpCircle, Users, Heart, Phone
 import GlobalHeader from '@/components/home/GlobalHeader';
 import Footer from '@/components/footer/Footer';
 import StickyTourButton from '@/components/tour/StickyTourButton';
+import PlacementConversionBand from '@/components/conversion/PlacementConversionBand';
+import EditorialPlacementLinks from '@/components/conversion/EditorialPlacementLinks';
 import SimpleContactForm from '@/components/forms/SimpleContactForm';
 
 export default function ChoosingSeniorLivingPage() {
@@ -393,6 +395,16 @@ export default function ChoosingSeniorLivingPage() {
           </div>
         </div>
       </section>
+
+      <EditorialPlacementLinks />
+
+      <PlacementConversionBand
+        title="Not sure which care level fits?"
+        description="Call for a free consultation—we'll help you compare independent living, assisted living, and memory care in Cleveland."
+        phonePlacement="choosing_senior_living"
+        contactHref="/contact?intent=placement&source=choosing"
+        secondaryHref="/assessment"
+      />
 
       <StickyTourButton />
       <Footer />

@@ -1,5 +1,9 @@
+'use client';
+
 import Link from 'next/link';
 import { Phone, ArrowRight } from 'lucide-react';
+import PhoneLink from '@/components/conversion/PhoneLink';
+import { PLACEMENT_PHONE_DISPLAY } from '@/lib/placement-contact';
 
 interface MidArticleCTAProps {
   variant?: 'default' | 'compact';
@@ -13,13 +17,13 @@ export default function MidArticleCTA({ variant = 'default' }: MidArticleCTAProp
           <Phone className="h-5 w-5 flex-shrink-0" />
           <span className="font-medium">Need help with senior care decisions?</span>
         </div>
-        <Link
-          href="/contact"
+        <PhoneLink
+          placement="blog_mid_compact"
           className="bg-white text-orange-600 font-semibold py-2 px-4 rounded-lg hover:bg-orange-50 transition-colors flex items-center gap-2 whitespace-nowrap"
         >
-          Free Consultation
+          Call {PLACEMENT_PHONE_DISPLAY}
           <ArrowRight className="h-4 w-4" />
-        </Link>
+        </PhoneLink>
       </div>
     );
   }
@@ -32,17 +36,17 @@ export default function MidArticleCTA({ variant = 'default' }: MidArticleCTAProp
             Looking for Senior Living Options?
           </h3>
           <p className="text-gray-600">
-            Our advisors can help you find the perfect community for your loved one—completely free.
+            Talk to a Cleveland placement advisor—free for families. We&apos;ll call you with 3 matched communities.
           </p>
         </div>
         <div className="flex flex-col sm:flex-row gap-3">
-          <Link
-            href="/contact"
+          <PhoneLink
+            placement="blog_mid"
             className="bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-5 rounded-lg transition-colors text-center flex items-center justify-center gap-2"
           >
             <Phone className="h-4 w-4" />
-            Get Free Help
-          </Link>
+            Get a Free Placement Call
+          </PhoneLink>
           <Link
             href="/cleveland"
             className="bg-white hover:bg-gray-50 text-gray-700 font-semibold py-3 px-5 rounded-lg border border-gray-300 transition-colors text-center"

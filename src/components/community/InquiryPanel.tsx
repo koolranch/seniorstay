@@ -89,6 +89,11 @@ export default function InquiryPanel({
     e.preventDefault();
     if (isSubmitting || !contactData.email) return;
 
+    const digits = contactData.phone.replace(/\D/g, '');
+    if (digits.length < 10) {
+      return;
+    }
+
     setIsSubmitting(true);
     try {
       const allQuestions = [...selectedChips];
@@ -151,7 +156,7 @@ export default function InquiryPanel({
                   {communityName}
                 </SheetTitle>
                 <SheetDescription className="text-xs text-slate-500">
-                  Ask a question — we typically respond within 24 hours
+                  Ask a question — we&apos;ll call you back, often within 15 minutes
                 </SheetDescription>
               </div>
             </div>
@@ -236,7 +241,7 @@ export default function InquiryPanel({
                     Where should we send the answer?
                   </p>
                   <p className="text-xs text-slate-500">
-                    We&apos;ll respond to your question within 24 hours.
+                    A Cleveland advisor will call you shortly—often within 15 minutes during business hours.
                   </p>
                 </div>
 
@@ -274,14 +279,15 @@ export default function InquiryPanel({
 
                   <div>
                     <label htmlFor="inquiry-phone" className="text-sm font-medium text-slate-700 mb-1 block">
-                      Phone <span className="text-slate-400">(optional)</span>
+                      Phone *
                     </label>
                     <Input
                       id="inquiry-phone"
                       type="tel"
+                      required
                       value={contactData.phone}
                       onChange={(e) => setContactData({ ...contactData, phone: e.target.value })}
-                      placeholder="(216) 555-0123"
+                      placeholder="(216) 677-4630"
                       className="h-11"
                     />
                   </div>
@@ -321,7 +327,7 @@ export default function InquiryPanel({
                 </motion.div>
                 <h3 className="text-lg font-bold text-slate-900 mb-2">Question Sent!</h3>
                 <p className="text-sm text-slate-600 max-w-xs">
-                  We&apos;ll get back to you about {communityName} within 24 hours.
+                  A Cleveland advisor will call you about {communityName} shortly.
                 </p>
                 <Button
                   variant="outline"

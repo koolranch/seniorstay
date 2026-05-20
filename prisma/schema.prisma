@@ -91,6 +91,12 @@ model Community {
   // Photo enrichment tracking
   photos_source        String?   // "facility_website", "caring.com", etc.
   photos_last_updated  DateTime?
+
+  // Listing enrichment (advisor / scrape pipeline)
+  starting_price_monthly Int?
+  availability_status    String?   // tours_available | waitlist | call_for_availability
+  ohio_license_number    String?
+  amenity_tags           String[]  @default([])
   
   // CMS Certification and Official Data
   ccn                      String?   @unique

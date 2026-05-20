@@ -58,7 +58,7 @@ export default function StickyTourButton() {
 
   return (
     <div
-      className={`fixed bottom-6 right-6 z-50 transition-all duration-300 ${
+      className={`hidden md:block fixed bottom-6 right-6 z-40 transition-all duration-300 ${
         isVisible ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0 pointer-events-none'
       }`}
     >

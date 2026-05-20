@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, Suspense, useEffect } from 'react';
+import { useState, Suspense, useEffect, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
 import GlobalHeader from '@/components/home/GlobalHeader';
 import Footer from '@/components/footer/Footer';
@@ -10,6 +10,10 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useLeadSubmit, getUtmParams } from '@/hooks/useLeadSubmit';
+import { trackFormStart } from '@/components/analytics/GoogleAnalytics';
+import PhoneLink from '@/components/conversion/PhoneLink';
+import { PLACEMENT_CALLBACK_MESSAGE, PLACEMENT_PHONE_DISPLAY } from '@/lib/placement-contact';
+import { isValidPhone, MOVE_IN_TIMELINE_OPTIONS } from '@/lib/lead-form-options';
 
 // Separate component that uses useSearchParams
 function ContactForm() {
@@ -21,6 +25,14 @@ function ContactForm() {
   const cityName = searchParams.get('city');
   
   const { submit, isPending, result, isSuccess, isError, reset } = useLeadSubmit();
+  const formStartTrackedRef = useRef(false);
+
+  const trackStartOnce = () => {
+    if (!formStartTrackedRef.current) {
+      formStartTrackedRef.current = true;
+      trackFormStart('contact');
+    }
+  };
 
   // Reset errors when result changes
   useEffect(() => {
@@ -38,28 +50,35 @@ function ContactForm() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setFormErrors({});
-    
+
     const formData = new FormData(e.currentTarget);
+    const phone = (formData.get('phone') as string) || '';
+
+    if (!isValidPhone(phone)) {
+      setFormErrors({ phone: 'A valid phone number is required so we can call you back.' });
+      return;
+    }
+
     const utmParams = getUtmParams();
-    
+
     const firstName = formData.get('firstName') as string;
     const lastName = formData.get('lastName') as string;
-    
-    // Determine care type from subject
+
     const subject = formData.get('subject') as string;
     let careType: string | undefined;
     if (subject === 'Help Finding a Community') {
-      careType = 'Assisted Living'; // Default, will be refined by notes
+      careType = 'Assisted Living';
     }
-    
+
     await submit({
       fullName: `${firstName} ${lastName}`.trim(),
       email: formData.get('email') as string,
-      phone: formData.get('phone') as string || undefined,
+      phone,
+      moveInTimeline: (formData.get('moveInTimeline') as string) || undefined,
       notes: formData.get('message') as string,
       communityName: communityName || undefined,
       cityOrZip: cityName || undefined,
-      careType: careType as any,
+      careType,
       pageType: 'contact',
       sourceSlug: cityName?.toLowerCase().replace(/\s+/g, '-'),
       ...utmParams,
@@ -78,13 +97,21 @@ function ContactForm() {
         <div className="absolute top-20 right-10 w-72 h-72 bg-teal-200/20 rounded-full blur-3xl" />
         
         <div className="container mx-auto px-4 relative z-10">
-          {/* Show context banner if coming from a community page */}
-          {communityName && (
+          {/* Context banner from city or community */}
+          {(communityName || cityName) && (
             <div className="bg-teal-50 border border-teal-200 rounded-xl p-4 mb-8 max-w-2xl mx-auto flex items-center gap-3">
               <Building2 className="h-5 w-5 text-teal-600 flex-shrink-0" />
               <p className="text-slate-700">
-                <strong>Interested in {communityName}</strong>
-                {cityName && ` in ${cityName}`}? Our advisor will help you learn more about this community.
+                {communityName ? (
+                  <>
+                    <strong>Interested in {communityName}</strong>
+                    {cityName && ` in ${cityName}`}? Our advisor will help you learn more about this community.
+                  </>
+                ) : (
+                  <>
+                    <strong>Looking for senior living in {cityName}?</strong> A local advisor will call you back—often within 2 hours on business days.
+                  </>
+                )}
               </p>
             </div>
           )}
@@ -94,14 +121,18 @@ function ContactForm() {
               Free Expert Guidance
             </span>
             <h1 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6">
-              {communityName 
-                ? `Speak to a ${cityName || 'Cleveland'} Advisor` 
-                : 'Contact Us'}
+              {communityName
+                ? `Speak to a ${cityName || 'Cleveland'} Advisor`
+                : cityName
+                  ? `Speak to a ${cityName} Advisor`
+                  : 'Contact Us'}
             </h1>
             <p className="text-lg md:text-xl text-slate-600">
               {communityName
                 ? `Our local advisors know ${communityName} well. Get personalized help with pricing, tours, and availability.`
-                : `We're here to help you find the perfect senior living community. 
+                : cityName
+                  ? `Get free help comparing senior living in ${cityName}. We'll call you back—often within 2 hours on business days.`
+                  : `We're here to help you find the perfect senior living community. 
                    Reach out to our experienced advisors for personalized assistance.`}
             </p>
           </div>
@@ -123,10 +154,11 @@ function ContactForm() {
                   <div>
                     <h3 className="font-bold text-slate-900 mb-1">Phone</h3>
                     <p className="text-slate-600 text-sm mb-2">Call us toll-free</p>
-                    <a href="tel:+12166774630" className="text-teal-600 hover:text-teal-700 text-xl font-bold">
-                      (216) 677-4630
-                    </a>
-                    <p className="text-sm text-slate-500 mt-2">Monday - Friday: 8:00 AM - 8:00 PM EST</p>
+                    <PhoneLink placement="contact_sidebar" className="text-teal-600 hover:text-teal-700 text-xl font-bold">
+                      {PLACEMENT_PHONE_DISPLAY}
+                    </PhoneLink>
+                    <p className="text-sm text-slate-500 mt-2">Most families hear back within 2 hours on business days.</p>
+                    <p className="text-sm text-slate-500">Monday - Friday: 8:00 AM - 8:00 PM EST</p>
                     <p className="text-sm text-slate-500">Saturday - Sunday: 9:00 AM - 5:00 PM EST</p>
                   </div>
                 </div>
@@ -151,7 +183,7 @@ function ContactForm() {
                   <div>
                     <h3 className="font-bold text-slate-900 mb-1">Response Time</h3>
                     <p className="text-slate-600">
-                      We typically respond to inquiries within 1 business day.
+                      {PLACEMENT_CALLBACK_MESSAGE}
                       For urgent matters, please call us directly.
                     </p>
                   </div>
@@ -197,12 +229,14 @@ function ContactForm() {
                       <CheckCircle2 className="h-6 w-6 text-green-600" />
                     </div>
                     <div>
-                      <h3 className="font-bold text-green-800 text-lg">{result?.message}</h3>
-                      {result?.priority === 'high' && (
-                        <p className="text-green-700 mt-2">
-                          Based on your inquiry, a senior advisor will contact you very soon.
-                        </p>
-                      )}
+                      <h3 className="font-bold text-green-800 text-lg">Thank you!</h3>
+                      <p className="text-green-700 mt-2">{PLACEMENT_CALLBACK_MESSAGE}</p>
+                      <p className="text-green-700 mt-2 text-sm">
+                        Or call{' '}
+                        <PhoneLink placement="contact_success" className="font-semibold underline">
+                          {PLACEMENT_PHONE_DISPLAY}
+                        </PhoneLink>
+                      </p>
                       <Button 
                         onClick={() => reset()} 
                         variant="outline" 
@@ -214,12 +248,12 @@ function ContactForm() {
                   </div>
                 </div>
               ) : (
-                <form className="space-y-5" onSubmit={handleSubmit}>
+                <form className="space-y-5" onSubmit={handleSubmit} onFocus={trackStartOnce}>
                   {/* Hidden fields for community context tracking */}
-                  {communityName && (
+                  {(communityName || cityName) && (
                     <>
-                      <input type="hidden" name="community_interest" value={communityName} />
-                      <input type="hidden" name="city" value={cityName || ''} />
+                      {communityName && <input type="hidden" name="community_interest" value={communityName} />}
+                      {cityName && <input type="hidden" name="city" value={cityName} />}
                     </>
                   )}
                   
@@ -278,20 +312,45 @@ function ContactForm() {
                   </div>
 
                   <div>
-                    <Label htmlFor="phone" className="font-semibold text-slate-700">Phone Number</Label>
-                    <Input 
-                      id="phone" 
-                      name="phone" 
-                      type="tel" 
-                      placeholder="(216) 677-4630" 
+                    <Label htmlFor="phone" className="font-semibold text-slate-700">Phone Number *</Label>
+                    <Input
+                      id="phone"
+                      name="phone"
+                      type="tel"
+                      required
+                      placeholder="(216) 677-4630"
+                      onFocus={trackStartOnce}
                       className={`mt-1.5 h-12 ${formErrors.phone ? 'border-red-500' : 'border-slate-300'}`}
                     />
                     <p className="text-xs text-slate-500 mt-1.5">
-                      Providing your phone helps us respond faster, especially for urgent inquiries.
+                      We call you back—often within 15 minutes during business hours.
                     </p>
                     {formErrors.phone && (
                       <p className="text-red-500 text-sm mt-1">{formErrors.phone}</p>
                     )}
+                  </div>
+
+                  <div>
+                    <Label htmlFor="moveInTimeline" className="font-semibold text-slate-700">
+                      When are you looking to move? *
+                    </Label>
+                    <select
+                      id="moveInTimeline"
+                      name="moveInTimeline"
+                      required
+                      defaultValue=""
+                      onFocus={trackStartOnce}
+                      className="w-full mt-1.5 h-12 px-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+                    >
+                      <option value="" disabled>
+                        Select a timeline
+                      </option>
+                      {MOVE_IN_TIMELINE_OPTIONS.map((opt) => (
+                        <option key={opt.value} value={opt.value}>
+                          {opt.label}
+                        </option>
+                      ))}
+                    </select>
                   </div>
 
                   <div>

@@ -2,8 +2,12 @@
 
 import React, { useState, useId } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { Heart, MapPin, Phone, Star, Clock, Check } from 'lucide-react';
+import { Heart, MapPin, Phone, Check, DollarSign, Camera } from 'lucide-react';
+import PhoneLink from '@/components/conversion/PhoneLink';
+import CommunityTrustBadge from '@/components/community/CommunityTrustBadge';
+import { PLACEMENT_CALLBACK_MESSAGE, PLACEMENT_PHONE_TEL } from '@/lib/placement-contact';
+import { formatPriceEstimate, getPricingForCommunity } from '@/lib/community-pricing';
+import { hasRealCommunityImage } from '@/lib/community-listing-utils';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
@@ -29,7 +33,6 @@ export default function LocationCard({ community, compact = false, regionSlug }:
   const [isTourSubmitting, setIsTourSubmitting] = useState(false);
   const [pricingSubmitted, setPricingSubmitted] = useState(false);
   const [tourSubmitted, setTourSubmitted] = useState(false);
-  const router = useRouter();
   const { addToComparison, isInComparison, removeFromComparison } = useComparison();
 
   // Early return with an error indicator if community is null/undefined
@@ -44,6 +47,16 @@ export default function LocationCard({ community, compact = false, regionSlug }:
   // Safely access community id with fallback only if actually undefined
   const communityId = community.id || 'unknown';
   const isCompared = isInComparison(communityId);
+  const pricing = getPricingForCommunity(community);
+  const hasRealPhoto = hasRealCommunityImage(community);
+  const availabilityLabel =
+    community.availabilityStatus === 'tours_available'
+      ? 'Tours available'
+      : community.availabilityStatus === 'waitlist'
+        ? 'Waitlist'
+        : community.availabilityStatus === 'call_for_availability'
+          ? 'Call for availability'
+          : null;
 
   const toggleComparison = () => {
     if (isCompared) {
@@ -183,6 +196,7 @@ export default function LocationCard({ community, compact = false, regionSlug }:
               </span>
             ))}
           </div>
+          <p className="text-xs font-semibold text-teal-700 mt-2">{formatPriceEstimate(community)}</p>
         </div>
       </div>
     );
@@ -201,6 +215,13 @@ export default function LocationCard({ community, compact = false, regionSlug }:
             sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
           />
         </Link>
+
+        {!hasRealPhoto && (
+          <div className="absolute bottom-2 left-2 flex items-center gap-1 bg-black/65 text-white text-[10px] font-medium px-2 py-1 rounded-md">
+            <Camera className="h-3 w-3" />
+            Photo coming soon
+          </div>
+        )}
 
         {/* Memory Care Badge - High contrast for accessibility */}
         {careTypes.includes('Memory Care') && (
@@ -241,8 +262,8 @@ export default function LocationCard({ community, compact = false, regionSlug }:
         </div>
 
         {/* Care Types - Larger badges for readability */}
-        <div className="flex flex-wrap gap-2 mb-4">
-          {careTypes.map((type, index) => (
+        <div className="flex flex-wrap gap-2 mb-3">
+          {careTypes.slice(0, 3).map((type, index) => (
             <span
               key={`${communityId}-${type}-${index}`}
               className="bg-primary/15 text-primary-700 px-3 py-1.5 rounded-full text-sm font-semibold"
@@ -251,6 +272,22 @@ export default function LocationCard({ community, compact = false, regionSlug }:
             </span>
           ))}
         </div>
+
+        <div className="flex flex-wrap items-center gap-2 mb-3">
+          <span className="inline-flex items-center gap-1 text-sm font-bold text-teal-700 bg-teal-50 px-2.5 py-1 rounded-lg">
+            <DollarSign className="h-3.5 w-3.5" />
+            {formatPriceEstimate(community)}
+          </span>
+          <CommunityTrustBadge community={community} />
+          {availabilityLabel && (
+            <span className="text-xs font-medium text-slate-600 bg-slate-100 px-2 py-0.5 rounded-full">
+              {availabilityLabel}
+            </span>
+          )}
+        </div>
+        <p className="text-[10px] text-slate-400 mb-3">
+          {pricing.confirmedStarting ? 'Advisor-confirmed starting price' : '2026 area estimate — call to confirm'}
+        </p>
 
         {/* View Details Link - 48px+ tap target */}
         <Link
@@ -265,14 +302,21 @@ export default function LocationCard({ community, compact = false, regionSlug }:
       {!isOnlySkilledNursing ? (
         <div className="p-4 pt-0 mt-auto">
           <div className="grid grid-cols-2 gap-3">
-            {/* Get Pricing Button - 48px+ height for WCAG 2.2 */}
+            <PhoneLink
+              placement="listing_card"
+              phoneTel={PLACEMENT_PHONE_TEL}
+              className="w-full min-h-[48px] py-3 text-base font-bold bg-teal-600 hover:bg-teal-700 text-white rounded-md shadow-md inline-flex items-center justify-center gap-1.5"
+            >
+              <Phone className="h-4 w-4" />
+              Call for Pricing
+            </PhoneLink>
             <Dialog>
               <DialogTrigger asChild>
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   className="w-full min-h-[48px] py-3 text-base font-semibold border-2 border-gray-300 hover:border-primary hover:bg-primary/5"
                 >
-                  Get Pricing
+                  Request Callback
                 </Button>
               </DialogTrigger>
               <DialogContent className="max-w-md mx-auto">
@@ -330,7 +374,7 @@ export default function LocationCard({ community, compact = false, regionSlug }:
                     </div>
                     <h3 className="font-medium text-lg">Request Sent!</h3>
                     <p className="text-gray-600">
-                      Thank you for your interest in {communityName}. A senior living advisor will contact you shortly with pricing information.
+                      {PLACEMENT_CALLBACK_MESSAGE} We&apos;ll share pricing for {communityName}.
                     </p>
                     <Button variant="outline" onClick={() => setPricingSubmitted(false)}>
                       Send Another Request

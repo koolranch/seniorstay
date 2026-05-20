@@ -6,6 +6,7 @@ import Footer from '@/components/footer/Footer';
 import StickyTourButton from '@/components/tour/StickyTourButton';
 import { fetchRecentBlogPosts } from '@/lib/blog-posts';
 import SimpleContactForm from '@/components/forms/SimpleContactForm';
+import PlacementConversionBand from '@/components/conversion/PlacementConversionBand';
 
 export const revalidate = 300;
 
@@ -326,6 +327,16 @@ export default async function ResourcesPage() {
           </div>
         </div>
       </section>
+
+      {/* Placement CTA for families ready to move beyond resources */}
+      <PlacementConversionBand
+        title="Ready to find the right community?"
+        description="Resources are a great start—when you're ready, our Cleveland advisors compare options and pricing at no cost."
+        phonePlacement="resources_band"
+        contactHref="/contact?intent=placement&source=resources"
+        secondaryHref="/assessment"
+        secondaryLabel="Take the 2-min care assessment"
+      />
 
       {/* CTA Section */}
       <section className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 py-16 md:py-20">

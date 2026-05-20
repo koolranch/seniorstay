@@ -254,7 +254,11 @@ function transformDatabaseToCommunity(data: any): Community {
     imageAlt: data.image_alt || `${data.name} senior living facility in ${data.city}, Ohio`,
     careTypes: data.services?.split(',').map((s: string) => s.trim()) || [],
     description: data.description || undefined,
-    amenities: undefined,
+    amenities: data.amenity_tags?.length
+      ? data.amenity_tags
+      : data.amenityTags?.length
+        ? data.amenityTags
+        : undefined,
     staff: undefined,
     testimonials: undefined,
     rating: data.rating ? parseFloat(data.rating) : undefined,
@@ -283,6 +287,11 @@ function transformDatabaseToCommunity(data: any): Community {
     careCompareUrl: data.care_compare_url || data.careCompareUrl || undefined,
     medicaidPercentage: data.medicaid_percentage ? parseFloat(data.medicaid_percentage) : 
                        data.medicaidPercentage ? parseFloat(data.medicaidPercentage) : undefined,
+
+    startingPriceMonthly: data.starting_price_monthly ?? data.startingPriceMonthly ?? undefined,
+    availabilityStatus: data.availability_status || data.availabilityStatus || undefined,
+    ohioLicenseNumber: data.ohio_license_number || data.ohioLicenseNumber || undefined,
+    amenityTags: data.amenity_tags || data.amenityTags || undefined,
   };
 }
 

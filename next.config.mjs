@@ -491,6 +491,34 @@ const nextConfig = {
         destination: '/cleveland/events',
         permanent: true,
       },
+
+      // === Phase 2: Analytics-driven legacy URL cleanup (May 2026) ===
+      {
+        source: '/road-trips-from-chicago',
+        destination: '/blog',
+        permanent: true,
+      },
+      {
+        source: '/sticky-post/sticky-post',
+        destination: '/blog',
+        permanent: true,
+      },
+      {
+        source: '/sticky-post/:path*',
+        destination: '/blog',
+        permanent: true,
+      },
+      {
+        source: '/blog/:slug/embed',
+        destination: '/blog/:slug',
+        permanent: true,
+      },
+      // Promote placement content for old cost URL variants
+      {
+        source: '/blog/average-cost-of-assisted-living',
+        destination: '/blog/cost-of-assisted-living-ohio',
+        permanent: true,
+      },
     ];
   },
 };

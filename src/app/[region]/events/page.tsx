@@ -4,6 +4,7 @@ import { createClient } from '@supabase/supabase-js';
 import EventsHubClient from '@/app/events/EventsHubClient';
 import GlobalHeader from '@/components/home/GlobalHeader';
 import Footer from '@/components/footer/Footer';
+import PlacementConversionBand from '@/components/conversion/PlacementConversionBand';
 import { SeniorEvent } from '@/types/events';
 import { getRegionConfig, isValidRegion, getAllRegionSlugs } from '@/data/regions';
 
@@ -203,6 +204,15 @@ export default async function RegionEventsPage({ params }: RegionEventsPageProps
             </div>
           </div>
         </section>
+
+        <PlacementConversionBand
+          title="Planning a move near this event?"
+          description={`Relocating in ${regionConfig.displayName}? Our advisors compare assisted living and memory care options at no cost to your family.`}
+          phonePlacement="events_hub_band"
+          contactHref={`/contact?intent=placement&source=events&region=${region}`}
+          secondaryHref="/assessment"
+          secondaryLabel="Take the 2-min care assessment"
+        />
 
         {/* Events Content */}
         <EventsHubClient initialEvents={events} regionSlug={region} />

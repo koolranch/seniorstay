@@ -7,6 +7,8 @@ import GlobalHeader from '@/components/home/GlobalHeader';
 import Footer from '@/components/footer/Footer';
 import LocationCard from '@/components/property/LocationCard';
 import StickyTourButton from '@/components/tour/StickyTourButton';
+import PopularSuburbsGrid from '@/components/conversion/PopularSuburbsGrid';
+import PlacementConversionBand from '@/components/conversion/PlacementConversionBand';
 import { communityData } from '@/data/facilities';
 import { submitLead } from '@/app/actions/leads';
 
@@ -152,6 +154,8 @@ export default function IndependentLivingClevelandPage() {
           </div>
         </div>
       </section>
+
+      <PopularSuburbsGrid title="Independent Living by Suburb" />
 
       {/* What is Independent Living */}
       <section id="guide" className="py-16 md:py-20 bg-white">
@@ -407,6 +411,15 @@ export default function IndependentLivingClevelandPage() {
           </div>
         </div>
       </section>
+
+      <PlacementConversionBand
+        title="Compare independent living communities"
+        description="Call for pricing, availability, and tours across Cleveland's top suburbs—free for families."
+        phonePlacement="independent_living_hub"
+        contactHref="/contact?intent=placement&source=independent-living"
+        secondaryHref="/senior-living-costs-cleveland"
+        secondaryLabel="See 2026 cost ranges"
+      />
 
       <StickyTourButton />
       <Footer />

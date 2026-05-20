@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import GlobalHeader from '@/components/home/GlobalHeader';
 import Footer from '@/components/footer/Footer';
+import PlacementConversionBand from '@/components/conversion/PlacementConversionBand';
 
 /**
  * Brain Health for Seniors Page
@@ -425,6 +426,15 @@ export default function BrainHealthPage() {
             </div>
           </div>
         </section>
+
+        <PlacementConversionBand
+          title="Worried about memory changes?"
+          description="Our Cleveland advisors help families compare memory care and assisted living—call for a free, confidential conversation."
+          phonePlacement="resources_brain_health"
+          contactHref="/contact?intent=placement&source=brain-health"
+          secondaryHref="/memory-care-cleveland"
+          secondaryLabel="Memory care communities in Cleveland"
+        />
 
         <Footer />
       </main>

@@ -7,6 +7,8 @@ import GlobalHeader from '@/components/home/GlobalHeader';
 import Footer from '@/components/footer/Footer';
 import LocationCard from '@/components/property/LocationCard';
 import StickyTourButton from '@/components/tour/StickyTourButton';
+import PopularSuburbsGrid from '@/components/conversion/PopularSuburbsGrid';
+import PlacementConversionBand from '@/components/conversion/PlacementConversionBand';
 import { Community } from '@/data/facilities';
 import { submitLead } from '@/app/actions/leads';
 
@@ -149,6 +151,8 @@ export default function MemoryCareClevelandClient({ communities }: MemoryCareCle
           </div>
         </div>
       </section>
+
+      <PopularSuburbsGrid title="Memory Care by Suburb" />
 
       {/* What is Memory Care Section */}
       <section id="guide" className="py-16 md:py-20 bg-white">
@@ -452,6 +456,14 @@ export default function MemoryCareClevelandClient({ communities }: MemoryCareCle
           </div>
         </div>
       </section>
+
+      <PlacementConversionBand
+        title="Need help choosing memory care?"
+        description="Call for a free consultation—we know Cleveland's dementia care communities personally."
+        phonePlacement="memory_care_hub"
+        contactHref="/contact?intent=placement&source=memory-care"
+        secondaryHref="/assessment"
+      />
 
       <StickyTourButton />
       <Footer />

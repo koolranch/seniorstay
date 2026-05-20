@@ -6,6 +6,8 @@ import { ArrowRight, DollarSign, TrendingUp, Shield, HelpCircle, Phone, Brain, H
 import GlobalHeader from '@/components/home/GlobalHeader';
 import Footer from '@/components/footer/Footer';
 import StickyTourButton from '@/components/tour/StickyTourButton';
+import PopularSuburbsGrid from '@/components/conversion/PopularSuburbsGrid';
+import PlacementConversionBand from '@/components/conversion/PlacementConversionBand';
 import { submitLead } from '@/app/actions/leads';
 import AffordabilityCalculator from '@/components/AffordabilityCalculator';
 
@@ -153,6 +155,8 @@ export default function SeniorLivingCostsClevelandPage() {
         </div>
       </section>
 
+      <PopularSuburbsGrid title="Compare Costs by Suburb" />
+
       {/* Pricing Overview */}
       <section className="py-16 md:py-20 bg-white">
         <div className="container mx-auto px-4">
@@ -160,6 +164,14 @@ export default function SeniorLivingCostsClevelandPage() {
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Cleveland Senior Living Cost Breakdown</h2>
               <p className="text-lg text-slate-600">Monthly costs by care type in Greater Cleveland</p>
+              <p className="mt-4">
+                <Link
+                  href="/blog/cost-of-assisted-living-ohio"
+                  className="text-teal-600 hover:text-teal-700 font-semibold text-sm underline-offset-2 hover:underline"
+                >
+                  Read our full Ohio assisted living cost guide →
+                </Link>
+              </p>
             </div>
             
             <div className="grid md:grid-cols-3 gap-6 mb-12">
@@ -434,6 +446,14 @@ export default function SeniorLivingCostsClevelandPage() {
           </div>
         </div>
       </section>
+
+      <PlacementConversionBand
+        title="Want a personalized cost estimate?"
+        description="Every family's situation is different—call for a free breakdown based on your budget and care needs."
+        phonePlacement="costs_hub"
+        contactHref="/contact?intent=placement&source=costs"
+        secondaryHref="/assessment"
+      />
 
       <StickyTourButton />
       <Footer />

@@ -4,6 +4,8 @@ import './globals.css';
 import { ComparisonProvider } from '@/context/ComparisonContext';
 import GoogleMapsScript from '@/components/map/GoogleMapsScript';
 import GoogleAnalytics from '@/components/analytics/GoogleAnalytics';
+import PlacementPageTracker from '@/components/analytics/PlacementPageTracker';
+import SitewideConversionBar from '@/components/conversion/SitewideConversionBar';
 import MetaPixel from '@/components/analytics/MetaPixel';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
@@ -81,14 +83,16 @@ export default function RootLayout({
         <meta name="theme-color" content="#0070f3" />
         <link rel="apple-touch-icon" href="/icon-192x192.png" />
       </head>
-      <body className="min-h-screen bg-white antialiased">
+      <body className="min-h-screen bg-white antialiased pb-24 md:pb-0">
         <GoogleAnalytics />
+        <PlacementPageTracker />
         <MetaPixel />
         <Analytics />
         <SpeedInsights />
         <ComparisonProvider>
           {children}
         </ComparisonProvider>
+        <SitewideConversionBar />
         <GoogleMapsScript />
       </body>
     </html>

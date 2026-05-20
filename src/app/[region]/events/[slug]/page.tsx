@@ -11,6 +11,7 @@ import { fetchQualityCommunitiesByCity } from '@/lib/fetch-featured-communities'
 import GlobalHeader from '@/components/home/GlobalHeader';
 import EventReminderForm from '@/components/events/EventReminderForm';
 import Footer from '@/components/footer/Footer';
+import PlacementConversionBand from '@/components/conversion/PlacementConversionBand';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -441,6 +442,16 @@ export default async function EventSlugPage({ params }: EventPageProps) {
           </div>
         </div>
       </section>
+
+      <PlacementConversionBand
+        title={`Planning a move near ${event.neighborhood || event.location_name || regionConfig.primaryCity}?`}
+        description="Our Cleveland advisors compare assisted living and memory care at no cost—call or request a callback."
+        phonePlacement="event_detail_band"
+        contactHref={`/contact?intent=placement&source=event&city=${encodeURIComponent(event.neighborhood || event.location_name || '')}`}
+        cityName={event.neighborhood || undefined}
+        cityHref={citySlug ? `/${region}/${citySlug}#communities` : undefined}
+        secondaryHref="/assessment"
+      />
       
       <Footer />
     </div>

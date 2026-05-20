@@ -1,11 +1,15 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Phone, Users, CheckCircle, Shield, Calendar, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { submitLead } from '@/app/actions/leads';
+import { trackFormError, trackFormStart, trackFormSubmission } from '@/components/analytics/GoogleAnalytics';
+import PhoneLink from '@/components/conversion/PhoneLink';
+import { PLACEMENT_CALLBACK_MESSAGE, PLACEMENT_PHONE_DISPLAY } from '@/lib/placement-contact';
+import { isValidPhone, MOVE_IN_TIMELINE_OPTIONS } from '@/lib/lead-form-options';
 
 const BENEFITS = [
   'Free consultation with a local senior living advisor',
@@ -19,8 +23,18 @@ export default function AdvisorSection() {
     fullName: '',
     phone: '',
     email: '',
+    moveInTimeline: '',
     contactPreference: 'phone' as 'phone' | 'email',
   });
+  const [formError, setFormError] = useState('');
+  const formStartTrackedRef = useRef(false);
+
+  const trackStartOnce = () => {
+    if (!formStartTrackedRef.current) {
+      formStartTrackedRef.current = true;
+      trackFormStart('advisor');
+    }
+  };
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
@@ -28,19 +42,39 @@ export default function AdvisorSection() {
     e.preventDefault();
     if (isSubmitting) return;
 
+    setFormError('');
+    if (!isValidPhone(formData.phone)) {
+      setFormError('Please enter a valid phone number so we can call you.');
+      trackFormError('advisor', 'invalid_phone');
+      return;
+    }
+    if (!formData.moveInTimeline) {
+      setFormError('Please tell us when you are looking to move.');
+      return;
+    }
+
     setIsSubmitting(true);
     try {
-      await submitLead({
+      const result = await submitLead({
         fullName: formData.fullName,
         phone: formData.phone,
         email: formData.email,
+        moveInTimeline: formData.moveInTimeline,
         pageType: 'advisor_request',
         notes: `Advisor consultation requested. Preferred contact: ${formData.contactPreference}`,
         sourceSlug: 'homepage-advisor',
       });
-      setIsSubmitted(true);
-    } catch (error) {
-      console.error('Error submitting advisor request:', error);
+      if (result.success) {
+        trackFormSubmission('advisor');
+        setIsSubmitted(true);
+        formStartTrackedRef.current = false;
+      } else {
+        setFormError(result.message || 'Something went wrong. Please try again.');
+        trackFormError('advisor', result.message);
+      }
+    } catch {
+      setFormError('Unable to submit. Please call us directly.');
+      trackFormError('advisor', 'network_error');
     } finally {
       setIsSubmitting(false);
     }
@@ -126,7 +160,7 @@ export default function AdvisorSection() {
                     We&apos;ll be in touch soon!
                   </h3>
                   <p className="text-slate-600">
-                    A local advisor will reach out within 1 business day.
+                    {PLACEMENT_CALLBACK_MESSAGE}
                   </p>
                 </div>
               ) : (
@@ -163,14 +197,16 @@ export default function AdvisorSection() {
 
                     <div>
                       <label htmlFor="advisor-phone" className="text-sm font-medium text-slate-700 mb-1.5 block">
-                        Phone Number
+                        Phone Number *
                       </label>
                       <Input
                         id="advisor-phone"
                         type="tel"
+                        required
                         value={formData.phone}
                         onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                        placeholder="(216) 555-0123"
+                        onFocus={trackStartOnce}
+                        placeholder="(216) 677-4630"
                         className="h-12"
                       />
                     </div>
@@ -187,6 +223,29 @@ export default function AdvisorSection() {
                         placeholder="you@email.com"
                         className="h-12"
                       />
+                    </div>
+
+                    <div>
+                      <label htmlFor="advisor-timeline" className="text-sm font-medium text-slate-700 mb-1.5 block">
+                        When are you looking to move? *
+                      </label>
+                      <select
+                        id="advisor-timeline"
+                        required
+                        value={formData.moveInTimeline}
+                        onChange={(e) => setFormData({ ...formData, moveInTimeline: e.target.value })}
+                        onFocus={trackStartOnce}
+                        className="w-full h-12 px-3 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:ring-2 focus:ring-teal-500"
+                      >
+                        <option value="" disabled>
+                          Select a timeline
+                        </option>
+                        {MOVE_IN_TIMELINE_OPTIONS.map((opt) => (
+                          <option key={opt.value} value={opt.value}>
+                            {opt.label}
+                          </option>
+                        ))}
+                      </select>
                     </div>
 
                     {/* Contact Preference */}
@@ -220,20 +279,22 @@ export default function AdvisorSection() {
                       </div>
                     </div>
 
+                    {formError && <p className="text-red-500 text-sm">{formError}</p>}
+
                     <Button
                       type="submit"
                       disabled={isSubmitting}
                       className="w-full h-13 text-base font-bold bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800 shadow-lg"
                     >
-                      {isSubmitting ? 'Submitting...' : 'Request Free Consultation'}
+                      {isSubmitting ? 'Submitting...' : 'Request Free Placement Call'}
                       <ArrowRight className="h-5 w-5 ml-2" />
                     </Button>
 
                     <p className="text-xs text-center text-slate-400">
                       Or call us directly:{' '}
-                      <a href="tel:+12166774630" className="text-teal-600 font-medium hover:underline">
-                        (216) 677-4630
-                      </a>
+                      <PhoneLink placement="advisor_form" className="text-teal-600 font-medium hover:underline">
+                        {PLACEMENT_PHONE_DISPLAY}
+                      </PhoneLink>
                     </p>
                   </form>
                 </>

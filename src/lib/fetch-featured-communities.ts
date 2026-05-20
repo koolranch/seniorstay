@@ -6,6 +6,8 @@
 
 import { supabase } from './supabase-client';
 import { Community } from '@/data/facilities';
+import { hasRealCommunityImage } from '@/lib/community-listing-utils';
+import { sortCommunitiesForDisplay } from '@/lib/community-listing-utils';
 
 // Tier 1 Premium Cities - Highest value leads
 const TIER_1_CITIES = ['Westlake', 'Beachwood', 'Shaker Heights', 'Rocky River', 'Solon'];
@@ -40,9 +42,17 @@ function transformDatabaseToCommunity(data: any): Community {
         : [],
     careTypes: data.services?.split(',').map((s: string) => s.trim()) || [],
     description: data.description || undefined,
-    amenities: undefined,
+    amenities: data.amenity_tags?.length
+      ? data.amenity_tags
+      : data.amenityTags?.length
+        ? data.amenityTags
+        : undefined,
     staff: undefined,
     testimonials: undefined,
+    startingPriceMonthly: data.starting_price_monthly ?? data.startingPriceMonthly ?? undefined,
+    availabilityStatus: data.availability_status || data.availabilityStatus || undefined,
+    ohioLicenseNumber: data.ohio_license_number || data.ohioLicenseNumber || undefined,
+    amenityTags: data.amenity_tags || data.amenityTags || undefined,
     rating: data.rating ? parseFloat(data.rating) : undefined,
     ccn: data.ccn || undefined,
     facilityType: data.facility_type || data.facilityType || undefined,
@@ -68,20 +78,10 @@ function transformDatabaseToCommunity(data: any): Community {
 }
 
 /**
- * Check if image URL is a placeholder
+ * Check if community has a real photo (shared helper)
  */
-function isPlaceholderImage(imageUrl: string | null | undefined): boolean {
-  if (!imageUrl) return true;
-  const placeholderPatterns = [
-    'placeholder',
-    'no-image',
-    'default-community',
-    'generic',
-    'missing',
-  ];
-  return placeholderPatterns.some(pattern => 
-    imageUrl.toLowerCase().includes(pattern)
-  );
+function isPlaceholderImage(_imageUrl: string | null | undefined, community: Community): boolean {
+  return !hasRealCommunityImage(community);
 }
 
 /**
@@ -153,7 +153,7 @@ export async function fetchFeaturedCommunities(limit: number = 8): Promise<Commu
 
       // Must have non-placeholder image (double-check after Supabase filter)
       const imageUrl = c.images?.[0];
-      if (isPlaceholderImage(imageUrl)) {
+      if (isPlaceholderImage(imageUrl, c)) {
         filteredOutIds.push(`${c.id} (placeholder image: ${imageUrl})`);
         return false;
       }
@@ -190,22 +190,12 @@ export async function fetchFeaturedCommunities(limit: number = 8): Promise<Commu
     }
 
     // TIER PRIORITY SORTING: Tier 1 cities at top of all "Featured" feeds
-    const sorted = communities.sort((a, b) => {
-      // Tier priority (Westlake, Beachwood, Rocky River first)
+    const sorted = [...communities].sort((a, b) => {
       const tierA = getCityTier(a.location);
       const tierB = getCityTier(b.location);
       if (tierA !== tierB) return tierA - tierB;
-
-      // Memory Care priority
-      const aHasMemoryCare = a.careTypes.some(t => t.toLowerCase().includes('memory care'));
-      const bHasMemoryCare = b.careTypes.some(t => t.toLowerCase().includes('memory care'));
-      if (aHasMemoryCare && !bHasMemoryCare) return -1;
-      if (!aHasMemoryCare && bHasMemoryCare) return 1;
-
-      // Rating priority
-      const ratingA = a.overallRating || a.rating || 0;
-      const ratingB = b.overallRating || b.rating || 0;
-      return ratingB - ratingA;
+      const [first] = sortCommunitiesForDisplay([a, b]);
+      return first.id === a.id ? -1 : 1;
     });
 
     return sorted.slice(0, limit);
@@ -300,7 +290,7 @@ export async function fetchQualityCommunitiesByCity(
         
         // Must have non-placeholder image
         const imageUrl = c.images?.[0];
-        if (isPlaceholderImage(imageUrl)) {
+        if (isPlaceholderImage(imageUrl, c)) {
           filteredOutIds.push(`${c.id} (${c.name}: placeholder image)`);
           return false;
         }
@@ -329,16 +319,13 @@ export async function fetchQualityCommunitiesByCity(
       );
     }
 
-    // Sort: Memory Care first, then by rating
-    return communities.sort((a, b) => {
-      const aHasMemoryCare = a.careTypes.some(t => t.toLowerCase().includes('memory care'));
-      const bHasMemoryCare = b.careTypes.some(t => t.toLowerCase().includes('memory care'));
-      if (aHasMemoryCare && !bHasMemoryCare) return -1;
-      if (!aHasMemoryCare && bHasMemoryCare) return 1;
-
-      const ratingA = a.overallRating || a.rating || 0;
-      const ratingB = b.overallRating || b.rating || 0;
-      return ratingB - ratingA;
+    // Sort: tier cities first, then shared display sort
+    return [...communities].sort((a, b) => {
+      const tierA = getCityTier(a.location);
+      const tierB = getCityTier(b.location);
+      if (tierA !== tierB) return tierA - tierB;
+      const [first] = sortCommunitiesForDisplay([a, b]);
+      return first.id === a.id ? -1 : 1;
     });
   } catch (error) {
     console.error(`Error in fetchQualityCommunitiesByCity for ${city}:`, error);
@@ -356,7 +343,7 @@ export function isAdmissionReady(community: Community): boolean {
   
   // Must have non-placeholder image
   const imageUrl = community.images?.[0];
-  if (isPlaceholderImage(imageUrl)) return false;
+  if (!hasRealCommunityImage(community)) return false;
   
   // Must offer Assisted Living or Memory Care
   const hasQualifyingCare = community.careTypes.some(type => 

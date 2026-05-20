@@ -57,6 +57,13 @@ export interface Community {
   
   // Payer Mix (from cost reports, Phase 4)
   medicaidPercentage?: number;
+
+  /** Advisor- or partner-confirmed starting monthly rent (USD) */
+  startingPriceMonthly?: number;
+  /** tours_available | waitlist | call_for_availability */
+  availabilityStatus?: string;
+  ohioLicenseNumber?: string;
+  amenityTags?: string[];
 }
 
 // Export the community data

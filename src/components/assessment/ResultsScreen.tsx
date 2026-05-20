@@ -1,7 +1,10 @@
 "use client";
 
 import { motion } from 'framer-motion';
+import Link from 'next/link';
 import { CheckCircle, RefreshCw, Edit, Phone, Calendar } from 'lucide-react';
+import PhoneLink from '@/components/conversion/PhoneLink';
+import PlacementConversionBand from '@/components/conversion/PlacementConversionBand';
 import { useAssessmentStore } from '@/store/assessmentStore';
 import CommunityMatch from './CommunityMatch';
 import LeadCaptureForm from './LeadCaptureForm';
@@ -40,6 +43,8 @@ export default function ResultsScreen({ onRestart }: ResultsScreenProps) {
   }
 
   const communityNames = matchedCommunities.map(c => c.name);
+  const primaryCity = matchedCommunities[0]?.location.split(',')[0]?.trim();
+  const primaryCitySlug = primaryCity?.toLowerCase().replace(/\s+/g, '-');
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
@@ -62,7 +67,7 @@ export default function ResultsScreen({ onRestart }: ResultsScreenProps) {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
-        className="bg-gradient-to-br from-blue-50 to-orange-50 rounded-2xl p-6 sm:p-8 mb-8 border-2 border-[#ff5a5f]"
+        className="bg-gradient-to-br from-teal-50 to-slate-50 rounded-2xl p-6 sm:p-8 mb-8 border-2 border-teal-200"
       >
         <div className="flex items-start justify-between mb-4">
           <div>
@@ -143,6 +148,18 @@ export default function ResultsScreen({ onRestart }: ResultsScreenProps) {
         )}
       </motion.div>
 
+      <PlacementConversionBand
+        title="Ready to talk through your results?"
+        description="Skip the form—call now and a Cleveland advisor will walk you through communities that match your assessment."
+        phonePlacement="assessment_results_call"
+        contactHref="/contact?intent=placement&source=assessment"
+        cityName={primaryCity}
+        cityHref={primaryCitySlug ? `/cleveland/${primaryCitySlug}#communities` : undefined}
+        secondaryHref="/senior-living-costs-cleveland"
+        secondaryLabel="See 2026 Cleveland cost ranges"
+        className="mb-8 rounded-2xl overflow-hidden"
+      />
+
       {/* Lead Capture Form */}
       <LeadCaptureForm
         assessmentData={{
@@ -200,13 +217,10 @@ export default function ResultsScreen({ onRestart }: ResultsScreenProps) {
           <p className="text-gray-700 mb-4">
             <strong>Need immediate assistance?</strong>
           </p>
-          <a
-            href="tel:+12166774630"
-            className="inline-flex items-center text-[#ff5a5f] font-semibold hover:underline"
-          >
+          <PhoneLink placement="assessment_results_footer" className="inline-flex items-center text-teal-600 font-semibold hover:underline">
             <Phone className="w-5 h-5 mr-2" />
             Call us now: (216) 677-4630
-          </a>
+          </PhoneLink>
         </div>
       </motion.div>
 

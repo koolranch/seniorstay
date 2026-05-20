@@ -26,9 +26,9 @@ export default function CommunityMatch({
   index 
 }: CommunityMatchProps) {
   const matchReason = generateMatchReason(community, answers, recommendation);
-  
-  // Generate slug for URL
-  const slug = community.name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+
+  const cityPart = community.location.split(',')[0].trim();
+  const citySlug = cityPart.toLowerCase().replace(/\s+/g, '-');
 
   const handleClick = () => {
     trackResultsCommunityClicked(community.name, index + 1);
@@ -100,12 +100,11 @@ export default function CommunityMatch({
           </p>
         </div>
 
-        {/* View Details Button - SEO Fix: Use canonical region-based URL */}
-        <Link href={`/cleveland/community/${community.id}/${slug}`} onClick={handleClick}>
+        <Link href={`/cleveland/${citySlug}#communities`} onClick={handleClick}>
           <Button
-            className="w-full bg-[#1e3a5f] hover:bg-[#2d4a6f] text-white"
+            className="w-full bg-teal-600 hover:bg-teal-700 text-white"
           >
-            View Details
+            See options in {cityPart}
             <ArrowRight className="w-4 h-4 ml-2" />
           </Button>
         </Link>
