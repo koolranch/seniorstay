@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Hospital, Shield, MapPin, Phone, Clock } from 'lucide-react';
+import PhoneLink from '@/components/conversion/PhoneLink';
 import { getCityHospitals, HospitalData } from '@/lib/hospital-proximity';
 
 interface ClinicalTrustBarCityProps {
@@ -74,7 +75,9 @@ const ClinicalTrustBarCity: React.FC<ClinicalTrustBarCityProps> = ({
             </div>
             <div className="hidden md:flex items-center gap-1.5 opacity-90">
               <Phone className="h-4 w-4" />
-              <a href="tel:+12166774630" className="hover:underline">(216) 677-4630</a>
+              <PhoneLink placement="clinical_trust_bar" className="hover:underline">
+                (216) 677-4630
+              </PhoneLink>
             </div>
           </div>
         </div>

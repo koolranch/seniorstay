@@ -198,8 +198,11 @@ function ContactForm() {
                 </h3>
                 <p className="text-amber-700 text-sm">
                   If you're dealing with a hospital discharge, safety concern, or urgent placement need, 
-                  please call us directly at <a href="tel:+12166774630" className="font-bold underline">(216) 677-4630</a> or 
-                  mention "urgent" in your message for priority response.
+                  please call us directly at{' '}
+                  <PhoneLink placement="contact_urgent" className="font-bold underline inline">
+                    (216) 677-4630
+                  </PhoneLink>{' '}
+                  or mention "urgent" in your message for priority response.
                 </p>
               </div>
 

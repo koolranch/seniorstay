@@ -2,10 +2,10 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { Star, Check, ArrowRight, DollarSign } from 'lucide-react';
+import { Star, Check, DollarSign, Phone } from 'lucide-react';
 import { Community } from '@/data/facilities';
-import { Button } from '@/components/ui/button';
 import CommunityTrustBadge from '@/components/community/CommunityTrustBadge';
+import PhoneLink from '@/components/conversion/PhoneLink';
 import { formatPriceEstimate } from '@/lib/community-pricing';
 
 interface CommunityComparisonTableProps {
@@ -157,12 +157,18 @@ export default function CommunityComparisonTable({
                       </div>
                     </td>
                     <td className="p-4 border-b border-gray-100 text-center">
-                      <Link href={url}>
-                        <Button size="sm" variant="outline" className="whitespace-nowrap">
-                          View Details
-                          <ArrowRight className="h-3 w-3 ml-1" />
-                        </Button>
-                      </Link>
+                      <div className="flex flex-col gap-2 items-center">
+                        <PhoneLink
+                          placement="comparison_table"
+                          className="inline-flex items-center justify-center gap-1 bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold px-3 py-2 rounded-md whitespace-nowrap min-h-[36px]"
+                        >
+                          <Phone className="h-3 w-3" />
+                          Call for Pricing
+                        </PhoneLink>
+                        <Link href={url} className="text-xs text-slate-500 hover:text-teal-600">
+                          View details →
+                        </Link>
+                      </div>
                     </td>
                   </tr>
                 );
@@ -190,11 +196,15 @@ export default function CommunityComparisonTable({
                     </li>
                   ))}
                 </ul>
-                <Link href={url}>
-                  <Button size="sm" className="w-full">
-                    View Details
-                    <ArrowRight className="h-4 w-4 ml-1" />
-                  </Button>
+                <PhoneLink
+                  placement="comparison_table_mobile"
+                  className="w-full inline-flex items-center justify-center gap-2 bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 rounded-md mb-2 min-h-[48px]"
+                >
+                  <Phone className="h-4 w-4" />
+                  Call for Pricing
+                </PhoneLink>
+                <Link href={url} className="block text-center text-xs text-slate-500 hover:text-teal-600">
+                  View details →
                 </Link>
               </div>
             );
@@ -202,9 +212,13 @@ export default function CommunityComparisonTable({
         </div>
 
         <div className="mt-6 text-center">
-          <p className="text-sm text-gray-500">
-            Need help choosing? Call (216) 677-4630 for free, personalized guidance.
-          </p>
+          <PhoneLink
+            placement="comparison_table_footer"
+            className="inline-flex items-center gap-2 text-teal-700 hover:text-teal-900 font-semibold text-sm"
+          >
+            <Phone className="h-4 w-4" />
+            Need help choosing? Call for free personalized guidance
+          </PhoneLink>
         </div>
       </div>
     </section>

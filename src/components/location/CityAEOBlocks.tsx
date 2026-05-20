@@ -3,6 +3,7 @@
 import React from 'react';
 import Script from 'next/script';
 import { HelpCircle, MapPin, DollarSign, Clock, Heart, Shield, ChevronDown, ChevronUp } from 'lucide-react';
+import PhoneLink from '@/components/conversion/PhoneLink';
 import { CityInfo } from '@/data/cleveland-cities';
 import { getCityHospitals, getNearestHospitalForCity, HospitalData } from '@/lib/hospital-proximity';
 
@@ -187,12 +188,12 @@ const CityAEOBlocks: React.FC<CityAEOBlocksProps> = ({
 
             {/* CTA */}
             <div className="mt-8 text-center">
-              <a 
-                href="tel:+12166774630"
+              <PhoneLink
+                placement="city_aeo_blocks"
                 className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-bold px-8 py-4 rounded-xl transition-colors text-lg shadow-lg"
               >
                 Get Your Free {cityName} Senior Living Guide
-              </a>
+              </PhoneLink>
               <p className="mt-3 text-sm text-gray-500">
                 No obligation • Personalized recommendations • {currentYear} pricing
               </p>

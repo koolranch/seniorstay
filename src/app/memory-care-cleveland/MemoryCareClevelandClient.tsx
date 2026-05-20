@@ -9,6 +9,7 @@ import LocationCard from '@/components/property/LocationCard';
 import StickyTourButton from '@/components/tour/StickyTourButton';
 import PopularSuburbsGrid from '@/components/conversion/PopularSuburbsGrid';
 import PlacementConversionBand from '@/components/conversion/PlacementConversionBand';
+import PhoneLink from '@/components/conversion/PhoneLink';
 import { Community } from '@/data/facilities';
 import { submitLead } from '@/app/actions/leads';
 
@@ -367,9 +368,16 @@ export default function MemoryCareClevelandClient({ communities }: MemoryCareCle
               </div>
             </div>
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Get Expert Help Finding Memory Care in Cleveland</h2>
-            <p className="text-lg text-rose-100 mb-10">
+            <p className="text-lg text-rose-100 mb-6">
               Our Cleveland advisors specialize in memory care placement. We understand the unique challenges of dementia care and can help you find the right community—completely free.
             </p>
+            <PhoneLink
+              placement="memory_care_hub_cta"
+              className="inline-flex items-center gap-2 bg-white text-rose-700 hover:bg-rose-50 font-bold px-8 py-4 rounded-xl shadow-lg mb-8 min-h-[56px]"
+            >
+              <Phone className="h-5 w-5" />
+              Call for Memory Care Help
+            </PhoneLink>
             <div className="bg-white p-8 rounded-2xl shadow-2xl text-left">
               {isSuccess ? (
                 <div className="text-center py-6">
@@ -377,8 +385,14 @@ export default function MemoryCareClevelandClient({ communities }: MemoryCareCle
                     <CheckCircle className="h-8 w-8 text-green-600" />
                   </div>
                   <h3 className="text-xl font-bold text-slate-900 mb-2">Thank You!</h3>
-                  <p className="text-slate-600">A memory care specialist will contact you within 24 hours.</p>
-                  <p className="text-sm text-slate-500 mt-4">Need immediate help? Call <strong className="text-teal-600">(216) 677-4630</strong></p>
+                  <p className="text-slate-600 mb-4">A memory care specialist will contact you within 24 hours.</p>
+                  <PhoneLink
+                    placement="memory_care_form_success"
+                    className="inline-flex items-center gap-2 bg-teal-600 hover:bg-teal-700 text-white font-semibold px-5 py-2.5 rounded-lg text-sm"
+                  >
+                    <Phone className="h-4 w-4" />
+                    Urgent? Call us now
+                  </PhoneLink>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-5">
@@ -437,21 +451,11 @@ export default function MemoryCareClevelandClient({ communities }: MemoryCareCle
                     disabled={isSubmitting}
                     className="w-full bg-teal-600 hover:bg-teal-700 disabled:bg-teal-300 text-white font-bold py-4 px-6 rounded-xl transition-colors min-h-[56px] shadow-lg"
                   >
-                    {isSubmitting ? 'Sending...' : 'Get Free Memory Care Consultation'}
+                    {isSubmitting ? 'Sending...' : 'Request a Callback'}
                   </button>
                   <p className="text-xs text-slate-500 text-center">We&apos;ll contact you within 24 hours to discuss your specific needs.</p>
                 </form>
               )}
-            </div>
-            
-            <div className="mt-8">
-              <a
-                href="tel:+12166774630"
-                className="inline-flex items-center gap-2 text-white hover:text-rose-100 font-semibold transition-colors"
-              >
-                <Phone className="h-5 w-5" />
-                <span>Or call us directly: (216) 677-4630</span>
-              </a>
             </div>
           </div>
         </div>

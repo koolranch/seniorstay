@@ -10,14 +10,23 @@ import FAQAccordion from './FAQAccordion';
 
 interface BlogArticleContentProps {
   content: string;
+  slug?: string;
 }
+
+const COST_RELATED_SLUGS = [
+  'cost-of-assisted-living-ohio',
+  'average-cost-of-assisted-living',
+  'senior-living-costs',
+  'how-much-does-assisted-living-cost',
+  'memory-care-costs',
+];
 
 interface FAQItem {
   question: string;
   answer: string;
 }
 
-export default function BlogArticleContent({ content }: BlogArticleContentProps) {
+export default function BlogArticleContent({ content, slug }: BlogArticleContentProps) {
   // Extract Quick Answer section if present
   const quickAnswerMatch = content.match(/## Quick Answer[:\s]*([^\n]*)\n\n([\s\S]*?)(?=\n---\n|\n## [^Q])/i);
   const hasQuickAnswer = !!quickAnswerMatch;
@@ -38,6 +47,11 @@ export default function BlogArticleContent({ content }: BlogArticleContentProps)
   // Find good place for mid-article CTA (after ~40% of content or after specific sections)
   const sections = mainContent.split(/\n## /);
   const midPoint = Math.floor(sections.length * 0.4);
+
+  const midCtaVariant =
+    slug && (COST_RELATED_SLUGS.some((s) => slug.includes(s)) || slug.includes('cost'))
+      ? 'cost'
+      : 'compact';
   
   return (
     <>
@@ -188,7 +202,7 @@ export default function BlogArticleContent({ content }: BlogArticleContentProps)
       )}
       
       {/* Mid-article CTA */}
-      <MidArticleCTA variant="compact" />
+      <MidArticleCTA variant={midCtaVariant} />
     </>
   );
 }

@@ -2,8 +2,9 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ClipboardCheck, ArrowRight, Timer, Shield, Heart } from 'lucide-react';
+import { ClipboardCheck, ArrowRight, Timer, Shield, Heart, Phone } from 'lucide-react';
 import Link from 'next/link';
+import PhoneLink from '@/components/conversion/PhoneLink';
 
 const STEPS = [
   { icon: <ClipboardCheck className="h-5 w-5" />, label: 'Answer a few questions' },
@@ -73,6 +74,17 @@ export default function PersonalizedPlanCTA() {
             <p className="text-sm text-slate-500 mt-4">
               No account required. Completely free.
             </p>
+
+            <div className="mt-6 pt-6 border-t border-white/10">
+              <p className="text-sm text-slate-400 mb-3">Prefer to talk now?</p>
+              <PhoneLink
+                placement="homepage_assessment_band"
+                className="inline-flex items-center gap-2 text-teal-300 hover:text-white font-semibold transition-colors"
+              >
+                <Phone className="h-4 w-4" />
+                Call for a free placement consult
+              </PhoneLink>
+            </div>
           </motion.div>
         </div>
       </div>

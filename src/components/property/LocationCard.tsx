@@ -285,17 +285,9 @@ export default function LocationCard({ community, compact = false, regionSlug }:
             </span>
           )}
         </div>
-        <p className="text-[10px] text-slate-400 mb-3">
+        <p className="text-[10px] text-slate-400 mb-1">
           {pricing.confirmedStarting ? 'Advisor-confirmed starting price' : '2026 area estimate — call to confirm'}
         </p>
-
-        {/* View Details Link - 48px+ tap target */}
-        <Link
-          href={communityUrl}
-          className="inline-flex items-center text-base font-semibold text-primary hover:text-primary-700 hover:underline min-h-[48px] py-2 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded"
-        >
-          View Details →
-        </Link>
       </div>
 
       {/* Card Actions - Mobile UX: 48px+ touch targets, high contrast */}
@@ -407,6 +399,12 @@ export default function LocationCard({ community, compact = false, regionSlug }:
               </DialogContent>
             </Dialog>
           </div>
+          <Link
+            href={communityUrl}
+            className="block text-center text-xs text-slate-400 hover:text-teal-600 mt-3 py-1"
+          >
+            View community details
+          </Link>
         </div>
       ) : (
         <div className="p-4 pt-0 mt-auto">

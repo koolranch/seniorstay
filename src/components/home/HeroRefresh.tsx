@@ -1,10 +1,12 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Search, MapPin, ChevronDown, Phone } from 'lucide-react';
 import PhoneLink from '@/components/conversion/PhoneLink';
 import { PLACEMENT_PHONE_DISPLAY } from '@/lib/placement-contact';
+import { TOP_CLEVELAND_CITIES } from '@/lib/top-cleveland-cities';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const CARE_TYPES = [
@@ -12,7 +14,6 @@ const CARE_TYPES = [
   { value: 'assisted-living', label: 'Assisted Living' },
   { value: 'memory-care', label: 'Memory Care' },
   { value: 'independent-living', label: 'Independent Living' },
-  { value: 'skilled-nursing', label: 'Skilled Nursing' },
 ];
 
 const ROTATING_WORDS = [
@@ -43,7 +44,7 @@ const HeroRefresh: React.FC = () => {
     const params = new URLSearchParams();
     if (careType) params.set('care', careType);
     if (zipCode) params.set('zip', zipCode);
-    router.push(`/greater-cleveland${params.toString() ? `?${params.toString()}` : ''}`);
+    router.push(`/cleveland${params.toString() ? `?${params.toString()}` : ''}`);
   };
 
   return (
@@ -211,6 +212,25 @@ const HeroRefresh: React.FC = () => {
               <div className="w-2 h-2 bg-amber-400 rounded-full" />
               <span>Local Expert Guidance</span>
             </div>
+          </motion.div>
+
+          {/* Top suburb shortcuts */}
+          <motion.div
+            className="mt-8 flex flex-wrap items-center justify-center gap-2"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.9 }}
+          >
+            <span className="text-xs text-white/40 w-full mb-1">Popular suburbs:</span>
+            {TOP_CLEVELAND_CITIES.map((city) => (
+              <Link
+                key={city.slug}
+                href={`/cleveland/${city.slug}`}
+                className="text-xs font-medium text-white/70 hover:text-white bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-full transition-colors"
+              >
+                {city.name}
+              </Link>
+            ))}
           </motion.div>
         </div>
       </div>

@@ -1,8 +1,10 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Bell, CheckCircle, Loader2, Mail, FileText } from 'lucide-react';
+import { Bell, CheckCircle, Loader2, Mail, FileText, Phone } from 'lucide-react';
+import PhoneLink from '@/components/conversion/PhoneLink';
 
 interface EventReminderFormProps {
   eventId: string;
@@ -66,9 +68,21 @@ export default function EventReminderForm({
       <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
         <CheckCircle className="h-8 w-8 text-green-600 mx-auto mb-2" />
         <p className="text-green-800 font-semibold mb-1">You&apos;re all set!</p>
-        <p className="text-green-600 text-sm">
+        <p className="text-green-600 text-sm mb-4">
           Check your email for the event reminder and your free{' '}
           {neighborhood ? `${neighborhood} ` : ''}Cost Report.
+        </p>
+        <PhoneLink
+          placement="event_signup_success"
+          className="inline-flex items-center gap-2 bg-teal-600 hover:bg-teal-700 text-white font-semibold px-4 py-2.5 rounded-lg text-sm mb-2"
+        >
+          <Phone className="h-4 w-4" />
+          Call to discuss senior living options
+        </PhoneLink>
+        <p className="text-xs text-slate-500 mt-2">
+          <Link href="/assessment" className="text-teal-600 hover:underline">
+            Or take the 2-min care assessment →
+          </Link>
         </p>
       </div>
     );

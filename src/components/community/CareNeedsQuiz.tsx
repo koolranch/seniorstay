@@ -8,6 +8,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import PhoneLink from '@/components/conversion/PhoneLink';
 import { submitLead } from '@/app/actions/leads';
 
 interface CareNeedsQuizProps {
@@ -225,18 +226,13 @@ export default function CareNeedsQuiz({
 
             {/* Immediate callback option for urgent */}
             {selectedIntent === 'move_30_days' && (
-              <a href="tel:+12166774630" className="block mb-4">
-                <Button 
-                  className="w-full py-6 text-base font-semibold"
-                  style={{ backgroundColor: '#ef4444' }}
-                >
-                  <Phone className="h-5 w-5 mr-2" />
-                  Call Now: (216) 677-4630
-                </Button>
-                <p className="text-center text-xs text-slate-400 mt-2">
-                  Priority line for urgent placements
-                </p>
-              </a>
+              <PhoneLink
+                placement="care_needs_quiz_urgent"
+                className="flex items-center justify-center gap-2 w-full py-6 mb-4 text-base font-semibold text-white rounded-md bg-red-500 hover:bg-red-600 transition-colors"
+              >
+                <Phone className="h-5 w-5" />
+                Call Now — Urgent Placement Help
+              </PhoneLink>
             )}
 
             <div className="relative">

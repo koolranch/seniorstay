@@ -8,6 +8,7 @@ import Footer from '@/components/footer/Footer';
 import StickyTourButton from '@/components/tour/StickyTourButton';
 import PopularSuburbsGrid from '@/components/conversion/PopularSuburbsGrid';
 import PlacementConversionBand from '@/components/conversion/PlacementConversionBand';
+import PhoneLink from '@/components/conversion/PhoneLink';
 import { submitLead } from '@/app/actions/leads';
 
 export default function InHomeCareClevelandPage() {
@@ -301,7 +302,7 @@ export default function InHomeCareClevelandPage() {
       </section>
 
       {/* CTA Section */}
-      <section id="cta" className="bg-gradient-to-r from-amber-500 to-orange-500 py-16 md:py-20">
+      <section id="cta" className="bg-gradient-to-r from-teal-600 to-teal-700 py-16 md:py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center">
             <div className="flex justify-center mb-6">
@@ -310,9 +311,16 @@ export default function InHomeCareClevelandPage() {
               </div>
             </div>
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Explore Your Care Options</h2>
-            <p className="text-lg text-amber-100 mb-10">
+            <p className="text-lg text-teal-100 mb-6">
               Not sure if in-home care or a senior living community is the right choice? Our advisors can help you compare all options—completely free.
             </p>
+            <PhoneLink
+              placement="in_home_care_hub_cta"
+              className="inline-flex items-center gap-2 bg-white text-teal-700 hover:bg-teal-50 font-bold px-8 py-4 rounded-xl shadow-lg mb-8 min-h-[56px]"
+            >
+              <Phone className="h-5 w-5" />
+              Call for Free Help
+            </PhoneLink>
             <div className="bg-white p-8 rounded-2xl shadow-2xl text-left">
               {isSuccess ? (
                 <div className="text-center py-6">
@@ -320,8 +328,14 @@ export default function InHomeCareClevelandPage() {
                     <CheckCircle className="h-8 w-8 text-green-600" />
                   </div>
                   <h3 className="text-xl font-bold text-slate-900 mb-2">Thank You!</h3>
-                  <p className="text-slate-600">A senior care advisor will contact you within 24 hours.</p>
-                  <p className="text-sm text-slate-500 mt-4">Need immediate help? Call <strong className="text-amber-600">(216) 677-4630</strong></p>
+                  <p className="text-slate-600 mb-4">A senior care advisor will contact you within 24 hours.</p>
+                  <PhoneLink
+                    placement="in_home_care_form_success"
+                    className="inline-flex items-center gap-2 bg-teal-600 hover:bg-teal-700 text-white font-semibold px-5 py-2.5 rounded-lg text-sm"
+                  >
+                    <Phone className="h-4 w-4" />
+                    Need help now? Call us
+                  </PhoneLink>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-5">
@@ -334,7 +348,7 @@ export default function InHomeCareClevelandPage() {
                         id="name"
                         required
                         placeholder="Full name"
-                        className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors"
+                        className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors"
                       />
                     </div>
                     <div>
@@ -345,7 +359,7 @@ export default function InHomeCareClevelandPage() {
                         id="phone"
                         required
                         placeholder="(216) 555-1234"
-                        className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors"
+                        className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors"
                       />
                     </div>
                   </div>
@@ -365,7 +379,7 @@ export default function InHomeCareClevelandPage() {
                     <select
                       name="urgency"
                       id="urgency"
-                      className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors bg-white"
+                      className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors bg-white"
                     >
                       <option value="">When do you need care?</option>
                       <option value="immediate">Immediately</option>
@@ -378,23 +392,13 @@ export default function InHomeCareClevelandPage() {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full bg-amber-500 hover:bg-amber-600 disabled:bg-amber-300 text-white font-bold py-4 px-6 rounded-xl transition-colors min-h-[56px] shadow-lg"
+                    className="w-full bg-teal-600 hover:bg-teal-700 disabled:bg-teal-300 text-white font-bold py-4 px-6 rounded-xl transition-colors min-h-[56px] shadow-lg"
                   >
-                    {isSubmitting ? 'Sending...' : 'Get Free Care Consultation'}
+                    {isSubmitting ? 'Sending...' : 'Request a Callback'}
                   </button>
                   <p className="text-xs text-slate-500 text-center">100% Free • No Obligation • Confidential</p>
                 </form>
               )}
-            </div>
-            
-            <div className="mt-8">
-              <a
-                href="tel:+12166774630"
-                className="inline-flex items-center gap-2 text-white hover:text-amber-100 font-semibold transition-colors"
-              >
-                <Phone className="h-5 w-5" />
-                <span>Or call us directly: (216) 677-4630</span>
-              </a>
             </div>
           </div>
         </div>

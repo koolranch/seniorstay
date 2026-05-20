@@ -12,6 +12,7 @@ import {
   Phone
 } from 'lucide-react';
 import Link from 'next/link';
+import PhoneLink from '@/components/conversion/PhoneLink';
 
 /**
  * Trust/Social Proof Section
@@ -146,20 +147,20 @@ const TrustSection: React.FC = () => {
               Speak with a local Cleveland senior care expert today—it's completely free and there's no obligation.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link
-                href="/contact"
-                className="inline-flex items-center gap-2 bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800 text-white font-bold px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all"
-              >
-                <Users className="h-5 w-5" />
-                <span>Talk to a Local Expert</span>
-              </Link>
-              <a
-                href="tel:+12166774630"
-                className="inline-flex items-center gap-2 bg-white border-2 border-slate-300 hover:border-teal-500 text-slate-700 hover:text-teal-700 font-bold px-8 py-4 rounded-xl transition-all"
+              <PhoneLink
+                placement="homepage_trust"
+                className="inline-flex items-center gap-2 bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800 text-white font-bold px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all min-h-[56px]"
               >
                 <Phone className="h-5 w-5" />
-                <span>(216) 677-4630</span>
-              </a>
+                <span>Call (216) 677-4630</span>
+              </PhoneLink>
+              <Link
+                href="/contact?intent=placement"
+                className="inline-flex items-center gap-2 bg-white border-2 border-slate-300 hover:border-teal-500 text-slate-700 hover:text-teal-700 font-bold px-8 py-4 rounded-xl transition-all min-h-[56px]"
+              >
+                <Users className="h-5 w-5" />
+                <span>Request a Callback</span>
+              </Link>
             </div>
           </div>
         </motion.div>

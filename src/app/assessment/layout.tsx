@@ -2,6 +2,7 @@ import { ReactNode } from 'react';
 import { metadata } from './metadata';
 import Link from 'next/link';
 import { Home, Phone } from 'lucide-react';
+import PhoneLink from '@/components/conversion/PhoneLink';
 
 export { metadata };
 
@@ -90,13 +91,13 @@ export default function AssessmentLayout({
           </Link>
           
           {/* Help CTA */}
-          <a
-            href="tel:+12166774630"
+          <PhoneLink
+            placement="assessment_header"
             className="hidden sm:flex items-center gap-2 text-slate-600 hover:text-teal-600 font-medium transition-colors"
           >
             <Phone className="h-4 w-4" />
             <span>Need help? (216) 677-4630</span>
-          </a>
+          </PhoneLink>
         </div>
       </header>
 

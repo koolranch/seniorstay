@@ -9,6 +9,7 @@ import LocationCard from '@/components/property/LocationCard';
 import StickyTourButton from '@/components/tour/StickyTourButton';
 import PopularSuburbsGrid from '@/components/conversion/PopularSuburbsGrid';
 import PlacementConversionBand from '@/components/conversion/PlacementConversionBand';
+import PhoneLink from '@/components/conversion/PhoneLink';
 import { communityData } from '@/data/facilities';
 import { submitLead } from '@/app/actions/leads';
 
@@ -322,9 +323,16 @@ export default function IndependentLivingClevelandPage() {
               </div>
             </div>
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Ready to Explore Independent Living?</h2>
-            <p className="text-lg text-teal-100 mb-10">
+            <p className="text-lg text-teal-100 mb-6">
               Our Cleveland advisors can help you find the perfect community that matches your lifestyle and budget—completely free.
             </p>
+            <PhoneLink
+              placement="independent_living_hub_cta"
+              className="inline-flex items-center gap-2 bg-white text-teal-700 hover:bg-teal-50 font-bold px-8 py-4 rounded-xl shadow-lg mb-8 min-h-[56px]"
+            >
+              <Phone className="h-5 w-5" />
+              Call for Free Help
+            </PhoneLink>
             <div className="bg-white p-8 rounded-2xl shadow-2xl text-left">
               {isSuccess ? (
                 <div className="text-center py-6">
@@ -332,8 +340,14 @@ export default function IndependentLivingClevelandPage() {
                     <CheckCircle className="h-8 w-8 text-green-600" />
                   </div>
                   <h3 className="text-xl font-bold text-slate-900 mb-2">Thank You!</h3>
-                  <p className="text-slate-600">A senior living advisor will contact you within 24 hours.</p>
-                  <p className="text-sm text-slate-500 mt-4">Need immediate help? Call <strong className="text-teal-600">(216) 677-4630</strong></p>
+                  <p className="text-slate-600 mb-4">A senior living advisor will contact you within 24 hours.</p>
+                  <PhoneLink
+                    placement="independent_living_form_success"
+                    className="inline-flex items-center gap-2 bg-teal-600 hover:bg-teal-700 text-white font-semibold px-5 py-2.5 rounded-lg text-sm"
+                  >
+                    <Phone className="h-4 w-4" />
+                    Need help now? Call us
+                  </PhoneLink>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-5">
@@ -392,21 +406,11 @@ export default function IndependentLivingClevelandPage() {
                     disabled={isSubmitting}
                     className="w-full bg-teal-600 hover:bg-teal-700 disabled:bg-teal-300 text-white font-bold py-4 px-6 rounded-xl transition-colors min-h-[56px] shadow-lg"
                   >
-                    {isSubmitting ? 'Sending...' : 'Get Free Consultation'}
+                    {isSubmitting ? 'Sending...' : 'Request a Callback'}
                   </button>
                   <p className="text-xs text-slate-500 text-center">100% Free • No Obligation • Confidential</p>
                 </form>
               )}
-            </div>
-            
-            <div className="mt-8">
-              <a
-                href="tel:+12166774630"
-                className="inline-flex items-center gap-2 text-white hover:text-teal-100 font-semibold transition-colors"
-              >
-                <Phone className="h-5 w-5" />
-                <span>Or call us directly: (216) 677-4630</span>
-              </a>
             </div>
           </div>
         </div>

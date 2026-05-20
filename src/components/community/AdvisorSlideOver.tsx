@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import PhoneLink from '@/components/conversion/PhoneLink';
 import { submitLead } from '@/app/actions/leads';
 
 interface AdvisorSlideOverProps {
@@ -192,9 +193,9 @@ export default function AdvisorSlideOver({
             </Button>
             <p className="text-xs text-center text-slate-400">
               Or call{' '}
-              <a href="tel:+12166774630" className="text-teal-600 font-medium hover:underline">
+              <PhoneLink placement="advisor_slideover" className="text-teal-600 font-medium hover:underline">
                 (216) 677-4630
-              </a>
+              </PhoneLink>
             </p>
           </div>
         )}

@@ -24,6 +24,8 @@ import NeighborhoodEvents from '@/components/events/NeighborhoodEvents';
 import SavedCommunitiesBar from '@/components/community/SavedCommunitiesBar';
 import CommunityListingFilters from '@/components/location/CommunityListingFilters';
 import EditorialPlacementLinks from '@/components/conversion/EditorialPlacementLinks';
+import PlacementConversionBand from '@/components/conversion/PlacementConversionBand';
+import PhoneLink from '@/components/conversion/PhoneLink';
 import {
   DEFAULT_LISTING_FILTERS,
   filterCommunities,
@@ -141,13 +143,14 @@ export default function CityLocationClient({
 
             {/* Quick CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-6">
-              <a
-                href={`tel:${phoneNumber.replace(/[^0-9+]/g, '')}`}
+              <PhoneLink
+                placement="city_hero"
+                phoneTel={`tel:${phoneNumber.replace(/[^0-9+]/g, '')}`}
                 className="inline-flex items-center justify-center gap-2 bg-teal-600 hover:bg-teal-700 text-white font-bold px-8 py-4 rounded-xl transition-colors shadow-lg hover:shadow-xl min-h-[56px]"
               >
                 <Phone className="h-5 w-5" />
                 Talk to a {cityName} Expert
-              </a>
+              </PhoneLink>
               <a
                 href={`/contact?city=${encodeURIComponent(cityName)}`}
                 className="inline-flex items-center justify-center gap-2 bg-white border-2 border-slate-300 text-slate-700 hover:border-teal-500 hover:text-teal-600 font-bold px-8 py-4 rounded-xl transition-colors min-h-[56px]"
@@ -243,6 +246,26 @@ export default function CityLocationClient({
         </div>
       </section>
 
+      {filteredCommunities.length > 1 && (
+        <CommunityComparisonTable
+          communities={filteredCommunities}
+          cityName={cityName}
+          maxCommunities={6}
+          regionSlug={regionSlug}
+        />
+      )}
+
+      <PlacementConversionBand
+        title={`Need help choosing in ${cityName}?`}
+        description="Our Cleveland advisors compare pricing, availability, and fit — then help schedule tours. Free for families."
+        phonePlacement="city_listings_mid"
+        contactHref={`/contact?city=${citySlug}&intent=placement`}
+        cityName={cityName}
+        cityHref={`/${regionSlug}/${citySlug}`}
+        secondaryHref="/blog/cost-of-assisted-living-ohio"
+        secondaryLabel="2026 Ohio cost guide"
+      />
+
       {/* SECTION 3: CARE TYPE NAVIGATION */}
       <CareTypeNav
         cityName={cityName}
@@ -299,16 +322,6 @@ export default function CityLocationClient({
         communityCount={totalCommunities}
         isHospitalDischarge={isHospitalDischarge}
       />
-
-      {/* SECTION 8: COMMUNITY COMPARISON TABLE */}
-      {communities.length > 1 && (
-        <CommunityComparisonTable
-          communities={filteredCommunities}
-          cityName={cityName}
-          maxCommunities={6}
-          regionSlug={regionSlug}
-        />
-      )}
 
       {/* SECTION 9: TESTIMONIALS */}
       <TestimonialSection
@@ -438,15 +451,16 @@ export default function CityLocationClient({
             Our local advisors are standing by to help you compare options, schedule tours, and find the perfect community—at no cost to you.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a
-              href={`tel:${phoneNumber.replace(/[^0-9+]/g, '')}`}
+            <PhoneLink
+              placement="city_footer_cta"
+              phoneTel={`tel:${phoneNumber.replace(/[^0-9+]/g, '')}`}
               className="inline-flex items-center justify-center gap-2 bg-white text-teal-700 font-bold px-8 py-4 rounded-xl shadow-lg hover:shadow-xl hover:bg-slate-50 transition-all min-h-[56px]"
             >
               <Phone className="h-5 w-5" />
               Call {phoneNumber}
-            </a>
+            </PhoneLink>
             <Link
-              href="/contact"
+              href={`/contact?city=${encodeURIComponent(citySlug)}&intent=placement`}
               className="inline-flex items-center justify-center gap-2 bg-teal-800 text-white font-bold px-8 py-4 rounded-xl hover:bg-teal-900 transition-all min-h-[56px]"
             >
               Request Free Consultation

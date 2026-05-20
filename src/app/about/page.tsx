@@ -3,6 +3,7 @@ import Footer from '@/components/footer/Footer';
 import { Heart, Shield, Award, MapPin, Phone, CheckCircle, ArrowRight, Star, Eye, Building2, Users, Sparkles, ClipboardCheck, HeartHandshake, AlertTriangle } from 'lucide-react';
 import Script from 'next/script';
 import Link from 'next/link';
+import PhoneLink from '@/components/conversion/PhoneLink';
 import Image from 'next/image';
 
 // ============================================================================
@@ -638,14 +639,14 @@ export default function AboutPage() {
               </p>
               
               {/* Phone CTA */}
-              <a
-                href="tel:+12166774630"
+              <PhoneLink
+                placement="about_page_cta"
                 className="inline-flex items-center justify-center gap-3 text-2xl md:text-3xl font-bold px-10 py-5 rounded-xl shadow-2xl transition-all hover:scale-105"
                 style={{ backgroundColor: COLORS.sage, color: COLORS.navy }}
               >
                 <Phone className="h-7 w-7" />
                 <span>(216) 677-4630</span>
-              </a>
+              </PhoneLink>
               
               <p className="text-slate-400 mt-6 text-sm">
                 Free consultation &bull; No obligation &bull; Cleveland-based

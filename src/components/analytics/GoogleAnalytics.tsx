@@ -83,6 +83,16 @@ export function trackFormStart(formType: string) {
   });
 }
 
+export function trackListingFilter(filterType: string, filterValue: string, resultCount: number) {
+  trackEvent('listing_filter', {
+    event_category: 'engagement',
+    filter_type: filterType,
+    filter_value: filterValue,
+    result_count: resultCount,
+    page_path: typeof window !== 'undefined' ? window.location.pathname : '',
+  });
+}
+
 export function trackFormError(formType: string, message?: string) {
   trackEvent('form_error', {
     event_category: 'conversion',

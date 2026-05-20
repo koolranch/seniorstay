@@ -9,6 +9,7 @@ import StickyTourButton from '@/components/tour/StickyTourButton';
 import PlacementConversionBand from '@/components/conversion/PlacementConversionBand';
 import EditorialPlacementLinks from '@/components/conversion/EditorialPlacementLinks';
 import SimpleContactForm from '@/components/forms/SimpleContactForm';
+import PhoneLink from '@/components/conversion/PhoneLink';
 
 export default function ChoosingSeniorLivingPage() {
   return (
@@ -369,29 +370,33 @@ export default function ChoosingSeniorLivingPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="bg-gradient-to-r from-amber-500 to-orange-500 py-16 md:py-20">
+      <section className="bg-gradient-to-r from-teal-600 to-teal-700 py-16 md:py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Get Personalized Help Choosing Senior Living</h2>
-            <p className="text-lg text-amber-100 mb-10">
+            <p className="text-lg text-teal-100 mb-6">
               Our Cleveland advisors will help you navigate this important decision. We'll match you with communities that fit your needs, budget, and preferences—completely free.
             </p>
+            <PhoneLink
+              placement="choosing_hub_cta"
+              className="inline-flex items-center gap-2 bg-white text-teal-700 hover:bg-teal-50 font-bold px-8 py-4 rounded-xl shadow-lg mb-8 min-h-[56px]"
+            >
+              <Phone className="h-5 w-5" />
+              Call for Free Help
+            </PhoneLink>
             <div className="bg-white p-8 rounded-2xl shadow-2xl">
               <SimpleContactForm 
                 sourcePage="choosing-senior-living" 
-                buttonText="Get Free Consultation"
+                buttonText="Request a Callback"
                 showMessage={false}
               />
             </div>
-            <div className="mt-8">
-              <a
-                href="tel:+12166774630"
-                className="inline-flex items-center gap-2 text-white hover:text-amber-100 font-semibold transition-colors"
-              >
-                <Phone className="h-5 w-5" />
-                <span>Or call us directly: (216) 677-4630</span>
-              </a>
-            </div>
+            <p className="mt-6 text-sm text-teal-100">
+              Prefer self-serve?{' '}
+              <Link href="/assessment" className="underline hover:text-white font-medium">
+                Take the 2-min assessment →
+              </Link>
+            </p>
           </div>
         </div>
       </section>

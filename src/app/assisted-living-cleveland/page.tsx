@@ -7,6 +7,7 @@ import LocationCard from '@/components/property/LocationCard';
 import StickyTourButton from '@/components/tour/StickyTourButton';
 import { fetchAllCommunities } from '@/lib/fetch-community';
 import SimpleContactForm from '@/components/forms/SimpleContactForm';
+import PhoneLink from '@/components/conversion/PhoneLink';
 import PopularSuburbsGrid from '@/components/conversion/PopularSuburbsGrid';
 import PlacementConversionBand from '@/components/conversion/PlacementConversionBand';
 import PlacementHeroCTAs from '@/components/conversion/PlacementHeroCTAs';
@@ -251,9 +252,16 @@ export default async function AssistedLivingClevelandPage() {
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Get Free Help Finding Assisted Living in Cleveland</h2>
-            <p className="text-lg text-teal-100 mb-10">
+            <p className="text-lg text-teal-100 mb-6">
               Our local advisors know every community personally. We'll help you compare options, schedule tours, and find the perfect fit—at no cost to you.
             </p>
+            <PhoneLink
+              placement="assisted_living_hub_cta"
+              className="inline-flex items-center gap-2 bg-white text-teal-700 hover:bg-teal-50 font-bold px-8 py-4 rounded-xl shadow-lg mb-8 min-h-[56px]"
+            >
+              <Phone className="h-5 w-5" />
+              Call for Free Help
+            </PhoneLink>
             <div className="bg-white p-8 rounded-2xl shadow-2xl">
               <SimpleContactForm 
                 sourcePage="assisted-living-cleveland" 
@@ -261,15 +269,12 @@ export default async function AssistedLivingClevelandPage() {
                 showMessage={false}
               />
             </div>
-            <div className="mt-8">
-              <a
-                href="tel:+12166774630"
-                className="inline-flex items-center gap-2 text-white hover:text-teal-100 font-semibold transition-colors"
-              >
-                <Phone className="h-5 w-5" />
-                <span>Or call us directly: (216) 677-4630</span>
-              </a>
-            </div>
+            <p className="mt-6 text-sm text-teal-100">
+              Prefer email? Submit the form above — or{' '}
+              <Link href="/assessment" className="underline hover:text-white font-medium">
+                take the 2-min assessment
+              </Link>
+            </p>
           </div>
         </div>
       </section>

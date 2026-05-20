@@ -1,8 +1,9 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { Calendar, Clock, Tag, ArrowLeft, User, MapPin } from 'lucide-react';
+import { Calendar, Clock, Tag, ArrowLeft, User, MapPin, Phone } from 'lucide-react';
 import Header from '@/components/header/Header';
 import Footer from '@/components/footer/Footer';
+import PhoneLink from '@/components/conversion/PhoneLink';
 import { fetchBlogPostBySlug, fetchRelatedBlogPosts, isRegionalPost, getPostRegionDisplayName } from '@/lib/blog-posts';
 import SuburbLinksSection from '@/components/blog/SuburbLinksSection';
 import BlogArticleContent from '@/components/blog/BlogArticleContent';
@@ -204,7 +205,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
             </div>
 
             {/* Article Content with Enhanced UI */}
-            <BlogArticleContent content={post.content} />
+            <BlogArticleContent content={post.content} slug={params.slug} />
 
             {/* Suburb Links for Medicaid Articles - Internal Siloing */}
             {isMedicaidRelated && (
@@ -214,26 +215,35 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
               />
             )}
 
-            {/* CTA Box - Region-aware */}
-            <div className="bg-primary/5 border border-primary/20 rounded-xl p-8 mt-12">
-              <h3 className="text-2xl font-bold mb-4">
+            {/* CTA Box - Region-aware, phone-first */}
+            <div className="bg-teal-50 border border-teal-200 rounded-xl p-8 mt-12">
+              <h3 className="text-2xl font-bold mb-4 text-slate-900">
                 Need Help Finding Senior Living{isRegional && regionDisplayName ? ` in ${regionDisplayName}` : ''}?
               </h3>
-              <p className="text-gray-700 mb-6">
-                Our {isRegional && regionDisplayName ? `${regionDisplayName} ` : ''}local advisors can provide personalized recommendations, schedule tours, and answer all your questions—completely free.
+              <p className="text-slate-700 mb-6">
+                Our {isRegional && regionDisplayName ? `${regionDisplayName} ` : ''}local advisors compare pricing, schedule tours, and answer your questions — completely free.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <Link
-                  href="/contact"
-                  className="bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors text-center"
+                <PhoneLink
+                  placement="blog_post_cta"
+                  className="inline-flex items-center justify-center gap-2 bg-teal-600 hover:bg-teal-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors text-center min-h-[48px]"
                 >
-                  Get Free Consultation
+                  <Phone className="h-5 w-5" />
+                  Call for Free Help
+                </PhoneLink>
+                <Link
+                  href={`/contact?intent=placement${isRegional && regionSlug ? `&region=${regionSlug}` : ''}`}
+                  className="inline-flex items-center justify-center bg-white hover:bg-slate-50 text-slate-900 font-semibold py-3 px-6 rounded-lg border-2 border-teal-200 transition-colors text-center min-h-[48px]"
+                >
+                  Request a Callback
                 </Link>
+              </div>
+              <div className="mt-4">
                 <Link
                   href={isRegional && regionSlug ? `/${regionSlug}` : '/cleveland'}
-                  className="bg-white hover:bg-gray-50 text-gray-900 font-semibold py-3 px-6 rounded-lg border-2 border-gray-300 transition-colors text-center"
+                  className="text-teal-700 hover:text-teal-900 font-medium text-sm"
                 >
-                  Browse {regionDisplayName || 'Cleveland'} Communities
+                  Browse {regionDisplayName || 'Cleveland'} communities →
                 </Link>
               </div>
             </div>

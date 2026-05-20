@@ -2,11 +2,12 @@
 
 import { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import { CheckCircle, Loader2, Mail, FileText } from 'lucide-react';
+import { CheckCircle, Loader2, Mail, FileText, Phone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
+import PhoneLink from '@/components/conversion/PhoneLink';
 import { trackLeadFormSubmitted } from '@/components/analytics/AssessmentAnalytics';
 import { submitLead } from '@/app/actions/leads';
 
@@ -166,12 +167,13 @@ export default function LeadCaptureForm({ assessmentData }: LeadCaptureFormProps
           <p className="text-teal-800 font-medium mb-2">
             Ready to Schedule Tours?
           </p>
-          <a 
-            href="tel:+12166774630" 
+          <PhoneLink
+            placement="assessment_form_success"
             className="inline-flex items-center gap-2 bg-teal-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-teal-700 transition-colors"
           >
+            <Phone className="h-4 w-4" />
             Call (216) 677-4630
-          </a>
+          </PhoneLink>
           <p className="text-sm text-teal-600 mt-2">
             Free guidance from local Cleveland advisors
           </p>
@@ -191,9 +193,20 @@ export default function LeadCaptureForm({ assessmentData }: LeadCaptureFormProps
         <h3 className="text-2xl sm:text-3xl font-bold text-white mb-2">
           Get Your FREE Personalized Care Guide
         </h3>
-        <p className="text-gray-200">
+        <p className="text-gray-200 mb-4">
           We'll send detailed information on these communities, pricing, availability, and next steps
         </p>
+        <div className="bg-teal-800/40 border border-teal-500/30 rounded-lg p-4 mb-2">
+          <p className="text-teal-100 text-sm mb-3">Want answers now? Call a Cleveland advisor:</p>
+          <PhoneLink
+            placement="assessment_lead_form"
+            className="inline-flex items-center gap-2 bg-white text-teal-700 hover:bg-teal-50 font-bold px-6 py-3 rounded-lg transition-colors"
+          >
+            <Phone className="h-5 w-5" />
+            Call for Free Help
+          </PhoneLink>
+        </div>
+        <p className="text-xs text-gray-400">Or submit the form below for your written guide</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -276,7 +289,7 @@ export default function LeadCaptureForm({ assessmentData }: LeadCaptureFormProps
           type="submit"
           disabled={isSubmitting}
           size="lg"
-          className="w-full bg-[#ff5a5f] hover:bg-[#ff4449] text-white font-semibold py-6 text-lg"
+          className="w-full bg-teal-600 hover:bg-teal-700 text-white font-semibold py-6 text-lg"
         >
           {isSubmitting ? (
             <>

@@ -3,6 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { Home, Phone, Mail, MapPin } from 'lucide-react';
+import PhoneLink from '@/components/conversion/PhoneLink';
 
 // SEO Fix: All internal links now point to canonical URLs (no redirects)
 // Phase 2 - Fixed 320 "Links to Redirect" errors
@@ -18,6 +19,7 @@ const footerLinks = {
     { label: 'Memory Care', href: '/memory-care-cleveland' },
     { label: 'Local Events', href: '/cleveland/events' }, // Fixed: was /events (301 redirect)
     { label: 'Pricing Guide', href: '/senior-living-costs-cleveland' },
+    { label: 'Ohio AL Cost Guide', href: '/blog/cost-of-assisted-living-ohio' },
     { label: 'Choosing Guide', href: '/choosing-senior-living' },
     { label: 'Resources', href: '/resources' },
     { label: 'Blog & Advice', href: '/blog' },
@@ -58,10 +60,13 @@ const Footer = () => {
             
             {/* Contact Info */}
             <div className="space-y-3">
-              <a href="tel:+12166774630" className="flex items-center gap-2 text-slate-300 hover:text-teal-400 transition-colors">
+              <PhoneLink
+                placement="footer"
+                className="flex items-center gap-2 text-slate-300 hover:text-teal-400 transition-colors"
+              >
                 <Phone className="h-4 w-4" />
                 <span>(216) 677-4630</span>
-              </a>
+              </PhoneLink>
               <a href="mailto:info@guideforseniors.com" className="flex items-center gap-2 text-slate-300 hover:text-teal-400 transition-colors">
                 <Mail className="h-4 w-4" />
                 <span>info@guideforseniors.com</span>

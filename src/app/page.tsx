@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import GlobalHeader from '@/components/home/GlobalHeader';
 import HeroRefresh from '@/components/home/HeroRefresh';
+import PopularSuburbsGrid from '@/components/conversion/PopularSuburbsGrid';
 import ValueProps from '@/components/home/ValueProps';
 import CareTypes from '@/components/home/CareTypes';
 import Neighborhoods from '@/components/home/Neighborhoods';
@@ -188,6 +189,8 @@ export default async function HomePage() {
         {/* B. Hero Section - Refreshed with animated text rotation */}
         <HeroRefresh />
 
+        <PopularSuburbsGrid title="Browse Top Cleveland Suburbs" className="py-8" />
+
         {/* C. Value Propositions - 3 key benefits */}
         <ValueProps />
 
@@ -203,11 +206,11 @@ export default async function HomePage() {
         {/* G. Talk to an Advisor Section */}
         <AdvisorSection />
 
-        {/* H. Lead Magnet Section */}
-        <LeadMagnet />
-
-        {/* I. Trust/Social Proof Section */}
+        {/* H. Trust/Social Proof Section */}
         <TrustSection />
+
+        {/* I. Lead Magnet Section (demoted below trust) */}
+        <LeadMagnet />
 
         {/* J. FAQ Section */}
         <HomeFAQ />

@@ -23,6 +23,8 @@ import LocalAuthorityProse from '@/components/location/LocalAuthorityProse';
 import NeighborhoodEvents from '@/components/events/NeighborhoodEvents';
 import CommunityListingFilters from '@/components/location/CommunityListingFilters';
 import EditorialPlacementLinks from '@/components/conversion/EditorialPlacementLinks';
+import PlacementConversionBand from '@/components/conversion/PlacementConversionBand';
+import PhoneLink from '@/components/conversion/PhoneLink';
 import {
   DEFAULT_LISTING_FILTERS,
   filterCommunities,
@@ -135,13 +137,13 @@ export default function CityLocationClient({ cityName, stateAbbr, communities, r
 
             {/* Quick CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-6">
-              <a
-                href="tel:+12166774630"
+              <PhoneLink
+                placement="city_hero"
                 className="inline-flex items-center justify-center gap-2 bg-teal-600 hover:bg-teal-700 text-white font-bold px-8 py-4 rounded-xl transition-colors shadow-lg hover:shadow-xl min-h-[56px]"
               >
                 <Phone className="h-5 w-5" />
                 Talk to a {cityName} Expert
-              </a>
+              </PhoneLink>
               <a
                 href={`/contact?city=${encodeURIComponent(cityName)}`}
                 className="inline-flex items-center justify-center gap-2 bg-white border-2 border-slate-300 text-slate-700 hover:border-teal-500 hover:text-teal-600 font-bold px-8 py-4 rounded-xl transition-colors min-h-[56px]"
@@ -299,18 +301,6 @@ export default function CityLocationClient({ cityName, stateAbbr, communities, r
         </div>
       </section>
 
-      <EditorialPlacementLinks cityName={cityName} />
-
-      <CityLeadMagnet
-        cityName={cityName}
-        citySlug={citySlug}
-        isHospitalDischarge={isHospitalDischarge}
-      />
-
-      {/* ============================================
-          SECTION 8: COMMUNITY COMPARISON TABLE
-          Side-by-side comparison for decision making
-      ============================================ */}
       {filteredCommunities.length > 1 && (
         <CommunityComparisonTable
           communities={filteredCommunities}
@@ -320,6 +310,28 @@ export default function CityLocationClient({ cityName, stateAbbr, communities, r
         />
       )}
 
+      <PlacementConversionBand
+        title={`Need help choosing in ${cityName}?`}
+        description="Our Cleveland advisors compare pricing, availability, and fit — then help schedule tours. Free for families."
+        phonePlacement="city_listings_mid"
+        contactHref={`/contact?city=${citySlug}&intent=placement`}
+        cityName={cityName}
+        cityHref={`/cleveland/${citySlug}`}
+        secondaryHref="/blog/cost-of-assisted-living-ohio"
+        secondaryLabel="2026 Ohio cost guide"
+      />
+
+      <EditorialPlacementLinks cityName={cityName} />
+
+      <CityLeadMagnet
+        cityName={cityName}
+        citySlug={citySlug}
+        isHospitalDischarge={isHospitalDischarge}
+      />
+
+      {/* ============================================
+          SECTION 8: LOCAL EVENTS / remaining sections
+      ============================================ */}
       {/* ============================================
           SECTION 9: TESTIMONIALS
           Social proof from local families
@@ -463,15 +475,15 @@ export default function CityLocationClient({ cityName, stateAbbr, communities, r
             Our local advisors are standing by to help you compare options, schedule tours, and find the perfect community—at no cost to you.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a
-              href="tel:+12166774630"
+            <PhoneLink
+              placement="city_footer_cta"
               className="inline-flex items-center justify-center gap-2 bg-white text-teal-700 font-bold px-8 py-4 rounded-xl shadow-lg hover:shadow-xl hover:bg-slate-50 transition-all min-h-[56px]"
             >
               <Phone className="h-5 w-5" />
               Call (216) 677-4630
-            </a>
+            </PhoneLink>
             <Link
-              href="/contact"
+              href={`/contact?city=${encodeURIComponent(citySlug)}&intent=placement`}
               className="inline-flex items-center justify-center gap-2 bg-teal-800 text-white font-bold px-8 py-4 rounded-xl hover:bg-teal-900 transition-all min-h-[56px]"
             >
               Request Free Consultation

@@ -8,6 +8,7 @@ import Footer from '@/components/footer/Footer';
 import StickyTourButton from '@/components/tour/StickyTourButton';
 import PopularSuburbsGrid from '@/components/conversion/PopularSuburbsGrid';
 import PlacementConversionBand from '@/components/conversion/PlacementConversionBand';
+import PhoneLink from '@/components/conversion/PhoneLink';
 import { submitLead } from '@/app/actions/leads';
 import AffordabilityCalculator from '@/components/AffordabilityCalculator';
 
@@ -358,9 +359,16 @@ export default function SeniorLivingCostsClevelandPage() {
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Get Personalized Pricing for Cleveland Communities</h2>
-            <p className="text-lg text-teal-100 mb-10">
+            <p className="text-lg text-teal-100 mb-6">
               Every situation is unique. Tell us about your needs and we'll provide specific pricing for communities that match your requirements and budget.
             </p>
+            <PhoneLink
+              placement="costs_hub_cta"
+              className="inline-flex items-center gap-2 bg-white text-teal-700 hover:bg-teal-50 font-bold px-8 py-4 rounded-xl shadow-lg mb-8 min-h-[56px]"
+            >
+              <Phone className="h-5 w-5" />
+              Call for Pricing Help
+            </PhoneLink>
             <div className="bg-white p-8 rounded-2xl shadow-2xl text-left">
               {isSuccess ? (
                 <div className="text-center py-6">
@@ -368,8 +376,14 @@ export default function SeniorLivingCostsClevelandPage() {
                     <CheckCircle className="h-8 w-8 text-green-600" />
                   </div>
                   <h3 className="text-xl font-bold text-slate-900 mb-2">Thank You!</h3>
-                  <p className="text-slate-600">We'll send you detailed pricing information shortly.</p>
-                  <p className="text-sm text-slate-500 mt-4">Need immediate help? Call <strong className="text-teal-600">(216) 677-4630</strong></p>
+                  <p className="text-slate-600 mb-4">We'll send you detailed pricing information shortly.</p>
+                  <PhoneLink
+                    placement="costs_hub_form_success"
+                    className="inline-flex items-center gap-2 bg-teal-600 hover:bg-teal-700 text-white font-semibold px-5 py-2.5 rounded-lg text-sm"
+                  >
+                    <Phone className="h-4 w-4" />
+                    Need pricing now? Call us
+                  </PhoneLink>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-5">
@@ -433,15 +447,6 @@ export default function SeniorLivingCostsClevelandPage() {
                   <p className="text-xs text-slate-500 text-center">We'll send detailed pricing for communities that match your needs.</p>
                 </form>
               )}
-            </div>
-            <div className="mt-8">
-              <a
-                href="tel:+12166774630"
-                className="inline-flex items-center gap-2 text-white hover:text-teal-100 font-semibold transition-colors"
-              >
-                <Phone className="h-5 w-5" />
-                <span>Or call us directly: (216) 677-4630</span>
-              </a>
             </div>
           </div>
         </div>

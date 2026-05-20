@@ -3,6 +3,7 @@
 import React from 'react';
 import { Hospital, Clock, Shield, Phone, ArrowRight, Heart, Brain, Activity } from 'lucide-react';
 import Link from 'next/link';
+import PhoneLink from '@/components/conversion/PhoneLink';
 
 interface CitySpecificContentProps {
   citySlug: string;
@@ -73,13 +74,13 @@ const CitySpecificContent: React.FC<CitySpecificContentProps> = ({ citySlug, cit
                 <h3 className="text-xl font-bold mb-1">Need Urgent Discharge Planning?</h3>
                 <p className="text-blue-100">Speak with a Westlake placement specialist today—no cost, no obligation.</p>
               </div>
-              <a 
-                href="tel:+12166774630"
+              <PhoneLink
+                placement="city_specific_hospital"
                 className="inline-flex items-center gap-2 bg-white text-blue-600 font-bold px-6 py-3 rounded-lg hover:bg-blue-50 transition-colors whitespace-nowrap"
               >
                 <Phone className="h-5 w-5" />
                 (216) 677-4630
-              </a>
+              </PhoneLink>
             </div>
           </div>
         </div>
@@ -147,13 +148,13 @@ const CitySpecificContent: React.FC<CitySpecificContentProps> = ({ citySlug, cit
                 <h3 className="text-xl font-bold mb-1">Need Memory Care Guidance?</h3>
                 <p className="text-purple-100">Speak with a Beachwood dementia care specialist—free consultation.</p>
               </div>
-              <a 
-                href="tel:+12166774630"
+              <PhoneLink
+                placement="city_specific_discharge"
                 className="inline-flex items-center gap-2 bg-white text-purple-600 font-bold px-6 py-3 rounded-lg hover:bg-purple-50 transition-colors whitespace-nowrap"
               >
                 <Phone className="h-5 w-5" />
                 (216) 677-4630
-              </a>
+              </PhoneLink>
             </div>
           </div>
         </div>

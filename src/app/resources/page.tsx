@@ -7,6 +7,7 @@ import StickyTourButton from '@/components/tour/StickyTourButton';
 import { fetchRecentBlogPosts } from '@/lib/blog-posts';
 import SimpleContactForm from '@/components/forms/SimpleContactForm';
 import PlacementConversionBand from '@/components/conversion/PlacementConversionBand';
+import PhoneLink from '@/components/conversion/PhoneLink';
 
 export const revalidate = 300;
 
@@ -364,19 +365,18 @@ export default async function ResourcesPage() {
                   <span>Confidential</span>
                 </div>
               </div>
-              <SimpleContactForm sourcePage="resources" buttonText="Get Free Consultation" />
+              <SimpleContactForm sourcePage="resources" buttonText="Request a Callback" />
             </div>
             
-            {/* Phone CTA */}
             <div className="text-center mt-8">
-              <p className="text-slate-400 mb-3">Or call us directly</p>
-              <a
-                href="tel:+12166774630"
-                className="inline-flex items-center gap-2 text-white hover:text-teal-300 font-bold text-xl transition-colors"
+              <p className="text-slate-400 mb-3">Prefer to talk now?</p>
+              <PhoneLink
+                placement="resources_hub_cta"
+                className="inline-flex items-center gap-2 text-white hover:text-teal-200 font-bold text-xl transition-colors"
               >
                 <Phone className="h-6 w-6" />
-                <span>(216) 677-4630</span>
-              </a>
+                <span>Call (216) 677-4630</span>
+              </PhoneLink>
             </div>
           </div>
         </div>

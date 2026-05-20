@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { Download, CheckCircle2, AlertCircle, FileText, Phone } from 'lucide-react';
+import PhoneLink from '@/components/conversion/PhoneLink';
 import { submitLead } from '@/app/actions/leads';
 
 interface CityLeadMagnetProps {
@@ -116,15 +117,27 @@ const CityLeadMagnet: React.FC<CityLeadMagnetProps> = ({
                     </div>
                     <h3 className="text-xl font-bold text-slate-900 mb-2">Guide Sent!</h3>
                     <p className="text-slate-600 mb-4">Check your inbox for your free {cityName} cost guide.</p>
-                    <a
-                      href="tel:+12166774630"
+                    <PhoneLink
+                      placement="city_lead_magnet_success"
                       className="inline-flex items-center gap-2 text-teal-600 font-semibold hover:text-teal-700"
                     >
                       <Phone className="h-4 w-4" />
-                      Need help now? Call (216) 677-4630
-                    </a>
+                      Need help now? Call for free guidance
+                    </PhoneLink>
                   </div>
                 ) : (
+                  <>
+                    <div className="bg-teal-50 border border-teal-200 rounded-xl p-4 mb-4 text-center">
+                      <p className="text-sm text-slate-600 mb-2">Want pricing now? Talk to a {cityName} advisor:</p>
+                      <PhoneLink
+                        placement="city_lead_magnet"
+                        className="inline-flex items-center gap-2 bg-teal-600 hover:bg-teal-700 text-white font-bold px-5 py-2.5 rounded-lg text-sm min-h-[44px]"
+                      >
+                        <Phone className="h-4 w-4" />
+                        Call for Free Help
+                      </PhoneLink>
+                      <p className="text-xs text-slate-400 mt-2">Or download the written guide below</p>
+                    </div>
                   <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
                       <label htmlFor="lead-name" className="block text-sm font-semibold text-slate-700 mb-1">
@@ -178,6 +191,7 @@ const CityLeadMagnet: React.FC<CityLeadMagnetProps> = ({
                       100% free • No spam • Your info is confidential
                     </p>
                   </form>
+                  </>
                 )}
               </div>
             </div>

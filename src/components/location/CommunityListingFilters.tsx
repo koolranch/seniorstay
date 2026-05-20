@@ -7,6 +7,7 @@ import {
   CareTypeFilter,
 } from '@/lib/community-listing-utils';
 import { BudgetFilter } from '@/lib/community-pricing';
+import { trackListingFilter } from '@/components/analytics/GoogleAnalytics';
 
 interface CommunityListingFiltersProps {
   filters: ListingFilters;
@@ -21,7 +22,13 @@ export default function CommunityListingFilters({
   resultCount,
   totalCount,
 }: CommunityListingFiltersProps) {
-  const set = (partial: Partial<ListingFilters>) => onChange({ ...filters, ...partial });
+  const set = (partial: Partial<ListingFilters>, filterType?: string, filterValue?: string) => {
+    const next = { ...filters, ...partial };
+    onChange(next);
+    if (filterType && filterValue !== undefined) {
+      trackListingFilter(filterType, filterValue, resultCount);
+    }
+  };
 
   return (
     <div className="bg-white border border-slate-200 rounded-xl p-4 mb-8 shadow-sm">
@@ -36,19 +43,24 @@ export default function CommunityListingFilters({
         <select
           aria-label="Care type filter"
           value={filters.careType}
-          onChange={(e) => set({ careType: e.target.value as CareTypeFilter })}
+          onChange={(e) => {
+            const value = e.target.value as CareTypeFilter;
+            set({ careType: value }, 'care_type', value);
+          }}
           className="h-10 px-3 text-sm border border-slate-300 rounded-lg bg-white focus:ring-2 focus:ring-teal-500"
         >
           <option value="all">All care types</option>
           <option value="assisted-living">Assisted Living</option>
           <option value="memory-care">Memory Care</option>
           <option value="independent-living">Independent Living</option>
-          <option value="skilled-nursing">Skilled Nursing</option>
         </select>
         <select
           aria-label="Budget filter"
           value={filters.budget}
-          onChange={(e) => set({ budget: e.target.value as BudgetFilter })}
+          onChange={(e) => {
+            const value = e.target.value as BudgetFilter;
+            set({ budget: value }, 'budget', value);
+          }}
           className="h-10 px-3 text-sm border border-slate-300 rounded-lg bg-white focus:ring-2 focus:ring-teal-500"
         >
           <option value="all">Any budget (est.)</option>
@@ -60,7 +72,7 @@ export default function CommunityListingFilters({
           <input
             type="checkbox"
             checked={filters.photosOnly}
-            onChange={(e) => set({ photosOnly: e.target.checked })}
+            onChange={(e) => set({ photosOnly: e.target.checked }, 'photos_only', String(e.target.checked))}
             className="rounded border-slate-300 text-teal-600 focus:ring-teal-500"
           />
           Photos only

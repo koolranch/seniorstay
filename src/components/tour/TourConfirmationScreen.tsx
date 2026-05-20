@@ -4,6 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { CheckCircle, Calendar, Phone, ArrowRight, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import PhoneLink from '@/components/conversion/PhoneLink';
 import { Community } from '@/data/facilities';
 
 interface TourConfirmationScreenProps {
@@ -133,9 +134,9 @@ export default function TourConfirmationScreen({
             <div className="mt-6 pt-6 border-t text-sm text-gray-500">
               <p>
                 Questions? Call us at{' '}
-                <a href="tel:+12166774630" className="text-primary hover:underline font-medium">
+                <PhoneLink placement="tour_confirmation" className="text-primary hover:underline font-medium">
                   (216) 677-4630
-                </a>
+                </PhoneLink>
               </p>
             </div>
           </div>

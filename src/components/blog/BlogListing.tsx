@@ -10,6 +10,7 @@ interface BlogListingProps {
   posts: BlogPostSummary[];
 }
 
+const COST_GUIDE_SLUG = 'cost-of-assisted-living-ohio';
 const POSTS_PER_PAGE = 12;
 
 export default function BlogListing({ posts }: BlogListingProps) {
@@ -41,9 +42,15 @@ export default function BlogListing({ posts }: BlogListingProps) {
   const endIndex = startIndex + POSTS_PER_PAGE;
   const paginatedPosts = filteredPosts.slice(startIndex, endIndex);
   
-  // Featured post (most recent)
-  const featuredPost = filteredPosts[0];
-  const remainingPosts = paginatedPosts.slice(currentPage === 1 ? 1 : 0);
+  // Featured post — pin cost guide when browsing all articles
+  const featuredPost = useMemo(() => {
+    if (selectedCategory === 'All' && !searchQuery) {
+      const costGuide = filteredPosts.find((p) => p.slug === COST_GUIDE_SLUG);
+      if (costGuide) return costGuide;
+    }
+    return filteredPosts[0];
+  }, [filteredPosts, selectedCategory, searchQuery]);
+  const remainingPosts = paginatedPosts.filter((p) => p.slug !== featuredPost?.slug || currentPage !== 1);
 
   // Reset to page 1 when filters change
   const handleCategoryChange = (category: string) => {

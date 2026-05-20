@@ -3,7 +3,8 @@ import GlobalHeader from '@/components/home/GlobalHeader';
 import Footer from '@/components/footer/Footer';
 import BlogListing from '@/components/blog/BlogListing';
 import { fetchBlogPostSummaries } from '@/lib/blog-posts';
-import { Phone, ArrowRight, BookOpen, ChevronRight } from 'lucide-react';
+import PhoneLink from '@/components/conversion/PhoneLink';
+import { Phone, ArrowRight, BookOpen, ChevronRight, DollarSign } from 'lucide-react';
 
 export const revalidate = 300;
 
@@ -119,6 +120,33 @@ export default async function BlogPage() {
         </div>
       </section>
 
+      {/* Featured cost guide — high-intent placement content */}
+      <section className="bg-teal-50 border-b border-teal-100 py-8">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto flex flex-col md:flex-row items-center gap-6">
+            <div className="flex-1">
+              <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-teal-700 bg-teal-100 px-3 py-1 rounded-full mb-3">
+                <DollarSign className="h-3.5 w-3.5" />
+                Most searched
+              </span>
+              <h2 className="text-xl md:text-2xl font-bold text-slate-900 mb-2">
+                2026 Assisted Living Costs in Ohio
+              </h2>
+              <p className="text-slate-600 text-sm">
+                City-by-city pricing for Cleveland suburbs — what families actually pay and how to compare communities.
+              </p>
+            </div>
+            <Link
+              href="/blog/cost-of-assisted-living-ohio"
+              className="inline-flex items-center gap-2 bg-teal-600 hover:bg-teal-700 text-white font-bold px-6 py-3.5 rounded-xl shrink-0"
+            >
+              Read the cost guide
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* Blog Listing */}
       <BlogListing posts={posts} />
 
@@ -163,28 +191,28 @@ export default async function BlogPage() {
               community—completely free.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link
-                href="/contact"
+              <PhoneLink
+                placement="blog_index_cta"
                 className="inline-flex items-center justify-center gap-2 bg-white text-teal-700 font-bold px-8 py-4 rounded-xl shadow-lg hover:shadow-xl hover:bg-slate-50 transition-all min-h-[56px]"
               >
-                Get Free Consultation
-                <ArrowRight className="h-5 w-5" />
-              </Link>
+                <Phone className="h-5 w-5" />
+                Call for Free Help
+              </PhoneLink>
               <Link
-                href="/cleveland"
+                href="/contact?intent=placement"
                 className="inline-flex items-center justify-center gap-2 bg-teal-800 text-white font-bold px-8 py-4 rounded-xl hover:bg-teal-900 transition-all min-h-[56px]"
               >
-                Browse Communities
+                Request a Callback
+                <ArrowRight className="h-5 w-5" />
               </Link>
             </div>
-            <div className="mt-8">
-              <a
-                href="tel:+12166774630"
-                className="inline-flex items-center gap-2 text-white hover:text-teal-100 font-semibold transition-colors"
+            <div className="mt-6">
+              <Link
+                href="/cleveland"
+                className="text-teal-100 hover:text-white font-medium underline-offset-2 hover:underline"
               >
-                <Phone className="h-5 w-5" />
-                <span>Or call us directly: (216) 677-4630</span>
-              </a>
+                Browse Cleveland communities →
+              </Link>
             </div>
           </div>
         </div>
