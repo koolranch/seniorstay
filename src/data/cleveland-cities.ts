@@ -984,5 +984,95 @@ export const clevelandCitiesData: Record<string, CityInfo> = {
         community: "Vitalia Mentor"
       }
     ]
+  },
+
+  'solon': {
+    name: 'Solon',
+    slug: 'solon',
+    description: 'Solon is an affluent, family-friendly southeast suburb in Cuyahoga County known for top-rated schools, a thriving business community, and convenient access to east-side healthcare. The city offers quality independent living, assisted living, and memory care options in a safe, well-served setting close to Chagrin Falls and Beachwood.',
+    highlights: [
+      'Quick access to UH Ahuja Medical Center',
+      'Top-rated schools and strong city services',
+      'Solon Community Park and recreation programs',
+      'Convenient I-422 and I-271 access',
+      'Close to Chagrin Falls village and Beachwood shopping'
+    ],
+    nearbyHospitals: [
+      'UH Ahuja Medical Center',
+      'Cleveland Clinic Hillcrest Hospital',
+      'Cleveland Clinic Twinsburg Family Health'
+    ],
+    averageCost: {
+      independentLiving: '$3,000 - $5,200',
+      assistedLiving: '$4,200 - $7,000',
+      memoryCare: '$5,800 - $9,200'
+    },
+    testimonials: [
+      {
+        text: "Vitalia Solon has been wonderful for Mom. The independent living apartments are beautiful and the staff is attentive and caring.",
+        author: "Diane M.",
+        community: "Vitalia Solon"
+      }
+    ]
+  },
+
+  'aurora': {
+    name: 'Aurora',
+    slug: 'aurora',
+    description: 'Aurora is a welcoming Portage County city in the southeast Cleveland suburbs, known for excellent schools, Aurora Farms premium outlets, and a peaceful, family-oriented atmosphere. The city offers independent living, assisted living, and memory care options with convenient access to both Cleveland and Akron healthcare systems.',
+    highlights: [
+      'Quiet, family-friendly residential setting',
+      'Aurora Farms Premium Outlets and local shopping',
+      'Convenient to SR-82 and I-480/I-271',
+      'Close to Geauga Lake and area parks',
+      'Easy access to Cleveland and Akron hospitals'
+    ],
+    nearbyHospitals: [
+      'UH Portage Medical Center',
+      'Cleveland Clinic Twinsburg Family Health',
+      'UH Ahuja Medical Center'
+    ],
+    averageCost: {
+      independentLiving: '$2,800 - $4,800',
+      assistedLiving: '$3,800 - $6,400',
+      memoryCare: '$5,200 - $8,600'
+    },
+    testimonials: [
+      {
+        text: "Independence Village of Aurora gave Dad the freedom he wanted with the support he needed. The community feels warm and the dining is excellent.",
+        author: "Karen S.",
+        community: "Independence Village of Aurora"
+      }
+    ]
+  },
+
+  'south-russell': {
+    name: 'South Russell',
+    slug: 'south-russell',
+    description: 'South Russell is a small, upscale village in Geauga County bordering Chagrin Falls, known for its wooded landscapes, equestrian heritage, and quiet residential character. The village offers boutique assisted living and memory care just minutes from the Chagrin Falls village center and east-side Cleveland healthcare.',
+    highlights: [
+      'Scenic, wooded village adjacent to Chagrin Falls',
+      'Boutique assisted living and memory care',
+      'Close to Chagrin Falls shops, dining, and the waterfall',
+      'Convenient to Hillcrest Hospital and UH Ahuja',
+      'Peaceful, safe residential community'
+    ],
+    nearbyHospitals: [
+      'Cleveland Clinic Hillcrest Hospital',
+      'UH Ahuja Medical Center',
+      'UH Geauga Medical Center'
+    ],
+    averageCost: {
+      independentLiving: '$3,200 - $5,500',
+      assistedLiving: '$4,500 - $7,200',
+      memoryCare: '$6,000 - $9,200'
+    },
+    testimonials: [
+      {
+        text: "Meadow Falls of Chagrin Valley feels like home. The smaller size means Mom gets personalized attention, and it's just minutes from Chagrin Falls.",
+        author: "Patricia L.",
+        community: "Meadow Falls of Chagrin Valley"
+      }
+    ]
   }
 }; 
