@@ -31,6 +31,8 @@ import { fetchQualityCommunitiesByCity } from '@/lib/fetch-featured-communities'
 import GlobalHeader from '@/components/home/GlobalHeader';
 import EventReminderForm from '@/components/events/EventReminderForm';
 import Footer from '@/components/footer/Footer';
+import PhoneLink from '@/components/conversion/PhoneLink';
+import PlacementConversionBand from '@/components/conversion/PlacementConversionBand';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -899,12 +901,12 @@ export default async function EventSlugPage({ params }: { params: { slug: string
                             Speak with a Placement Specialist
                           </Button>
                         </Link>
-                        <a href="tel:+12166774630">
+                        <PhoneLink placement="event_legacy_past_cta" className="inline-block">
                           <Button variant="outline" size="lg" className="gap-2">
                             <Phone className="h-4 w-4" />
                             Call (216) 677-4630
                           </Button>
-                        </a>
+                        </PhoneLink>
                       </>
                     ) : (
                       <>
@@ -1177,10 +1179,10 @@ export default async function EventSlugPage({ params }: { params: { slug: string
                       <p className="mt-3 text-slate-600 text-sm leading-relaxed">
                         Most senior events in {event.neighborhood || 'Cleveland'} are held at ADA-compliant venues. 
                         {event.location_name ? ` ${event.location_name} typically offers` : ' Venues typically offer'} accessible 
-                        parking, ramps, and restrooms. For specific accessibility information, call us at{' '}
-                        <a href="tel:+12166774630" className="font-medium hover:underline" style={{ color: SAGE_GREEN }}>
+                        parking, ramps, and restrooms.                         For specific accessibility information, call us at{' '}
+                        <PhoneLink placement="event_legacy_faq_accessibility" className="font-medium hover:underline" style={{ color: SAGE_GREEN }}>
                           (216) 677-4630
-                        </a>.
+                        </PhoneLink>.
                       </p>
                     </details>
 
@@ -1367,7 +1369,7 @@ export default async function EventSlugPage({ params }: { params: { slug: string
                     Our Cleveland advisors provide free, personalized guidance on assisted living, 
                     memory care, and independent living options.
                   </p>
-                  <a href="tel:+12166774630">
+                  <PhoneLink placement="event_legacy_sidebar_cta" className="block">
                     <Button 
                       variant="secondary" 
                       className="w-full font-bold text-slate-900 bg-white hover:bg-slate-100"
@@ -1375,7 +1377,7 @@ export default async function EventSlugPage({ params }: { params: { slug: string
                     >
                       Call (216) 677-4630
                     </Button>
-                  </a>
+                  </PhoneLink>
                 </CardContent>
               </Card>
 
@@ -1635,6 +1637,16 @@ export default async function EventSlugPage({ params }: { params: { slug: string
             </div>
           </section>
         )}
+
+        <PlacementConversionBand
+          title={`Planning senior living near ${event.neighborhood || 'Cleveland'}?`}
+          description="Our Cleveland advisors compare assisted living and memory care at no cost—call or request a callback."
+          phonePlacement="event_legacy_band"
+          contactHref={`/contact?intent=placement&source=event&city=${encodeURIComponent(event.neighborhood || '')}`}
+          cityName={event.neighborhood || undefined}
+          cityHref={neighborhoodSlug ? `/cleveland/${neighborhoodSlug}#communities` : undefined}
+          secondaryHref="/assessment"
+        />
 
         <Footer />
       </main>

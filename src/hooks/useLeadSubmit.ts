@@ -1,12 +1,38 @@
 'use client';
 
-import { useState, useCallback, useRef, useTransition } from 'react';
-import { submitLead, LeadInput, LeadSubmitResult } from '@/app/actions/leads';
+import { useState, useCallback, useRef, useTransition, useEffect } from 'react';
+import { getLeadSubmissionToken, submitLead, LeadInput, LeadSubmitResult } from '@/app/actions/leads';
 import { trackFormError, trackFormSubmission } from '@/components/analytics/GoogleAnalytics';
 
 interface UseLeadSubmitOptions {
   onSuccess?: (result: LeadSubmitResult) => void;
   onError?: (result: LeadSubmitResult) => void;
+}
+
+export function useLeadSubmissionToken(): string {
+  const [token, setToken] = useState('');
+
+  useEffect(() => {
+    let active = true;
+
+    getLeadSubmissionToken()
+      .then((nextToken) => {
+        if (active) {
+          setToken(nextToken);
+        }
+      })
+      .catch(() => {
+        if (active) {
+          setToken('');
+        }
+      });
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  return token;
 }
 
 /**
@@ -17,16 +43,30 @@ export function useLeadSubmit(options?: UseLeadSubmitOptions) {
   const [result, setResult] = useState<LeadSubmitResult | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const formStartedAtRef = useRef(Date.now());
+  const submissionToken = useLeadSubmissionToken();
 
   const submit = useCallback(async (data: LeadInput) => {
     setIsSubmitting(true);
     setResult(null);
+
+    if (!submissionToken) {
+      const errorResult: LeadSubmitResult = {
+        success: false,
+        message: 'Form is still loading. Please wait a moment and try again.',
+      };
+      setResult(errorResult);
+      trackFormError(data.pageType || 'lead', errorResult.message);
+      options?.onError?.(errorResult);
+      setIsSubmitting(false);
+      return;
+    }
     
     startTransition(async () => {
       try {
         const response = await submitLead({
-          website: '',
+          website: data.website ?? '',
           submissionStartedAt: formStartedAtRef.current,
+          submissionToken,
           ...data,
         });
         setResult(response);
@@ -50,7 +90,7 @@ export function useLeadSubmit(options?: UseLeadSubmitOptions) {
         setIsSubmitting(false);
       }
     });
-  }, [options]);
+  }, [options, submissionToken]);
 
   const reset = useCallback(() => {
     setResult(null);
@@ -60,6 +100,7 @@ export function useLeadSubmit(options?: UseLeadSubmitOptions) {
     submit,
     reset,
     isPending: isPending || isSubmitting,
+    isReady: Boolean(submissionToken),
     result,
     isSuccess: result?.success === true,
     isError: result?.success === false,

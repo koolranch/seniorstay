@@ -24,7 +24,7 @@ function ContactForm() {
   const communityName = searchParams.get('community');
   const cityName = searchParams.get('city');
   
-  const { submit, isPending, result, isSuccess, isError, reset } = useLeadSubmit();
+  const { submit, isPending, result, isSuccess, isError, reset, isReady } = useLeadSubmit();
   const formStartTrackedRef = useRef(false);
 
   const trackStartOnce = () => {
@@ -72,7 +72,7 @@ function ContactForm() {
 
     await submit({
       fullName: `${firstName} ${lastName}`.trim(),
-      email: formData.get('email') as string,
+      email: (formData.get('email') as string)?.trim() || undefined,
       phone,
       moveInTimeline: (formData.get('moveInTimeline') as string) || undefined,
       notes: formData.get('message') as string,
@@ -81,6 +81,7 @@ function ContactForm() {
       careType,
       pageType: 'contact',
       sourceSlug: cityName?.toLowerCase().replace(/\s+/g, '-'),
+      website: (formData.get('website') as string) || '',
       ...utmParams,
     });
     
@@ -127,7 +128,7 @@ function ContactForm() {
                   ? `Speak to a ${cityName} Advisor`
                   : 'Contact Us'}
             </h1>
-            <p className="text-lg md:text-xl text-slate-600">
+            <p className="text-lg md:text-xl text-slate-600 mb-6">
               {communityName
                 ? `Our local advisors know ${communityName} well. Get personalized help with pricing, tours, and availability.`
                 : cityName
@@ -135,6 +136,14 @@ function ContactForm() {
                   : `We're here to help you find the perfect senior living community. 
                    Reach out to our experienced advisors for personalized assistance.`}
             </p>
+            <PhoneLink
+              placement="contact_hero"
+              className="inline-flex items-center justify-center gap-2 bg-teal-600 hover:bg-teal-700 text-white font-bold px-8 py-4 rounded-xl text-lg shadow-lg min-h-[48px]"
+            >
+              <Phone className="h-5 w-5" />
+              Call {PLACEMENT_PHONE_DISPLAY} Now
+            </PhoneLink>
+            <p className="text-sm text-slate-500 mt-3">Live advisors • Free guidance • No obligation</p>
           </div>
         </div>
       </section>
@@ -223,7 +232,8 @@ function ContactForm() {
 
             {/* Contact Form */}
             <div className="bg-white border-2 border-slate-200 rounded-2xl p-8 shadow-lg">
-              <h2 className="text-2xl font-bold text-slate-900 mb-6">Send Us a Message</h2>
+              <h2 className="text-2xl font-bold text-slate-900 mb-2">Request a Callback</h2>
+              <p className="text-slate-600 mb-6">Phone is required — we call you back, often within 15 minutes on business days.</p>
               
               {isSuccess ? (
                 <div className="bg-green-50 border-2 border-green-200 p-6 rounded-xl">
@@ -252,6 +262,14 @@ function ContactForm() {
                 </div>
               ) : (
                 <form className="space-y-5" onSubmit={handleSubmit} onFocus={trackStartOnce}>
+                  <input
+                    type="text"
+                    name="website"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    aria-hidden="true"
+                    className="hidden"
+                  />
                   {/* Hidden fields for community context tracking */}
                   {(communityName || cityName) && (
                     <>
@@ -300,21 +318,6 @@ function ContactForm() {
                   )}
 
                   <div>
-                    <Label htmlFor="email" className="font-semibold text-slate-700">Email *</Label>
-                    <Input 
-                      id="email" 
-                      name="email" 
-                      type="email" 
-                      placeholder="john@example.com" 
-                      required 
-                      className={`mt-1.5 h-12 ${formErrors.email ? 'border-red-500' : 'border-slate-300'}`}
-                    />
-                    {formErrors.email && (
-                      <p className="text-red-500 text-sm mt-1">{formErrors.email}</p>
-                    )}
-                  </div>
-
-                  <div>
                     <Label htmlFor="phone" className="font-semibold text-slate-700">Phone Number *</Label>
                     <Input
                       id="phone"
@@ -330,6 +333,20 @@ function ContactForm() {
                     </p>
                     {formErrors.phone && (
                       <p className="text-red-500 text-sm mt-1">{formErrors.phone}</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <Label htmlFor="email" className="font-semibold text-slate-700">Email <span className="text-slate-400 font-normal">(optional)</span></Label>
+                    <Input 
+                      id="email" 
+                      name="email" 
+                      type="email" 
+                      placeholder="john@example.com" 
+                      className={`mt-1.5 h-12 ${formErrors.email ? 'border-red-500' : 'border-slate-300'}`}
+                    />
+                    {formErrors.email && (
+                      <p className="text-red-500 text-sm mt-1">{formErrors.email}</p>
                     )}
                   </div>
 
@@ -393,9 +410,9 @@ function ContactForm() {
                   <Button 
                     type="submit" 
                     className="w-full h-14 text-lg font-bold bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800" 
-                    disabled={isPending}
+                    disabled={isPending || !isReady}
                   >
-                    {isPending ? 'Sending...' : 'Send Message'}
+                    {isPending ? 'Sending...' : 'Request Callback'}
                   </Button>
                   
                   <p className="text-xs text-slate-500 text-center">

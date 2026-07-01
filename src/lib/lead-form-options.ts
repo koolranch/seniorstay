@@ -7,5 +7,16 @@ export const MOVE_IN_TIMELINE_OPTIONS = [
 
 export function isValidPhone(phone: string): boolean {
   const digits = phone.replace(/\D/g, '');
-  return digits.length >= 10;
+  const normalized = digits.length === 11 && digits.startsWith('1') ? digits.slice(1) : digits;
+  if (normalized.length !== 10) {
+    return false;
+  }
+
+  const areaCode = normalized.slice(0, 3);
+  const exchange = normalized.slice(3, 6);
+  if (/^[01]/.test(areaCode) || /^[01]/.test(exchange)) {
+    return false;
+  }
+
+  return true;
 }

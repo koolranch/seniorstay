@@ -32,6 +32,7 @@ export const LeadSchema = z.object({
   utmCampaign: z.string().max(200).optional(),
   website: z.string().max(200).optional().or(z.literal('')),
   submissionStartedAt: z.number().int().positive().optional().nullable(),
+  submissionToken: z.string().max(500).optional().or(z.literal('')),
 });
 
 /**

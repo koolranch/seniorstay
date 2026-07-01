@@ -5,7 +5,8 @@ import { createClient } from '@supabase/supabase-js';
 import { createHash, randomUUID } from 'crypto';
 import { LeadSchema, LeadInput, LeadSubmitResult, ReferralStatus } from './lead-types';
 import { Resend } from 'resend';
-import { createGuideAccessToken } from '@/lib/lead-security';
+import { createGuideAccessToken, createLeadSubmissionToken, verifyAndConsumeLeadSubmissionToken } from '@/lib/lead-security';
+import { evaluateLeadSpamSignals, isValidNanpPhone } from '@/lib/lead-spam';
 
 // Initialize Resend for email notifications
 const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
@@ -149,10 +150,10 @@ type RecentLeadRecord = {
   notes: string | null;
 };
 
-const MIN_FORM_COMPLETION_MS = 1500;
+const MIN_FORM_COMPLETION_MS = 3000;
 const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
-const MAX_SUBMISSIONS_PER_IP_WINDOW = 5;
-const MAX_SUBMISSIONS_PER_EMAIL_WINDOW = 4;
+const MAX_SUBMISSIONS_PER_IP_WINDOW = 2;
+const MAX_SUBMISSIONS_PER_EMAIL_WINDOW = 2;
 const DUPLICATE_WINDOW_MS = 30 * 60 * 1000;
 
 const DISPOSABLE_EMAIL_DOMAINS = new Set([
@@ -160,8 +161,10 @@ const DISPOSABLE_EMAIL_DOMAINS = new Set([
   'dispostable.com',
   'fakeinbox.com',
   'guerrillamail.com',
+  'jmailservice.com',
   'maildrop.cc',
   'mailinator.com',
+  'sendproud.com',
   'sharklasers.com',
   'tempmail.com',
   'temp-mail.org',
@@ -222,6 +225,36 @@ async function evaluateSubmissionSecurity(params: {
 
   if (data.website?.trim()) {
     return { action: 'silent_drop', reason: 'honeypot_filled' };
+  }
+
+  const spamVerdict = evaluateLeadSpamSignals({
+    fullName: data.fullName,
+    email: data.email,
+    phone: data.phone,
+    notes: data.notes,
+  });
+  if (spamVerdict.isSpam) {
+    return { action: 'silent_drop', reason: spamVerdict.reason || 'spam_heuristics' };
+  }
+
+  if (data.submissionToken?.trim()) {
+    const tokenDecision = verifyAndConsumeLeadSubmissionToken(data.submissionToken);
+    if (!tokenDecision.valid) {
+      return { action: 'silent_drop', reason: tokenDecision.reason || 'invalid_submission_token' };
+    }
+  } else if (typeof data.submissionStartedAt === 'number') {
+    const elapsed = Date.now() - data.submissionStartedAt;
+    if (elapsed < MIN_FORM_COMPLETION_MS || elapsed > 2 * 60 * 60 * 1000) {
+      return { action: 'silent_drop', reason: 'invalid_submission_timing' };
+    }
+  }
+
+  if (data.phone && !isValidNanpPhone(data.phone)) {
+    return {
+      action: 'reject',
+      message: 'Please enter a valid U.S. phone number so we can call you back.',
+      reason: 'invalid_phone_number',
+    };
   }
 
   if (typeof data.submissionStartedAt === 'number') {
@@ -301,6 +334,10 @@ async function evaluateSubmissionSecurity(params: {
   }
 
   return { action: 'allow' };
+}
+
+export async function getLeadSubmissionToken(): Promise<string> {
+  return createLeadSubmissionToken();
 }
 
 /**

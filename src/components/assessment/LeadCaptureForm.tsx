@@ -10,6 +10,8 @@ import { Label } from '@/components/ui/label';
 import PhoneLink from '@/components/conversion/PhoneLink';
 import { trackLeadFormSubmitted } from '@/components/analytics/AssessmentAnalytics';
 import { submitLead } from '@/app/actions/leads';
+import { PLACEMENT_CALLBACK_MESSAGE } from '@/lib/placement-contact';
+import { isValidPhone } from '@/lib/lead-form-options';
 
 interface LeadCaptureFormProps {
   assessmentData: {
@@ -54,11 +56,18 @@ export default function LeadCaptureForm({ assessmentData }: LeadCaptureFormProps
     setIsSubmitting(true);
     setError('');
 
+    if (!isValidPhone(formData.phone)) {
+      setError('A valid phone number is required so an advisor can call you.');
+      setIsSubmitting(false);
+      return;
+    }
+
     try {
+      const trimmedEmail = formData.email.trim();
       // Step 1: Submit lead to database
       const result = await submitLead({
         fullName: formData.name,
-        email: formData.email,
+        email: trimmedEmail || undefined,
         phone: formData.phone,
         careType: recommendationToCareType(assessmentData.recommendation) as any,
         notes: `Assessment Results: ${assessmentData.recommendation}. Score: ${assessmentData.score}. Matched Communities: ${assessmentData.matchedCommunities.join(', ')}. ${formData.message ? `Additional comments: ${formData.message}` : ''}`,
@@ -70,35 +79,34 @@ export default function LeadCaptureForm({ assessmentData }: LeadCaptureFormProps
       });
 
       if (result.success) {
-        // Step 2: Send personalized PDF care guide via email
-        try {
-          if (!result.careGuideToken) {
-            throw new Error('Missing guide authorization token');
-          }
+        // Step 2: Send personalized PDF care guide via email (only when email provided)
+        if (trimmedEmail) {
+          try {
+            if (!result.careGuideToken) {
+              throw new Error('Missing guide authorization token');
+            }
 
-          const pdfResponse = await fetch('/api/send-care-guide', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              recipientName: formData.name,
-              email: formData.email,
-              accessToken: result.careGuideToken,
-              assessmentData: assessmentData,
-            }),
-          });
-          
-          const pdfResult = await pdfResponse.json();
-          if (!pdfResult.success) {
-            console.warn('[LeadCaptureForm] PDF email may not have been sent:', pdfResult.error);
-            // Don't fail the whole submission if PDF fails - lead was already captured
+            const pdfResponse = await fetch('/api/send-care-guide', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                recipientName: formData.name,
+                email: trimmedEmail,
+                accessToken: result.careGuideToken,
+                assessmentData: assessmentData,
+              }),
+            });
+            
+            const pdfResult = await pdfResponse.json();
+            if (!pdfResult.success) {
+              console.warn('[LeadCaptureForm] PDF email may not have been sent:', pdfResult.error);
+            }
+          } catch (pdfError) {
+            console.error('[LeadCaptureForm] Error sending PDF:', pdfError);
           }
-        } catch (pdfError) {
-          console.error('[LeadCaptureForm] Error sending PDF:', pdfError);
-          // Continue anyway - the lead was captured successfully
         }
 
-        // Mark as success and store email for display
-        setSubmittedEmail(formData.email);
+        setSubmittedEmail(trimmedEmail);
         setIsSuccess(true);
         setFormData({ name: '', email: '', phone: '', message: '' });
         formStartedAtRef.current = Date.now();
@@ -129,21 +137,28 @@ export default function LeadCaptureForm({ assessmentData }: LeadCaptureFormProps
         </div>
         
         <h3 className="text-2xl font-bold text-green-800 mb-2">
-          Your Care Guide is On Its Way!
+          {submittedEmail ? 'Your Care Guide is On Its Way!' : 'An Advisor Will Call You Soon!'}
         </h3>
         
-        <div className="bg-white rounded-lg p-4 mb-4 inline-block">
-          <div className="flex items-center justify-center gap-2 text-teal-700">
-            <FileText className="w-5 h-5" />
-            <span className="font-medium">Check your email at</span>
+        {submittedEmail ? (
+          <div className="bg-white rounded-lg p-4 mb-4 inline-block">
+            <div className="flex items-center justify-center gap-2 text-teal-700">
+              <FileText className="w-5 h-5" />
+              <span className="font-medium">Check your email at</span>
+            </div>
+            <p className="text-lg font-bold text-teal-800 mt-1">{submittedEmail}</p>
           </div>
-          <p className="text-lg font-bold text-teal-800 mt-1">{submittedEmail}</p>
-        </div>
+        ) : (
+          <p className="text-green-700 mb-4">{PLACEMENT_CALLBACK_MESSAGE}</p>
+        )}
         
+        {submittedEmail && (
         <p className="text-green-700 mb-4">
           Your personalized care guide PDF is attached to our email. It includes:
         </p>
+        )}
         
+        {submittedEmail && (
         <ul className="text-left text-green-600 mb-6 max-w-sm mx-auto space-y-2">
           <li className="flex items-start gap-2">
             <CheckCircle className="w-4 h-4 mt-1 flex-shrink-0" />
@@ -162,10 +177,11 @@ export default function LeadCaptureForm({ assessmentData }: LeadCaptureFormProps
             <span>Tour preparation checklist</span>
           </li>
         </ul>
+        )}
         
         <div className="bg-teal-100 rounded-lg p-4">
           <p className="text-teal-800 font-medium mb-2">
-            Ready to Schedule Tours?
+            {submittedEmail ? 'Ready to Schedule Tours?' : 'Want to Talk Now?'}
           </p>
           <PhoneLink
             placement="assessment_form_success"
@@ -191,10 +207,10 @@ export default function LeadCaptureForm({ assessmentData }: LeadCaptureFormProps
     >
       <div className="text-center mb-6">
         <h3 className="text-2xl sm:text-3xl font-bold text-white mb-2">
-          Get Your FREE Personalized Care Guide
+          Get Free Help With Your Results
         </h3>
         <p className="text-gray-200 mb-4">
-          We'll send detailed information on these communities, pricing, availability, and next steps
+          A Cleveland advisor can walk through your matches, pricing, and next steps by phone
         </p>
         <div className="bg-teal-800/40 border border-teal-500/30 rounded-lg p-4 mb-2">
           <p className="text-teal-100 text-sm mb-3">Want answers now? Call a Cleveland advisor:</p>
@@ -206,10 +222,27 @@ export default function LeadCaptureForm({ assessmentData }: LeadCaptureFormProps
             Call for Free Help
           </PhoneLink>
         </div>
-        <p className="text-xs text-gray-400">Or submit the form below for your written guide</p>
+        <p className="text-xs text-gray-400">Or request a callback below — add email if you want the written guide</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Phone */}
+        <div>
+          <Label htmlFor="phone" className="text-white mb-2 block">
+            Phone Number *
+          </Label>
+          <Input
+            id="phone"
+            name="phone"
+            type="tel"
+            required
+            value={formData.phone}
+            onChange={handleChange}
+            placeholder="(216) 677-4630"
+            className="bg-white"
+          />
+        </div>
+
         {/* Name */}
         <div>
           <Label htmlFor="name" className="text-white mb-2 block">
@@ -230,33 +263,15 @@ export default function LeadCaptureForm({ assessmentData }: LeadCaptureFormProps
         {/* Email */}
         <div>
           <Label htmlFor="email" className="text-white mb-2 block">
-            Email Address *
+            Email Address <span className="text-gray-400 font-normal">(optional — for written guide)</span>
           </Label>
           <Input
             id="email"
             name="email"
             type="email"
-            required
             value={formData.email}
             onChange={handleChange}
             placeholder="john@example.com"
-            className="bg-white"
-          />
-        </div>
-
-        {/* Phone */}
-        <div>
-          <Label htmlFor="phone" className="text-white mb-2 block">
-            Phone Number *
-          </Label>
-          <Input
-            id="phone"
-            name="phone"
-            type="tel"
-            required
-            value={formData.phone}
-            onChange={handleChange}
-            placeholder="(216) 677-4630"
             className="bg-white"
           />
         </div>
@@ -298,8 +313,8 @@ export default function LeadCaptureForm({ assessmentData }: LeadCaptureFormProps
             </>
           ) : (
             <>
-              <FileText className="w-5 h-5 mr-2" />
-              Get My Personalized Guide
+              <Phone className="w-5 h-5 mr-2" />
+              Request a Callback
             </>
           )}
         </Button>

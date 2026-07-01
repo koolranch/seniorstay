@@ -22,6 +22,9 @@ import {
 } from 'lucide-react';
 import { useLeadSubmit, getUtmParams, getSourceInfo } from '@/hooks/useLeadSubmit';
 import { LeadInput } from '@/app/actions/leads';
+import PhoneLink from '@/components/conversion/PhoneLink';
+import { PLACEMENT_CALLBACK_MESSAGE, PLACEMENT_PHONE_DISPLAY } from '@/lib/placement-contact';
+import { isValidPhone } from '@/lib/lead-form-options';
 
 // =============================================================================
 // 2026 CLEVELAND MARKET DATA CONSTANTS
@@ -335,6 +338,7 @@ function LeadCaptureModal({ isOpen, onClose, results, inputs }: LeadCaptureModal
     careType: 'Assisted Living' as const,
     moveInTimeline: '' as LeadInput['moveInTimeline'],
   });
+  const [phoneError, setPhoneError] = useState('');
   
   const { submit, isPending, isSuccess, result } = useLeadSubmit({
     onSuccess: () => {
@@ -344,6 +348,12 @@ function LeadCaptureModal({ isOpen, onClose, results, inputs }: LeadCaptureModal
   
   const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!isValidPhone(formData.phone)) {
+      setPhoneError('A valid phone number is required so an advisor can call you.');
+      return;
+    }
+    setPhoneError('');
     
     const utmParams = getUtmParams();
     const sourceInfo = getSourceInfo();
@@ -377,7 +387,7 @@ ${JSON.stringify(calculatorMetaData)}
     
     const leadData: LeadInput = {
       fullName: formData.fullName,
-      email: formData.email,
+      email: formData.email.trim() || undefined,
       phone: formData.phone,
       careType: formData.careType,
       moveInTimeline: formData.moveInTimeline || undefined,
@@ -425,10 +435,10 @@ ${JSON.stringify(calculatorMetaData)}
               </div>
               <div>
                 <h3 className="text-xl font-bold text-white">
-                  Get Your Full Cleveland Cost Report
+                  Talk to a Cleveland Advisor
                 </h3>
                 <p className="text-teal-100 text-sm mt-1">
-                  Personalized analysis with community recommendations
+                  Get a personalized cost walkthrough for your situation
                 </p>
               </div>
             </div>
@@ -456,10 +466,11 @@ ${JSON.stringify(calculatorMetaData)}
                   <CheckCircle2 className="h-8 w-8 text-emerald-600" />
                 </div>
                 <h4 className="text-xl font-semibold text-slate-900 mb-2">
-                  Report Requested!
+                  Callback Requested!
                 </h4>
                 <p className="text-slate-600 mb-6">
-                  A Cleveland senior living advisor will email your personalized cost report within 24 hours.
+                  {PLACEMENT_CALLBACK_MESSAGE}
+                  {formData.email.trim() ? ' We will also email your cost summary.' : ''}
                 </p>
                 <button
                   onClick={onClose}
@@ -469,7 +480,33 @@ ${JSON.stringify(calculatorMetaData)}
                 </button>
               </motion.div>
             ) : (
+              <>
+                <PhoneLink
+                  placement="calculator_modal_call"
+                  className="w-full py-4 mb-4 bg-white border-2 border-teal-600 text-teal-700 font-bold rounded-xl hover:bg-teal-50 transition-colors flex items-center justify-center gap-2"
+                >
+                  Call {PLACEMENT_PHONE_DISPLAY} Now
+                </PhoneLink>
+                <p className="text-center text-xs text-slate-500 mb-4">or request a callback below</p>
               <form onSubmit={handleSubmit} className="space-y-4">
+                {/* Phone */}
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">
+                    Phone Number *
+                  </label>
+                  <input
+                    type="tel"
+                    required
+                    value={formData.phone}
+                    onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
+                    className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors"
+                    placeholder="(216) 555-0123"
+                  />
+                  {phoneError && (
+                    <p className="text-red-600 text-sm mt-1">{phoneError}</p>
+                  )}
+                </div>
+
                 {/* Name */}
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-1">
@@ -488,29 +525,14 @@ ${JSON.stringify(calculatorMetaData)}
                 {/* Email */}
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-1">
-                    Email Address *
+                    Email Address <span className="text-slate-400 font-normal">(optional)</span>
                   </label>
                   <input
                     type="email"
-                    required
                     value={formData.email}
                     onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
                     className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors"
                     placeholder="you@email.com"
-                  />
-                </div>
-                
-                {/* Phone */}
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">
-                    Phone Number
-                  </label>
-                  <input
-                    type="tel"
-                    value={formData.phone}
-                    onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
-                    className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors"
-                    placeholder="(216) 555-0123"
                   />
                 </div>
                 
@@ -559,17 +581,17 @@ ${JSON.stringify(calculatorMetaData)}
                     </>
                   ) : (
                     <>
-                      Get My Free Report
+                      Request a Callback
                       <ArrowRight className="h-5 w-5" />
                     </>
                   )}
                 </button>
                 
                 <p className="text-xs text-center text-slate-500">
-                  By submitting, you agree to receive your personalized cost report via email.
-                  Your information is secure and will never be sold.
+                  Free, no obligation. {PLACEMENT_CALLBACK_MESSAGE}
                 </p>
               </form>
+              </>
             )}
           </div>
         </motion.div>
@@ -892,21 +914,26 @@ export default function AffordabilityCalculator({ defaultCity, showStickyButton 
               </div>
               
               {/* CTA Button */}
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => setIsModalOpen(true)}
+              <PhoneLink
+                placement="calculator_results_call"
                 className="w-full mt-6 py-4 bg-gradient-to-r from-teal-600 to-teal-700 text-white font-semibold rounded-xl
                          hover:from-teal-700 hover:to-teal-800 transition-all duration-200
                          flex items-center justify-center gap-3 shadow-lg shadow-teal-500/25"
               >
-                <FileText className="h-5 w-5" />
-                Get My Full Cleveland Cost Report
+                Call for Personalized Help
                 <ArrowRight className="h-5 w-5" />
-              </motion.button>
+              </PhoneLink>
+
+              <button
+                type="button"
+                onClick={() => setIsModalOpen(true)}
+                className="w-full mt-3 py-3 text-teal-700 font-semibold rounded-xl border-2 border-teal-200 hover:bg-teal-50 transition-colors text-sm"
+              >
+                Or request a callback with your results
+              </button>
               
               <p className="text-center text-xs text-slate-500 mt-3">
-                Free personalized analysis • No obligation • Cleveland experts
+                Free guidance • No obligation • Cleveland experts
               </p>
             </div>
           </div>

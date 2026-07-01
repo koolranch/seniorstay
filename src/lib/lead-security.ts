@@ -1,4 +1,4 @@
-import { createHmac, timingSafeEqual } from 'crypto';
+import { createHmac, randomUUID, timingSafeEqual } from 'crypto';
 import type { NextRequest } from 'next/server';
 
 export type GuideAccessPurpose = 'pricing-guide' | 'care-guide';
@@ -15,7 +15,15 @@ interface RateLimitBucket {
 }
 
 const GUIDE_ACCESS_TOKEN_TTL_MS = 15 * 60 * 1000;
+const LEAD_SUBMISSION_TOKEN_TTL_MS = 2 * 60 * 60 * 1000;
+const LEAD_SUBMISSION_MIN_AGE_MS = 3_000;
 const rateLimitBuckets = new Map<string, RateLimitBucket>();
+const consumedSubmissionNonces = new Map<string, number>();
+
+interface LeadSubmissionTokenPayload {
+  nonce: string;
+  issuedAt: number;
+}
 
 function getLeadSecuritySecret(): string {
   return (
@@ -143,4 +151,95 @@ export function getClientIp(request: NextRequest): string | null {
 
   const realIp = request.headers.get('x-real-ip');
   return realIp?.trim().slice(0, 45) || null;
+}
+
+function serializeLeadSubmissionPayload(payload: LeadSubmissionTokenPayload): string {
+  return `${payload.nonce}|${payload.issuedAt}`;
+}
+
+function signLeadSubmissionPayload(payload: LeadSubmissionTokenPayload): string {
+  return createHmac('sha256', getLeadSecuritySecret())
+    .update(serializeLeadSubmissionPayload(payload))
+    .digest('hex');
+}
+
+function pruneConsumedSubmissionNonces(now: number): void {
+  if (consumedSubmissionNonces.size <= 5000) {
+    return;
+  }
+
+  for (const [nonce, expiresAt] of consumedSubmissionNonces.entries()) {
+    if (expiresAt <= now) {
+      consumedSubmissionNonces.delete(nonce);
+    }
+  }
+}
+
+export function createLeadSubmissionToken(): string {
+  const payload: LeadSubmissionTokenPayload = {
+    nonce: randomUUID(),
+    issuedAt: Date.now(),
+  };
+
+  const encodedPayload = Buffer.from(JSON.stringify(payload), 'utf8').toString('base64url');
+  return `${encodedPayload}.${signLeadSubmissionPayload(payload)}`;
+}
+
+export function verifyAndConsumeLeadSubmissionToken(token: string | undefined): {
+  valid: boolean;
+  issuedAt?: number;
+  reason?: string;
+} {
+  if (!token) {
+    return { valid: false, reason: 'missing_submission_token' };
+  }
+
+  const [encodedPayload, signature] = token.split('.');
+  if (!encodedPayload || !signature) {
+    return { valid: false, reason: 'malformed_submission_token' };
+  }
+
+  try {
+    const payload = JSON.parse(
+      Buffer.from(encodedPayload, 'base64url').toString('utf8'),
+    ) as Partial<LeadSubmissionTokenPayload>;
+
+    if (typeof payload.nonce !== 'string' || typeof payload.issuedAt !== 'number') {
+      return { valid: false, reason: 'invalid_submission_token_payload' };
+    }
+
+    if (payload.issuedAt > Date.now() + 60_000) {
+      return { valid: false, reason: 'submission_token_from_future' };
+    }
+
+    const age = Date.now() - payload.issuedAt;
+    if (age > LEAD_SUBMISSION_TOKEN_TTL_MS) {
+      return { valid: false, reason: 'submission_token_expired' };
+    }
+
+    if (age < LEAD_SUBMISSION_MIN_AGE_MS) {
+      return { valid: false, reason: 'submission_token_too_fresh' };
+    }
+
+    if (
+      !hasValidSignature(
+        signature,
+        signLeadSubmissionPayload(payload as LeadSubmissionTokenPayload),
+      )
+    ) {
+      return { valid: false, reason: 'submission_token_bad_signature' };
+    }
+
+    const now = Date.now();
+    pruneConsumedSubmissionNonces(now);
+
+    if (consumedSubmissionNonces.has(payload.nonce)) {
+      return { valid: false, reason: 'submission_token_reused' };
+    }
+
+    consumedSubmissionNonces.set(payload.nonce, now + LEAD_SUBMISSION_TOKEN_TTL_MS);
+    return { valid: true, issuedAt: payload.issuedAt };
+  } catch {
+    return { valid: false, reason: 'submission_token_parse_error' };
+  }
 }

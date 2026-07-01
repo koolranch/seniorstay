@@ -12,12 +12,12 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { useComparison } from '@/context/ComparisonContext';
 import { Community } from '@/data/facilities';
 import { getCommunityImage } from '@/lib/communityImages';
 import CommunityImage from '@/components/ui/CommunityImage';
 import { submitLead } from '@/app/actions/leads';
+import { isValidPhone } from '@/lib/lead-form-options';
 import TourSchedulerForm from '@/components/tour/TourSchedulerForm';
 
 interface LocationCardProps {
@@ -66,31 +66,25 @@ export default function LocationCard({ community, compact = false, regionSlug }:
     }
   };
 
-  // Map timeframe to moveInTimeline
-  const timeframeToTimeline = (timeframe: string): string => {
-    switch (timeframe) {
-      case 'asap': return 'Immediate';
-      case '1-3months': return '1-3 months';
-      case 'future': return 'Just researching';
-      default: return '';
-    }
-  };
-
   const handlePricingSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsPricingSubmitting(true);
 
     const formData = new FormData(e.currentTarget);
+    const phone = formData.get('phone')?.toString() || '';
+
+    if (!isValidPhone(phone)) {
+      setIsPricingSubmitting(false);
+      return;
+    }
 
     try {
       const result = await submitLead({
         fullName: formData.get('name')?.toString() || '',
-        email: formData.get('email')?.toString() || '',
-        phone: formData.get('phone')?.toString() || '',
-        moveInTimeline: timeframeToTimeline(formData.get('timeframe')?.toString() || '') as any,
+        phone,
         communityName: community.name || 'Unknown Community',
         cityOrZip: community.location?.split(',')[0]?.trim() || '',
-        notes: `Pricing request for ${community.name}`,
+        notes: `Callback request for pricing at ${community.name}`,
         pageType: 'location_page',
         sourceSlug: community.id,
       });
@@ -313,42 +307,22 @@ export default function LocationCard({ community, compact = false, regionSlug }:
               </DialogTrigger>
               <DialogContent className="max-w-md mx-auto">
                 <DialogHeader>
-                  <DialogTitle>Request Pricing Info</DialogTitle>
+                  <DialogTitle>Request a Callback</DialogTitle>
                 </DialogHeader>
 
                 {!pricingSubmitted ? (
                   <form onSubmit={handlePricingSubmit} className="space-y-4 pt-4">
+                    <p className="text-sm text-slate-600">
+                      Leave your name and number — a Cleveland advisor will call with pricing for {communityName}.
+                    </p>
                     <div className="space-y-2">
                       <Label htmlFor={`${formId}-name`} className="text-base font-semibold text-gray-800">Your Name</Label>
-                      <Input id={`${formId}-name`} name="name" required placeholder="Enter your full name" className="h-12 text-base" />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor={`${formId}-email`} className="text-base font-semibold text-gray-800">Email</Label>
-                      <Input id={`${formId}-email`} name="email" type="email" required placeholder="your@email.com" className="h-12 text-base" />
+                      <Input id={`${formId}-name`} name="name" required placeholder="Enter your name" className="h-12 text-base" />
                     </div>
 
                     <div className="space-y-2">
                       <Label htmlFor={`${formId}-phone`} className="text-base font-semibold text-gray-800">Phone Number</Label>
-                      <Input id={`${formId}-phone`} name="phone" type="tel" required placeholder="(555) 555-5555" className="h-12 text-base" />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label>Move-in Timeframe</Label>
-                      <RadioGroup name="timeframe" defaultValue="asap">
-                        <div className="flex items-center space-x-2 py-1">
-                          <RadioGroupItem value="asap" id={`${formId}-asap`} />
-                          <Label htmlFor={`${formId}-asap`} className="cursor-pointer">As soon as possible</Label>
-                        </div>
-                        <div className="flex items-center space-x-2 py-1">
-                          <RadioGroupItem value="1-3months" id={`${formId}-1-3months`} />
-                          <Label htmlFor={`${formId}-1-3months`} className="cursor-pointer">1-3 months</Label>
-                        </div>
-                        <div className="flex items-center space-x-2 py-1">
-                          <RadioGroupItem value="future" id={`${formId}-future`} />
-                          <Label htmlFor={`${formId}-future`} className="cursor-pointer">Just researching</Label>
-                        </div>
-                      </RadioGroup>
+                      <Input id={`${formId}-phone`} name="phone" type="tel" required placeholder="(216) 555-0123" className="h-12 text-base" />
                     </div>
 
                     <Button 
@@ -356,7 +330,7 @@ export default function LocationCard({ community, compact = false, regionSlug }:
                       className="w-full min-h-[48px] h-12 text-base font-bold" 
                       disabled={isPricingSubmitting}
                     >
-                      {isPricingSubmitting ? 'Sending...' : 'Get Pricing Information'}
+                      {isPricingSubmitting ? 'Sending...' : 'Request Callback'}
                     </Button>
                   </form>
                 ) : (

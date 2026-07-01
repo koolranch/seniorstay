@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useRef, useState } from 'react';
-import { submitLead } from '@/app/actions/leads';
+import React, { useEffect, useRef, useState } from 'react';
+import { getLeadSubmissionToken, submitLead } from '@/app/actions/leads';
 import {
   trackFormError,
   trackFormStart,
@@ -29,8 +29,29 @@ export default function SimpleContactForm({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState('');
+  const [submissionToken, setSubmissionToken] = useState('');
   const formStartedAtRef = useRef(Date.now());
   const formStartTrackedRef = useRef(false);
+
+  useEffect(() => {
+    let active = true;
+
+    getLeadSubmissionToken()
+      .then((token) => {
+        if (active) {
+          setSubmissionToken(token);
+        }
+      })
+      .catch(() => {
+        if (active) {
+          setSubmissionToken('');
+        }
+      });
+
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const trackStartOnce = () => {
     if (!formStartTrackedRef.current) {
@@ -48,8 +69,14 @@ export default function SimpleContactForm({
     const phone = formData.get('phone')?.toString() || '';
 
     if (!isValidPhone(phone)) {
-      setError('Please enter a valid phone number so we can call you back.');
+      setError('Please enter a valid U.S. phone number so we can call you back.');
       trackFormError(formType, 'invalid_phone');
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (!submissionToken) {
+      setError('Form is still loading. Please wait a moment and try again.');
       setIsSubmitting(false);
       return;
     }
@@ -63,8 +90,9 @@ export default function SimpleContactForm({
         notes: formData.get('message')?.toString() || `Placement inquiry from ${sourcePage}`,
         pageType: 'other',
         sourceSlug: sourcePage,
-        website: '',
+        website: formData.get('website')?.toString() || '',
         submissionStartedAt: formStartedAtRef.current,
+        submissionToken,
       });
 
       if (result.success) {
@@ -101,6 +129,14 @@ export default function SimpleContactForm({
 
   return (
     <form onSubmit={handleSubmit} onFocus={trackStartOnce} className={`space-y-4 ${className}`}>
+      <input
+        type="text"
+        name="website"
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden="true"
+        className="hidden"
+      />
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <input
           type="text"
@@ -155,7 +191,7 @@ export default function SimpleContactForm({
       {error && <p className="text-red-500 text-sm">{error}</p>}
       <button
         type="submit"
-        disabled={isSubmitting}
+        disabled={isSubmitting || !submissionToken}
         className="w-full bg-primary hover:bg-primary/90 disabled:bg-primary/50 text-white py-4 rounded-lg font-semibold text-lg transition-colors"
       >
         {isSubmitting ? 'Sending...' : buttonText}
