@@ -128,8 +128,14 @@ export function looksLikeGibberishText(text: string | null | undefined): boolean
     return false;
   }
 
-  const internalCaps = (trimmed.slice(1).match(/[A-Z]/g) || []).length;
-  if (internalCaps >= 3 && letters.length >= 10) {
+  // Count capitals mid-word only (\B), skipping all-caps words so acronyms
+  // ("ASAP", "AL") and normal names ("Mary Ann McDonald") don't trip the
+  // bot detector, while random-case bot strings ("ddPPJqvSmScFTyaUqYl") do.
+  const midWordCaps = trimmed
+    .split(/\s+/)
+    .filter((word) => !/^[^a-z]+$/.test(word))
+    .reduce((count, word) => count + (word.match(/\B[A-Z]/g) || []).length, 0);
+  if (midWordCaps >= 4 && letters.length >= 10) {
     return true;
   }
 
@@ -143,7 +149,7 @@ export function looksLikeGibberishText(text: string | null | undefined): boolean
     return true;
   }
 
-  if (/^[A-Za-z]{16,}$/.test(trimmed) && internalCaps >= 2) {
+  if (/^[A-Za-z]{16,}$/.test(trimmed) && midWordCaps >= 2) {
     return true;
   }
 
