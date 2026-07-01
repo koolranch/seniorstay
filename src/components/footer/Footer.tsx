@@ -17,6 +17,8 @@ const footerLinks = {
   seniorCare: [
     { label: 'Assisted Living', href: '/assisted-living-cleveland' },
     { label: 'Memory Care', href: '/memory-care-cleveland' },
+    { label: 'Talk to an Advisor', href: '/cleveland-senior-living-advisor' },
+    { label: 'Medicaid Waiver Guide', href: '/medicaid-assisted-living-ohio' },
     { label: 'Local Events', href: '/cleveland/events' }, // Fixed: was /events (301 redirect)
     { label: 'Pricing Guide', href: '/senior-living-costs-cleveland' },
     { label: 'Ohio AL Cost Guide', href: '/blog/cost-of-assisted-living-ohio' },

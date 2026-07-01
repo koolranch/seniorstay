@@ -188,6 +188,13 @@ export default async function AssistedLivingClevelandPage() {
                   </div>
                 ))}
               </div>
+              <p className="text-slate-600 mt-4">
+                On a limited income? Read our full guide to the{' '}
+                <Link href="/medicaid-assisted-living-ohio" className="text-teal-700 font-semibold underline underline-offset-2">
+                  Ohio Assisted Living Medicaid Waiver
+                </Link>{' '}
+                — 2026 eligibility, what it covers, and which Cleveland communities accept it.
+              </p>
             </div>
 
             {/* How to Choose */}

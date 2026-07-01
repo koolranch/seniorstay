@@ -20,6 +20,7 @@ import StickyCalculatorCTA from '@/components/StickyCalculatorCTA';
 import CityLeadMagnet from '@/components/location/CityLeadMagnet';
 import CareTypeNav from '@/components/location/CareTypeNav';
 import LocalAuthorityProse from '@/components/location/LocalAuthorityProse';
+import CityAdvisorDeepDive from '@/components/location/CityAdvisorDeepDive';
 import NeighborhoodEvents from '@/components/events/NeighborhoodEvents';
 import SavedCommunitiesBar from '@/components/community/SavedCommunitiesBar';
 import CommunityListingFilters from '@/components/location/CommunityListingFilters';
@@ -322,6 +323,9 @@ export default function CityLocationClient({
         communityCount={totalCommunities}
         isHospitalDischarge={isHospitalDischarge}
       />
+
+      {/* SECTION 8: FLAGSHIP DEEP-DIVE (advisor commentary, city pricing, landmarks) */}
+      <CityAdvisorDeepDive citySlug={citySlug} cityName={cityName} />
 
       {/* SECTION 9: TESTIMONIALS */}
       <TestimonialSection
