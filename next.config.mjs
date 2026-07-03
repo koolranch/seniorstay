@@ -255,6 +255,12 @@ const nextConfig = {
         destination: '/blog/cruises-for-seniors',
         permanent: true,
       },
+      // DataForSEO lost-backlink audit Jul 2026: thereviewstories.com links here; was 404
+      {
+        source: '/blog/travel-thailand',
+        destination: '/blog/cruises-for-seniors',
+        permanent: true,
+      },
       // Face lift content (DR 67 link from csa.us)
       {
         source: '/blog/mini-face-lift',
