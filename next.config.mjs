@@ -404,7 +404,8 @@ const nextConfig = {
       },
       
       // === Legacy WordPress Image Hotlinks ===
-      // These return 403 - redirect to homepage with image fallback
+      // Redirect to a real branded placeholder (this target 404ed until
+      // Jul 2026, so every legacy hotlink resolved to a broken image)
       {
         source: '/wp-content/uploads/:path*',
         destination: '/images/default-community.jpg',
