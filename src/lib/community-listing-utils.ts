@@ -8,7 +8,27 @@ export function hasRealCommunityImage(community: Community): boolean {
   if (!url || typeof url !== 'string') return false;
   const lower = url.trim().toLowerCase();
   if (!lower || lower.startsWith('data:image/svg')) return false;
+  // Legacy '/community-images/' paths reference files missing from storage;
+  // they render as placeholders, so don't rank them as real photos.
+  if (lower.startsWith('/community-images/')) return false;
   return !PLACEHOLDER_PATTERNS.some((p) => lower.includes(p));
+}
+
+/**
+ * Skilled-nursing-focused facilities (CMS-imported nursing homes) are not
+ * placement targets — we don't refer families to SNFs. Some list "Memory
+ * Care" among services, so check facilityType first, then care types.
+ */
+export function isSkilledNursingFocused(community: Community): boolean {
+  if (community.facilityType === 'skilled-nursing' || community.facilityType === 'nursing-home') {
+    return true;
+  }
+  const types = community.careTypes.map((t) => t.toLowerCase());
+  const hasSnf = types.some((t) => t.includes('skilled nursing') || t.includes('nursing home'));
+  const hasPlacementType = types.some(
+    (t) => t.includes('assisted living') || t.includes('independent living')
+  );
+  return hasSnf && !hasPlacementType;
 }
 
 export type CareTypeFilter =
@@ -79,10 +99,12 @@ export function getFeaturedCommunities(communities: Community[], limit = 9): Com
   return sortCommunitiesForDisplay(
     communities.filter(
       (c) =>
+        !isSkilledNursingFocused(c) &&
         c.careTypes.some(
           (t) =>
             t.toLowerCase().includes('assisted living') || t.toLowerCase().includes('memory care')
-        ) && (c.description || hasRealCommunityImage(c))
+        ) &&
+        (c.description || hasRealCommunityImage(c))
     )
   ).slice(0, limit);
 }

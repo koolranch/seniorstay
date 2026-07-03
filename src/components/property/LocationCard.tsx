@@ -1,23 +1,19 @@
 "use client";
 
-import React, { useState, useId } from 'react';
+import React from 'react';
 import Link from 'next/link';
-import { Heart, MapPin, Phone, Check, DollarSign, Camera } from 'lucide-react';
+import { Heart, MapPin, Phone, DollarSign, Camera } from 'lucide-react';
 import PhoneLink from '@/components/conversion/PhoneLink';
 import CommunityTrustBadge from '@/components/community/CommunityTrustBadge';
-import { PLACEMENT_CALLBACK_MESSAGE, PLACEMENT_PHONE_TEL } from '@/lib/placement-contact';
+import { PLACEMENT_PHONE_TEL } from '@/lib/placement-contact';
 import { formatPriceEstimate, getPricingForCommunity } from '@/lib/community-pricing';
-import { hasRealCommunityImage } from '@/lib/community-listing-utils';
+import { hasRealCommunityImage, isSkilledNursingFocused } from '@/lib/community-listing-utils';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { useComparison } from '@/context/ComparisonContext';
 import { Community } from '@/data/facilities';
 import { getCommunityImage } from '@/lib/communityImages';
 import CommunityImage from '@/components/ui/CommunityImage';
-import { submitLead } from '@/app/actions/leads';
-import { isValidPhone } from '@/lib/lead-form-options';
 import TourSchedulerForm from '@/components/tour/TourSchedulerForm';
 
 interface LocationCardProps {
@@ -28,11 +24,6 @@ interface LocationCardProps {
 
 export default function LocationCard({ community, compact = false, regionSlug }: LocationCardProps) {
   // All Hooks must be called at the top level
-  const formId = useId();
-  const [isPricingSubmitting, setIsPricingSubmitting] = useState(false);
-  const [isTourSubmitting, setIsTourSubmitting] = useState(false);
-  const [pricingSubmitted, setPricingSubmitted] = useState(false);
-  const [tourSubmitted, setTourSubmitted] = useState(false);
   const { addToComparison, isInComparison, removeFromComparison } = useComparison();
 
   // Early return with an error indicator if community is null/undefined
@@ -66,69 +57,11 @@ export default function LocationCard({ community, compact = false, regionSlug }:
     }
   };
 
-  const handlePricingSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setIsPricingSubmitting(true);
-
-    const formData = new FormData(e.currentTarget);
-    const phone = formData.get('phone')?.toString() || '';
-
-    if (!isValidPhone(phone)) {
-      setIsPricingSubmitting(false);
-      return;
-    }
-
-    try {
-      const result = await submitLead({
-        fullName: formData.get('name')?.toString() || '',
-        phone,
-        communityName: community.name || 'Unknown Community',
-        cityOrZip: community.location?.split(',')[0]?.trim() || '',
-        notes: `Callback request for pricing at ${community.name}`,
-        pageType: 'location_page',
-        sourceSlug: community.id,
-      });
-
-      if (result.success) {
-        setPricingSubmitted(true);
-      }
-    } catch (error) {
-      console.error('Form submission error:', error);
-    } finally {
-      setIsPricingSubmitting(false);
-    }
-  };
-
-  const handleTourSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setIsTourSubmitting(true);
-
-    const formData = new FormData(e.currentTarget);
-
-    try {
-      const result = await submitLead({
-        fullName: formData.get('name')?.toString() || '',
-        email: formData.get('email')?.toString() || '',
-        phone: formData.get('phone')?.toString() || '',
-        communityName: community.name || 'Unknown Community',
-        cityOrZip: community.location?.split(',')[0]?.trim() || '',
-        notes: `Tour request for ${community.name}`,
-        pageType: 'location_page',
-        sourceSlug: community.id,
-      });
-
-      if (result.success) {
-        setTourSubmitted(true);
-      }
-    } catch (error) {
-      console.error('Form submission error:', error);
-    } finally {
-      setIsTourSubmitting(false);
-    }
-  };
-
   // Use the actual community name and location, only use fallbacks if undefined
   const communityName = community.name || 'Community';
+  // CMS-imported names carry ", City, OH - Care Types" suffixes; strip them
+  // for display only (URLs/slugs keep the full name for consistency)
+  const displayName = communityName.replace(/,\s*[A-Za-z .'-]+,\s*(OH|Ohio)\b.*$/i, '').trim() || communityName;
   const communityLocation = community.location || 'Unknown location';
   const communitySlug = communityName.toLowerCase().replace(/\s+/g, '-');
 
@@ -140,13 +73,8 @@ export default function LocationCard({ community, compact = false, regionSlug }:
   // Use actual care types or fallback to empty array only if undefined
   const careTypes = community.careTypes || [];
 
-  // Check if this is a skilled nursing-only facility (no AL/MC services)
-  const isOnlySkilledNursing = careTypes.every(type => 
-    type.toLowerCase().includes('skilled nursing')
-  ) && !careTypes.some(type =>
-    type.toLowerCase().includes('assisted living') ||
-    type.toLowerCase().includes('memory care')
-  );
+  // SNF-focused facilities are outside the referral model — no placement CTAs
+  const isOnlySkilledNursing = isSkilledNursingFocused(community);
 
   // Compact mode: horizontal card for spotlight sections
   // Mobile UX: 48px+ tap targets, high contrast text
@@ -173,7 +101,7 @@ export default function LocationCard({ community, compact = false, regionSlug }:
               href={communityUrl} 
               className="hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded"
             >
-              {communityName}
+              {displayName}
             </Link>
           </h4>
           <div className="flex items-center text-sm text-gray-700 mb-2">
@@ -217,13 +145,6 @@ export default function LocationCard({ community, compact = false, regionSlug }:
           </div>
         )}
 
-        {/* Memory Care Badge - High contrast for accessibility */}
-        {careTypes.includes('Memory Care') && (
-          <div className="absolute top-3 left-3 bg-red-600 text-white px-4 py-1.5 rounded-full text-sm font-bold shadow-lg">
-            Memory Care Available
-          </div>
-        )}
-
         {/* Compare Button - 48px+ tap target for mobile (WCAG 2.2) */}
         <button
           onClick={toggleComparison}
@@ -245,7 +166,7 @@ export default function LocationCard({ community, compact = false, regionSlug }:
             href={communityUrl} 
             className="hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded min-h-[48px] inline-block"
           >
-            {communityName}
+            {displayName}
           </Link>
         </h3>
 
@@ -296,73 +217,20 @@ export default function LocationCard({ community, compact = false, regionSlug }:
               <Phone className="h-4 w-4" />
               Call for Pricing
             </PhoneLink>
+
+            {/* Schedule Tour Button - Opens date/time picker */}
             <Dialog>
               <DialogTrigger asChild>
                 <Button
                   variant="outline"
                   className="w-full min-h-[48px] py-3 text-base font-semibold border-2 border-gray-300 hover:border-primary hover:bg-primary/5"
                 >
-                  Request Callback
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="max-w-md mx-auto">
-                <DialogHeader>
-                  <DialogTitle>Request a Callback</DialogTitle>
-                </DialogHeader>
-
-                {!pricingSubmitted ? (
-                  <form onSubmit={handlePricingSubmit} className="space-y-4 pt-4">
-                    <p className="text-sm text-slate-600">
-                      Leave your name and number — a Cleveland advisor will call with pricing for {communityName}.
-                    </p>
-                    <div className="space-y-2">
-                      <Label htmlFor={`${formId}-name`} className="text-base font-semibold text-gray-800">Your Name</Label>
-                      <Input id={`${formId}-name`} name="name" required placeholder="Enter your name" className="h-12 text-base" />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor={`${formId}-phone`} className="text-base font-semibold text-gray-800">Phone Number</Label>
-                      <Input id={`${formId}-phone`} name="phone" type="tel" required placeholder="(216) 555-0123" className="h-12 text-base" />
-                    </div>
-
-                    <Button 
-                      type="submit" 
-                      className="w-full min-h-[48px] h-12 text-base font-bold" 
-                      disabled={isPricingSubmitting}
-                    >
-                      {isPricingSubmitting ? 'Sending...' : 'Request Callback'}
-                    </Button>
-                  </form>
-                ) : (
-                  <div className="pt-4 text-center space-y-4">
-                    <div className="rounded-full bg-green-100 w-16 h-16 mx-auto flex items-center justify-center">
-                      <Check className="h-8 w-8 text-green-600" />
-                    </div>
-                    <h3 className="font-medium text-lg">Request Sent!</h3>
-                    <p className="text-gray-600">
-                      {PLACEMENT_CALLBACK_MESSAGE} We&apos;ll share pricing for {communityName}.
-                    </p>
-                    <Button variant="outline" onClick={() => setPricingSubmitted(false)}>
-                      Send Another Request
-                    </Button>
-                  </div>
-                )}
-              </DialogContent>
-            </Dialog>
-
-            {/* Schedule Tour Button - Opens date/time picker */}
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button 
-                  variant="default" 
-                  className="w-full min-h-[48px] py-3 text-base font-bold bg-teal-600 hover:bg-teal-700 text-white shadow-md"
-                >
                   Schedule Tour
                 </Button>
               </DialogTrigger>
               <DialogContent className="max-w-md mx-auto max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
-                  <DialogTitle>Schedule a Tour at {communityName}</DialogTitle>
+                  <DialogTitle>Schedule a Tour at {displayName}</DialogTitle>
                 </DialogHeader>
                 <TourSchedulerForm
                   communityName={communityName}
@@ -375,9 +243,9 @@ export default function LocationCard({ community, compact = false, regionSlug }:
           </div>
           <Link
             href={communityUrl}
-            className="block text-center text-xs text-slate-400 hover:text-teal-600 mt-3 py-1"
+            className="block text-center text-sm font-semibold text-teal-700 hover:text-teal-800 mt-3 py-1"
           >
-            View community details
+            View community details →
           </Link>
         </div>
       ) : (

@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo } from 'react';
 import Link from 'next/link';
-import { MapPin, Phone, ArrowRight, Hospital, Shield, Users, Gamepad2, Brain, Coffee, BookOpen } from 'lucide-react';
+import { MapPin, Phone, ArrowRight, Hospital, Shield, Users } from 'lucide-react';
 import GlobalHeader from '@/components/home/GlobalHeader';
 import Footer from '@/components/footer/Footer';
 import LocationCard from '@/components/property/LocationCard';
@@ -25,12 +25,12 @@ import NeighborhoodEvents from '@/components/events/NeighborhoodEvents';
 import SavedCommunitiesBar from '@/components/community/SavedCommunitiesBar';
 import CommunityListingFilters from '@/components/location/CommunityListingFilters';
 import EditorialPlacementLinks from '@/components/conversion/EditorialPlacementLinks';
-import PlacementConversionBand from '@/components/conversion/PlacementConversionBand';
 import PhoneLink from '@/components/conversion/PhoneLink';
 import {
   DEFAULT_LISTING_FILTERS,
   filterCommunities,
   getFeaturedCommunities,
+  isSkilledNursingFocused,
   ListingFilters,
 } from '@/lib/community-listing-utils';
 
@@ -67,21 +67,34 @@ export default function CityLocationClient({
     return first?.coordinates ? { lat: first.coordinates.lat, lng: first.coordinates.lng } : null;
   }, [communities]);
   const [listingFilters, setListingFilters] = useState<ListingFilters>(DEFAULT_LISTING_FILTERS);
+  const [showSnfList, setShowSnfList] = useState(false);
 
   const filteredCommunities = useMemo(
     () => filterCommunities(communities, listingFilters),
     [communities, listingFilters]
   );
 
-  const featuredCommunities = useMemo(
-    () => getFeaturedCommunities(filteredCommunities, 9),
+  // SNF-only facilities are not placement targets; keep them out of the main
+  // grid and show them in a collapsed reference list instead.
+  const placementCommunities = useMemo(
+    () => filteredCommunities.filter((c) => !isSkilledNursingFocused(c)),
     [filteredCommunities]
+  );
+
+  const snfCommunities = useMemo(
+    () => filteredCommunities.filter((c) => isSkilledNursingFocused(c)),
+    [filteredCommunities]
+  );
+
+  const featuredCommunities = useMemo(
+    () => getFeaturedCommunities(placementCommunities, 9),
+    [placementCommunities]
   );
 
   const remainingCommunities = useMemo(() => {
     const featuredIds = new Set(featuredCommunities.map((c) => c.id));
-    return filteredCommunities.filter((c) => !featuredIds.has(c.id));
-  }, [filteredCommunities, featuredCommunities]);
+    return placementCommunities.filter((c) => !featuredIds.has(c.id));
+  }, [placementCommunities, featuredCommunities]);
   const citySlug = cityName.toLowerCase().replace(/\s+/g, '-');
   const cityData = getCityInfo(regionSlug, citySlug);
   const localResources = getLocalResourcesForCity(citySlug);
@@ -92,13 +105,10 @@ export default function CityLocationClient({
   const isMemoryCareHub = citySlug === 'beachwood';
 
   const getHeroSubtitle = () => {
-    if (isHospitalDischarge) {
-      return `Moving from a hospital to senior care? Get our 48-hour ${cityName} discharge checklist and ${currentYear} local cost guide—free.`;
-    }
     if (isMemoryCareHub) {
       return `Find specialized memory care near UH Ahuja Medical Center. Compare ${totalCommunities} communities with ${currentYear} pricing.`;
     }
-    return `Compare ${totalCommunities} senior living communities in ${cityName}. Get personalized recommendations and ${currentYear} pricing.`;
+    return `Compare ${totalCommunities} senior living communities in ${cityName}. Get personalized recommendations and ${currentYear} pricing from a free local advisor.`;
   };
 
   return (
@@ -131,9 +141,6 @@ export default function CityLocationClient({
 
             {/* Dynamic H1 with city name */}
             <h1 className="text-3xl md:text-5xl font-bold text-slate-900 mb-5 leading-tight">
-              {isHospitalDischarge && (
-                <>Hospital Discharge? <br className="hidden md:block" /></>
-              )}
               Senior Living in {cityName}, {stateAbbr}
             </h1>
 
@@ -142,15 +149,15 @@ export default function CityLocationClient({
               {getHeroSubtitle()}
             </p>
 
-            {/* Quick CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-6">
+            {/* Quick CTA Buttons — show the actual number so desktop visitors can dial */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-4">
               <PhoneLink
                 placement="city_hero"
                 phoneTel={`tel:${phoneNumber.replace(/[^0-9+]/g, '')}`}
                 className="inline-flex items-center justify-center gap-2 bg-teal-600 hover:bg-teal-700 text-white font-bold px-8 py-4 rounded-xl transition-colors shadow-lg hover:shadow-xl min-h-[56px]"
               >
                 <Phone className="h-5 w-5" />
-                Talk to a {cityName} Expert
+                Call {phoneNumber}
               </PhoneLink>
               <a
                 href={`/contact?city=${encodeURIComponent(cityName)}`}
@@ -160,6 +167,25 @@ export default function CityLocationClient({
                 <ArrowRight className="h-5 w-5" />
               </a>
             </div>
+            <p className="text-sm text-slate-500 mb-4">
+              Talk to a local {cityName} expert — free, no obligation
+            </p>
+
+            {isHospitalDischarge && (
+              <div className="inline-flex items-center gap-2 bg-amber-50 border border-amber-200 text-amber-900 px-4 py-2.5 rounded-xl text-sm font-medium mb-4">
+                <Hospital className="h-4 w-4 text-amber-600 flex-shrink-0" />
+                <span>
+                  Hospital discharge? We handle 48-hour placements —{' '}
+                  <PhoneLink
+                    placement="city_hero_discharge"
+                    phoneTel={`tel:${phoneNumber.replace(/[^0-9+]/g, '')}`}
+                    className="font-bold underline underline-offset-2"
+                  >
+                    call now
+                  </PhoneLink>
+                </span>
+              </div>
+            )}
             <p className="text-center mb-8">
               <a
                 href="/senior-living-costs-cleveland"
@@ -194,11 +220,11 @@ export default function CityLocationClient({
           <CommunityListingFilters
             filters={listingFilters}
             onChange={setListingFilters}
-            resultCount={filteredCommunities.length}
+            resultCount={placementCommunities.length}
             totalCount={totalCommunities}
           />
 
-          {filteredCommunities.length === 0 ? (
+          {placementCommunities.length === 0 && snfCommunities.length === 0 ? (
             <p className="text-center text-slate-600 py-8">
               No communities match these filters.{' '}
               <button type="button" className="text-teal-600 font-semibold underline" onClick={() => setListingFilters(DEFAULT_LISTING_FILTERS)}>
@@ -242,30 +268,57 @@ export default function CityLocationClient({
               </div>
             </div>
           )}
+
+          {/* SNF reference list — we don't place here, so keep it collapsed */}
+          {snfCommunities.length > 0 && (
+            <div className="mt-12 max-w-3xl mx-auto">
+              <button
+                type="button"
+                onClick={() => setShowSnfList((v) => !v)}
+                className="w-full flex items-center justify-between bg-white border border-slate-200 rounded-xl px-5 py-4 text-left hover:border-slate-300 transition-colors"
+              >
+                <span className="text-slate-700 font-semibold">
+                  Skilled nursing &amp; rehab in {cityName} ({snfCommunities.length})
+                  <span className="block text-xs font-normal text-slate-500 mt-0.5">
+                    We specialize in assisted living, memory care, and independent living — these are listed for reference only.
+                  </span>
+                </span>
+                <span className="text-teal-600 text-2xl leading-none flex-shrink-0 ml-4">
+                  {showSnfList ? '−' : '+'}
+                </span>
+              </button>
+              {showSnfList && (
+                <ul className="mt-3 bg-white border border-slate-200 rounded-xl divide-y divide-slate-100">
+                  {snfCommunities.map((community) => (
+                    <li key={community.id} className="px-5 py-3 flex items-center justify-between gap-3">
+                      <div>
+                        <p className="font-medium text-slate-800">{community.name}</p>
+                        <p className="text-xs text-slate-500">{community.address || community.location}</p>
+                      </div>
+                      <span className="text-xs text-slate-400 whitespace-nowrap">Contact facility directly</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          )}
             </>
           )}
         </div>
       </section>
 
-      {filteredCommunities.length > 1 && (
+      {placementCommunities.length > 1 && (
         <CommunityComparisonTable
-          communities={filteredCommunities}
+          communities={placementCommunities}
           cityName={cityName}
           maxCommunities={6}
           regionSlug={regionSlug}
         />
       )}
 
-      <PlacementConversionBand
-        title={`Need help choosing in ${cityName}?`}
-        description="Our Cleveland advisors compare pricing, availability, and fit — then help schedule tours. Free for families."
-        phonePlacement="city_listings_mid"
-        contactHref={`/contact?city=${citySlug}&intent=placement`}
-        cityName={cityName}
-        cityHref={`/${regionSlug}/${citySlug}`}
-        secondaryHref="/blog/cost-of-assisted-living-ohio"
-        secondaryLabel="2026 Ohio cost guide"
-      />
+      {/* FLAGSHIP DEEP-DIVE (advisor commentary, city pricing, landmarks) —
+          placed high so the best referral content is actually seen */}
+      <CityAdvisorDeepDive citySlug={citySlug} cityName={cityName} />
 
       {/* SECTION 3: CARE TYPE NAVIGATION */}
       <CareTypeNav
@@ -324,9 +377,6 @@ export default function CityLocationClient({
         isHospitalDischarge={isHospitalDischarge}
       />
 
-      {/* SECTION 8: FLAGSHIP DEEP-DIVE (advisor commentary, city pricing, landmarks) */}
-      <CityAdvisorDeepDive citySlug={citySlug} cityName={cityName} />
-
       {/* SECTION 9: TESTIMONIALS */}
       <TestimonialSection
         title={`What ${regionConfig.displayName} Families Say About ${cityName} Senior Living`}
@@ -350,97 +400,6 @@ export default function CityLocationClient({
               limit={3}
               showHeader={true}
             />
-          </div>
-        </div>
-      </section>
-
-      {/* SECTION 11: HELPFUL RESOURCES */}
-      <section className="py-16 bg-slate-50 border-t border-slate-200">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-10">
-            <span className="inline-block bg-violet-100 text-violet-700 px-4 py-2 rounded-full text-sm font-semibold mb-4">
-              Helpful Resources
-            </span>
-            <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-3">
-              Senior Living Guides & Activities
-            </h2>
-            <p className="text-slate-600 max-w-2xl mx-auto">
-              Free resources to help you and your loved one navigate senior care decisions
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
-            <Link 
-              href="/resources/games-for-seniors"
-              className="bg-white rounded-2xl border border-slate-200 p-6 hover:shadow-lg transition-all duration-300 group"
-            >
-              <div className="bg-violet-100 text-violet-600 w-12 h-12 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                <Gamepad2 className="h-6 w-6" />
-              </div>
-              <h3 className="text-lg font-bold text-slate-900 mb-2 group-hover:text-teal-600 transition-colors">
-                Games for Seniors
-              </h3>
-              <p className="text-slate-600 text-sm mb-3">
-                Free brain games and puzzles to stay mentally sharp.
-              </p>
-              <span className="text-teal-600 text-sm font-semibold flex items-center gap-1">
-                Explore <ArrowRight className="h-4 w-4" />
-              </span>
-            </Link>
-
-            <Link 
-              href="/resources/social-activities"
-              className="bg-white rounded-2xl border border-slate-200 p-6 hover:shadow-lg transition-all duration-300 group"
-            >
-              <div className="bg-rose-100 text-rose-600 w-12 h-12 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                <Coffee className="h-6 w-6" />
-              </div>
-              <h3 className="text-lg font-bold text-slate-900 mb-2 group-hover:text-teal-600 transition-colors">
-                Where Seniors Meet
-              </h3>
-              <p className="text-slate-600 text-sm mb-3">
-                Social activities and places to make new friends.
-              </p>
-              <span className="text-teal-600 text-sm font-semibold flex items-center gap-1">
-                Explore <ArrowRight className="h-4 w-4" />
-              </span>
-            </Link>
-
-            <Link 
-              href="/resources/brain-health"
-              className="bg-white rounded-2xl border border-slate-200 p-6 hover:shadow-lg transition-all duration-300 group"
-            >
-              <div className="bg-teal-100 text-teal-600 w-12 h-12 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                <Brain className="h-6 w-6" />
-              </div>
-              <h3 className="text-lg font-bold text-slate-900 mb-2 group-hover:text-teal-600 transition-colors">
-                Brain Health Guide
-              </h3>
-              <p className="text-slate-600 text-sm mb-3">
-                Cognitive exercises and memory care tips.
-              </p>
-              <span className="text-teal-600 text-sm font-semibold flex items-center gap-1">
-                Explore <ArrowRight className="h-4 w-4" />
-              </span>
-            </Link>
-
-            <Link 
-              href="/senior-living-costs-cleveland"
-              className="bg-white rounded-2xl border border-slate-200 p-6 hover:shadow-lg transition-all duration-300 group"
-            >
-              <div className="bg-amber-100 text-amber-600 w-12 h-12 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                <BookOpen className="h-6 w-6" />
-              </div>
-              <h3 className="text-lg font-bold text-slate-900 mb-2 group-hover:text-teal-600 transition-colors">
-                {regionConfig.displayName} Cost Guide
-              </h3>
-              <p className="text-slate-600 text-sm mb-3">
-                Understand senior living pricing in {cityName}.
-              </p>
-              <span className="text-teal-600 text-sm font-semibold flex items-center gap-1">
-                Explore <ArrowRight className="h-4 w-4" />
-              </span>
-            </Link>
           </div>
         </div>
       </section>

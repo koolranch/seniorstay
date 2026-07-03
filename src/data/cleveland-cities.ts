@@ -141,9 +141,10 @@ export const clevelandCitiesData: Record<string, CityInfo> = {
       'Fairview Hospital'
     ],
     averageCost: {
-      independentLiving: '$2,700 - $4,800',
-      assistedLiving: '$3,800 - $6,500',
-      memoryCare: '$5,200 - $8,800'
+      // Must match CityAdvisorDeepDive pricing table and PRICING_RANGES
+      independentLiving: '$2,400 - $4,300',
+      assistedLiving: '$4,300 - $6,900',
+      memoryCare: '$5,600 - $8,500'
     },
     testimonials: [
       {

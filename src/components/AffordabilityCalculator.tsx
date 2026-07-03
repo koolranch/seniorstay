@@ -258,10 +258,10 @@ function ValueGapBar({ valueGap, valueGapPercent, isHighValue, seniorLivingCost,
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5 }}
         className={`p-4 rounded-xl border-2 ${
-          isHighValue 
-            ? 'bg-emerald-50 border-emerald-200' 
-            : valueGap < 0 
-              ? 'bg-rose-50 border-rose-200'
+          isHighValue
+            ? 'bg-emerald-50 border-emerald-200'
+            : valueGap < 0
+              ? 'bg-slate-50 border-slate-200'
               : 'bg-amber-50 border-amber-200'
         }`}
       >
@@ -272,8 +272,8 @@ function ValueGapBar({ valueGap, valueGapPercent, isHighValue, seniorLivingCost,
                 <Sparkles className="h-5 w-5 text-emerald-600" />
               </div>
             ) : valueGap < 0 ? (
-              <div className="p-2 bg-rose-100 rounded-full">
-                <TrendingUp className="h-5 w-5 text-rose-600" />
+              <div className="p-2 bg-teal-100 rounded-full">
+                <TrendingUp className="h-5 w-5 text-teal-600" />
               </div>
             ) : (
               <div className="p-2 bg-amber-100 rounded-full">
@@ -282,19 +282,19 @@ function ValueGapBar({ valueGap, valueGapPercent, isHighValue, seniorLivingCost,
             )}
             <div>
               <p className={`font-semibold ${
-                isHighValue ? 'text-emerald-800' : valueGap < 0 ? 'text-rose-800' : 'text-amber-800'
+                isHighValue ? 'text-emerald-800' : valueGap < 0 ? 'text-slate-800' : 'text-amber-800'
               }`}>
-                {isHighValue 
-                  ? 'High Value Opportunity!' 
-                  : valueGap < 0 
-                    ? 'Senior Living Costs More' 
+                {isHighValue
+                  ? 'High Value Opportunity!'
+                  : valueGap < 0
+                    ? 'The Math Changes With Care Needs'
                     : 'Comparable Costs'}
               </p>
               <p className="text-sm text-slate-600">
-                {isHighValue 
+                {isHighValue
                   ? 'Senior living may cost less than staying home'
                   : valueGap < 0
-                    ? `Home is $${Math.abs(valueGap).toLocaleString()}/mo cheaper`
+                    ? 'Add in-home care hours above — most families comparing senior living need 40+ hrs/mo, which flips this result'
                     : 'Within 10% of home costs'}
               </p>
             </div>
@@ -306,7 +306,7 @@ function ValueGapBar({ valueGap, valueGapPercent, isHighValue, seniorLivingCost,
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               className={`text-2xl font-bold ${
-                isHighValue ? 'text-emerald-600' : valueGap < 0 ? 'text-rose-600' : 'text-amber-600'
+                isHighValue ? 'text-emerald-600' : valueGap < 0 ? 'text-slate-700' : 'text-amber-600'
               }`}
             >
               {valueGap >= 0 ? '+' : ''}{valueGap < 0 ? '-' : ''}${Math.abs(valueGap).toLocaleString()}
@@ -642,13 +642,16 @@ export default function AffordabilityCalculator({ defaultCity, showStickyButton 
   };
 
   // Calculator Inputs State
+  // homeCareHours defaults to a realistic level for a family already
+  // considering senior living (~20 hrs/mo of paid or informal help) so the
+  // starting comparison reflects their actual situation, not an empty house.
   const [inputs, setInputs] = useState<CalculatorInputs>({
     homeValue: 250000,
     mortgage: 0,
     groceries: CLEVELAND_2026_DATA.groceriesAvg,
     utilities: CLEVELAND_2026_DATA.utilitiesAvg,
     maintenance: CLEVELAND_2026_DATA.maintenanceAvg,
-    homeCareHours: 0,
+    homeCareHours: 20,
     selectedLocation: getDefaultLocation(defaultCity),
   });
   

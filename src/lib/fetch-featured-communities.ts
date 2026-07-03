@@ -40,7 +40,12 @@ function transformDatabaseToCommunity(data: any): Community {
       : (data.image_url || data.imageUrl) 
         ? [data.image_url || data.imageUrl] 
         : [],
-    careTypes: data.services?.split(',').map((s: string) => s.trim()) || [],
+    careTypes:
+      data.services
+        ?.replace(/^\s*services:\s*/i, '')
+        .split(',')
+        .map((s: string) => s.trim())
+        .filter(Boolean) || [],
     description: data.description || undefined,
     amenities: data.amenity_tags?.length
       ? data.amenity_tags

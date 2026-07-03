@@ -3,10 +3,19 @@ import { Community } from '@/data/facilities';
 /** 2026 Cleveland-area monthly estimate ranges by city (Genworth / market research) */
 export const PRICING_RANGES: Record<
   string,
-  { assisted_living: [number, number]; memory_care: [number, number] }
+  {
+    assisted_living: [number, number];
+    memory_care: [number, number];
+    independent_living?: [number, number];
+  }
 > = {
   beachwood: { assisted_living: [5500, 8200], memory_care: [6500, 9500] },
-  westlake: { assisted_living: [4800, 7200], memory_care: [6000, 8800] },
+  // Westlake ranges must match the CityAdvisorDeepDive pricing table
+  westlake: {
+    independent_living: [2400, 4300],
+    assisted_living: [4300, 6900],
+    memory_care: [5600, 8500],
+  },
   'shaker heights': { assisted_living: [5200, 7800], memory_care: [6200, 9000] },
   'rocky river': { assisted_living: [4600, 7000], memory_care: [5800, 8500] },
   parma: { assisted_living: [3800, 5800], memory_care: [5000, 7500] },
@@ -48,13 +57,24 @@ export function getPricingForCommunity(community: Community): CommunityPriceEsti
 
   const city = getCityFromLocation(community.location);
   const pricing = PRICING_RANGES[city] || PRICING_RANGES.cleveland;
-  const hasMemoryCare = community.careTypes.some((t) => t.toLowerCase().includes('memory'));
+  const types = community.careTypes.map((t) => t.toLowerCase());
+  const hasMemoryCare = types.some((t) => t.includes('memory'));
+  const independentOnly =
+    types.some((t) => t.includes('independent')) &&
+    !types.some((t) => t.includes('assisted') || t.includes('memory'));
 
+  if (independentOnly) {
+    const il = pricing.independent_living || CLEVELAND_IL_FALLBACK;
+    return { low: il[0], high: il[1], label: 'Independent Living', isEstimate: true };
+  }
   if (hasMemoryCare) {
     return { low: pricing.memory_care[0], high: pricing.memory_care[1], label: 'Memory Care', isEstimate: true };
   }
   return { low: pricing.assisted_living[0], high: pricing.assisted_living[1], label: 'Assisted Living', isEstimate: true };
 }
+
+/** Metro-wide independent living range when a city has no specific IL data */
+const CLEVELAND_IL_FALLBACK: [number, number] = [2400, 4800];
 
 export function formatPriceRange(low: number, high: number): string {
   const fmt = (n: number) => `$${n.toLocaleString()}`;

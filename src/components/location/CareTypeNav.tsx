@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { Heart, Brain, Home, UserCheck, ArrowRight } from 'lucide-react';
+import { Heart, Brain, Home, ArrowRight } from 'lucide-react';
 
 interface CareTypeNavProps {
   cityName: string;
@@ -43,15 +43,7 @@ const CareTypeNav: React.FC<CareTypeNavProps> = ({ cityName, citySlug, careTypeC
       count: careTypeCounts['Independent Living'] || 0,
       href: `/independent-living-cleveland`,
     },
-    {
-      id: 'skilled-nursing',
-      title: 'Skilled Nursing',
-      description: `24-hour nursing care for complex medical needs and rehabilitation`,
-      icon: UserCheck,
-      color: 'amber',
-      count: (careTypeCounts['Skilled Nursing'] || 0) + (careTypeCounts['Rehabilitation'] || 0),
-      href: `/senior-living-costs-cleveland`,
-    },
+    // Skilled nursing intentionally omitted — outside the referral model
   ];
 
   const colorClasses = {
@@ -73,7 +65,7 @@ const CareTypeNav: React.FC<CareTypeNavProps> = ({ cityName, citySlug, careTypeC
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
           {careTypes.map((careType) => {
             const Icon = careType.icon;
             const colors = colorClasses[careType.color as keyof typeof colorClasses];

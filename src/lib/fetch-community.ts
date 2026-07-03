@@ -252,7 +252,12 @@ function transformDatabaseToCommunity(data: any): Community {
         : [],
     // SEO Phase 2: Image alt text from database
     imageAlt: data.image_alt || `${data.name} senior living facility in ${data.city}, Ohio`,
-    careTypes: data.services?.split(',').map((s: string) => s.trim()) || [],
+    careTypes:
+      data.services
+        ?.replace(/^\s*services:\s*/i, '')
+        .split(',')
+        .map((s: string) => s.trim())
+        .filter(Boolean) || [],
     description: data.description || undefined,
     amenities: data.amenity_tags?.length
       ? data.amenity_tags
