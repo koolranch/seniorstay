@@ -116,6 +116,24 @@ const nextConfig = {
         hostname: 'images.squarespace-cdn.com',
         pathname: '**',
       },
+      // Duda website CDN (Saint Therese of Westlake, etc.)
+      {
+        protocol: 'https',
+        hostname: 'lirp.cdn-website.com',
+        pathname: '**',
+      },
+      // Sinceri Senior Living (Westlake Pointe) — wp-content lives under a subpath
+      {
+        protocol: 'https',
+        hostname: 'sinceriseniorliving.com',
+        pathname: '**',
+      },
+      // Google Places photos (photo enrichment script stores these directly)
+      {
+        protocol: 'https',
+        hostname: 'maps.googleapis.com',
+        pathname: '/maps/api/place/photo**',
+      },
       // Catch-all for other facility websites (use wildcard carefully)
       {
         protocol: 'https',

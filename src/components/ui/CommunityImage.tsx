@@ -111,6 +111,10 @@ export default function CommunityImage({
   const [imgSrc, setImgSrc] = useState(initialSrc);
   const [hasError, setHasError] = useState(!isValidImageUrl(src));
   const [isLoading, setIsLoading] = useState(isValidImageUrl(src));
+  // Photos live on dozens of facility sites/CDNs that may not be in the
+  // next.config remotePatterns allowlist. When the optimizer rejects a host
+  // (400 from /_next/image), retry the raw URL unoptimized before giving up.
+  const [useRawUrl, setUseRawUrl] = useState(false);
 
   // Reset state when src changes
   useEffect(() => {
@@ -118,9 +122,14 @@ export default function CommunityImage({
     setImgSrc(validSrc ? src : placeholder);
     setHasError(!validSrc);
     setIsLoading(validSrc);
+    setUseRawUrl(false);
   }, [src, placeholder]);
 
   const handleError = () => {
+    if (!useRawUrl && !hasError && imgSrc.startsWith('http')) {
+      setUseRawUrl(true);
+      return;
+    }
     if (!hasError) {
       // Use inline SVG placeholder (no external request needed)
       setHasError(true);
@@ -135,6 +144,7 @@ export default function CommunityImage({
 
   // For data URLs (our SVG placeholders), use unoptimized
   const isDataUrl = imgSrc.startsWith('data:');
+  const skipOptimizer = isDataUrl || useRawUrl;
   
   return (
     <div 
@@ -161,7 +171,7 @@ export default function CommunityImage({
         priority={priority}
         onError={handleError}
         onLoad={handleLoad}
-        unoptimized={isDataUrl}
+        unoptimized={skipOptimizer}
         loading={priority ? undefined : 'lazy'}
       />
     </div>
