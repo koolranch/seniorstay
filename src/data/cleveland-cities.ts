@@ -254,7 +254,7 @@ export const clevelandCitiesData: Record<string, CityInfo> = {
   'lakewood': {
     name: 'Lakewood',
     slug: 'lakewood',
-    description: 'Lakewood is a vibrant, walkable community on Cleveland\'s west side with Lake Erie access. Known for its diverse population and active lifestyle, it offers quality senior care in an urban suburban setting.',
+    description: 'Lakewood is a walkable west-side city for assisted living and independent living near Lake Erie, Detroit Avenue, and Fairview Hospital. Families compare local communities with nearby Rocky River options for memory care depth and private-pay pricing.',
     highlights: [
       'Lake Erie waterfront and Lakewood Park',
       'Walkable downtown with shops and restaurants',
@@ -316,7 +316,7 @@ export const clevelandCitiesData: Record<string, CityInfo> = {
   'rocky-river': {
     name: 'Rocky River',
     slug: 'rocky-river',
-    description: 'Rocky River is an affluent western suburb known for its excellent schools, parks, and quality of life. The city offers upscale senior living options with scenic views and top-notch amenities. Located along the shores of Lake Erie and adjacent to the Rocky River Reservation Metroparks, residents enjoy a perfect blend of natural beauty and urban convenience.',
+    description: 'Rocky River is a top West Shore suburb for assisted living and memory care — lakefront amenities, Rocky River Reservation Metroparks, and quick access to Fairview Hospital. Private-pay families often shortlist Bloom, The Normandy, Rockport, and Rocky River Village with a free local advisor.',
     highlights: [
       'Rocky River Reservation (Metroparks)',
       'Lake Erie access and marina',
@@ -394,7 +394,7 @@ export const clevelandCitiesData: Record<string, CityInfo> = {
   'chagrin-falls': {
     name: 'Chagrin Falls',
     slug: 'chagrin-falls',
-    description: 'Chagrin Falls is a picturesque village known for its historic downtown, stunning waterfall, and charming New England atmosphere. The area offers premium senior living options in a serene, upscale setting with easy access to Cleveland\'s east side amenities.',
+    description: 'Chagrin Falls is the center of Chagrin Valley assisted living — historic village, waterfall downtown, and premium private-pay communities including Hamlet, nearby Meadow Falls in South Russell, and Judson South Franklin Circle. East-side hospital access via Hillcrest and UH Ahuja.',
     highlights: [
       'Historic downtown with waterfall centerpiece',
       'Luxury senior communities including Hamlet at Chagrin Falls',
@@ -1050,7 +1050,7 @@ export const clevelandCitiesData: Record<string, CityInfo> = {
   'south-russell': {
     name: 'South Russell',
     slug: 'south-russell',
-    description: 'South Russell is a small, upscale village in Geauga County bordering Chagrin Falls, known for its wooded landscapes, equestrian heritage, and quiet residential character. The village offers boutique assisted living and memory care just minutes from the Chagrin Falls village center and east-side Cleveland healthcare.',
+    description: 'South Russell offers boutique assisted living and memory care minutes from Chagrin Falls — best known for Meadow Falls of Chagrin Valley. Families get a quieter Geauga County setting with village shopping nearby and Hillcrest / UH Ahuja access for private-pay placement.',
     highlights: [
       'Scenic, wooded village adjacent to Chagrin Falls',
       'Boutique assisted living and memory care',

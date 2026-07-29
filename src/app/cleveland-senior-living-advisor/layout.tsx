@@ -1,18 +1,18 @@
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Cleveland Senior Living Advisor — Free Local Placement Help | Guide for Seniors',
+  title: 'Senior Living Placement Cleveland | Free Local Advisor | Guide for Seniors',
   description:
-    'Talk to a free local senior living advisor in Cleveland. We help families compare assisted living, memory care, and independent living communities, check real pricing and availability, and schedule tours — at no cost to you.',
+    'Free senior living placement in Cleveland and the suburbs. A local advisor compares assisted living, memory care, and independent living, shares real pricing, and schedules tours — at no cost to your family.',
   keywords:
-    'senior living advisor cleveland, senior placement services cleveland, help finding assisted living cleveland, free senior living referral cleveland ohio, elder care advisor cleveland',
+    'senior living placement cleveland, senior living advisor cleveland, assisted living advisor cleveland, senior placement services cleveland oh, free senior living referral cleveland, help finding assisted living cleveland',
   alternates: {
     canonical: 'https://www.guideforseniors.com/cleveland-senior-living-advisor',
   },
   openGraph: {
-    title: 'Free Cleveland Senior Living Advisor | Guide for Seniors',
+    title: 'Free Senior Living Placement in Cleveland | Local Advisor',
     description:
-      'One call, and a local advisor shortlists Cleveland-area communities that fit your care needs and budget — free to families.',
+      'One call, and a Cleveland-area advisor shortlists assisted living and memory care communities that fit your care needs and budget — free to families.',
     url: 'https://www.guideforseniors.com/cleveland-senior-living-advisor',
     siteName: 'Guide for Seniors',
     locale: 'en_US',

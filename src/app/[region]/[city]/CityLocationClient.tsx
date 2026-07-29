@@ -21,6 +21,7 @@ import CityLeadMagnet from '@/components/location/CityLeadMagnet';
 import CareTypeNav from '@/components/location/CareTypeNav';
 import LocalAuthorityProse from '@/components/location/LocalAuthorityProse';
 import CityAdvisorDeepDive from '@/components/location/CityAdvisorDeepDive';
+import CityAEOBlocks from '@/components/location/CityAEOBlocks';
 import NeighborhoodEvents from '@/components/events/NeighborhoodEvents';
 import SavedCommunitiesBar from '@/components/community/SavedCommunitiesBar';
 import CommunityListingFilters from '@/components/location/CommunityListingFilters';
@@ -103,13 +104,23 @@ export default function CityLocationClient({
 
   const isHospitalDischarge = citySlug === 'westlake';
   const isMemoryCareHub = citySlug === 'beachwood';
+  const hasAssistedLiving = (careTypeCounts['Assisted Living'] ?? 0) > 0;
+  const assistedLivingCount = careTypeCounts['Assisted Living'] ?? 0;
+  const memoryCareCount = careTypeCounts['Memory Care'] ?? 0;
 
   const getHeroSubtitle = () => {
     if (isMemoryCareHub) {
       return `Find specialized memory care near UH Ahuja Medical Center. Compare ${totalCommunities} communities with ${currentYear} pricing.`;
     }
+    if (hasAssistedLiving) {
+      return `Compare assisted living, memory care, and independent living in ${cityName}. Free local placement help with ${currentYear} pricing — call (216) 677-4630.`;
+    }
     return `Compare ${totalCommunities} senior living communities in ${cityName}. Get personalized recommendations and ${currentYear} pricing from a free local advisor.`;
   };
+
+  const heroTitle = hasAssistedLiving
+    ? `Assisted Living in ${cityName}, ${stateAbbr}`
+    : `Senior Living in ${cityName}, ${stateAbbr}`;
 
   return (
     <main className="flex min-h-screen flex-col bg-white">
@@ -139,15 +150,34 @@ export default function CityLocationClient({
               {totalCommunities} Communities in {cityName}
             </span>
 
-            {/* Dynamic H1 with city name */}
+            {/* Dynamic H1 — lead with assisted living for private-pay placement queries */}
             <h1 className="text-3xl md:text-5xl font-bold text-slate-900 mb-5 leading-tight">
-              Senior Living in {cityName}, {stateAbbr}
+              {heroTitle}
             </h1>
 
             {/* Empathetic sub-headline */}
-            <p className="text-lg md:text-xl text-slate-600 mb-8 max-w-3xl mx-auto">
+            <p className="text-lg md:text-xl text-slate-600 mb-4 max-w-3xl mx-auto">
               {getHeroSubtitle()}
             </p>
+            {cityData?.description ? (
+              <p className="text-base text-slate-600 mb-6 max-w-3xl mx-auto leading-relaxed">
+                {cityData.description}
+              </p>
+            ) : null}
+            {cityData?.highlights && cityData.highlights.length > 0 ? (
+              <ul className="flex flex-wrap justify-center gap-2 mb-8 max-w-3xl mx-auto">
+                {cityData.highlights.slice(0, 5).map((highlight) => (
+                  <li
+                    key={highlight}
+                    className="bg-white border border-slate-200 text-slate-700 text-sm px-3 py-1.5 rounded-lg"
+                  >
+                    {highlight}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <div className="mb-8" />
+            )}
 
             {/* Quick CTA Buttons — show the actual number so desktop visitors can dial */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-4">
@@ -319,6 +349,16 @@ export default function CityLocationClient({
       {/* FLAGSHIP DEEP-DIVE (advisor commentary, city pricing, landmarks) —
           placed high so the best referral content is actually seen */}
       <CityAdvisorDeepDive citySlug={citySlug} cityName={cityName} />
+
+      <CityAEOBlocks
+        cityName={cityName}
+        citySlug={citySlug}
+        communityCount={totalCommunities}
+        cityData={cityData || undefined}
+        memoryCareCount={memoryCareCount}
+        assistedLivingCount={assistedLivingCount}
+        includeSchema={false}
+      />
 
       {/* SECTION 3: CARE TYPE NAVIGATION */}
       <CareTypeNav

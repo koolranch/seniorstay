@@ -1,0 +1,923 @@
+{
+  "date": "2026-07-28",
+  "domain": "guideforseniors.com",
+  "location_code": 2840,
+  "location": "United States",
+  "depth": 100,
+  "focus": "private-pay AL/MC/IL city + advisor placement keywords (no Medicaid)",
+  "rows": [
+    {
+      "keyword": "assisted living rocky river oh",
+      "lane": "al-city",
+      "target": "/cleveland/rocky-river",
+      "position": 60,
+      "url": "/cleveland/rocky-river",
+      "url_matches_target": true,
+      "top_competitor": "bloomseniorliving.com",
+      "top_url": "https://bloomseniorliving.com/bloom-at-rocky-river/",
+      "top5": [
+        {
+          "rank": 4,
+          "domain": "bloomseniorliving.com",
+          "url": "https://bloomseniorliving.com/bloom-at-rocky-river/"
+        },
+        {
+          "rank": 5,
+          "domain": "thenormandy.com",
+          "url": "https://thenormandy.com/"
+        },
+        {
+          "rank": 6,
+          "domain": "www.aplaceformom.com",
+          "url": "https://www.aplaceformom.com/independent-living/ohio/rocky-river"
+        },
+        {
+          "rank": 7,
+          "domain": "embassyhealthcare.net",
+          "url": "https://embassyhealthcare.net/locations/ohio/rockport"
+        },
+        {
+          "rank": 8,
+          "domain": "rockyrivervillage.com",
+          "url": "https://rockyrivervillage.com/"
+        }
+      ],
+      "error": null,
+      "cost": 0.0155,
+      "search_volume": 10,
+      "cpc": null,
+      "competition": "MEDIUM"
+    },
+    {
+      "keyword": "assisted living westlake oh",
+      "lane": "al-city",
+      "target": "/cleveland/westlake",
+      "position": 76,
+      "url": "/cleveland/westlake",
+      "url_matches_target": true,
+      "top_competitor": "www.assistedliving.org",
+      "top_url": "https://www.assistedliving.org/ohio/westlake/",
+      "top5": [
+        {
+          "rank": 4,
+          "domain": "www.assistedliving.org",
+          "url": "https://www.assistedliving.org/ohio/westlake/"
+        },
+        {
+          "rank": 6,
+          "domain": "westlakeal.com",
+          "url": "https://westlakeal.com/"
+        },
+        {
+          "rank": 7,
+          "domain": "www.sainttherese.org",
+          "url": "https://www.sainttherese.org/westlake"
+        },
+        {
+          "rank": 8,
+          "domain": "www.brookdale.com",
+          "url": "https://www.brookdale.com/en/communities/brookdale-westlake-village.html"
+        },
+        {
+          "rank": 9,
+          "domain": "www.aplaceformom.com",
+          "url": "https://www.aplaceformom.com/nursing-homes/ohio/westlake"
+        }
+      ],
+      "error": null,
+      "cost": 0.0155,
+      "search_volume": 10,
+      "cpc": 23.05,
+      "competition": "HIGH"
+    },
+    {
+      "keyword": "assisted living shaker heights oh",
+      "lane": "al-city",
+      "target": "/cleveland/shaker-heights",
+      "position": 70,
+      "url": "/cleveland/shaker-heights",
+      "url_matches_target": true,
+      "top_competitor": "storypoint.com",
+      "top_url": "https://storypoint.com/community/shaker-heights-oh/",
+      "top5": [
+        {
+          "rank": 4,
+          "domain": "storypoint.com",
+          "url": "https://storypoint.com/community/shaker-heights-oh/"
+        },
+        {
+          "rank": 5,
+          "domain": "www.aplaceformom.com",
+          "url": "https://www.aplaceformom.com/assisted-living/ohio/shaker-heights"
+        },
+        {
+          "rank": 6,
+          "domain": "woodlandsbyhrc.com",
+          "url": "https://woodlandsbyhrc.com/"
+        },
+        {
+          "rank": 7,
+          "domain": "www.jenningsohio.org",
+          "url": "https://www.jenningsohio.org/locations/shaker-heights/overview"
+        },
+        {
+          "rank": 8,
+          "domain": "www.assistedliving.org",
+          "url": "https://www.assistedliving.org/ohio/shaker-heights/"
+        }
+      ],
+      "error": null,
+      "cost": 0.0155,
+      "search_volume": null,
+      "cpc": null,
+      "competition": null
+    },
+    {
+      "keyword": "assisted living lakewood oh",
+      "lane": "al-city",
+      "target": "/cleveland/lakewood",
+      "position": 62,
+      "url": "/cleveland/lakewood",
+      "url_matches_target": true,
+      "top_competitor": "npseniorliving.com",
+      "top_url": "https://npseniorliving.com/communities/haven-lakewood/",
+      "top5": [
+        {
+          "rank": 5,
+          "domain": "npseniorliving.com",
+          "url": "https://npseniorliving.com/communities/haven-lakewood/"
+        },
+        {
+          "rank": 6,
+          "domain": "www.aplaceformom.com",
+          "url": "https://www.aplaceformom.com/assisted-living/ohio/lakewood"
+        },
+        {
+          "rank": 8,
+          "domain": "havenatlakewood.com",
+          "url": "https://havenatlakewood.com/"
+        },
+        {
+          "rank": 9,
+          "domain": "www.oasissenioradvisors.com",
+          "url": "https://www.oasissenioradvisors.com/community-guide/ohio/lakewood/"
+        },
+        {
+          "rank": 10,
+          "domain": "www.enniscourt.com",
+          "url": "https://www.enniscourt.com/"
+        }
+      ],
+      "error": null,
+      "cost": 0.0155,
+      "search_volume": 10,
+      "cpc": null,
+      "competition": null
+    },
+    {
+      "keyword": "assisted living beachwood oh",
+      "lane": "al-city",
+      "target": "/cleveland/beachwood",
+      "position": 70,
+      "url": "/cleveland/beachwood",
+      "url_matches_target": true,
+      "top_competitor": "www.aplaceformom.com",
+      "top_url": "https://www.aplaceformom.com/assisted-living/ohio/beachwood",
+      "top5": [
+        {
+          "rank": 4,
+          "domain": "www.aplaceformom.com",
+          "url": "https://www.aplaceformom.com/assisted-living/ohio/beachwood"
+        },
+        {
+          "rank": 5,
+          "domain": "beachwood.roseseniorliving.com",
+          "url": "https://beachwood.roseseniorliving.com/"
+        },
+        {
+          "rank": 6,
+          "domain": "www.sunshineretirementliving.com",
+          "url": "https://www.sunshineretirementliving.com/beachwood-retirement-living/"
+        },
+        {
+          "rank": 8,
+          "domain": "kingdavidnursing.org",
+          "url": "https://kingdavidnursing.org/deer-creek-lodge-al"
+        },
+        {
+          "rank": 9,
+          "domain": "www.lcsliving.com",
+          "url": "https://www.lcsliving.com/location-finder/ohio/beachwood/rose-senior-living-at-beachwood/"
+        }
+      ],
+      "error": null,
+      "cost": 0.0155,
+      "search_volume": 140,
+      "cpc": 9.39,
+      "competition": "HIGH"
+    },
+    {
+      "keyword": "assisted living parma oh",
+      "lane": "al-city",
+      "target": "/cleveland/parma",
+      "position": 73,
+      "url": "/cleveland/parma",
+      "url_matches_target": true,
+      "top_competitor": "storypoint.com",
+      "top_url": "https://storypoint.com/community/parma-oh/",
+      "top5": [
+        {
+          "rank": 4,
+          "domain": "storypoint.com",
+          "url": "https://storypoint.com/community/parma-oh/"
+        },
+        {
+          "rank": 5,
+          "domain": "www.assistedliving.org",
+          "url": "https://www.assistedliving.org/ohio/parma/"
+        },
+        {
+          "rank": 6,
+          "domain": "franciscanministries.org",
+          "url": "https://franciscanministries.org/community/mount-alverna-village/"
+        },
+        {
+          "rank": 7,
+          "domain": "www.sunriseseniorliving.com",
+          "url": "https://www.sunriseseniorliving.com/communities/oh/sunrise-at-parma"
+        },
+        {
+          "rank": 8,
+          "domain": "www.aplaceformom.com",
+          "url": "https://www.aplaceformom.com/assisted-living/ohio/parma"
+        }
+      ],
+      "error": null,
+      "cost": 0.0155,
+      "search_volume": 170,
+      "cpc": 11.29,
+      "competition": "MEDIUM"
+    },
+    {
+      "keyword": "assisted living chagrin falls oh",
+      "lane": "al-city",
+      "target": "/cleveland/chagrin-falls",
+      "position": 88,
+      "url": "/cleveland/community/ba459ea6-2bb4-4bfa-af75-33b790b504ff/eliza-at-chagrin-falls",
+      "url_matches_target": false,
+      "top_competitor": "www.caring.com",
+      "top_url": "https://www.caring.com/senior-living/assisted-living/ohio/chagrin-falls",
+      "top5": [
+        {
+          "rank": 4,
+          "domain": "www.caring.com",
+          "url": "https://www.caring.com/senior-living/assisted-living/ohio/chagrin-falls"
+        },
+        {
+          "rank": 5,
+          "domain": "meadowfallsseniorliving.com",
+          "url": "https://meadowfallsseniorliving.com/chagrin-valley/"
+        },
+        {
+          "rank": 6,
+          "domain": "hamletretirement.com",
+          "url": "https://hamletretirement.com/"
+        },
+        {
+          "rank": 7,
+          "domain": "www.facebook.com",
+          "url": "https://www.facebook.com/lanternofchagrinvalley/"
+        },
+        {
+          "rank": 8,
+          "domain": "judsonsmartliving.org",
+          "url": "https://judsonsmartliving.org/south-franklin-circle/assisted-living/"
+        }
+      ],
+      "error": null,
+      "cost": 0.0155,
+      "search_volume": null,
+      "cpc": null,
+      "competition": null
+    },
+    {
+      "keyword": "assisted living solon oh",
+      "lane": "al-city",
+      "target": "/cleveland/solon",
+      "position": 65,
+      "url": "/cleveland/solon",
+      "url_matches_target": true,
+      "top_competitor": "hamletretirement.com",
+      "top_url": "https://hamletretirement.com/chagrin-falls/location-solon/",
+      "top5": [
+        {
+          "rank": 4,
+          "domain": "hamletretirement.com",
+          "url": "https://hamletretirement.com/chagrin-falls/location-solon/"
+        },
+        {
+          "rank": 5,
+          "domain": "www.aplaceformom.com",
+          "url": "https://www.aplaceformom.com/assisted-living/ohio/solon"
+        },
+        {
+          "rank": 7,
+          "domain": "vitaliasolon.com",
+          "url": "https://vitaliasolon.com/"
+        },
+        {
+          "rank": 8,
+          "domain": "solonpointehc.com",
+          "url": "https://solonpointehc.com/"
+        },
+        {
+          "rank": 9,
+          "domain": "www.ourparents.com",
+          "url": "https://www.ourparents.com/senior-living-options/ohio/solon"
+        }
+      ],
+      "error": null,
+      "cost": 0.0155,
+      "search_volume": null,
+      "cpc": null,
+      "competition": null
+    },
+    {
+      "keyword": "assisted living aurora oh",
+      "lane": "al-city",
+      "target": "/cleveland/aurora",
+      "position": 70,
+      "url": "/cleveland/aurora",
+      "url_matches_target": true,
+      "top_competitor": "www.atriumliving.com",
+      "top_url": "https://www.atriumliving.com/",
+      "top5": [
+        {
+          "rank": 4,
+          "domain": "www.atriumliving.com",
+          "url": "https://www.atriumliving.com/"
+        },
+        {
+          "rank": 6,
+          "domain": "www.annamariaofaurora.com",
+          "url": "https://www.annamariaofaurora.com/"
+        },
+        {
+          "rank": 7,
+          "domain": "www.aplaceformom.com",
+          "url": "https://www.aplaceformom.com/independent-living/ohio/aurora"
+        },
+        {
+          "rank": 8,
+          "domain": "www.oasissenioradvisors.com",
+          "url": "https://www.oasissenioradvisors.com/community-guide/ohio/aurora/"
+        },
+        {
+          "rank": 9,
+          "domain": "www.whereyoulivematters.org",
+          "url": "https://www.whereyoulivematters.org/find-a-community/independence-village-of-aurora/"
+        }
+      ],
+      "error": null,
+      "cost": 0.0155,
+      "search_volume": 10,
+      "cpc": 20.85,
+      "competition": "HIGH"
+    },
+    {
+      "keyword": "assisted living south russell oh",
+      "lane": "al-city",
+      "target": "/cleveland/south-russell",
+      "position": 24,
+      "url": "/cleveland/south-russell",
+      "url_matches_target": true,
+      "top_competitor": "www.aplaceformom.com",
+      "top_url": "https://www.aplaceformom.com/assisted-living/ohio/south-russell",
+      "top5": [
+        {
+          "rank": 1,
+          "domain": "www.aplaceformom.com",
+          "url": "https://www.aplaceformom.com/assisted-living/ohio/south-russell"
+        },
+        {
+          "rank": 5,
+          "domain": "meadowfallsseniorliving.com",
+          "url": "https://meadowfallsseniorliving.com/chagrin-valley/"
+        },
+        {
+          "rank": 6,
+          "domain": "health.usnews.com",
+          "url": "https://health.usnews.com/best-senior-living/independent-living/ohio/south-russell"
+        },
+        {
+          "rank": 7,
+          "domain": "www.seniorcareauthority.com",
+          "url": "https://www.seniorcareauthority.com/assisted-living/the-lantern-of-chagrin-valley/"
+        },
+        {
+          "rank": 8,
+          "domain": "www.miradorliving.com",
+          "url": "https://www.miradorliving.com/assisted-living/ohio/south-russell"
+        }
+      ],
+      "error": null,
+      "cost": 0.0155,
+      "search_volume": null,
+      "cpc": null,
+      "competition": null
+    },
+    {
+      "keyword": "assisted living cleveland oh",
+      "lane": "al-metro",
+      "target": "/assisted-living-cleveland",
+      "position": 70,
+      "url": "/assisted-living-cleveland",
+      "url_matches_target": true,
+      "top_competitor": "www.whereyoulivematters.org",
+      "top_url": "https://www.whereyoulivematters.org/assisted-living/ohio/cleveland/",
+      "top5": [
+        {
+          "rank": 4,
+          "domain": "www.whereyoulivematters.org",
+          "url": "https://www.whereyoulivematters.org/assisted-living/ohio/cleveland/"
+        },
+        {
+          "rank": 5,
+          "domain": "thenormandy.com",
+          "url": "https://thenormandy.com/"
+        },
+        {
+          "rank": 6,
+          "domain": "staugministries.org",
+          "url": "https://staugministries.org/health-campus/towers-assisted-living/"
+        },
+        {
+          "rank": 7,
+          "domain": "www.assistedliving.org",
+          "url": "https://www.assistedliving.org/ohio/cleveland/"
+        },
+        {
+          "rank": 8,
+          "domain": "www.brookdale.com",
+          "url": "https://www.brookdale.com/en/locations/ohio/cleveland.html"
+        }
+      ],
+      "error": null,
+      "cost": 0.0155,
+      "search_volume": 1000,
+      "cpc": 14.59,
+      "competition": "MEDIUM"
+    },
+    {
+      "keyword": "memory care rocky river oh",
+      "lane": "mc-city",
+      "target": "/cleveland/rocky-river",
+      "position": 56,
+      "url": "/cleveland/rocky-river",
+      "url_matches_target": true,
+      "top_competitor": "www.aplaceformom.com",
+      "top_url": "https://www.aplaceformom.com/alzheimers-care/ohio/rocky-river",
+      "top5": [
+        {
+          "rank": 1,
+          "domain": "www.aplaceformom.com",
+          "url": "https://www.aplaceformom.com/alzheimers-care/ohio/rocky-river"
+        },
+        {
+          "rank": 5,
+          "domain": "bloomseniorliving.com",
+          "url": "https://bloomseniorliving.com/bloom-at-rocky-river/"
+        },
+        {
+          "rank": 6,
+          "domain": "thenormandy.com",
+          "url": "https://thenormandy.com/"
+        },
+        {
+          "rank": 7,
+          "domain": "rockyrivervillage.com",
+          "url": "https://rockyrivervillage.com/"
+        },
+        {
+          "rank": 8,
+          "domain": "www.miradorliving.com",
+          "url": "https://www.miradorliving.com/assisted-living/ohio/rocky-river/the-normandy-senior-living"
+        }
+      ],
+      "error": null,
+      "cost": 0.0155,
+      "search_volume": 10,
+      "cpc": null,
+      "competition": "LOW"
+    },
+    {
+      "keyword": "memory care westlake oh",
+      "lane": "mc-city",
+      "target": "/cleveland/westlake",
+      "position": 69,
+      "url": "/cleveland/westlake",
+      "url_matches_target": true,
+      "top_competitor": "www.brookdale.com",
+      "top_url": "https://www.brookdale.com/en/communities/brookdale-westlake-village/memory-care.html",
+      "top5": [
+        {
+          "rank": 4,
+          "domain": "www.brookdale.com",
+          "url": "https://www.brookdale.com/en/communities/brookdale-westlake-village/memory-care.html"
+        },
+        {
+          "rank": 5,
+          "domain": "www.assistedliving.org",
+          "url": "https://www.assistedliving.org/ohio/westlake/"
+        },
+        {
+          "rank": 6,
+          "domain": "www.sainttherese.org",
+          "url": "https://www.sainttherese.org/westlake"
+        },
+        {
+          "rank": 7,
+          "domain": "vitaliawestlake.com",
+          "url": "https://vitaliawestlake.com/"
+        },
+        {
+          "rank": 8,
+          "domain": "health.usnews.com",
+          "url": "https://health.usnews.com/best-senior-living/memory-care/ohio/westlake"
+        }
+      ],
+      "error": null,
+      "cost": 0.0155,
+      "search_volume": 10,
+      "cpc": null,
+      "competition": null
+    },
+    {
+      "keyword": "memory care beachwood oh",
+      "lane": "mc-city",
+      "target": "/cleveland/beachwood",
+      "position": null,
+      "url": null,
+      "url_matches_target": null,
+      "top_competitor": null,
+      "top_url": null,
+      "top5": [],
+      "error": "Internal SE Server Error.",
+      "cost": 0.002,
+      "search_volume": null,
+      "cpc": null,
+      "competition": null
+    },
+    {
+      "keyword": "memory care shaker heights oh",
+      "lane": "mc-city",
+      "target": "/cleveland/shaker-heights",
+      "position": null,
+      "url": null,
+      "url_matches_target": null,
+      "top_competitor": null,
+      "top_url": null,
+      "top5": [],
+      "error": "Internal SE Server Error.",
+      "cost": 0.002,
+      "search_volume": null,
+      "cpc": null,
+      "competition": null
+    },
+    {
+      "keyword": "memory care lakewood oh",
+      "lane": "mc-city",
+      "target": "/cleveland/lakewood",
+      "position": null,
+      "url": null,
+      "url_matches_target": null,
+      "top_competitor": null,
+      "top_url": null,
+      "top5": [],
+      "error": "Internal SE Server Error.",
+      "cost": 0.005,
+      "search_volume": null,
+      "cpc": null,
+      "competition": null
+    },
+    {
+      "keyword": "memory care chagrin falls oh",
+      "lane": "mc-city",
+      "target": "/cleveland/chagrin-falls",
+      "position": null,
+      "url": null,
+      "url_matches_target": null,
+      "top_competitor": null,
+      "top_url": null,
+      "top5": [],
+      "error": "Internal SE Server Error.",
+      "cost": 0.002,
+      "search_volume": null,
+      "cpc": null,
+      "competition": null
+    },
+    {
+      "keyword": "memory care cleveland oh",
+      "lane": "mc-metro",
+      "target": "/memory-care-cleveland",
+      "position": 35,
+      "url": "/blog",
+      "url_matches_target": false,
+      "top_competitor": "www.whereyoulivematters.org",
+      "top_url": "https://www.whereyoulivematters.org/assisted-living/ohio/cleveland/",
+      "top5": [
+        {
+          "rank": 4,
+          "domain": "www.whereyoulivematters.org",
+          "url": "https://www.whereyoulivematters.org/assisted-living/ohio/cleveland/"
+        },
+        {
+          "rank": 6,
+          "domain": "www.assistedliving.org",
+          "url": "https://www.assistedliving.org/ohio/cleveland/"
+        },
+        {
+          "rank": 7,
+          "domain": "thenormandy.com",
+          "url": "https://thenormandy.com/"
+        },
+        {
+          "rank": 8,
+          "domain": "health.usnews.com",
+          "url": "https://health.usnews.com/best-senior-living/memory-care/ohio/cleveland"
+        },
+        {
+          "rank": 9,
+          "domain": "judsonsmartliving.org",
+          "url": "https://judsonsmartliving.org/judson-park/"
+        }
+      ],
+      "error": null,
+      "cost": 0.0155,
+      "search_volume": null,
+      "cpc": null,
+      "competition": null
+    },
+    {
+      "keyword": "independent living rocky river oh",
+      "lane": "il-city",
+      "target": "/cleveland/rocky-river",
+      "position": 52,
+      "url": "/cleveland/rocky-river",
+      "url_matches_target": true,
+      "top_competitor": "thenormandy.com",
+      "top_url": "https://thenormandy.com/",
+      "top5": [
+        {
+          "rank": 1,
+          "domain": "thenormandy.com",
+          "url": "https://thenormandy.com/"
+        },
+        {
+          "rank": 2,
+          "domain": "www.aplaceformom.com",
+          "url": "https://www.aplaceformom.com/independent-living/ohio/rocky-river"
+        },
+        {
+          "rank": 3,
+          "domain": "www.caring.com",
+          "url": "https://www.caring.com/senior-living/independent-living/ohio/rocky-river"
+        },
+        {
+          "rank": 4,
+          "domain": "www.miradorliving.com",
+          "url": "https://www.miradorliving.com/assisted-living/ohio/rocky-river/the-normandy-senior-living"
+        },
+        {
+          "rank": 5,
+          "domain": "www.oasissenioradvisors.com",
+          "url": "https://www.oasissenioradvisors.com/community-guide/ohio/rocky-river/"
+        }
+      ],
+      "error": null,
+      "cost": 0.0155,
+      "search_volume": null,
+      "cpc": null,
+      "competition": null
+    },
+    {
+      "keyword": "independent living westlake oh",
+      "lane": "il-city",
+      "target": "/cleveland/westlake",
+      "position": 75,
+      "url": "/cleveland/westlake",
+      "url_matches_target": true,
+      "top_competitor": "www.brookdale.com",
+      "top_url": "https://www.brookdale.com/en/communities/brookdale-westlake-village.html",
+      "top5": [
+        {
+          "rank": 4,
+          "domain": "www.brookdale.com",
+          "url": "https://www.brookdale.com/en/communities/brookdale-westlake-village.html"
+        },
+        {
+          "rank": 5,
+          "domain": "www.sainttherese.org",
+          "url": "https://www.sainttherese.org/westlake"
+        },
+        {
+          "rank": 6,
+          "domain": "www.assistedliving.org",
+          "url": "https://www.assistedliving.org/ohio/westlake/"
+        },
+        {
+          "rank": 7,
+          "domain": "www.aplaceformom.com",
+          "url": "https://www.aplaceformom.com/independent-living/ohio/westlake"
+        },
+        {
+          "rank": 8,
+          "domain": "www.fairmontseniorliving.com",
+          "url": "https://www.fairmontseniorliving.com/westlake-oh/"
+        }
+      ],
+      "error": null,
+      "cost": 0.0155,
+      "search_volume": 10,
+      "cpc": null,
+      "competition": null
+    },
+    {
+      "keyword": "independent living cleveland oh",
+      "lane": "il-metro",
+      "target": "/independent-living-cleveland",
+      "position": 72,
+      "url": "/independent-living-cleveland",
+      "url_matches_target": true,
+      "top_competitor": "www.whereyoulivematters.org",
+      "top_url": "https://www.whereyoulivematters.org/independent-living/ohio/cleveland/",
+      "top5": [
+        {
+          "rank": 5,
+          "domain": "www.whereyoulivematters.org",
+          "url": "https://www.whereyoulivematters.org/independent-living/ohio/cleveland/"
+        },
+        {
+          "rank": 6,
+          "domain": "sil-oh.org",
+          "url": "https://sil-oh.org/"
+        },
+        {
+          "rank": 7,
+          "domain": "www.after55.com",
+          "url": "https://www.after55.com/search/oh/cleveland"
+        },
+        {
+          "rank": 8,
+          "domain": "thenormandy.com",
+          "url": "https://thenormandy.com/"
+        },
+        {
+          "rank": 9,
+          "domain": "hhs.cuyahogacounty.gov",
+          "url": "https://hhs.cuyahogacounty.gov/programs/options-for-independent-living"
+        }
+      ],
+      "error": null,
+      "cost": 0.0155,
+      "search_volume": 10,
+      "cpc": 7.37,
+      "competition": "HIGH"
+    },
+    {
+      "keyword": "senior living advisor cleveland",
+      "lane": "advisor",
+      "target": "/cleveland-senior-living-advisor",
+      "position": 27,
+      "url": "/cleveland-senior-living-advisor",
+      "url_matches_target": true,
+      "top_competitor": "www.oasissenioradvisors.com",
+      "top_url": "https://www.oasissenioradvisors.com/locations/northeastern-oh/",
+      "top5": [
+        {
+          "rank": 2,
+          "domain": "www.oasissenioradvisors.com",
+          "url": "https://www.oasissenioradvisors.com/locations/northeastern-oh/"
+        },
+        {
+          "rank": 3,
+          "domain": "assistedlivinglocators.com",
+          "url": "https://assistedlivinglocators.com/care-advisor/cleveland-east"
+        },
+        {
+          "rank": 4,
+          "domain": "www.seniorcareauthority.com",
+          "url": "https://www.seniorcareauthority.com/locations/cleveland-oh/"
+        },
+        {
+          "rank": 5,
+          "domain": "www.senioradvisor.com",
+          "url": "https://www.senioradvisor.com/"
+        },
+        {
+          "rank": 6,
+          "domain": "nextlevelsenior.com",
+          "url": "https://nextlevelsenior.com/"
+        }
+      ],
+      "error": null,
+      "cost": 0.0155,
+      "search_volume": null,
+      "cpc": null,
+      "competition": null
+    },
+    {
+      "keyword": "assisted living advisor cleveland",
+      "lane": "advisor",
+      "target": "/cleveland-senior-living-advisor",
+      "position": 28,
+      "url": "/cleveland-senior-living-advisor",
+      "url_matches_target": true,
+      "top_competitor": "www.oasissenioradvisors.com",
+      "top_url": "https://www.oasissenioradvisors.com/locations/northeastern-oh/",
+      "top5": [
+        {
+          "rank": 2,
+          "domain": "www.oasissenioradvisors.com",
+          "url": "https://www.oasissenioradvisors.com/locations/northeastern-oh/"
+        },
+        {
+          "rank": 3,
+          "domain": "assistedlivinglocators.com",
+          "url": "https://assistedlivinglocators.com/care-advisor/cleveland-east"
+        },
+        {
+          "rank": 4,
+          "domain": "www.seniorcareauthority.com",
+          "url": "https://www.seniorcareauthority.com/locations/cleveland-oh/"
+        },
+        {
+          "rank": 5,
+          "domain": "www.senioradvisor.com",
+          "url": "https://www.senioradvisor.com/"
+        },
+        {
+          "rank": 6,
+          "domain": "carepatrol.com",
+          "url": "https://carepatrol.com/northeast-ohio/"
+        }
+      ],
+      "error": null,
+      "cost": 0.0155,
+      "search_volume": null,
+      "cpc": null,
+      "competition": null
+    },
+    {
+      "keyword": "senior living placement cleveland",
+      "lane": "advisor",
+      "target": "/contact",
+      "position": 55,
+      "url": "/cleveland/cleveland",
+      "url_matches_target": false,
+      "top_competitor": "www.seniorcareauthority.com",
+      "top_url": "https://www.seniorcareauthority.com/locations/cleveland-oh/",
+      "top5": [
+        {
+          "rank": 1,
+          "domain": "www.seniorcareauthority.com",
+          "url": "https://www.seniorcareauthority.com/locations/cleveland-oh/"
+        },
+        {
+          "rank": 2,
+          "domain": "www.oasissenioradvisors.com",
+          "url": "https://www.oasissenioradvisors.com/locations/northeastern-oh/"
+        },
+        {
+          "rank": 3,
+          "domain": "www.whereyoulivematters.org",
+          "url": "https://www.whereyoulivematters.org/independent-living/ohio/cleveland/"
+        },
+        {
+          "rank": 4,
+          "domain": "assistedlivinglocators.com",
+          "url": "https://assistedlivinglocators.com/care-advisor/cleveland-east"
+        },
+        {
+          "rank": 5,
+          "domain": "storypoint.com",
+          "url": "https://storypoint.com/find/ohio/cleveland/"
+        }
+      ],
+      "error": null,
+      "cost": 0.0155,
+      "search_volume": null,
+      "cpc": null,
+      "competition": null
+    }
+  ],
+  "summary": {
+    "total": 24,
+    "top10": 0,
+    "top30": 3,
+    "top100": 20,
+    "not_ranking": 0,
+    "errors": 4,
+    "total_cost": 0.321
+  }
+}

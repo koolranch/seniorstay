@@ -14,6 +14,8 @@ interface CityAEOBlocksProps {
   cityData?: CityInfo;
   memoryCareCount?: number;
   assistedLivingCount?: number;
+  /** When false, skip FAQ JSON-LD (city SchemaOrg already emits FAQPage). */
+  includeSchema?: boolean;
 }
 
 interface FAQItem {
@@ -33,6 +35,7 @@ const CityAEOBlocks: React.FC<CityAEOBlocksProps> = ({
   cityData,
   memoryCareCount = 0,
   assistedLivingCount = 0,
+  includeSchema = true,
 }) => {
   const [openFAQ, setOpenFAQ] = React.useState<number | null>(0);
   const currentYear = new Date().getFullYear();
@@ -107,12 +110,13 @@ const CityAEOBlocks: React.FC<CityAEOBlocksProps> = ({
 
   return (
     <>
-      {/* JSON-LD Schema for FAQPage - eligibility for AI rich results */}
-      <Script
-        id={`faq-schema-${citySlug}`}
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-      />
+      {includeSchema ? (
+        <Script
+          id={`faq-schema-${citySlug}`}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+        />
+      ) : null}
 
       <section className="py-12 bg-gradient-to-br from-slate-50 to-white border-y border-slate-200">
         <div className="container mx-auto px-4">

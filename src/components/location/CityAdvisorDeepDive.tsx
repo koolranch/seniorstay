@@ -102,6 +102,282 @@ const CITY_DEEP_DIVE: Record<string, CityDeepDiveData> = {
       },
     ],
   },
+
+  'rocky-river': {
+    advisorIntro:
+      "Rocky River is our most-requested West Side suburb after Westlake — walkable downtown, Metroparks, and a tight cluster of assisted living and memory care near Fairview Hospital. Here's how we usually shortlist it for private-pay families.",
+    communityTakes: [
+      {
+        name: 'Bloom at Rocky River',
+        careTypes: 'Assisted Living · Memory Care',
+        take: 'Family-operated feel with strong memory care programming. A frequent first tour when dementia is the primary concern and families want something smaller than a big national campus.',
+      },
+      {
+        name: 'The Normandy',
+        careTypes: 'Independent Living · Assisted Living',
+        take: 'Lakefront campus with independent and assisted living. Best when a couple needs different support levels or when the resident still wants an apartment lifestyle near Lake Erie.',
+      },
+      {
+        name: 'Embassy of Rockport',
+        careTypes: 'Assisted Living · Memory Care',
+        take: 'Often the value conversation on Center Ridge — useful when budget is tighter than Bloom or Normandy but families still want Rocky River / West Shore proximity.',
+      },
+      {
+        name: 'Rocky River Village',
+        careTypes: 'Independent Living · Assisted Living · Memory Care',
+        take: 'Continuum option when the family wants room to age in place on one campus. Ask about current renovations and which buildings accept new move-ins.',
+      },
+    ],
+    pricing: [
+      { careType: 'Independent Living', range: '$3,000 – $5,200/mo', note: 'Apartment-style; meals often included' },
+      { careType: 'Assisted Living', range: '$4,200 – $7,200/mo', note: 'Base rent plus care level after assessment' },
+      { careType: 'Memory Care', range: '$5,800 – $9,500/mo', note: 'Secured neighborhoods; usually all-inclusive' },
+    ],
+    pricingContext:
+      'Rocky River prices above many Cuyahoga suburbs because of the lakefront location and newer renovations. We pull current rate sheets and move-in specials before you tour so you are not comparing stale website numbers.',
+    landmarks: [
+      {
+        icon: 'hospital',
+        name: 'Fairview Hospital',
+        desc: 'Primary hospital for West Shore discharge planning — most Rocky River communities are a short drive.',
+      },
+      {
+        icon: 'park',
+        name: 'Rocky River Reservation',
+        desc: 'Metroparks trails and scenery right next door — a real quality-of-life factor for residents and visiting families.',
+      },
+      {
+        icon: 'shopping',
+        name: 'Downtown Rocky River',
+        desc: 'Walkable shops and restaurants along Detroit Road that communities use for outings and family visits.',
+      },
+    ],
+  },
+
+  lakewood: {
+    advisorIntro:
+      'Lakewood families usually want walkability and west-side healthcare access without paying full Westlake premiums. Assisted living options are fewer than Westlake, so we often compare Lakewood and Rocky River in the same shortlist.',
+    communityTakes: [
+      {
+        name: 'Haven at Lakewood',
+        careTypes: 'Assisted Living · Independent Living',
+        take: 'The community we tour most in Lakewood proper — central location, newer feel relative to older west-side buildings. Strong when the resident still wants neighborhood energy.',
+      },
+      {
+        name: "O'Neill Healthcare Lakewood",
+        careTypes: 'Assisted Living · Skilled Nursing',
+        take: 'Useful when rehab-to-assisted-living transitions matter. We place into assisted living suites here; skilled nursing is listed for continuum context only.',
+      },
+      {
+        name: 'EnnisCourt',
+        careTypes: 'Assisted Living',
+        take: 'Smaller, more traditional assisted living footprint. Worth a look when families prefer a quieter building over a large campus.',
+      },
+    ],
+    pricing: [
+      { careType: 'Independent Living', range: '$2,400 – $4,200/mo', note: 'Often more affordable than Westlake / Rocky River' },
+      { careType: 'Assisted Living', range: '$3,400 – $5,800/mo', note: 'Wide range by building age and care level' },
+      { careType: 'Memory Care', range: '$4,800 – $8,200/mo', note: 'May require nearby Rocky River or Westlake options' },
+    ],
+    pricingContext:
+      'Lakewood can be a better value than Westlake for private-pay assisted living, but memory care depth is thinner — we regularly add Rocky River communities to the tour list when dementia care is the driver.',
+    landmarks: [
+      {
+        icon: 'hospital',
+        name: 'Fairview Hospital & Clinic Lakewood',
+        desc: 'West-side hospital access without leaving the Lakewood / Fairview corridor.',
+      },
+      {
+        icon: 'park',
+        name: 'Lakewood Park & Lake Erie',
+        desc: 'Waterfront green space that visiting families use constantly — a lifestyle plus for active residents.',
+      },
+      {
+        icon: 'shopping',
+        name: 'Detroit Avenue corridor',
+        desc: 'Walkable restaurants and shops that make Lakewood feel like a real neighborhood, not a campus island.',
+      },
+    ],
+  },
+
+  'chagrin-falls': {
+    advisorIntro:
+      'Chagrin Falls is our east-side boutique market — village character, premium pricing, and a short list of communities that actually fit assisted living and memory care. Families based in Chagrin, Hunting Valley, Moreland Hills, and South Russell usually start here.',
+    communityTakes: [
+      {
+        name: 'Hamlet at Chagrin Falls',
+        careTypes: 'Independent Living · Assisted Living · Memory Care',
+        take: 'The flagship Chagrin Falls campus for many private-pay families. Resort-style grounds and a full continuum — tour early if the resident wants village proximity without a tiny building.',
+      },
+      {
+        name: 'Meadow Falls of Chagrin Valley',
+        careTypes: 'Assisted Living · Memory Care',
+        take: 'Technically in South Russell, but every Chagrin Falls search includes it. Smaller, more personalized feel — often our first call when families want boutique memory care near the village.',
+      },
+      {
+        name: 'Judson South Franklin Circle',
+        careTypes: 'Assisted Living · Independent Living',
+        take: 'Strong nonprofit / life-plan option for families who want Judson\'s reputation with Chagrin Valley geography. Ask about entrance fee vs rental pathways.',
+      },
+      {
+        name: 'Eliza at Chagrin Falls',
+        careTypes: 'Assisted Living',
+        take: 'Worth comparing when Hamlet feels too large or too expensive. We verify current availability before you drive out — inventory moves quickly in this zip code.',
+      },
+    ],
+    pricing: [
+      { careType: 'Independent Living', range: '$3,500 – $6,000/mo', note: 'Village premiums apply' },
+      { careType: 'Assisted Living', range: '$5,000 – $8,000/mo', note: 'Among the higher private-pay ranges in Greater Cleveland' },
+      { careType: 'Memory Care', range: '$6,500 – $10,000/mo', note: 'Boutique buildings; all-inclusive common' },
+    ],
+    pricingContext:
+      'Chagrin Valley is a premium private-pay market. Website rates are often incomplete — care levels and community fees change the real monthly total. We share current numbers before tours so families are not surprised at the sales office.',
+    landmarks: [
+      {
+        icon: 'shopping',
+        name: 'Chagrin Falls village center',
+        desc: 'Waterfall, shops, and restaurants that make visits feel like an outing — not a hospital corridor.',
+      },
+      {
+        icon: 'hospital',
+        name: 'Hillcrest Hospital & UH Ahuja',
+        desc: 'East-side hospital access for Chagrin Valley residents within a reasonable drive.',
+      },
+      {
+        icon: 'park',
+        name: 'Chagrin River / Valley trails',
+        desc: 'Wooded surroundings that match what many residents are leaving behind in Hunting Valley or Moreland Hills homes.',
+      },
+    ],
+  },
+
+  'south-russell': {
+    advisorIntro:
+      'South Russell is a small Geauga County village that punches above its weight for assisted living SEO and placements — mostly because Meadow Falls of Chagrin Valley sits here, minutes from downtown Chagrin Falls.',
+    communityTakes: [
+      {
+        name: 'Meadow Falls of Chagrin Valley',
+        careTypes: 'Assisted Living · Memory Care',
+        take: 'The community almost every South Russell / Chagrin Falls family asks about. Boutique size, memory care depth, and a Chagrin Valley address without living in the village parking crush.',
+      },
+      {
+        name: 'Hamlet at Chagrin Falls (nearby)',
+        careTypes: 'Independent Living · Assisted Living · Memory Care',
+        take: 'We almost always put Hamlet on the same tour day. Useful when the resident needs more campus amenities or a fuller continuum than Meadow Falls.',
+      },
+    ],
+    pricing: [
+      { careType: 'Independent Living', range: '$3,200 – $5,500/mo', note: 'Often served by nearby Chagrin Falls campuses' },
+      { careType: 'Assisted Living', range: '$4,500 – $7,200/mo', note: 'Boutique pricing; verify care-level fees' },
+      { careType: 'Memory Care', range: '$6,000 – $9,200/mo', note: 'Primary driver for many South Russell inquiries' },
+    ],
+    pricingContext:
+      'South Russell searches convert when families want Chagrin Valley without Hamlet\'s full campus price. We compare Meadow Falls against Hamlet and Solon options with current private-pay rates.',
+    landmarks: [
+      {
+        icon: 'shopping',
+        name: 'Chagrin Falls village (minutes away)',
+        desc: 'Dining and waterfall visits stay easy for families — South Russell is the quiet neighbor, not a remote outpost.',
+      },
+      {
+        icon: 'hospital',
+        name: 'Hillcrest & UH Ahuja',
+        desc: 'Same east-side hospital network Chagrin Falls families already use.',
+      },
+      {
+        icon: 'park',
+        name: 'Wooded residential setting',
+        desc: 'Equestrian / wooded character that feels closer to Geauga County living than a strip-mall campus.',
+      },
+    ],
+  },
+
+  solon: {
+    advisorIntro:
+      'Solon is the practical southeast hub between Beachwood and Chagrin Falls — strong schools, I-422 access, and UH Ahuja proximity. We place private-pay residents here when families want newer buildings without full Beachwood luxury pricing.',
+    communityTakes: [
+      {
+        name: 'Vitalia Solon',
+        careTypes: 'Independent Living · Assisted Living · Memory Care',
+        take: 'The campus we tour most in Solon. Good when the resident wants an active independent living start with a path into assisted living or memory care later.',
+      },
+      {
+        name: 'Solon Pointe',
+        careTypes: 'Assisted Living · Rehab / Long-term',
+        take: 'More clinical continuum. We use assisted living pathways carefully and are clear when skilled nursing is not a Guide for Seniors placement lane.',
+      },
+      {
+        name: 'Nearby Chagrin Falls / Beachwood options',
+        careTypes: 'Assisted Living · Memory Care',
+        take: 'Many Solon zip-code searches still end in Hamlet, Meadow Falls, or Beachwood memory care. We build the shortlist around care need first, city second.',
+      },
+    ],
+    pricing: [
+      { careType: 'Independent Living', range: '$3,000 – $5,200/mo', note: 'Competitive vs Beachwood' },
+      { careType: 'Assisted Living', range: '$4,200 – $7,000/mo', note: 'Base + care level; ask about specials' },
+      { careType: 'Memory Care', range: '$5,800 – $9,200/mo', note: 'Depth varies — we may add Beachwood tours' },
+    ],
+    pricingContext:
+      'Solon is often the value play versus Beachwood for private-pay families who still want east-side hospitals. We confirm which buildings have real openings before you spend a Saturday touring.',
+    landmarks: [
+      {
+        icon: 'hospital',
+        name: 'UH Ahuja Medical Center',
+        desc: 'Primary hospital draw for Solon and Chagrin Valley discharge planning.',
+      },
+      {
+        icon: 'shopping',
+        name: 'Solon business / retail corridors',
+        desc: 'Practical errands and family dining without driving into Beachwood traffic every visit.',
+      },
+      {
+        icon: 'park',
+        name: 'Solon Community Park',
+        desc: 'Recreation space and community events that keep family visits easy.',
+      },
+    ],
+  },
+
+  aurora: {
+    advisorIntro:
+      'Aurora serves Portage County and far-southeast Cuyahoga families who want quieter living than Beachwood with still-reasonable hospital access. The market is thinner, so we usually compare Aurora against Solon and Twinsburg in one conversation.',
+    communityTakes: [
+      {
+        name: 'Independence Village of Aurora',
+        careTypes: 'Independent Living · Assisted Living',
+        take: 'The Aurora community we tour most. Strong when the resident wants apartment-style living with support available, without a dense urban campus.',
+      },
+      {
+        name: 'Solon / Twinsburg alternatives',
+        careTypes: 'Assisted Living · Memory Care',
+        take: 'When memory care depth or faster hospital access matters, we expand the shortlist southeast rather than forcing a fit in Aurora alone.',
+      },
+    ],
+    pricing: [
+      { careType: 'Independent Living', range: '$2,800 – $4,800/mo', note: 'Often below Chagrin Falls premiums' },
+      { careType: 'Assisted Living', range: '$3,800 – $6,400/mo', note: 'Private-pay ranges; verify care fees' },
+      { careType: 'Memory Care', range: '$5,200 – $8,600/mo', note: 'May require nearby cities for best fit' },
+    ],
+    pricingContext:
+      'Aurora can save private-pay families money versus Chagrin Falls, but inventory is limited. We check real availability first so you are not touring a waitlist.',
+    landmarks: [
+      {
+        icon: 'hospital',
+        name: 'UH Portage & Twinsburg Clinic',
+        desc: 'Hospital access for Portage / southeast families without always driving to Hillcrest.',
+      },
+      {
+        icon: 'shopping',
+        name: 'Aurora Farms Premium Outlets',
+        desc: 'Easy landmark for visiting adult children coming from the highway.',
+      },
+      {
+        icon: 'park',
+        name: 'Quiet residential setting',
+        desc: 'Slower pace than Beachwood — a plus for residents leaving large suburban homes.',
+      },
+    ],
+  },
 };
 
 const LANDMARK_ICONS = {

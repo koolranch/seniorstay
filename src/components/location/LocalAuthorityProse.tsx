@@ -54,7 +54,42 @@ const LocalAuthorityProse: React.FC<LocalAuthorityProseProps> = ({
     if (citySlug === 'rocky-river') {
       return {
         intro: `Rocky River combines lakefront living with exceptional senior care options. This affluent western suburb offers ${communityCount} communities near the Rocky River Reservation Metroparks, Lake Erie shores, and convenient access to Fairview Hospital and St. John Medical Center.`,
-        highlight: `Seniors and families seeking a balance of natural beauty, upscale amenities, and quality healthcare find Rocky River's communities—like Bickford of Rocky River and Sunrise Senior Living—ideal for active retirement and assisted living needs.`,
+        highlight: `Seniors and families seeking a balance of natural beauty, upscale amenities, and quality healthcare find Rocky River's communities—like Bloom at Rocky River, The Normandy, and Rockport—worth touring for assisted living and memory care. Our advisors share current pricing before you visit.`,
+      };
+    }
+
+    if (citySlug === 'lakewood') {
+      return {
+        intro: `Lakewood is one of Cleveland's most walkable west-side cities for assisted living — ${communityCount} communities sit near Lake Erie, Detroit Avenue shops, and quick routes to Fairview Hospital and Cleveland Clinic Lakewood Family Health Center.`,
+        highlight: `Families often compare Haven at Lakewood, O'Neill Healthcare Lakewood, and nearby Rocky River options in the same search. We help match care level and budget without cold-calling every front desk.`,
+      };
+    }
+
+    if (citySlug === 'chagrin-falls') {
+      return {
+        intro: `Chagrin Falls is the heart of Chagrin Valley senior living — a village setting with ${communityCount} assisted living and memory care options minutes from the waterfall, boutique shopping, and Hillcrest Hospital / UH Ahuja.`,
+        highlight: `Hamlet at Chagrin Falls, Meadow Falls of Chagrin Valley (South Russell), and Judson South Franklin Circle are the communities we tour most with east-side families. Private-pay placement guidance is free.`,
+      };
+    }
+
+    if (citySlug === 'south-russell') {
+      return {
+        intro: `South Russell offers boutique assisted living and memory care in a quiet Geauga County village bordering Chagrin Falls. Families get a smaller community feel with ${communityCount} local option${communityCount === 1 ? '' : 's'} and village amenities just minutes away.`,
+        highlight: `Meadow Falls of Chagrin Valley is the community most Chagrin Valley families ask about first. We also compare nearby Hamlet and Solon options when the right fit needs a different care level or price point.`,
+      };
+    }
+
+    if (citySlug === 'solon') {
+      return {
+        intro: `Solon sits at the crossroads of Cuyahoga's southeast suburbs — ${communityCount} senior living communities with fast access to UH Ahuja Medical Center, I-422, and Chagrin Falls dining.`,
+        highlight: `Vitalia Solon is a frequent independent and assisted living tour stop; we also compare Solon Pointe and nearby Beachwood / Chagrin Falls communities when memory care or continuum of care matters.`,
+      };
+    }
+
+    if (citySlug === 'aurora') {
+      return {
+        intro: `Aurora gives Portage County and southeast Cleveland families a quieter assisted living market — ${communityCount} communities with access to UH Portage Medical Center, Twinsburg Clinic locations, and Aurora Farms shopping.`,
+        highlight: `Independence Village of Aurora is often the starting point for independent and assisted living tours. We help compare it against Solon and Chagrin Valley options when families want more memory care depth.`,
       };
     }
     

@@ -25,7 +25,7 @@ export const revalidate = 86400;
 const serviceSchema = {
   '@context': 'https://schema.org',
   '@type': 'Service',
-  name: 'Cleveland Senior Living Advisor',
+  name: 'Cleveland Senior Living Placement Advisor',
   serviceType: 'Senior living placement and referral service',
   provider: {
     '@type': 'LocalBusiness',
@@ -45,7 +45,46 @@ const serviceSchema = {
     description: 'Free to families — advisors are compensated by partner communities.',
   },
   description:
-    'Free local advisor service helping Cleveland-area families compare assisted living, memory care, and independent living communities, verify pricing and availability, and schedule tours.',
+    'Free local senior living placement in Cleveland helping families compare assisted living, memory care, and independent living, verify pricing and availability, and schedule tours.',
+};
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'Is senior living placement in Cleveland free for families?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes. Guide for Seniors placement help is free to families. Partner assisted living, memory care, and independent living communities pay a referral fee only if your loved one moves in. You pay the same community rate either way.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What does a Cleveland senior living advisor actually do?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'A local advisor learns care needs, budget, and preferred suburbs, then shortlists communities with real pricing and availability. We schedule tours, flag contract details families miss, and stay with you through the decision — without pressure to move.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Which Cleveland suburbs do you cover for assisted living placement?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'We cover Greater Cleveland including Rocky River, Lakewood, Westlake, Beachwood, Shaker Heights, Parma, Chagrin Falls, South Russell, Solon, Aurora, and surrounding suburbs. Private-pay assisted living and memory care are our focus.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'How is a local advisor different from a national referral site?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'National sites often route you to a call center. We are based in the Chagrin Valley / Greater Cleveland area, tour communities ourselves, and share current rate sheets before you visit. You get a shortlist that fits — not a blast of sales calls.',
+      },
+    },
+  ],
 };
 
 const CARE_TYPES = [
@@ -99,6 +138,10 @@ export default function ClevelandSeniorLivingAdvisorPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
       <GlobalHeader />
 
       {/* Hero */}
@@ -110,18 +153,19 @@ export default function ClevelandSeniorLivingAdvisorPage() {
           <div className="max-w-4xl mx-auto text-center">
             <span className="inline-block bg-teal-100 text-teal-700 px-4 py-2 rounded-full text-sm font-semibold mb-6">
               <ShieldCheck className="inline h-4 w-4 mr-1" />
-              100% Free to Families
+              Free Senior Living Placement — Greater Cleveland
             </span>
             <h1 className="text-4xl md:text-5xl font-bold mb-6 text-slate-900 leading-tight">
-              Your Free Senior Living Advisor in Cleveland
+              Senior Living Placement in Cleveland
             </h1>
             <p className="text-lg md:text-xl text-slate-600 mb-4">
-              Finding assisted living or memory care for a parent usually means dozens of calls,
-              vague pricing, and sales pressure. Skip all of it.
+              Free local advisor help finding assisted living or memory care — without dozens of
+              cold calls, vague pricing, or national call-center pressure.
             </p>
             <p className="text-base text-slate-500 mb-10">
-              One call to a local advisor gets you a shortlist of Cleveland-area communities with
-              real pricing and current availability — matched to your care needs and budget.
+              One call gets a shortlist of Cleveland and suburb communities with real pricing and
+              current availability, matched to care needs and budget. We cover West Side suburbs,
+              the Heights, and Chagrin Valley (Chagrin Falls, South Russell, Solon, Aurora).
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
               <PhoneLink
@@ -283,7 +327,26 @@ export default function ClevelandSeniorLivingAdvisorPage() {
         </div>
       </section>
 
-      <PopularSuburbsGrid title="We Cover Every Cleveland Suburb" />
+      <PopularSuburbsGrid title="We Place Across Cleveland & Chagrin Valley" />
+
+      {/* Placement FAQs — visible answers for advisor / placement queries */}
+      <section className="py-16 bg-white border-t border-slate-100">
+        <div className="container mx-auto px-4">
+          <div className="max-w-3xl mx-auto">
+            <h2 className="text-3xl font-bold text-slate-900 mb-8 text-center">
+              Cleveland Senior Living Placement FAQs
+            </h2>
+            <div className="space-y-6">
+              {faqSchema.mainEntity.map((item) => (
+                <div key={item.name} className="bg-slate-50 rounded-2xl p-6 border border-slate-200">
+                  <h3 className="font-bold text-slate-900 text-lg mb-2">{item.name}</h3>
+                  <p className="text-slate-600 leading-relaxed">{item.acceptedAnswer.text}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Callback form */}
       <section id="callback" className="bg-gradient-to-r from-teal-600 to-teal-700 py-16 md:py-20">

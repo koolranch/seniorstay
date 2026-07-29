@@ -52,6 +52,21 @@ const NEIGHBORHOOD_OG_DATA: Record<string, {
     landmark: 'Chagrin Falls waterfall',
     imageDescription: 'Chagrin Falls, Ohio historic village senior living area',
   },
+  'south-russell': {
+    hook: 'Quiet Chagrin Valley assisted living minutes from the village waterfall',
+    landmark: 'Chagrin Valley trails',
+    imageDescription: 'South Russell, Ohio boutique senior living near Chagrin Falls',
+  },
+  'aurora': {
+    hook: 'Family-friendly assisted living with easy access to Portage and east-side hospitals',
+    landmark: 'Aurora Farms',
+    imageDescription: 'Aurora, Ohio senior living community in southeast Cleveland suburbs',
+  },
+  'lakewood': {
+    hook: 'Walkable west-side assisted living near Lake Erie and Fairview Hospital',
+    landmark: 'Lakewood Park',
+    imageDescription: 'Lakewood, Ohio senior living near Lake Erie waterfront',
+  },
   'hudson': {
     hook: 'Upscale senior living in a historic Western Reserve community',
     landmark: 'Hudson Green',
@@ -148,22 +163,33 @@ export async function generateMetadata({ params }: CityPageProps): Promise<Metad
   const regionDisplayName = regionConfig?.displayName || 'Greater Cleveland';
   const stateAbbr = regionConfig?.stateAbbr || 'OH';
   
+  // Lead with assisted living (private-pay placement intent) when available
+  const primaryCareLabel = hasAssistedLiving
+    ? 'Assisted Living'
+    : hasMemoryCare
+      ? 'Memory Care'
+      : 'Senior Living';
+
   // OG Title: Under 60 chars
-  const ogTitle = `${cityName} Senior Living | ${communities.length}+ Communities Near ${nearestHospital}`;
+  const ogTitle = `${cityName} ${primaryCareLabel} | Near ${nearestHospital}`;
   
   // OG Description: 110-160 chars
-  const ogDescription = `${neighborhoodData.hook}. Compare ${communities.length} verified ${careTypesList} options. Free ${currentYear} Cost Report & placement help.`;
+  const ogDescription = `${neighborhoodData.hook}. Compare ${communities.length} verified ${careTypesList} options. Free ${currentYear} pricing & local placement help.`;
   
-  // SEO Title
-  const seoTitle = `Senior Living in ${cityName}, ${stateAbbr} (${currentYear}) | ${communities.length}+ Communities Near ${nearestHospital}`;
+  // SEO Title — match "assisted living {city} oh" queries
+  const seoTitle = hasAssistedLiving
+    ? `Assisted Living in ${cityName}, ${stateAbbr} (${currentYear}) | ${communities.length}+ Communities`
+    : `Senior Living in ${cityName}, ${stateAbbr} (${currentYear}) | ${communities.length}+ Communities`;
   
   // SEO Description
-  const seoDescription = `Explore ${communities.length}+ senior living communities in ${cityName}, ${stateAbbr}. Find ${careTypesList} near ${nearestHospital}. Get verified pricing, virtual tours, and free placement assistance from Guide for Seniors.`;
+  const seoDescription = hasAssistedLiving
+    ? `Compare assisted living in ${cityName}, ${stateAbbr} near ${nearestHospital}. See ${communities.length}+ communities with ${careTypesList}, verified pricing, and free local placement help from Guide for Seniors.`
+    : `Explore ${communities.length}+ senior living communities in ${cityName}, ${stateAbbr}. Find ${careTypesList} near ${nearestHospital}. Get verified pricing and free placement assistance from Guide for Seniors.`;
   
   return {
     title: seoTitle,
     description: seoDescription,
-    keywords: `senior living ${cityName} ${stateAbbr.toLowerCase()}, ${careTypesList} ${cityName}, senior care near ${nearestHospital}, ${cityName} assisted living costs ${currentYear}, ${regionDisplayName} senior living`,
+    keywords: `assisted living ${cityName} ${stateAbbr.toLowerCase()}, assisted living ${cityName} oh, ${careTypesList} ${cityName}, senior living ${cityName} ${stateAbbr.toLowerCase()}, senior care near ${nearestHospital}, ${cityName} assisted living costs ${currentYear}, ${regionDisplayName} senior living`,
     alternates: {
       canonical: canonicalUrl,
     },
