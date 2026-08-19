@@ -420,7 +420,7 @@ export default function IndependentLivingClevelandPage() {
         title="Compare independent living communities"
         description="Call for pricing, availability, and tours across Cleveland's top suburbs—free for families."
         phonePlacement="independent_living_hub"
-        contactHref="/contact?intent=placement&source=independent-living"
+        contactHref="/cleveland-senior-living-advisor"
         secondaryHref="/senior-living-costs-cleveland"
         secondaryLabel="See 2026 cost ranges"
       />

@@ -56,8 +56,8 @@ const Footer = () => {
               <span className="text-xl font-bold">Guide for Seniors</span>
             </Link>
             <p className="text-slate-400 mb-6 max-w-sm leading-relaxed">
-              Helping Cleveland families find the right senior living communities. 
-              Free expert guidance for assisted living, memory care, and independent living.
+              Helping Cleveland families find the right senior living communities.
+              Free expert guidance for assisted living, memory care, and independent living — based in Chagrin Falls.
             </p>
             
             {/* Contact Info */}
@@ -75,7 +75,7 @@ const Footer = () => {
               </a>
               <div className="flex items-center gap-2 text-slate-400">
                 <MapPin className="h-4 w-4" />
-                <span>Cleveland, Ohio</span>
+                <span>Chagrin Falls / Greater Cleveland, Ohio</span>
               </div>
             </div>
           </div>

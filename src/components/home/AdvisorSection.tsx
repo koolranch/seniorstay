@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useRef, useState } from 'react';
+import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Phone, Users, CheckCircle, Shield, Calendar, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -99,12 +100,18 @@ export default function AdvisorSection() {
               </span>
 
               <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6">
-                Talk to a Senior Living Advisor
+                Talk to a Cleveland Senior Living Advisor
               </h2>
 
-              <p className="text-lg text-slate-600 mb-8 leading-relaxed">
-                Navigating senior care shouldn&apos;t feel overwhelming. Our Cleveland-based advisors
-                have helped hundreds of families find the right community—and they can help you too.
+              <p className="text-lg text-slate-600 mb-4 leading-relaxed">
+                Navigating senior care shouldn&apos;t feel overwhelming. Chris Ray is a Chagrin
+                Falls–based advisor who helps families compare assisted living and memory care
+                across Greater Cleveland.
+              </p>
+              <p className="mb-8">
+                <Link href="/cleveland-senior-living-advisor" className="text-teal-700 font-semibold hover:underline">
+                  How free Cleveland senior living placement works →
+                </Link>
               </p>
 
               <ul className="space-y-4 mb-8">

@@ -19,34 +19,22 @@ import SimpleContactForm from '@/components/forms/SimpleContactForm';
 import PhoneLink from '@/components/conversion/PhoneLink';
 import PopularSuburbsGrid from '@/components/conversion/PopularSuburbsGrid';
 import { PLACEMENT_PHONE_DISPLAY } from '@/lib/placement-contact';
+import {
+  ADVISOR_EMAIL,
+  ADVISOR_JOB_TITLE,
+  ADVISOR_LOCALITY,
+  ADVISOR_NAME,
+  ADVISOR_PLACEMENT_CASES,
+  ADVISOR_SERVICE_AREA_LABEL,
+  getAdvisorLocalBusinessSchema,
+  getAdvisorPersonSchema,
+} from '@/lib/advisor-profile';
 
 export const revalidate = 86400;
 
-const serviceSchema = {
-  '@context': 'https://schema.org',
-  '@type': 'Service',
-  name: 'Cleveland Senior Living Placement Advisor',
-  serviceType: 'Senior living placement and referral service',
-  provider: {
-    '@type': 'LocalBusiness',
-    name: 'Guide for Seniors',
-    telephone: '+1-216-677-4630',
-    url: 'https://www.guideforseniors.com',
-    areaServed: {
-      '@type': 'City',
-      name: 'Cleveland',
-      containedInPlace: { '@type': 'State', name: 'Ohio' },
-    },
-  },
-  offers: {
-    '@type': 'Offer',
-    price: '0',
-    priceCurrency: 'USD',
-    description: 'Free to families — advisors are compensated by partner communities.',
-  },
-  description:
-    'Free local senior living placement in Cleveland helping families compare assisted living, memory care, and independent living, verify pricing and availability, and schedule tours.',
-};
+const ADVISOR_PHONE_E164 = '+1-216-677-4630';
+const serviceSchema = getAdvisorLocalBusinessSchema(ADVISOR_PHONE_E164);
+const personSchema = getAdvisorPersonSchema(ADVISOR_PHONE_E164);
 
 const faqSchema = {
   '@context': 'https://schema.org',
@@ -81,7 +69,15 @@ const faqSchema = {
       name: 'How is a local advisor different from a national referral site?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'National sites often route you to a call center. We are based in the Chagrin Valley / Greater Cleveland area, tour communities ourselves, and share current rate sheets before you visit. You get a shortlist that fits — not a blast of sales calls.',
+        text: 'National sites often route you to a call center. Chris Ray is based in Chagrin Falls and only works Greater Cleveland. He tours communities himself and shares current rate sheets before you visit — a shortlist that fits, not a blast of sales calls.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Who is the Cleveland senior living advisor at Guide for Seniors?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Chris Ray is a former regional director and hospital liaison who now provides free assisted living, memory care, and independent living placement from Chagrin Falls across Greater Cleveland. Families call (216) 677-4630.',
       },
     },
   ],
@@ -140,6 +136,10 @@ export default function ClevelandSeniorLivingAdvisorPage() {
       />
       <script
         type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema) }}
+      />
+      <script
+        type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       <GlobalHeader />
@@ -159,13 +159,13 @@ export default function ClevelandSeniorLivingAdvisorPage() {
               Senior Living Placement in Cleveland
             </h1>
             <p className="text-lg md:text-xl text-slate-600 mb-4">
-              Free local advisor help finding assisted living or memory care — without dozens of
-              cold calls, vague pricing, or national call-center pressure.
+              Free help from {ADVISOR_NAME}, a Chagrin Falls–based senior living advisor —
+              without dozens of cold calls, vague pricing, or national call-center pressure.
             </p>
             <p className="text-base text-slate-500 mb-10">
               One call gets a shortlist of Cleveland and suburb communities with real pricing and
-              current availability, matched to care needs and budget. We cover West Side suburbs,
-              the Heights, and Chagrin Valley (Chagrin Falls, South Russell, Solon, Aurora).
+              current availability. We cover West Side suburbs, the Heights, and Chagrin Valley
+              (Chagrin Falls, South Russell, Solon, Aurora).
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
               <PhoneLink
@@ -184,7 +184,7 @@ export default function ClevelandSeniorLivingAdvisorPage() {
             </div>
             <p className="text-sm text-slate-500 mt-5 flex items-center justify-center gap-2">
               <Clock className="h-4 w-4" />
-              Calls answered live — advisors local to Greater Cleveland
+              Calls answered live — {ADVISOR_NAME}, {ADVISOR_LOCALITY} / Greater Cleveland
             </p>
           </div>
         </div>
@@ -204,7 +204,60 @@ export default function ClevelandSeniorLivingAdvisorPage() {
             </div>
             <div className="flex items-center gap-2">
               <Users className="h-5 w-5 text-teal-400" />
-              <span>Local Advisors, Not a Call Center</span>
+              <span>Local advisor, not a call center</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Local advisor identity */}
+      <section className="py-16 md:py-20 bg-white border-b border-slate-100">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto grid md:grid-cols-[auto_1fr] gap-8 items-start">
+            <div
+              className="w-28 h-28 rounded-2xl bg-teal-700 text-white flex items-center justify-center text-3xl font-bold shrink-0"
+              aria-hidden="true"
+            >
+              CR
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-teal-700 mb-1">{ADVISOR_JOB_TITLE}</p>
+              <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
+                Meet {ADVISOR_NAME}
+              </h2>
+              <p className="text-lg text-slate-600 leading-relaxed mb-4">
+                Former regional director, executive director, and hospital liaison — now a
+                placement advisor based in {ADVISOR_LOCALITY}. Twenty years inside Midwest
+                senior living, including time embedded with discharge teams at Cleveland Clinic,
+                University Hospitals, and St. John Medical Center. Guide for Seniors is a
+                service-area practice: we tour communities with families across{' '}
+                {ADVISOR_SERVICE_AREA_LABEL}; we do not publish a storefront address.
+              </p>
+              <ul className="space-y-2 text-slate-700">
+                <li className="flex items-start gap-2">
+                  <MapPin className="h-5 w-5 text-teal-600 shrink-0 mt-0.5" />
+                  <span>Based in {ADVISOR_LOCALITY}, Ohio — serving Greater Cleveland</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <Phone className="h-5 w-5 text-teal-600 shrink-0 mt-0.5" />
+                  <span>Live line {PLACEMENT_PHONE_DISPLAY}</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <Users className="h-5 w-5 text-teal-600 shrink-0 mt-0.5" />
+                  <span>
+                    <a href={`mailto:${ADVISOR_EMAIL}`} className="text-teal-700 font-semibold hover:underline">
+                      {ADVISOR_EMAIL}
+                    </a>
+                  </span>
+                </li>
+              </ul>
+              <p className="text-sm text-slate-500 mt-4">
+                Full background:{' '}
+                <Link href="/about" className="text-teal-700 font-semibold underline underline-offset-2">
+                  20-year insider bio
+                </Link>
+                .
+              </p>
             </div>
           </div>
         </div>
@@ -281,6 +334,31 @@ export default function ClevelandSeniorLivingAdvisorPage() {
         </div>
       </section>
 
+      {/* Anonymized placement cases — suburb + care type, no PHI */}
+      <section className="py-16 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-slate-900 text-center">
+              How Recent Cleveland Placements Worked
+            </h2>
+            <p className="text-lg text-slate-600 mb-10 text-center max-w-2xl mx-auto">
+              Specific suburbs and care types — no family names. This is the work a local
+              advisor actually does.
+            </p>
+            <div className="space-y-4">
+              {ADVISOR_PLACEMENT_CASES.map((item) => (
+                <div key={`${item.suburb}-${item.careType}`} className="bg-slate-50 rounded-2xl p-6 border border-slate-200">
+                  <p className="text-sm font-semibold text-teal-700 mb-2">
+                    {item.suburb} · {item.careType}
+                  </p>
+                  <p className="text-slate-700 leading-relaxed">{item.summary}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Care types we cover */}
       <section className="py-16 md:py-20 bg-white">
         <div className="container mx-auto px-4">
@@ -313,15 +391,11 @@ export default function ClevelandSeniorLivingAdvisorPage() {
               })}
             </div>
             <p className="text-slate-600 text-center mt-8">
-              Worried about paying for care? See how the{' '}
-              <Link href="/medicaid-assisted-living-ohio" className="text-teal-700 font-semibold underline underline-offset-2">
-                Ohio Assisted Living Medicaid Waiver
-              </Link>{' '}
-              works, or compare{' '}
+              Compare{' '}
               <Link href="/senior-living-costs-cleveland" className="text-teal-700 font-semibold underline underline-offset-2">
                 current Cleveland pricing
-              </Link>
-              .
+              </Link>{' '}
+              before you tour — we share rate sheets on the first call.
             </p>
           </div>
         </div>

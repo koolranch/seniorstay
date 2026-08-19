@@ -290,7 +290,7 @@ export default async function AssistedLivingClevelandPage() {
         title="Not sure assisted living is the right fit?"
         description="Take our 2-minute assessment or call for a free personalized recommendation."
         phonePlacement="assisted_living_hub"
-        contactHref="/contact?intent=placement&source=assisted-living"
+        contactHref="/cleveland-senior-living-advisor"
         secondaryHref="/assessment"
       />
 

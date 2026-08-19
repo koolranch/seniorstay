@@ -58,8 +58,9 @@ const founderSchema = {
   "@context": "https://schema.org",
   "@type": "Person",
   "@id": "https://guideforseniors.com/#founder",
-  "name": "Guide for Seniors Founder",
-  "jobTitle": "Senior Living Consultant & Former Regional Director",
+  "name": "Chris Ray",
+  "jobTitle": "Senior Living Placement Advisor & Former Regional Director",
+  "url": "https://www.guideforseniors.com/cleveland-senior-living-advisor",
   "description": "20-year senior living industry veteran with experience as Regional Director, Executive Director, Hospice Liaison, and Activity Director.",
   "worksFor": {
     "@id": "https://guideforseniors.com/#organization"

@@ -66,7 +66,7 @@ export function getStickyCtaContext(pathname: string): StickyCtaContext {
       requestLabel: 'Request Callback',
       subtext: 'Compare Cleveland communities free',
       phonePlacement: 'sticky_care_hub',
-      contactHref: '/contact?intent=placement',
+      contactHref: '/cleveland-senior-living-advisor',
     };
   }
 
@@ -75,6 +75,6 @@ export function getStickyCtaContext(pathname: string): StickyCtaContext {
     requestLabel: 'Request Call',
     subtext: undefined,
     phonePlacement: 'sticky_mobile',
-    contactHref: '/contact?intent=placement',
+    contactHref: '/cleveland-senior-living-advisor',
   };
 }

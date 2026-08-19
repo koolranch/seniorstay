@@ -465,7 +465,7 @@ export default function MemoryCareClevelandClient({ communities }: MemoryCareCle
         title="Need help choosing memory care?"
         description="Call for a free consultation—we know Cleveland's dementia care communities personally."
         phonePlacement="memory_care_hub"
-        contactHref="/contact?intent=placement&source=memory-care"
+        contactHref="/cleveland-senior-living-advisor"
         secondaryHref="/assessment"
       />
 

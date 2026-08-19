@@ -14,6 +14,8 @@ import { trackFormStart } from '@/components/analytics/GoogleAnalytics';
 import PhoneLink from '@/components/conversion/PhoneLink';
 import { PLACEMENT_CALLBACK_MESSAGE, PLACEMENT_PHONE_DISPLAY } from '@/lib/placement-contact';
 import { isValidPhone, MOVE_IN_TIMELINE_OPTIONS } from '@/lib/lead-form-options';
+import { ADVISOR_PATH } from '@/lib/advisor-profile';
+import Link from 'next/link';
 
 // Separate component that uses useSearchParams
 function ContactForm() {
@@ -23,6 +25,7 @@ function ContactForm() {
   // Get community info from URL parameters (from sticky CTA)
   const communityName = searchParams.get('community');
   const cityName = searchParams.get('city');
+  const intent = searchParams.get('intent');
   
   const { submit, isPending, result, isSuccess, isError, reset, isReady } = useLeadSubmit();
   const formStartTrackedRef = useRef(false);
@@ -116,6 +119,18 @@ function ContactForm() {
               </p>
             </div>
           )}
+
+          {intent === 'placement' && !communityName && (
+            <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 mb-8 max-w-2xl mx-auto text-center">
+              <p className="text-slate-700">
+                Looking for free Cleveland senior living placement?{' '}
+                <Link href={ADVISOR_PATH} className="text-teal-700 font-semibold underline underline-offset-2">
+                  Talk to a Cleveland senior living advisor
+                </Link>
+                {' '}or leave your number below for a callback.
+              </p>
+            </div>
+          )}
           
           <div className="text-center max-w-3xl mx-auto">
             <span className="inline-block bg-teal-100 text-teal-700 px-4 py-2 rounded-full text-sm font-semibold mb-6">
@@ -182,6 +197,21 @@ function ContactForm() {
                     <a href="mailto:info@guideforseniors.com" className="text-teal-600 hover:text-teal-700 font-semibold">
                       info@guideforseniors.com
                     </a>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4 bg-slate-50 rounded-xl p-5">
+                  <div className="bg-teal-100 p-3 rounded-lg">
+                    <MapPin className="h-6 w-6 text-teal-600" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-slate-900 mb-1">Service area</h3>
+                    <p className="text-slate-600 text-sm mb-2">
+                      Based in Chagrin Falls — we meet families at communities across Greater Cleveland.
+                    </p>
+                    <Link href={ADVISOR_PATH} className="text-teal-700 font-semibold hover:underline">
+                      Cleveland senior living advisor →
+                    </Link>
                   </div>
                 </div>
 

@@ -1,9 +1,4 @@
-import { Metadata } from 'next';
-
-export const metadata: Metadata = {
-  title: 'Contact Us | Guide for Seniors',
-  description: 'Get in touch with Guide for Seniors. We\'re here to help you find the perfect senior living community.',
-};
+export { metadata } from './metadata';
 
 export default function ContactLayout({
   children,
@@ -11,4 +6,4 @@ export default function ContactLayout({
   children: React.ReactNode;
 }) {
   return children;
-} 
+}

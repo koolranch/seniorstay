@@ -7,6 +7,7 @@ interface PlacementConversionBandProps {
   description: string;
   phonePlacement: string;
   contactHref?: string;
+  contactLabel?: string;
   cityName?: string;
   cityHref?: string;
   secondaryHref?: string;
@@ -18,13 +19,19 @@ export default function PlacementConversionBand({
   title,
   description,
   phonePlacement,
-  contactHref = '/contact?intent=placement',
+  contactHref = '/cleveland-senior-living-advisor',
+  contactLabel,
   cityName,
   cityHref,
   secondaryHref = '/assessment',
   secondaryLabel = 'Take the 2-min assessment',
   className = '',
 }: PlacementConversionBandProps) {
+  const hrefLabel =
+    contactLabel ??
+    (contactHref.includes('/cleveland-senior-living-advisor')
+      ? 'See how placement works'
+      : 'Request a Callback');
   return (
     <section className={`bg-gradient-to-r from-teal-600 to-teal-700 py-8 md:py-10 ${className}`}>
       <div className="container mx-auto px-4">
@@ -43,7 +50,7 @@ export default function PlacementConversionBand({
               href={contactHref}
               className="inline-flex items-center justify-center gap-2 bg-teal-800/40 hover:bg-teal-800/60 text-white font-semibold px-6 py-3.5 rounded-xl border border-white/30 min-h-[48px] w-full sm:w-auto"
             >
-              Request a Callback
+              {hrefLabel}
             </Link>
           </div>
           <div className="flex flex-wrap justify-center gap-4 mt-5 text-sm">

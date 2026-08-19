@@ -1,9 +1,9 @@
 /** High-intent placement content — promote internally from city & resource pages. */
 export const PLACEMENT_EDITORIAL_LINKS = [
   {
-    href: '/blog/cost-of-assisted-living-ohio',
-    label: 'Ohio assisted living costs explained',
-    description: 'Statewide pricing, Medicaid, and what families pay',
+    href: '/cleveland-senior-living-advisor',
+    label: 'Cleveland senior living advisor',
+    description: 'Free local placement — shortlist, pricing, and tours',
   },
   {
     href: '/senior-living-costs-cleveland',

@@ -16,6 +16,7 @@ export const CLEVELAND_CARE_HUBS = [
   { label: 'Assisted Living', href: '/assisted-living-cleveland' },
   { label: 'Memory Care', href: '/memory-care-cleveland' },
   { label: 'Independent Living', href: '/independent-living-cleveland' },
+  { label: 'Free Placement', href: '/cleveland-senior-living-advisor' },
   { label: '2026 Cost Guide', href: '/senior-living-costs-cleveland' },
 ] as const;
 

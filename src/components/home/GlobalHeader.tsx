@@ -86,6 +86,12 @@ const GlobalHeader: React.FC = () => {
               Local Events
             </Link>
             <Link 
+              href="/cleveland-senior-living-advisor"
+              className="text-slate-600 hover:text-teal-600 font-medium transition-colors"
+            >
+              Free Placement
+            </Link>
+            <Link 
               href="/assessment" 
               className="text-slate-600 hover:text-teal-600 font-medium transition-colors"
             >
@@ -161,6 +167,13 @@ const GlobalHeader: React.FC = () => {
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Local Events
+              </Link>
+              <Link 
+                href="/cleveland-senior-living-advisor"
+                className="px-4 py-3 text-slate-700 hover:bg-slate-50 rounded-lg font-medium transition-colors"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Free Placement
               </Link>
               <Link 
                 href="/assessment" 

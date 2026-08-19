@@ -7,6 +7,7 @@ import { trackPlacementPageView } from '@/components/analytics/GoogleAnalytics';
 function pageTypeFromPath(path: string): string | null {
   if (/^\/cleveland\/[^/]+$/.test(path) && !path.includes('/events')) return 'city';
   if (path === '/contact') return 'contact';
+  if (path === '/cleveland-senior-living-advisor') return 'advisor';
   if (path.startsWith('/assessment')) return 'assessment';
   if (path.includes('/events')) return 'events';
   if (path.includes('assisted-living')) return 'care_hub_assisted';

@@ -456,13 +456,6 @@ export default function CityAdvisorDeepDive({ citySlug, cityName }: CityAdvisorD
               </table>
             </div>
             <p className="text-slate-600 leading-relaxed">{data.pricingContext}</p>
-            <p className="text-slate-600 mt-3">
-              Worried about affording it? See how the{' '}
-              <Link href="/medicaid-assisted-living-ohio" className="text-teal-700 font-semibold underline underline-offset-2">
-                Ohio Assisted Living Medicaid Waiver
-              </Link>{' '}
-              works and which communities accept it.
-            </p>
           </div>
 
           {/* Landmarks / healthcare */}
@@ -505,6 +498,14 @@ export default function CityAdvisorDeepDive({ citySlug, cityName }: CityAdvisorD
               <Phone className="h-5 w-5" />
               Call {PLACEMENT_PHONE_DISPLAY}
             </PhoneLink>
+            <p className="mt-4">
+              <Link
+                href="/cleveland-senior-living-advisor"
+                className="text-teal-300 hover:text-white font-semibold underline underline-offset-2"
+              >
+                Free Cleveland senior living advisor — how placement works
+              </Link>
+            </p>
           </div>
         </div>
       </div>
