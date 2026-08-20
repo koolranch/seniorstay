@@ -1,7 +1,8 @@
 /** Public local-advisor identity for the Cleveland placement landing page.
  *  Service-area business: locality only — never publish a home street address.
  */
-export const ADVISOR_NAME = 'Chris Ray';
+export const ADVISOR_NAME = 'Jocelynn Ray';
+export const ADVISOR_INITIALS = 'JR';
 export const ADVISOR_JOB_TITLE = 'Senior Living Placement Advisor';
 export const ADVISOR_BUSINESS = 'Guide for Seniors';
 export const ADVISOR_PATH = '/cleveland-senior-living-advisor';

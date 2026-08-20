@@ -104,7 +104,7 @@ export default function AdvisorSection() {
               </h2>
 
               <p className="text-lg text-slate-600 mb-4 leading-relaxed">
-                Navigating senior care shouldn&apos;t feel overwhelming. Chris Ray is a Chagrin
+                Navigating senior care shouldn&apos;t feel overwhelming. Jocelynn Ray is a Chagrin
                 Falls–based advisor who helps families compare assisted living and memory care
                 across Greater Cleveland.
               </p>

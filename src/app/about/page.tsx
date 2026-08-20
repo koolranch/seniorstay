@@ -58,7 +58,7 @@ const founderSchema = {
   "@context": "https://schema.org",
   "@type": "Person",
   "@id": "https://guideforseniors.com/#founder",
-  "name": "Chris Ray",
+  "name": "Jocelynn Ray",
   "jobTitle": "Senior Living Placement Advisor & Former Regional Director",
   "url": "https://www.guideforseniors.com/cleveland-senior-living-advisor",
   "description": "20-year senior living industry veteran with experience as Regional Director, Executive Director, Hospice Liaison, and Activity Director.",

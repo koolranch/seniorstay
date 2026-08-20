@@ -21,6 +21,7 @@ import PopularSuburbsGrid from '@/components/conversion/PopularSuburbsGrid';
 import { PLACEMENT_PHONE_DISPLAY } from '@/lib/placement-contact';
 import {
   ADVISOR_EMAIL,
+  ADVISOR_INITIALS,
   ADVISOR_JOB_TITLE,
   ADVISOR_LOCALITY,
   ADVISOR_NAME,
@@ -69,7 +70,7 @@ const faqSchema = {
       name: 'How is a local advisor different from a national referral site?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'National sites often route you to a call center. Chris Ray is based in Chagrin Falls and only works Greater Cleveland. He tours communities himself and shares current rate sheets before you visit — a shortlist that fits, not a blast of sales calls.',
+        text: 'National sites often route you to a call center. Jocelynn Ray is based in Chagrin Falls and only works Greater Cleveland. She tours communities herself and shares current rate sheets before you visit — a shortlist that fits, not a blast of sales calls.',
       },
     },
     {
@@ -77,7 +78,7 @@ const faqSchema = {
       name: 'Who is the Cleveland senior living advisor at Guide for Seniors?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Chris Ray is a former regional director and hospital liaison who now provides free assisted living, memory care, and independent living placement from Chagrin Falls across Greater Cleveland. Families call (216) 677-4630.',
+        text: 'Jocelynn Ray is a former regional director and hospital liaison who now provides free assisted living, memory care, and independent living placement from Chagrin Falls across Greater Cleveland. Families call (216) 677-4630.',
       },
     },
   ],
@@ -218,7 +219,7 @@ export default function ClevelandSeniorLivingAdvisorPage() {
               className="w-28 h-28 rounded-2xl bg-teal-700 text-white flex items-center justify-center text-3xl font-bold shrink-0"
               aria-hidden="true"
             >
-              CR
+              {ADVISOR_INITIALS}
             </div>
             <div>
               <p className="text-sm font-semibold text-teal-700 mb-1">{ADVISOR_JOB_TITLE}</p>

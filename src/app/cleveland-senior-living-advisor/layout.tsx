@@ -3,7 +3,7 @@ import { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Senior Living Placement Cleveland | Free Local Advisor | Guide for Seniors',
   description:
-    'Free senior living placement in Cleveland with Chris Ray, a Chagrin Falls–based advisor. Compare assisted living, memory care, and independent living, get real pricing, and schedule tours — at no cost to your family.',
+    'Free senior living placement in Cleveland with Jocelynn Ray, a Chagrin Falls–based advisor. Compare assisted living, memory care, and independent living, get real pricing, and schedule tours — at no cost to your family.',
   keywords:
     'senior living advisor cleveland, assisted living advisor cleveland, senior living placement cleveland, free senior living referral cleveland, help finding assisted living cleveland',
   alternates: {
