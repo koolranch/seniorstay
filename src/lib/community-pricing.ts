@@ -16,8 +16,19 @@ export const PRICING_RANGES: Record<
     assisted_living: [4300, 6900],
     memory_care: [5600, 8500],
   },
-  'shaker heights': { assisted_living: [5200, 7800], memory_care: [6200, 9000] },
+  // Shaker Heights ranges must match the CityAdvisorDeepDive pricing table
+  'shaker heights': {
+    independent_living: [2800, 5000],
+    assisted_living: [4000, 7000],
+    memory_care: [5500, 9000],
+  },
   'rocky river': { assisted_living: [4600, 7000], memory_care: [5800, 8500] },
+  // Medina ranges must match the CityAdvisorDeepDive pricing table
+  medina: {
+    independent_living: [2100, 3600],
+    assisted_living: [3100, 5300],
+    memory_care: [4400, 7200],
+  },
   parma: { assisted_living: [3800, 5800], memory_care: [5000, 7500] },
   lakewood: { assisted_living: [4200, 6500], memory_care: [5500, 8000] },
   strongsville: { assisted_living: [4400, 6800], memory_care: [5600, 8200] },
