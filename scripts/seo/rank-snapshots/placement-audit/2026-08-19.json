@@ -1,0 +1,4848 @@
+{
+  "date": "2026-08-19",
+  "domain": "guideforseniors.com",
+  "focus": "private-pay AL/MC/IL city + advisor placement (Medicaid/SNF classified, not scored as wins)",
+  "cleveland_location": {
+    "name": "Cleveland,Ohio,United States",
+    "code": 1023631
+  },
+  "overview": {
+    "status": "Ok.",
+    "cost": 0.0126,
+    "result": [
+      {
+        "se_type": "google",
+        "target": "guideforseniors.com",
+        "location_code": null,
+        "language_code": "en",
+        "total_count": 5,
+        "items_count": 5,
+        "items": [
+          {
+            "se_type": "google",
+            "location_code": 2036,
+            "language_code": "en",
+            "metrics": {
+              "organic": {
+                "pos_1": 0,
+                "pos_2_3": 0,
+                "pos_4_10": 0,
+                "pos_11_20": 0,
+                "pos_21_30": 0,
+                "pos_31_40": 0,
+                "pos_41_50": 1,
+                "pos_51_60": 0,
+                "pos_61_70": 0,
+                "pos_71_80": 0,
+                "pos_81_90": 0,
+                "pos_91_100": 0,
+                "etv": 0.671999990940094,
+                "count": 1,
+                "estimated_paid_traffic_cost": 0,
+                "is_new": 1,
+                "is_up": 0,
+                "is_down": 0,
+                "is_lost": 6,
+                "clickstream_etv": null,
+                "clickstream_gender_distribution": null,
+                "clickstream_age_distribution": null
+              },
+              "paid": {
+                "pos_1": 0,
+                "pos_2_3": 0,
+                "pos_4_10": 0,
+                "pos_11_20": 0,
+                "pos_21_30": 0,
+                "pos_31_40": 0,
+                "pos_41_50": 0,
+                "pos_51_60": 0,
+                "pos_61_70": 0,
+                "pos_71_80": 0,
+                "pos_81_90": 0,
+                "pos_91_100": 0,
+                "etv": 0,
+                "count": 0,
+                "estimated_paid_traffic_cost": 0,
+                "is_new": 0,
+                "is_up": 0,
+                "is_down": 0,
+                "is_lost": 0,
+                "clickstream_etv": null,
+                "clickstream_gender_distribution": null,
+                "clickstream_age_distribution": null
+              }
+            }
+          },
+          {
+            "se_type": "google",
+            "location_code": 2124,
+            "language_code": "en",
+            "metrics": {
+              "organic": {
+                "pos_1": 0,
+                "pos_2_3": 0,
+                "pos_4_10": 0,
+                "pos_11_20": 0,
+                "pos_21_30": 0,
+                "pos_31_40": 2,
+                "pos_41_50": 2,
+                "pos_51_60": 0,
+                "pos_61_70": 0,
+                "pos_71_80": 0,
+                "pos_81_90": 0,
+                "pos_91_100": 0,
+                "etv": 1.3439999967813492,
+                "count": 4,
+                "estimated_paid_traffic_cost": 2.2955099642276764,
+                "is_new": 4,
+                "is_up": 0,
+                "is_down": 0,
+                "is_lost": 2,
+                "clickstream_etv": null,
+                "clickstream_gender_distribution": null,
+                "clickstream_age_distribution": null
+              },
+              "paid": {
+                "pos_1": 0,
+                "pos_2_3": 0,
+                "pos_4_10": 0,
+                "pos_11_20": 0,
+                "pos_21_30": 0,
+                "pos_31_40": 0,
+                "pos_41_50": 0,
+                "pos_51_60": 0,
+                "pos_61_70": 0,
+                "pos_71_80": 0,
+                "pos_81_90": 0,
+                "pos_91_100": 0,
+                "etv": 0,
+                "count": 0,
+                "estimated_paid_traffic_cost": 0,
+                "is_new": 0,
+                "is_up": 0,
+                "is_down": 0,
+                "is_lost": 0,
+                "clickstream_etv": null,
+                "clickstream_gender_distribution": null,
+                "clickstream_age_distribution": null
+              }
+            }
+          },
+          {
+            "se_type": "google",
+            "location_code": 2554,
+            "language_code": "en",
+            "metrics": {
+              "organic": {
+                "pos_1": 0,
+                "pos_2_3": 0,
+                "pos_4_10": 0,
+                "pos_11_20": 0,
+                "pos_21_30": 0,
+                "pos_31_40": 2,
+                "pos_41_50": 0,
+                "pos_51_60": 0,
+                "pos_61_70": 0,
+                "pos_71_80": 0,
+                "pos_81_90": 0,
+                "pos_91_100": 0,
+                "etv": 1.0920000076293945,
+                "count": 2,
+                "estimated_paid_traffic_cost": 1.7472000122070312,
+                "is_new": 1,
+                "is_up": 1,
+                "is_down": 0,
+                "is_lost": 0,
+                "clickstream_etv": null,
+                "clickstream_gender_distribution": null,
+                "clickstream_age_distribution": null
+              },
+              "paid": {
+                "pos_1": 0,
+                "pos_2_3": 0,
+                "pos_4_10": 0,
+                "pos_11_20": 0,
+                "pos_21_30": 0,
+                "pos_31_40": 0,
+                "pos_41_50": 0,
+                "pos_51_60": 0,
+                "pos_61_70": 0,
+                "pos_71_80": 0,
+                "pos_81_90": 0,
+                "pos_91_100": 0,
+                "etv": 0,
+                "count": 0,
+                "estimated_paid_traffic_cost": 0,
+                "is_new": 0,
+                "is_up": 0,
+                "is_down": 0,
+                "is_lost": 0,
+                "clickstream_etv": null,
+                "clickstream_gender_distribution": null,
+                "clickstream_age_distribution": null
+              }
+            }
+          },
+          {
+            "se_type": "google",
+            "location_code": 2826,
+            "language_code": "en",
+            "metrics": {
+              "organic": {
+                "pos_1": 0,
+                "pos_2_3": 0,
+                "pos_4_10": 0,
+                "pos_11_20": 0,
+                "pos_21_30": 0,
+                "pos_31_40": 0,
+                "pos_41_50": 0,
+                "pos_51_60": 0,
+                "pos_61_70": 2,
+                "pos_71_80": 0,
+                "pos_81_90": 0,
+                "pos_91_100": 0,
+                "etv": 0.335999995470047,
+                "count": 2,
+                "estimated_paid_traffic_cost": 0.20223000645637512,
+                "is_new": 1,
+                "is_up": 1,
+                "is_down": 0,
+                "is_lost": 0,
+                "clickstream_etv": null,
+                "clickstream_gender_distribution": null,
+                "clickstream_age_distribution": null
+              },
+              "paid": {
+                "pos_1": 0,
+                "pos_2_3": 0,
+                "pos_4_10": 0,
+                "pos_11_20": 0,
+                "pos_21_30": 0,
+                "pos_31_40": 0,
+                "pos_41_50": 0,
+                "pos_51_60": 0,
+                "pos_61_70": 0,
+                "pos_71_80": 0,
+                "pos_81_90": 0,
+                "pos_91_100": 0,
+                "etv": 0,
+                "count": 0,
+                "estimated_paid_traffic_cost": 0,
+                "is_new": 0,
+                "is_up": 0,
+                "is_down": 0,
+                "is_lost": 0,
+                "clickstream_etv": null,
+                "clickstream_gender_distribution": null,
+                "clickstream_age_distribution": null
+              }
+            }
+          },
+          {
+            "se_type": "google",
+            "location_code": 2840,
+            "language_code": "en",
+            "metrics": {
+              "organic": {
+                "pos_1": 0,
+                "pos_2_3": 0,
+                "pos_4_10": 0,
+                "pos_11_20": 7,
+                "pos_21_30": 19,
+                "pos_31_40": 71,
+                "pos_41_50": 102,
+                "pos_51_60": 134,
+                "pos_61_70": 161,
+                "pos_71_80": 92,
+                "pos_81_90": 38,
+                "pos_91_100": 16,
+                "etv": 422.3519613277167,
+                "count": 640,
+                "estimated_paid_traffic_cost": 2924.5569583101897,
+                "is_new": 419,
+                "is_up": 151,
+                "is_down": 64,
+                "is_lost": 157,
+                "clickstream_etv": null,
+                "clickstream_gender_distribution": null,
+                "clickstream_age_distribution": null
+              },
+              "paid": {
+                "pos_1": 0,
+                "pos_2_3": 0,
+                "pos_4_10": 0,
+                "pos_11_20": 0,
+                "pos_21_30": 0,
+                "pos_31_40": 0,
+                "pos_41_50": 0,
+                "pos_51_60": 0,
+                "pos_61_70": 0,
+                "pos_71_80": 0,
+                "pos_81_90": 0,
+                "pos_91_100": 0,
+                "etv": 0,
+                "count": 0,
+                "estimated_paid_traffic_cost": 0,
+                "is_new": 0,
+                "is_up": 0,
+                "is_down": 0,
+                "is_lost": 0,
+                "clickstream_etv": null,
+                "clickstream_gender_distribution": null,
+                "clickstream_age_distribution": null
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "backlinks": {
+    "status": "Ok.",
+    "cost": 0.024036,
+    "rank": 163,
+    "backlinks": 425,
+    "referring_domains": 319,
+    "referring_main_domains": 309,
+    "referring_ips": 148,
+    "broken_backlinks": 0,
+    "referring_domains_nofollow": 106,
+    "referring_links_types": {
+      "anchor": 300,
+      "image": 115
+    },
+    "referring_links_platform_types": {
+      "organization": 196,
+      "blogs": 176,
+      "unknown": 150,
+      "cms": 95,
+      "news": 10
+    },
+    "referring_links_tlds": {}
+  },
+  "ranked_keywords": {
+    "status": "Ok.",
+    "cost": 0.0888,
+    "total_count": 640,
+    "items_count": 640,
+    "summary": {
+      "sampled_keywords": 640,
+      "buckets": {
+        "assisted-living": 81,
+        "memory-care": 2,
+        "independent-living": 5,
+        "advisor": 0,
+        "senior-living": 65,
+        "medicaid": 22,
+        "snf": 107,
+        "other": 358
+      },
+      "geo": {
+        "cleveland": 514,
+        "columbus": 0,
+        "other": 126
+      },
+      "etv_sampled": 422.35,
+      "etv_revenue_relevant": 70.11,
+      "etv_medicaid": 13.84,
+      "top10_sampled": 0,
+      "revenue_relevant": 146,
+      "revenue_page1": 0,
+      "revenue_striking_distance": 4
+    },
+    "top_by_etv": [
+      {
+        "keyword": "assisted living facility vs nursing home",
+        "search_volume": 5400,
+        "cpc": 10.930000305175781,
+        "competition": 0.23000000417232513,
+        "keyword_difficulty": 15,
+        "position": 69,
+        "url": "https://www.guideforseniors.com/blog/assisted-living-vs-nursing-home",
+        "etv": 11.34000015258789,
+        "is_featured_snippet": false,
+        "bucket": "snf",
+        "geo": "other",
+        "revenue_relevant": false
+      },
+      {
+        "keyword": "assisted living v nursing home",
+        "search_volume": 5400,
+        "cpc": 10.930000305175781,
+        "competition": 0.23000000417232513,
+        "keyword_difficulty": 15,
+        "position": 62,
+        "url": "https://www.guideforseniors.com/blog/assisted-living-vs-nursing-home",
+        "etv": 11.34000015258789,
+        "is_featured_snippet": false,
+        "bucket": "snf",
+        "geo": "other",
+        "revenue_relevant": false
+      },
+      {
+        "keyword": "assisted living vs nursing home",
+        "search_volume": 5400,
+        "cpc": 10.930000305175781,
+        "competition": 0.23000000417232513,
+        "keyword_difficulty": 7,
+        "position": 58,
+        "url": "https://www.guideforseniors.com/blog/assisted-living-vs-nursing-home",
+        "etv": 11.34000015258789,
+        "is_featured_snippet": false,
+        "bucket": "snf",
+        "geo": "other",
+        "revenue_relevant": false
+      },
+      {
+        "keyword": "nursing home versus assisted living",
+        "search_volume": 5400,
+        "cpc": 10.930000305175781,
+        "competition": 0.23000000417232513,
+        "keyword_difficulty": 15,
+        "position": 84,
+        "url": "https://www.guideforseniors.com/blog/assisted-living-vs-nursing-home",
+        "etv": 11.34000015258789,
+        "is_featured_snippet": false,
+        "bucket": "snf",
+        "geo": "other",
+        "revenue_relevant": false
+      },
+      {
+        "keyword": "medicaid for assisted living",
+        "search_volume": 4400,
+        "cpc": 6.869999885559082,
+        "competition": 0.009999999776482582,
+        "keyword_difficulty": 19,
+        "position": 72,
+        "url": "https://www.guideforseniors.com/medicaid-assisted-living-ohio",
+        "etv": 9.239999771118164,
+        "is_featured_snippet": false,
+        "bucket": "medicaid",
+        "geo": "other",
+        "revenue_relevant": false
+      },
+      {
+        "keyword": "mount alverna parma",
+        "search_volume": 2900,
+        "cpc": 6.5,
+        "competition": 0.07000000029802322,
+        "keyword_difficulty": 0,
+        "position": 57,
+        "url": "https://www.guideforseniors.com/cleveland/parma",
+        "etv": 6.090000152587891,
+        "is_featured_snippet": false,
+        "bucket": "other",
+        "geo": "cleveland",
+        "revenue_relevant": false
+      },
+      {
+        "keyword": "mount alverna village",
+        "search_volume": 2900,
+        "cpc": 6.5,
+        "competition": 0.07000000029802322,
+        "keyword_difficulty": 0,
+        "position": 53,
+        "url": "https://www.guideforseniors.com/cleveland/parma",
+        "etv": 6.090000152587891,
+        "is_featured_snippet": false,
+        "bucket": "other",
+        "geo": "cleveland",
+        "revenue_relevant": false
+      },
+      {
+        "keyword": "concord reserve westlake ohio",
+        "search_volume": 1900,
+        "cpc": 10.0600004196167,
+        "competition": 0.05999999865889549,
+        "keyword_difficulty": 0,
+        "position": 67,
+        "url": "https://www.guideforseniors.com/cleveland/westlake",
+        "etv": 3.990000009536743,
+        "is_featured_snippet": false,
+        "bucket": "other",
+        "geo": "cleveland",
+        "revenue_relevant": false
+      },
+      {
+        "keyword": "lutheran home concord reserve",
+        "search_volume": 1900,
+        "cpc": 10.0600004196167,
+        "competition": 0.05999999865889549,
+        "keyword_difficulty": 0,
+        "position": 80,
+        "url": "https://www.guideforseniors.com/cleveland/westlake",
+        "etv": 3.990000009536743,
+        "is_featured_snippet": false,
+        "bucket": "other",
+        "geo": "cleveland",
+        "revenue_relevant": false
+      },
+      {
+        "keyword": "arbors at stow",
+        "search_volume": 1600,
+        "cpc": 0.3100000023841858,
+        "competition": 0.019999999552965164,
+        "keyword_difficulty": 0,
+        "position": 55,
+        "url": "https://www.guideforseniors.com/cleveland/stow",
+        "etv": 3.3600001335144043,
+        "is_featured_snippet": false,
+        "bucket": "other",
+        "geo": "cleveland",
+        "revenue_relevant": false
+      },
+      {
+        "keyword": "arbors of stow",
+        "search_volume": 1600,
+        "cpc": 0.3100000023841858,
+        "competition": 0.019999999552965164,
+        "keyword_difficulty": 0,
+        "position": 54,
+        "url": "https://www.guideforseniors.com/cleveland/stow",
+        "etv": 3.3600001335144043,
+        "is_featured_snippet": false,
+        "bucket": "other",
+        "geo": "cleveland",
+        "revenue_relevant": false
+      },
+      {
+        "keyword": "bath creek estates",
+        "search_volume": 1600,
+        "cpc": 7.940000057220459,
+        "competition": 0.029999999329447746,
+        "keyword_difficulty": 0,
+        "position": 47,
+        "url": "https://www.guideforseniors.com/cleveland/cuyahoga-falls",
+        "etv": 3.3600001335144043,
+        "is_featured_snippet": false,
+        "bucket": "other",
+        "geo": "cleveland",
+        "revenue_relevant": false
+      },
+      {
+        "keyword": "chardon health care",
+        "search_volume": 1300,
+        "cpc": 9.350000381469727,
+        "competition": 0.029999999329447746,
+        "keyword_difficulty": 0,
+        "position": 90,
+        "url": "https://www.guideforseniors.com/cleveland/chardon",
+        "etv": 2.7300000190734863,
+        "is_featured_snippet": false,
+        "bucket": "other",
+        "geo": "cleveland",
+        "revenue_relevant": false
+      },
+      {
+        "keyword": "chardon healthcare center",
+        "search_volume": 1300,
+        "cpc": 9.350000381469727,
+        "competition": 0.029999999329447746,
+        "keyword_difficulty": 0,
+        "position": 89,
+        "url": "https://www.guideforseniors.com/cleveland/chardon",
+        "etv": 2.7300000190734863,
+        "is_featured_snippet": false,
+        "bucket": "other",
+        "geo": "cleveland",
+        "revenue_relevant": false
+      },
+      {
+        "keyword": "heritage of hudson",
+        "search_volume": 1300,
+        "cpc": 0.6399999856948853,
+        "competition": 0.019999999552965164,
+        "keyword_difficulty": 0,
+        "position": 84,
+        "url": "https://www.guideforseniors.com/cleveland/hudson",
+        "etv": 2.7300000190734863,
+        "is_featured_snippet": false,
+        "bucket": "other",
+        "geo": "cleveland",
+        "revenue_relevant": false
+      },
+      {
+        "keyword": "rose senior living beachwood",
+        "search_volume": 1300,
+        "cpc": 4.130000114440918,
+        "competition": 0.07999999821186066,
+        "keyword_difficulty": 0,
+        "position": 52,
+        "url": "https://www.guideforseniors.com/cleveland/beachwood",
+        "etv": 2.7300000190734863,
+        "is_featured_snippet": false,
+        "bucket": "senior-living",
+        "geo": "cleveland",
+        "revenue_relevant": true
+      },
+      {
+        "keyword": "shaker gardens",
+        "search_volume": 1300,
+        "cpc": 3.059999942779541,
+        "competition": 0.019999999552965164,
+        "keyword_difficulty": 0,
+        "position": 60,
+        "url": "https://www.guideforseniors.com/cleveland/shaker-heights",
+        "etv": 2.7300000190734863,
+        "is_featured_snippet": false,
+        "bucket": "other",
+        "geo": "cleveland",
+        "revenue_relevant": false
+      },
+      {
+        "keyword": "storypoint medina",
+        "search_volume": 1300,
+        "cpc": 3.2200000286102295,
+        "competition": 0.05000000074505806,
+        "keyword_difficulty": 0,
+        "position": 62,
+        "url": "https://www.guideforseniors.com/cleveland/medina",
+        "etv": 2.7300000190734863,
+        "is_featured_snippet": false,
+        "bucket": "other",
+        "geo": "cleveland",
+        "revenue_relevant": false
+      },
+      {
+        "keyword": "assisted living cleveland",
+        "search_volume": 1000,
+        "cpc": 14.59000015258789,
+        "competition": 0.5899999737739563,
+        "keyword_difficulty": 9,
+        "position": 76,
+        "url": "https://www.guideforseniors.com/assisted-living-cleveland",
+        "etv": 2.0999999046325684,
+        "is_featured_snippet": false,
+        "bucket": "assisted-living",
+        "geo": "cleveland",
+        "revenue_relevant": true
+      },
+      {
+        "keyword": "assisted living cleveland ohio",
+        "search_volume": 1000,
+        "cpc": 14.59000015258789,
+        "competition": 0.5899999737739563,
+        "keyword_difficulty": 0,
+        "position": 66,
+        "url": "https://www.guideforseniors.com/assisted-living-cleveland",
+        "etv": 2.0999999046325684,
+        "is_featured_snippet": false,
+        "bucket": "assisted-living",
+        "geo": "cleveland",
+        "revenue_relevant": true
+      },
+      {
+        "keyword": "assisted living facilities in cleveland ohio",
+        "search_volume": 1000,
+        "cpc": 14.59000015258789,
+        "competition": 0.5899999737739563,
+        "keyword_difficulty": 0,
+        "position": 75,
+        "url": "https://www.guideforseniors.com/assisted-living-cleveland",
+        "etv": 2.0999999046325684,
+        "is_featured_snippet": false,
+        "bucket": "assisted-living",
+        "geo": "cleveland",
+        "revenue_relevant": true
+      },
+      {
+        "keyword": "assisted living westlake",
+        "search_volume": 1000,
+        "cpc": 11.239999771118164,
+        "competition": 0.23000000417232513,
+        "keyword_difficulty": 6,
+        "position": 83,
+        "url": "https://www.guideforseniors.com/cleveland/westlake",
+        "etv": 2.0999999046325684,
+        "is_featured_snippet": false,
+        "bucket": "assisted-living",
+        "geo": "cleveland",
+        "revenue_relevant": true
+      },
+      {
+        "keyword": "assisted living westlake ohio",
+        "search_volume": 1000,
+        "cpc": 11.239999771118164,
+        "competition": 0.23000000417232513,
+        "keyword_difficulty": 6,
+        "position": 67,
+        "url": "https://www.guideforseniors.com/cleveland/westlake",
+        "etv": 2.0999999046325684,
+        "is_featured_snippet": false,
+        "bucket": "assisted-living",
+        "geo": "cleveland",
+        "revenue_relevant": true
+      },
+      {
+        "keyword": "cleveland assisted living facilities",
+        "search_volume": 1000,
+        "cpc": 14.59000015258789,
+        "competition": 0.5899999737739563,
+        "keyword_difficulty": 0,
+        "position": 70,
+        "url": "https://www.guideforseniors.com/assisted-living-cleveland",
+        "etv": 2.0999999046325684,
+        "is_featured_snippet": false,
+        "bucket": "assisted-living",
+        "geo": "cleveland",
+        "revenue_relevant": true
+      },
+      {
+        "keyword": "cleveland ohio nursing homes",
+        "search_volume": 1000,
+        "cpc": 6.110000133514404,
+        "competition": 0.6100000143051147,
+        "keyword_difficulty": 0,
+        "position": 84,
+        "url": "https://www.guideforseniors.com/cleveland/cleveland",
+        "etv": 2.0999999046325684,
+        "is_featured_snippet": false,
+        "bucket": "snf",
+        "geo": "cleveland",
+        "revenue_relevant": false
+      },
+      {
+        "keyword": "danbury north ridgeville",
+        "search_volume": 1000,
+        "cpc": 4.75,
+        "competition": 0.03999999910593033,
+        "keyword_difficulty": 0,
+        "position": 42,
+        "url": "https://www.guideforseniors.com/cleveland/north-ridgeville",
+        "etv": 2.0999999046325684,
+        "is_featured_snippet": false,
+        "bucket": "other",
+        "geo": "cleveland",
+        "revenue_relevant": false
+      },
+      {
+        "keyword": "danbury tallmadge ohio",
+        "search_volume": 1000,
+        "cpc": 7.380000114440918,
+        "competition": 0.05000000074505806,
+        "keyword_difficulty": 0,
+        "position": 66,
+        "url": "https://www.guideforseniors.com/cleveland/tallmadge",
+        "etv": 2.0999999046325684,
+        "is_featured_snippet": false,
+        "bucket": "other",
+        "geo": "cleveland",
+        "revenue_relevant": false
+      },
+      {
+        "keyword": "free online games for seniors",
+        "search_volume": 1000,
+        "cpc": 0.8399999737739563,
+        "competition": 0.23000000417232513,
+        "keyword_difficulty": 41,
+        "position": 47,
+        "url": "https://www.guideforseniors.com/blog/senior-online-games",
+        "etv": 2.0999999046325684,
+        "is_featured_snippet": false,
+        "bucket": "other",
+        "geo": "other",
+        "revenue_relevant": false
+      },
+      {
+        "keyword": "free senior games online",
+        "search_volume": 1000,
+        "cpc": 0.8399999737739563,
+        "competition": 0.23000000417232513,
+        "keyword_difficulty": 53,
+        "position": 49,
+        "url": "https://www.guideforseniors.com/blog/senior-online-games",
+        "etv": 2.0999999046325684,
+        "is_featured_snippet": false,
+        "bucket": "other",
+        "geo": "other",
+        "revenue_relevant": false
+      },
+      {
+        "keyword": "life care center of westlake ohio",
+        "search_volume": 1000,
+        "cpc": 3.6100001335144043,
+        "competition": 0.029999999329447746,
+        "keyword_difficulty": 0,
+        "position": 70,
+        "url": "https://www.guideforseniors.com/cleveland/westlake",
+        "etv": 2.0999999046325684,
+        "is_featured_snippet": false,
+        "bucket": "other",
+        "geo": "cleveland",
+        "revenue_relevant": false
+      },
+      {
+        "keyword": "life care centers of westlake",
+        "search_volume": 1000,
+        "cpc": 3.6100001335144043,
+        "competition": 0.029999999329447746,
+        "keyword_difficulty": 0,
+        "position": 57,
+        "url": "https://www.guideforseniors.com/cleveland/westlake",
+        "etv": 2.0999999046325684,
+        "is_featured_snippet": false,
+        "bucket": "other",
+        "geo": "cleveland",
+        "revenue_relevant": false
+      },
+      {
+        "keyword": "nursing home in cleveland",
+        "search_volume": 1000,
+        "cpc": 6.110000133514404,
+        "competition": 0.6100000143051147,
+        "keyword_difficulty": 2,
+        "position": 88,
+        "url": "https://www.guideforseniors.com/cleveland/cleveland",
+        "etv": 2.0999999046325684,
+        "is_featured_snippet": false,
+        "bucket": "snf",
+        "geo": "cleveland",
+        "revenue_relevant": false
+      },
+      {
+        "keyword": "nursing homes cleveland",
+        "search_volume": 1000,
+        "cpc": 6.110000133514404,
+        "competition": 0.6100000143051147,
+        "keyword_difficulty": 7,
+        "position": 83,
+        "url": "https://www.guideforseniors.com/cleveland/cleveland",
+        "etv": 2.0999999046325684,
+        "is_featured_snippet": false,
+        "bucket": "snf",
+        "geo": "cleveland",
+        "revenue_relevant": false
+      },
+      {
+        "keyword": "nursing homes cleveland ohio",
+        "search_volume": 1000,
+        "cpc": 6.110000133514404,
+        "competition": 0.6100000143051147,
+        "keyword_difficulty": 0,
+        "position": 81,
+        "url": "https://www.guideforseniors.com/cleveland/cleveland",
+        "etv": 2.0999999046325684,
+        "is_featured_snippet": false,
+        "bucket": "snf",
+        "geo": "cleveland",
+        "revenue_relevant": false
+      },
+      {
+        "keyword": "nursing homes in cleveland",
+        "search_volume": 1000,
+        "cpc": 6.110000133514404,
+        "competition": 0.6100000143051147,
+        "keyword_difficulty": 6,
+        "position": 88,
+        "url": "https://www.guideforseniors.com/cleveland/cleveland",
+        "etv": 2.0999999046325684,
+        "is_featured_snippet": false,
+        "bucket": "snf",
+        "geo": "cleveland",
+        "revenue_relevant": false
+      },
+      {
+        "keyword": "nursing homes in cleveland ohio",
+        "search_volume": 1000,
+        "cpc": 6.110000133514404,
+        "competition": 0.6100000143051147,
+        "keyword_difficulty": 8,
+        "position": 95,
+        "url": "https://www.guideforseniors.com/cleveland/cleveland",
+        "etv": 2.0999999046325684,
+        "is_featured_snippet": false,
+        "bucket": "snf",
+        "geo": "cleveland",
+        "revenue_relevant": false
+      },
+      {
+        "keyword": "o neill healthcare lakewood",
+        "search_volume": 1000,
+        "cpc": 4.230000019073486,
+        "competition": 0.09000000357627869,
+        "keyword_difficulty": 0,
+        "position": 61,
+        "url": "https://www.guideforseniors.com/cleveland/lakewood",
+        "etv": 2.0999999046325684,
+        "is_featured_snippet": false,
+        "bucket": "other",
+        "geo": "cleveland",
+        "revenue_relevant": false
+      },
+      {
+        "keyword": "o'neill healthcare lakewood",
+        "search_volume": 1000,
+        "cpc": 4.230000019073486,
+        "competition": 0.09000000357627869,
+        "keyword_difficulty": 0,
+        "position": 69,
+        "url": "https://www.guideforseniors.com/cleveland/community/217c0b13-e5c0-480c-9131-a171e2b707e7/o-neill-healthcare-lakewood",
+        "etv": 2.0999999046325684,
+        "is_featured_snippet": false,
+        "bucket": "other",
+        "geo": "cleveland",
+        "revenue_relevant": false
+      },
+      {
+        "keyword": "parma care center",
+        "search_volume": 1000,
+        "cpc": 5.260000228881836,
+        "competition": 0.019999999552965164,
+        "keyword_difficulty": 0,
+        "position": 72,
+        "url": "https://www.guideforseniors.com/cleveland/parma",
+        "etv": 2.0999999046325684,
+        "is_featured_snippet": false,
+        "bucket": "other",
+        "geo": "cleveland",
+        "revenue_relevant": false
+      },
+      {
+        "keyword": "parma care center parma oh",
+        "search_volume": 1000,
+        "cpc": 5.260000228881836,
+        "competition": 0.019999999552965164,
+        "keyword_difficulty": 0,
+        "position": 69,
+        "url": "https://www.guideforseniors.com/cleveland/parma",
+        "etv": 2.0999999046325684,
+        "is_featured_snippet": false,
+        "bucket": "other",
+        "geo": "cleveland",
+        "revenue_relevant": false
+      }
+    ],
+    "revenue_relevant": [
+      {
+        "keyword": "rose senior living beachwood",
+        "search_volume": 1300,
+        "cpc": 4.130000114440918,
+        "competition": 0.07999999821186066,
+        "keyword_difficulty": 0,
+        "position": 52,
+        "url": "https://www.guideforseniors.com/cleveland/beachwood",
+        "etv": 2.7300000190734863,
+        "is_featured_snippet": false,
+        "bucket": "senior-living",
+        "geo": "cleveland",
+        "revenue_relevant": true
+      },
+      {
+        "keyword": "assisted living cleveland",
+        "search_volume": 1000,
+        "cpc": 14.59000015258789,
+        "competition": 0.5899999737739563,
+        "keyword_difficulty": 9,
+        "position": 76,
+        "url": "https://www.guideforseniors.com/assisted-living-cleveland",
+        "etv": 2.0999999046325684,
+        "is_featured_snippet": false,
+        "bucket": "assisted-living",
+        "geo": "cleveland",
+        "revenue_relevant": true
+      },
+      {
+        "keyword": "assisted living cleveland ohio",
+        "search_volume": 1000,
+        "cpc": 14.59000015258789,
+        "competition": 0.5899999737739563,
+        "keyword_difficulty": 0,
+        "position": 66,
+        "url": "https://www.guideforseniors.com/assisted-living-cleveland",
+        "etv": 2.0999999046325684,
+        "is_featured_snippet": false,
+        "bucket": "assisted-living",
+        "geo": "cleveland",
+        "revenue_relevant": true
+      },
+      {
+        "keyword": "assisted living facilities in cleveland ohio",
+        "search_volume": 1000,
+        "cpc": 14.59000015258789,
+        "competition": 0.5899999737739563,
+        "keyword_difficulty": 0,
+        "position": 75,
+        "url": "https://www.guideforseniors.com/assisted-living-cleveland",
+        "etv": 2.0999999046325684,
+        "is_featured_snippet": false,
+        "bucket": "assisted-living",
+        "geo": "cleveland",
+        "revenue_relevant": true
+      },
+      {
+        "keyword": "assisted living westlake",
+        "search_volume": 1000,
+        "cpc": 11.239999771118164,
+        "competition": 0.23000000417232513,
+        "keyword_difficulty": 6,
+        "position": 83,
+        "url": "https://www.guideforseniors.com/cleveland/westlake",
+        "etv": 2.0999999046325684,
+        "is_featured_snippet": false,
+        "bucket": "assisted-living",
+        "geo": "cleveland",
+        "revenue_relevant": true
+      },
+      {
+        "keyword": "assisted living westlake ohio",
+        "search_volume": 1000,
+        "cpc": 11.239999771118164,
+        "competition": 0.23000000417232513,
+        "keyword_difficulty": 6,
+        "position": 67,
+        "url": "https://www.guideforseniors.com/cleveland/westlake",
+        "etv": 2.0999999046325684,
+        "is_featured_snippet": false,
+        "bucket": "assisted-living",
+        "geo": "cleveland",
+        "revenue_relevant": true
+      },
+      {
+        "keyword": "cleveland assisted living facilities",
+        "search_volume": 1000,
+        "cpc": 14.59000015258789,
+        "competition": 0.5899999737739563,
+        "keyword_difficulty": 0,
+        "position": 70,
+        "url": "https://www.guideforseniors.com/assisted-living-cleveland",
+        "etv": 2.0999999046325684,
+        "is_featured_snippet": false,
+        "bucket": "assisted-living",
+        "geo": "cleveland",
+        "revenue_relevant": true
+      },
+      {
+        "keyword": "rockynol assisted living akron ohio",
+        "search_volume": 1000,
+        "cpc": 4.670000076293945,
+        "competition": 0.07000000029802322,
+        "keyword_difficulty": 0,
+        "position": 76,
+        "url": "https://www.guideforseniors.com/cleveland/akron",
+        "etv": 2.0999999046325684,
+        "is_featured_snippet": false,
+        "bucket": "assisted-living",
+        "geo": "cleveland",
+        "revenue_relevant": true
+      },
+      {
+        "keyword": "westlake assisted living",
+        "search_volume": 1000,
+        "cpc": 11.239999771118164,
+        "competition": 0.23000000417232513,
+        "keyword_difficulty": 0,
+        "position": 61,
+        "url": "https://www.guideforseniors.com/cleveland/westlake",
+        "etv": 2.0999999046325684,
+        "is_featured_snippet": false,
+        "bucket": "assisted-living",
+        "geo": "cleveland",
+        "revenue_relevant": true
+      },
+      {
+        "keyword": "hines hill senior living",
+        "search_volume": 590,
+        "cpc": 10.180000305175781,
+        "competition": 0.019999999552965164,
+        "keyword_difficulty": 0,
+        "position": 21,
+        "url": "https://www.guideforseniors.com/cleveland/hudson",
+        "etv": 1.9470000267028809,
+        "is_featured_snippet": false,
+        "bucket": "senior-living",
+        "geo": "cleveland",
+        "revenue_relevant": true
+      },
+      {
+        "keyword": "hudson grande senior living",
+        "search_volume": 880,
+        "cpc": 3.4700000286102295,
+        "competition": 0.07000000029802322,
+        "keyword_difficulty": 0,
+        "position": 46,
+        "url": "https://www.guideforseniors.com/cleveland/hudson",
+        "etv": 1.8480000495910645,
+        "is_featured_snippet": false,
+        "bucket": "senior-living",
+        "geo": "cleveland",
+        "revenue_relevant": true
+      },
+      {
+        "keyword": "fairmont senior living of westlake",
+        "search_volume": 720,
+        "cpc": 0.07999999821186066,
+        "competition": 0.029999999329447746,
+        "keyword_difficulty": 0,
+        "position": 38,
+        "url": "https://www.guideforseniors.com/cleveland/westlake",
+        "etv": 1.5120000839233398,
+        "is_featured_snippet": false,
+        "bucket": "senior-living",
+        "geo": "cleveland",
+        "revenue_relevant": true
+      },
+      {
+        "keyword": "assisted living lakewood",
+        "search_volume": 590,
+        "cpc": 16.860000610351562,
+        "competition": 0.8100000023841858,
+        "keyword_difficulty": 8,
+        "position": 56,
+        "url": "https://www.guideforseniors.com/cleveland/lakewood",
+        "etv": 1.2389999628067017,
+        "is_featured_snippet": false,
+        "bucket": "assisted-living",
+        "geo": "cleveland",
+        "revenue_relevant": true
+      },
+      {
+        "keyword": "medina pointe senior living",
+        "search_volume": 590,
+        "cpc": 9.470000267028809,
+        "competition": 0.10000000149011612,
+        "keyword_difficulty": 0,
+        "position": 70,
+        "url": "https://www.guideforseniors.com/cleveland/medina",
+        "etv": 1.2389999628067017,
+        "is_featured_snippet": false,
+        "bucket": "senior-living",
+        "geo": "cleveland",
+        "revenue_relevant": true
+      },
+      {
+        "keyword": "richmond heights place senior living",
+        "search_volume": 590,
+        "cpc": 2.0899999141693115,
+        "competition": 0.05000000074505806,
+        "keyword_difficulty": 0,
+        "position": 48,
+        "url": "https://www.guideforseniors.com/cleveland/richmond-heights",
+        "etv": 1.2389999628067017,
+        "is_featured_snippet": false,
+        "bucket": "senior-living",
+        "geo": "cleveland",
+        "revenue_relevant": true
+      },
+      {
+        "keyword": "westlake pointe senior living",
+        "search_volume": 590,
+        "cpc": 6.940000057220459,
+        "competition": 0.14000000059604645,
+        "keyword_difficulty": 0,
+        "position": 36,
+        "url": "https://www.guideforseniors.com/cleveland/westlake",
+        "etv": 1.2389999628067017,
+        "is_featured_snippet": false,
+        "bucket": "senior-living",
+        "geo": "cleveland",
+        "revenue_relevant": true
+      },
+      {
+        "keyword": "devon oaks assisted living",
+        "search_volume": 480,
+        "cpc": 11.119999885559082,
+        "competition": 0.05000000074505806,
+        "keyword_difficulty": 0,
+        "position": 48,
+        "url": "https://www.guideforseniors.com/assisted-living-cleveland",
+        "etv": 1.0080000162124634,
+        "is_featured_snippet": false,
+        "bucket": "assisted-living",
+        "geo": "cleveland",
+        "revenue_relevant": true
+      },
+      {
+        "keyword": "assisted living akron",
+        "search_volume": 390,
+        "cpc": 14.75,
+        "competition": 0.7900000214576721,
+        "keyword_difficulty": 11,
+        "position": 79,
+        "url": "https://www.guideforseniors.com/cleveland/akron",
+        "etv": 0.8190000057220459,
+        "is_featured_snippet": false,
+        "bucket": "assisted-living",
+        "geo": "cleveland",
+        "revenue_relevant": true
+      },
+      {
+        "keyword": "assisted living akron ohio",
+        "search_volume": 390,
+        "cpc": 14.75,
+        "competition": 0.7900000214576721,
+        "keyword_difficulty": 11,
+        "position": 76,
+        "url": "https://www.guideforseniors.com/cleveland/akron",
+        "etv": 0.8190000057220459,
+        "is_featured_snippet": false,
+        "bucket": "assisted-living",
+        "geo": "cleveland",
+        "revenue_relevant": true
+      },
+      {
+        "keyword": "assisted living facilities akron ohio",
+        "search_volume": 390,
+        "cpc": 14.75,
+        "competition": 0.7900000214576721,
+        "keyword_difficulty": 11,
+        "position": 74,
+        "url": "https://www.guideforseniors.com/cleveland/akron",
+        "etv": 0.8190000057220459,
+        "is_featured_snippet": false,
+        "bucket": "assisted-living",
+        "geo": "cleveland",
+        "revenue_relevant": true
+      },
+      {
+        "keyword": "assisted living in akron ohio",
+        "search_volume": 390,
+        "cpc": 14.75,
+        "competition": 0.7900000214576721,
+        "keyword_difficulty": 11,
+        "position": 75,
+        "url": "https://www.guideforseniors.com/cleveland/akron",
+        "etv": 0.8190000057220459,
+        "is_featured_snippet": false,
+        "bucket": "assisted-living",
+        "geo": "cleveland",
+        "revenue_relevant": true
+      },
+      {
+        "keyword": "assisted living in independence",
+        "search_volume": 390,
+        "cpc": 9.989999771118164,
+        "competition": 0.800000011920929,
+        "keyword_difficulty": 0,
+        "position": 82,
+        "url": "https://www.guideforseniors.com/cleveland/independence",
+        "etv": 0.8190000057220459,
+        "is_featured_snippet": false,
+        "bucket": "assisted-living",
+        "geo": "cleveland",
+        "revenue_relevant": true
+      },
+      {
+        "keyword": "assisted living in medina ohio",
+        "search_volume": 390,
+        "cpc": 24.399999618530273,
+        "competition": 0.6800000071525574,
+        "keyword_difficulty": 3,
+        "position": 75,
+        "url": "https://www.guideforseniors.com/cleveland/medina",
+        "etv": 0.8190000057220459,
+        "is_featured_snippet": false,
+        "bucket": "assisted-living",
+        "geo": "cleveland",
+        "revenue_relevant": true
+      },
+      {
+        "keyword": "assisted living in mentor ohio",
+        "search_volume": 390,
+        "cpc": 10.15999984741211,
+        "competition": 0.7400000095367432,
+        "keyword_difficulty": 4,
+        "position": 65,
+        "url": "https://www.guideforseniors.com/cleveland/mentor",
+        "etv": 0.8190000057220459,
+        "is_featured_snippet": false,
+        "bucket": "assisted-living",
+        "geo": "cleveland",
+        "revenue_relevant": true
+      },
+      {
+        "keyword": "assisted living medina ohio",
+        "search_volume": 390,
+        "cpc": 24.399999618530273,
+        "competition": 0.6800000071525574,
+        "keyword_difficulty": 5,
+        "position": 71,
+        "url": "https://www.guideforseniors.com/cleveland/medina",
+        "etv": 0.8190000057220459,
+        "is_featured_snippet": false,
+        "bucket": "assisted-living",
+        "geo": "cleveland",
+        "revenue_relevant": true
+      },
+      {
+        "keyword": "assisted living mentor",
+        "search_volume": 390,
+        "cpc": 10.15999984741211,
+        "competition": 0.7400000095367432,
+        "keyword_difficulty": 4,
+        "position": 77,
+        "url": "https://www.guideforseniors.com/cleveland/mentor",
+        "etv": 0.8190000057220459,
+        "is_featured_snippet": false,
+        "bucket": "assisted-living",
+        "geo": "cleveland",
+        "revenue_relevant": true
+      },
+      {
+        "keyword": "cleveland senior living",
+        "search_volume": 390,
+        "cpc": 8.199999809265137,
+        "competition": 0.5199999809265137,
+        "keyword_difficulty": 1,
+        "position": 69,
+        "url": "https://www.guideforseniors.com/assisted-living-cleveland",
+        "etv": 0.8190000057220459,
+        "is_featured_snippet": false,
+        "bucket": "senior-living",
+        "geo": "cleveland",
+        "revenue_relevant": true
+      },
+      {
+        "keyword": "generations senior living of berea",
+        "search_volume": 390,
+        "cpc": null,
+        "competition": 0.05000000074505806,
+        "keyword_difficulty": 0,
+        "position": 83,
+        "url": "https://www.guideforseniors.com/cleveland/berea",
+        "etv": 0.8190000057220459,
+        "is_featured_snippet": false,
+        "bucket": "senior-living",
+        "geo": "cleveland",
+        "revenue_relevant": true
+      },
+      {
+        "keyword": "generations senior living of strongsville",
+        "search_volume": 390,
+        "cpc": 3.559999942779541,
+        "competition": 0.05000000074505806,
+        "keyword_difficulty": 0,
+        "position": 95,
+        "url": "https://www.guideforseniors.com/cleveland/strongsville",
+        "etv": 0.8190000057220459,
+        "is_featured_snippet": false,
+        "bucket": "senior-living",
+        "geo": "cleveland",
+        "revenue_relevant": true
+      },
+      {
+        "keyword": "medina assisted living",
+        "search_volume": 390,
+        "cpc": 24.399999618530273,
+        "competition": 0.6800000071525574,
+        "keyword_difficulty": 0,
+        "position": 74,
+        "url": "https://www.guideforseniors.com/cleveland/medina",
+        "etv": 0.8190000057220459,
+        "is_featured_snippet": false,
+        "bucket": "assisted-living",
+        "geo": "cleveland",
+        "revenue_relevant": true
+      },
+      {
+        "keyword": "senior living cleveland",
+        "search_volume": 390,
+        "cpc": 8.199999809265137,
+        "competition": 0.5199999809265137,
+        "keyword_difficulty": 0,
+        "position": 77,
+        "url": "https://www.guideforseniors.com/cleveland",
+        "etv": 0.8190000057220459,
+        "is_featured_snippet": false,
+        "bucket": "senior-living",
+        "geo": "cleveland",
+        "revenue_relevant": true
+      },
+      {
+        "keyword": "senior living cleveland ohio",
+        "search_volume": 390,
+        "cpc": 8.199999809265137,
+        "competition": 0.5199999809265137,
+        "keyword_difficulty": 0,
+        "position": 77,
+        "url": "https://www.guideforseniors.com/assisted-living-cleveland",
+        "etv": 0.8190000057220459,
+        "is_featured_snippet": false,
+        "bucket": "senior-living",
+        "geo": "cleveland",
+        "revenue_relevant": true
+      },
+      {
+        "keyword": "senior living communities cleveland ohio",
+        "search_volume": 390,
+        "cpc": 8.199999809265137,
+        "competition": 0.5199999809265137,
+        "keyword_difficulty": 0,
+        "position": 70,
+        "url": "https://www.guideforseniors.com/cleveland",
+        "etv": 0.8190000057220459,
+        "is_featured_snippet": false,
+        "bucket": "senior-living",
+        "geo": "cleveland",
+        "revenue_relevant": true
+      },
+      {
+        "keyword": "senior living in cleveland ohio",
+        "search_volume": 390,
+        "cpc": 8.199999809265137,
+        "competition": 0.5199999809265137,
+        "keyword_difficulty": 0,
+        "position": 91,
+        "url": "https://www.guideforseniors.com/assisted-living-cleveland",
+        "etv": 0.8190000057220459,
+        "is_featured_snippet": false,
+        "bucket": "senior-living",
+        "geo": "cleveland",
+        "revenue_relevant": true
+      },
+      {
+        "keyword": "cardinal court assisted living & memory care",
+        "search_volume": 320,
+        "cpc": 4.050000190734863,
+        "competition": 0.03999999910593033,
+        "keyword_difficulty": 0,
+        "position": 52,
+        "url": "https://www.guideforseniors.com/cleveland/strongsville",
+        "etv": 0.671999990940094,
+        "is_featured_snippet": false,
+        "bucket": "memory-care",
+        "geo": "cleveland",
+        "revenue_relevant": true
+      },
+      {
+        "keyword": "the preserve senior living at mentor ridge",
+        "search_volume": 320,
+        "cpc": 1.5299999713897705,
+        "competition": 0.05000000074505806,
+        "keyword_difficulty": 0,
+        "position": 78,
+        "url": "https://www.guideforseniors.com/cleveland/mentor",
+        "etv": 0.671999990940094,
+        "is_featured_snippet": false,
+        "bucket": "senior-living",
+        "geo": "cleveland",
+        "revenue_relevant": true
+      },
+      {
+        "keyword": "assisted living in strongsville",
+        "search_volume": 260,
+        "cpc": 10.260000228881836,
+        "competition": 0.8399999737739563,
+        "keyword_difficulty": 11,
+        "position": 71,
+        "url": "https://www.guideforseniors.com/cleveland/strongsville",
+        "etv": 0.5460000038146973,
+        "is_featured_snippet": false,
+        "bucket": "assisted-living",
+        "geo": "cleveland",
+        "revenue_relevant": true
+      },
+      {
+        "keyword": "assisted living in strongsville ohio",
+        "search_volume": 260,
+        "cpc": 10.260000228881836,
+        "competition": 0.8399999737739563,
+        "keyword_difficulty": 11,
+        "position": 62,
+        "url": "https://www.guideforseniors.com/cleveland/strongsville",
+        "etv": 0.5460000038146973,
+        "is_featured_snippet": false,
+        "bucket": "assisted-living",
+        "geo": "cleveland",
+        "revenue_relevant": true
+      },
+      {
+        "keyword": "assisted living strongsville ohio",
+        "search_volume": 260,
+        "cpc": 10.260000228881836,
+        "competition": 0.8399999737739563,
+        "keyword_difficulty": 11,
+        "position": 73,
+        "url": "https://www.guideforseniors.com/cleveland/strongsville",
+        "etv": 0.5460000038146973,
+        "is_featured_snippet": false,
+        "bucket": "assisted-living",
+        "geo": "cleveland",
+        "revenue_relevant": true
+      },
+      {
+        "keyword": "assisted living brunswick",
+        "search_volume": 210,
+        "cpc": 16.540000915527344,
+        "competition": 0.6899999976158142,
+        "keyword_difficulty": 21,
+        "position": 77,
+        "url": "https://www.guideforseniors.com/cleveland/brunswick",
+        "etv": 0.4410000145435333,
+        "is_featured_snippet": false,
+        "bucket": "assisted-living",
+        "geo": "cleveland",
+        "revenue_relevant": true
+      },
+      {
+        "keyword": "assisted living cost in ohio",
+        "search_volume": 210,
+        "cpc": 5.340000152587891,
+        "competition": 0.5,
+        "keyword_difficulty": 2,
+        "position": 83,
+        "url": "https://www.guideforseniors.com/senior-living-costs-cleveland",
+        "etv": 0.4410000145435333,
+        "is_featured_snippet": false,
+        "bucket": "assisted-living",
+        "geo": "cleveland",
+        "revenue_relevant": true
+      },
+      {
+        "keyword": "assisted living hudson",
+        "search_volume": 210,
+        "cpc": 9.130000114440918,
+        "competition": 0.7099999785423279,
+        "keyword_difficulty": 19,
+        "position": 73,
+        "url": "https://www.guideforseniors.com/cleveland/hudson",
+        "etv": 0.4410000145435333,
+        "is_featured_snippet": false,
+        "bucket": "assisted-living",
+        "geo": "cleveland",
+        "revenue_relevant": true
+      },
+      {
+        "keyword": "cost of assisted living in ohio",
+        "search_volume": 210,
+        "cpc": 5.340000152587891,
+        "competition": 0.5,
+        "keyword_difficulty": 0,
+        "position": 85,
+        "url": "https://www.guideforseniors.com/senior-living-costs-cleveland",
+        "etv": 0.4410000145435333,
+        "is_featured_snippet": false,
+        "bucket": "assisted-living",
+        "geo": "cleveland",
+        "revenue_relevant": true
+      },
+      {
+        "keyword": "hudson senior living",
+        "search_volume": 210,
+        "cpc": 4.039999961853027,
+        "competition": 0.5299999713897705,
+        "keyword_difficulty": 12,
+        "position": 72,
+        "url": "https://www.guideforseniors.com/cleveland/hudson",
+        "etv": 0.4410000145435333,
+        "is_featured_snippet": false,
+        "bucket": "senior-living",
+        "geo": "cleveland",
+        "revenue_relevant": true
+      },
+      {
+        "keyword": "senior living hudson",
+        "search_volume": 210,
+        "cpc": 4.039999961853027,
+        "competition": 0.5299999713897705,
+        "keyword_difficulty": 19,
+        "position": 82,
+        "url": "https://www.guideforseniors.com/cleveland/hudson",
+        "etv": 0.4410000145435333,
+        "is_featured_snippet": false,
+        "bucket": "senior-living",
+        "geo": "cleveland",
+        "revenue_relevant": true
+      },
+      {
+        "keyword": "senior living in medina ohio",
+        "search_volume": 90,
+        "cpc": 8.850000381469727,
+        "competition": 0.7400000095367432,
+        "keyword_difficulty": 1,
+        "position": 22,
+        "url": "https://www.guideforseniors.com/cleveland/medina",
+        "etv": 0.3869999945163727,
+        "is_featured_snippet": false,
+        "bucket": "senior-living",
+        "geo": "cleveland",
+        "revenue_relevant": true
+      },
+      {
+        "keyword": "assisted living hudson ohio",
+        "search_volume": 170,
+        "cpc": 6.480000019073486,
+        "competition": 0.7200000286102295,
+        "keyword_difficulty": 10,
+        "position": 64,
+        "url": "https://www.guideforseniors.com/cleveland/hudson",
+        "etv": 0.3569999933242798,
+        "is_featured_snippet": false,
+        "bucket": "assisted-living",
+        "geo": "cleveland",
+        "revenue_relevant": true
+      },
+      {
+        "keyword": "assisted living in hudson ohio",
+        "search_volume": 170,
+        "cpc": 6.480000019073486,
+        "competition": 0.7200000286102295,
+        "keyword_difficulty": 10,
+        "position": 57,
+        "url": "https://www.guideforseniors.com/cleveland/hudson",
+        "etv": 0.3569999933242798,
+        "is_featured_snippet": false,
+        "bucket": "assisted-living",
+        "geo": "cleveland",
+        "revenue_relevant": true
+      },
+      {
+        "keyword": "assisted living in parma ohio",
+        "search_volume": 170,
+        "cpc": 11.289999961853027,
+        "competition": 0.5899999737739563,
+        "keyword_difficulty": 0,
+        "position": 58,
+        "url": "https://www.guideforseniors.com/cleveland/parma",
+        "etv": 0.3569999933242798,
+        "is_featured_snippet": false,
+        "bucket": "assisted-living",
+        "geo": "cleveland",
+        "revenue_relevant": true
+      },
+      {
+        "keyword": "assisted living in rocky river",
+        "search_volume": 170,
+        "cpc": 8.279999732971191,
+        "competition": 0.5,
+        "keyword_difficulty": 0,
+        "position": 76,
+        "url": "https://www.guideforseniors.com/cleveland/rocky-river",
+        "etv": 0.3569999933242798,
+        "is_featured_snippet": false,
+        "bucket": "assisted-living",
+        "geo": "cleveland",
+        "revenue_relevant": true
+      },
+      {
+        "keyword": "assisted living parma ohio",
+        "search_volume": 170,
+        "cpc": 11.289999961853027,
+        "competition": 0.5899999737739563,
+        "keyword_difficulty": 0,
+        "position": 65,
+        "url": "https://www.guideforseniors.com/cleveland/parma",
+        "etv": 0.3569999933242798,
+        "is_featured_snippet": false,
+        "bucket": "assisted-living",
+        "geo": "cleveland",
+        "revenue_relevant": true
+      },
+      {
+        "keyword": "assisted living rocky river ohio",
+        "search_volume": 170,
+        "cpc": 8.279999732971191,
+        "competition": 0.5,
+        "keyword_difficulty": 0,
+        "position": 55,
+        "url": "https://www.guideforseniors.com/cleveland/rocky-river",
+        "etv": 0.3569999933242798,
+        "is_featured_snippet": false,
+        "bucket": "assisted-living",
+        "geo": "cleveland",
+        "revenue_relevant": true
+      },
+      {
+        "keyword": "brunswick village assisted living",
+        "search_volume": 170,
+        "cpc": null,
+        "competition": 0.029999999329447746,
+        "keyword_difficulty": 0,
+        "position": 89,
+        "url": "https://www.guideforseniors.com/cleveland/brunswick",
+        "etv": 0.3569999933242798,
+        "is_featured_snippet": false,
+        "bucket": "assisted-living",
+        "geo": "cleveland",
+        "revenue_relevant": true
+      },
+      {
+        "keyword": "generations senior living berea",
+        "search_volume": 170,
+        "cpc": 4.070000171661377,
+        "competition": 0.3700000047683716,
+        "keyword_difficulty": 0,
+        "position": 69,
+        "url": "https://www.guideforseniors.com/cleveland/berea",
+        "etv": 0.3569999933242798,
+        "is_featured_snippet": false,
+        "bucket": "senior-living",
+        "geo": "cleveland",
+        "revenue_relevant": true
+      },
+      {
+        "keyword": "generations senior living strongsville",
+        "search_volume": 170,
+        "cpc": 3.240000009536743,
+        "competition": 0.30000001192092896,
+        "keyword_difficulty": 0,
+        "position": 76,
+        "url": "https://www.guideforseniors.com/cleveland/strongsville",
+        "etv": 0.3569999933242798,
+        "is_featured_snippet": false,
+        "bucket": "senior-living",
+        "geo": "cleveland",
+        "revenue_relevant": true
+      },
+      {
+        "keyword": "hudson assisted living",
+        "search_volume": 170,
+        "cpc": 6.480000019073486,
+        "competition": 0.7200000286102295,
+        "keyword_difficulty": 19,
+        "position": 71,
+        "url": "https://www.guideforseniors.com/cleveland/hudson",
+        "etv": 0.3569999933242798,
+        "is_featured_snippet": false,
+        "bucket": "assisted-living",
+        "geo": "cleveland",
+        "revenue_relevant": true
+      },
+      {
+        "keyword": "optimized senior living assisted living and memory care loveland",
+        "search_volume": 170,
+        "cpc": null,
+        "competition": 0.029999999329447746,
+        "keyword_difficulty": 0,
+        "position": 101,
+        "url": "https://www.guideforseniors.com/assisted-living-cleveland",
+        "etv": 0.3569999933242798,
+        "is_featured_snippet": false,
+        "bucket": "memory-care",
+        "geo": "cleveland",
+        "revenue_relevant": true
+      },
+      {
+        "keyword": "rocky river assisted living",
+        "search_volume": 170,
+        "cpc": 8.279999732971191,
+        "competition": 0.5,
+        "keyword_difficulty": 0,
+        "position": 65,
+        "url": "https://www.guideforseniors.com/cleveland/rocky-river",
+        "etv": 0.3569999933242798,
+        "is_featured_snippet": false,
+        "bucket": "assisted-living",
+        "geo": "cleveland",
+        "revenue_relevant": true
+      },
+      {
+        "keyword": "senior living in westlake",
+        "search_volume": 170,
+        "cpc": 7.119999885559082,
+        "competition": 0.6399999856948853,
+        "keyword_difficulty": 23,
+        "position": 77,
+        "url": "https://www.guideforseniors.com/cleveland/westlake",
+        "etv": 0.3569999933242798,
+        "is_featured_snippet": false,
+        "bucket": "senior-living",
+        "geo": "cleveland",
+        "revenue_relevant": true
+      },
+      {
+        "keyword": "senior living independence",
+        "search_volume": 170,
+        "cpc": 6.900000095367432,
+        "competition": 0.8399999737739563,
+        "keyword_difficulty": 3,
+        "position": 107,
+        "url": "https://www.guideforseniors.com/cleveland/independence",
+        "etv": 0.3569999933242798,
+        "is_featured_snippet": false,
+        "bucket": "senior-living",
+        "geo": "cleveland",
+        "revenue_relevant": true
+      }
+    ],
+    "medicaid_top": [
+      {
+        "keyword": "medicaid for assisted living",
+        "search_volume": 4400,
+        "cpc": 6.869999885559082,
+        "competition": 0.009999999776482582,
+        "keyword_difficulty": 19,
+        "position": 72,
+        "url": "https://www.guideforseniors.com/medicaid-assisted-living-ohio",
+        "etv": 9.239999771118164,
+        "is_featured_snippet": false,
+        "bucket": "medicaid",
+        "geo": "other",
+        "revenue_relevant": false
+      },
+      {
+        "keyword": "medicaid assisted living waiver",
+        "search_volume": 480,
+        "cpc": 9.380000114440918,
+        "competition": 0.12999999523162842,
+        "keyword_difficulty": 16,
+        "position": 57,
+        "url": "https://www.guideforseniors.com/blog/medicaid-assisted-living-ohio",
+        "etv": 1.0080000162124634,
+        "is_featured_snippet": false,
+        "bucket": "medicaid",
+        "geo": "other",
+        "revenue_relevant": false
+      },
+      {
+        "keyword": "how to pay for assisted living in ohio",
+        "search_volume": 70,
+        "cpc": 3.5799999237060547,
+        "competition": 0.5600000023841858,
+        "keyword_difficulty": 3,
+        "position": 15,
+        "url": "https://www.guideforseniors.com/blog/medicaid-assisted-living-ohio",
+        "etv": 0.5249999761581421,
+        "is_featured_snippet": false,
+        "bucket": "medicaid",
+        "geo": "other",
+        "revenue_relevant": false
+      },
+      {
+        "keyword": "assisted living waiver in ohio",
+        "search_volume": 110,
+        "cpc": 19.3700008392334,
+        "competition": 0.10000000149011612,
+        "keyword_difficulty": 0,
+        "position": 38,
+        "url": "https://www.guideforseniors.com/blog/medicaid-assisted-living-ohio",
+        "etv": 0.23100000619888306,
+        "is_featured_snippet": false,
+        "bucket": "medicaid",
+        "geo": "other",
+        "revenue_relevant": false
+      },
+      {
+        "keyword": "assisted living waiver ohio",
+        "search_volume": 110,
+        "cpc": 19.3700008392334,
+        "competition": 0.10000000149011612,
+        "keyword_difficulty": 0,
+        "position": 39,
+        "url": "https://www.guideforseniors.com/blog/medicaid-assisted-living-ohio",
+        "etv": 0.23100000619888306,
+        "is_featured_snippet": false,
+        "bucket": "medicaid",
+        "geo": "other",
+        "revenue_relevant": false
+      },
+      {
+        "keyword": "assisted living waiver program ohio",
+        "search_volume": 110,
+        "cpc": 11.5,
+        "competition": 0.12999999523162842,
+        "keyword_difficulty": 0,
+        "position": 36,
+        "url": "https://www.guideforseniors.com/blog/medicaid-assisted-living-ohio",
+        "etv": 0.23100000619888306,
+        "is_featured_snippet": false,
+        "bucket": "medicaid",
+        "geo": "other",
+        "revenue_relevant": false
+      },
+      {
+        "keyword": "ohio assisted living waiver",
+        "search_volume": 110,
+        "cpc": 19.3700008392334,
+        "competition": 0.10000000149011612,
+        "keyword_difficulty": 0,
+        "position": 39,
+        "url": "https://www.guideforseniors.com/blog/medicaid-assisted-living-ohio",
+        "etv": 0.23100000619888306,
+        "is_featured_snippet": false,
+        "bucket": "medicaid",
+        "geo": "other",
+        "revenue_relevant": false
+      },
+      {
+        "keyword": "ohio assisted living waiver program",
+        "search_volume": 110,
+        "cpc": 11.5,
+        "competition": 0.12999999523162842,
+        "keyword_difficulty": 0,
+        "position": 32,
+        "url": "https://www.guideforseniors.com/blog/medicaid-assisted-living-ohio",
+        "etv": 0.23100000619888306,
+        "is_featured_snippet": false,
+        "bucket": "medicaid",
+        "geo": "other",
+        "revenue_relevant": false
+      },
+      {
+        "keyword": "assisted living medicaid waiver ohio",
+        "search_volume": 90,
+        "cpc": null,
+        "competition": 0.03999999910593033,
+        "keyword_difficulty": 0,
+        "position": 37,
+        "url": "https://www.guideforseniors.com/blog/medicaid-assisted-living-ohio",
+        "etv": 0.1889999955892563,
+        "is_featured_snippet": false,
+        "bucket": "medicaid",
+        "geo": "other",
+        "revenue_relevant": false
+      },
+      {
+        "keyword": "medicaid assisted living waiver ohio",
+        "search_volume": 90,
+        "cpc": null,
+        "competition": 0.03999999910593033,
+        "keyword_difficulty": 0,
+        "position": 37,
+        "url": "https://www.guideforseniors.com/blog/medicaid-assisted-living-ohio",
+        "etv": 0.1889999955892563,
+        "is_featured_snippet": false,
+        "bucket": "medicaid",
+        "geo": "other",
+        "revenue_relevant": false
+      },
+      {
+        "keyword": "medicaid waiver assisted living ohio",
+        "search_volume": 90,
+        "cpc": null,
+        "competition": 0.03999999910593033,
+        "keyword_difficulty": 0,
+        "position": 36,
+        "url": "https://www.guideforseniors.com/blog/medicaid-assisted-living-ohio",
+        "etv": 0.1889999955892563,
+        "is_featured_snippet": false,
+        "bucket": "medicaid",
+        "geo": "other",
+        "revenue_relevant": false
+      },
+      {
+        "keyword": "ohio medicaid assisted living waiver",
+        "search_volume": 90,
+        "cpc": null,
+        "competition": 0.03999999910593033,
+        "keyword_difficulty": 0,
+        "position": 48,
+        "url": "https://www.guideforseniors.com/blog/medicaid-assisted-living-ohio",
+        "etv": 0.1889999955892563,
+        "is_featured_snippet": false,
+        "bucket": "medicaid",
+        "geo": "other",
+        "revenue_relevant": false
+      },
+      {
+        "keyword": "ohio medicaid waiver assisted living",
+        "search_volume": 90,
+        "cpc": null,
+        "competition": 0.03999999910593033,
+        "keyword_difficulty": 0,
+        "position": 39,
+        "url": "https://www.guideforseniors.com/blog/medicaid-assisted-living-ohio",
+        "etv": 0.1889999955892563,
+        "is_featured_snippet": false,
+        "bucket": "medicaid",
+        "geo": "other",
+        "revenue_relevant": false
+      },
+      {
+        "keyword": "ohio medicaid waiver for assisted living",
+        "search_volume": 90,
+        "cpc": null,
+        "competition": 0.03999999910593033,
+        "keyword_difficulty": 0,
+        "position": 40,
+        "url": "https://www.guideforseniors.com/blog/medicaid-assisted-living-ohio",
+        "etv": 0.1889999955892563,
+        "is_featured_snippet": false,
+        "bucket": "medicaid",
+        "geo": "other",
+        "revenue_relevant": false
+      },
+      {
+        "keyword": "assisted living for medicaid patients",
+        "search_volume": 70,
+        "cpc": 7.519999980926514,
+        "competition": 0.5299999713897705,
+        "keyword_difficulty": 19,
+        "position": 99,
+        "url": "https://www.guideforseniors.com/blog/medicaid-assisted-living-ohio",
+        "etv": 0.1469999998807907,
+        "is_featured_snippet": false,
+        "bucket": "medicaid",
+        "geo": "other",
+        "revenue_relevant": false
+      },
+      {
+        "keyword": "ohio medicaid waiver assisted living facilities pdf",
+        "search_volume": 70,
+        "cpc": 7.550000190734863,
+        "competition": 0.11999999731779099,
+        "keyword_difficulty": 0,
+        "position": 54,
+        "url": "https://www.guideforseniors.com/medicaid-assisted-living-ohio",
+        "etv": 0.1469999998807907,
+        "is_featured_snippet": false,
+        "bucket": "medicaid",
+        "geo": "other",
+        "revenue_relevant": false
+      },
+      {
+        "keyword": "assisted living vs nursing home medicaid",
+        "search_volume": 50,
+        "cpc": 1.409999966621399,
+        "competition": 0.09000000357627869,
+        "keyword_difficulty": 4,
+        "position": 72,
+        "url": "https://www.guideforseniors.com/blog/assisted-living-vs-nursing-home",
+        "etv": 0.10499999672174454,
+        "is_featured_snippet": false,
+        "bucket": "medicaid",
+        "geo": "other",
+        "revenue_relevant": false
+      },
+      {
+        "keyword": "does medicaid pay for assisted living in ohio",
+        "search_volume": 50,
+        "cpc": null,
+        "competition": 0.029999999329447746,
+        "keyword_difficulty": 0,
+        "position": 31,
+        "url": "https://www.guideforseniors.com/blog/medicaid-assisted-living-ohio",
+        "etv": 0.10499999672174454,
+        "is_featured_snippet": false,
+        "bucket": "medicaid",
+        "geo": "other",
+        "revenue_relevant": false
+      },
+      {
+        "keyword": "ohio medicaid assisted living",
+        "search_volume": 50,
+        "cpc": 1.9600000381469727,
+        "competition": 0.27000001072883606,
+        "keyword_difficulty": 0,
+        "position": 35,
+        "url": "https://www.guideforseniors.com/blog/medicaid-assisted-living-ohio",
+        "etv": 0.10499999672174454,
+        "is_featured_snippet": false,
+        "bucket": "medicaid",
+        "geo": "other",
+        "revenue_relevant": false
+      },
+      {
+        "keyword": "assisted living cleveland ohio medicaid",
+        "search_volume": 30,
+        "cpc": 1.2300000190734863,
+        "competition": 0.5099999904632568,
+        "keyword_difficulty": 0,
+        "position": 31,
+        "url": "https://www.guideforseniors.com/blog/medicaid-assisted-living-ohio",
+        "etv": 0.06300000101327896,
+        "is_featured_snippet": false,
+        "bucket": "medicaid",
+        "geo": "cleveland",
+        "revenue_relevant": false
+      }
+    ]
+  },
+  "relevant_pages": {
+    "status": "Ok.",
+    "cost": 0.018,
+    "total_count": 71,
+    "rows": [
+      {
+        "page": "https://www.guideforseniors.com/blog/assisted-living-vs-nursing-home",
+        "etv": 48.279000617563725,
+        "count": 14,
+        "pos_1": 0,
+        "pos_2_3": 0,
+        "pos_4_10": 0,
+        "pos_11_20": 0,
+        "pos_21_30": 0,
+        "pos_31_100": null,
+        "estimated_paid_traffic_cost": 530.8039697855711,
+        "bucket": "other",
+        "geo": "other",
+        "revenue_relevant": false
+      },
+      {
+        "page": "https://www.guideforseniors.com/cleveland/westlake",
+        "etv": 42.04199966788292,
+        "count": 45,
+        "pos_1": 0,
+        "pos_2_3": 0,
+        "pos_4_10": 0,
+        "pos_11_20": 0,
+        "pos_21_30": 0,
+        "pos_31_100": null,
+        "estimated_paid_traffic_cost": 289.6723195761442,
+        "bucket": "other",
+        "geo": "cleveland",
+        "revenue_relevant": false
+      },
+      {
+        "page": "https://www.guideforseniors.com/cleveland/parma",
+        "etv": 30.324000127613544,
+        "count": 35,
+        "pos_1": 0,
+        "pos_2_3": 0,
+        "pos_4_10": 0,
+        "pos_11_20": 0,
+        "pos_21_30": 0,
+        "pos_31_100": null,
+        "estimated_paid_traffic_cost": 174.60218555480242,
+        "bucket": "other",
+        "geo": "cleveland",
+        "revenue_relevant": false
+      },
+      {
+        "page": "https://www.guideforseniors.com/cleveland/akron",
+        "etv": 19.398960316553712,
+        "count": 26,
+        "pos_1": 0,
+        "pos_2_3": 0,
+        "pos_4_10": 0,
+        "pos_11_20": 0,
+        "pos_21_30": 0,
+        "pos_31_100": null,
+        "estimated_paid_traffic_cost": 148.3971288036555,
+        "bucket": "other",
+        "geo": "cleveland",
+        "revenue_relevant": false
+      },
+      {
+        "page": "https://www.guideforseniors.com/cleveland/cuyahoga-falls",
+        "etv": 18.64800050109625,
+        "count": 33,
+        "pos_1": 0,
+        "pos_2_3": 0,
+        "pos_4_10": 0,
+        "pos_11_20": 0,
+        "pos_21_30": 0,
+        "pos_31_100": null,
+        "estimated_paid_traffic_cost": 104.79419977217913,
+        "bucket": "other",
+        "geo": "cleveland",
+        "revenue_relevant": false
+      },
+      {
+        "page": "https://www.guideforseniors.com/cleveland/medina",
+        "etv": 17.103000033646822,
+        "count": 34,
+        "pos_1": 0,
+        "pos_2_3": 0,
+        "pos_4_10": 0,
+        "pos_11_20": 1,
+        "pos_21_30": 1,
+        "pos_31_100": null,
+        "estimated_paid_traffic_cost": 167.50089406967163,
+        "bucket": "other",
+        "geo": "cleveland",
+        "revenue_relevant": false
+      },
+      {
+        "page": "https://www.guideforseniors.com/cleveland/stow",
+        "etv": 16.401000574231148,
+        "count": 17,
+        "pos_1": 0,
+        "pos_2_3": 0,
+        "pos_4_10": 0,
+        "pos_11_20": 0,
+        "pos_21_30": 0,
+        "pos_31_100": null,
+        "estimated_paid_traffic_cost": 73.24484956264496,
+        "bucket": "other",
+        "geo": "cleveland",
+        "revenue_relevant": false
+      },
+      {
+        "page": "https://www.guideforseniors.com/cleveland/cleveland",
+        "etv": 14.531999409198761,
+        "count": 14,
+        "pos_1": 0,
+        "pos_2_3": 0,
+        "pos_4_10": 0,
+        "pos_11_20": 0,
+        "pos_21_30": 0,
+        "pos_31_100": null,
+        "estimated_paid_traffic_cost": 91.33110189437866,
+        "bucket": "other",
+        "geo": "cleveland",
+        "revenue_relevant": false
+      },
+      {
+        "page": "https://www.guideforseniors.com/cleveland/rocky-river",
+        "etv": 13.838999845087528,
+        "count": 31,
+        "pos_1": 0,
+        "pos_2_3": 0,
+        "pos_4_10": 0,
+        "pos_11_20": 0,
+        "pos_21_30": 1,
+        "pos_31_100": null,
+        "estimated_paid_traffic_cost": 70.03877963125706,
+        "bucket": "other",
+        "geo": "cleveland",
+        "revenue_relevant": false
+      },
+      {
+        "page": "https://www.guideforseniors.com/cleveland/chardon",
+        "etv": 13.755000159144402,
+        "count": 15,
+        "pos_1": 0,
+        "pos_2_3": 0,
+        "pos_4_10": 0,
+        "pos_11_20": 0,
+        "pos_21_30": 0,
+        "pos_31_100": null,
+        "estimated_paid_traffic_cost": 141.2197486460209,
+        "bucket": "other",
+        "geo": "cleveland",
+        "revenue_relevant": false
+      },
+      {
+        "page": "https://www.guideforseniors.com/cleveland/beachwood",
+        "etv": 13.657000049948692,
+        "count": 27,
+        "pos_1": 0,
+        "pos_2_3": 0,
+        "pos_4_10": 0,
+        "pos_11_20": 1,
+        "pos_21_30": 0,
+        "pos_31_100": null,
+        "estimated_paid_traffic_cost": 73.74003028124571,
+        "bucket": "other",
+        "geo": "cleveland",
+        "revenue_relevant": false
+      },
+      {
+        "page": "https://www.guideforseniors.com/cleveland/hudson",
+        "etv": 13.380000088363886,
+        "count": 25,
+        "pos_1": 0,
+        "pos_2_3": 0,
+        "pos_4_10": 0,
+        "pos_11_20": 2,
+        "pos_21_30": 0,
+        "pos_31_100": null,
+        "estimated_paid_traffic_cost": 58.52576922625303,
+        "bucket": "other",
+        "geo": "cleveland",
+        "revenue_relevant": false
+      },
+      {
+        "page": "https://www.guideforseniors.com/blog/magnesium-for-health",
+        "etv": 13.230000160634518,
+        "count": 35,
+        "pos_1": 0,
+        "pos_2_3": 0,
+        "pos_4_10": 0,
+        "pos_11_20": 0,
+        "pos_21_30": 0,
+        "pos_31_100": null,
+        "estimated_paid_traffic_cost": 23.56977017398458,
+        "bucket": "other",
+        "geo": "other",
+        "revenue_relevant": false
+      },
+      {
+        "page": "https://www.guideforseniors.com/assisted-living-cleveland",
+        "etv": 12.26399964466691,
+        "count": 10,
+        "pos_1": 0,
+        "pos_2_3": 0,
+        "pos_4_10": 0,
+        "pos_11_20": 0,
+        "pos_21_30": 0,
+        "pos_31_100": null,
+        "estimated_paid_traffic_cost": 154.3495787680149,
+        "bucket": "other",
+        "geo": "cleveland",
+        "revenue_relevant": false
+      },
+      {
+        "page": "https://www.guideforseniors.com/blog/senior-online-games",
+        "etv": 11.696999788284302,
+        "count": 16,
+        "pos_1": 0,
+        "pos_2_3": 0,
+        "pos_4_10": 0,
+        "pos_11_20": 0,
+        "pos_21_30": 2,
+        "pos_31_100": null,
+        "estimated_paid_traffic_cost": 21.54746973514557,
+        "bucket": "other",
+        "geo": "other",
+        "revenue_relevant": false
+      },
+      {
+        "page": "https://www.guideforseniors.com/cleveland/strongsville",
+        "etv": 11.403000082820654,
+        "count": 29,
+        "pos_1": 0,
+        "pos_2_3": 0,
+        "pos_4_10": 0,
+        "pos_11_20": 0,
+        "pos_21_30": 0,
+        "pos_31_100": null,
+        "estimated_paid_traffic_cost": 60.70722031965852,
+        "bucket": "other",
+        "geo": "cleveland",
+        "revenue_relevant": false
+      },
+      {
+        "page": "https://www.guideforseniors.com/cleveland/mentor",
+        "etv": 11.004000216722488,
+        "count": 27,
+        "pos_1": 0,
+        "pos_2_3": 0,
+        "pos_4_10": 0,
+        "pos_11_20": 0,
+        "pos_21_30": 0,
+        "pos_31_100": null,
+        "estimated_paid_traffic_cost": 63.971250999718904,
+        "bucket": "other",
+        "geo": "cleveland",
+        "revenue_relevant": false
+      },
+      {
+        "page": "https://www.guideforseniors.com/medicaid-assisted-living-ohio",
+        "etv": 9.386999770998955,
+        "count": 2,
+        "pos_1": 0,
+        "pos_2_3": 0,
+        "pos_4_10": 0,
+        "pos_11_20": 0,
+        "pos_21_30": 0,
+        "pos_31_100": null,
+        "estimated_paid_traffic_cost": 64.58865177631378,
+        "bucket": "medicaid",
+        "geo": "other",
+        "revenue_relevant": false
+      },
+      {
+        "page": "https://www.guideforseniors.com/cleveland/lakewood",
+        "etv": 7.8539998307824135,
+        "count": 22,
+        "pos_1": 0,
+        "pos_2_3": 0,
+        "pos_4_10": 0,
+        "pos_11_20": 1,
+        "pos_21_30": 0,
+        "pos_31_100": null,
+        "estimated_paid_traffic_cost": 46.42238987982273,
+        "bucket": "other",
+        "geo": "cleveland",
+        "revenue_relevant": false
+      },
+      {
+        "page": "https://www.guideforseniors.com/cleveland/shaker-heights",
+        "etv": 7.493999969214201,
+        "count": 15,
+        "pos_1": 0,
+        "pos_2_3": 0,
+        "pos_4_10": 0,
+        "pos_11_20": 1,
+        "pos_21_30": 1,
+        "pos_31_100": null,
+        "estimated_paid_traffic_cost": 39.99471016228199,
+        "bucket": "other",
+        "geo": "cleveland",
+        "revenue_relevant": false
+      },
+      {
+        "page": "https://www.guideforseniors.com/cleveland/solon",
+        "etv": 6.594000019133091,
+        "count": 11,
+        "pos_1": 0,
+        "pos_2_3": 0,
+        "pos_4_10": 0,
+        "pos_11_20": 0,
+        "pos_21_30": 0,
+        "pos_31_100": null,
+        "estimated_paid_traffic_cost": 35.574210703372955,
+        "bucket": "other",
+        "geo": "cleveland",
+        "revenue_relevant": false
+      },
+      {
+        "page": "https://www.guideforseniors.com/cleveland/north-ridgeville",
+        "etv": 6.02699988335371,
+        "count": 11,
+        "pos_1": 0,
+        "pos_2_3": 0,
+        "pos_4_10": 0,
+        "pos_11_20": 0,
+        "pos_21_30": 0,
+        "pos_31_100": null,
+        "estimated_paid_traffic_cost": 32.836440682411194,
+        "bucket": "other",
+        "geo": "cleveland",
+        "revenue_relevant": false
+      },
+      {
+        "page": "https://www.guideforseniors.com/blog/skilled-nursing-vs-assisted-living",
+        "etv": 5.523000068962574,
+        "count": 6,
+        "pos_1": 0,
+        "pos_2_3": 0,
+        "pos_4_10": 0,
+        "pos_11_20": 0,
+        "pos_21_30": 0,
+        "pos_31_100": null,
+        "estimated_paid_traffic_cost": 66.15860915184021,
+        "bucket": "other",
+        "geo": "other",
+        "revenue_relevant": false
+      },
+      {
+        "page": "https://www.guideforseniors.com/cleveland/berea",
+        "etv": 4.914000019431114,
+        "count": 10,
+        "pos_1": 0,
+        "pos_2_3": 0,
+        "pos_4_10": 0,
+        "pos_11_20": 0,
+        "pos_21_30": 0,
+        "pos_31_100": null,
+        "estimated_paid_traffic_cost": 14.248710058629513,
+        "bucket": "other",
+        "geo": "cleveland",
+        "revenue_relevant": false
+      },
+      {
+        "page": "https://www.guideforseniors.com/blog/medicaid-assisted-living-ohio",
+        "etv": 4.346999991685152,
+        "count": 19,
+        "pos_1": 0,
+        "pos_2_3": 0,
+        "pos_4_10": 0,
+        "pos_11_20": 1,
+        "pos_21_30": 4,
+        "pos_31_100": null,
+        "estimated_paid_traffic_cost": 31.648680046200752,
+        "bucket": "medicaid",
+        "geo": "other",
+        "revenue_relevant": false
+      },
+      {
+        "page": "https://www.guideforseniors.com/cleveland/brunswick",
+        "etv": 3.2339999973773956,
+        "count": 12,
+        "pos_1": 0,
+        "pos_2_3": 0,
+        "pos_4_10": 0,
+        "pos_11_20": 0,
+        "pos_21_30": 0,
+        "pos_31_100": null,
+        "estimated_paid_traffic_cost": 41.51573899388313,
+        "bucket": "other",
+        "geo": "cleveland",
+        "revenue_relevant": false
+      },
+      {
+        "page": "https://www.guideforseniors.com/resources/social-activities",
+        "etv": 3.171000000089407,
+        "count": 17,
+        "pos_1": 0,
+        "pos_2_3": 0,
+        "pos_4_10": 0,
+        "pos_11_20": 0,
+        "pos_21_30": 0,
+        "pos_31_100": null,
+        "estimated_paid_traffic_cost": 21.87611972540617,
+        "bucket": "other",
+        "geo": "other",
+        "revenue_relevant": false
+      },
+      {
+        "page": "https://www.guideforseniors.com/cleveland/tallmadge",
+        "etv": 3.086999900639057,
+        "count": 5,
+        "pos_1": 0,
+        "pos_2_3": 0,
+        "pos_4_10": 0,
+        "pos_11_20": 0,
+        "pos_21_30": 0,
+        "pos_31_100": null,
+        "estimated_paid_traffic_cost": 18.752580165863037,
+        "bucket": "other",
+        "geo": "cleveland",
+        "revenue_relevant": false
+      },
+      {
+        "page": "https://www.guideforseniors.com/cleveland/community/d513dee6-8f01-43bf-ae4c-9da58f0e1fb2/sunrise-at-parma",
+        "etv": 3.0240001678466797,
+        "count": 2,
+        "pos_1": 0,
+        "pos_2_3": 0,
+        "pos_4_10": 0,
+        "pos_11_20": 0,
+        "pos_21_30": 0,
+        "pos_31_100": null,
+        "estimated_paid_traffic_cost": 9.586079597473145,
+        "bucket": "other",
+        "geo": "cleveland",
+        "revenue_relevant": false
+      },
+      {
+        "page": "https://www.guideforseniors.com/cleveland/community/e92e4621-15f1-4ef0-9d2b-04d18c67b372/vitalia-active-adult-community-north-olmsted-north-olmsted-oh-independent-living",
+        "etv": 3.0240001678466797,
+        "count": 2,
+        "pos_1": 0,
+        "pos_2_3": 0,
+        "pos_4_10": 0,
+        "pos_11_20": 0,
+        "pos_21_30": 2,
+        "pos_31_100": null,
+        "estimated_paid_traffic_cost": 12.731040000915527,
+        "bucket": "other",
+        "geo": "cleveland",
+        "revenue_relevant": false
+      },
+      {
+        "page": "https://www.guideforseniors.com/cleveland/community/b64c4494-2ea7-45f6-bbe3-a66a33e777a2/berea-alzheimer-s-care-center",
+        "etv": 3.02400004863739,
+        "count": 3,
+        "pos_1": 0,
+        "pos_2_3": 0,
+        "pos_4_10": 0,
+        "pos_11_20": 0,
+        "pos_21_30": 1,
+        "pos_31_100": null,
+        "estimated_paid_traffic_cost": 39.342241287231445,
+        "bucket": "other",
+        "geo": "cleveland",
+        "revenue_relevant": false
+      },
+      {
+        "page": "https://www.guideforseniors.com/cleveland/richmond-heights",
+        "etv": 2.246999979019165,
+        "count": 2,
+        "pos_1": 0,
+        "pos_2_3": 0,
+        "pos_4_10": 0,
+        "pos_11_20": 0,
+        "pos_21_30": 1,
+        "pos_31_100": null,
+        "estimated_paid_traffic_cost": 2.589509963989258,
+        "bucket": "other",
+        "geo": "cleveland",
+        "revenue_relevant": false
+      },
+      {
+        "page": "https://www.guideforseniors.com/cleveland/community/217c0b13-e5c0-480c-9131-a171e2b707e7/o-neill-healthcare-lakewood",
+        "etv": 2.0999999046325684,
+        "count": 1,
+        "pos_1": 0,
+        "pos_2_3": 0,
+        "pos_4_10": 0,
+        "pos_11_20": 0,
+        "pos_21_30": 0,
+        "pos_31_100": null,
+        "estimated_paid_traffic_cost": 8.883000373840332,
+        "bucket": "other",
+        "geo": "cleveland",
+        "revenue_relevant": false
+      },
+      {
+        "page": "https://www.guideforseniors.com/cleveland",
+        "etv": 2.0160000026226044,
+        "count": 4,
+        "pos_1": 0,
+        "pos_2_3": 0,
+        "pos_4_10": 0,
+        "pos_11_20": 0,
+        "pos_21_30": 0,
+        "pos_31_100": null,
+        "estimated_paid_traffic_cost": 15.729839563369751,
+        "bucket": "other",
+        "geo": "cleveland",
+        "revenue_relevant": false
+      },
+      {
+        "page": "https://www.guideforseniors.com/cleveland/independence",
+        "etv": 1.9950000047683716,
+        "count": 3,
+        "pos_1": 0,
+        "pos_2_3": 0,
+        "pos_4_10": 0,
+        "pos_11_20": 0,
+        "pos_21_30": 0,
+        "pos_31_100": null,
+        "estimated_paid_traffic_cost": 16.41087031364441,
+        "bucket": "other",
+        "geo": "cleveland",
+        "revenue_relevant": false
+      },
+      {
+        "page": "https://www.guideforseniors.com/cleveland/community/7e5b6de5-997e-495e-a498-f5f2e9ab5302/independence-village-of-aurora",
+        "etv": 1.8480000495910645,
+        "count": 1,
+        "pos_1": 0,
+        "pos_2_3": 0,
+        "pos_4_10": 0,
+        "pos_11_20": 0,
+        "pos_21_30": 0,
+        "pos_31_100": null,
+        "estimated_paid_traffic_cost": 13.508879661560059,
+        "bucket": "other",
+        "geo": "cleveland",
+        "revenue_relevant": false
+      },
+      {
+        "page": "https://www.guideforseniors.com/cleveland/community/220ef84c-9916-44aa-a649-621a936642f1/maplewood-at-cuyahoga-falls-cuyahoga-falls-oh-assisted-living-memory-care",
+        "etv": 1.8480000495910645,
+        "count": 1,
+        "pos_1": 0,
+        "pos_2_3": 0,
+        "pos_4_10": 0,
+        "pos_11_20": 0,
+        "pos_21_30": 0,
+        "pos_31_100": null,
+        "estimated_paid_traffic_cost": 13.157759666442871,
+        "bucket": "other",
+        "geo": "cleveland",
+        "revenue_relevant": false
+      },
+      {
+        "page": "https://www.guideforseniors.com/cleveland/community/baac72b7-478e-4306-9761-398355cbd5d6/light-of-hearts-villa-bedford-oh-assisted-living-memory-care",
+        "etv": 1.8480000495910645,
+        "count": 1,
+        "pos_1": 0,
+        "pos_2_3": 0,
+        "pos_4_10": 0,
+        "pos_11_20": 0,
+        "pos_21_30": 1,
+        "pos_31_100": null,
+        "estimated_paid_traffic_cost": 8.667119979858398,
+        "bucket": "other",
+        "geo": "cleveland",
+        "revenue_relevant": false
+      },
+      {
+        "page": "https://www.guideforseniors.com/cleveland/community/b287add2-1b83-4c9f-b364-44e5117575e1/danbury-senior-living-mentor",
+        "etv": 1.532999962568283,
+        "count": 2,
+        "pos_1": 0,
+        "pos_2_3": 0,
+        "pos_4_10": 0,
+        "pos_11_20": 0,
+        "pos_21_30": 1,
+        "pos_31_100": null,
+        "estimated_paid_traffic_cost": 10.024770021438599,
+        "bucket": "other",
+        "geo": "cleveland",
+        "revenue_relevant": false
+      },
+      {
+        "page": "https://www.guideforseniors.com/cleveland/community/c22288f7-f3dc-41cc-99cf-8edcbe3b74c0/bickford-of-rocky-river,-rocky-river,-oh---assisted-living,-memory-care",
+        "etv": 1.5120000839233398,
+        "count": 1,
+        "pos_1": 0,
+        "pos_2_3": 0,
+        "pos_4_10": 0,
+        "pos_11_20": 0,
+        "pos_21_30": 0,
+        "pos_31_100": null,
+        "estimated_paid_traffic_cost": 10.402560234069824,
+        "bucket": "other",
+        "geo": "cleveland",
+        "revenue_relevant": false
+      },
+      {
+        "page": "https://www.guideforseniors.com/cleveland/community/1c3c6cea-bc72-42f7-aa7f-2337d3df69cc/crocker-pointe-health-and-rehabilitation",
+        "etv": 1.5120000839233398,
+        "count": 1,
+        "pos_1": 0,
+        "pos_2_3": 0,
+        "pos_4_10": 0,
+        "pos_11_20": 0,
+        "pos_21_30": 1,
+        "pos_31_100": null,
+        "estimated_paid_traffic_cost": 18.642959594726562,
+        "bucket": "other",
+        "geo": "cleveland",
+        "revenue_relevant": false
+      },
+      {
+        "page": "https://www.guideforseniors.com/cleveland/community/ba459ea6-2bb4-4bfa-af75-33b790b504ff/eliza-at-chagrin-falls",
+        "etv": 1.5120000839233398,
+        "count": 1,
+        "pos_1": 0,
+        "pos_2_3": 0,
+        "pos_4_10": 0,
+        "pos_11_20": 0,
+        "pos_21_30": 0,
+        "pos_31_100": null,
+        "estimated_paid_traffic_cost": 0,
+        "bucket": "other",
+        "geo": "cleveland",
+        "revenue_relevant": false
+      },
+      {
+        "page": "https://www.guideforseniors.com/blog/residential-care-facility-vs-nursing-home-ohio-differences",
+        "etv": 1.323000006377697,
+        "count": 9,
+        "pos_1": 0,
+        "pos_2_3": 0,
+        "pos_4_10": 0,
+        "pos_11_20": 0,
+        "pos_21_30": 1,
+        "pos_31_100": null,
+        "estimated_paid_traffic_cost": 19.284090489149094,
+        "bucket": "other",
+        "geo": "other",
+        "revenue_relevant": false
+      },
+      {
+        "page": "https://www.guideforseniors.com/resources/games-for-seniors",
+        "etv": 1.2389999628067017,
+        "count": 1,
+        "pos_1": 0,
+        "pos_2_3": 0,
+        "pos_4_10": 0,
+        "pos_11_20": 0,
+        "pos_21_30": 0,
+        "pos_31_100": null,
+        "estimated_paid_traffic_cost": 2.7010200023651123,
+        "bucket": "other",
+        "geo": "other",
+        "revenue_relevant": false
+      },
+      {
+        "page": "https://www.guideforseniors.com/senior-living-costs-cleveland",
+        "etv": 1.1760000213980675,
+        "count": 4,
+        "pos_1": 0,
+        "pos_2_3": 0,
+        "pos_4_10": 0,
+        "pos_11_20": 0,
+        "pos_21_30": 0,
+        "pos_31_100": null,
+        "estimated_paid_traffic_cost": 6.210749864578247,
+        "bucket": "other",
+        "geo": "cleveland",
+        "revenue_relevant": false
+      },
+      {
+        "page": "https://www.guideforseniors.com/independent-living-cleveland",
+        "etv": 1.154999978840351,
+        "count": 6,
+        "pos_1": 0,
+        "pos_2_3": 0,
+        "pos_4_10": 0,
+        "pos_11_20": 0,
+        "pos_21_30": 0,
+        "pos_31_100": null,
+        "estimated_paid_traffic_cost": 8.23682987689972,
+        "bucket": "other",
+        "geo": "cleveland",
+        "revenue_relevant": false
+      },
+      {
+        "page": "https://www.guideforseniors.com/cleveland/south-russell",
+        "etv": 1.0080000162124634,
+        "count": 1,
+        "pos_1": 0,
+        "pos_2_3": 0,
+        "pos_4_10": 0,
+        "pos_11_20": 0,
+        "pos_21_30": 0,
+        "pos_31_100": null,
+        "estimated_paid_traffic_cost": 6.340320110321045,
+        "bucket": "other",
+        "geo": "cleveland",
+        "revenue_relevant": false
+      },
+      {
+        "page": "https://www.guideforseniors.com/cleveland/bedford",
+        "etv": 0.4620000123977661,
+        "count": 2,
+        "pos_1": 0,
+        "pos_2_3": 0,
+        "pos_4_10": 0,
+        "pos_11_20": 0,
+        "pos_21_30": 0,
+        "pos_31_100": null,
+        "estimated_paid_traffic_cost": 3.5435400009155273,
+        "bucket": "other",
+        "geo": "cleveland",
+        "revenue_relevant": false
+      },
+      {
+        "page": "https://www.guideforseniors.com/in-home-care-cleveland",
+        "etv": 0.3569999933242798,
+        "count": 1,
+        "pos_1": 0,
+        "pos_2_3": 0,
+        "pos_4_10": 0,
+        "pos_11_20": 0,
+        "pos_21_30": 0,
+        "pos_31_100": null,
+        "estimated_paid_traffic_cost": 1.2994799613952637,
+        "bucket": "other",
+        "geo": "cleveland",
+        "revenue_relevant": false
+      },
+      {
+        "page": "https://www.guideforseniors.com/cleveland/community/09cacfc4-7260-4671-8f3a-68726e5b6729/king-david-post-acute-nursing-&-rehabilitation-llc",
+        "etv": 0.3149999901652336,
+        "count": 3,
+        "pos_1": 0,
+        "pos_2_3": 0,
+        "pos_4_10": 0,
+        "pos_11_20": 0,
+        "pos_21_30": 0,
+        "pos_31_100": null,
+        "estimated_paid_traffic_cost": 1.1487000286579132,
+        "bucket": "other",
+        "geo": "cleveland",
+        "revenue_relevant": false
+      }
+    ]
+  },
+  "competitors": {
+    "status": "Ok.",
+    "cost": 0.0144,
+    "rows": [
+      {
+        "domain": "guideforseniors.com",
+        "avg_position": 58.5609375,
+        "intersections": 640,
+        "etv": 422.3519613277167,
+        "count": 640,
+        "pos_1": 0,
+        "pos_2_3": 0,
+        "pos_4_10": 0
+      },
+      {
+        "domain": "facebook.com",
+        "avg_position": 18.71252204585538,
+        "intersections": 567,
+        "etv": 394.36396113596857,
+        "count": 567,
+        "pos_1": 0,
+        "pos_2_3": 0,
+        "pos_4_10": 0
+      },
+      {
+        "domain": "aplaceformom.com",
+        "avg_position": 11.95539033457249,
+        "intersections": 538,
+        "etv": 386.2639614325017,
+        "count": 538,
+        "pos_1": 0,
+        "pos_2_3": 0,
+        "pos_4_10": 0
+      },
+      {
+        "domain": "usnews.com",
+        "avg_position": 13.940726577437859,
+        "intersections": 523,
+        "etv": 381.03596152924,
+        "count": 523,
+        "pos_1": 0,
+        "pos_2_3": 0,
+        "pos_4_10": 0
+      },
+      {
+        "domain": "caring.com",
+        "avg_position": 22.265873015873016,
+        "intersections": 504,
+        "etv": 316.97896082140505,
+        "count": 504,
+        "pos_1": 0,
+        "pos_2_3": 0,
+        "pos_4_10": 0
+      },
+      {
+        "domain": "yelp.com",
+        "avg_position": 23.780793319415448,
+        "intersections": 479,
+        "etv": 296.2579605765641,
+        "count": 479,
+        "pos_1": 0,
+        "pos_2_3": 0,
+        "pos_4_10": 0
+      },
+      {
+        "domain": "seniorly.com",
+        "avg_position": 27.699788583509513,
+        "intersections": 473,
+        "etv": 307.1059610005468,
+        "count": 473,
+        "pos_1": 0,
+        "pos_2_3": 0,
+        "pos_4_10": 0
+      },
+      {
+        "domain": "seniorhomes.com",
+        "avg_position": 26.094713656387665,
+        "intersections": 454,
+        "etv": 289.2399610709399,
+        "count": 454,
+        "pos_1": 0,
+        "pos_2_3": 0,
+        "pos_4_10": 0
+      },
+      {
+        "domain": "youtube.com",
+        "avg_position": 43.77326968973747,
+        "intersections": 419,
+        "etv": 288.5590006802231,
+        "count": 419,
+        "pos_1": 0,
+        "pos_2_3": 0,
+        "pos_4_10": 0
+      },
+      {
+        "domain": "senioradvice.com",
+        "avg_position": 40.02879581151832,
+        "intersections": 382,
+        "etv": 252.6810002606362,
+        "count": 382,
+        "pos_1": 0,
+        "pos_2_3": 0,
+        "pos_4_10": 0
+      },
+      {
+        "domain": "whereyoulivematters.org",
+        "avg_position": 15.11873350923483,
+        "intersections": 379,
+        "etv": 268.5169606786221,
+        "count": 379,
+        "pos_1": 0,
+        "pos_2_3": 0,
+        "pos_4_10": 0
+      },
+      {
+        "domain": "seniorhousingnet.com",
+        "avg_position": 33.93333333333333,
+        "intersections": 345,
+        "etv": 203.39196024276316,
+        "count": 345,
+        "pos_1": 0,
+        "pos_2_3": 0,
+        "pos_4_10": 0
+      },
+      {
+        "domain": "assistedliving.org",
+        "avg_position": 22.174927113702623,
+        "intersections": 343,
+        "etv": 215.1249605808407,
+        "count": 343,
+        "pos_1": 0,
+        "pos_2_3": 0,
+        "pos_4_10": 0
+      },
+      {
+        "domain": "seniorliving.org",
+        "avg_position": 32.90615835777126,
+        "intersections": 341,
+        "etv": 249.84796081483364,
+        "count": 341,
+        "pos_1": 0,
+        "pos_2_3": 0,
+        "pos_4_10": 0
+      },
+      {
+        "domain": "miradorliving.com",
+        "avg_position": 22.026785714285715,
+        "intersections": 336,
+        "etv": 228.3379616457969,
+        "count": 336,
+        "pos_1": 0,
+        "pos_2_3": 0,
+        "pos_4_10": 0
+      },
+      {
+        "domain": "familyassets.com",
+        "avg_position": 36.2955223880597,
+        "intersections": 335,
+        "etv": 219.70396233163774,
+        "count": 335,
+        "pos_1": 0,
+        "pos_2_3": 0,
+        "pos_4_10": 0
+      },
+      {
+        "domain": "elderlifefinancial.com",
+        "avg_position": 17.11111111111111,
+        "intersections": 324,
+        "etv": 217.30296146683395,
+        "count": 324,
+        "pos_1": 0,
+        "pos_2_3": 0,
+        "pos_4_10": 0
+      },
+      {
+        "domain": "mapquest.com",
+        "avg_position": 27.10248447204969,
+        "intersections": 322,
+        "etv": 226.1310017965734,
+        "count": 322,
+        "pos_1": 0,
+        "pos_2_3": 0,
+        "pos_4_10": 0
+      },
+      {
+        "domain": "oasissenioradvisors.com",
+        "avg_position": 22.044368600682596,
+        "intersections": 293,
+        "etv": 238.66500199213624,
+        "count": 293,
+        "pos_1": 0,
+        "pos_2_3": 0,
+        "pos_4_10": 0
+      },
+      {
+        "domain": "assistedlivingcenter.com",
+        "avg_position": 30.649305555555557,
+        "intersections": 288,
+        "etv": 186.58396100252867,
+        "count": 288,
+        "pos_1": 0,
+        "pos_2_3": 0,
+        "pos_4_10": 0
+      }
+    ]
+  },
+  "keyword_gaps": [
+    {
+      "competitor": "oasissenioradvisors.com",
+      "status": "Ok.",
+      "cost": 0.0216,
+      "total_count": 80846,
+      "rows": [
+        {
+          "keyword": "oasis senior advisors",
+          "search_volume": 4400,
+          "cpc": 6.639999866485596,
+          "competitor_pos": 1,
+          "competitor_url": "https://www.oasissenioradvisors.com/",
+          "our_pos": null,
+          "our_url": null,
+          "bucket": "advisor",
+          "geo": "other",
+          "revenue_relevant": false
+        },
+        {
+          "keyword": "grace assisted living",
+          "search_volume": 2400,
+          "cpc": 7.809999942779541,
+          "competitor_pos": 5,
+          "competitor_url": "https://www.oasissenioradvisors.com/community-guide/idaho/twin-falls/grace-assisted-living-twin-falls/",
+          "our_pos": null,
+          "our_url": null,
+          "bucket": "assisted-living",
+          "geo": "other",
+          "revenue_relevant": false
+        },
+        {
+          "keyword": "senior living advisor",
+          "search_volume": 1000,
+          "cpc": 8.829999923706055,
+          "competitor_pos": 6,
+          "competitor_url": "https://www.oasissenioradvisors.com/",
+          "our_pos": null,
+          "our_url": null,
+          "bucket": "advisor",
+          "geo": "other",
+          "revenue_relevant": false
+        },
+        {
+          "keyword": "oasis senior living",
+          "search_volume": 720,
+          "cpc": 6.139999866485596,
+          "competitor_pos": 4,
+          "competitor_url": "https://www.oasissenioradvisors.com/",
+          "our_pos": null,
+          "our_url": null,
+          "bucket": "senior-living",
+          "geo": "other",
+          "revenue_relevant": false
+        },
+        {
+          "keyword": "the grove senior living",
+          "search_volume": 1300,
+          "cpc": 3.450000047683716,
+          "competitor_pos": 5,
+          "competitor_url": "https://www.oasissenioradvisors.com/community-guide/oregon/medford/the-grove-senior-living/",
+          "our_pos": null,
+          "our_url": null,
+          "bucket": "senior-living",
+          "geo": "other",
+          "revenue_relevant": false
+        },
+        {
+          "keyword": "assisted living mcminnville tn",
+          "search_volume": 4400,
+          "cpc": 7.159999847412109,
+          "competitor_pos": 9,
+          "competitor_url": "https://www.oasissenioradvisors.com/community-guide/tennessee/mcminnville/",
+          "our_pos": null,
+          "our_url": null,
+          "bucket": "assisted-living",
+          "geo": "other",
+          "revenue_relevant": false
+        }
+      ]
+    },
+    {
+      "competitor": "aplaceformom.com",
+      "status": "Ok.",
+      "cost": 0.0216,
+      "total_count": 301130,
+      "rows": [
+        {
+          "keyword": "assisted living facilities near me",
+          "search_volume": 165000,
+          "cpc": 12.90999984741211,
+          "competitor_pos": 6,
+          "competitor_url": "https://www.aplaceformom.com/",
+          "our_pos": null,
+          "our_url": null,
+          "bucket": "assisted-living",
+          "geo": "other",
+          "revenue_relevant": false
+        },
+        {
+          "keyword": "assisted livings near me",
+          "search_volume": 165000,
+          "cpc": 12.90999984741211,
+          "competitor_pos": 7,
+          "competitor_url": "https://www.aplaceformom.com/assisted-living",
+          "our_pos": null,
+          "our_url": null,
+          "bucket": "assisted-living",
+          "geo": "other",
+          "revenue_relevant": false
+        },
+        {
+          "keyword": "senior assisted living near me",
+          "search_volume": 74000,
+          "cpc": 10.649999618530273,
+          "competitor_pos": 7,
+          "competitor_url": "https://www.aplaceformom.com/assisted-living/california/long-beach",
+          "our_pos": null,
+          "our_url": null,
+          "bucket": "assisted-living",
+          "geo": "other",
+          "revenue_relevant": false
+        },
+        {
+          "keyword": "senior living facilities near me",
+          "search_volume": 74000,
+          "cpc": 10.649999618530273,
+          "competitor_pos": 7,
+          "competitor_url": "https://www.aplaceformom.com/assisted-living",
+          "our_pos": null,
+          "our_url": null,
+          "bucket": "senior-living",
+          "geo": "other",
+          "revenue_relevant": false
+        },
+        {
+          "keyword": "memory care facilities near me",
+          "search_volume": 22200,
+          "cpc": 30.989999771118164,
+          "competitor_pos": 5,
+          "competitor_url": "https://www.aplaceformom.com/alzheimers-care/tennessee/memphis",
+          "our_pos": null,
+          "our_url": null,
+          "bucket": "memory-care",
+          "geo": "other",
+          "revenue_relevant": false
+        },
+        {
+          "keyword": "memory care facility near me",
+          "search_volume": 22200,
+          "cpc": 30.989999771118164,
+          "competitor_pos": 5,
+          "competitor_url": "https://www.aplaceformom.com/",
+          "our_pos": null,
+          "our_url": null,
+          "bucket": "memory-care",
+          "geo": "other",
+          "revenue_relevant": false
+        },
+        {
+          "keyword": "independent living",
+          "search_volume": 18100,
+          "cpc": 11.460000038146973,
+          "competitor_pos": 7,
+          "competitor_url": "https://www.aplaceformom.com/independent-living",
+          "our_pos": null,
+          "our_url": null,
+          "bucket": "independent-living",
+          "geo": "other",
+          "revenue_relevant": false
+        },
+        {
+          "keyword": "assisted living at home",
+          "search_volume": 18100,
+          "cpc": 14.640000343322754,
+          "competitor_pos": 5,
+          "competitor_url": "https://www.aplaceformom.com/caregiver-resources/articles/assisted-living-vs-home-care",
+          "our_pos": null,
+          "our_url": null,
+          "bucket": "assisted-living",
+          "geo": "other",
+          "revenue_relevant": false
+        },
+        {
+          "keyword": "senior living",
+          "search_volume": 74000,
+          "cpc": 12,
+          "competitor_pos": 9,
+          "competitor_url": "https://www.aplaceformom.com/",
+          "our_pos": null,
+          "our_url": null,
+          "bucket": "senior-living",
+          "geo": "other",
+          "revenue_relevant": false
+        },
+        {
+          "keyword": "assisted living home",
+          "search_volume": 18100,
+          "cpc": 14.640000343322754,
+          "competitor_pos": 7,
+          "competitor_url": "https://www.aplaceformom.com/assisted-living",
+          "our_pos": null,
+          "our_url": null,
+          "bucket": "assisted-living",
+          "geo": "other",
+          "revenue_relevant": false
+        },
+        {
+          "keyword": "assisted living facility",
+          "search_volume": 40500,
+          "cpc": 11.619999885559082,
+          "competitor_pos": 8,
+          "competitor_url": "https://www.aplaceformom.com/assisted-living",
+          "our_pos": null,
+          "our_url": null,
+          "bucket": "assisted-living",
+          "geo": "other",
+          "revenue_relevant": false
+        },
+        {
+          "keyword": "assisted living near me",
+          "search_volume": 165000,
+          "cpc": 12.90999984741211,
+          "competitor_pos": 13,
+          "competitor_url": "https://www.aplaceformom.com/assisted-living",
+          "our_pos": null,
+          "our_url": null,
+          "bucket": "assisted-living",
+          "geo": "other",
+          "revenue_relevant": false
+        },
+        {
+          "keyword": "assisted living and memory care",
+          "search_volume": 6600,
+          "cpc": 22.3799991607666,
+          "competitor_pos": 4,
+          "competitor_url": "https://www.aplaceformom.com/caregiver-resources/articles/assisted-living-vs-memory-care",
+          "our_pos": null,
+          "our_url": null,
+          "bucket": "memory-care",
+          "geo": "other",
+          "revenue_relevant": false
+        },
+        {
+          "keyword": "memory care and assisted living",
+          "search_volume": 6600,
+          "cpc": 22.3799991607666,
+          "competitor_pos": 5,
+          "competitor_url": "https://www.aplaceformom.com/caregiver-resources/articles/assisted-living-vs-memory-care",
+          "our_pos": null,
+          "our_url": null,
+          "bucket": "memory-care",
+          "geo": "other",
+          "revenue_relevant": false
+        },
+        {
+          "keyword": "assisted living facilities",
+          "search_volume": 40500,
+          "cpc": 11.619999885559082,
+          "competitor_pos": 9,
+          "competitor_url": "https://www.aplaceformom.com/assisted-living",
+          "our_pos": null,
+          "our_url": null,
+          "bucket": "assisted-living",
+          "geo": "other",
+          "revenue_relevant": false
+        },
+        {
+          "keyword": "senior assisted living facility near me",
+          "search_volume": 74000,
+          "cpc": 10.649999618530273,
+          "competitor_pos": 11,
+          "competitor_url": "https://www.aplaceformom.com/assisted-living",
+          "our_pos": null,
+          "our_url": null,
+          "bucket": "assisted-living",
+          "geo": "other",
+          "revenue_relevant": false
+        },
+        {
+          "keyword": "assisted living facilities costs",
+          "search_volume": 5400,
+          "cpc": 9.550000190734863,
+          "competitor_pos": 2,
+          "competitor_url": "https://www.aplaceformom.com/caregiver-resources/articles/cost-of-assisted-living",
+          "our_pos": null,
+          "our_url": null,
+          "bucket": "assisted-living",
+          "geo": "other",
+          "revenue_relevant": false
+        },
+        {
+          "keyword": "assisted living facilities cost",
+          "search_volume": 5400,
+          "cpc": 9.550000190734863,
+          "competitor_pos": 2,
+          "competitor_url": "https://www.aplaceformom.com/caregiver-resources/articles/cost-of-assisted-living",
+          "our_pos": null,
+          "our_url": null,
+          "bucket": "assisted-living",
+          "geo": "other",
+          "revenue_relevant": false
+        },
+        {
+          "keyword": "prices of assisted living",
+          "search_volume": 5400,
+          "cpc": 9.550000190734863,
+          "competitor_pos": 2,
+          "competitor_url": "https://www.aplaceformom.com/caregiver-resources/articles/cost-of-assisted-living",
+          "our_pos": null,
+          "our_url": null,
+          "bucket": "assisted-living",
+          "geo": "other",
+          "revenue_relevant": false
+        },
+        {
+          "keyword": "assisted living costs",
+          "search_volume": 5400,
+          "cpc": 9.550000190734863,
+          "competitor_pos": 2,
+          "competitor_url": "https://www.aplaceformom.com/caregiver-resources/articles/cost-of-assisted-living",
+          "our_pos": null,
+          "our_url": null,
+          "bucket": "assisted-living",
+          "geo": "other",
+          "revenue_relevant": false
+        },
+        {
+          "keyword": "cost of assisted living",
+          "search_volume": 5400,
+          "cpc": 9.550000190734863,
+          "competitor_pos": 2,
+          "competitor_url": "https://www.aplaceformom.com/caregiver-resources/articles/cost-of-assisted-living",
+          "our_pos": null,
+          "our_url": null,
+          "bucket": "assisted-living",
+          "geo": "other",
+          "revenue_relevant": false
+        },
+        {
+          "keyword": "assisted living facility cost",
+          "search_volume": 5400,
+          "cpc": 9.550000190734863,
+          "competitor_pos": 6,
+          "competitor_url": "https://www.aplaceformom.com/caregiver-resources/articles/cost-of-assisted-living",
+          "our_pos": null,
+          "our_url": null,
+          "bucket": "assisted-living",
+          "geo": "other",
+          "revenue_relevant": false
+        },
+        {
+          "keyword": "assisted living prices",
+          "search_volume": 5400,
+          "cpc": 9.550000190734863,
+          "competitor_pos": 2,
+          "competitor_url": "https://www.aplaceformom.com/caregiver-resources/articles/cost-of-assisted-living",
+          "our_pos": null,
+          "our_url": null,
+          "bucket": "assisted-living",
+          "geo": "other",
+          "revenue_relevant": false
+        },
+        {
+          "keyword": "costs of assisted living",
+          "search_volume": 5400,
+          "cpc": 9.550000190734863,
+          "competitor_pos": 2,
+          "competitor_url": "https://www.aplaceformom.com/caregiver-resources/articles/cost-of-assisted-living",
+          "our_pos": null,
+          "our_url": null,
+          "bucket": "assisted-living",
+          "geo": "other",
+          "revenue_relevant": false
+        }
+      ]
+    }
+  ],
+  "serp": {
+    "location": "United States",
+    "location_code": 2840,
+    "summary": {
+      "total": 31,
+      "top10": 0,
+      "top30": 0,
+      "top100": 6,
+      "not_ranking": 20,
+      "wrong_url": 0,
+      "errors": 5
+    },
+    "rows": [
+      {
+        "keyword": "assisted living rocky river oh",
+        "lane": "al-city",
+        "target": "/cleveland/rocky-river",
+        "location_code": 2840,
+        "position": 97,
+        "url": "/cleveland/rocky-river",
+        "url_matches_target": true,
+        "top_competitor": "thenormandy.com",
+        "top_url": "https://thenormandy.com/",
+        "top5": [
+          {
+            "rank": 4,
+            "domain": "thenormandy.com",
+            "url": "https://thenormandy.com/"
+          },
+          {
+            "rank": 6,
+            "domain": "embassyhealthcare.net",
+            "url": "https://embassyhealthcare.net/locations/ohio/rockport"
+          },
+          {
+            "rank": 7,
+            "domain": "www.seniorliving.org",
+            "url": "https://www.seniorliving.org/assisted-living/ohio/rocky-river/"
+          },
+          {
+            "rank": 8,
+            "domain": "www.aplaceformom.com",
+            "url": "https://www.aplaceformom.com/independent-living/ohio/rocky-river"
+          },
+          {
+            "rank": 9,
+            "domain": "rockyrivervillage.com",
+            "url": "https://rockyrivervillage.com/"
+          }
+        ],
+        "error": null,
+        "cost": 0.0155,
+        "search_volume": 10,
+        "cpc": null,
+        "competition": "MEDIUM"
+      },
+      {
+        "keyword": "assisted living westlake oh",
+        "lane": "al-city",
+        "target": "/cleveland/westlake",
+        "location_code": 2840,
+        "position": null,
+        "url": null,
+        "url_matches_target": null,
+        "top_competitor": "www.brookdale.com",
+        "top_url": "https://www.brookdale.com/en/communities/brookdale-westlake-village.html",
+        "top5": [
+          {
+            "rank": 4,
+            "domain": "www.brookdale.com",
+            "url": "https://www.brookdale.com/en/communities/brookdale-westlake-village.html"
+          },
+          {
+            "rank": 5,
+            "domain": "www.assistedliving.org",
+            "url": "https://www.assistedliving.org/ohio/westlake/"
+          },
+          {
+            "rank": 7,
+            "domain": "www.sainttherese.org",
+            "url": "https://www.sainttherese.org/westlake"
+          },
+          {
+            "rank": 8,
+            "domain": "westlakeal.com",
+            "url": "https://westlakeal.com/"
+          },
+          {
+            "rank": 9,
+            "domain": "lec.org",
+            "url": "https://lec.org/communities/concord-reserve/"
+          }
+        ],
+        "error": null,
+        "cost": 0.0155,
+        "search_volume": 10,
+        "cpc": 4.81,
+        "competition": "HIGH"
+      },
+      {
+        "keyword": "assisted living shaker heights oh",
+        "lane": "al-city",
+        "target": "/cleveland/shaker-heights",
+        "location_code": 2840,
+        "position": null,
+        "url": null,
+        "url_matches_target": null,
+        "top_competitor": null,
+        "top_url": null,
+        "top5": [],
+        "error": "Internal SE Server Error.",
+        "cost": 0.002,
+        "search_volume": null,
+        "cpc": null,
+        "competition": null
+      },
+      {
+        "keyword": "assisted living lakewood oh",
+        "lane": "al-city",
+        "target": "/cleveland/lakewood",
+        "location_code": 2840,
+        "position": 105,
+        "url": "/cleveland/lakewood",
+        "url_matches_target": true,
+        "top_competitor": "www.aplaceformom.com",
+        "top_url": "https://www.aplaceformom.com/assisted-living/ohio/lakewood",
+        "top5": [
+          {
+            "rank": 4,
+            "domain": "www.aplaceformom.com",
+            "url": "https://www.aplaceformom.com/assisted-living/ohio/lakewood"
+          },
+          {
+            "rank": 6,
+            "domain": "oneillhc.com",
+            "url": "https://oneillhc.com/locations/lakewood/"
+          },
+          {
+            "rank": 7,
+            "domain": "www.enniscourt.com",
+            "url": "https://www.enniscourt.com/"
+          },
+          {
+            "rank": 8,
+            "domain": "havenatlakewood.com",
+            "url": "https://havenatlakewood.com/"
+          },
+          {
+            "rank": 9,
+            "domain": "www.miradorliving.com",
+            "url": "https://www.miradorliving.com/assisted-living/ohio/cleveland/lakewood-senior-health-campus"
+          }
+        ],
+        "error": null,
+        "cost": 0.0155,
+        "search_volume": 10,
+        "cpc": null,
+        "competition": "HIGH"
+      },
+      {
+        "keyword": "assisted living beachwood oh",
+        "lane": "al-city",
+        "target": "/cleveland/beachwood",
+        "location_code": 2840,
+        "position": null,
+        "url": null,
+        "url_matches_target": null,
+        "top_competitor": "www.aplaceformom.com",
+        "top_url": "https://www.aplaceformom.com/assisted-living/ohio/beachwood",
+        "top5": [
+          {
+            "rank": 4,
+            "domain": "www.aplaceformom.com",
+            "url": "https://www.aplaceformom.com/assisted-living/ohio/beachwood"
+          },
+          {
+            "rank": 5,
+            "domain": "beachwood.roseseniorliving.com",
+            "url": "https://beachwood.roseseniorliving.com/"
+          },
+          {
+            "rank": 7,
+            "domain": "kingdavidnursing.org",
+            "url": "https://kingdavidnursing.org/the-villas-at-kd-al"
+          },
+          {
+            "rank": 8,
+            "domain": "npseniorliving.com",
+            "url": "https://npseniorliving.com/communities/beachwood-commons/"
+          },
+          {
+            "rank": 9,
+            "domain": "www.whereyoulivematters.org",
+            "url": "https://www.whereyoulivematters.org/find-a-community/rose-senior-living-beachwood/"
+          }
+        ],
+        "error": null,
+        "cost": 0.0155,
+        "search_volume": 140,
+        "cpc": 8.86,
+        "competition": "MEDIUM"
+      },
+      {
+        "keyword": "assisted living parma oh",
+        "lane": "al-city",
+        "target": "/cleveland/parma",
+        "location_code": 2840,
+        "position": 105,
+        "url": "/cleveland/parma",
+        "url_matches_target": true,
+        "top_competitor": "storypoint.com",
+        "top_url": "https://storypoint.com/community/parma-oh/",
+        "top5": [
+          {
+            "rank": 4,
+            "domain": "storypoint.com",
+            "url": "https://storypoint.com/community/parma-oh/"
+          },
+          {
+            "rank": 5,
+            "domain": "www.assistedliving.org",
+            "url": "https://www.assistedliving.org/ohio/parma/"
+          },
+          {
+            "rank": 7,
+            "domain": "franciscanministries.org",
+            "url": "https://franciscanministries.org/community/mount-alverna-village/"
+          },
+          {
+            "rank": 8,
+            "domain": "www.sunriseseniorliving.com",
+            "url": "https://www.sunriseseniorliving.com/communities/oh/sunrise-at-parma"
+          },
+          {
+            "rank": 9,
+            "domain": "pleasantviewcare.com",
+            "url": "https://pleasantviewcare.com/"
+          }
+        ],
+        "error": null,
+        "cost": 0.0155,
+        "search_volume": 170,
+        "cpc": 15.92,
+        "competition": "HIGH"
+      },
+      {
+        "keyword": "assisted living chagrin falls oh",
+        "lane": "al-city",
+        "target": "/cleveland/chagrin-falls",
+        "location_code": 2840,
+        "position": null,
+        "url": null,
+        "url_matches_target": null,
+        "top_competitor": "www.caring.com",
+        "top_url": "https://www.caring.com/senior-living/assisted-living/ohio/chagrin-falls",
+        "top5": [
+          {
+            "rank": 4,
+            "domain": "www.caring.com",
+            "url": "https://www.caring.com/senior-living/assisted-living/ohio/chagrin-falls"
+          },
+          {
+            "rank": 5,
+            "domain": "meadowfallsseniorliving.com",
+            "url": "https://meadowfallsseniorliving.com/chagrin-valley/"
+          },
+          {
+            "rank": 6,
+            "domain": "hamletretirement.com",
+            "url": "https://hamletretirement.com/"
+          },
+          {
+            "rank": 7,
+            "domain": "www.miradorliving.com",
+            "url": "https://www.miradorliving.com/assisted-living/ohio/chagrin-falls/eliza-at-chagrin-falls"
+          },
+          {
+            "rank": 8,
+            "domain": "judsonsmartliving.org",
+            "url": "https://judsonsmartliving.org/south-franklin-circle/independent-living/"
+          }
+        ],
+        "error": null,
+        "cost": 0.0155,
+        "search_volume": null,
+        "cpc": null,
+        "competition": null
+      },
+      {
+        "keyword": "assisted living solon oh",
+        "lane": "al-city",
+        "target": "/cleveland/solon",
+        "location_code": 2840,
+        "position": 107,
+        "url": "/cleveland/solon",
+        "url_matches_target": true,
+        "top_competitor": "www.aplaceformom.com",
+        "top_url": "https://www.aplaceformom.com/assisted-living/ohio/solon",
+        "top5": [
+          {
+            "rank": 4,
+            "domain": "www.aplaceformom.com",
+            "url": "https://www.aplaceformom.com/assisted-living/ohio/solon"
+          },
+          {
+            "rank": 5,
+            "domain": "vitaliasolon.com",
+            "url": "https://vitaliasolon.com/"
+          },
+          {
+            "rank": 7,
+            "domain": "hamletretirement.com",
+            "url": "https://hamletretirement.com/chagrin-falls/location-solon/"
+          },
+          {
+            "rank": 8,
+            "domain": "solonpointehc.com",
+            "url": "https://solonpointehc.com/"
+          },
+          {
+            "rank": 9,
+            "domain": "www.ourparents.com",
+            "url": "https://www.ourparents.com/senior-living-options/ohio/solon"
+          }
+        ],
+        "error": null,
+        "cost": 0.0155,
+        "search_volume": null,
+        "cpc": null,
+        "competition": null
+      },
+      {
+        "keyword": "assisted living aurora oh",
+        "lane": "al-city",
+        "target": "/cleveland/aurora",
+        "location_code": 2840,
+        "position": 98,
+        "url": "/cleveland/aurora",
+        "url_matches_target": true,
+        "top_competitor": "www.atriumliving.com",
+        "top_url": "https://www.atriumliving.com/",
+        "top5": [
+          {
+            "rank": 5,
+            "domain": "www.atriumliving.com",
+            "url": "https://www.atriumliving.com/"
+          },
+          {
+            "rank": 6,
+            "domain": "www.annamariaofaurora.com",
+            "url": "https://www.annamariaofaurora.com/"
+          },
+          {
+            "rank": 7,
+            "domain": "www.aplaceformom.com",
+            "url": "https://www.aplaceformom.com/independent-living/ohio/aurora"
+          },
+          {
+            "rank": 8,
+            "domain": "storypoint.com",
+            "url": "https://storypoint.com/community/aurora-oh/"
+          },
+          {
+            "rank": 9,
+            "domain": "www.oasissenioradvisors.com",
+            "url": "https://www.oasissenioradvisors.com/community-guide/ohio/aurora/"
+          }
+        ],
+        "error": null,
+        "cost": 0.0155,
+        "search_volume": 10,
+        "cpc": null,
+        "competition": "MEDIUM"
+      },
+      {
+        "keyword": "assisted living south russell oh",
+        "lane": "al-city",
+        "target": "/cleveland/south-russell",
+        "location_code": 2840,
+        "position": null,
+        "url": null,
+        "url_matches_target": null,
+        "top_competitor": "www.aplaceformom.com",
+        "top_url": "https://www.aplaceformom.com/assisted-living/ohio/south-russell",
+        "top5": [
+          {
+            "rank": 4,
+            "domain": "www.aplaceformom.com",
+            "url": "https://www.aplaceformom.com/assisted-living/ohio/south-russell"
+          },
+          {
+            "rank": 5,
+            "domain": "meadowfallsseniorliving.com",
+            "url": "https://meadowfallsseniorliving.com/chagrin-valley/"
+          },
+          {
+            "rank": 6,
+            "domain": "www.seniorcareauthority.com",
+            "url": "https://www.seniorcareauthority.com/assisted-living/the-lantern-of-chagrin-valley/"
+          },
+          {
+            "rank": 8,
+            "domain": "health.usnews.com",
+            "url": "https://health.usnews.com/best-senior-living/independent-living/ohio/south-russell"
+          },
+          {
+            "rank": 9,
+            "domain": "www.miradorliving.com",
+            "url": "https://www.miradorliving.com/memory-care/ohio/south-russell"
+          }
+        ],
+        "error": null,
+        "cost": 0.002,
+        "search_volume": null,
+        "cpc": null,
+        "competition": null
+      },
+      {
+        "keyword": "assisted living cleveland oh",
+        "lane": "al-metro",
+        "target": "/assisted-living-cleveland",
+        "location_code": 2840,
+        "position": null,
+        "url": null,
+        "url_matches_target": null,
+        "top_competitor": "www.whereyoulivematters.org",
+        "top_url": "https://www.whereyoulivematters.org/assisted-living/ohio/cleveland/",
+        "top5": [
+          {
+            "rank": 4,
+            "domain": "www.whereyoulivematters.org",
+            "url": "https://www.whereyoulivematters.org/assisted-living/ohio/cleveland/"
+          },
+          {
+            "rank": 6,
+            "domain": "www.assistedliving.org",
+            "url": "https://www.assistedliving.org/ohio/cleveland/"
+          },
+          {
+            "rank": 7,
+            "domain": "staugministries.org",
+            "url": "https://staugministries.org/health-campus/towers-assisted-living/"
+          },
+          {
+            "rank": 8,
+            "domain": "mcgregoramasa.org",
+            "url": "https://mcgregoramasa.org/living-options/assisted-living/"
+          },
+          {
+            "rank": 9,
+            "domain": "www.brookdale.com",
+            "url": "https://www.brookdale.com/en/locations/ohio/cleveland.html"
+          }
+        ],
+        "error": null,
+        "cost": 0.0155,
+        "search_volume": 1000,
+        "cpc": 15.44,
+        "competition": "HIGH"
+      },
+      {
+        "keyword": "memory care rocky river oh",
+        "lane": "mc-city",
+        "target": "/cleveland/rocky-river",
+        "location_code": 2840,
+        "position": null,
+        "url": null,
+        "url_matches_target": null,
+        "top_competitor": "bloomseniorliving.com",
+        "top_url": "https://bloomseniorliving.com/bloom-at-rocky-river/",
+        "top5": [
+          {
+            "rank": 4,
+            "domain": "bloomseniorliving.com",
+            "url": "https://bloomseniorliving.com/bloom-at-rocky-river/"
+          },
+          {
+            "rank": 5,
+            "domain": "thenormandy.com",
+            "url": "https://thenormandy.com/"
+          },
+          {
+            "rank": 6,
+            "domain": "www.aplaceformom.com",
+            "url": "https://www.aplaceformom.com/alzheimers-care/ohio/rocky-river"
+          },
+          {
+            "rank": 8,
+            "domain": "rockyrivervillage.com",
+            "url": "https://rockyrivervillage.com/"
+          },
+          {
+            "rank": 9,
+            "domain": "www.seniorliving.org",
+            "url": "https://www.seniorliving.org/assisted-living/ohio/rocky-river/"
+          }
+        ],
+        "error": null,
+        "cost": 0.0155,
+        "search_volume": 10,
+        "cpc": null,
+        "competition": "LOW"
+      },
+      {
+        "keyword": "memory care westlake oh",
+        "lane": "mc-city",
+        "target": "/cleveland/westlake",
+        "location_code": 2840,
+        "position": null,
+        "url": null,
+        "url_matches_target": null,
+        "top_competitor": null,
+        "top_url": null,
+        "top5": [],
+        "error": "Internal SE Server Error.",
+        "cost": 0.002,
+        "search_volume": 10,
+        "cpc": null,
+        "competition": null
+      },
+      {
+        "keyword": "memory care beachwood oh",
+        "lane": "mc-city",
+        "target": "/cleveland/beachwood",
+        "location_code": 2840,
+        "position": null,
+        "url": null,
+        "url_matches_target": null,
+        "top_competitor": "www.aplaceformom.com",
+        "top_url": "https://www.aplaceformom.com/assisted-living/ohio/beachwood",
+        "top5": [
+          {
+            "rank": 4,
+            "domain": "www.aplaceformom.com",
+            "url": "https://www.aplaceformom.com/assisted-living/ohio/beachwood"
+          },
+          {
+            "rank": 5,
+            "domain": "beachwood.roseseniorliving.com",
+            "url": "https://beachwood.roseseniorliving.com/"
+          },
+          {
+            "rank": 6,
+            "domain": "npseniorliving.com",
+            "url": "https://npseniorliving.com/communities/beachwood-commons/"
+          },
+          {
+            "rank": 8,
+            "domain": "www.lcsliving.com",
+            "url": "https://www.lcsliving.com/location-finder/ohio/beachwood/rose-senior-living-at-beachwood/"
+          },
+          {
+            "rank": 9,
+            "domain": "www.sunshineretirementliving.com",
+            "url": "https://www.sunshineretirementliving.com/ohio-senior-retirement-living/beachwood/"
+          }
+        ],
+        "error": null,
+        "cost": 0.0065,
+        "search_volume": null,
+        "cpc": null,
+        "competition": null
+      },
+      {
+        "keyword": "memory care shaker heights oh",
+        "lane": "mc-city",
+        "target": "/cleveland/shaker-heights",
+        "location_code": 2840,
+        "position": null,
+        "url": null,
+        "url_matches_target": null,
+        "top_competitor": null,
+        "top_url": null,
+        "top5": [],
+        "error": "Internal SE Server Error.",
+        "cost": 0.002,
+        "search_volume": null,
+        "cpc": null,
+        "competition": null
+      },
+      {
+        "keyword": "memory care lakewood oh",
+        "lane": "mc-city",
+        "target": "/cleveland/lakewood",
+        "location_code": 2840,
+        "position": 104,
+        "url": "/cleveland/lakewood",
+        "url_matches_target": true,
+        "top_competitor": "www.aplaceformom.com",
+        "top_url": "https://www.aplaceformom.com/assisted-living/ohio/lakewood",
+        "top5": [
+          {
+            "rank": 4,
+            "domain": "www.aplaceformom.com",
+            "url": "https://www.aplaceformom.com/assisted-living/ohio/lakewood"
+          },
+          {
+            "rank": 6,
+            "domain": "www.oasissenioradvisors.com",
+            "url": "https://www.oasissenioradvisors.com/community-guide/ohio/lakewood/"
+          },
+          {
+            "rank": 7,
+            "domain": "oneillhc.com",
+            "url": "https://oneillhc.com/locations/lakewood/"
+          },
+          {
+            "rank": 8,
+            "domain": "npseniorliving.com",
+            "url": "https://npseniorliving.com/communities/haven-lakewood/"
+          },
+          {
+            "rank": 9,
+            "domain": "havenatlakewood.com",
+            "url": "https://havenatlakewood.com/"
+          }
+        ],
+        "error": null,
+        "cost": 0.0155,
+        "search_volume": null,
+        "cpc": null,
+        "competition": null
+      },
+      {
+        "keyword": "memory care chagrin falls oh",
+        "lane": "mc-city",
+        "target": "/cleveland/chagrin-falls",
+        "location_code": 2840,
+        "position": null,
+        "url": null,
+        "url_matches_target": null,
+        "top_competitor": null,
+        "top_url": null,
+        "top5": [],
+        "error": "Internal SE Server Error.",
+        "cost": 0.002,
+        "search_volume": null,
+        "cpc": null,
+        "competition": null
+      },
+      {
+        "keyword": "memory care cleveland oh",
+        "lane": "mc-metro",
+        "target": "/memory-care-cleveland",
+        "location_code": 2840,
+        "position": null,
+        "url": null,
+        "url_matches_target": null,
+        "top_competitor": "www.assistedliving.org",
+        "top_url": "https://www.assistedliving.org/ohio/cleveland/",
+        "top5": [
+          {
+            "rank": 4,
+            "domain": "www.assistedliving.org",
+            "url": "https://www.assistedliving.org/ohio/cleveland/"
+          },
+          {
+            "rank": 6,
+            "domain": "www.whereyoulivematters.org",
+            "url": "https://www.whereyoulivematters.org/memory-care/ohio/cleveland/"
+          },
+          {
+            "rank": 7,
+            "domain": "judsonsmartliving.org",
+            "url": "https://judsonsmartliving.org/judson-park/memory-care/"
+          },
+          {
+            "rank": 8,
+            "domain": "kemperhouse.com",
+            "url": "https://kemperhouse.com/long-term-residential-alzheimers-and-dementia-care/"
+          },
+          {
+            "rank": 9,
+            "domain": "www.aplaceformom.com",
+            "url": "https://www.aplaceformom.com/alzheimers-care/ohio/cleveland"
+          }
+        ],
+        "error": null,
+        "cost": 0.0155,
+        "search_volume": null,
+        "cpc": null,
+        "competition": null
+      },
+      {
+        "keyword": "independent living rocky river oh",
+        "lane": "il-city",
+        "target": "/cleveland/rocky-river",
+        "location_code": 2840,
+        "position": null,
+        "url": null,
+        "url_matches_target": null,
+        "top_competitor": "thenormandy.com",
+        "top_url": "https://thenormandy.com/",
+        "top5": [
+          {
+            "rank": 2,
+            "domain": "thenormandy.com",
+            "url": "https://thenormandy.com/"
+          },
+          {
+            "rank": 3,
+            "domain": "www.aplaceformom.com",
+            "url": "https://www.aplaceformom.com/independent-living/ohio/rocky-river"
+          },
+          {
+            "rank": 4,
+            "domain": "www.seniorliving.org",
+            "url": "https://www.seniorliving.org/assisted-living/ohio/rocky-river/"
+          },
+          {
+            "rank": 6,
+            "domain": "www.apartments.com",
+            "url": "https://www.apartments.com/rocky-river-oh/senior-housing/"
+          },
+          {
+            "rank": 7,
+            "domain": "www.oasissenioradvisors.com",
+            "url": "https://www.oasissenioradvisors.com/community-guide/ohio/rocky-river/"
+          }
+        ],
+        "error": null,
+        "cost": 0.0155,
+        "search_volume": null,
+        "cpc": null,
+        "competition": null
+      },
+      {
+        "keyword": "independent living westlake oh",
+        "lane": "il-city",
+        "target": "/cleveland/westlake",
+        "location_code": 2840,
+        "position": null,
+        "url": null,
+        "url_matches_target": null,
+        "top_competitor": "www.brookdale.com",
+        "top_url": "https://www.brookdale.com/en/communities/brookdale-westlake-village.html",
+        "top5": [
+          {
+            "rank": 4,
+            "domain": "www.brookdale.com",
+            "url": "https://www.brookdale.com/en/communities/brookdale-westlake-village.html"
+          },
+          {
+            "rank": 5,
+            "domain": "www.aplaceformom.com",
+            "url": "https://www.aplaceformom.com/independent-living/ohio/westlake"
+          },
+          {
+            "rank": 7,
+            "domain": "www.sainttherese.org",
+            "url": "https://www.sainttherese.org/westlake"
+          },
+          {
+            "rank": 8,
+            "domain": "lec.org",
+            "url": "https://lec.org/communities/concord-reserve/"
+          },
+          {
+            "rank": 9,
+            "domain": "sil-oh.org",
+            "url": "https://sil-oh.org/"
+          }
+        ],
+        "error": null,
+        "cost": 0.0155,
+        "search_volume": 10,
+        "cpc": 8.03,
+        "competition": "HIGH"
+      },
+      {
+        "keyword": "independent living cleveland oh",
+        "lane": "il-metro",
+        "target": "/independent-living-cleveland",
+        "location_code": 2840,
+        "position": null,
+        "url": null,
+        "url_matches_target": null,
+        "top_competitor": "www.whereyoulivematters.org",
+        "top_url": "https://www.whereyoulivematters.org/independent-living/ohio/cleveland/",
+        "top5": [
+          {
+            "rank": 4,
+            "domain": "www.whereyoulivematters.org",
+            "url": "https://www.whereyoulivematters.org/independent-living/ohio/cleveland/"
+          },
+          {
+            "rank": 5,
+            "domain": "sil-oh.org",
+            "url": "https://sil-oh.org/"
+          },
+          {
+            "rank": 6,
+            "domain": "hhs.cuyahogacounty.gov",
+            "url": "https://hhs.cuyahogacounty.gov/programs/options-for-independent-living"
+          },
+          {
+            "rank": 8,
+            "domain": "www.after55.com",
+            "url": "https://www.after55.com/search/oh/cleveland"
+          },
+          {
+            "rank": 9,
+            "domain": "www.brookdale.com",
+            "url": "https://www.brookdale.com/en/locations/ohio/cleveland.html"
+          }
+        ],
+        "error": null,
+        "cost": 0.0155,
+        "search_volume": 10,
+        "cpc": null,
+        "competition": "HIGH"
+      },
+      {
+        "keyword": "senior living advisor cleveland",
+        "lane": "advisor",
+        "target": "/cleveland-senior-living-advisor",
+        "location_code": 2840,
+        "position": null,
+        "url": null,
+        "url_matches_target": null,
+        "top_competitor": "www.oasissenioradvisors.com",
+        "top_url": "https://www.oasissenioradvisors.com/locations/northeastern-oh/",
+        "top5": [
+          {
+            "rank": 1,
+            "domain": "www.oasissenioradvisors.com",
+            "url": "https://www.oasissenioradvisors.com/locations/northeastern-oh/"
+          },
+          {
+            "rank": 6,
+            "domain": "assistedlivinglocators.com",
+            "url": "https://assistedlivinglocators.com/care-advisor/cleveland-east"
+          },
+          {
+            "rank": 7,
+            "domain": "carepatrol.com",
+            "url": "https://carepatrol.com/northeast-ohio/"
+          },
+          {
+            "rank": 8,
+            "domain": "www.seniorcareauthority.com",
+            "url": "https://www.seniorcareauthority.com/locations/cleveland-oh/"
+          },
+          {
+            "rank": 9,
+            "domain": "www.senioradvisor.com",
+            "url": "https://www.senioradvisor.com/cleveland-oh/assisted-living"
+          }
+        ],
+        "error": null,
+        "cost": 0.0155,
+        "search_volume": null,
+        "cpc": null,
+        "competition": null
+      },
+      {
+        "keyword": "assisted living advisor cleveland",
+        "lane": "advisor",
+        "target": "/cleveland-senior-living-advisor",
+        "location_code": 2840,
+        "position": null,
+        "url": null,
+        "url_matches_target": null,
+        "top_competitor": "www.oasissenioradvisors.com",
+        "top_url": "https://www.oasissenioradvisors.com/locations/northeastern-oh/",
+        "top5": [
+          {
+            "rank": 2,
+            "domain": "www.oasissenioradvisors.com",
+            "url": "https://www.oasissenioradvisors.com/locations/northeastern-oh/"
+          },
+          {
+            "rank": 4,
+            "domain": "assistedlivinglocators.com",
+            "url": "https://assistedlivinglocators.com/care-advisor/cleveland-east"
+          },
+          {
+            "rank": 8,
+            "domain": "carepatrol.com",
+            "url": "https://carepatrol.com/northeast-ohio/"
+          },
+          {
+            "rank": 9,
+            "domain": "www.seniorcareauthority.com",
+            "url": "https://www.seniorcareauthority.com/locations/cleveland-oh/"
+          },
+          {
+            "rank": 10,
+            "domain": "www.senioradvisor.com",
+            "url": "https://www.senioradvisor.com/cleveland-oh/assisted-living"
+          }
+        ],
+        "error": null,
+        "cost": 0.014,
+        "search_volume": null,
+        "cpc": null,
+        "competition": null
+      },
+      {
+        "keyword": "senior living placement cleveland",
+        "lane": "advisor",
+        "target": "/contact",
+        "location_code": 2840,
+        "position": null,
+        "url": null,
+        "url_matches_target": null,
+        "top_competitor": "www.oasissenioradvisors.com",
+        "top_url": "https://www.oasissenioradvisors.com/locations/northeastern-oh/",
+        "top5": [
+          {
+            "rank": 2,
+            "domain": "www.oasissenioradvisors.com",
+            "url": "https://www.oasissenioradvisors.com/locations/northeastern-oh/"
+          },
+          {
+            "rank": 4,
+            "domain": "www.seniorcareauthority.com",
+            "url": "https://www.seniorcareauthority.com/locations/cleveland-oh/"
+          },
+          {
+            "rank": 8,
+            "domain": "assistedlivinglocators.com",
+            "url": "https://assistedlivinglocators.com/care-advisor/cleveland-east"
+          },
+          {
+            "rank": 9,
+            "domain": "storypoint.com",
+            "url": "https://storypoint.com/find/ohio/cleveland/"
+          },
+          {
+            "rank": 10,
+            "domain": "www.bridgewatersenior.com",
+            "url": "https://www.bridgewatersenior.com/"
+          }
+        ],
+        "error": null,
+        "cost": 0.002,
+        "search_volume": null,
+        "cpc": null,
+        "competition": null
+      },
+      {
+        "keyword": "best assisted living cleveland",
+        "lane": "al-metro",
+        "target": "/assisted-living-cleveland",
+        "location_code": 2840,
+        "position": null,
+        "url": null,
+        "url_matches_target": null,
+        "top_competitor": "www.assistedliving.org",
+        "top_url": "https://www.assistedliving.org/ohio/cleveland/",
+        "top5": [
+          {
+            "rank": 4,
+            "domain": "www.assistedliving.org",
+            "url": "https://www.assistedliving.org/ohio/cleveland/"
+          },
+          {
+            "rank": 5,
+            "domain": "health.usnews.com",
+            "url": "https://health.usnews.com/best-senior-living/assisted-living/ohio/cleveland"
+          },
+          {
+            "rank": 6,
+            "domain": "judsonsmartliving.org",
+            "url": "https://judsonsmartliving.org/judson-manor/"
+          },
+          {
+            "rank": 8,
+            "domain": "www.whereyoulivematters.org",
+            "url": "https://www.whereyoulivematters.org/assisted-living/ohio/cleveland/"
+          },
+          {
+            "rank": 9,
+            "domain": "www.caring.com",
+            "url": "https://www.caring.com/senior-living/assisted-living/ohio/cleveland"
+          }
+        ],
+        "error": null,
+        "cost": 0.011,
+        "search_volume": null,
+        "cpc": null,
+        "competition": null
+      },
+      {
+        "keyword": "assisted living near me cleveland",
+        "lane": "al-metro",
+        "target": "/assisted-living-cleveland",
+        "location_code": 2840,
+        "position": null,
+        "url": null,
+        "url_matches_target": null,
+        "top_competitor": "www.whereyoulivematters.org",
+        "top_url": "https://www.whereyoulivematters.org/assisted-living/ohio/cleveland/",
+        "top5": [
+          {
+            "rank": 4,
+            "domain": "www.whereyoulivematters.org",
+            "url": "https://www.whereyoulivematters.org/assisted-living/ohio/cleveland/"
+          },
+          {
+            "rank": 5,
+            "domain": "www.assistedliving.org",
+            "url": "https://www.assistedliving.org/ohio/cleveland/"
+          },
+          {
+            "rank": 7,
+            "domain": "staugministries.org",
+            "url": "https://staugministries.org/health-campus/towers-assisted-living/"
+          },
+          {
+            "rank": 8,
+            "domain": "mcgregoramasa.org",
+            "url": "https://mcgregoramasa.org/living-options/assisted-living/"
+          },
+          {
+            "rank": 9,
+            "domain": "www.foresthillsplaceassistedliving.com",
+            "url": "https://www.foresthillsplaceassistedliving.com/"
+          }
+        ],
+        "error": null,
+        "cost": 0.002,
+        "search_volume": null,
+        "cpc": null,
+        "competition": null
+      },
+      {
+        "keyword": "memory care near me cleveland",
+        "lane": "mc-metro",
+        "target": "/memory-care-cleveland",
+        "location_code": 2840,
+        "position": null,
+        "url": null,
+        "url_matches_target": null,
+        "top_competitor": null,
+        "top_url": null,
+        "top5": [],
+        "error": "Internal SE Server Error.",
+        "cost": 0.002,
+        "search_volume": null,
+        "cpc": null,
+        "competition": null
+      },
+      {
+        "keyword": "senior living consultant cleveland",
+        "lane": "advisor",
+        "target": "/cleveland-senior-living-advisor",
+        "location_code": 2840,
+        "position": null,
+        "url": null,
+        "url_matches_target": null,
+        "top_competitor": "www.oasissenioradvisors.com",
+        "top_url": "https://www.oasissenioradvisors.com/locations/northeastern-oh/",
+        "top5": [
+          {
+            "rank": 4,
+            "domain": "www.oasissenioradvisors.com",
+            "url": "https://www.oasissenioradvisors.com/locations/northeastern-oh/"
+          },
+          {
+            "rank": 5,
+            "domain": "www.seniorcareauthority.com",
+            "url": "https://www.seniorcareauthority.com/locations/cleveland-oh/senior-care-services/"
+          },
+          {
+            "rank": 7,
+            "domain": "assistedlivinglocators.com",
+            "url": "https://assistedlivinglocators.com/care-advisor/cleveland-east"
+          },
+          {
+            "rank": 8,
+            "domain": "carepatrol.com",
+            "url": "https://carepatrol.com/northeast-ohio/"
+          },
+          {
+            "rank": 9,
+            "domain": "judsonsmartliving.org",
+            "url": "https://judsonsmartliving.org/"
+          }
+        ],
+        "error": null,
+        "cost": 0.0035,
+        "search_volume": null,
+        "cpc": null,
+        "competition": null
+      },
+      {
+        "keyword": "assisted living columbus oh",
+        "lane": "columbus",
+        "target": "/columbus",
+        "location_code": 2840,
+        "position": null,
+        "url": null,
+        "url_matches_target": null,
+        "top_competitor": "www.whereyoulivematters.org",
+        "top_url": "https://www.whereyoulivematters.org/independent-living/ohio/columbus/?_paged=2",
+        "top5": [
+          {
+            "rank": 4,
+            "domain": "www.whereyoulivematters.org",
+            "url": "https://www.whereyoulivematters.org/independent-living/ohio/columbus/?_paged=2"
+          },
+          {
+            "rank": 5,
+            "domain": "www.fvdublin.org",
+            "url": "https://www.fvdublin.org/"
+          },
+          {
+            "rank": 7,
+            "domain": "www.aplaceformom.com",
+            "url": "https://www.aplaceformom.com/assisted-living/ohio/columbus"
+          },
+          {
+            "rank": 8,
+            "domain": "bickfordseniorliving.com",
+            "url": "https://bickfordseniorliving.com/branch/bickford-of-bexley/"
+          },
+          {
+            "rank": 9,
+            "domain": "ohioliving.org",
+            "url": "https://ohioliving.org/communities/ohio-living-westminster-thurber"
+          }
+        ],
+        "error": null,
+        "cost": 0.0155,
+        "search_volume": 1300,
+        "cpc": 15.53,
+        "competition": "HIGH"
+      },
+      {
+        "keyword": "memory care columbus oh",
+        "lane": "columbus",
+        "target": "/columbus",
+        "location_code": 2840,
+        "position": null,
+        "url": null,
+        "url_matches_target": null,
+        "top_competitor": "www.nationalchurchresidences.org",
+        "top_url": "https://www.nationalchurchresidences.org/communities/first-community-village/living-options/memory-care/",
+        "top5": [
+          {
+            "rank": 4,
+            "domain": "www.nationalchurchresidences.org",
+            "url": "https://www.nationalchurchresidences.org/communities/first-community-village/living-options/memory-care/"
+          },
+          {
+            "rank": 6,
+            "domain": "bickfordseniorliving.com",
+            "url": "https://bickfordseniorliving.com/branch/bickford-of-bexley/"
+          },
+          {
+            "rank": 7,
+            "domain": "www.assistedliving.org",
+            "url": "https://www.assistedliving.org/ohio/columbus/"
+          },
+          {
+            "rank": 8,
+            "domain": "health.usnews.com",
+            "url": "https://health.usnews.com/best-senior-living/memory-care/ohio/columbus"
+          },
+          {
+            "rank": 9,
+            "domain": "continentalseniorcommunities.com",
+            "url": "https://continentalseniorcommunities.com/cherry-blossom"
+          }
+        ],
+        "error": null,
+        "cost": 0.0155,
+        "search_volume": 140,
+        "cpc": 29.73,
+        "competition": "HIGH"
+      },
+      {
+        "keyword": "senior living advisor columbus",
+        "lane": "columbus",
+        "target": "/contact",
+        "location_code": 2840,
+        "position": null,
+        "url": null,
+        "url_matches_target": null,
+        "top_competitor": "www.trueguidesenioradvisors.com",
+        "top_url": "https://www.trueguidesenioradvisors.com/",
+        "top5": [
+          {
+            "rank": 2,
+            "domain": "www.trueguidesenioradvisors.com",
+            "url": "https://www.trueguidesenioradvisors.com/"
+          },
+          {
+            "rank": 6,
+            "domain": "www.oasissenioradvisors.com",
+            "url": "https://www.oasissenioradvisors.com/locations/central-ohio/"
+          },
+          {
+            "rank": 8,
+            "domain": "westcolumbus.assistedlivinglocators.com",
+            "url": "https://westcolumbus.assistedlivinglocators.com/"
+          },
+          {
+            "rank": 9,
+            "domain": "illuminateseniorservices.com",
+            "url": "https://illuminateseniorservices.com/"
+          },
+          {
+            "rank": 10,
+            "domain": "carepatrol.com",
+            "url": "https://carepatrol.com/columbus-central-ohio/team-members/"
+          }
+        ],
+        "error": null,
+        "cost": 0.011,
+        "search_volume": null,
+        "cpc": null,
+        "competition": null
+      }
+    ]
+  },
+  "serp_cleveland_local": {
+    "location": {
+      "name": "Cleveland,Ohio,United States",
+      "code": 1023631
+    },
+    "rows": [
+      {
+        "keyword": "assisted living cleveland oh",
+        "lane": "al-metro",
+        "target": "/assisted-living-cleveland",
+        "location_code": 1023631,
+        "position": null,
+        "url": null,
+        "url_matches_target": null,
+        "top_competitor": "www.assistedliving.org",
+        "top_url": "https://www.assistedliving.org/ohio/cleveland/",
+        "top5": [
+          {
+            "rank": 4,
+            "domain": "www.assistedliving.org",
+            "url": "https://www.assistedliving.org/ohio/cleveland/"
+          },
+          {
+            "rank": 6,
+            "domain": "www.whereyoulivematters.org",
+            "url": "https://www.whereyoulivematters.org/independent-living/ohio/cleveland/"
+          },
+          {
+            "rank": 7,
+            "domain": "thenormandy.com",
+            "url": "https://thenormandy.com/"
+          },
+          {
+            "rank": 8,
+            "domain": "www.brookdale.com",
+            "url": "https://www.brookdale.com/en/locations/ohio/cleveland.html"
+          },
+          {
+            "rank": 9,
+            "domain": "staugministries.org",
+            "url": "https://staugministries.org/health-campus/towers-assisted-living/"
+          }
+        ],
+        "error": null,
+        "cost": 0.0155
+      },
+      {
+        "keyword": "memory care cleveland oh",
+        "lane": "mc-metro",
+        "target": "/memory-care-cleveland",
+        "location_code": 1023631,
+        "position": null,
+        "url": null,
+        "url_matches_target": null,
+        "top_competitor": "www.whereyoulivematters.org",
+        "top_url": "https://www.whereyoulivematters.org/assisted-living/ohio/cleveland/",
+        "top5": [
+          {
+            "rank": 5,
+            "domain": "www.whereyoulivematters.org",
+            "url": "https://www.whereyoulivematters.org/assisted-living/ohio/cleveland/"
+          },
+          {
+            "rank": 6,
+            "domain": "www.assistedliving.org",
+            "url": "https://www.assistedliving.org/ohio/cleveland/"
+          },
+          {
+            "rank": 7,
+            "domain": "www.aplaceformom.com",
+            "url": "https://www.aplaceformom.com/alzheimers-care/ohio/cleveland"
+          },
+          {
+            "rank": 8,
+            "domain": "judsonsmartliving.org",
+            "url": "https://judsonsmartliving.org/judson-park/memory-care/"
+          },
+          {
+            "rank": 9,
+            "domain": "www.foresthillsplaceassistedliving.com",
+            "url": "https://www.foresthillsplaceassistedliving.com/"
+          }
+        ],
+        "error": null,
+        "cost": 0.0155
+      },
+      {
+        "keyword": "senior living advisor cleveland",
+        "lane": "advisor",
+        "target": "/cleveland-senior-living-advisor",
+        "location_code": 1023631,
+        "position": null,
+        "url": null,
+        "url_matches_target": null,
+        "top_competitor": "www.oasissenioradvisors.com",
+        "top_url": "https://www.oasissenioradvisors.com/locations/northeastern-oh/",
+        "top5": [
+          {
+            "rank": 1,
+            "domain": "www.oasissenioradvisors.com",
+            "url": "https://www.oasissenioradvisors.com/locations/northeastern-oh/"
+          },
+          {
+            "rank": 6,
+            "domain": "assistedlivinglocators.com",
+            "url": "https://assistedlivinglocators.com/care-advisor/cleveland-east"
+          },
+          {
+            "rank": 7,
+            "domain": "carepatrol.com",
+            "url": "https://carepatrol.com/northeast-ohio/"
+          },
+          {
+            "rank": 8,
+            "domain": "www.seniorcareauthority.com",
+            "url": "https://www.seniorcareauthority.com/locations/cleveland-oh/"
+          },
+          {
+            "rank": 9,
+            "domain": "www.senioradvisor.com",
+            "url": "https://www.senioradvisor.com/cleveland-oh/assisted-living"
+          }
+        ],
+        "error": null,
+        "cost": 0.0095
+      },
+      {
+        "keyword": "assisted living advisor cleveland",
+        "lane": "advisor",
+        "target": "/cleveland-senior-living-advisor",
+        "location_code": 1023631,
+        "position": null,
+        "url": null,
+        "url_matches_target": null,
+        "top_competitor": "www.oasissenioradvisors.com",
+        "top_url": "https://www.oasissenioradvisors.com/locations/northeastern-oh/",
+        "top5": [
+          {
+            "rank": 1,
+            "domain": "www.oasissenioradvisors.com",
+            "url": "https://www.oasissenioradvisors.com/locations/northeastern-oh/"
+          },
+          {
+            "rank": 6,
+            "domain": "assistedlivinglocators.com",
+            "url": "https://assistedlivinglocators.com/care-advisor/cleveland-east"
+          },
+          {
+            "rank": 7,
+            "domain": "carepatrol.com",
+            "url": "https://carepatrol.com/northeast-ohio/"
+          },
+          {
+            "rank": 8,
+            "domain": "www.seniorcareauthority.com",
+            "url": "https://www.seniorcareauthority.com/locations/cleveland-oh/"
+          },
+          {
+            "rank": 9,
+            "domain": "www.senioradvisor.com",
+            "url": "https://www.senioradvisor.com/cleveland-oh/assisted-living"
+          }
+        ],
+        "error": null,
+        "cost": 0.0155
+      },
+      {
+        "keyword": "senior living placement cleveland",
+        "lane": "advisor",
+        "target": "/contact",
+        "location_code": 1023631,
+        "position": null,
+        "url": null,
+        "url_matches_target": null,
+        "top_competitor": "www.seniorcareauthority.com",
+        "top_url": "https://www.seniorcareauthority.com/locations/cleveland-oh/",
+        "top5": [
+          {
+            "rank": 5,
+            "domain": "www.seniorcareauthority.com",
+            "url": "https://www.seniorcareauthority.com/locations/cleveland-oh/"
+          },
+          {
+            "rank": 6,
+            "domain": "assistedlivinglocators.com",
+            "url": "https://assistedlivinglocators.com/care-advisor/cleveland-east"
+          },
+          {
+            "rank": 8,
+            "domain": "storypoint.com",
+            "url": "https://storypoint.com/find/ohio/cleveland/"
+          },
+          {
+            "rank": 9,
+            "domain": "judsonsmartliving.org",
+            "url": "https://judsonsmartliving.org/judson-manor/"
+          },
+          {
+            "rank": 10,
+            "domain": "www.oasissenioradvisors.com",
+            "url": "https://www.oasissenioradvisors.com/locations/northeastern-oh/"
+          }
+        ],
+        "error": null,
+        "cost": 0.0155
+      },
+      {
+        "keyword": "best assisted living cleveland",
+        "lane": "al-metro",
+        "target": "/assisted-living-cleveland",
+        "location_code": 1023631,
+        "position": null,
+        "url": null,
+        "url_matches_target": null,
+        "top_competitor": "www.assistedliving.org",
+        "top_url": "https://www.assistedliving.org/ohio/cleveland/",
+        "top5": [
+          {
+            "rank": 4,
+            "domain": "www.assistedliving.org",
+            "url": "https://www.assistedliving.org/ohio/cleveland/"
+          },
+          {
+            "rank": 5,
+            "domain": "health.usnews.com",
+            "url": "https://health.usnews.com/best-senior-living/assisted-living/ohio/cleveland"
+          },
+          {
+            "rank": 7,
+            "domain": "judsonsmartliving.org",
+            "url": "https://judsonsmartliving.org/judson-manor/"
+          },
+          {
+            "rank": 8,
+            "domain": "www.whereyoulivematters.org",
+            "url": "https://www.whereyoulivematters.org/assisted-living/ohio/cleveland/"
+          },
+          {
+            "rank": 9,
+            "domain": "www.ccdocle.org",
+            "url": "https://www.ccdocle.org/programs/assisted-living-nursing-care"
+          }
+        ],
+        "error": null,
+        "cost": 0.0125
+      }
+    ]
+  },
+  "total_cost": 0.62604
+}
