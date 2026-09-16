@@ -184,14 +184,6 @@ const updates = [
     ]
   },
   {
-    id: '2227a4a1-1fd0-4591-af9a-95f6c1aed74a', // SHEVCHENKO MANOR
-    website: 'https://affordablesearch.com/apartments/Listing.aspx?id=9583',
-    image_url: 'https://affordablesearch.com/apartments/images/Listing/9583/Poltava_Center_1.jpg',
-    image_urls: [
-      'https://affordablesearch.com/apartments/images/Listing/9583/Poltava_Center_1.jpg'
-    ]
-  },
-  {
     id: '8307a5ae-48b9-4055-97c8-970f219bf071', // Westlake Assisted Living
     website: 'https://westlakeal.com/',
     image_url: 'https://westlakeal.com/wp-content/uploads/2021/03/westlake-al-exterior.jpg',

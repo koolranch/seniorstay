@@ -408,19 +408,6 @@ export const communityData: Community[] = [
     description: "Legacy Place Parma provides personalized assisted living services in a comfortable environment. Our dedicated staff delivers 24-hour assistance with daily activities, medication management, and health monitoring while promoting dignity and independence."
   },
   {
-    id: "facility-30",
-    name: "SHEVCHENKO MANOR",
-    location: "Parma, OH",
-    address: "2222 Westbrook Dr, Parma, OH 44134",
-    coordinates: {
-      lat: 41.4048,
-      lng: -81.7229
-    },
-    images: [],  // Will use varied placeholders
-    careTypes: ["Assisted Living"],
-    description: "SHEVCHENKO MANOR provides personalized assisted living services in a comfortable environment. Our dedicated staff delivers 24-hour assistance with daily activities, medication management, and health monitoring while promoting dignity and independence."
-  },
-  {
     id: "facility-31",
     name: "StoryPoint Strongsville",
     location: "Strongsville, OH",

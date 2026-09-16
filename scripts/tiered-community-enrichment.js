@@ -238,16 +238,7 @@ For Cleveland's eastern suburbs families facing skilled nursing decisions, Solon
 // Persona: The Stressed Adult Child
 // =============================================================================
 const TIER2_COMMUNITIES = [
-  // PARMA (11 communities)
-  {
-    id: '2227a4a1-1fd0-4591-af9a-95f6c1aed74a',
-    name: 'SHEVCHENKO MANOR, Parma, OH - Assisted Living',
-    city: 'Parma',
-    website: 'https://affordablesearch.com/apartments/Listing.aspx?id=9583',
-    description: `Shevchenko Manor provides affordable assisted living in Parma for seniors seeking supportive care without financial strain. This community-focused residence offers personalized assistance with daily activities while maintaining residents' independence and dignity. Staff members provide medication management, meal preparation, and housekeeping services tailored to individual needs. Located just 2.5 miles from UH Parma Medical Center, families have peace of mind knowing quality healthcare is always accessible. The affordable pricing structure makes assisted living attainable for families on fixed incomes or those seeking value-conscious care options. For adult children managing their parents' care transition, Shevchenko Manor offers the safety, supervision, and compassionate support that allows everyone to breathe easier.`,
-    services: 'Assisted Living',
-    tier: 2
-  },
+  // PARMA
   {
     id: '2d19fa36-7e15-4450-a53a-b3f3b4b2da78',
     name: "Rely's Adult Family Home, Parma, OH - Assisted Living",

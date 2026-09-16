@@ -1,3 +1,19 @@
+import { createRequire } from 'module';
+
+const require = createRequire(import.meta.url);
+
+// Sep 2026 AI-content audit: single source of truth for pruned blog posts.
+// Maps /blog/<slug> -> consolidation target. See src/data/blog-redirects.json.
+const blogRedirectMap = require('./src/data/blog-redirects.json');
+
+const blogConsolidationRedirects = Object.entries(blogRedirectMap)
+  .filter(([slug]) => slug !== '__comment')
+  .map(([slug, destination]) => ({
+    source: `/blog/${slug}`,
+    destination,
+    permanent: true,
+  }));
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // Ensure consistent URLs without trailing slashes
@@ -176,33 +192,16 @@ const nextConfig = {
       // Kept: /blog/entertainment-ideas - DR 75 backlink, may exist
       // ============================================================
       
-      // === Feb 2026 Lost Backlink Recovery (Ahrefs CSV Analysis) ===
-      // High-value backlinks lost due to redirect chains - restore with direct redirects
-      
-      // DR 72 backlink - Cleveland winter safety (MeloQ Devices)
-      {
-        source: '/blog/cleveland-winter-safety-tips-for-seniors',
-        destination: '/blog',
-        permanent: true,
-      },
-      // DR 70 backlink - Person-centered dementia care (Atlanta Hyperbaric)
-      {
-        source: '/blog/person-centered-dementia-care-assisted-living',
-        destination: '/resources',
-        permanent: true,
-      },
-      // DR 29 backlink - Questions to ask facilities (TX Family Adoption)
-      {
-        source: '/blog/questions-to-ask-assisted-living-facilities',
-        destination: '/resources',
-        permanent: true,
-      },
-      // DR 29, DR 25 backlinks - Medicare vs Medicaid Ohio
-      {
-        source: '/blog/medicare-vs-medicaid-ohio-senior-care',
-        destination: '/resources',
-        permanent: true,
-      },
+      // === Sep 2026 AI-content audit: consolidate cannibalizing blog posts ===
+      // 47 zero-ranking posts 301 into the page that should own each intent.
+      // Map lives in src/data/blog-redirects.json (shared with app code).
+      ...blogConsolidationRedirects,
+
+      // NOTE (Sep 2026 audit): the Feb 2026 redirects that sent LIVE posts
+      // (cleveland-winter-safety-tips-for-seniors, person-centered-dementia-care-
+      // assisted-living, medicare-vs-medicaid-ohio-senior-care, mini-face-lift)
+      // to /blog or /resources were removed — those posts exist in the DB and
+      // hold DR 25-72 backlinks. They now resolve normally again.
       
       // === Redirects for blog posts that DON'T exist (Jan 2026 Backlink Recovery) ===
       
@@ -278,15 +277,11 @@ const nextConfig = {
         destination: '/blog/cruises-for-seniors',
         permanent: true,
       },
-      // Face lift content (DR 67 link from csa.us)
-      {
-        source: '/blog/mini-face-lift',
-        destination: '/blog',
-        permanent: true,
-      },
+      // Face lift content (DR 67 link from csa.us) — post exists, send legacy
+      // path straight to it (Sep 2026: stopped redirecting the live post away)
       {
         source: '/senior-health/aesthetics/mini-face-lift',
-        destination: '/blog',
+        destination: '/blog/mini-face-lift',
         permanent: true,
       },
       // Games redirect to actual games page
@@ -391,15 +386,15 @@ const nextConfig = {
         permanent: true,
       },
       
-      // Meeting places legacy URL
+      // Meeting places legacy URL — post exists at /blog/11-places-seniors-meet-seniors
       {
         source: '/senior-lifestyle/family/11-places-seniors-meet-seniors',
-        destination: '/resources/social-activities',
+        destination: '/blog/11-places-seniors-meet-seniors',
         permanent: true,
       },
       {
         source: '/senior-lifestyle/family/11-places-seniors-meet-seniors/',
-        destination: '/resources/social-activities',
+        destination: '/blog/11-places-seniors-meet-seniors',
         permanent: true,
       },
       
@@ -555,12 +550,19 @@ const nextConfig = {
         destination: '/blog/:slug',
         permanent: true,
       },
-      // Promote placement content for old cost URL variants
+      // Removed listing — not a real placement community
       {
-        source: '/blog/average-cost-of-assisted-living',
-        destination: '/blog/cost-of-assisted-living-ohio',
+        source: '/cleveland/community/2227a4a1-1fd0-4591-af9a-95f6c1aed74a/shevchenko-manor',
+        destination: '/cleveland/parma',
         permanent: true,
       },
+      {
+        source: '/community/2227a4a1-1fd0-4591-af9a-95f6c1aed74a/shevchenko-manor',
+        destination: '/cleveland/parma',
+        permanent: true,
+      },
+
+      // (average-cost-of-assisted-living redirect moved into blog-redirects.json)
     ];
   },
 };
