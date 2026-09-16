@@ -76,10 +76,15 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     ogTags.push('Local Expert Advice');
   }
 
+  // Sep 2026 AI-content audit: low-value filler posts stay live for readers
+  // but carry meta_robots='noindex, follow' in Supabase to drop out of the index
+  const isNoindex = Boolean(post.metaRobots?.toLowerCase().includes('noindex'));
+
   return {
     title,
     description,
     keywords: allKeywords,
+    ...(isNoindex ? { robots: { index: false, follow: true } } : {}),
     alternates: {
       canonical: `${baseUrl}${canonicalUrl}`,
     },

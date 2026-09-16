@@ -12,6 +12,7 @@ export interface BlogPost {
   image?: string | null;
   content: string;
   regionSlug?: string | null; // null = global, 'cleveland' = Cleveland-specific
+  metaRobots?: string | null; // e.g. 'noindex, follow' for pruned low-value posts
 }
 
 /**
@@ -32,7 +33,17 @@ type BlogPostRow = {
   image_url: string | null;
   content_markdown: string;
   region_slug: string | null;
+  status: string | null;
+  meta_robots: string | null;
 };
+
+/**
+ * Sep 2026 AI-content audit: posts consolidated into money pages have
+ * status='redirected' in Supabase (301s live in next.config.mjs via
+ * src/data/blog-redirects.json). Every listing/related/sitemap query must
+ * only surface status='published' so we never link to a redirecting URL.
+ */
+const PUBLISHED = 'published';
 
 /**
  * REGIONAL BLOG CONTENT LOGIC
@@ -78,6 +89,7 @@ function mapRowToBlogPost(row: BlogPostRow): BlogPost {
     image: row.image_url,
     content: row.content_markdown,
     regionSlug: row.region_slug,
+    metaRobots: row.meta_robots,
   };
 }
 
@@ -90,6 +102,7 @@ export const fetchAllBlogPosts = cache(async (): Promise<BlogPost[]> => {
   const { data, error } = await client
     .from('blog_posts')
     .select('*')
+    .eq('status', PUBLISHED)
     .order('published_at', { ascending: false });
 
   if (error) {
@@ -114,7 +127,8 @@ export const fetchBlogPostSummaries = cache(async (): Promise<BlogPostSummary[]>
 
   const { data, error } = await client
     .from('blog_posts')
-    .select('slug, title, description, category, author, published_at, read_time_minutes, image_url, region_slug')
+    .select('slug, title, description, category, author, published_at, read_time_minutes, image_url, region_slug, meta_robots')
+    .eq('status', PUBLISHED)
     .order('published_at', { ascending: false });
 
   if (error) {
@@ -132,6 +146,7 @@ export const fetchBlogPostSummaries = cache(async (): Promise<BlogPostSummary[]>
     readTime: `${row.read_time_minutes} min read`,
     image: row.image_url,
     regionSlug: row.region_slug,
+    metaRobots: row.meta_robots,
   }));
 });
 
@@ -145,6 +160,7 @@ export const fetchBlogPostBySlug = cache(async (slug: string): Promise<BlogPost 
     .from('blog_posts')
     .select('*')
     .eq('slug', slug)
+    .eq('status', PUBLISHED)
     .maybeSingle();
 
   if (error) {
@@ -253,6 +269,7 @@ export const fetchPostsByRegion = cache(async (regionSlug: string, limit?: numbe
   const { data, error } = await client
     .from('blog_posts')
     .select('*')
+    .eq('status', PUBLISHED)
     .or(`region_slug.eq.${regionSlug},region_slug.is.null`)
     .order('published_at', { ascending: false });
 
@@ -281,6 +298,7 @@ export const fetchRegionalOnlyPosts = cache(async (regionSlug: string, limit?: n
   let query = client
     .from('blog_posts')
     .select('*')
+    .eq('status', PUBLISHED)
     .eq('region_slug', regionSlug)
     .order('published_at', { ascending: false });
 
@@ -311,6 +329,7 @@ export const fetchGlobalPosts = cache(async (limit?: number): Promise<BlogPost[]
   let query = client
     .from('blog_posts')
     .select('*')
+    .eq('status', PUBLISHED)
     .is('region_slug', null)
     .order('published_at', { ascending: false });
 
