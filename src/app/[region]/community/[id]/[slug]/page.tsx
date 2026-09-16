@@ -1,6 +1,5 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import Image from 'next/image';
 import Link from 'next/link';
 import { 
   Hospital, MapPin, Shield, Clock, Star, Check, 
@@ -26,9 +25,11 @@ import CommunityInquiryClient from '@/components/community/CommunityInquiryClien
 import WhatToExpectCard from '@/components/community/WhatToExpectCard';
 import SaveHeartButton from '@/components/community/SaveHeartButton';
 import SavedCommunitiesBar from '@/components/community/SavedCommunitiesBar';
+import CommunityImage from '@/components/ui/CommunityImage';
+import { isUsableCommunityImageUrl } from '@/lib/community-listing-utils';
 
-// ISR: Revalidate every hour
-export const revalidate = 3600;
+// Photos and pricing change often; keep ISR short so expired photo URLs don't stick.
+export const revalidate = 300;
 
 interface CommunityPageProps {
   params: { region: string; id: string; slug: string };
@@ -88,7 +89,7 @@ export async function generateMetadata({ params }: CommunityPageProps): Promise<
   
   // SEO SAFETY: Check if profile is "incomplete"
   const hasDescription = community.description && community.description.trim().length > 50;
-  const communityImage = community.images?.[0] || '';
+  const communityImage = (community.images || []).find(isUsableCommunityImageUrl) || '';
   const hasPlaceholderImage = !communityImage || 
     communityImage.toLowerCase().includes('placeholder') ||
     communityImage.toLowerCase().includes('no-image');
@@ -159,6 +160,7 @@ export default async function CommunityPage({ params }: CommunityPageProps) {
     notFound();
   }
 
+  const galleryImages = (community.images || []).filter(isUsableCommunityImageUrl);
   const cityName = community.location.split(',')[0].trim();
   const citySlug = cityName.toLowerCase().replace(/\s+/g, '-');
   const neighborhoodData = getNeighborhoodHubData(citySlug);
@@ -280,15 +282,16 @@ export default async function CommunityPage({ params }: CommunityPageProps) {
         <div className="relative h-[40vh] md:h-[50vh] overflow-hidden">
           <Carousel className="w-full h-full">
             <CarouselContent className="h-full">
-              {community.images?.length > 0 ? (
-                community.images.map((image, index) => (
+              {galleryImages.length > 0 ? (
+                galleryImages.map((image, index) => (
                   <CarouselItem key={`gallery-${index}`} className="h-full">
                     <div className="relative w-full h-[40vh] md:h-[50vh]">
-                      <Image
+                      <CommunityImage
                         src={image}
                         alt={`${community.name} - Image ${index + 1}`}
                         fill
                         className="object-cover"
+                        sizes="100vw"
                         priority={index === 0}
                       />
                     </div>
@@ -305,7 +308,7 @@ export default async function CommunityPage({ params }: CommunityPageProps) {
                 </CarouselItem>
               )}
             </CarouselContent>
-            {community.images?.length > 1 && (
+            {galleryImages.length > 1 && (
               <>
                 <CarouselPrevious className="left-4" />
                 <CarouselNext className="right-4" />

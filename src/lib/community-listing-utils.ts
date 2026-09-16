@@ -3,11 +3,25 @@ import { matchesBudgetFilter, BudgetFilter } from '@/lib/community-pricing';
 
 const PLACEHOLDER_PATTERNS = ['placeholder', 'no-image', 'default-community', 'generic', 'missing'];
 
+/** Google Places photo API URLs expire and leak a key — never treat them as usable. */
+export function isUsableCommunityImageUrl(url: string | undefined | null): boolean {
+  if (!url || typeof url !== 'string') return false;
+  const trimmed = url.trim();
+  if (!trimmed) return false;
+  if (trimmed.includes('maps.googleapis.com/maps/api/place/photo')) return false;
+  return (
+    trimmed.startsWith('http://') ||
+    trimmed.startsWith('https://') ||
+    trimmed.startsWith('/') ||
+    trimmed.startsWith('data:')
+  );
+}
+
 export function hasRealCommunityImage(community: Community): boolean {
   const url = community.images?.[0];
-  if (!url || typeof url !== 'string') return false;
+  if (!isUsableCommunityImageUrl(url) || !url) return false;
   const lower = url.trim().toLowerCase();
-  if (!lower || lower.startsWith('data:image/svg')) return false;
+  if (lower.startsWith('data:image/svg')) return false;
   // Legacy '/community-images/' paths reference files missing from storage;
   // they render as placeholders, so don't rank them as real photos.
   if (lower.startsWith('/community-images/')) return false;

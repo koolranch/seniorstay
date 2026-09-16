@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import Image from 'next/image';
 import { Home } from 'lucide-react';
+import { isUsableCommunityImageUrl } from '@/lib/community-listing-utils';
 
 interface CommunityImageProps {
   src: string;
@@ -71,22 +72,6 @@ function getPlaceholderDataUrl(name: string): string {
   return generatePlaceholderSVG(name, hash);
 }
 
-/**
- * Check if a URL is valid for use as an image source
- */
-function isValidImageUrl(url: string | undefined | null): boolean {
-  if (!url || typeof url !== 'string') return false;
-  const trimmed = url.trim();
-  if (!trimmed) return false;
-  
-  // Check for valid URL patterns
-  return (
-    trimmed.startsWith('http://') || 
-    trimmed.startsWith('https://') || 
-    trimmed.startsWith('/') ||
-    trimmed.startsWith('data:')
-  );
-}
 
 /**
  * CommunityImage component with built-in fallback for broken images
@@ -106,11 +91,11 @@ export default function CommunityImage({
   const placeholder = useMemo(() => getPlaceholderDataUrl(alt || 'Community'), [alt]);
   
   // Determine initial image source - use placeholder if src is invalid
-  const initialSrc = isValidImageUrl(src) ? src : placeholder;
+  const initialSrc = isUsableCommunityImageUrl(src) ? src : placeholder;
   
   const [imgSrc, setImgSrc] = useState(initialSrc);
-  const [hasError, setHasError] = useState(!isValidImageUrl(src));
-  const [isLoading, setIsLoading] = useState(isValidImageUrl(src));
+  const [hasError, setHasError] = useState(!isUsableCommunityImageUrl(src));
+  const [isLoading, setIsLoading] = useState(isUsableCommunityImageUrl(src));
   // Photos live on dozens of facility sites/CDNs that may not be in the
   // next.config remotePatterns allowlist. When the optimizer rejects a host
   // (400 from /_next/image), retry the raw URL unoptimized before giving up.
@@ -118,7 +103,7 @@ export default function CommunityImage({
 
   // Reset state when src changes
   useEffect(() => {
-    const validSrc = isValidImageUrl(src);
+    const validSrc = isUsableCommunityImageUrl(src);
     setImgSrc(validSrc ? src : placeholder);
     setHasError(!validSrc);
     setIsLoading(validSrc);

@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowLeft, Building, MapPin, Phone, Calendar, Star, Check, Heart, DollarSign } from 'lucide-react';
 
@@ -21,7 +20,8 @@ import OhioLicensePanel from '@/components/community/OhioLicensePanel';
 import PhoneLink from '@/components/conversion/PhoneLink';
 import { PLACEMENT_PHONE_TEL } from '@/lib/placement-contact';
 import { formatPriceEstimate, getPricingForCommunity } from '@/lib/community-pricing';
-import { hasRealCommunityImage } from '@/lib/community-listing-utils';
+import CommunityImage from '@/components/ui/CommunityImage';
+import { hasRealCommunityImage, isUsableCommunityImageUrl } from '@/lib/community-listing-utils';
 
 interface CommunityClientProps {
   community: Community;
@@ -48,7 +48,8 @@ export default function CommunityClient({ community }: CommunityClientProps) {
     description ||
     `${name} is a senior living community in ${location}. Contact our placement advisors for verified pricing, availability, and tour scheduling.`;
 
-  const galleryImages = images.length > 0 ? images : ['/images/community-placeholder.jpg'];
+  const usableImages = (images || []).filter(isUsableCommunityImageUrl);
+  const galleryImages = usableImages.length > 0 ? usableImages : ['/images/community-placeholder.jpg'];
 
   // Map timeframe to moveInTimeline
   const timeframeToTimeline = (timeframe: string): string => {
@@ -163,12 +164,12 @@ export default function CommunityClient({ community }: CommunityClientProps) {
               {galleryImages.map((image, index) => (
                 <CarouselItem key={`gallery-${index}`}>
                   <div className="relative w-full h-[300px] md:h-[450px]">
-                    <Image
+                    <CommunityImage
                       src={image}
                       alt={`${name} - Image ${index + 1}`}
                       fill
                       className="object-cover"
-                      crossOrigin="anonymous"
+                      sizes="100vw"
                     />
                   </div>
                 </CarouselItem>
