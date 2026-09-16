@@ -71,48 +71,48 @@ const GlobalHeader: React.FC = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center gap-6">
+          <nav className="hidden lg:flex items-center gap-4 xl:gap-5 min-w-0">
             <LocationSwitcher />
             <Link 
               href={`/${currentRegion}`}
-              className="text-slate-600 hover:text-teal-600 font-medium transition-colors"
+              className="whitespace-nowrap text-slate-600 hover:text-teal-600 font-medium transition-colors"
             >
               Browse Communities
             </Link>
             <Link 
               href={`/${currentRegion}/events`}
-              className="text-slate-600 hover:text-teal-600 font-medium transition-colors"
+              className="hidden xl:inline whitespace-nowrap text-slate-600 hover:text-teal-600 font-medium transition-colors"
             >
               Local Events
             </Link>
             <Link 
               href="/cleveland-senior-living-advisor"
-              className="text-slate-600 hover:text-teal-600 font-medium transition-colors"
+              className="whitespace-nowrap text-slate-600 hover:text-teal-600 font-medium transition-colors"
             >
               Free Placement
             </Link>
             <Link 
               href="/assessment" 
-              className="text-slate-600 hover:text-teal-600 font-medium transition-colors"
+              className="whitespace-nowrap text-slate-600 hover:text-teal-600 font-medium transition-colors"
             >
               Care Assessment
             </Link>
             <Link 
               href="/resources" 
-              className="text-slate-600 hover:text-teal-600 font-medium transition-colors"
+              className="whitespace-nowrap text-slate-600 hover:text-teal-600 font-medium transition-colors"
             >
               Resources
             </Link>
             <Link 
               href="/about" 
-              className="text-slate-600 hover:text-teal-600 font-medium transition-colors"
+              className="hidden xl:inline whitespace-nowrap text-slate-600 hover:text-teal-600 font-medium transition-colors"
             >
               About
             </Link>
           </nav>
 
           {/* CTA Button */}
-          <div className="flex items-center gap-2 sm:gap-3">
+          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
             <PhoneLink
               placement="header_mobile"
               phoneTel={PLACEMENT_PHONE_TEL}
@@ -124,10 +124,11 @@ const GlobalHeader: React.FC = () => {
             <PhoneLink
               placement="header_desktop"
               phoneTel={`tel:${phoneNumber.replace(/[^0-9+]/g, '')}`}
-              className="hidden sm:inline-flex items-center gap-2 bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800 text-white font-bold px-5 py-2.5 rounded-lg shadow-md hover:shadow-lg transition-all"
+              className="hidden sm:inline-flex items-center gap-2 bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800 text-white font-bold px-4 py-2.5 xl:px-5 rounded-lg shadow-md hover:shadow-lg transition-all whitespace-nowrap"
             >
-              <Phone className="h-4 w-4" />
-              <span>Talk to a Local Expert</span>
+              <Phone className="h-4 w-4 shrink-0" />
+              <span className="xl:hidden">Talk to an Expert</span>
+              <span className="hidden xl:inline">Talk to a Local Expert</span>
             </PhoneLink>
 
             {/* Mobile Menu Toggle */}
