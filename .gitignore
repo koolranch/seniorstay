@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# photo / scrape reports (may include expired source URLs)
+/scripts/output/
