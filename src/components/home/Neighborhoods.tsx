@@ -7,6 +7,7 @@ import { MapPin, ArrowRight, Building2, Hospital } from 'lucide-react';
 import MapComponent from '@/components/map/GoogleMap';
 import { Community } from '@/data/facilities';
 import { clevelandCitiesData } from '@/data/cleveland-cities';
+import { DEFAULT_REGION } from '@/data/regions';
 
 /**
  * Hyper-Local SEO Section - Cleveland Neighborhoods
@@ -126,10 +127,19 @@ const itemVariants = {
   },
 };
 
+/** Homepage coverage map: Greater Cleveland / NE Ohio only (excludes Columbus and the rest of the state). */
+function isGreaterClevelandCoordinate(coords: { lat: number; lng: number }): boolean {
+  return coords.lat >= 40.85 && coords.lat <= 42.1 && coords.lng >= -82.45 && coords.lng <= -80.7;
+}
+
 const Neighborhoods: React.FC<NeighborhoodsProps> = ({ communities = [] }) => {
-  // Filter communities that have valid coordinates for the map
-  const communitiesWithCoords = communities.filter(c => c.coordinates);
-  const communityCount = communities.length;
+  const clevelandCommunities = communities.filter(
+    (community) => (community.regionSlug || DEFAULT_REGION) === 'cleveland'
+  );
+  const communitiesWithCoords = clevelandCommunities.filter(
+    (community) => community.coordinates && isGreaterClevelandCoordinate(community.coordinates)
+  );
+  const communityCount = clevelandCommunities.length;
   return (
     <section className="py-20 md:py-28 bg-slate-50">
       <div className="container mx-auto px-4">
