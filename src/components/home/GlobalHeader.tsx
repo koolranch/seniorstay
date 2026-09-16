@@ -53,8 +53,8 @@ const GlobalHeader: React.FC = () => {
           : 'bg-white'
       }`}
     >
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16 md:h-20">
+      <div className="mx-auto w-full max-w-[1500px] px-4 sm:px-6">
+        <div className="flex items-center justify-between gap-4 h-16 md:h-20">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 group flex-shrink-0">
             <div className="bg-gradient-to-br from-teal-600 to-teal-700 p-2 rounded-lg shadow-md group-hover:shadow-lg transition-all">
@@ -71,7 +71,7 @@ const GlobalHeader: React.FC = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center gap-4 xl:gap-5 min-w-0">
+          <nav className="hidden lg:flex items-center justify-center gap-5 xl:gap-6 min-w-0 text-sm">
             <LocationSwitcher />
             <Link 
               href={`/${currentRegion}`}
@@ -81,7 +81,7 @@ const GlobalHeader: React.FC = () => {
             </Link>
             <Link 
               href={`/${currentRegion}/events`}
-              className="hidden xl:inline whitespace-nowrap text-slate-600 hover:text-teal-600 font-medium transition-colors"
+              className="hidden 2xl:inline whitespace-nowrap text-slate-600 hover:text-teal-600 font-medium transition-colors"
             >
               Local Events
             </Link>
@@ -93,7 +93,7 @@ const GlobalHeader: React.FC = () => {
             </Link>
             <Link 
               href="/assessment" 
-              className="whitespace-nowrap text-slate-600 hover:text-teal-600 font-medium transition-colors"
+              className="hidden 2xl:inline whitespace-nowrap text-slate-600 hover:text-teal-600 font-medium transition-colors"
             >
               Care Assessment
             </Link>
@@ -105,7 +105,7 @@ const GlobalHeader: React.FC = () => {
             </Link>
             <Link 
               href="/about" 
-              className="hidden xl:inline whitespace-nowrap text-slate-600 hover:text-teal-600 font-medium transition-colors"
+              className="hidden 2xl:inline whitespace-nowrap text-slate-600 hover:text-teal-600 font-medium transition-colors"
             >
               About
             </Link>
@@ -116,7 +116,7 @@ const GlobalHeader: React.FC = () => {
             <PhoneLink
               placement="header_mobile"
               phoneTel={PLACEMENT_PHONE_TEL}
-              className="sm:hidden inline-flex items-center gap-1.5 bg-gradient-to-r from-teal-600 to-teal-700 text-white font-bold px-3 py-2 rounded-lg shadow-md min-h-[44px]"
+              className="sm:hidden inline-flex items-center gap-1.5 bg-gradient-to-r from-teal-600 to-teal-700 text-white font-semibold px-3 py-2 rounded-full shadow-md min-h-[44px]"
             >
               <Phone className="h-4 w-4" />
               <span>Call</span>
@@ -124,11 +124,10 @@ const GlobalHeader: React.FC = () => {
             <PhoneLink
               placement="header_desktop"
               phoneTel={`tel:${phoneNumber.replace(/[^0-9+]/g, '')}`}
-              className="hidden sm:inline-flex items-center gap-2 bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800 text-white font-bold px-4 py-2.5 xl:px-5 rounded-lg shadow-md hover:shadow-lg transition-all whitespace-nowrap"
+              className="hidden sm:inline-flex items-center gap-2 bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800 text-white font-semibold text-sm px-4 py-2 rounded-full shadow-md hover:shadow-lg transition-all whitespace-nowrap"
             >
               <Phone className="h-4 w-4 shrink-0" />
-              <span className="xl:hidden">Talk to an Expert</span>
-              <span className="hidden xl:inline">Talk to a Local Expert</span>
+              <span>{phoneNumber}</span>
             </PhoneLink>
 
             {/* Mobile Menu Toggle */}
