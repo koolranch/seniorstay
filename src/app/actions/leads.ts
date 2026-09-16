@@ -7,6 +7,7 @@ import { LeadSchema, LeadInput, LeadSubmitResult, ReferralStatus } from './lead-
 import { Resend } from 'resend';
 import { createGuideAccessToken, createLeadSubmissionToken, verifyAndConsumeLeadSubmissionToken } from '@/lib/lead-security';
 import { evaluateLeadSpamSignals, isValidNanpPhone } from '@/lib/lead-spam';
+import { classifyLeadQuality, qualityLabel, qualityRank } from '@/lib/lead-quality';
 import { isBookedCallbackLead, shouldCancelNurture } from '@/lib/lead-nurture';
 import {
   cancelLeadNurture,
@@ -19,6 +20,7 @@ const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KE
 
 // Internal notification email
 const NOTIFICATION_EMAIL = 'jocelynn@guideforseniors.com';
+const OWNER_ALERT_EMAIL = 'flatearthequip@gmail.com';
 
 // Re-export types for consumers (these are just type re-exports, not values)
 export type { LeadInput, LeadSubmitResult, ReferralStatus };
@@ -756,15 +758,27 @@ async function sendLeadNotificationEmail(lead: {
   sourceSlug?: string;
   urgencyScore: number;
   pageType?: string;
+  communityName?: string;
+  quality: ReturnType<typeof classifyLeadQuality>['quality'];
 }): Promise<boolean> {
   if (!resend) {
     console.warn('[LeadNotification] Resend not configured, skipping notification email');
     return false;
   }
 
+  if (lead.quality === 'likely_spam') {
+    console.log('[LeadNotification] Skipping email for likely spam:', lead.id);
+    return false;
+  }
+
   try {
     const cityName = formatCityName(lead.sourceSlug);
-    const priorityLabel = lead.urgencyScore > 80 ? '🚨 HIGH PRIORITY' : lead.urgencyScore > 30 ? '⚡ Normal' : '📝 Low';
+    const recipients = lead.quality === 'likely_family'
+      ? [NOTIFICATION_EMAIL, OWNER_ALERT_EMAIL]
+      : [NOTIFICATION_EMAIL];
+    const priorityLabel = lead.quality === 'likely_family'
+      ? 'Likely family'
+      : lead.urgencyScore > 80 ? 'HIGH PRIORITY' : lead.urgencyScore > 30 ? 'Normal' : 'Low';
     
     // Determine type-specific subject line
     const pageTypeLabels: Record<string, string> = {
@@ -773,7 +787,9 @@ async function sendLeadNotificationEmail(lead: {
       exit_intent_inquiry: 'Quick Inquiry',
     };
     const typeLabel = (lead.pageType && pageTypeLabels[lead.pageType]) || 'New Lead';
-    const subject = `${typeLabel}: ${lead.fullName} - ${lead.careType || 'Senior Living'} (${cityName})`;
+    const subject = lead.quality === 'likely_family'
+      ? `Likely family: ${lead.fullName} — ${lead.communityName || cityName}`
+      : `${typeLabel}: ${lead.fullName} - ${lead.careType || 'Senior Living'} (${cityName})`;
     
     const htmlContent = `
 <!DOCTYPE html>
@@ -797,7 +813,7 @@ async function sendLeadNotificationEmail(lead: {
 <body>
   <div class="header">
     <h1 style="margin:0;">${typeLabel}</h1>
-    <p style="margin:5px 0 0;">${priorityLabel}</p>
+    <p style="margin:5px 0 0;">${qualityLabel(lead.quality)} · ${priorityLabel}</p>
   </div>
   <div class="content">
     <div class="field">
@@ -848,12 +864,15 @@ async function sendLeadNotificationEmail(lead: {
 </html>
     `.trim();
 
-    const { data, error } = await resend.emails.send({
-      from: 'Guide for Seniors <notifications@guideforseniors.com>',
-      to: NOTIFICATION_EMAIL,
-      subject,
-      html: htmlContent,
-    });
+    const { data, error } = await resend.emails.send(
+      {
+        from: 'Guide for Seniors <notifications@guideforseniors.com>',
+        to: recipients,
+        subject,
+        html: htmlContent,
+      },
+      { idempotencyKey: `gfs-lead-notify/${lead.id}/${lead.quality}` },
+    );
 
     if (error) {
       console.error('[LeadNotification] Failed to send:', error);
@@ -1179,12 +1198,25 @@ export async function submitLead(formData: LeadInput): Promise<LeadSubmitResult>
       leadId = inserted.id;
     }
     
+    const qualityVerdict = classifyLeadQuality({
+      fullName: data.fullName,
+      email: data.email,
+      phone: data.phone,
+      notes: cleanNotes,
+      pageType: normalizedPageType,
+      communityName: data.communityName,
+      cityOrZip: data.cityOrZip,
+      sourceSlug,
+    });
+
     // -------------------------------------------------------------------------
     // 6. INTERNAL REFERRAL: Send draft to internal email for review
     // All notifications now go to YOUR internal email for review before forwarding
     // HIGH-VALUE leads get 🚨 PRIORITY subject, standard leads get normal subject
     // -------------------------------------------------------------------------
-    const internalDraftSent = await sendInternalReferralDraft({
+    const internalDraftSent = qualityVerdict.quality === 'likely_spam'
+      ? false
+      : await sendInternalReferralDraft({
       id: leadId,
       fullName: data.fullName,
       phone: data.phone,
@@ -1202,7 +1234,8 @@ export async function submitLead(formData: LeadInput): Promise<LeadSubmitResult>
     
     // -------------------------------------------------------------------------
     // 7. SEND INSTANT NOTIFICATION EMAIL
-    // Send email notification to jocelynn@guideforseniors.com for every new lead
+    // Family leads go to Jocelynn and flatearthequip@gmail.com.
+    // Review leads stay on Jocelynn only. Likely spam is not emailed.
     // -------------------------------------------------------------------------
     await sendLeadNotificationEmail({
       id: leadId,
@@ -1215,20 +1248,24 @@ export async function submitLead(formData: LeadInput): Promise<LeadSubmitResult>
       sourceSlug,
       urgencyScore: finalUrgencyScore,
       pageType: normalizedPageType || undefined,
+      communityName: data.communityName,
+      quality: qualityVerdict.quality,
     });
 
-    await scheduleLeadNurture({
-      id: leadId,
-      fullName: data.fullName,
-      email: normalizeEmail(data.email),
-      phone: data.phone,
-      pageType: normalizedPageType,
-      careType: normalizedCareType,
-      status: 'new',
-      referral_status: 'new',
-      advisor_notes: null,
-      notes: cleanNotes,
-    });
+    if (qualityVerdict.quality !== 'likely_spam') {
+      await scheduleLeadNurture({
+        id: leadId,
+        fullName: data.fullName,
+        email: normalizeEmail(data.email),
+        phone: data.phone,
+        pageType: normalizedPageType,
+        careType: normalizedCareType,
+        status: 'new',
+        referral_status: 'new',
+        advisor_notes: null,
+        notes: cleanNotes,
+      });
+    }
     
     // Update referral status to 'internal_review' in database
     if (internalDraftSent) {
@@ -1489,10 +1526,32 @@ export async function getPipelineLeads() {
   if (error) throw error;
 
   const nurtureLabels = await getNurtureSummariesByLeadIds((data || []).map((lead) => lead.id));
-  const leadsWithNurture = (data || []).map((lead) => ({
-    ...lead,
-    nurtureLabel: nurtureLabels[lead.id] || null,
-  }));
+  const leadsWithNurture = (data || []).map((lead) => {
+    const verdict = classifyLeadQuality({
+      fullName: lead.fullName,
+      email: lead.email,
+      phone: lead.phone,
+      notes: lead.notes,
+      pageType: lead.pageType,
+      communityName: lead.communityName,
+      cityOrZip: lead.cityOrZip,
+      sourceSlug: lead.sourceSlug,
+    });
+    return {
+      ...lead,
+      nurtureLabel: nurtureLabels[lead.id] || null,
+      quality: verdict.quality,
+      qualityReason: verdict.reason,
+    };
+  });
+
+  const qualityCounts = leadsWithNurture.reduce(
+    (counts, lead) => {
+      counts[lead.quality] += 1;
+      return counts;
+    },
+    { likely_family: 0, review: 0, likely_spam: 0 },
+  );
   
   // Group by referral status
   const pipeline = {
@@ -1511,6 +1570,16 @@ export async function getPipelineLeads() {
     } else {
       pipeline.new.push(lead);
     }
+  });
+
+  (Object.keys(pipeline) as Array<keyof typeof pipeline>).forEach((status) => {
+    pipeline[status].sort((left, right) => {
+      const rankDelta = qualityRank(left.quality) - qualityRank(right.quality);
+      if (rankDelta !== 0) {
+        return rankDelta;
+      }
+      return new Date(right.createdAt).getTime() - new Date(left.createdAt).getTime();
+    });
   });
   
   // Calculate totals
@@ -1533,6 +1602,7 @@ export async function getPipelineLeads() {
     totalPipelineValue,
     totalPaidCommission,
     totalLeads: leadsWithNurture.length,
+    qualityCounts,
   };
 }
 

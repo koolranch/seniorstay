@@ -29,6 +29,7 @@ import {
   sendLeadReferral,
   ReferralStatus 
 } from '@/app/actions/leads';
+import { LeadQuality, qualityLabel } from '@/lib/lead-quality';
 
 // =============================================================================
 // TYPES
@@ -58,6 +59,11 @@ interface Lead {
   meta_data?: Record<string, unknown>;
   status?: string;
   nurtureLabel?: string | null;
+  notes?: string;
+  pageType?: string;
+  communityName?: string;
+  quality?: LeadQuality;
+  qualityReason?: string;
 }
 
 interface PipelineData {
@@ -65,6 +71,11 @@ interface PipelineData {
   totalPipelineValue: number;
   totalPaidCommission: number;
   totalLeads: number;
+  qualityCounts?: {
+    likely_family: number;
+    review: number;
+    likely_spam: number;
+  };
 }
 
 // =============================================================================
@@ -134,6 +145,37 @@ interface LeadCardProps {
   onMarkContacted: (leadId: string) => void;
 }
 
+function QualityBadge({ quality }: { quality?: LeadQuality }) {
+  if (!quality) {
+    return null;
+  }
+
+  switch (quality) {
+    case 'likely_family':
+      return (
+        <span className="px-2 py-0.5 bg-teal-100 text-teal-800 text-xs font-medium rounded-full">
+          {qualityLabel(quality)}
+        </span>
+      );
+    case 'review':
+      return (
+        <span className="px-2 py-0.5 bg-slate-100 text-slate-700 text-xs font-medium rounded-full">
+          {qualityLabel(quality)}
+        </span>
+      );
+    case 'likely_spam':
+      return (
+        <span className="px-2 py-0.5 bg-rose-50 text-rose-700 text-xs font-medium rounded-full">
+          {qualityLabel(quality)}
+        </span>
+      );
+    default: {
+      const exhaustive: never = quality;
+      return exhaustive;
+    }
+  }
+}
+
 function LeadCard({ lead, onStatusChange, onSendReferral, onMarkAdmitted, onMarkContacted }: LeadCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const commission = lead.actual_commission || lead.estimated_commission || 0;
@@ -145,6 +187,7 @@ function LeadCard({ lead, onStatusChange, onSendReferral, onMarkAdmitted, onMark
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -10 }}
       className={`bg-white rounded-xl border shadow-sm hover:shadow-md transition-shadow ${
+        lead.quality === 'likely_family' ? 'ring-2 ring-teal-500' :
         lead.is_high_value ? 'ring-2 ring-amber-400' : ''
       }`}
     >
@@ -157,6 +200,7 @@ function LeadCard({ lead, onStatusChange, onSendReferral, onMarkAdmitted, onMark
           <div className="flex-1">
             <div className="flex items-center gap-2">
               <h3 className="font-semibold text-slate-900">{lead.fullName}</h3>
+              <QualityBadge quality={lead.quality} />
               {lead.is_high_value && (
                 <span className="px-2 py-0.5 bg-amber-100 text-amber-700 text-xs font-medium rounded-full flex items-center gap-1">
                   <Sparkles className="h-3 w-3" />
@@ -241,6 +285,23 @@ function LeadCard({ lead, onStatusChange, onSendReferral, onMarkAdmitted, onMark
                   </a>
                 )}
               </div>
+
+              {lead.communityName && (
+                <p className="text-sm text-slate-600">
+                  Community: {lead.communityName}
+                </p>
+              )}
+
+              {lead.notes && (
+                <div className="bg-teal-50 rounded-lg p-3">
+                  <h4 className="text-xs font-semibold text-teal-800 uppercase mb-1">
+                    Notes
+                  </h4>
+                  <p className="text-sm text-slate-700 whitespace-pre-wrap">
+                    {lead.notes.split('---META_DATA_JSON---')[0]?.trim()}
+                  </p>
+                </div>
+              )}
               
               {/* Financial Readiness */}
               {(lead.home_value || lead.value_gap || lead.calculated_budget) && (
@@ -448,6 +509,7 @@ export default function PipelineDashboard() {
   const [error, setError] = useState<string | null>(null);
   const [admittedLead, setAdmittedLead] = useState<Lead | null>(null);
   const [refreshing, setRefreshing] = useState(false);
+  const [showSpam, setShowSpam] = useState(false);
   
   const fetchData = useCallback(async () => {
     try {
@@ -546,14 +608,28 @@ export default function PipelineDashboard() {
               <h1 className="text-2xl font-bold text-slate-900">Commission Pipeline</h1>
               <p className="text-slate-600 text-sm">Guide for Seniors - Cleveland</p>
             </div>
-            <button
-              onClick={fetchData}
-              disabled={refreshing}
-              className="px-4 py-2 bg-slate-100 text-slate-700 rounded-lg hover:bg-slate-200 flex items-center gap-2"
-            >
-              <RefreshCw className={`h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} />
-              Refresh
-            </button>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => setShowSpam((current) => !current)}
+                className={`px-4 py-2 rounded-lg text-sm font-medium ${
+                  showSpam
+                    ? 'bg-rose-100 text-rose-800'
+                    : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                }`}
+              >
+                {showSpam
+                  ? 'Showing likely spam'
+                  : `Show ${data?.qualityCounts?.likely_spam || 0} likely spam`}
+              </button>
+              <button
+                onClick={fetchData}
+                disabled={refreshing}
+                className="px-4 py-2 bg-slate-100 text-slate-700 rounded-lg hover:bg-slate-200 flex items-center gap-2"
+              >
+                <RefreshCw className={`h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} />
+                Refresh
+              </button>
+            </div>
           </div>
         </div>
       </header>
@@ -619,7 +695,7 @@ export default function PipelineDashboard() {
               {data?.totalLeads || 0}
             </p>
             <p className="text-slate-500 text-sm mt-1">
-              All time
+              {data?.qualityCounts?.likely_family || 0} likely family · {data?.qualityCounts?.review || 0} review
             </p>
           </motion.div>
           
@@ -649,7 +725,9 @@ export default function PipelineDashboard() {
         <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
           {(['new', 'internal_review', 'referral_sent', 'tour_scheduled', 'admitted', 'paid'] as ReferralStatus[]).map((status) => {
             const config = STATUS_CONFIG[status];
-            const leads = data?.pipeline[status] || [];
+            const leads = (data?.pipeline[status] || []).filter((lead) => (
+              showSpam || lead.quality !== 'likely_spam'
+            ));
             const statusValue = leads.reduce((sum, l) => sum + (parseFloat(String(l.estimated_commission)) || 0), 0);
             
             return (

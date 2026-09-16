@@ -28,7 +28,19 @@ const OUTREACH_NOTE_PATTERNS = [
   /\boutreach\b/i,
   /\bfreelance writer\b/i,
   /\bfeatured on your site\b/i,
+  /\bturbojot\b/i,
+  /\bform submissions across thousands\b/i,
+  /\bredesign their websites\b/i,
+  /\bjust popping back into your inbox\b/i,
+  /\badd another resource to your page\b/i,
+  /\bposition your brand\b/i,
+  /\bstart a business in retirement\b/i,
+  /\btax time a breeze\b/i,
 ];
+
+const VENDOR_PHONES = new Set([
+  '2158218810',
+]);
 
 export type LeadSpamInput = {
   fullName?: string | null;
@@ -165,7 +177,16 @@ function looksLikeOutreachNote(notes: string | null | undefined): boolean {
   return OUTREACH_NOTE_PATTERNS.some((pattern) => pattern.test(trimmed));
 }
 
+function isKnownVendorPhone(phone: string | null | undefined): boolean {
+  const digits = toTenDigitNanp(phone);
+  return Boolean(digits && VENDOR_PHONES.has(digits));
+}
+
 export function evaluateLeadSpamSignals(input: LeadSpamInput): LeadSpamVerdict {
+  if (isKnownVendorPhone(input.phone)) {
+    return { isSpam: true, reason: 'known_vendor_phone' };
+  }
+
   if (isDisposableOrSpamEmailDomain(input.email)) {
     return { isSpam: true, reason: 'spam_email_domain' };
   }
