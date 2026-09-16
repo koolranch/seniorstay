@@ -81,6 +81,16 @@ interface PipelineData {
 // STATUS CONFIG
 // =============================================================================
 
+function formatSourceLabel(slug?: string | null): string | null {
+  if (!slug?.trim()) {
+    return null;
+  }
+  const lastSegment = slug.split('/').filter(Boolean).pop() || slug;
+  return lastSegment
+    .replace(/-/g, ' ')
+    .replace(/\b\w/g, (character) => character.toUpperCase());
+}
+
 const STATUS_CONFIG: Record<ReferralStatus, { 
   label: string; 
   color: string; 
@@ -89,28 +99,28 @@ const STATUS_CONFIG: Record<ReferralStatus, {
   description: string;
 }> = {
   new: {
-    label: 'New Leads',
+    label: 'New',
     color: 'text-blue-600',
     bgColor: 'bg-blue-50 border-blue-200',
     icon: <Users className="h-5 w-5" />,
     description: 'Not yet reviewed',
   },
   internal_review: {
-    label: 'Internal Review',
+    label: 'Review',
     color: 'text-indigo-600',
     bgColor: 'bg-indigo-50 border-indigo-200',
     icon: <FileText className="h-5 w-5" />,
     description: 'Draft ready to forward',
   },
   referral_sent: {
-    label: 'Referral Sent',
+    label: 'Referred',
     color: 'text-purple-600',
     bgColor: 'bg-purple-50 border-purple-200',
     icon: <Send className="h-5 w-5" />,
     description: 'Awaiting community response',
   },
   tour_scheduled: {
-    label: 'Tour Scheduled',
+    label: 'Tour',
     color: 'text-amber-600',
     bgColor: 'bg-amber-50 border-amber-200',
     icon: <Calendar className="h-5 w-5" />,
@@ -124,7 +134,7 @@ const STATUS_CONFIG: Record<ReferralStatus, {
     description: 'Awaiting commission',
   },
   paid: {
-    label: 'Commission Paid',
+    label: 'Paid',
     color: 'text-green-600',
     bgColor: 'bg-green-50 border-green-200',
     icon: <CheckCircle2 className="h-5 w-5" />,
@@ -178,6 +188,7 @@ function QualityBadge({ quality }: { quality?: LeadQuality }) {
 function LeadCard({ lead, onStatusChange, onSendReferral, onMarkAdmitted, onMarkContacted }: LeadCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const commission = lead.actual_commission || lead.estimated_commission || 0;
+  const sourceLabel = formatSourceLabel(lead.sourceSlug);
   
   return (
     <motion.div
@@ -195,37 +206,33 @@ function LeadCard({ lead, onStatusChange, onSendReferral, onMarkAdmitted, onMark
         className="p-4 cursor-pointer"
         onClick={() => setIsExpanded(!isExpanded)}
       >
-        <div className="flex items-start justify-between">
-          <div className="flex-1">
-            <div className="flex items-center gap-2">
-              <h3 className="font-semibold text-slate-900">{lead.fullName}</h3>
-              <QualityBadge quality={lead.quality} />
-              {lead.is_high_value && (
-                <span className="px-2 py-0.5 bg-amber-100 text-amber-700 text-xs font-medium rounded-full flex items-center gap-1">
-                  <Sparkles className="h-3 w-3" />
-                  High Value
-                </span>
-              )}
-            </div>
-            <div className="flex items-center gap-3 mt-1 text-sm text-slate-500">
+        <div className="space-y-2">
+          <div className="flex flex-wrap items-center gap-2">
+            <h3 className="font-semibold text-slate-900 leading-snug">{lead.fullName}</h3>
+            <QualityBadge quality={lead.quality} />
+            {lead.is_high_value && (
+              <span className="px-2 py-0.5 bg-amber-100 text-amber-700 text-xs font-medium rounded-full flex items-center gap-1">
+                <Sparkles className="h-3 w-3" />
+                High Value
+              </span>
+            )}
+          </div>
+          {(lead.careType || sourceLabel) && (
+            <div className="flex flex-wrap items-center gap-2 text-sm text-slate-500">
               {lead.careType && <span>{lead.careType}</span>}
-              {lead.sourceSlug && (
+              {sourceLabel && (
                 <span className="flex items-center gap-1">
-                  <MapPin className="h-3 w-3" />
-                  {lead.sourceSlug.replace(/-/g, ' ')}
+                  <MapPin className="h-3 w-3 shrink-0" />
+                  {sourceLabel}
                 </span>
               )}
             </div>
-          </div>
-          
-          <div className="text-right">
-            <p className="text-lg font-bold text-emerald-600">
-              ${commission.toLocaleString()}
+          )}
+          {commission > 0 && (
+            <p className="text-sm font-semibold text-emerald-700">
+              {lead.actual_commission ? 'Confirmed' : 'Est.'} ${commission.toLocaleString()}
             </p>
-            <p className="text-xs text-slate-500">
-              {lead.actual_commission ? 'Confirmed' : 'Estimated'}
-            </p>
-          </div>
+          )}
         </div>
         
         {/* Quick Stats */}
@@ -608,18 +615,20 @@ export default function PipelineDashboard() {
               <p className="text-slate-600 text-sm">Guide for Seniors - Cleveland</p>
             </div>
             <div className="flex items-center gap-3">
-              <button
-                onClick={() => setShowSpam((current) => !current)}
-                className={`px-4 py-2 rounded-lg text-sm font-medium ${
-                  showSpam
-                    ? 'bg-rose-100 text-rose-800'
-                    : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
-                }`}
-              >
-                {showSpam
-                  ? 'Showing likely spam'
-                  : `Show ${data?.qualityCounts?.likely_spam || 0} likely spam`}
-              </button>
+              {(data?.qualityCounts?.likely_spam || 0) > 0 && (
+                <button
+                  onClick={() => setShowSpam((current) => !current)}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium ${
+                    showSpam
+                      ? 'bg-rose-100 text-rose-800'
+                      : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                  }`}
+                >
+                  {showSpam
+                    ? 'Hide likely spam'
+                    : `Show ${data?.qualityCounts?.likely_spam} likely spam`}
+                </button>
+              )}
               <button
                 onClick={fetchData}
                 disabled={refreshing}
@@ -721,7 +730,7 @@ export default function PipelineDashboard() {
         </div>
         
         {/* Pipeline Columns */}
-        <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
+        <div className="flex gap-4 overflow-x-auto pb-2">
           {(['new', 'internal_review', 'referral_sent', 'tour_scheduled', 'admitted', 'paid'] as ReferralStatus[]).map((status) => {
             const config = STATUS_CONFIG[status];
             const leads = (data?.pipeline[status] || []).filter((lead) => (
@@ -734,16 +743,16 @@ export default function PipelineDashboard() {
                 key={status}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="flex flex-col"
+                className="flex w-64 shrink-0 flex-col"
               >
                 {/* Column Header */}
-                <div className={`p-4 rounded-t-xl border ${config.bgColor}`}>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <span className={config.color}>{config.icon}</span>
-                      <h2 className={`font-semibold ${config.color}`}>{config.label}</h2>
+                <div className={`p-3 rounded-t-xl border ${config.bgColor}`}>
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-2 min-w-0">
+                      <span className={`${config.color} shrink-0`}>{config.icon}</span>
+                      <h2 className={`font-semibold truncate ${config.color}`}>{config.label}</h2>
                     </div>
-                    <span className={`px-2 py-0.5 rounded-full text-sm font-medium ${config.bgColor} ${config.color}`}>
+                    <span className={`px-2 py-0.5 rounded-full text-sm font-medium shrink-0 ${config.bgColor} ${config.color}`}>
                       {leads.length}
                     </span>
                   </div>
