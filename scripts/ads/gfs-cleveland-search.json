@@ -134,8 +134,16 @@
     },
     "gtag_env": {
       "NEXT_PUBLIC_GFS_GOOGLE_ADS_ID": "AW-16989996368",
-      "NEXT_PUBLIC_GFS_ADS_PHONE_LABEL": "set after conversion action exists",
-      "NEXT_PUBLIC_GFS_ADS_CALLBACK_LABEL": "set after conversion action exists"
+      "NEXT_PUBLIC_GFS_ADS_PHONE_LABEL": "T6TfCI_LmvkcENCKu6U_",
+      "NEXT_PUBLIC_GFS_ADS_CALLBACK_LABEL": "mHY5CNTOmvkcENCKu6U_"
+    },
+    "created_2026_09_15": {
+      "campaign_id": "24250421199",
+      "budget_id": "15885151159",
+      "negative_shared_set_id": "12235472694",
+      "phone_conversion_id": "7770383759",
+      "callback_conversion_id": "7770384212",
+      "custom_goal_id": "6459077569"
     }
   },
   "current_account_state_2026_09_15": {
@@ -143,6 +151,6 @@
     "gfc_employer_search": { "id": "24158336820", "status": "ENABLED", "budget_per_day": 10, "spend_30d": 426.03 },
     "gfc_operator_search": { "id": "24184008234", "status": "PAUSED", "budget_per_day": 25, "spend_30d": 370.00 },
     "proposed_gfs_daily_cap": 15,
-    "note": "GFS cap is in the same band as GFC Employer. Do not enable until owner says yes."
+    "note": "Enabled 2026-09-15 after owner approved $15/day, weekday 9-17 ET, 11-city presence geo. GFC campaigns left untouched."
   }
 }
