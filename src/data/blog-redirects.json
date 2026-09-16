@@ -1,0 +1,61 @@
+{
+  "__comment": "Sep 2026 AI-content audit: 47 of 86 blog posts (mostly the Nov 2025 - Feb 2026 Outrank wave) ranked for zero keywords after 7-10 months and cannibalized money pages. Each slug here 301s from /blog/<slug> to the page that should own the intent. Rows in Supabase blog_posts are set to status='redirected' so listings/sitemap skip them. To restore a post: remove it here and set status='published'.",
+
+  "average-cost-of-assisted-living": "/blog/cost-of-assisted-living-ohio",
+  "how-much-is-assisted-living-per-month": "/blog/cost-of-assisted-living-ohio",
+  "cost-of-assisted-living-in-cleveland-ohio-2025-breakdown": "/blog/cost-of-assisted-living-ohio",
+  "what-is-included-in-assisted-living-costs": "/blog/cost-of-assisted-living-ohio",
+  "hidden-costs-of-assisted-living": "/blog/cost-of-assisted-living-ohio",
+  "senior-living-cost": "/blog/cost-of-assisted-living-ohio",
+  "cost-of-senior-living": "/blog/cost-of-assisted-living-ohio",
+  "cost-of-senior-living-near-me": "/blog/cost-of-assisted-living-ohio",
+  "retirement-community-cost": "/blog/cost-of-assisted-living-ohio",
+  "cost-for-independent-living": "/blog/cost-of-assisted-living-ohio",
+  "independent-living-vs-assisted-living-cost-cleveland": "/blog/cost-of-assisted-living-ohio",
+  "assisted-living-vs-nursing-home-costs-cleveland-comparison": "/blog/cost-of-assisted-living-ohio",
+
+  "memory-care-cost-comparison-cuyahoga-vs-lake-county": "/blog/how-much-does-memory-care-cost",
+
+  "medicaid-assisted-living-ohio": "/medicaid-assisted-living-ohio",
+  "do-assisted-living-facilities-accept-medicaid": "/medicaid-assisted-living-ohio",
+
+  "medicare-vs-medicaid-for-long-term-care-ohio-guide": "/blog/medicare-vs-medicaid-ohio-senior-care",
+  "does-medicare-cover-assisted-living": "/blog/medicare-vs-medicaid-ohio-senior-care",
+  "does-medicare-cover-nursing-home": "/blog/medicare-vs-medicaid-ohio-senior-care",
+
+  "skilled-nursing-vs-assisted-living": "/blog/assisted-living-vs-nursing-home",
+  "assisted-living-vs-skilled-nursing-facilities": "/blog/assisted-living-vs-nursing-home",
+  "residential-care-facility-vs-nursing-home-ohio-differences": "/blog/assisted-living-vs-nursing-home",
+  "retirement-community-vs-nursing-home": "/blog/assisted-living-vs-nursing-home",
+  "what-is-skilled-nursing-care": "/blog/assisted-living-vs-nursing-home",
+
+  "memory-care-facilities-near-me": "/memory-care-cleveland",
+  "memory-care-communities-near-me": "/memory-care-cleveland",
+  "best-memory-care-facilities": "/memory-care-cleveland",
+  "memory-care-cleveland-ohio": "/memory-care-cleveland",
+  "assisted-living-with-dementia": "/memory-care-cleveland",
+
+  "senior-living-communities-in-solon-ohio-pricing-guide": "/cleveland/solon",
+  "affordable-assisted-living-parma-ohio-for-low-income": "/cleveland/parma",
+  "best-memory-care-communities-westlake-ohio-reviews": "/cleveland/westlake",
+  "senior-apartments-with-care-services-lakewood-ohio": "/cleveland/lakewood",
+  "luxury-senior-living-beachwood-ohio-vs-private-care": "/cleveland/beachwood",
+
+  "what-is-assisted-living-for-seniors": "/assisted-living-cleveland",
+  "assisted-living-buildings": "/assisted-living-cleveland",
+  "new-assisted-living-facilities-cleveland-area-2025": "/assisted-living-cleveland",
+  "immediate-availability-assisted-living-cleveland-east-side": "/assisted-living-cleveland",
+  "pet-friendly-assisted-living-cleveland-west-side-options": "/assisted-living-cleveland",
+  "assisted-living-near-cleveland-clinic-main-campus": "/assisted-living-cleveland",
+
+  "senior-living-options-near-me": "/cleveland",
+  "senior-housing-in-cleveland-ohio": "/cleveland",
+  "retirement-homes-in-ohio": "/cleveland",
+
+  "senior-apartments-in-cleveland-ohio": "/independent-living-cleveland",
+  "independent-senior-living-communities": "/independent-living-cleveland",
+
+  "starting-assisted-living": "/blog/how-to-choose-assisted-living",
+  "how-to-talk-to-parents-about-assisted-living": "/blog/how-to-talk-to-parents-about-senior-living",
+  "questions-to-ask-assisted-living-facilities": "/blog/questions-to-ask-during-senior-living-tour"
+}
