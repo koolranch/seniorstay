@@ -249,7 +249,7 @@ const SchemaOrg: React.FC<SchemaOrgProps> = ({ cityName, stateAbbr, communities,
             "longitude": community.coordinates.lng,
           } : undefined,
           "telephone": "(216) 677-4630",
-          "url": `https://guideforseniors.com/community/${community.id}/${community.name.toLowerCase().replace(/\s+/g, '-')}`,
+          "url": `https://www.guideforseniors.com/${community.regionSlug || 'cleveland'}/community/${community.id}/${community.name.toLowerCase().replace(/\s+/g, '-')}`,
           "image": community.images[0],
           ...(community.rating ? {
             "aggregateRating": {

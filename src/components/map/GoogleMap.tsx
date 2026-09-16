@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef, useState, useMemo } from 'react';
 import { Community } from '@/data/facilities';
+import { DEFAULT_REGION } from '@/data/regions';
 import { useRouter } from 'next/navigation';
 import { Loader2 } from 'lucide-react';
 import MapFallback from './MapFallback';
@@ -133,6 +134,10 @@ export default function MapComponent({
         // Add markers for each community with coordinates
         validCommunities.forEach(community => {
           if (community && community.coordinates) {
+            const regionSlug = community.regionSlug || DEFAULT_REGION;
+            const communitySlug = (community.name || 'community').toLowerCase().replace(/\s+/g, '-');
+            const communityHref = `/${regionSlug}/community/${community.id}/${communitySlug}`;
+
             // Safely access community properties with optional chaining
             const marker = new google.maps.Marker({
               position: {
@@ -161,7 +166,7 @@ export default function MapComponent({
                     `<span style="background-color: rgba(255, 56, 92, 0.1); color: #FF385C; border-radius: 20px; padding: 2px 6px; font-size: 10px;">${type}</span>`
                   ).join('')}
                 </div>
-                <a href="/cleveland/community/${community.id}/${(community.name || 'community').toLowerCase().replace(/\\s+/g, '-')}"
+                <a href="${communityHref}"
                    style="display: block; text-align: center; margin-top: 8px; color: #FF385C; font-size: 12px; text-decoration: none;">
                    View Details
                 </a>
@@ -199,7 +204,7 @@ export default function MapComponent({
             } else {
               // Navigate to community detail page on click
               marker.addListener('click', () => {
-                router.push(`/community/${community.id}/${(community.name || 'community').toLowerCase().replace(/\\s+/g, '-')}`);
+                router.push(communityHref);
               });
             }
 

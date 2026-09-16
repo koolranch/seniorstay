@@ -4,6 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { MapPin, ArrowRight, Building2, Clock, Shield, Heart } from 'lucide-react';
 import { Community } from '@/data/facilities';
+import { DEFAULT_REGION } from '@/data/regions';
 import { Button } from '@/components/ui/button';
 import CommunityImage from '@/components/ui/CommunityImage';
 import { getCommunityImage } from '@/lib/communityImages';
@@ -77,7 +78,8 @@ export default function CommunitySpotlight({
   position = 1 
 }: CommunitySpotlightProps) {
   const communitySlug = community.name.toLowerCase().replace(/\s+/g, '-');
-  const communityUrl = `/community/${community.id}/${communitySlug}`;
+  const regionSlug = community.regionSlug || DEFAULT_REGION;
+  const communityUrl = `/${regionSlug}/community/${community.id}/${communitySlug}`;
   
   const description = community.description || generateDescription(community, cityName);
   const features = getKeyFeatures(community);

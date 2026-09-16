@@ -470,12 +470,9 @@ const nextConfig = {
         permanent: true,
       },
       
-      // Community detail pages: /community/:id/:slug -> /cleveland/community/:id/:slug
-      {
-        source: '/community/:id/:slug',
-        destination: '/cleveland/community/:id/:slug',
-        permanent: true,
-      },
+      // /community/:id/:slug is handled by src/app/community/[id]/[slug]/page.tsx
+      // (308 to /:region/community/:id/:slug using the community's region_slug).
+      // Do not hardcode /cleveland here — that would 404 Columbus listings.
       
       // Event pages: /events/:slug -> /cleveland/events/:slug
       {

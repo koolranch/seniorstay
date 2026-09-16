@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { useComparison } from '@/context/ComparisonContext';
 import { Community } from '@/data/facilities';
+import { DEFAULT_REGION } from '@/data/regions';
 import { getCommunityImage } from '@/lib/communityImages';
 import CommunityImage from '@/components/ui/CommunityImage';
 import TourSchedulerForm from '@/components/tour/TourSchedulerForm';
@@ -65,10 +66,8 @@ export default function LocationCard({ community, compact = false, regionSlug }:
   const communityLocation = community.location || 'Unknown location';
   const communitySlug = communityName.toLowerCase().replace(/\s+/g, '-');
 
-  // Prepare community URL - region-aware if regionSlug provided
-  const communityUrl = regionSlug 
-    ? `/${regionSlug}/community/${communityId}/${communitySlug}`
-    : `/community/${communityId}/${communitySlug}`;
+  const resolvedRegion = regionSlug || community.regionSlug || DEFAULT_REGION;
+  const communityUrl = `/${resolvedRegion}/community/${communityId}/${communitySlug}`;
 
   // Use actual care types or fallback to empty array only if undefined
   const careTypes = community.careTypes || [];
