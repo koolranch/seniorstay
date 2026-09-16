@@ -52,7 +52,7 @@ export default function CommunityInquiryClient({
           <div>
             <h3 className="text-lg font-semibold text-slate-900 mb-1">Have Questions?</h3>
             <p className="text-sm text-slate-500">
-              Ask about {communityName} — we respond within 24 hours
+              Ask about {communityName} — we&apos;ll call you back, often within 15 minutes
             </p>
           </div>
         </div>

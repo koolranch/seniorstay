@@ -22,6 +22,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { submitLead } from '@/app/actions/leads';
+import { isValidPhone } from '@/lib/lead-form-options';
 
 interface QuickFact {
   icon: React.ReactNode;
@@ -63,6 +64,8 @@ export default function InquiryPanel({
   const [selectedChips, setSelectedChips] = useState<string[]>([]);
   const [customMessage, setCustomMessage] = useState('');
   const [contactData, setContactData] = useState({ email: '', phone: '', fullName: '' });
+  const [phoneError, setPhoneError] = useState('');
+  const [formError, setFormError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const quickFacts: QuickFact[] = [
@@ -87,20 +90,22 @@ export default function InquiryPanel({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (isSubmitting || !contactData.email) return;
+    if (isSubmitting) return;
 
-    const digits = contactData.phone.replace(/\D/g, '');
-    if (digits.length < 10) {
+    if (!isValidPhone(contactData.phone)) {
+      setPhoneError('Enter a valid U.S. phone number so we can call you back.');
       return;
     }
 
+    setPhoneError('');
+    setFormError('');
     setIsSubmitting(true);
     try {
       const allQuestions = [...selectedChips];
       if (customMessage.trim()) allQuestions.push(customMessage.trim());
       const notes = `Community Inquiry: ${allQuestions.join(' | ')}`;
 
-      await submitLead({
+      const result = await submitLead({
         fullName: contactData.fullName || 'Website Inquiry',
         email: contactData.email,
         phone: contactData.phone,
@@ -111,9 +116,15 @@ export default function InquiryPanel({
         sourceSlug: sourceSlug || 'community-inquiry',
       });
 
+      if (!result.success) {
+        setFormError(result.message || 'Something went wrong. Please try again or call us.');
+        return;
+      }
+
       setStep('success');
     } catch (error) {
       console.error('Error submitting inquiry:', error);
+      setFormError('Something went wrong. Please try again or call us.');
     } finally {
       setIsSubmitting(false);
     }
@@ -125,6 +136,8 @@ export default function InquiryPanel({
       setSelectedChips([]);
       setCustomMessage('');
       setContactData({ email: '', phone: '', fullName: '' });
+      setPhoneError('');
+      setFormError('');
     }, 300);
     onOpenChange(false);
   };
@@ -238,10 +251,10 @@ export default function InquiryPanel({
               >
                 <div className="mb-5">
                   <p className="text-sm font-medium text-slate-700 mb-1">
-                    Where should we send the answer?
+                    How should we reach you?
                   </p>
                   <p className="text-xs text-slate-500">
-                    A Cleveland advisor will call you shortly—often within 15 minutes during business hours.
+                    A Cleveland advisor will call you shortly — often within 15 minutes during business hours.
                   </p>
                 </div>
 
@@ -263,33 +276,48 @@ export default function InquiryPanel({
 
                 <form id="inquiry-contact-form" onSubmit={handleSubmit} className="space-y-3">
                   <div>
-                    <label htmlFor="inquiry-email" className="text-sm font-medium text-slate-700 mb-1 block">
-                      Email <span className="text-red-400">*</span>
-                    </label>
-                    <Input
-                      id="inquiry-email"
-                      type="email"
-                      required
-                      value={contactData.email}
-                      onChange={(e) => setContactData({ ...contactData, email: e.target.value })}
-                      placeholder="you@email.com"
-                      className="h-11"
-                    />
-                  </div>
-
-                  <div>
                     <label htmlFor="inquiry-phone" className="text-sm font-medium text-slate-700 mb-1 block">
-                      Phone *
+                      Callback number <span className="text-red-400">*</span>
                     </label>
                     <Input
                       id="inquiry-phone"
                       type="tel"
                       required
+                      autoComplete="tel"
+                      inputMode="tel"
+                      aria-invalid={phoneError ? true : undefined}
+                      aria-describedby={phoneError ? 'inquiry-phone-error' : undefined}
                       value={contactData.phone}
-                      onChange={(e) => setContactData({ ...contactData, phone: e.target.value })}
-                      placeholder="(216) 677-4630"
+                      onChange={(e) => {
+                        setContactData({ ...contactData, phone: e.target.value });
+                        if (phoneError) setPhoneError('');
+                      }}
+                      placeholder="(216) 555-0123"
                       className="h-11"
                     />
+                    {phoneError && (
+                      <p id="inquiry-phone-error" className="mt-1.5 text-xs text-red-600" role="alert">
+                        {phoneError}
+                      </p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label htmlFor="inquiry-email" className="text-sm font-medium text-slate-700 mb-1 block">
+                      Email <span className="text-slate-400">(optional)</span>
+                    </label>
+                    <Input
+                      id="inquiry-email"
+                      type="email"
+                      autoComplete="email"
+                      value={contactData.email}
+                      onChange={(e) => setContactData({ ...contactData, email: e.target.value })}
+                      placeholder="you@email.com"
+                      className="h-11"
+                    />
+                    <p className="mt-1 text-xs text-slate-500">
+                      Optional — we&apos;ll send a written follow-up if you add one.
+                    </p>
                   </div>
 
                   <div>
@@ -298,12 +326,18 @@ export default function InquiryPanel({
                     </label>
                     <Input
                       id="inquiry-name"
+                      autoComplete="name"
                       value={contactData.fullName}
                       onChange={(e) => setContactData({ ...contactData, fullName: e.target.value })}
                       placeholder="Your name"
                       className="h-11"
                     />
                   </div>
+                  {formError && (
+                    <p className="text-xs text-red-600" role="alert">
+                      {formError}
+                    </p>
+                  )}
                 </form>
               </motion.div>
             )}
@@ -365,7 +399,7 @@ export default function InquiryPanel({
                 <Button
                   type="submit"
                   form="inquiry-contact-form"
-                  disabled={isSubmitting || !contactData.email}
+                  disabled={isSubmitting}
                   className="flex-1 h-12 font-semibold bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800 shadow-sm"
                 >
                   {isSubmitting ? 'Sending...' : 'Send My Question'}
