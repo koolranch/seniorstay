@@ -61,7 +61,6 @@ interface Lead {
   nurtureLabel?: string | null;
   notes?: string;
   pageType?: string;
-  communityName?: string;
   quality?: LeadQuality;
   qualityReason?: string;
 }
