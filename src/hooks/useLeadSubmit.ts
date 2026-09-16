@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useRef, useTransition, useEffect } from 'react';
 import { getLeadSubmissionToken, submitLead, LeadInput, LeadSubmitResult } from '@/app/actions/leads';
-import { trackFormError, trackFormSubmission } from '@/components/analytics/GoogleAnalytics';
+import { trackFormError, trackSuccessfulLeadConversion } from '@/components/analytics/GoogleAnalytics';
 
 interface UseLeadSubmitOptions {
   onSuccess?: (result: LeadSubmitResult) => void;
@@ -72,7 +72,12 @@ export function useLeadSubmit(options?: UseLeadSubmitOptions) {
         setResult(response);
         
         if (response.success) {
-          trackFormSubmission(data.pageType || 'lead');
+          trackSuccessfulLeadConversion({
+            pageType: data.pageType,
+            phone: data.phone,
+            formType: data.pageType || 'lead',
+            bookedCallback: response.bookedCallback,
+          });
           options?.onSuccess?.(response);
           formStartedAtRef.current = Date.now();
         } else {

@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Community } from '@/data/facilities';
 import { submitLead } from '@/app/actions/leads';
+import { trackBookedCallback } from '@/components/analytics/GoogleAnalytics';
 
 interface TourBookingOverlayProps {
   community: Community;
@@ -60,11 +61,12 @@ export default function TourBookingOverlay({
         cityOrZip: userZip || community.location?.split(',')[0]?.trim() || '',
         moveInTimeline: timingToTimeline(formData.timing) as any,
         notes: `Tour request for ${community.name}. Timing: ${formData.timing}, Time preference: ${formData.timePreference}${distance ? `, Distance: ${distance.toFixed(1)} miles` : ''}`,
-        pageType: 'community_page',
+        pageType: 'tour_request',
         sourceSlug: community.id,
       });
 
       if (result.success) {
+        trackBookedCallback('tour_request');
         onSuccess();
       } else {
         setError(result.message || 'Something went wrong. Please try again.');

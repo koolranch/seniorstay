@@ -25,6 +25,7 @@ import {
 import { 
   getPipelineLeads, 
   updateLeadStatus, 
+  updateLeadContactStatus,
   sendLeadReferral,
   ReferralStatus 
 } from '@/app/actions/leads';
@@ -55,6 +56,8 @@ interface Lead {
   calculated_budget?: number;
   advisor_notes?: string;
   meta_data?: Record<string, unknown>;
+  status?: string;
+  nurtureLabel?: string | null;
 }
 
 interface PipelineData {
@@ -128,9 +131,10 @@ interface LeadCardProps {
   onStatusChange: (leadId: string, status: ReferralStatus) => void;
   onSendReferral: (leadId: string) => void;
   onMarkAdmitted: (lead: Lead) => void;
+  onMarkContacted: (leadId: string) => void;
 }
 
-function LeadCard({ lead, onStatusChange, onSendReferral, onMarkAdmitted }: LeadCardProps) {
+function LeadCard({ lead, onStatusChange, onSendReferral, onMarkAdmitted, onMarkContacted }: LeadCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const commission = lead.actual_commission || lead.estimated_commission || 0;
   
@@ -195,6 +199,12 @@ function LeadCard({ lead, onStatusChange, onSendReferral, onMarkAdmitted }: Lead
             <span className="flex items-center gap-1">
               <Home className="h-3 w-3" />
               ${lead.home_value.toLocaleString()}
+            </span>
+          )}
+          {lead.nurtureLabel && (
+            <span className="flex items-center gap-1 text-teal-700">
+              <Mail className="h-3 w-3" />
+              {lead.nurtureLabel}
             </span>
           )}
         </div>
@@ -315,6 +325,16 @@ function LeadCard({ lead, onStatusChange, onSendReferral, onMarkAdmitted }: Lead
                   </button>
                 )}
                 
+                {lead.status !== 'contacted' && lead.status !== 'qualified' && lead.status !== 'converted' && lead.status !== 'lost' && (
+                  <button
+                    onClick={(e) => { e.stopPropagation(); onMarkContacted(lead.id); }}
+                    className="px-3 py-1.5 bg-teal-50 text-teal-800 text-sm font-medium rounded-lg hover:bg-teal-100 flex items-center gap-1"
+                  >
+                    <Phone className="h-4 w-4" />
+                    Mark Contacted
+                  </button>
+                )}
+
                 <a
                   href={`/api/lead-profile/${lead.id}`}
                   target="_blank"
@@ -466,6 +486,15 @@ export default function PipelineDashboard() {
     }
   };
   
+  const handleMarkContacted = async (leadId: string) => {
+    const result = await updateLeadContactStatus(leadId, 'contacted');
+    if (result.success) {
+      fetchData();
+    } else {
+      alert(result.message);
+    }
+  };
+
   const handleMarkAdmitted = async (leadId: string, commission: number, moveInDate?: string) => {
     const result = await updateLeadStatus(leadId, 'admitted', {
       actual_commission: commission,
@@ -659,6 +688,7 @@ export default function PipelineDashboard() {
                         onStatusChange={handleStatusChange}
                         onSendReferral={handleSendReferral}
                         onMarkAdmitted={() => setAdmittedLead(lead)}
+                        onMarkContacted={handleMarkContacted}
                       />
                     ))}
                   </AnimatePresence>

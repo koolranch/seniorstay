@@ -50,6 +50,7 @@ export interface LeadSubmitResult {
   priority?: 'high' | 'normal' | 'low';
   pricingGuideToken?: string;
   careGuideToken?: string;
+  bookedCallback?: boolean;
   message: string;
   errors?: Record<string, string[]>;
 }

@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { submitLead } from '@/app/actions/leads';
+import { trackBookedCallback } from '@/components/analytics/GoogleAnalytics';
 
 const TIME_SLOTS = [
   { value: '9:00 AM', label: '9:00 AM' },
@@ -124,11 +125,12 @@ export default function TourSchedulerForm({
         communityId,
         cityOrZip: communityLocation?.split(',')[0]?.trim() || '',
         notes: `Tour scheduled: ${tourDate} at ${selectedTime} for ${communityName}`,
-        pageType: 'community_page',
+        pageType: 'tour_request',
         sourceSlug: sourceSlug || communityId || 'tour-scheduler',
       });
 
       if (result.success) {
+        trackBookedCallback('tour_request');
         setStep('success');
         onSuccess?.();
       }

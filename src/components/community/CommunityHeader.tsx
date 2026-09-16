@@ -11,6 +11,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import CommunityImage from '@/components/ui/CommunityImage';
 import { submitLead } from '@/app/actions/leads';
+import { trackBookedCallback } from '@/components/analytics/GoogleAnalytics';
 
 interface CommunityHeaderProps {
   community: Community;
@@ -35,10 +36,13 @@ export default function CommunityHeader({ community, isOnlySkilledNursing = fals
         communityName: community.name,
         cityOrZip: community.location?.split(',')[0]?.trim() || '',
         notes: `Tour request for ${community.name}`,
-        pageType: 'community_page',
+        pageType: 'tour_request',
         sourceSlug: community.id,
       });
-      if (result.success) setTourSubmitted(true);
+      if (result.success) {
+        trackBookedCallback('tour_request');
+        setTourSubmitted(true);
+      }
     } catch (error) {
       console.error('Error submitting form:', error);
     } finally {

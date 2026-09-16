@@ -7,7 +7,7 @@ import { Phone, Users, CheckCircle, Shield, Calendar, ArrowRight } from 'lucide-
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { submitLead } from '@/app/actions/leads';
-import { trackFormError, trackFormStart, trackFormSubmission } from '@/components/analytics/GoogleAnalytics';
+import { trackFormError, trackFormStart, trackSuccessfulLeadConversion } from '@/components/analytics/GoogleAnalytics';
 import PhoneLink from '@/components/conversion/PhoneLink';
 import { PLACEMENT_CALLBACK_MESSAGE, PLACEMENT_PHONE_DISPLAY } from '@/lib/placement-contact';
 import { isValidPhone, MOVE_IN_TIMELINE_OPTIONS } from '@/lib/lead-form-options';
@@ -66,7 +66,12 @@ export default function AdvisorSection() {
         sourceSlug: 'homepage-advisor',
       });
       if (result.success) {
-        trackFormSubmission('advisor');
+        trackSuccessfulLeadConversion({
+          pageType: 'advisor_request',
+          phone: formData.phone,
+          formType: 'advisor',
+          bookedCallback: result.bookedCallback,
+        });
         setIsSubmitted(true);
         formStartTrackedRef.current = false;
       } else {

@@ -1,0 +1,148 @@
+{
+  "account_id": "3466711027",
+  "manager_id": "3740653678",
+  "isolation": {
+    "do_not_edit": ["GFC Employer — Search", "GFC Operator — Search"],
+    "do_not_share_budgets_or_lists": true,
+    "do_not_add_gfs_conversions_as_account_default_primary": true,
+    "keep_public_phone": "(216) 677-4630"
+  },
+  "campaign": {
+    "name": "GFS Cleveland — Search",
+    "status": "PAUSED",
+    "channel": "SEARCH",
+    "budget_micros_per_day": 15000000,
+    "budget_shared": false,
+    "bidding": {
+      "strategy": "MAXIMIZE_CLICKS",
+      "cpc_bid_ceiling_micros": 8000000
+    },
+    "network": {
+      "google_search": true,
+      "search_partners": false,
+      "display": false
+    },
+    "geo": {
+      "country": "US",
+      "positive_geo_target_type": "PRESENCE",
+      "locations": [
+        { "id": "1023631", "name": "Cleveland, Ohio" },
+        { "id": "1024088", "name": "Westlake, Ohio" },
+        { "id": "1023967", "name": "Rocky River, Ohio" },
+        { "id": "1023779", "name": "Lakewood, Ohio" },
+        { "id": "1023558", "name": "Beachwood, Ohio" },
+        { "id": "1023618", "name": "Chagrin Falls, Ohio" },
+        { "id": "1023993", "name": "Solon, Ohio" },
+        { "id": "1023544", "name": "Aurora, Ohio" },
+        { "id": "9052645", "name": "Parma, Ohio" },
+        { "id": "9052828", "name": "Shaker Heights, Ohio" },
+        { "id": "9052881", "name": "South Russell, Ohio" }
+      ],
+      "do_not_use_dma_200510": "Cleveland-Akron (Canton) includes Akron/Canton — too wide for this test"
+    },
+    "schedule": {
+      "timezone": "America/New_York",
+      "days": ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY"],
+      "start_hour": 9,
+      "end_hour": 17,
+      "needs_owner_confirm": true
+    },
+    "landing_pages": {
+      "primary": "https://www.guideforseniors.com/cleveland-senior-living-advisor",
+      "secondary": "https://www.guideforseniors.com/contact",
+      "never": [
+        "/medicaid-assisted-living-ohio",
+        "/columbus",
+        "/community/",
+        "/blog/",
+        "skilled nursing pages"
+      ]
+    }
+  },
+  "keywords_exact_only": [
+    { "text": "cleveland senior living advisor", "volume": 10, "keep": true },
+    { "text": "assisted living advisor cleveland", "volume": null, "keep": true },
+    { "text": "senior living placement cleveland", "volume": null, "keep": true },
+    { "text": "memory care advisor cleveland", "volume": null, "keep": true },
+    { "text": "help finding assisted living cleveland", "volume": null, "keep": true },
+    { "text": "cleveland assisted living advisor", "volume": null, "keep": true },
+    { "text": "assisted living placement cleveland", "volume": null, "keep": true },
+    { "text": "senior living consultant cleveland", "volume": null, "keep": true },
+    { "text": "memory care placement cleveland", "volume": null, "keep": true }
+  ],
+  "keywords_skipped_no_volume": [
+    "beachwood senior living advisor",
+    "westlake senior living advisor",
+    "rocky river senior living advisor",
+    "shaker heights senior living advisor",
+    "chagrin falls senior living advisor",
+    "parma senior living advisor",
+    "lakewood senior living advisor",
+    "solon senior living advisor"
+  ],
+  "ad_group": {
+    "name": "Cleveland placement advisor",
+    "final_url": "https://www.guideforseniors.com/cleveland-senior-living-advisor"
+  },
+  "rsa": {
+    "headlines": [
+      "Cleveland Senior Living Advisor",
+      "Talk to Jocelynn, Not a Call Center",
+      "Free Family Placement Consult",
+      "Assisted Living Help in Cleveland",
+      "Memory Care Advisor — Cleveland",
+      "Local Help for Cleveland Families",
+      "Westlake, Beachwood, Rocky River",
+      "Compare Communities, Then Tour",
+      "You Talk to a Local Advisor",
+      "Guide for Seniors — Cleveland",
+      "Chagrin Valley Placement Help",
+      "Find the Right Fit Nearby",
+      "No Cost to Families",
+      "Call (216) 677-4630",
+      "Shaker Heights & Lakewood Help"
+    ],
+    "descriptions": [
+      "I help Cleveland families compare assisted living and memory care. Call Jocelynn at (216) 677-4630.",
+      "Free local guidance for Greater Cleveland and Chagrin Valley families. You talk to me, not a call center.",
+      "Tell me what you need. I’ll narrow communities that actually fit and help you schedule tours."
+    ],
+    "path1": "Cleveland",
+    "path2": "Advisor"
+  },
+  "sitelinks": [
+    { "text": "Talk with an advisor", "url": "https://www.guideforseniors.com/contact" },
+    { "text": "Assisted living Cleveland", "url": "https://www.guideforseniors.com/assisted-living-cleveland" },
+    { "text": "Memory care Cleveland", "url": "https://www.guideforseniors.com/memory-care-cleveland" },
+    { "text": "Cleveland senior living costs", "url": "https://www.guideforseniors.com/senior-living-costs-cleveland" }
+  ],
+  "conversions": {
+    "create": [
+      { "name": "GFS Phone Click", "category": "CONTACT", "primary_for_goal": false },
+      { "name": "GFS Booked Callback", "category": "CONTACT", "primary_for_goal": false }
+    ],
+    "attach_only_to": "GFS Cleveland — Search",
+    "do_not_optimize_to": [
+      "form_submission",
+      "placement_page_view",
+      "listing_filter",
+      "PDF downloads"
+    ],
+    "site_events": {
+      "phone_click": "already fired in GA4 via PhoneLink",
+      "booked_callback": "fired on contact/advisor+phone and Schedule Tour"
+    },
+    "gtag_env": {
+      "NEXT_PUBLIC_GFS_GOOGLE_ADS_ID": "AW-16989996368",
+      "NEXT_PUBLIC_GFS_ADS_PHONE_LABEL": "set after conversion action exists",
+      "NEXT_PUBLIC_GFS_ADS_CALLBACK_LABEL": "set after conversion action exists"
+    }
+  },
+  "current_account_state_2026_09_15": {
+    "currency": "USD",
+    "gfc_employer_search": { "id": "24158336820", "status": "ENABLED", "budget_per_day": 10, "spend_30d": 426.03 },
+    "gfc_operator_search": { "id": "24184008234", "status": "PAUSED", "budget_per_day": 25, "spend_30d": 370.00 },
+    "proposed_gfs_daily_cap": 15,
+    "note": "GFS cap is in the same band as GFC Employer. Do not enable until owner says yes."
+  }
+}

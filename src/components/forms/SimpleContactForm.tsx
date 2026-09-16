@@ -5,7 +5,7 @@ import { getLeadSubmissionToken, submitLead } from '@/app/actions/leads';
 import {
   trackFormError,
   trackFormStart,
-  trackFormSubmission,
+  trackSuccessfulLeadConversion,
 } from '@/components/analytics/GoogleAnalytics';
 import PhoneLink from '@/components/conversion/PhoneLink';
 import { PLACEMENT_CALLBACK_MESSAGE, PLACEMENT_PHONE_DISPLAY } from '@/lib/placement-contact';
@@ -96,7 +96,12 @@ export default function SimpleContactForm({
       });
 
       if (result.success) {
-        trackFormSubmission(formType);
+        trackSuccessfulLeadConversion({
+          pageType: 'other',
+          phone,
+          formType,
+          bookedCallback: result.bookedCallback,
+        });
         setIsSuccess(true);
         formStartedAtRef.current = Date.now();
         formStartTrackedRef.current = false;

@@ -19,6 +19,7 @@ export default function GoogleAnalytics() {
           gtag('config', '${GA_MEASUREMENT_ID}', {
             page_path: window.location.pathname,
           });
+          ${process.env.NEXT_PUBLIC_GFS_GOOGLE_ADS_ID ? `gtag('config', '${process.env.NEXT_PUBLIC_GFS_GOOGLE_ADS_ID}');` : ''}
         `}
       </Script>
     </>
@@ -57,6 +58,16 @@ export function trackFormSubmission(formType: string, communityName?: string) {
   });
 }
 
+function trackGfsAdsConversion(label?: string) {
+  const adsId = process.env.NEXT_PUBLIC_GFS_GOOGLE_ADS_ID;
+  if (!adsId || !label) {
+    return;
+  }
+  trackEvent('conversion', {
+    send_to: `${adsId}/${label}`,
+  });
+}
+
 export function trackPhoneClick(placement: string, page?: string) {
   trackEvent('phone_click', {
     event_category: 'conversion',
@@ -64,6 +75,28 @@ export function trackPhoneClick(placement: string, page?: string) {
     page_path: page || (typeof window !== 'undefined' ? window.location.pathname : ''),
     page_location: typeof window !== 'undefined' ? window.location.href : '',
   });
+  trackGfsAdsConversion(process.env.NEXT_PUBLIC_GFS_ADS_PHONE_LABEL);
+}
+
+export function trackBookedCallback(source: string) {
+  trackEvent('booked_callback', {
+    event_category: 'conversion',
+    event_label: source,
+    page_path: typeof window !== 'undefined' ? window.location.pathname : '',
+  });
+  trackGfsAdsConversion(process.env.NEXT_PUBLIC_GFS_ADS_CALLBACK_LABEL);
+}
+
+export function trackSuccessfulLeadConversion(input: {
+  pageType?: string | null;
+  phone?: string | null;
+  formType?: string;
+  bookedCallback?: boolean;
+}) {
+  trackFormSubmission(input.formType || input.pageType || 'lead');
+  if (input.bookedCallback) {
+    trackBookedCallback(input.pageType || input.formType || 'lead');
+  }
 }
 
 /** Fired once per session when user views a high-intent placement page (baseline KPI). */

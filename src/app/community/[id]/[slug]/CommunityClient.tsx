@@ -15,6 +15,7 @@ import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext
 import { Community } from '@/data/facilities';
 import MapComponent from '@/components/map/GoogleMap';
 import { submitLead } from '@/app/actions/leads';
+import { trackBookedCallback } from '@/components/analytics/GoogleAnalytics';
 import CommunityTrustBadge from '@/components/community/CommunityTrustBadge';
 import OhioLicensePanel from '@/components/community/OhioLicensePanel';
 import PhoneLink from '@/components/conversion/PhoneLink';
@@ -102,11 +103,12 @@ export default function CommunityClient({ community }: CommunityClientProps) {
         communityName: name,
         cityOrZip: location?.split(',')[0]?.trim() || '',
         notes: `Tour request for ${name}. Preferred time: ${formData.get('timePreference') || 'not specified'}`,
-        pageType: 'community_page',
+        pageType: 'tour_request',
         sourceSlug: community.id,
       });
 
       if (result.success) {
+        trackBookedCallback('tour_request');
         setTourSubmitted(true);
       }
     } catch (error) {

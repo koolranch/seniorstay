@@ -15,6 +15,10 @@
     {
       "path": "/api/etl/import-inspection-pdfs",
       "schedule": "0 5 * * 0"
+    },
+    {
+      "path": "/api/cron/lead-nurture",
+      "schedule": "0 13-22 * * 1-5"
     }
   ],
   "redirects": [

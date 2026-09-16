@@ -7,6 +7,12 @@ import { LeadSchema, LeadInput, LeadSubmitResult, ReferralStatus } from './lead-
 import { Resend } from 'resend';
 import { createGuideAccessToken, createLeadSubmissionToken, verifyAndConsumeLeadSubmissionToken } from '@/lib/lead-security';
 import { evaluateLeadSpamSignals, isValidNanpPhone } from '@/lib/lead-spam';
+import { isBookedCallbackLead, shouldCancelNurture } from '@/lib/lead-nurture';
+import {
+  cancelLeadNurture,
+  getNurtureSummariesByLeadIds,
+  scheduleLeadNurture,
+} from '@/lib/lead-nurture-store';
 
 // Initialize Resend for email notifications
 const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
@@ -54,6 +60,7 @@ const VALID_PAGE_TYPES: readonly string[] = [
   'advisor_request',
   'community_inquiry',
   'exit_intent_inquiry',
+  'tour_request',
   'other',
   ''
 ];
@@ -1209,6 +1216,19 @@ export async function submitLead(formData: LeadInput): Promise<LeadSubmitResult>
       urgencyScore: finalUrgencyScore,
       pageType: normalizedPageType || undefined,
     });
+
+    await scheduleLeadNurture({
+      id: leadId,
+      fullName: data.fullName,
+      email: normalizeEmail(data.email),
+      phone: data.phone,
+      pageType: normalizedPageType,
+      careType: normalizedCareType,
+      status: 'new',
+      referral_status: 'new',
+      advisor_notes: null,
+      notes: cleanNotes,
+    });
     
     // Update referral status to 'internal_review' in database
     if (internalDraftSent) {
@@ -1241,6 +1261,7 @@ export async function submitLead(formData: LeadInput): Promise<LeadSubmitResult>
       priority: finalPriority,
       pricingGuideToken,
       careGuideToken,
+      bookedCallback: isBookedCallbackLead(normalizedPageType, data.phone),
       message: finalPriority === 'high' 
         ? 'Thank you! A senior advisor will contact you very soon.'
         : 'Thank you! We\'ll be in touch within 1 business day.',
@@ -1466,18 +1487,24 @@ export async function getPipelineLeads() {
     .order('createdAt', { ascending: false });
     
   if (error) throw error;
+
+  const nurtureLabels = await getNurtureSummariesByLeadIds((data || []).map((lead) => lead.id));
+  const leadsWithNurture = (data || []).map((lead) => ({
+    ...lead,
+    nurtureLabel: nurtureLabels[lead.id] || null,
+  }));
   
   // Group by referral status
   const pipeline = {
-    new: [] as typeof data,
-    internal_review: [] as typeof data,
-    referral_sent: [] as typeof data,
-    tour_scheduled: [] as typeof data,
-    admitted: [] as typeof data,
-    paid: [] as typeof data,
+    new: [] as typeof leadsWithNurture,
+    internal_review: [] as typeof leadsWithNurture,
+    referral_sent: [] as typeof leadsWithNurture,
+    tour_scheduled: [] as typeof leadsWithNurture,
+    admitted: [] as typeof leadsWithNurture,
+    paid: [] as typeof leadsWithNurture,
   };
   
-  data?.forEach(lead => {
+  leadsWithNurture.forEach(lead => {
     const status = (lead.referral_status || 'new') as ReferralStatus;
     if (pipeline[status]) {
       pipeline[status].push(lead);
@@ -1487,14 +1514,14 @@ export async function getPipelineLeads() {
   });
   
   // Calculate totals
-  const totalPipelineValue = data?.reduce((sum, lead) => {
+  const totalPipelineValue = leadsWithNurture.reduce((sum, lead) => {
     if (lead.referral_status !== 'paid') {
       return sum + (parseFloat(lead.estimated_commission) || 0);
     }
     return sum;
   }, 0) || 0;
   
-  const totalPaidCommission = data?.reduce((sum, lead) => {
+  const totalPaidCommission = leadsWithNurture.reduce((sum, lead) => {
     if (lead.referral_status === 'paid') {
       return sum + (parseFloat(lead.actual_commission) || parseFloat(lead.estimated_commission) || 0);
     }
@@ -1505,7 +1532,7 @@ export async function getPipelineLeads() {
     pipeline,
     totalPipelineValue,
     totalPaidCommission,
-    totalLeads: data?.length || 0,
+    totalLeads: leadsWithNurture.length,
   };
 }
 
@@ -1561,9 +1588,44 @@ export async function updateLeadStatus(
     console.error('[Pipeline] Status update failed:', error);
     return { success: false, message: error.message };
   }
+
+  if (shouldCancelNurture({
+    referralStatus: status,
+    advisorNotes: additionalData?.advisor_notes,
+  })) {
+    await cancelLeadNurture(leadId, status);
+  }
   
   console.log(`[Pipeline] Lead ${leadId} moved to ${status}`);
   return { success: true, message: `Lead moved to ${status}` };
+}
+
+export async function updateLeadContactStatus(
+  leadId: string,
+  status: 'contacted' | 'qualified' | 'converted' | 'lost',
+  advisorNotes?: string
+): Promise<{ success: boolean; message: string }> {
+  const supabase = getSupabaseAdmin();
+  const updateData: Record<string, unknown> = {
+    status,
+    updatedAt: new Date().toISOString(),
+  };
+  if (advisorNotes) {
+    updateData.advisor_notes = advisorNotes;
+  }
+
+  const { error } = await supabase
+    .from('Lead')
+    .update(updateData)
+    .eq('id', leadId);
+
+  if (error) {
+    console.error('[Pipeline] Contact status update failed:', error);
+    return { success: false, message: error.message };
+  }
+
+  await cancelLeadNurture(leadId, status);
+  return { success: true, message: `Lead marked ${status}` };
 }
 
 /**
@@ -1642,6 +1704,8 @@ export async function sendLeadReferral(leadId: string): Promise<{ success: boole
         updatedAt: new Date().toISOString(),
       })
       .eq('id', leadId);
+
+    await cancelLeadNurture(leadId, 'referral_sent');
       
     return { success: true, message: 'Referral notification sent successfully' };
   }

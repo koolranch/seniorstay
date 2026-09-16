@@ -208,3 +208,26 @@ model Lead {
   @@index([referral_status])
   @@index([is_high_value])
 }
+
+model GfsLeadNurture {
+  id              String    @id @default(uuid()) @db.Uuid
+  leadId          String    @map("lead_id")
+  email           String
+  phone           String?
+  sequenceKey     String    @map("sequence_key")
+  step            Int
+  status          String    @default("scheduled")
+  scheduledFor    DateTime  @map("scheduled_for")
+  sentAt          DateTime? @map("sent_at")
+  cancelledAt     DateTime? @map("cancelled_at")
+  cancelReason    String?   @map("cancel_reason")
+  skipReason      String?   @map("skip_reason")
+  resendMessageId String?   @map("resend_message_id")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+
+  @@index([status, scheduledFor])
+  @@index([leadId])
+  @@index([sequenceKey, createdAt])
+  @@map("gfs_lead_nurture")
+}

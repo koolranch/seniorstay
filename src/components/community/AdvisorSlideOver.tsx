@@ -14,6 +14,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import PhoneLink from '@/components/conversion/PhoneLink';
 import { submitLead } from '@/app/actions/leads';
+import { trackSuccessfulLeadConversion } from '@/components/analytics/GoogleAnalytics';
 
 interface AdvisorSlideOverProps {
   open: boolean;
@@ -44,7 +45,7 @@ export default function AdvisorSlideOver({
 
     setIsSubmitting(true);
     try {
-      await submitLead({
+      const result = await submitLead({
         fullName: formData.fullName,
         phone: formData.phone,
         email: formData.email,
@@ -56,7 +57,15 @@ export default function AdvisorSlideOver({
           : 'Advisor consultation requested',
         sourceSlug: sourceSlug || 'community-advisor',
       });
-      setIsSubmitted(true);
+      if (result.success) {
+        trackSuccessfulLeadConversion({
+          pageType: 'advisor_request',
+          phone: formData.phone,
+          formType: 'advisor',
+          bookedCallback: result.bookedCallback,
+        });
+        setIsSubmitted(true);
+      }
     } catch (error) {
       console.error('Error submitting advisor request:', error);
     } finally {
