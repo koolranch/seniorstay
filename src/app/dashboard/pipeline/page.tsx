@@ -91,6 +91,18 @@ function formatSourceLabel(slug?: string | null): string | null {
     .replace(/\b\w/g, (character) => character.toUpperCase());
 }
 
+function formatLeadPhone(phone?: string | null): string | null {
+  if (!phone?.trim()) {
+    return null;
+  }
+  const digits = phone.replace(/\D/g, '');
+  const national = digits.length === 11 && digits.startsWith('1') ? digits.slice(1) : digits;
+  if (national.length !== 10) {
+    return phone.trim();
+  }
+  return `(${national.slice(0, 3)}) ${national.slice(3, 6)}-${national.slice(6)}`;
+}
+
 const STATUS_CONFIG: Record<ReferralStatus, { 
   label: string; 
   color: string; 
@@ -271,29 +283,29 @@ function LeadCard({ lead, onStatusChange, onSendReferral, onMarkAdmitted, onMark
           >
             <div className="p-4 space-y-4">
               {/* Contact Info */}
-              <div className="grid grid-cols-2 gap-3">
+              <div className="flex flex-col gap-2">
                 {lead.phone && (
                   <a 
-                    href={`tel:${lead.phone}`}
+                    href={`tel:${lead.phone.replace(/\D/g, '')}`}
                     className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600"
                   >
-                    <Phone className="h-4 w-4" />
-                    {lead.phone}
+                    <Phone className="h-4 w-4 shrink-0" />
+                    <span className="whitespace-nowrap">{formatLeadPhone(lead.phone)}</span>
                   </a>
                 )}
                 {lead.email && (
                   <a 
                     href={`mailto:${lead.email}`}
-                    className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600"
+                    className="flex items-start gap-2 text-sm text-slate-600 hover:text-blue-600 min-w-0"
                   >
-                    <Mail className="h-4 w-4" />
-                    {lead.email}
+                    <Mail className="h-4 w-4 shrink-0 mt-0.5" />
+                    <span className="break-all">{lead.email}</span>
                   </a>
                 )}
               </div>
 
               {lead.communityName && (
-                <p className="text-sm text-slate-600">
+                <p className="text-sm text-slate-600 break-words">
                   Community: {lead.communityName}
                 </p>
               )}
