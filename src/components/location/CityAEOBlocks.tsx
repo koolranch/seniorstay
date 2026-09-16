@@ -2,10 +2,11 @@
 
 import React from 'react';
 import Script from 'next/script';
-import { HelpCircle, MapPin, DollarSign, Clock, Heart, Shield, ChevronDown, ChevronUp } from 'lucide-react';
+import { HelpCircle, Phone, ChevronDown, ChevronUp } from 'lucide-react';
 import PhoneLink from '@/components/conversion/PhoneLink';
 import { CityInfo } from '@/data/cleveland-cities';
-import { getCityHospitals, getNearestHospitalForCity, HospitalData } from '@/lib/hospital-proximity';
+import { getCityHospitals, getNearestHospitalForCity } from '@/lib/hospital-proximity';
+import { PLACEMENT_PHONE_DISPLAY } from '@/lib/placement-contact';
 
 interface CityAEOBlocksProps {
   cityName: string;
@@ -123,7 +124,7 @@ const CityAEOBlocks: React.FC<CityAEOBlocksProps> = ({
           <div className="max-w-4xl mx-auto">
             {/* Section Header */}
             <div className="text-center mb-10">
-              <div className="inline-flex items-center gap-2 bg-primary-100 text-primary-700 px-4 py-2 rounded-full text-sm font-medium mb-4">
+              <div className="inline-flex items-center gap-2 bg-teal-100 text-teal-700 px-4 py-2 rounded-full text-sm font-medium mb-4">
                 <HelpCircle className="h-4 w-4" />
                 <span>Frequently Asked Questions</span>
               </div>
@@ -151,7 +152,7 @@ const CityAEOBlocks: React.FC<CityAEOBlocksProps> = ({
                       {faq.question}
                     </span>
                     {openFAQ === index ? (
-                      <ChevronUp className="h-5 w-5 text-primary-600 flex-shrink-0" />
+                      <ChevronUp className="h-5 w-5 text-teal-600 flex-shrink-0" />
                     ) : (
                       <ChevronDown className="h-5 w-5 text-gray-400 flex-shrink-0" />
                     )}
@@ -173,19 +174,19 @@ const CityAEOBlocks: React.FC<CityAEOBlocksProps> = ({
             {/* Quick Stats Bar */}
             <div className="mt-10 grid grid-cols-2 md:grid-cols-4 gap-4">
               <div className="bg-white p-4 rounded-xl border border-slate-200 text-center">
-                <div className="text-2xl font-bold text-primary-600">{communityCount || '10+'}</div>
+                <div className="text-2xl font-bold text-teal-600">{communityCount || '10+'}</div>
                 <div className="text-sm text-gray-600">Communities</div>
               </div>
               <div className="bg-white p-4 rounded-xl border border-slate-200 text-center">
-                <div className="text-2xl font-bold text-primary-600">{costData.assistedLiving.split('-')[0]}</div>
+                <div className="text-2xl font-bold text-teal-600">{costData.assistedLiving.split('-')[0]}</div>
                 <div className="text-sm text-gray-600">Starting Cost</div>
               </div>
               <div className="bg-white p-4 rounded-xl border border-slate-200 text-center">
-                <div className="text-2xl font-bold text-primary-600">{cityHospitals.length}+</div>
+                <div className="text-2xl font-bold text-teal-600">{cityHospitals.length}+</div>
                 <div className="text-sm text-gray-600">Nearby Hospitals</div>
               </div>
               <div className="bg-white p-4 rounded-xl border border-slate-200 text-center">
-                <div className="text-2xl font-bold text-primary-600">Free</div>
+                <div className="text-2xl font-bold text-teal-600">Free</div>
                 <div className="text-sm text-gray-600">Consultation</div>
               </div>
             </div>
@@ -194,9 +195,10 @@ const CityAEOBlocks: React.FC<CityAEOBlocksProps> = ({
             <div className="mt-8 text-center">
               <PhoneLink
                 placement="city_aeo_blocks"
-                className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-bold px-8 py-4 rounded-xl transition-colors text-lg shadow-lg"
+                className="inline-flex items-center gap-2 bg-teal-600 hover:bg-teal-700 text-white font-bold px-8 py-4 rounded-xl transition-colors text-lg shadow-lg min-h-[56px]"
               >
-                Get Your Free {cityName} Senior Living Guide
+                <Phone className="h-5 w-5" />
+                Call {PLACEMENT_PHONE_DISPLAY}
               </PhoneLink>
               <p className="mt-3 text-sm text-gray-500">
                 No obligation • Personalized recommendations • {currentYear} pricing

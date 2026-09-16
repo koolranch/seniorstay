@@ -112,7 +112,7 @@ export default function LocationCard({ community, compact = false, regionSlug }:
             {careTypes.slice(0, 2).map((type, index) => (
               <span
                 key={`${communityId}-${type}-${index}`}
-                className="bg-primary/15 text-primary-700 px-2.5 py-1 rounded-full text-xs font-semibold"
+                className="bg-primary/15 text-teal-700 px-2.5 py-1 rounded-full text-xs font-semibold"
               >
                 {type}
               </span>
@@ -181,7 +181,7 @@ export default function LocationCard({ community, compact = false, regionSlug }:
           {careTypes.slice(0, 3).map((type, index) => (
             <span
               key={`${communityId}-${type}-${index}`}
-              className="bg-primary/15 text-primary-700 px-3 py-1.5 rounded-full text-sm font-semibold"
+              className="bg-primary/15 text-teal-700 px-3 py-1.5 rounded-full text-sm font-semibold"
             >
               {type}
             </span>

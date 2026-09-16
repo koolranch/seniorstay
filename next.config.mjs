@@ -134,6 +134,23 @@ const nextConfig = {
         hostname: 'maps.googleapis.com',
         pathname: '/maps/api/place/photo**',
       },
+      {
+        protocol: 'https',
+        hostname: 'lh3.googleusercontent.com',
+        pathname: '**',
+      },
+      // StoryPoint / Independence Village CloudFront
+      {
+        protocol: 'https',
+        hostname: 'd2bsnvfgibl1g1.cloudfront.net',
+        pathname: '**',
+      },
+      // Oasis / ElderLife community photos
+      {
+        protocol: 'https',
+        hostname: 'media.elderlifefinancial.com',
+        pathname: '**',
+      },
       // Catch-all for other facility websites (use wildcard carefully)
       {
         protocol: 'https',
