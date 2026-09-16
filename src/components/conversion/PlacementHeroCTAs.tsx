@@ -10,6 +10,7 @@ interface PlacementHeroCTAsProps {
   browseLabel?: string;
   guideHref?: string;
   guideLabel?: string;
+  phonePlacement?: string;
   variant?: 'light' | 'dark';
   className?: string;
 }
@@ -19,6 +20,7 @@ export default function PlacementHeroCTAs({
   browseLabel = 'Browse Communities',
   guideHref,
   guideLabel = 'Read Complete Guide',
+  phonePlacement = 'hero_primary',
   variant = 'light',
   className = '',
 }: PlacementHeroCTAsProps) {
@@ -36,7 +38,7 @@ export default function PlacementHeroCTAs({
     <div className={`flex flex-col items-center gap-4 ${className}`}>
       <div className="flex flex-col sm:flex-row gap-4 justify-center w-full max-w-xl mx-auto">
         <PhoneLink
-          placement="hero_primary"
+          placement={phonePlacement}
           className="inline-flex items-center justify-center gap-2 bg-teal-600 hover:bg-teal-700 text-white font-bold px-8 py-4 rounded-xl transition-colors shadow-lg hover:shadow-xl min-h-[56px] flex-1 sm:flex-none"
         >
           <Phone className="h-5 w-5 shrink-0" />
