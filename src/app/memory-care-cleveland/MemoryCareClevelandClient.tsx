@@ -259,11 +259,11 @@ export default function MemoryCareClevelandClient({ communities }: MemoryCareCle
                 ))}
               </div>
               <p className="text-sm text-slate-500">
-                Ohio Medicaid waivers may help some families with monthly care costs, but they cannot pay placement or referral fees.{' '}
-                <Link href="/medicaid-assisted-living-ohio" className="text-teal-700 font-medium hover:underline">
-                  Read about Ohio Medicaid assisted living
-                </Link>
-                .
+                Most Cleveland memory care is private-pay. A{' '}
+                <Link href="/cleveland-senior-living-advisor" className="text-teal-700 font-medium hover:underline">
+                  Cleveland senior living advisor
+                </Link>{' '}
+                can compare current rates and availability before you tour.
               </p>
             </div>
 
@@ -331,7 +331,7 @@ export default function MemoryCareClevelandClient({ communities }: MemoryCareCle
             <p className="mt-6 text-sm text-teal-100">
               Prefer to read first?{' '}
               <Link href="/cleveland-senior-living-advisor" className="underline hover:text-white font-medium">
-                See how free placement works
+                Cleveland senior living advisor
               </Link>
             </p>
           </div>

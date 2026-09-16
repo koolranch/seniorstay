@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { Phone, ArrowRight, MapPin } from 'lucide-react';
 import PhoneLink from '@/components/conversion/PhoneLink';
+import { ADVISOR_LINK_LABEL, ADVISOR_PATH } from '@/lib/advisor-profile';
 
 interface PlacementConversionBandProps {
   title: string;
@@ -19,7 +20,7 @@ export default function PlacementConversionBand({
   title,
   description,
   phonePlacement,
-  contactHref = '/cleveland-senior-living-advisor',
+  contactHref = ADVISOR_PATH,
   contactLabel,
   cityName,
   cityHref,
@@ -29,8 +30,8 @@ export default function PlacementConversionBand({
 }: PlacementConversionBandProps) {
   const hrefLabel =
     contactLabel ??
-    (contactHref.includes('/cleveland-senior-living-advisor')
-      ? 'See how placement works'
+    (contactHref.includes(ADVISOR_PATH)
+      ? ADVISOR_LINK_LABEL
       : 'Request a Callback');
   return (
     <section className={`bg-gradient-to-r from-teal-600 to-teal-700 py-8 md:py-10 ${className}`}>

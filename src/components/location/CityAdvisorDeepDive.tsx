@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { Phone, MapPin, Hospital, DollarSign, Quote, ShoppingBag, TreePine, Brain } from 'lucide-react';
 import PhoneLink from '@/components/conversion/PhoneLink';
 import { PLACEMENT_PHONE_DISPLAY } from '@/lib/placement-contact';
+import { ADVISOR_LINK_LABEL, ADVISOR_PATH } from '@/lib/advisor-profile';
 
 interface CommunityTake {
   name: string;
@@ -695,10 +696,10 @@ export default function CityAdvisorDeepDive({ citySlug, cityName }: CityAdvisorD
             </PhoneLink>
             <p className="mt-4">
               <Link
-                href="/cleveland-senior-living-advisor"
+                href={ADVISOR_PATH}
                 className="text-teal-300 hover:text-white font-semibold underline underline-offset-2"
               >
-                Free Cleveland senior living advisor — how placement works
+                {ADVISOR_LINK_LABEL}
               </Link>
             </p>
           </div>

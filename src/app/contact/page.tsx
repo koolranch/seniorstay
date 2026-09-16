@@ -120,12 +120,13 @@ function ContactForm() {
             </div>
           )}
 
-          {intent === 'placement' && !communityName && (
+          {!communityName && (
             <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 mb-8 max-w-2xl mx-auto text-center">
               <p className="text-slate-700">
-                Looking for free Cleveland senior living placement?{' '}
+                {intent === 'placement' ? 'Looking for free Cleveland senior living placement? ' : ''}
+                Talk to a{' '}
                 <Link href={ADVISOR_PATH} className="text-teal-700 font-semibold underline underline-offset-2">
-                  Talk to a Cleveland senior living advisor
+                  Cleveland senior living advisor
                 </Link>
                 {' '}or leave your number below for a callback.
               </p>

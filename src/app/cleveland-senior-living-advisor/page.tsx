@@ -12,6 +12,8 @@ import {
   ShieldCheck,
   Users,
   CalendarCheck,
+  Mail,
+  Globe,
 } from 'lucide-react';
 import GlobalHeader from '@/components/home/GlobalHeader';
 import Footer from '@/components/footer/Footer';
@@ -20,11 +22,14 @@ import PhoneLink from '@/components/conversion/PhoneLink';
 import PopularSuburbsGrid from '@/components/conversion/PopularSuburbsGrid';
 import { PLACEMENT_PHONE_DISPLAY } from '@/lib/placement-contact';
 import {
+  ADVISOR_BUSINESS,
+  ADVISOR_CANONICAL,
   ADVISOR_EMAIL,
   ADVISOR_INITIALS,
   ADVISOR_JOB_TITLE,
   ADVISOR_LOCALITY,
   ADVISOR_NAME,
+  ADVISOR_NAP_CITY_LINE,
   ADVISOR_PLACEMENT_CASES,
   ADVISOR_SERVICE_AREA_LABEL,
   getAdvisorLocalBusinessSchema,
@@ -234,24 +239,43 @@ export default function ClevelandSeniorLivingAdvisorPage() {
                 service-area practice: we tour communities with families across{' '}
                 {ADVISOR_SERVICE_AREA_LABEL}; we do not publish a storefront address.
               </p>
-              <ul className="space-y-2 text-slate-700">
-                <li className="flex items-start gap-2">
-                  <MapPin className="h-5 w-5 text-teal-600 shrink-0 mt-0.5" />
-                  <span>Based in {ADVISOR_LOCALITY}, Ohio — serving Greater Cleveland</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <Phone className="h-5 w-5 text-teal-600 shrink-0 mt-0.5" />
-                  <span>Live line {PLACEMENT_PHONE_DISPLAY}</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <Users className="h-5 w-5 text-teal-600 shrink-0 mt-0.5" />
-                  <span>
+              <div className="mt-6 rounded-2xl border border-slate-200 bg-slate-50 p-5 text-slate-800">
+                <p className="text-xs font-semibold uppercase tracking-wide text-teal-700 mb-3">
+                  Public listing details
+                </p>
+                <p className="font-bold text-slate-900">{ADVISOR_BUSINESS}</p>
+                <p className="text-sm text-slate-600 mb-3">
+                  {ADVISOR_NAME}, {ADVISOR_JOB_TITLE}
+                </p>
+                <ul className="space-y-2 text-sm">
+                  <li className="flex items-start gap-2">
+                    <MapPin className="h-4 w-4 text-teal-600 shrink-0 mt-0.5" />
+                    <span>
+                      {ADVISOR_NAP_CITY_LINE} — service-area practice, no public storefront
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <Phone className="h-4 w-4 text-teal-600 shrink-0 mt-0.5" />
+                    <span>Live line {PLACEMENT_PHONE_DISPLAY}</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <Mail className="h-4 w-4 text-teal-600 shrink-0 mt-0.5" />
                     <a href={`mailto:${ADVISOR_EMAIL}`} className="text-teal-700 font-semibold hover:underline">
                       {ADVISOR_EMAIL}
                     </a>
-                  </span>
-                </li>
-              </ul>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <Globe className="h-4 w-4 text-teal-600 shrink-0 mt-0.5" />
+                    <a href={ADVISOR_CANONICAL} className="text-teal-700 font-semibold hover:underline break-all">
+                      {ADVISOR_CANONICAL}
+                    </a>
+                  </li>
+                </ul>
+                <p className="text-xs text-slate-500 mt-3">
+                  We meet families at communities across Greater Cleveland. There is no
+                  public office to visit.
+                </p>
+              </div>
               <p className="text-sm text-slate-500 mt-4">
                 Full background:{' '}
                 <Link href="/about" className="text-teal-700 font-semibold underline underline-offset-2">

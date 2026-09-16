@@ -12,6 +12,9 @@ export const ADVISOR_LOCALITY = 'Chagrin Falls';
 export const ADVISOR_REGION = 'OH';
 export const ADVISOR_POSTAL_CODE = '44022';
 export const ADVISOR_SERVICE_AREA_LABEL = 'Chagrin Falls and Greater Cleveland, Ohio';
+/** Citation-ready locality line — no street or home address. */
+export const ADVISOR_NAP_CITY_LINE = `${ADVISOR_LOCALITY}, ${ADVISOR_REGION} ${ADVISOR_POSTAL_CODE}`;
+export const ADVISOR_LINK_LABEL = 'Cleveland senior living advisor';
 
 export const ADVISOR_PLACEMENT_CASES = [
   {
@@ -45,12 +48,22 @@ export function getAdvisorLocalBusinessSchema(telephone: string) {
     email: ADVISOR_EMAIL,
     image: 'https://www.guideforseniors.com/images/default-community.jpg',
     priceRange: 'Free to families',
+    description:
+      'Free assisted living, memory care, and independent living placement for Greater Cleveland families. Service-area advisor based in Chagrin Falls, Ohio.',
     address: {
       '@type': 'PostalAddress',
       addressLocality: ADVISOR_LOCALITY,
       addressRegion: ADVISOR_REGION,
       postalCode: ADVISOR_POSTAL_CODE,
       addressCountry: 'US',
+    },
+    contactPoint: {
+      '@type': 'ContactPoint',
+      telephone,
+      email: ADVISOR_EMAIL,
+      contactType: 'customer service',
+      areaServed: 'US',
+      availableLanguage: 'English',
     },
     areaServed: [
       { '@type': 'City', name: 'Cleveland', containedInPlace: { '@type': 'State', name: 'Ohio' } },

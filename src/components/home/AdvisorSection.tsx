@@ -10,6 +10,7 @@ import { submitLead } from '@/app/actions/leads';
 import { trackFormError, trackFormStart, trackSuccessfulLeadConversion } from '@/components/analytics/GoogleAnalytics';
 import PhoneLink from '@/components/conversion/PhoneLink';
 import { PLACEMENT_CALLBACK_MESSAGE, PLACEMENT_PHONE_DISPLAY } from '@/lib/placement-contact';
+import { ADVISOR_LINK_LABEL, ADVISOR_PATH } from '@/lib/advisor-profile';
 import { isValidPhone, MOVE_IN_TIMELINE_OPTIONS } from '@/lib/lead-form-options';
 
 const BENEFITS = [
@@ -114,8 +115,8 @@ export default function AdvisorSection() {
                 across Greater Cleveland.
               </p>
               <p className="mb-8">
-                <Link href="/cleveland-senior-living-advisor" className="text-teal-700 font-semibold hover:underline">
-                  How free Cleveland senior living placement works →
+                <Link href={ADVISOR_PATH} className="text-teal-700 font-semibold hover:underline">
+                  {ADVISOR_LINK_LABEL} →
                 </Link>
               </p>
 

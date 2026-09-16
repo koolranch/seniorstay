@@ -189,11 +189,11 @@ export default async function AssistedLivingClevelandPage() {
                 ))}
               </div>
               <p className="text-slate-600 mt-4">
-                On a limited income? Read our full guide to the{' '}
-                <Link href="/medicaid-assisted-living-ohio" className="text-teal-700 font-semibold underline underline-offset-2">
-                  Ohio Assisted Living Medicaid Waiver
+                Comparing private-pay buildings? Talk to a{' '}
+                <Link href="/cleveland-senior-living-advisor" className="text-teal-700 font-semibold underline underline-offset-2">
+                  Cleveland senior living advisor
                 </Link>{' '}
-                — 2026 eligibility, what it covers, and which Cleveland communities accept it.
+                — placement help is free to families and does not change the community rate.
               </p>
             </div>
 
@@ -291,6 +291,7 @@ export default async function AssistedLivingClevelandPage() {
         description="Take our 2-minute assessment or call for a free personalized recommendation."
         phonePlacement="assisted_living_hub"
         contactHref="/cleveland-senior-living-advisor"
+        contactLabel="Cleveland senior living advisor"
         secondaryHref="/assessment"
       />
 
