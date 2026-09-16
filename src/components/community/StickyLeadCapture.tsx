@@ -159,85 +159,8 @@ export default function StickyLeadCapture({ neighborhood, communityName }: Stick
         </div>
       </div>
 
-      {/* Mobile: Floating Button */}
-      <div className="fixed bottom-20 right-4 z-50 md:hidden">
-        <Button
-          onClick={() => setIsExpanded(true)}
-          className="rounded-full shadow-lg px-4 py-3 text-slate-900 font-semibold"
-          style={{ backgroundColor: '#8DA399' }}
-        >
-          <Download className="h-4 w-4 mr-2" />
-          {neighborhood} Report
-        </Button>
-      </div>
-
-      {/* Mobile Expanded Modal */}
-      {isExpanded && (
-        <div className="fixed inset-0 z-[100] md:hidden flex items-end">
-          <div 
-            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-            onClick={() => setIsExpanded(false)}
-          />
-          <div 
-            className="relative w-full rounded-t-3xl p-6 pb-8"
-            style={{
-              background: 'linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 41, 59, 0.98) 100%)',
-            }}
-          >
-            <button
-              onClick={() => setIsExpanded(false)}
-              className="absolute top-4 right-4 text-slate-400"
-            >
-              <X className="h-6 w-6" />
-            </button>
-            
-            <div className="text-center mb-6">
-              <div 
-                className="inline-flex p-3 rounded-xl mb-4"
-                style={{ backgroundColor: 'rgba(141, 163, 153, 0.2)' }}
-              >
-                <FileText className="h-8 w-8" style={{ color: '#8DA399' }} />
-              </div>
-              <h3 className="text-xl font-bold text-white mb-2">
-                {neighborhood} Pricing Report
-              </h3>
-              <p className="text-slate-400 text-sm">
-                2026 rates, waitlist status & community comparisons
-              </p>
-            </div>
-
-            {isSubmitted ? (
-              <div className="text-center py-6">
-                <div className="inline-flex items-center gap-2 text-emerald-400 text-lg font-medium">
-                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  Report sent to your email!
-                </div>
-              </div>
-            ) : (
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <Input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter your email"
-                  className="bg-white/10 border-white/20 text-white placeholder:text-slate-400 h-12"
-                  required
-                />
-                <Button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="w-full h-12 text-slate-900 font-semibold text-base"
-                  style={{ backgroundColor: '#8DA399' }}
-                >
-                  {isSubmitting ? 'Sending...' : 'Get Free Report'}
-                </Button>
-              </form>
-            )}
-          </div>
-        </div>
-      )}
+      {/* Mobile intentionally has no report button: the floating inquiry
+          bubble (phone-first callback) is the single mobile CTA. */}
     </>
   );
 }

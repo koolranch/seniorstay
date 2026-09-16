@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import InquiryPanel from './InquiryPanel';
 import FloatingInquiryButton from './FloatingInquiryButton';
 import AdvisorSlideOver from './AdvisorSlideOver';
-import ExitIntentPrompt from './ExitIntentPrompt';
 import { Button } from '@/components/ui/button';
 import { MessageCircle, Users } from 'lucide-react';
 
@@ -21,7 +20,7 @@ interface CommunityInquiryClientProps {
 /**
  * All-in-one client component that manages inquiry and advisor panels
  * for the community detail page. Renders both the bento card CTA
- * and the floating/slide-over/exit-intent components.
+ * and the floating/slide-over components.
  */
 export default function CommunityInquiryClient({
   communityName,
@@ -101,15 +100,6 @@ export default function CommunityInquiryClient({
         communityName={communityName}
         communityId={communityId}
         sourceSlug={citySlug || sourceSlug}
-      />
-
-      {/* Exit Intent */}
-      <ExitIntentPrompt
-        communityName={communityName}
-        communityId={communityId}
-        sourceSlug={sourceSlug}
-        citySlug={citySlug}
-        disabled={inquiryOpen || advisorOpen}
       />
     </>
   );

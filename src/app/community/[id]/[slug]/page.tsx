@@ -450,7 +450,7 @@ export default async function CommunityPage({ params }: CommunityPageProps) {
             cityName={cityName}
           />
 
-          {/* Card 3: Expert Take / About */}
+          {/* Card 3: About this community */}
           <div 
             className="lg:col-span-2 rounded-2xl p-6 border bg-white"
             style={{ borderColor: 'rgba(0,0,0,0.08)' }}
@@ -464,23 +464,35 @@ export default async function CommunityPage({ params }: CommunityPageProps) {
               </div>
               <div>
                 <h2 className="text-lg font-semibold text-slate-900 mb-1">
-                  Expert Consultant's Take
+                  About {community.name}
                 </h2>
                 <p className="text-sm text-slate-500">
-                  From our team of 20+ year regional specialists
+                  Reviewed by our local placement team
                 </p>
               </div>
             </div>
-            
-            {neighborhoodData?.expertTake ? (
-              <div className="space-y-4">
-                <p className="text-slate-700 leading-relaxed">
-                  {neighborhoodData.expertTake.consultantPerspective}
-                </p>
-                
-                <div className="flex flex-wrap gap-2 pt-2">
+
+            {community.description ? (
+              <p className="text-slate-700 leading-relaxed">
+                {community.description}
+              </p>
+            ) : neighborhoodData?.expertTake ? (
+              <p className="text-slate-700 leading-relaxed">
+                {neighborhoodData.expertTake.consultantPerspective}
+              </p>
+            ) : (
+              <p className="text-slate-700 leading-relaxed">
+                {community.name} is a respected senior living community in {cityName}, Ohio,
+                providing compassionate care in a welcoming environment. Our team can help you
+                understand if this community matches your family's specific needs.
+              </p>
+            )}
+
+            {community.description && neighborhoodData?.expertTake && (
+              <div className="mt-4 pt-4 border-t border-slate-100">
+                <div className="flex flex-wrap items-center gap-2">
                   <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
-                    Best for:
+                    {cityName} is best for:
                   </span>
                   {neighborhoodData.expertTake.bestFor.map((item, i) => (
                     <Badge key={i} variant="secondary" className="text-xs">
@@ -489,16 +501,6 @@ export default async function CommunityPage({ params }: CommunityPageProps) {
                   ))}
                 </div>
               </div>
-            ) : community.description ? (
-              <p className="text-slate-700 leading-relaxed">
-                {community.description}
-              </p>
-            ) : (
-              <p className="text-slate-700 leading-relaxed">
-                {community.name} is a respected senior living community in {cityName}, Ohio,
-                providing compassionate care in a welcoming environment. Our team can help you
-                understand if this community matches your family's specific needs.
-              </p>
             )}
           </div>
 

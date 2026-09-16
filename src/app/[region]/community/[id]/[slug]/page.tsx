@@ -477,37 +477,45 @@ export default async function CommunityPage({ params }: CommunityPageProps) {
             citySlug={citySlug}
           />
 
-          {/* Card 3: Expert Take / About */}
+          {/* Card 3: About this community */}
           <div className="lg:col-span-2 rounded-2xl p-6 border bg-white" style={{ borderColor: 'rgba(0,0,0,0.08)' }}>
             <div className="flex items-start gap-3 mb-4">
               <div className="p-2.5 rounded-xl shrink-0" style={{ backgroundColor: 'rgba(141, 163, 153, 0.15)' }}>
                 <Award className="h-5 w-5" style={{ color: '#8DA399' }} />
               </div>
               <div>
-                <h2 className="text-lg font-semibold text-slate-900 mb-1">Expert Consultant's Take</h2>
-                <p className="text-sm text-slate-500">From our team of 20+ year regional specialists</p>
+                <h2 className="text-lg font-semibold text-slate-900 mb-1">About {cleanDisplayName}</h2>
+                <p className="text-sm text-slate-500">Reviewed by our local placement team</p>
               </div>
             </div>
-            
-            {neighborhoodData?.expertTake ? (
-              <div className="space-y-4">
-                <p className="text-slate-700 leading-relaxed">
-                  {neighborhoodData.expertTake.consultantPerspective}
-                </p>
-                <div className="flex flex-wrap gap-2 pt-2">
-                  <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Best for:</span>
-                  {neighborhoodData.expertTake.bestFor.map((item, i) => (
-                    <Badge key={i} variant="secondary" className="text-xs">{item}</Badge>
-                  ))}
-                </div>
-              </div>
-            ) : community.description ? (
+
+            {community.description ? (
               <p className="text-slate-700 leading-relaxed">{community.description}</p>
+            ) : neighborhoodData?.expertTake ? (
+              <p className="text-slate-700 leading-relaxed">
+                {neighborhoodData.expertTake.consultantPerspective}
+              </p>
             ) : (
               <p className="text-slate-700 leading-relaxed">
                 {community.name} is a respected senior living community in {cityName}, {regionConfig.stateAbbr},
                 providing compassionate care in a welcoming environment.
               </p>
+            )}
+
+            {community.description && neighborhoodData?.expertTake && (
+              <div className="mt-4 pt-4 border-t border-slate-100">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">{cityName} is best for:</span>
+                  {neighborhoodData.expertTake.bestFor.map((item, i) => (
+                    <Badge key={i} variant="secondary" className="text-xs">{item}</Badge>
+                  ))}
+                </div>
+                <p className="text-sm text-slate-500 mt-3">
+                  <Link href={`/${region}/${citySlug}`} className="text-teal-700 hover:text-teal-800 underline underline-offset-2">
+                    Compare all {cityName} senior living communities
+                  </Link>
+                </p>
+              </div>
             )}
           </div>
 
